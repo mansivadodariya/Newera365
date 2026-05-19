@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM"],
+    "jsx": "react-jsx",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "target": "ES2019",
+    "outDir": "dist",
+    "rootDir": "src",
+    "noEmit": false,
+    "isolatedModules": false,
+    "noUncheckedIndexedAccess": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "build"]
+}
