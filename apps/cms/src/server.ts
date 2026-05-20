@@ -16,7 +16,9 @@ const start = async (): Promise<void> => {
   });
 
   // Custom REST endpoints built on the Payload Express app.
-  registerCustomEndpoints(app);
+  // Pass the initialized payload instance so endpoints can query collections
+  // and globals (e.g. reading mt5SyncEnabled from SiteSettings).
+  registerCustomEndpoints(app, payload);
 
   app.listen(port, () => {
     payload.logger.info(`CMS server listening on http://localhost:${port}`);

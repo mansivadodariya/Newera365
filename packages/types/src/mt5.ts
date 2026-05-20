@@ -1,11 +1,5 @@
 /** Asset classes mirrored from the 6 Markets pages (Template A). */
-export type AssetClass =
-  | 'forex'
-  | 'commodities'
-  | 'indices'
-  | 'stocks'
-  | 'etfs'
-  | 'crypto';
+export type AssetClass = 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
 
 /** Live instrument spec sourced from the MT5 Manager API bridge. */
 export interface InstrumentSpec {
@@ -23,12 +17,29 @@ export interface InstrumentSpec {
 }
 
 /**
- * Wrapper returned by all MT5-backed API responses. `usesMT5Data` is false
- * when the bridge fell back to the static JSON data tables (Gate 1 fallback
- * agreement) — the UI should surface a "last updated" / static-data notice.
+ * Identifies where the data in an MT5Response originated.
+ *
+ * 'mt5-live'            — fetched from the MT5 Manager API bridge in real time.
+ * 'cms-manual'          — a per-instrument toggle is OFF; CMS manual values used.
+ * 'cms-global-override' — the site-wide master switch (mt5SyncEnabled) is OFF;
+ *                         all instruments served from CMS regardless of per-doc setting.
+ * 'cms-fallback'        — MT5 service was unreachable; degraded to CMS data.
+ */
+export type MT5DataSource = 'mt5-live' | 'cms-manual' | 'cms-global-override' | 'cms-fallback';
+
+/**
+ * Wrapper returned by all MT5-backed API responses.
+ *
+ * `usesMT5Data` — false when ANY fallback path was taken; the frontend should
+ *   surface a "last updated" / static-data notice instead of implying prices
+ *   are live.
+ *
+ * `source` — discriminator that tells the UI (and logging) exactly why the
+ *   data came from where it did. See MT5DataSource for the four states.
  */
 export interface MT5Response<T> {
   usesMT5Data: boolean;
+  source: MT5DataSource;
   fetchedAt: string;
   data: T;
 }

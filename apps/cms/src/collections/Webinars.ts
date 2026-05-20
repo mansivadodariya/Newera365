@@ -1,18 +1,66 @@
 import type { CollectionConfig } from 'payload/types';
-import { publishFields } from './_fields';
+import { localizationFields, seoFields, slugField } from './_fields';
+import { ensureTranslationKey, uniqueSlugPerLocale } from '../hooks';
 
-// Powers /webinars (Template I, Zoom variant). Registration via /api/webinars/register.
+// Powers /webinars — upcoming sessions + replay archive.
 export const Webinars: CollectionConfig = {
   slug: 'webinars',
-  admin: { useAsTitle: 'title', defaultColumns: ['title', 'startsAt', 'status'] },
+  admin: {
+    group: 'Education',
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'speaker', 'status', 'scheduledAt', 'locale'],
+  },
   access: { read: () => true },
+  hooks: {
+    beforeValidate: [uniqueSlugPerLocale('webinars')],
+    beforeChange: [ensureTranslationKey],
+  },
   fields: [
-    { name: 'title', type: 'text', required: true, localized: true },
-    ...publishFields,
-    { name: 'description', type: 'textarea', localized: true },
-    { name: 'speaker', type: 'text' },
-    { name: 'startsAt', type: 'date', required: true },
-    { name: 'zoomMeetingId', type: 'text' },
-    { name: 'replayUrl', type: 'text', admin: { description: 'Set after the webinar ends' } },
+    { name: 'title', type: 'text', required: true, maxLength: 200 },
+    slugField('title'),
+    { name: 'speaker', type: 'text', required: true, maxLength: 100 },
+    { name: 'speakerBio', type: 'textarea', maxLength: 300 },
+    {
+      name: 'scheduledAt',
+      type: 'date',
+      required: true,
+      index: true,
+      admin: {
+        date: { pickerAppearance: 'dayAndTime' },
+        description: 'UTC date + time. Drives upcoming/past sort and live-now detection.',
+      },
+    },
+    { name: 'timezone', type: 'text', admin: { description: 'Display hint, e.g. UTC+3.' } },
+    {
+      name: 'status',
+      type: 'select',
+      required: true,
+      defaultValue: 'upcoming',
+      options: ['upcoming', 'live', 'completed', 'cancelled'],
+    },
+    {
+      name: 'zoomRegistrationLink',
+      type: 'text',
+      admin: {
+        description: 'Public Zoom URL. Shown when status is upcoming or live.',
+        condition: (data) => data?.status === 'upcoming' || data?.status === 'live',
+      },
+    },
+    {
+      name: 'zoomWebinarId',
+      type: 'text',
+      admin: { description: 'Numeric Zoom ID — enables POST /api/webinars/register.' },
+    },
+    {
+      name: 'replayUrl',
+      type: 'text',
+      admin: {
+        description: 'Replay video URL. Shown when status is completed.',
+        condition: (data) => data?.status === 'completed',
+      },
+    },
+    { name: 'thumbnail', type: 'upload', relationTo: 'media' },
+    ...seoFields,
+    ...localizationFields,
   ],
 };

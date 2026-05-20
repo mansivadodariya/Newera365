@@ -8,14 +8,18 @@ import { Users } from './collections/Users';
 import { Media } from './collections/Media';
 import { BlogPosts } from './collections/BlogPosts';
 import { MarketAnalysis } from './collections/MarketAnalysis';
+import { News } from './collections/News';
 import { ResearchReports } from './collections/ResearchReports';
 import { EducationContent } from './collections/EducationContent';
 import { Webinars } from './collections/Webinars';
 import { ProductsInstruments } from './collections/ProductsInstruments';
 import { AccountTypes } from './collections/AccountTypes';
-import { News } from './collections/News';
 import { FAQs } from './collections/FAQs';
 import { NewsletterSubscribers } from './collections/NewsletterSubscribers';
+import { Careers } from './collections/Careers';
+import { LegalPages } from './collections/LegalPages';
+import { CompanyContent } from './collections/CompanyContent';
+import { TeamMembers } from './collections/TeamMembers';
 import { SiteSettings } from './globals/SiteSettings';
 
 export default buildConfig({
@@ -28,25 +32,26 @@ export default buildConfig({
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URL },
   }),
-  // EN default (LTR) + AR (RTL). RTL layout flip is handled in the frontend.
-  localization: {
-    locales: ['en', 'ar'],
-    defaultLocale: 'en',
-    fallback: true,
-  },
+  // Locale is an explicit per-document field — see collections/_fields.ts
+  // (localizationFields) and hooks/ (ensureTranslationKey, uniqueSlugPerLocale).
+  // Payload's native `localization` config is intentionally NOT used.
   collections: [
     Users,
     Media,
     BlogPosts,
     MarketAnalysis,
+    News,
     ResearchReports,
     EducationContent,
     Webinars,
     ProductsInstruments,
     AccountTypes,
-    News,
     FAQs,
     NewsletterSubscribers,
+    Careers,
+    LegalPages,
+    CompanyContent,
+    TeamMembers,
   ],
   globals: [SiteSettings],
   cors: [process.env.FRONTEND_URL ?? 'http://localhost:3000'],

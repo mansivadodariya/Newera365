@@ -1,21 +1,173 @@
 import type { CollectionConfig } from 'payload/types';
 
-// Static product metadata for the 6 Markets pages (Template A). Live spreads/
-// swaps come from the MT5 bridge at request time — NOT stored here.
+// Powers all 6 Markets pages, the 3 calculator widgets, and /fees-charges.
+// Language-neutral — instrument specs are not locale-specific.
+//
+// MT5 DATA TOGGLE (per instrument)
+// ---------------------------------
+// usesMT5Data = true  → /api/mt5/instruments fetches live data from the MT5
+//   bridge at request time. The "Manual Trading Data" block is hidden in the
+//   admin UI — there is nothing for the editor to fill in.
+// usesMT5Data = false → The MT5 bridge is bypassed for this instrument. The
+//   "Manual Trading Data" block becomes visible and the editor must supply
+//   spread / swap values directly. The frontend will display these CMS values
+//   instead of live MT5 figures.
+//
+// A site-wide master switch also exists in Site Settings → MT5 Integration.
+// When that global toggle is OFF, ALL instruments fall back to CMS data
+// regardless of this per-instrument setting.
 export const ProductsInstruments: CollectionConfig = {
   slug: 'products-instruments',
-  admin: { useAsTitle: 'name', defaultColumns: ['name', 'assetClass', 'mt5Symbol'] },
+  admin: {
+    group: 'Trading Data',
+    useAsTitle: 'name',
+    defaultColumns: ['name', 'symbol', 'assetClass', 'usesMT5Data', 'status'],
+    description:
+      'Each instrument can pull live data from MT5 or be updated manually. Use the "Use MT5 Live Data" toggle per row to switch modes.',
+  },
   access: { read: () => true },
   fields: [
-    { name: 'name', type: 'text', required: true, localized: true },
-    { name: 'mt5Symbol', type: 'text', required: true, unique: true, index: true },
+    // ── Identity ────────────────────────────────────────────────────────────
+    {
+      name: 'name',
+      type: 'text',
+      required: true,
+      maxLength: 50,
+      admin: { description: 'Display name shown to traders, e.g. EUR/USD.' },
+    },
+    {
+      name: 'symbol',
+      type: 'text',
+      required: true,
+      unique: true,
+      index: true,
+      admin: {
+        description: 'Uppercase lookup key used by the frontend and calculators, e.g. EURUSD.',
+      },
+    },
+    {
+      name: 'mt5Symbol',
+      type: 'text',
+      admin: {
+        description:
+          'Exact symbol string in the MT5 Manager API feed — must match the broker server precisely. Required when "Use MT5 Live Data" is ON.',
+      },
+    },
     {
       name: 'assetClass',
       type: 'select',
       required: true,
       options: ['forex', 'commodities', 'indices', 'stocks', 'etfs', 'crypto'],
     },
-    { name: 'description', type: 'textarea', localized: true },
-    { name: 'displayOrder', type: 'number', defaultValue: 0 },
+
+    // ── MT5 Data Toggle ─────────────────────────────────────────────────────
+    {
+      name: 'usesMT5Data',
+      type: 'checkbox',
+      label: 'Use MT5 Live Data',
+      defaultValue: true,
+      admin: {
+        description:
+          'ON → live spread, swap and price data is fetched from the MT5 bridge at request time (recommended). ' +
+          'OFF → the "Manual Trading Data" section below becomes editable and its values are served to the frontend instead.',
+      },
+    },
+
+    // ── Manual Trading Data (only shown when MT5 toggle is OFF) ─────────────
+    {
+      type: 'collapsible',
+      label: 'Manual Trading Data  —  visible only when "Use MT5 Live Data" is OFF',
+      admin: {
+        // Reveal this entire block only when the admin has turned MT5 sync OFF.
+        condition: (data) => data?.usesMT5Data === false,
+        initCollapsed: false,
+        description:
+          'Fill these values when the MT5 bridge is disabled for this instrument. They will be served directly to the frontend.',
+      },
+      fields: [
+        {
+          name: 'spread',
+          type: 'number',
+          admin: { description: 'Spread in pips, e.g. 0.1 for EUR/USD.' },
+        },
+        {
+          name: 'swapLong',
+          type: 'number',
+          admin: {
+            description: 'Long overnight swap in points/day (negative = cost to hold buy).',
+          },
+        },
+        {
+          name: 'swapShort',
+          type: 'number',
+          admin: { description: 'Short overnight swap in points/day.' },
+        },
+      ],
+    },
+
+    // ── Static Specification (always visible) ───────────────────────────────
+    {
+      type: 'collapsible',
+      label: 'Instrument Specification',
+      admin: { initCollapsed: true },
+      fields: [
+        {
+          name: 'leverage',
+          type: 'text',
+          admin: { description: 'Max leverage display string, e.g. 1:500.' },
+        },
+        {
+          name: 'marginRequirement',
+          type: 'number',
+          admin: { description: 'Margin % — e.g. 0.2 means 0.2%.' },
+        },
+        {
+          name: 'contractSize',
+          type: 'number',
+          admin: { description: 'Units per standard lot.' },
+        },
+        {
+          name: 'tradingHours',
+          type: 'text',
+          admin: { description: 'e.g. Mon-Fri 00:00–24:00 UTC.' },
+        },
+        {
+          name: 'minTradeSize',
+          type: 'number',
+          admin: { description: 'Minimum lots, e.g. 0.01.' },
+        },
+        {
+          name: 'pipValue',
+          type: 'number',
+          admin: {
+            description:
+              'Value per pip per standard lot in the quote currency. Used by the Pip Value Calculator.',
+          },
+        },
+        {
+          name: 'tickSize',
+          type: 'number',
+          admin: {
+            description:
+              'Minimum price increment (tick). Used by the Swap and Profit/Loss calculators.',
+          },
+        },
+      ],
+    },
+
+    // ── Admin / Display ─────────────────────────────────────────────────────
+    {
+      name: 'sortOrder',
+      type: 'number',
+      defaultValue: 0,
+      admin: { description: 'Left-to-right / top-to-bottom display order within the asset class.' },
+    },
+    {
+      name: 'status',
+      type: 'select',
+      required: true,
+      defaultValue: 'active',
+      options: ['active', 'inactive'],
+    },
   ],
 };
