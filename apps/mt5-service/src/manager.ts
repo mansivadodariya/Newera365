@@ -41,3 +41,26 @@ export async function getInstruments(assetClass?: string): Promise<MT5Response<I
     data,
   };
 }
+
+/** Returns a single instrument by symbol, or null data if not found. */
+export async function getInstrument(symbol: string): Promise<MT5Response<InstrumentSpec | null>> {
+  const all = fallback.instruments as InstrumentSpec[];
+  const found = all.find((i) => i.symbol === symbol) ?? null;
+
+  if (!credentialsPresent) {
+    return {
+      usesMT5Data: false,
+      source: 'cms-fallback',
+      fetchedAt: new Date().toISOString(),
+      data: found,
+    };
+  }
+
+  // TODO(NE-003): fetch live data for a single instrument from the MT5 Manager API.
+  return {
+    usesMT5Data: true,
+    source: 'mt5-live',
+    fetchedAt: new Date().toISOString(),
+    data: found,
+  };
+}

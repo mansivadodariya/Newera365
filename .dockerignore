@@ -1,0 +1,40 @@
+# Version control
+.git
+.gitignore
+
+# Build outputs (will be built inside Docker)
+**/dist
+**/build
+**/.next
+**/out
+**/.turbo
+
+# Dependencies (will be installed inside Docker)
+**/node_modules
+
+# Dev / local config
+**/.env
+**/.env.local
+**/.env.*.local
+**/nodemon.json
+
+# Logs
+**/*.log
+**/npm-debug.log*
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+**/*.tsbuildinfo
+
+# Docs / non-essential
+README.md
+GUIDE.md
+SECURITY.md
+CLAUDE.md
+
+# Other apps (not needed for CMS build)
+apps/web/src
+apps/mt5-service/src
+packages/ui/src

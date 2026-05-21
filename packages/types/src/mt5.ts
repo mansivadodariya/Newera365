@@ -1,5 +1,16 @@
 /** Asset classes mirrored from the 6 Markets pages (Template A). */
-export type AssetClass = 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
+export const ASSET_CLASSES = [
+  'forex',
+  'commodities',
+  'indices',
+  'stocks',
+  'etfs',
+  'crypto',
+] as const;
+export type AssetClass = (typeof ASSET_CLASSES)[number];
+
+export const isAssetClass = (value: unknown): value is AssetClass =>
+  typeof value === 'string' && (ASSET_CLASSES as readonly string[]).includes(value);
 
 /** Live instrument spec sourced from the MT5 Manager API bridge. */
 export interface InstrumentSpec {

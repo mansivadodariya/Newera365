@@ -28,6 +28,9 @@
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json,md}": "prettier --write"
   },
+  "overrides": {
+    "qs": "^6.15.2"
+  },
   "engines": {
     "node": ">=20.0.0",
     "npm": ">=10.0.0"

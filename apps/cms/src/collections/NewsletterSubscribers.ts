@@ -3,6 +3,13 @@ import type { CollectionConfig } from 'payload/types';
 // Powers the /newsletter double opt-in flow. Synced to Mailchimp via
 // /api/newsletter/*. Not publicly readable — admin only. Most fields are
 // system-managed and read-only in the admin panel.
+//
+// SECURITY: `create: () => true` makes this collection publicly writable.
+// The corresponding /api/newsletter/subscribe endpoint MUST be paired with:
+//   - express-rate-limit (~5 req/min/IP)
+//   - a Cloudflare Turnstile token check
+//   - email-format validation before write
+// Without these, the table is an open dumping ground for bulk-email pollution.
 export const NewsletterSubscribers: CollectionConfig = {
   slug: 'newsletter-subscribers',
   admin: {
@@ -70,6 +77,32 @@ export const NewsletterSubscribers: CollectionConfig = {
       name: 'utmParams',
       type: 'json',
       admin: { readOnly: true, description: 'UTM attribution: source, medium, campaign, content.' },
+    },
+    {
+      name: 'confirmToken',
+      type: 'text',
+      admin: {
+        readOnly: true,
+        description:
+          'One-time UUID used to confirm the double opt-in email link. Cleared after confirmation.',
+      },
+    },
+    {
+      name: 'confirmTokenExpiry',
+      type: 'date',
+      admin: {
+        readOnly: true,
+        description: 'Confirmation token expires 72 hours after issue. Cleared after confirmation.',
+      },
+    },
+    {
+      name: 'unsubscribeToken',
+      type: 'text',
+      admin: {
+        readOnly: true,
+        description:
+          'Stable UUID included in every outgoing email as an unsubscribe link token. Never changes.',
+      },
     },
   ],
 };

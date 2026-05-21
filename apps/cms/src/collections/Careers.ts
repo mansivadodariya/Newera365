@@ -66,6 +66,8 @@ export const Careers: CollectionConfig = {
     {
       name: 'publishedDate',
       type: 'date',
+      required: true,
+      defaultValue: () => new Date().toISOString(),
       admin: { description: 'Sort key on /careers listing.' },
     },
     {
