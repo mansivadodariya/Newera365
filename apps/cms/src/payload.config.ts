@@ -23,32 +23,35 @@ import { TeamMembers } from './collections/TeamMembers';
 import { SiteSettings } from './globals/SiteSettings';
 import { emailTransport } from './email/transport';
 
-// Catch the placeholder value that ships in .env.example. If this reaches
-// production it allows trivial JWT forgery — hard-fail on both envs.
-if (!process.env.PAYLOAD_SECRET || process.env.PAYLOAD_SECRET === 'change-me-in-production') {
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error('PAYLOAD_SECRET must be set to a strong random secret in production');
-  } else {
-    // eslint-disable-next-line no-console
-    console.warn(
-      '\n⚠️  PAYLOAD_SECRET is still the placeholder value "change-me-in-production".\n' +
-        '   Generate a real secret: openssl rand -hex 32\n' +
-        '   Leaving this in place means admin JWTs are signed with a public string.\n',
-    );
+// These checks run server-side only. payload.config.ts is also bundled by
+// webpack for the browser admin UI — in that context process.env vars are
+// undefined and NODE_ENV is 'production', so top-level throws would crash
+// the admin panel before React mounts (blank white screen).
+if (typeof window === 'undefined') {
+  if (!process.env.PAYLOAD_SECRET || process.env.PAYLOAD_SECRET === 'change-me-in-production') {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('PAYLOAD_SECRET must be set to a strong random secret in production');
+    } else {
+      // eslint-disable-next-line no-console
+      console.warn(
+        '\n⚠️  PAYLOAD_SECRET is still the placeholder value "change-me-in-production".\n' +
+          '   Generate a real secret: openssl rand -hex 32\n' +
+          '   Leaving this in place means admin JWTs are signed with a public string.\n',
+      );
+    }
+  }
+  if (!process.env.FRONTEND_URL && process.env.NODE_ENV === 'production') {
+    throw new Error('FRONTEND_URL must be set in production');
+  }
+  if (!process.env.RESEND_API_KEY && process.env.NODE_ENV === 'production') {
+    throw new Error('RESEND_API_KEY must be set in production');
+  }
+  if (!process.env.EMAIL_FROM && process.env.NODE_ENV === 'production') {
+    throw new Error('EMAIL_FROM must be set in production');
   }
 }
 
-if (!process.env.FRONTEND_URL && process.env.NODE_ENV === 'production') {
-  throw new Error('FRONTEND_URL must be set in production');
-}
 const corsOrigin = process.env.FRONTEND_URL ?? 'http://localhost:3000';
-
-if (!process.env.RESEND_API_KEY && process.env.NODE_ENV === 'production') {
-  throw new Error('RESEND_API_KEY must be set in production');
-}
-if (!process.env.EMAIL_FROM && process.env.NODE_ENV === 'production') {
-  throw new Error('EMAIL_FROM must be set in production');
-}
 
 // Mirrors the same logic in email/transport.ts and email/resend.ts:
 // use Resend's sandbox sender in dev/staging (no domain verification needed),
