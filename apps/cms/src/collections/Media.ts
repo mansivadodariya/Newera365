@@ -19,10 +19,17 @@ export const Media: CollectionConfig = {
       name: 'alt',
       type: 'text',
       // Required for images (accessibility); optional for PDFs/audio.
+      // Also enforces a 200×200 minimum dimension for image uploads.
       validate: (value, { data }) => {
-        const mimeType = (data as { mimeType?: string } | undefined)?.mimeType;
-        if (mimeType?.startsWith('image/') && !value) {
-          return 'Alt text is required for images.';
+        const meta = data as { mimeType?: string; width?: number; height?: number } | undefined;
+        const mimeType = meta?.mimeType;
+        if (mimeType?.startsWith('image/')) {
+          if (!value) return 'Alt text is required for images.';
+          const width = typeof meta?.width === 'number' ? meta.width : undefined;
+          const height = typeof meta?.height === 'number' ? meta.height : undefined;
+          if (width !== undefined && height !== undefined && (width < 200 || height < 200)) {
+            return 'Image must be at least 200×200 pixels.';
+          }
         }
         return true;
       },

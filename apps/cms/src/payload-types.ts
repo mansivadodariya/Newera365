@@ -159,9 +159,9 @@ export interface ProductsInstrument {
   contractSize?: number | null;
   tradingHours?: string | null;
   minTradeSize?: number | null;
-  sortOrder?: number | null;
   pipValue?: number | null;
   tickSize?: number | null;
+  sortOrder?: number | null;
   status: 'active' | 'inactive';
   updatedAt: string;
   createdAt: string;
@@ -274,10 +274,11 @@ export interface AccountType {
   name: string;
   minDeposit: number;
   spreadFrom: string;
-  spreadFromNumeric?: number | null;
-  commission?: string | null;
   leverage: string;
   platforms: ('mt5' | 'web-trader' | 'mobile')[];
+  usesMT5Data?: boolean | null;
+  spreadFromNumeric?: number | null;
+  commission?: string | null;
   features?:
     | {
         value: string;
@@ -285,7 +286,6 @@ export interface AccountType {
       }[]
     | null;
   isPopular?: boolean | null;
-  usesMT5Data?: boolean | null;
   sortOrder?: number | null;
   status: 'active' | 'inactive';
   updatedAt: string;
@@ -340,6 +340,9 @@ export interface NewsletterSubscriber {
     | number
     | boolean
     | null;
+  confirmToken?: string | null;
+  confirmTokenExpiry?: string | null;
+  unsubscribeToken?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -367,7 +370,7 @@ export interface Career {
     [k: string]: unknown;
   }[];
   applyUrl?: string | null;
-  publishedDate?: string | null;
+  publishedDate: string;
   sortOrder?: number | null;
   status: 'open' | 'closed';
   seoTitle?: string | null;
@@ -483,14 +486,22 @@ export interface PayloadMigration {
  */
 export interface SiteSetting {
   id: number;
-  nav?:
+  mt5SyncEnabled?: boolean | null;
+  navEn?:
     | {
         label: string;
         href: string;
         id?: string | null;
       }[]
     | null;
-  footer?:
+  navAr?:
+    | {
+        label: string;
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  footerEn?:
     | {
         heading?: string | null;
         links?:
@@ -503,7 +514,21 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
-  riskDisclaimer?: string | null;
+  footerAr?:
+    | {
+        heading?: string | null;
+        links?:
+          | {
+              label?: string | null;
+              href?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  riskDisclaimerEn?: string | null;
+  riskDisclaimerAr?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }

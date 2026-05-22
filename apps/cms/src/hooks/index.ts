@@ -74,26 +74,39 @@ export const deriveAlphabeticalIndex: CollectionBeforeChangeHook = ({ data }) =>
 export const archivePreviousLegalVersion: CollectionAfterChangeHook = async ({ doc, req }) => {
   if (doc.status !== 'published') return doc;
 
-  const previous = await req.payload.find({
-    collection: 'legal-pages',
-    where: {
-      and: [
-        { pageType: { equals: doc.pageType } },
-        { locale: { equals: doc.locale } },
-        { status: { equals: 'published' } },
-        { id: { not_equals: doc.id } },
-      ],
-    },
-    depth: 0,
-  });
-
-  for (const stale of previous.docs) {
-    await req.payload.update({
+  try {
+    const previous = await req.payload.find({
       collection: 'legal-pages',
-      id: stale.id,
-      data: { status: 'draft' },
+      where: {
+        and: [
+          { pageType: { equals: doc.pageType } },
+          { locale: { equals: doc.locale } },
+          { status: { equals: 'published' } },
+          { id: { not_equals: doc.id } },
+        ],
+      },
       depth: 0,
     });
+
+    for (const stale of previous.docs) {
+      // Re-fetch before archiving — guards against the race where two editors
+      // publish concurrently and both see the same "previous" published doc.
+      const latest = await req.payload.findByID({
+        collection: 'legal-pages',
+        id: stale.id,
+        depth: 0,
+      });
+      if (latest.status === 'published' && latest.id !== doc.id) {
+        await req.payload.update({
+          collection: 'legal-pages',
+          id: stale.id,
+          data: { status: 'draft' },
+          depth: 0,
+        });
+      }
+    }
+  } catch (err) {
+    req.payload.logger.error({ err, docId: doc.id }, 'Failed to archive previous legal version');
   }
   return doc;
 };

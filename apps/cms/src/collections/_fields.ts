@@ -1,19 +1,35 @@
 import type { Field } from 'payload/types';
 
-/** URL-safe slug from arbitrary text. */
+/**
+ * URL-safe slug from arbitrary text — Unicode-aware.
+ *
+ * Uses `\p{L}` / `\p{N}` (Unicode property escapes, Node 12+) so Arabic,
+ * Chinese, and other non-Latin scripts are preserved rather than stripped.
+ * Previously `[^a-z0-9]+` silently deleted all Arabic characters, producing
+ * an empty slug that broke creation of every AR document.
+ */
 export function slugify(input: string): string {
   return input
     .toLowerCase()
     .trim()
     .replace(/['"]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/\s+/gu, '-') // spaces → hyphens first
+    .replace(/[^\p{L}\p{N}-]+/gu, '-') // strip non-letter/number/hyphen
+    .replace(/-{2,}/gu, '-') // collapse consecutive hyphens
+    .replace(/^-+|-+$/gu, ''); // trim leading/trailing hyphens
 }
 
 /**
  * Slug field — auto-derived from `sourceField` when left empty.
- * Uniqueness is per-locale and enforced by the `uniqueSlugPerLocale`
- * collection hook (Payload v2 has no compound-unique index).
+ *
+ * Uniqueness is per-(slug, locale) and enforced by the `uniqueSlugPerLocale`
+ * collection hook. We deliberately do NOT set `unique: true` here because
+ * Payload v2's single-field unique constraint would reject legitimate EN/AR
+ * pairs that intentionally share a slug.
+ *
+ * For full belt-and-braces protection against the application-level race,
+ * a Postgres partial unique index `(slug, locale)` per collection table is
+ * applied via apps/cms/migrations/001_slug_locale_unique_indexes.sql.
  */
 export function slugField(sourceField: string): Field {
   return {
