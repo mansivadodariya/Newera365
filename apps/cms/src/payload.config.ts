@@ -22,6 +22,8 @@ import { CompanyContent } from './collections/CompanyContent';
 import { TeamMembers } from './collections/TeamMembers';
 import { SiteSettings } from './globals/SiteSettings';
 import { emailTransport } from './email/transport';
+import Logo from './graphics/Logo';
+import Icon from './graphics/Icon';
 
 // These checks run server-side only. payload.config.ts is also bundled by
 // webpack for the browser admin UI — in that context process.env vars are
@@ -93,6 +95,15 @@ export default buildConfig({
           },
         },
       };
+    },
+    meta: {
+      titleSuffix: '— NEWERA',
+    },
+    components: {
+      graphics: {
+        Logo,
+        Icon,
+      },
     },
   },
   editor: slateEditor({}),

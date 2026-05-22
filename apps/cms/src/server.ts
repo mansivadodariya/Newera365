@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import path from 'path';
 import express, { type Request, type Response, type NextFunction } from 'express';
 import payload from 'payload';
 import { registerCustomEndpoints } from './endpoints';
@@ -10,6 +11,9 @@ const port = Number(process.env.PORT ?? 3001);
 // Without this, req.ip resolves to the proxy's internal IP for every request,
 // making all express-rate-limit counters key on the same address → useless.
 app.set('trust proxy', 1);
+
+// Serve public assets (logo, etc.)
+app.use('/public', express.static(path.join(__dirname, '../public')));
 
 // Baseline security headers. CSP allows self + TradingView (used by
 // MarketAnalysis chartEmbed) and Cloudflare R2 media domain when configured.
