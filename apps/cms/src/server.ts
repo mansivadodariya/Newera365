@@ -59,6 +59,9 @@ const start = async (): Promise<void> => {
   // and globals (e.g. reading mt5SyncEnabled from SiteSettings).
   registerCustomEndpoints(app, payload);
 
+  // Redirect /admin → /admin/ so browsers don't get a bare Express 404.
+  app.get('/admin', (_req: Request, res: Response) => res.redirect(301, '/admin/'));
+
   const server = app.listen(port, () => {
     payload.logger.info(`CMS server listening on http://localhost:${port}`);
   });

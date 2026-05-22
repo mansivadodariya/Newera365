@@ -83,8 +83,10 @@ export default buildConfig({
             [transportPath]: transportMock,
             [resendEmailPath]: transportMock,
             [endpointsPath]: transportMock,
-            nodemailer: transportMock,
-            resend: transportMock,
+            // npm packages aliased to false → webpack emits empty modules,
+            // preventing their Node-only internals from crashing the browser bundle.
+            nodemailer: false,
+            resend: false,
           },
         },
       };

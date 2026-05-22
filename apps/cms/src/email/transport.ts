@@ -16,7 +16,7 @@ const fromAddress = IS_PROD
   ? (process.env.EMAIL_FROM ?? 'no-reply@newera365.com')
   : 'onboarding@resend.dev';
 
-export const emailTransport = nodemailer.createTransport(
+const transport = nodemailer.createTransport(
   {
     host: 'smtp.resend.com',
     port: 465,
@@ -25,15 +25,27 @@ export const emailTransport = nodemailer.createTransport(
       user: 'resend',
       pass: process.env.RESEND_API_KEY ?? '',
     },
+    connectionTimeout: 5_000,
+    greetingTimeout: 5_000,
   },
-  // Default message options — overridden per-send by Payload.
   { from: fromAddress },
 );
 
-// Verify SMTP credentials on startup so misconfiguration is caught early
-// rather than silently at the moment an email would be sent.
-if (process.env.NODE_ENV !== 'test') {
-  emailTransport.verify((err) => {
+// Payload calls transport.verify() during payload.init() — if SMTP port 465
+// is blocked (e.g. Railway), this makes every cold start log an error and
+// wait 5 seconds. Overriding verify() makes Payload's check always pass;
+// actual send failures are still reported at send time.
+if (process.env.SKIP_SMTP_VERIFY === 'true' || process.env.NODE_ENV === 'test') {
+  transport.verify = (cb?: (err: Error | null, success: true) => void) => {
+    cb?.(null, true);
+    return Promise.resolve(true) as ReturnType<typeof transport.verify>;
+  };
+}
+
+export const emailTransport = transport;
+
+if (process.env.SKIP_SMTP_VERIFY !== 'true' && process.env.NODE_ENV !== 'test') {
+  transport.verify((err) => {
     if (err) {
       console.error('[email] Resend SMTP connection failed:', err.message);
     } else {

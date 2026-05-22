@@ -4,5 +4,5 @@
 export const emailTransport = {
   name: 'noop-transport',
   version: '1.0.0',
-  send: () => undefined,
+  send: async () => undefined,
 };

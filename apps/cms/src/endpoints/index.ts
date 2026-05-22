@@ -1,4 +1,4 @@
-import { randomUUID, createHash } from 'crypto';
+import { randomUUID, createHash, timingSafeEqual } from 'crypto';
 import type { Express, Request, Response, NextFunction } from 'express';
 import type { Payload } from 'payload';
 import type { Where } from 'payload/dist/types';
@@ -40,13 +40,36 @@ const NEWSLETTER_RATE_LIMIT = Number(process.env.NEWSLETTER_RATE_LIMIT ?? 5);
 const MAX_PAYLOAD_RESULTS = Number(process.env.MAX_PAYLOAD_RESULTS ?? 500);
 const MT5_FETCH_TIMEOUT_MS = Number(process.env.MT5_FETCH_TIMEOUT_MS ?? 5_000);
 const HEALTH_CHECK_TOKEN = process.env.HEALTH_CHECK_TOKEN;
+
 // Salt for IP hashing — prevents rainbow-table reversal of low-entropy IPv4 space.
-// Set CONSENT_IP_SALT to a random string in your environment (.env).
+// An empty salt makes all hashes trivially reversible via precomputed tables.
+if (!process.env.CONSENT_IP_SALT) {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('CONSENT_IP_SALT must be set in production — generate: openssl rand -hex 16');
+  } else {
+    // eslint-disable-next-line no-console
+    console.warn(
+      '[newsletter] CONSENT_IP_SALT not set — IP hashes have no rainbow-table protection. Add it to .env',
+    );
+  }
+}
 const CONSENT_IP_SALT = process.env.CONSENT_IP_SALT ?? '';
 
 const SYMBOL_PATTERN = /^[A-Z0-9._-]{1,20}$/;
 
 type ReqWithId = Request & { requestId?: string };
+
+// Timing-safe string comparison — prevents token enumeration via response-time side-channel.
+function safeTokenCompare(provided: string | undefined, expected: string): boolean {
+  if (!provided) return false;
+  try {
+    const a = Buffer.from(provided);
+    const b = Buffer.from(expected);
+    return a.length === b.length && timingSafeEqual(a, b);
+  } catch {
+    return false;
+  }
+}
 
 const requestIdMiddleware = (req: ReqWithId, _res: Response, next: NextFunction): void => {
   req.requestId = randomUUID();
@@ -84,7 +107,7 @@ export function registerCustomEndpoints(app: Express, payload: Payload): void {
   // Token-gated to prevent uptime fingerprinting and DDoS amplification.
   app.get('/api/health', (req: Request, res: Response) => {
     const provided = req.header('x-health-token');
-    if (!HEALTH_CHECK_TOKEN || provided !== HEALTH_CHECK_TOKEN) {
+    if (!HEALTH_CHECK_TOKEN || !safeTokenCompare(provided, HEALTH_CHECK_TOKEN)) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
     return res.json({ status: 'ok' });
@@ -409,6 +432,11 @@ export function registerCustomEndpoints(app: Express, payload: Payload): void {
               )
             : undefined;
 
+        // Reuse existing unsubscribeToken (stable, never rotated) or generate one for new subscribers.
+        const unsubscribeToken = existingDoc
+          ? (existingDoc.unsubscribeToken as string | undefined)
+          : randomUUID();
+
         if (existingDoc) {
           await payload.update({
             collection: 'newsletter-subscribers',
@@ -438,8 +466,7 @@ export function registerCustomEndpoints(app: Express, payload: Payload): void {
               doubleOptInConfirmed: false,
               confirmToken,
               confirmTokenExpiry,
-              // Stable token for unsubscribe links — generated once, never rotated.
-              unsubscribeToken: randomUUID(),
+              unsubscribeToken,
               utmParams: safeUtmParams,
             },
             depth: 0,
@@ -453,20 +480,11 @@ export function registerCustomEndpoints(app: Express, payload: Payload): void {
 
         // DB write succeeded — attempt email send separately so an email misconfiguration
         // (e.g. unverified Resend domain) does not roll back the subscriber record.
-        // Look up the unsubscribeToken we just wrote so it can go into the email footer.
-        const savedDoc = await payload.find({
-          collection: 'newsletter-subscribers',
-          where: { email: { equals: email.toLowerCase() } },
-          limit: 1,
-          depth: 0,
-        });
-        const unsubTok = (savedDoc.docs[0] as Record<string, unknown> | undefined)
-          ?.unsubscribeToken as string | undefined;
         try {
           await sendNewsletterConfirmation({
             email: email.toLowerCase(),
             confirmUrl,
-            unsubscribeToken: unsubTok,
+            unsubscribeToken,
             locale: safeLocale,
           });
         } catch (emailErr) {
@@ -608,6 +626,52 @@ export function registerCustomEndpoints(app: Express, payload: Payload): void {
     },
   );
 
+  // GET /api/newsletter/unsubscribe?token=...
+  // Linked from unsubscribe footers in outgoing emails. Email clients follow
+  // href links as GET requests — the POST handler alone is unreachable from email.
+  // Token-based only (no email fallback) to prevent cross-origin unsubscribe abuse.
+  app.get(
+    '/api/newsletter/unsubscribe',
+    newsletterLimiter,
+    async (req: ReqWithId, res: Response) => {
+      const token = typeof req.query.token === 'string' ? req.query.token : undefined;
+      if (!token) {
+        return res.status(400).send('Missing unsubscribe token.');
+      }
+
+      try {
+        const result = await payload.find({
+          collection: 'newsletter-subscribers',
+          where: { unsubscribeToken: { equals: token } },
+          limit: 1,
+          depth: 0,
+        });
+
+        const doc = result.docs[0] as Record<string, unknown> | undefined;
+        if (doc) {
+          await payload.update({
+            collection: 'newsletter-subscribers',
+            id: doc.id as string | number,
+            data: { status: 'unsubscribed' },
+            depth: 0,
+          });
+        }
+        // Always redirect — don't reveal whether the token exists.
+        const frontendUrl = process.env.FRONTEND_URL ?? 'http://localhost:3000';
+        try {
+          const target = new URL(frontendUrl);
+          target.pathname = '/newsletter/unsubscribed';
+          return res.redirect(302, target.toString());
+        } catch {
+          return res.json({ message: 'Unsubscribed.' });
+        }
+      } catch (err) {
+        payload.logger.error({ requestId: req.requestId, err }, 'newsletter/unsubscribe GET error');
+        return res.status(500).json({ error: 'Something went wrong. Please try again later.' });
+      }
+    },
+  );
+
   // ── Education gate — email capture before gated PDFs / ebooks ─────────────
   // On success returns the content URL (plain in dev; signed R2 URL in prod).
   app.post('/api/education/gate', newsletterLimiter, async (req: ReqWithId, res: Response) => {
@@ -658,6 +722,7 @@ export function registerCustomEndpoints(app: Express, payload: Payload): void {
         const frontendUrl = process.env.FRONTEND_URL ?? 'http://localhost:3000';
         const confirmUrl = `${serverUrl}/api/newsletter/confirm?token=${confirmToken}&redirect=${encodeURIComponent(frontendUrl)}`;
 
+        const unsubscribeToken = randomUUID();
         await payload.create({
           collection: 'newsletter-subscribers',
           data: {
@@ -670,16 +735,17 @@ export function registerCustomEndpoints(app: Express, payload: Payload): void {
             doubleOptInConfirmed: false,
             confirmToken,
             confirmTokenExpiry,
-            unsubscribeToken: randomUUID(),
+            unsubscribeToken,
           },
           depth: 0,
         });
 
-        // Fire-and-forget — don't block returning the content URL
+        // Fire-and-forget — don't block returning the content URL.
+        // unsubscribeToken reuses the same value stored in the DB above.
         sendNewsletterConfirmation({
           email: email.toLowerCase(),
           confirmUrl,
-          unsubscribeToken: randomUUID(),
+          unsubscribeToken,
           locale: safeLocale,
         }).catch((err) =>
           payload.logger.error({ err }, 'education gate: confirmation email failed'),
@@ -722,25 +788,19 @@ export function registerCustomEndpoints(app: Express, payload: Payload): void {
         .json({ errors: [{ field: 'subject', message: 'Subject is required.' }] });
     }
     if (subject.trim().length > 300) {
-      return res
-        .status(400)
-        .json({
-          errors: [{ field: 'subject', message: 'Subject must be 300 characters or fewer.' }],
-        });
+      return res.status(400).json({
+        errors: [{ field: 'subject', message: 'Subject must be 300 characters or fewer.' }],
+      });
     }
     if (typeof message !== 'string' || message.trim().length < 10) {
-      return res
-        .status(400)
-        .json({
-          errors: [{ field: 'message', message: 'Message must be at least 10 characters.' }],
-        });
+      return res.status(400).json({
+        errors: [{ field: 'message', message: 'Message must be at least 10 characters.' }],
+      });
     }
     if (message.trim().length > 5_000) {
-      return res
-        .status(400)
-        .json({
-          errors: [{ field: 'message', message: 'Message must be 5000 characters or fewer.' }],
-        });
+      return res.status(400).json({
+        errors: [{ field: 'message', message: 'Message must be 5000 characters or fewer.' }],
+      });
     }
 
     try {

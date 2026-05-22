@@ -80,6 +80,14 @@ export const MarketAnalysis: CollectionConfig = {
         } catch {
           return 'Chart embed src is not a valid URL.';
         }
+        // Reject event handler attributes (on* covers all standard HTML event handlers).
+        if (/\bon\w+\s*=/i.test(trimmed)) {
+          return 'Chart embed must not contain event handler attributes.';
+        }
+        // Reject srcdoc — allows arbitrary HTML injection regardless of src.
+        if (/\bsrcdoc\s*=/i.test(trimmed)) {
+          return 'Chart embed must not contain a srcdoc attribute.';
+        }
         return true;
       },
     },

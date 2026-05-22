@@ -28,8 +28,8 @@ export function slugify(input: string): string {
  * pairs that intentionally share a slug.
  *
  * For full belt-and-braces protection against the application-level race,
- * add a Postgres partial unique index `(slug, locale)` per collection table
- * via a raw-SQL migration. Tracked as a hardening follow-up.
+ * a Postgres partial unique index `(slug, locale)` per collection table is
+ * applied via apps/cms/migrations/001_slug_locale_unique_indexes.sql.
  */
 export function slugField(sourceField: string): Field {
   return {

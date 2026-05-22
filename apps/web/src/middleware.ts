@@ -16,8 +16,20 @@ export default function middleware(request: NextRequest) {
     // to the default locale rather than returning a 500.
     // eslint-disable-next-line no-console
     console.error('Locale negotiation failed', err);
-    const url = new URL(`/${routing.defaultLocale}`, request.url);
-    return NextResponse.redirect(url);
+    const { pathname } = request.nextUrl;
+    // If already on the default locale path, pass through to avoid a redirect loop.
+    if (
+      pathname === `/${routing.defaultLocale}` ||
+      pathname.startsWith(`/${routing.defaultLocale}/`)
+    ) {
+      return NextResponse.next();
+    }
+    const url = new URL(`/${routing.defaultLocale}${pathname}`, request.url);
+    const response = NextResponse.redirect(url);
+    // Cookie ensures subsequent requests don't re-trigger locale negotiation
+    // via the same malformed header.
+    response.cookies.set('NEXT_LOCALE', routing.defaultLocale, { path: '/', sameSite: 'lax' });
+    return response;
   }
 }
 

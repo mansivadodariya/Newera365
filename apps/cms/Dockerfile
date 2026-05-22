@@ -25,8 +25,12 @@ WORKDIR /app/packages/types
 RUN npm run build
 
 # 2. Build Payload admin UI (webpack) + server TypeScript
+# PAYLOAD_PUBLIC_SERVER_URL must be baked in at build time — the webpack bundler
+# embeds it into the admin JS so the browser knows where to send API requests.
 WORKDIR /app/apps/cms
+ARG PAYLOAD_PUBLIC_SERVER_URL=https://cms-production-580a.up.railway.app
 ENV PAYLOAD_CONFIG_PATH=src/payload.config.ts
+ENV PAYLOAD_PUBLIC_SERVER_URL=$PAYLOAD_PUBLIC_SERVER_URL
 RUN npm run build
 
 # Prune dev deps from the full node_modules tree

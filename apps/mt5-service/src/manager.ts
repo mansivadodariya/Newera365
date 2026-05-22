@@ -33,10 +33,11 @@ export async function getInstruments(assetClass?: string): Promise<MT5Response<I
   }
 
   // TODO(NE-003): replace this stub with the real MT5 Manager API call.
-  // The real call should fetch live tick data and map it to InstrumentSpec[].
+  // Credentials are present but live fetch is not yet implemented — still return
+  // cms-fallback so the CMS/frontend don't show a false "live prices" badge.
   return {
-    usesMT5Data: true,
-    source: 'mt5-live',
+    usesMT5Data: false,
+    source: 'cms-fallback',
     fetchedAt: new Date().toISOString(),
     data,
   };
@@ -57,9 +58,11 @@ export async function getInstrument(symbol: string): Promise<MT5Response<Instrum
   }
 
   // TODO(NE-003): fetch live data for a single instrument from the MT5 Manager API.
+  // Credentials are present but live fetch is not yet implemented — still return
+  // cms-fallback so the CMS/frontend don't show a false "live prices" badge.
   return {
-    usesMT5Data: true,
-    source: 'mt5-live',
+    usesMT5Data: false,
+    source: 'cms-fallback',
     fetchedAt: new Date().toISOString(),
     data: found,
   };

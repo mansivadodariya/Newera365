@@ -22,9 +22,16 @@ const main = async (): Promise<void> => {
     'utf8',
   );
 
-  const pool = new Pool({ connectionString, ssl: { rejectUnauthorized: false } });
+  // Default to verifying the server cert (matches sslmode=verify-full in DATABASE_URL).
+  // Set MIGRATE_SKIP_SSL=true only for local environments without a valid CA chain.
+  const skipSsl = process.env.MIGRATE_SKIP_SSL === 'true';
+  const pool = new Pool({
+    connectionString,
+    ssl: skipSsl ? false : { rejectUnauthorized: true },
+  });
   const client = await pool.connect();
 
+  let exitCode = 0;
   try {
     console.log('Running slug-locale unique index migration…');
     await client.query('BEGIN');
@@ -32,13 +39,15 @@ const main = async (): Promise<void> => {
     await client.query('COMMIT');
     console.log('Migration complete. All indexes created (or already existed).');
   } catch (err) {
-    await client.query('ROLLBACK');
+    // ROLLBACK best-effort — don't let its failure mask the original error.
+    await client.query('ROLLBACK').catch(() => {});
     console.error('Migration failed — rolled back.', err);
-    process.exit(1);
+    exitCode = 1;
   } finally {
     client.release();
     await pool.end();
   }
+  process.exit(exitCode);
 };
 
 void main();

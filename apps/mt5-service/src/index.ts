@@ -1,8 +1,20 @@
 import 'dotenv/config';
+import { timingSafeEqual } from 'crypto';
 import express, { type Request, type Response, type NextFunction } from 'express';
 import cors from 'cors';
 import { ASSET_CLASSES, isAssetClass } from '@newera365/types';
 import { getInstruments, getInstrument } from './manager';
+
+function safeTokenCompare(provided: string | undefined, expected: string): boolean {
+  if (!provided) return false;
+  try {
+    const a = Buffer.from(provided);
+    const b = Buffer.from(expected);
+    return a.length === b.length && timingSafeEqual(a, b);
+  } catch {
+    return false;
+  }
+}
 
 const app = express();
 const port = Number(process.env.PORT ?? 4000);
@@ -29,7 +41,7 @@ function requireInternalToken(req: Request, res: Response, next: NextFunction): 
     return;
   }
   const provided = req.header('authorization');
-  if (provided !== `Bearer ${MT5_INTERNAL_API_TOKEN}`) {
+  if (!safeTokenCompare(provided, `Bearer ${MT5_INTERNAL_API_TOKEN}`)) {
     res.status(401).json({ error: 'Unauthorized' });
     return;
   }
@@ -38,7 +50,7 @@ function requireInternalToken(req: Request, res: Response, next: NextFunction): 
 
 app.get('/health', (req, res) => {
   const provided = req.header('x-health-token');
-  if (!HEALTH_CHECK_TOKEN || provided !== HEALTH_CHECK_TOKEN) {
+  if (!HEALTH_CHECK_TOKEN || !safeTokenCompare(provided, HEALTH_CHECK_TOKEN)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
   return res.json({ status: 'ok' });

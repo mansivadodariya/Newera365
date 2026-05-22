@@ -4,12 +4,10 @@ import type { CollectionConfig } from 'payload/types';
 // /api/newsletter/*. Not publicly readable — admin only. Most fields are
 // system-managed and read-only in the admin panel.
 //
-// SECURITY: `create: () => true` makes this collection publicly writable.
-// The corresponding /api/newsletter/subscribe endpoint MUST be paired with:
-//   - express-rate-limit (~5 req/min/IP)
-//   - a Cloudflare Turnstile token check
-//   - email-format validation before write
-// Without these, the table is an open dumping ground for bulk-email pollution.
+// Direct writes via the Payload REST API require authentication. The custom
+// /api/newsletter/subscribe endpoint uses the local API (overrideAccess: true
+// by default in Payload v2) so it bypasses this check — rate-limiting and
+// validation are enforced there instead.
 export const NewsletterSubscribers: CollectionConfig = {
   slug: 'newsletter-subscribers',
   admin: {
@@ -19,7 +17,9 @@ export const NewsletterSubscribers: CollectionConfig = {
   },
   access: {
     read: ({ req }) => Boolean(req.user),
-    create: () => true,
+    create: ({ req }) => Boolean(req.user),
+    update: ({ req }) => Boolean(req.user),
+    delete: ({ req }) => Boolean(req.user),
   },
   fields: [
     { name: 'email', type: 'email', required: true, unique: true, index: true },
