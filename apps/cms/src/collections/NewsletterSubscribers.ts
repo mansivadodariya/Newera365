@@ -1,8 +1,8 @@
 import type { CollectionConfig } from 'payload/types';
 
-// Powers the /newsletter double opt-in flow. Synced to Mailchimp via
-// /api/newsletter/*. Not publicly readable — admin only. Most fields are
-// system-managed and read-only in the admin panel.
+// Powers the /newsletter double opt-in flow. Optionally synced to a Resend
+// Audience via /api/newsletter/*. Not publicly readable — admin only. Most fields
+// are system-managed and read-only in the admin panel.
 //
 // Direct writes via the Payload REST API require authentication. The custom
 // /api/newsletter/subscribe endpoint uses the local API (overrideAccess: true
@@ -71,7 +71,7 @@ export const NewsletterSubscribers: CollectionConfig = {
     {
       name: 'externalId',
       type: 'text',
-      admin: { readOnly: true, description: 'Mailchimp subscriber ID after sync.' },
+      admin: { readOnly: true, description: 'Resend Audience contact ID after sync.' },
     },
     {
       name: 'utmParams',

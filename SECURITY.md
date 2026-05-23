@@ -63,6 +63,36 @@ npm run db:migrate:slug-indexes -w apps/cms
 
 SQL file: [`apps/cms/migrations/001_slug_locale_unique_indexes.sql`](apps/cms/migrations/001_slug_locale_unique_indexes.sql)
 
+This migration also runs automatically on server startup (`apps/cms/src/server.ts`,
+guarded by `RUN_MIGRATIONS_ON_START`, default ON in production). It is idempotent
+(`CREATE INDEX IF NOT EXISTS`) and non-fatal — a failure logs and the server still
+boots, because the `uniqueSlugPerLocale` application hook enforces uniqueness too.
+
+---
+
+### Operational caveats (not yet hardened)
+
+#### Media storage is ephemeral
+
+The `Media` collection writes uploads to the container filesystem
+(`apps/cms/src/collections/Media.ts`, `staticDir: 'media'`). On Railway the
+container filesystem is **ephemeral** — every deploy/restart wipes all uploaded
+images, PDFs, and audio. **Do not rely on CMS-uploaded media surviving a deploy
+until durable storage is wired.**
+
+- **Durable fix (preferred):** Cloudflare R2 via `@payloadcms/plugin-cloud-storage`
+  (NE-027), once R2 credentials are provisioned. Env scaffolding (`R2_*`) is already
+  in `.env.example`.
+- **Interim fix (no external creds):** mount a Railway **persistent volume** at the
+  media directory so uploads survive deploys. This needs a one-time volume setup in
+  the Railway dashboard and is not configured in code yet.
+
+#### Database connection pool
+
+`apps/cms/src/payload.config.ts` caps the Postgres pool at `max: 5` to stay within
+Neon's free/starter connection limits. Under concurrent admin + API load this can be
+tight. When on a paid Neon tier, raise `max` to ~10–15 and re-test.
+
 ---
 
 ### Smoke-test checklist (Resend / forgot-password)

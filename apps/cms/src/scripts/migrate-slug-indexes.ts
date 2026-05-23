@@ -4,50 +4,23 @@
  *
  * Run via:
  *   npm run db:migrate:slug-indexes -w apps/cms
+ *
+ * The same migration also runs automatically on server startup (server.ts,
+ * guarded by RUN_MIGRATIONS_ON_START). This script is for manual/ad-hoc runs.
  */
 import 'dotenv/config';
-import { readFileSync } from 'fs';
-import { join } from 'path';
-import { Pool } from 'pg';
+import { runSlugIndexMigration } from '../db/runSlugIndexMigration';
 
 const main = async (): Promise<void> => {
-  const connectionString = process.env.DATABASE_URL;
-  if (!connectionString) {
-    console.error('DATABASE_URL is not set — aborting.');
-    process.exit(1);
-  }
-
-  const sql = readFileSync(
-    join(__dirname, '../../migrations/001_slug_locale_unique_indexes.sql'),
-    'utf8',
-  );
-
-  // Default to verifying the server cert (matches sslmode=verify-full in DATABASE_URL).
-  // Set MIGRATE_SKIP_SSL=true only for local environments without a valid CA chain.
-  const skipSsl = process.env.MIGRATE_SKIP_SSL === 'true';
-  const pool = new Pool({
-    connectionString,
-    ssl: skipSsl ? false : { rejectUnauthorized: true },
-  });
-  const client = await pool.connect();
-
-  let exitCode = 0;
   try {
     console.log('Running slug-locale unique index migration…');
-    await client.query('BEGIN');
-    await client.query(sql);
-    await client.query('COMMIT');
+    await runSlugIndexMigration();
     console.log('Migration complete. All indexes created (or already existed).');
+    process.exit(0);
   } catch (err) {
-    // ROLLBACK best-effort — don't let its failure mask the original error.
-    await client.query('ROLLBACK').catch(() => {});
-    console.error('Migration failed — rolled back.', err);
-    exitCode = 1;
-  } finally {
-    client.release();
-    await pool.end();
+    console.error('Migration failed.', err);
+    process.exit(1);
   }
-  process.exit(exitCode);
 };
 
 void main();

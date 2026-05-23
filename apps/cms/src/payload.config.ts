@@ -20,10 +20,12 @@ import { Careers } from './collections/Careers';
 import { LegalPages } from './collections/LegalPages';
 import { CompanyContent } from './collections/CompanyContent';
 import { TeamMembers } from './collections/TeamMembers';
+import { WebinarRegistrations } from './collections/WebinarRegistrations';
 import { SiteSettings } from './globals/SiteSettings';
 import { emailTransport } from './email/transport';
 import Logo from './graphics/Logo';
 import Icon from './graphics/Icon';
+import TwoFactorLoginField from './components/TwoFactorLoginField';
 
 // These checks run server-side only. payload.config.ts is also bundled by
 // webpack for the browser admin UI — in that context process.env vars are
@@ -50,6 +52,9 @@ if (typeof window === 'undefined') {
   }
   if (!process.env.EMAIL_FROM && process.env.NODE_ENV === 'production') {
     throw new Error('EMAIL_FROM must be set in production');
+  }
+  if (!process.env.CONSENT_IP_SALT && process.env.NODE_ENV === 'production') {
+    throw new Error('CONSENT_IP_SALT must be set in production — generate: openssl rand -hex 16');
   }
 }
 
@@ -79,6 +84,10 @@ export default buildConfig({
       // Alias them to the no-op mock so webpack doesn't try to bundle them for the browser.
       const resendEmailPath = path.resolve(__dirname, 'email/resend');
       const endpointsPath = path.resolve(__dirname, 'endpoints');
+      // The TOTP module imports otplib + qrcode (Node crypto) — swap it for the
+      // browser-safe mock so the Users collection config still resolves in the bundle.
+      const totpPath = path.resolve(__dirname, 'auth/totp');
+      const totpMock = path.resolve(__dirname, 'auth/totp.mock');
       return {
         ...config,
         resolve: {
@@ -88,10 +97,13 @@ export default buildConfig({
             [transportPath]: transportMock,
             [resendEmailPath]: transportMock,
             [endpointsPath]: transportMock,
+            [totpPath]: totpMock,
             // npm packages aliased to false → webpack emits empty modules,
             // preventing their Node-only internals from crashing the browser bundle.
             nodemailer: false,
             resend: false,
+            otplib: false,
+            qrcode: false,
           },
         },
       };
@@ -104,6 +116,9 @@ export default buildConfig({
         Logo,
         Icon,
       },
+      // Renders a 2FA code input on the login screen and injects `otp` into the
+      // login request. Enforcement is server-side in the Users beforeLogin hook.
+      beforeLogin: [TwoFactorLoginField],
     },
   },
   editor: slateEditor({}),
@@ -138,6 +153,7 @@ export default buildConfig({
     LegalPages,
     CompanyContent,
     TeamMembers,
+    WebinarRegistrations,
   ],
   globals: [SiteSettings],
   cors: [corsOrigin],

@@ -24,6 +24,7 @@ export interface Config {
     'legal-pages': LegalPage;
     'company-content': CompanyContent;
     'team-members': TeamMember;
+    'webinar-registrations': WebinarRegistration;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
@@ -38,7 +39,9 @@ export interface Config {
 export interface User {
   id: number;
   name: string;
-  enable2fa: boolean;
+  totpEnabled?: boolean | null;
+  totpSecret?: string | null;
+  totpTempSecret?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -443,6 +446,21 @@ export interface TeamMember {
   status: 'active' | 'inactive';
   translationKey?: string | null;
   locale: 'en' | 'ar';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "webinar-registrations".
+ */
+export interface WebinarRegistration {
+  id: number;
+  webinar: number | Webinar;
+  name: string;
+  email: string;
+  locale: 'en' | 'ar';
+  registeredAt?: string | null;
+  consentIpHash?: string | null;
   updatedAt: string;
   createdAt: string;
 }

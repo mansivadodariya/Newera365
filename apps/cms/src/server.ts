@@ -3,6 +3,7 @@ import path from 'path';
 import express, { type Request, type Response, type NextFunction } from 'express';
 import payload from 'payload';
 import { registerCustomEndpoints } from './endpoints';
+import { runSlugIndexMigration } from './db/runSlugIndexMigration';
 
 const app = express();
 const port = Number(process.env.PORT ?? 3001);
@@ -58,10 +59,30 @@ const start = async (): Promise<void> => {
     },
   });
 
+  // Apply the (slug, locale) compound unique indexes. Idempotent (CREATE ...
+  // IF NOT EXISTS) so it is safe on every boot. Defaults to ON in production;
+  // set RUN_MIGRATIONS_ON_START=false to skip. A failure here is non-fatal —
+  // the uniqueSlugPerLocale application hook still enforces uniqueness — so we
+  // log and continue rather than crash the server.
+  const runMigrations =
+    process.env.RUN_MIGRATIONS_ON_START === 'true' ||
+    (process.env.RUN_MIGRATIONS_ON_START !== 'false' && process.env.NODE_ENV === 'production');
+  if (runMigrations) {
+    try {
+      await runSlugIndexMigration();
+      payload.logger.info('Slug-locale unique index migration applied (or already present).');
+    } catch (err) {
+      payload.logger.error(
+        { err },
+        'Slug-index migration failed — continuing (app hook still enforces uniqueness).',
+      );
+    }
+  }
+
   // Custom REST endpoints built on the Payload Express app.
   // Pass the initialized payload instance so endpoints can query collections
   // and globals (e.g. reading mt5SyncEnabled from SiteSettings).
-  registerCustomEndpoints(app, payload);
+  await registerCustomEndpoints(app, payload);
 
   // Redirect /admin → /admin/ so browsers don't get a bare Express 404.
   app.get('/admin', (_req: Request, res: Response) => res.redirect(301, '/admin/'));

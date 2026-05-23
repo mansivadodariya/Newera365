@@ -3,6 +3,7 @@ import type { Express, Request, Response, NextFunction } from 'express';
 import type { Payload } from 'payload';
 import type { Where } from 'payload/dist/types';
 import rateLimit from 'express-rate-limit';
+import { createRateLimitStoreFactory } from '../rateLimit/postgresStore';
 import {
   ASSET_CLASSES,
   isAssetClass,
@@ -14,6 +15,9 @@ import {
   sendNewsletterConfirmation,
   sendContactNotification,
   sendPartnersNotification,
+  sendWebinarRegistrationConfirmation,
+  sendWebinarRegistrationNotification,
+  syncSubscriberToAudience,
 } from '../email/resend';
 
 /**
@@ -21,7 +25,7 @@ import {
  * non-CMS routes the frontend calls:
  *   /api/mt5/instruments          MT5 proxy — respects global + per-doc toggles
  *   /api/mt5/instruments/:symbol  Single instrument
- *   /api/newsletter/subscribe     double opt-in start (Mailchimp)
+ *   /api/newsletter/subscribe     double opt-in start (optional Resend Audience sync)
  *   /api/newsletter/confirm       opt-in confirmation
  *   /api/newsletter/unsubscribe
  *   /api/contact                  contact form (rate-limited)
@@ -43,15 +47,13 @@ const HEALTH_CHECK_TOKEN = process.env.HEALTH_CHECK_TOKEN;
 
 // Salt for IP hashing — prevents rainbow-table reversal of low-entropy IPv4 space.
 // An empty salt makes all hashes trivially reversible via precomputed tables.
-if (!process.env.CONSENT_IP_SALT) {
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error('CONSENT_IP_SALT must be set in production — generate: openssl rand -hex 16');
-  } else {
-    // eslint-disable-next-line no-console
-    console.warn(
-      '[newsletter] CONSENT_IP_SALT not set — IP hashes have no rainbow-table protection. Add it to .env',
-    );
-  }
+// The hard production requirement is enforced once in payload.config.ts alongside
+// the other required-env checks; here we only warn in dev so both error paths can't diverge.
+if (!process.env.CONSENT_IP_SALT && process.env.NODE_ENV !== 'production') {
+  // eslint-disable-next-line no-console
+  console.warn(
+    '[newsletter] CONSENT_IP_SALT not set — IP hashes have no rainbow-table protection. Add it to .env',
+  );
 }
 const CONSENT_IP_SALT = process.env.CONSENT_IP_SALT ?? '';
 
@@ -93,15 +95,28 @@ const fetchWithTimeout = async (url: string, timeoutMs: number) => {
   }
 };
 
-export function registerCustomEndpoints(app: Express, payload: Payload): void {
+export async function registerCustomEndpoints(app: Express, payload: Payload): Promise<void> {
   app.use(requestIdMiddleware);
 
-  const contactLimiter = rateLimit({ windowMs: RATE_LIMIT_WINDOW_MS, max: CONTACT_RATE_LIMIT });
-  const webinarLimiter = rateLimit({ windowMs: RATE_LIMIT_WINDOW_MS, max: WEBINAR_RATE_LIMIT });
-  const newsletterLimiter = rateLimit({
-    windowMs: RATE_LIMIT_WINDOW_MS,
-    max: NEWSLETTER_RATE_LIMIT,
-  });
+  // Durable, Postgres-backed rate limiting (survives deploys/restarts). Falls back
+  // to express-rate-limit's in-memory store if the backing table can't be provisioned,
+  // so a transient DB issue can't take the API down.
+  const storeFactory = await createRateLimitStoreFactory();
+  if (!storeFactory) {
+    payload.logger.warn(
+      'Rate-limit Postgres store unavailable — falling back to in-memory limiting (resets on restart).',
+    );
+  }
+  const makeLimiter = (max: number, prefix: string) =>
+    rateLimit({
+      windowMs: RATE_LIMIT_WINDOW_MS,
+      max,
+      ...(storeFactory ? { store: storeFactory(prefix) } : {}),
+    });
+
+  const contactLimiter = makeLimiter(CONTACT_RATE_LIMIT, 'contact');
+  const webinarLimiter = makeLimiter(WEBINAR_RATE_LIMIT, 'webinar');
+  const newsletterLimiter = makeLimiter(NEWSLETTER_RATE_LIMIT, 'newsletter');
 
   // ── Health ─────────────────────────────────────────────────────────────────
   // Token-gated to prevent uptime fingerprinting and DDoS amplification.
@@ -551,6 +566,27 @@ export function registerCustomEndpoints(app: Express, payload: Payload): void {
         depth: 0,
       });
 
+      // Optional Resend Audience sync — no-op unless RESEND_AUDIENCE_ID is set.
+      // Non-fatal: a sync failure must never break the confirmation flow.
+      if (process.env.RESEND_AUDIENCE_ID && !doc.externalId) {
+        try {
+          const contactId = await syncSubscriberToAudience(doc.email as string);
+          if (contactId) {
+            await payload.update({
+              collection: 'newsletter-subscribers',
+              id: doc.id as string | number,
+              data: { externalId: contactId },
+              depth: 0,
+            });
+          }
+        } catch (syncErr) {
+          payload.logger.error(
+            { requestId: req.requestId, syncErr },
+            'newsletter/confirm: Resend Audience sync failed — subscriber still confirmed',
+          );
+        }
+      }
+
       // Redirect to frontend success page, falling back to a plain JSON response
       if (rawRedirect) {
         try {
@@ -872,7 +908,97 @@ export function registerCustomEndpoints(app: Express, payload: Payload): void {
   });
 
   // ── Webinar registration ─────────────────────────────────────────────────
-  app.post('/api/webinars/register', webinarLimiter, (_req, res) => {
-    res.status(501).json({ error: 'This endpoint is not yet available.' });
+  // Captures a registration + sends a Resend confirmation. No Zoom dependency.
+  app.post('/api/webinars/register', webinarLimiter, async (req: ReqWithId, res: Response) => {
+    const { name, email, webinarId, locale } = req.body ?? {};
+
+    if (typeof name !== 'string' || !name.trim()) {
+      return res.status(400).json({ errors: [{ field: 'name', message: 'Name is required.' }] });
+    }
+    if (name.trim().length > 200) {
+      return res
+        .status(400)
+        .json({ errors: [{ field: 'name', message: 'Name must be 200 characters or fewer.' }] });
+    }
+    if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res
+        .status(400)
+        .json({ errors: [{ field: 'email', message: 'A valid email address is required.' }] });
+    }
+    if (!webinarId) {
+      return res
+        .status(400)
+        .json({ errors: [{ field: 'webinarId', message: 'webinarId is required.' }] });
+    }
+    const safeLocale = locale === 'ar' ? 'ar' : 'en';
+
+    try {
+      let webinar: Record<string, unknown>;
+      try {
+        webinar = (await payload.findByID({
+          collection: 'webinars',
+          id: webinarId as string,
+          depth: 0,
+        })) as Record<string, unknown>;
+      } catch {
+        return res.status(404).json({ error: 'Webinar not found.' });
+      }
+      if (!webinar) return res.status(404).json({ error: 'Webinar not found.' });
+
+      const status = webinar.status as string | undefined;
+      if (status !== 'upcoming' && status !== 'live') {
+        return res.status(400).json({ error: 'Registration is not open for this webinar.' });
+      }
+
+      // Persist first (so an email failure doesn't lose the registration), then email.
+      const rawIp = req.ip ?? req.socket.remoteAddress ?? '';
+      const consentIpHash = createHash('sha256')
+        .update(CONSENT_IP_SALT + rawIp)
+        .digest('hex');
+
+      await payload.create({
+        collection: 'webinar-registrations',
+        data: {
+          webinar: webinar.id as number,
+          name: name.trim().slice(0, 200),
+          email: email.toLowerCase(),
+          locale: safeLocale,
+          registeredAt: new Date().toISOString(),
+          consentIpHash,
+        },
+        depth: 0,
+      });
+
+      const webinarTitle = (webinar.title as string | undefined) ?? 'NewEra365 Webinar';
+      const scheduledAt = webinar.scheduledAt as string | undefined;
+
+      try {
+        await sendWebinarRegistrationConfirmation({
+          email: email.toLowerCase(),
+          name: name.trim(),
+          webinarTitle,
+          scheduledAt,
+          locale: safeLocale,
+        });
+        // Internal notify is best-effort — don't fail the request if it errors.
+        await sendWebinarRegistrationNotification({
+          name: name.trim(),
+          email: email.toLowerCase(),
+          webinarTitle,
+        }).catch((notifyErr) =>
+          payload.logger.error({ requestId: req.requestId, notifyErr }, 'webinar notify failed'),
+        );
+      } catch (emailErr) {
+        payload.logger.error(
+          { requestId: req.requestId, emailErr },
+          'webinars/register: confirmation email failed — registration saved',
+        );
+      }
+
+      return res.json({ message: 'You are registered. Check your email for confirmation.' });
+    } catch (err) {
+      payload.logger.error({ requestId: req.requestId, err }, 'webinars/register error');
+      return res.status(500).json({ error: 'Something went wrong. Please try again later.' });
+    }
   });
 }
