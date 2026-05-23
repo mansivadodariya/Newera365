@@ -64,6 +64,8 @@ COPY --from=builder /app/apps/cms/dist/        ./apps/cms/dist/
 COPY --from=builder /app/apps/cms/build/       ./apps/cms/build/
 # Raw SQL migrations — read at startup by runSlugIndexMigration (RUN_MIGRATIONS_ON_START).
 COPY --from=builder /app/apps/cms/migrations/  ./apps/cms/migrations/
+# Static assets served by Express at /public (logo, favicon, etc.).
+COPY --from=builder /app/apps/cms/public/      ./apps/cms/public/
 
 WORKDIR /app/apps/cms
 
