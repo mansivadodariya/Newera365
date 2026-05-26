@@ -2,6 +2,8 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
+const isDev = process.env.NODE_ENV === 'development';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -45,7 +47,7 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' https://s3.tradingview.com https://www.tradingview.com",
+              `script-src 'self'${isDev ? " 'unsafe-eval' 'unsafe-inline'" : ''} https://s3.tradingview.com https://www.tradingview.com`,
               "frame-src https://www.tradingview.com https://s.tradingview.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https://media.newera365.com https://cms.newera365.com",

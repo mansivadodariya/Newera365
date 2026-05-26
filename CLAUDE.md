@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-NewEra365.com — website for a forex/CFD broker. Reference **CSL-NE365-2026-Q2** (CodeSquareLabs), target launch July 2026. Bilingual: English (LTR, default) + Arabic (RTL). The scaffold is an early skeleton — most of the 51 routes, the MT5 bridge, and the custom API endpoints are not yet implemented.
+NewEra365.com — website for a forex/CFD broker. Reference **CSL-NE365-2026-Q2** (CodeSquareLabs), target launch July 2026. Bilingual: English (LTR, default) + Arabic (RTL).
 
 ## Commands
 
@@ -14,43 +14,106 @@ Run from the repo root — Turborepo pipelines tasks across all workspaces.
 npm install                 # install all workspaces
 npm run dev                 # run web + cms + mt5-service together
 npm run build               # build all (CI runs this)
-npm run lint                # ESLint across workspaces
+npm run lint                # ESLint across workspaces (web lint also runs check-i18n)
 npm run type-check          # tsc --noEmit across workspaces
 npm run format              # Prettier write across the repo
 ```
 
-Single workspace: `npm run dev --workspace=@newera365/web` (or `@newera365/cms`, `@newera365/mt5-service`). There is no test runner wired up yet — `npm run test` is a no-op until test tooling is added.
+Single workspace:
 
-CMS-specific: `npm run generate:types --workspace=@newera365/cms` regenerates `apps/cms/src/payload-types.ts` after editing collections.
+```bash
+npm run dev --workspace=@newera365/web
+npm run dev --workspace=@newera365/cms
+npm run dev --workspace=@newera365/mt5-service
+```
+
+CMS-specific:
+
+```bash
+npm run generate:types --workspace=@newera365/cms   # regenerate payload-types.ts after editing collections
+npm run db:migrate:slug-indexes --workspace=@newera365/cms  # apply slug+locale compound index migration
+```
 
 Dev ports: web `3000`, cms `3001`, mt5-service `4000`.
+
+**CMS startup is slow (~20–40 s)** — the `@payloadcms/db-postgres` adapter runs a drizzle schema push against Neon on every boot, which requires many round trips over the internet. Wait for `CMS server listening on http://localhost:3001` before hitting endpoints.
+
+There is no test runner wired up — `npm run test` is a no-op until test tooling is added.
 
 ## Architecture
 
 npm workspaces + Turborepo monorepo. Three apps, three shared packages.
 
-- **`apps/web`** — Next.js 14 App Router frontend. All pages live under `src/app/[locale]/`; `[locale]` is `en` or `ar`. Internationalization is **next-intl v3**: `src/i18n/routing.ts` (locale list, always-prefix), `src/i18n/request.ts` (per-request messages loader), `src/middleware.ts` (locale negotiation). Translation strings are in `messages/en.json` and `messages/ar.json` — `ar.json` currently holds `__AR__`-prefixed stubs; the client supplies real Arabic copy. The `[locale]/layout.tsx` sets `<html dir>` via `dir()` from `@newera365/types`.
+### `apps/web` — Next.js 14 frontend
 
-- **`apps/cms`** — Payload CMS **v2** (not v3) running on a custom Express server (`src/server.ts`). Config is `src/payload.config.ts`. Database is PostgreSQL via `@payloadcms/db-postgres` (Neon in production). **16 collections** in `src/collections/` (Users, Media, BlogPosts, MarketAnalysis, News, ResearchReports, EducationContent, Webinars, ProductsInstruments, AccountTypes, FAQs, NewsletterSubscribers, Careers, LegalPages, CompanyContent, TeamMembers) grouped in the admin under Administration / Editorial / Education / Trading Data / Support / Marketing / Company / Compliance, plus a `SiteSettings` global in `src/globals/`. Custom non-CMS REST routes (`/api/mt5/*`, `/api/newsletter/*`, `/api/contact`, etc.) are registered in `src/endpoints/index.ts` — most are `501` stubs awaiting Phase 3.
+App Router. All pages live under `src/app/[locale]/`; `[locale]` is `en` or `ar`. Internationalization is **next-intl v3**: `src/i18n/routing.ts` (locale list, `localePrefix: 'always'`), `src/i18n/request.ts` (per-request messages loader). Translation strings are in `messages/en.json` and `messages/ar.json`; `ar.json` holds `__AR__`-prefixed stubs until the client provides real Arabic copy. The i18n check script (`scripts/check-i18n.js`) enforces matching key sets and no `__AR__` stubs — it runs inside `npm run lint` and fails CI on untranslated placeholders.
 
-  **Localization model**: Payload's native `localization` is intentionally **not** used. Each locale-aware collection stores **one document per locale**, carrying an explicit required `locale` select (`en`/`ar`) and a `translationKey` UUID that links the EN/AR counterparts. `(slug, locale)` must be unique. Shared field helpers live in `src/collections/_fields.ts` (`seoFields`, `localizationFields`, `slugField()`). Shared collection hooks live in `src/hooks/`: `ensureTranslationKey` (auto-fills the UUID on create), `uniqueSlugPerLocale(slug)` (hook-enforced compound uniqueness — Payload v2 has no compound-unique index), `deriveAlphabeticalIndex` (EducationContent glossary A-Z key), `archivePreviousLegalVersion` (LegalPages — only one published version per `pageType`+`locale`). Run `npm run generate:types --workspace=@newera365/cms` after editing any collection.
+### `apps/cms` — Payload CMS v2 + Express
 
-- **`apps/mt5-service`** — standalone Express service mocking the MT5 Manager API (live spreads, swaps, instrument specs). `src/manager.ts` serves static tables from `src/data/fallback.json` whenever MT5 credentials are absent.
+Config: `src/payload.config.ts`. Server entry: `src/server.ts`. Database: PostgreSQL via `@payloadcms/db-postgres` (Neon). **17 collections** in `src/collections/`: Users, Media, BlogPosts, MarketAnalysis, News, ResearchReports, EducationContent, Webinars, ProductsInstruments, AccountTypes, FAQs, NewsletterSubscribers, Careers, LegalPages, CompanyContent, TeamMembers, WebinarRegistrations — plus a `SiteSettings` global in `src/globals/`.
 
-- **`packages/types`** — shared TS types. `src/locales.ts` is the single source of truth for locales (`LOCALES`, `RTL_LOCALES`, `dir()`, `isRtl()`). `src/mt5.ts` defines `InstrumentSpec` and the `MT5Response<T>` wrapper.
+Custom non-CMS REST endpoints are all implemented in `src/endpoints/index.ts`:
 
-- **`packages/ui`** — shared React components (consumed by `apps/web`; listed in its `transpilePackages`).
+| Endpoint                             | Auth / limits                                                     |
+| ------------------------------------ | ----------------------------------------------------------------- |
+| `GET /api/health`                    | `x-health-token` header required (`HEALTH_CHECK_TOKEN` env var)   |
+| `GET /api/mt5/instruments[/:symbol]` | Public; falls back to CMS data when MT5 service is down           |
+| `POST /api/newsletter/subscribe`     | 5 req/min/IP                                                      |
+| `GET /api/newsletter/confirm`        | Token from confirmation email                                     |
+| `POST /api/newsletter/unsubscribe`   | 5 req/min/IP                                                      |
+| `GET /api/newsletter/unsubscribe`    | Token-based; links from email footers                             |
+| `POST /api/education/gate`           | 5 req/min/IP; validates `contentId` exists in `education-content` |
+| `POST /api/contact`                  | 3 req/min/IP                                                      |
+| `POST /api/partners/apply`           | 5 req/min/IP                                                      |
+| `POST /api/webinars/register`        | 10 req/min/IP; creates `webinar-registrations` record             |
 
-- **`packages/config`** — shared ESLint preset (`eslint-preset.js`) and Tailwind preset (`tailwind-preset.js`, holds placeholder brand tokens — finalize after the Gate 2 design handoff, NE-024).
+Rate limiting is backed by a Postgres table `rate_limit_hits` (created by `src/rateLimit/postgresStore.ts`, outside Payload's schema). On CMS restarts, drizzle schema push will prompt to drop this unknown table — type `y` to accept (it's transient rate-limit data, not content).
+
+TOTP 2FA for admin users is implemented in `src/auth/totp.ts` (server-only) and aliased to `src/auth/totp.mock.ts` in the webpack admin bundle to avoid Node-only imports reaching the browser.
+
+### `apps/mt5-service` — Mock MT5 bridge
+
+Standalone Express service on port 4000. `src/manager.ts` simulates live prices (±0.02% bid/ask jitter) from static tables in `src/data/fallback.json`. The real MT5 Manager API client is a TODO (`NE-003`). The CMS proxy gracefully falls back to CMS manual data when this service is unreachable.
+
+### `packages/types` — shared TypeScript types
+
+`src/locales.ts` — single source of truth for `LOCALES`, `RTL_LOCALES`, `dir()`, `isRtl()`. `src/mt5.ts` — `InstrumentSpec` and `MT5Response<T>` wrapper.
+
+### `packages/ui` — shared React components
+
+Consumed by `apps/web` (listed in `next.config.mjs` `transpilePackages`).
+
+### `packages/config` — shared ESLint + Tailwind presets
+
+Brand tokens are placeholders pending Gate 2 design handoff (NE-024).
 
 ## Conventions & gotchas
 
-- **MT5 fallback pattern**: any data that originates from the MT5 bridge is wrapped in `MT5Response<T>`. When `usesMT5Data` is `false`, the bridge fell back to static tables and the UI must show a static-data / "last updated" notice. Real MT5 credentials are a Day 1-3 blocker (NE-003) — do not assume live data is available.
-- **Payload is v2**, not v3 — APIs differ significantly. Do not use the Next.js-embedded CMS pattern; the CMS is a separate Express app and cannot run on Vercel serverless.
-- **Arabic requires a full RTL layout flip** for every template, not just `dir="rtl"`. Treat AR as a first-class locale in every component.
-- Auth pages (`/register`, `/login`, `/demo-account`) are **out of scope** — handled by the client's CRM team.
-- Work is ticket-tracked as `NE-0xx`; reference the relevant ticket in comments for deferred work.
+**Localization model** — Payload's native `localization` config is intentionally **not** used. Every locale-aware collection stores one document per locale with an explicit `locale` select (`en`/`ar`) and a `translationKey` UUID that links the EN/AR counterparts. The `(slug, locale)` pair must be unique per collection, enforced by the `uniqueSlugPerLocale` hook in `src/hooks/index.ts`. A Postgres partial unique index for belt-and-braces protection is applied by the slug-indexes migration. Shared field helpers (`seoFields`, `localizationFields`, `slugField()`) live in `src/collections/_fields.ts`; shared hooks in `src/hooks/`.
+
+**MT5 fallback pattern** — all MT5 data is wrapped in `MT5Response<T>` (`packages/types/src/mt5.ts`). When `usesMT5Data: false` or `source: 'cms-fallback'`, the bridge was unreachable or overridden and the UI must show a static-data notice. The dual-toggle logic (`mt5SyncEnabled` global master switch + per-instrument `usesMT5Data` field) lives entirely in the CMS endpoint.
+
+**`generate:types` strips a required `@ts-ignore`** — after running `npm run generate:types --workspace=@newera365/cms`, re-add the `@ts-ignore` comment that the generator removes from `apps/cms/src/payload-types.ts` or `tsc` type-check will fail.
+
+**Payload is v2**, not v3 — APIs differ significantly. Do not use the Next.js-embedded CMS pattern; the CMS runs on a standalone Express server and is not Vercel-serverless compatible.
+
+**Arabic is a first-class locale** — every component and template must include a full RTL layout flip, not just `dir="rtl"`. Use `dir()` / `isRtl()` from `@newera365/types`.
+
+**Admin-only collections** — `newsletter-subscribers`, `webinar-registrations`, and `users` return 403 to unauthenticated Payload REST API calls by design.
+
+**Auth pages** (`/register`, `/login`, `/demo-account`) are out of scope — handled by the client's CRM team.
+
+**Work tickets** — deferred work is tagged `NE-0xx` in comments; reference the ticket when noting blockers.
 
 ## Deployment
 
-Frontend → Vercel. CMS → EC2/Railway (Payload v2 is not Vercel-serverless compatible). Database → Neon. File storage → Cloudflare R2 (wired into Payload via `@payloadcms/plugin-cloud-storage` in Phase 3, NE-027). CI (`.github/workflows/ci.yml`) runs lint → type-check → build on push to `main`/`staging`. Husky pre-commit runs Prettier via lint-staged.
+| Component             | Platform                                                                         |
+| --------------------- | -------------------------------------------------------------------------------- |
+| Frontend (`apps/web`) | Vercel                                                                           |
+| CMS (`apps/cms`)      | EC2 / Railway                                                                    |
+| Database              | Neon (serverless PostgreSQL)                                                     |
+| Media / gated PDFs    | Cloudflare R2 — wired via `@payloadcms/plugin-cloud-storage` in Phase 3 (NE-027) |
+
+CI: lint → type-check → build on push to `main`/`staging` (`.github/workflows/ci.yml`). Husky pre-commit runs Prettier via lint-staged.
+
+Required env vars are validated on CMS startup: `PAYLOAD_SECRET` (warn in dev, error in prod), `FRONTEND_URL`, `RESEND_API_KEY`, `EMAIL_FROM`, `CONSENT_IP_SALT` (all error in prod only). `HEALTH_CHECK_TOKEN` must be set to a non-empty value or the `/api/health` endpoint will always return 401.

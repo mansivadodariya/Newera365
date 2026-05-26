@@ -720,12 +720,19 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
     }
 
     try {
-      // Fetch the content record to validate and get the file URL
-      const content = (await payload.findByID({
-        collection: 'education-content',
-        id: contentId as string,
-        depth: 1,
-      })) as Record<string, unknown>;
+      // Fetch the content record to validate and get the file URL.
+      // payload.findByID throws NotFound when the id doesn't exist (Payload v2
+      // behaviour), so we need an inner try-catch to return 404 rather than 500.
+      let content: Record<string, unknown>;
+      try {
+        content = (await payload.findByID({
+          collection: 'education-content',
+          id: contentId as string,
+          depth: 1,
+        })) as Record<string, unknown>;
+      } catch {
+        return res.status(404).json({ error: 'Content not found.' });
+      }
 
       if (!content || content.status !== 'published') {
         return res.status(404).json({ error: 'Content not found.' });

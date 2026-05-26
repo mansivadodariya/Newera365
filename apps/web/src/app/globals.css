@@ -2,6 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: #ffffff;
+  --surface: #f7f8fa;
+  --surface-elevated: #ffffff;
+  --foreground: #111111;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+}
+
+.dark {
+  --background: #111111;
+  --surface: #1c1c1c;
+  --surface-elevated: #242424;
+  --foreground: #ffffff;
+  --muted: #9ca3af;
+  --border: #2a2a2a;
+}
+
 html {
   scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings use Outfit */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Prevent layout shift from scrollbar */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid #00B050;
+  outline-offset: 2px;
+}
+
+/* Hide scrollbar but keep scroll functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
