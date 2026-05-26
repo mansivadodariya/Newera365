@@ -87,7 +87,7 @@
     "stepsGetStarted": "Get started"
   },
   "footer": {
-    "tagline": "Regulated trading across Forex, CFDs, Indices and Crypto.",
+    "tagline": "A premium global trading platform built for the new era of markets.",
     "trading": "Trading",
     "instruments": "Instruments",
     "accountTypes": "Account Types",
@@ -108,7 +108,29 @@
     "privacy": "Privacy Policy",
     "riskDisclosure": "Risk Disclosure",
     "aml": "AML Policy",
-    "riskWarning": "Risk Warning: Trading CFDs and FX carries significant risk to your capital. You should only trade with money you can afford to lose. Past performance is not indicative of future results.",
-    "copyright": "© 2025 NewEra365. All rights reserved."
+    "riskWarning": "Trading involves risk. Past performance is not indicative of future results. Trade responsibly.",
+    "copyright": "© 2026 NEWERA365",
+    "headingMarkets": "MARKETS",
+    "headingPlatform": "PLATFORM",
+    "headingCompany": "COMPANY",
+    "headingSupport": "SUPPORT",
+    "linkForex": "Forex",
+    "linkIndices": "Indices",
+    "linkCommodities": "Commodities",
+    "linkStocks": "Stocks",
+    "linkEtfs": "ETFs",
+    "linkCrypto": "Crypto",
+    "linkMT5": "MetaTrader 5",
+    "linkWebTrader": "Web Trader",
+    "linkMobileApp": "Mobile App",
+    "linkTools": "Tools",
+    "linkAbout": "About",
+    "linkCareers": "Careers",
+    "linkAwards": "Awards",
+    "linkMedia": "Media",
+    "linkContact": "Contact",
+    "linkFaqs": "FAQs",
+    "linkLiveChat": "Live Chat",
+    "linkLegal": "Legal"
   }
 }

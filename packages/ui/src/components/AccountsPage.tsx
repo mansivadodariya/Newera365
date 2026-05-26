@@ -26,16 +26,16 @@ const ACCOUNTS = [
     desc: 'Built for active retail traders. No commission, friendly spreads.',
     pricingLabel: 'PRICING',
     pricingValue: 'No commission',
-    cardBg: 'bg-white',
-    headTextColor: 'text-[#111111]',
-    descColor: 'text-[#6b7280]',
-    pricingLabelColor: 'text-[#6b7280]',
-    pricingValueColor: 'text-[#111111]',
-    rowsContainerBg: 'bg-[#111111]',
-    rowBg: 'bg-[#FAFAF9]',
-    rowLabelColor: 'text-[#6b7280]',
-    rowValueColor: 'text-[#111111]',
-    ctaBg: 'bg-[#111111] text-white',
+    cardBg: 'bg-white dark:bg-surface-elevated',
+    headTextColor: 'text-[#111111] dark:text-white',
+    descColor: 'text-[#6b7280] dark:text-[#9ca3af]',
+    pricingLabelColor: 'text-[#6b7280] dark:text-[#9ca3af]',
+    pricingValueColor: 'text-[#111111] dark:text-white',
+    rowsContainerBg: 'bg-[#111111] dark:bg-[#2a2a2a]',
+    rowBg: 'bg-[#FAFAF9] dark:bg-[#1c1c1c]',
+    rowLabelColor: 'text-[#6b7280] dark:text-[#9ca3af]',
+    rowValueColor: 'text-[#111111] dark:text-white',
+    ctaBg: 'bg-[#111111] dark:bg-white text-white dark:text-[#111111]',
     ctaLabel: 'Open Standard',
     rows: [
       { label: 'Min deposit', value: '$100' },
@@ -59,7 +59,7 @@ const ACCOUNTS = [
     descColor: 'text-white/60',
     pricingLabelColor: 'text-white/50',
     pricingValueColor: 'text-accent',
-    rowsContainerBg: 'bg-white',
+    rowsContainerBg: 'bg-white dark:bg-[#2a2a2a]',
     rowBg: 'bg-[#111111]',
     rowLabelColor: 'text-white/60',
     rowValueColor: 'text-white',
@@ -82,16 +82,16 @@ const ACCOUNTS = [
     desc: 'Dedicated dealer, custom spreads, priority withdrawals for $10k+ accounts.',
     pricingLabel: 'PRICING',
     pricingValue: 'From $1.50 / lot',
-    cardBg: 'bg-white',
-    headTextColor: 'text-[#111111]',
-    descColor: 'text-[#6b7280]',
-    pricingLabelColor: 'text-[#6b7280]',
-    pricingValueColor: 'text-[#111111]',
-    rowsContainerBg: 'bg-[#111111]',
-    rowBg: 'bg-[#FAFAF9]',
-    rowLabelColor: 'text-[#6b7280]',
-    rowValueColor: 'text-[#111111]',
-    ctaBg: 'bg-[#111111] text-white',
+    cardBg: 'bg-white dark:bg-surface-elevated',
+    headTextColor: 'text-[#111111] dark:text-white',
+    descColor: 'text-[#6b7280] dark:text-[#9ca3af]',
+    pricingLabelColor: 'text-[#6b7280] dark:text-[#9ca3af]',
+    pricingValueColor: 'text-[#111111] dark:text-white',
+    rowsContainerBg: 'bg-[#111111] dark:bg-[#2a2a2a]',
+    rowBg: 'bg-[#FAFAF9] dark:bg-[#1c1c1c]',
+    rowLabelColor: 'text-[#6b7280] dark:text-[#9ca3af]',
+    rowValueColor: 'text-[#111111] dark:text-white',
+    ctaBg: 'bg-[#111111] dark:bg-white text-white dark:text-[#111111]',
     ctaLabel: 'Open VIP',
     rows: [
       { label: 'Min deposit', value: '$10,000' },
@@ -121,7 +121,7 @@ export function AccountsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-white px-5 pb-8 pt-9">
+      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
           <SectionKicker className="mb-4">Account Types</SectionKicker>
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
@@ -135,7 +135,7 @@ export function AccountsPage() {
       </section>
 
       {/* Cards — horizontal scroll snap */}
-      <section className="bg-white pb-10">
+      <section className="dark:bg-background bg-white pb-10">
         <div
           className="scrollbar-hide flex snap-x snap-mandatory gap-[14px] overflow-x-auto px-5 pb-2"
           style={{ scrollPaddingLeft: '20px' }}
@@ -214,9 +214,9 @@ export function AccountsPage() {
       </section>
 
       {/* Feature Matrix */}
-      <section className="bg-black px-5 pb-12 pt-10">
+      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-4 [&>span:last-child]:text-white/50 [&>span]:bg-white/40">
+          <SectionKicker className="mb-4 [&>span:last-child]:text-white/50">
             FEATURE MATRIX
           </SectionKicker>
           <h2 className="mb-7 font-sans text-[26px] font-semibold leading-[1.1] text-white">
@@ -230,13 +230,13 @@ export function AccountsPage() {
             {/* Header row */}
             <div className="grid grid-cols-[1fr_52px_52px_52px] border-b border-white/10">
               <div className="px-4 py-3">
-                <span className="font-body text-[11px] uppercase tracking-[0.1em] text-white/40">
+                <span className="font-body text-[9px] uppercase tracking-[0.1em] text-[#FFFFFF8C]">
                   Feature
                 </span>
               </div>
               {['Std', 'Raw', 'VIP'].map((h) => (
                 <div key={h} className="flex items-center justify-center py-3">
-                  <span className="font-body text-[11px] uppercase tracking-[0.1em] text-white/40">
+                  <span className="font-body text-[9px] uppercase tracking-[0.1em] text-[#FFFFFF8C]">
                     {h}
                   </span>
                 </div>

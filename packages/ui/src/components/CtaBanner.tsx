@@ -10,10 +10,10 @@ export function CtaBanner() {
   return (
     <section className="overflow-hidden rounded-t-[32px] bg-black">
       <div className="px-5 pb-11 pt-11 text-center">
-        <h2 className="mb-4 font-sans text-[36px] font-semibold leading-[1.1] text-white">
+        <h2 className="mb-4 text-center font-sans text-[36px] font-semibold leading-[105%] tracking-[-0.025em] text-white">
           {t('ctaBannerTitle')}
         </h2>
-        <p className="font-body mb-10 text-[14px] leading-relaxed text-white">
+        <p className="font-body mb-10 text-center text-[14px] font-medium leading-[155%] tracking-[0] text-white/60">
           {t('ctaBannerSubtitle')}
         </p>
 

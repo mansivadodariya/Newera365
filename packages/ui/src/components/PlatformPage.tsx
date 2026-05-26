@@ -4,11 +4,108 @@ import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
+function IconMt5() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+      <polyline
+        points="2,14 7,9 11,12 18,5"
+        stroke="#111111"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+function IconWeb() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="8" stroke="#111111" strokeWidth="1.5" />
+      <path d="M10 2v16M2 10h16" stroke="#111111" strokeWidth="1.5" />
+      <ellipse cx="10" cy="10" rx="4" ry="8" stroke="#111111" strokeWidth="1.5" />
+    </svg>
+  );
+}
+function IconMobile() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+      <rect x="5" y="2" width="10" height="16" rx="2" stroke="#111111" strokeWidth="1.5" />
+      <circle cx="10" cy="15.5" r="1" fill="#111111" />
+    </svg>
+  );
+}
+function IconIndicators() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+      <polyline
+        points="2,14 7,9 11,12 18,5"
+        stroke="white"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+function IconEa() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+      <rect x="4" y="4" width="12" height="12" rx="2" stroke="white" strokeWidth="1.5" />
+      <path d="M8 8h4M8 11h2" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+function IconTimeframes() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="7.5" stroke="white" strokeWidth="1.5" />
+      <path
+        d="M10 6v4l2.5 2.5"
+        stroke="white"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+function IconHedging() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+      <path d="M2 14h16M4 10h12M6 6h8" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+function IconPhone() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+      <rect x="5" y="2" width="10" height="16" rx="2" stroke="#111111" strokeWidth="1.5" />
+      <circle cx="10" cy="15.5" r="1" fill="#111111" />
+    </svg>
+  );
+}
+function IconTablet() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+      <rect x="3" y="3" width="14" height="14" rx="2" stroke="#111111" strokeWidth="1.5" />
+      <circle cx="16.5" cy="10" r="1" fill="#111111" />
+    </svg>
+  );
+}
+function IconDesktop() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+      <rect x="2" y="3" width="16" height="11" rx="1.5" stroke="#111111" strokeWidth="1.5" />
+      <path d="M6 17h8M10 14v3" stroke="#111111" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 const PLATFORM_CARDS = [
   {
     id: 'mt5',
     tag: 'INDUSTRY STANDARD',
-    tagStyle: 'bg-[#f2f2f4] text-white',
+    tagStyle: 'bg-white/10 text-white',
     name: 'MetaTrader 5',
     desc: 'Advanced charting, 80+ indicators, Expert Advisors, multi-asset.',
     ctaLabel: 'Download',
@@ -17,17 +114,7 @@ const PLATFORM_CARDS = [
     nameColor: 'text-white',
     descColor: 'text-white/60',
     iconBg: 'bg-[#f2f2f4]',
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-        <polyline
-          points="2,14 7,9 11,12 18,5"
-          stroke="#111111"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
+    Icon: IconMt5,
   },
   {
     id: 'web',
@@ -37,17 +124,11 @@ const PLATFORM_CARDS = [
     desc: 'Full MT5 power, runs in any browser. No download required.',
     ctaLabel: 'Open web trader',
     ctaStyle: 'bg-[#111111] text-white',
-    cardBg: 'bg-[#FAFAF9]',
+    cardBg: 'bg-[#FAFAF9] dark:bg-surface',
     nameColor: 'text-foreground',
     descColor: 'text-muted',
-    iconBg: 'bg-white',
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="10" r="8" stroke="#111111" strokeWidth="1.5" />
-        <path d="M10 2v16M2 10h16" stroke="#111111" strokeWidth="1.5" />
-        <ellipse cx="10" cy="10" rx="4" ry="8" stroke="#111111" strokeWidth="1.5" />
-      </svg>
-    ),
+    iconBg: 'bg-white dark:bg-[#1c1c1c]',
+    Icon: IconWeb,
   },
   {
     id: 'mobile',
@@ -57,133 +138,49 @@ const PLATFORM_CARDS = [
     desc: 'One-tap trading with FaceID. Push alerts for every move.',
     ctaLabel: 'Get the app',
     ctaStyle: 'bg-[#111111] text-white',
-    cardBg: 'bg-[#FAFAF9]',
+    cardBg: 'bg-[#FAFAF9] dark:bg-surface',
     nameColor: 'text-foreground',
     descColor: 'text-muted',
-    iconBg: 'bg-white',
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-        <rect x="5" y="2" width="10" height="16" rx="2" stroke="#111111" strokeWidth="1.5" />
-        <circle cx="10" cy="15.5" r="1" fill="#111111" />
-      </svg>
-    ),
+    iconBg: 'bg-white dark:bg-[#1c1c1c]',
+    Icon: IconMobile,
   },
-] as const;
+];
 
 const TOOLS = [
   {
     id: 'indicators',
     label: '80+ indicators',
     desc: 'Built-in technical analysis tools',
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-        <polyline
-          points="2,14 7,9 11,12 18,5"
-          stroke="white"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
+    Icon: IconIndicators,
   },
   {
     id: 'ea',
     label: 'EA support',
     desc: 'Run Expert Advisors and algorithmic strategies',
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-        <rect x="4" y="4" width="12" height="12" rx="2" stroke="white" strokeWidth="1.5" />
-        <path d="M8 8h4M8 11h2" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-        <circle cx="10" cy="10" r="2" stroke="white" strokeWidth="1.5" />
-      </svg>
-    ),
+    Icon: IconEa,
   },
   {
     id: 'timeframes',
     label: '21 timeframes',
     desc: 'From M1 ticks to monthly bars',
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="10" r="7.5" stroke="white" strokeWidth="1.5" />
-        <path
-          d="M10 6v4l2.5 2.5"
-          stroke="white"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
+    Icon: IconTimeframes,
   },
   {
     id: 'hedging',
     label: 'Hedging',
     desc: 'Multiple positions on the same instrument',
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-        <path d="M2 14h16M4 10h12M6 6h8" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
+    Icon: IconHedging,
   },
-] as const;
+];
 
 const DEVICES = [
-  {
-    label: 'iOS',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-        <rect x="5" y="2" width="10" height="16" rx="2" stroke="#111111" strokeWidth="1.5" />
-        <circle cx="10" cy="15.5" r="1" fill="#111111" />
-      </svg>
-    ),
-  },
-  {
-    label: 'iPadOS',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-        <rect x="3" y="3" width="14" height="14" rx="2" stroke="#111111" strokeWidth="1.5" />
-        <circle cx="16.5" cy="10" r="1" fill="#111111" />
-      </svg>
-    ),
-  },
-  {
-    label: 'macOS',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-        <rect x="2" y="3" width="16" height="11" rx="1.5" stroke="#111111" strokeWidth="1.5" />
-        <path d="M6 17h8M10 14v3" stroke="#111111" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
-    label: 'Android',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-        <rect x="5" y="2" width="10" height="16" rx="2" stroke="#111111" strokeWidth="1.5" />
-        <circle cx="10" cy="15.5" r="1" fill="#111111" />
-      </svg>
-    ),
-  },
-  {
-    label: 'Linux',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-        <rect x="2" y="4" width="16" height="10" rx="1.5" stroke="#111111" strokeWidth="1.5" />
-        <path d="M6 17h8M10 14v3" stroke="#111111" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
-    label: 'Windows',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-        <rect x="2" y="4" width="16" height="10" rx="1.5" stroke="#111111" strokeWidth="1.5" />
-        <path d="M6 17h8M10 14v3" stroke="#111111" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-] as const;
+  { label: 'iOS', Icon: IconPhone },
+  { label: 'iPadOS', Icon: IconTablet },
+  { label: 'macOS', Icon: IconDesktop },
+  { label: 'Android', Icon: IconPhone },
+  { label: 'Linux', Icon: IconDesktop },
+  { label: 'Windows', Icon: IconDesktop },
+];
 
 export function PlatformPage() {
   const locale = useLocale();
@@ -191,7 +188,7 @@ export function PlatformPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-white px-5 pb-8 pt-9">
+      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
           <SectionKicker className="mb-4">Platforms</SectionKicker>
           <h1 className="text-foreground mb-4 whitespace-pre-line font-sans text-[40px] font-semibold leading-[1.1]">
@@ -203,7 +200,7 @@ export function PlatformPage() {
           </p>
 
           {/* Device mockup placeholder */}
-          <div className="relative mt-6 h-[200px] overflow-hidden rounded-[24px] bg-[#f5f5f5]">
+          <div className="relative mt-6 h-[200px] overflow-hidden rounded-[24px] bg-[#f5f5f5] dark:bg-[#1c1c1c]">
             {/* Mobile mock */}
             <div className="absolute right-8 top-4 h-[170px] w-[90px] rounded-[16px] bg-[#d9d9d9]" />
             {/* Laptop mock */}
@@ -216,7 +213,7 @@ export function PlatformPage() {
       </section>
 
       {/* Terminal section */}
-      <section className="bg-white px-5 pb-10">
+      <section className="dark:bg-background bg-white px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
           <SectionKicker className="mb-4">PICK YOUR TERMINAL</SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
@@ -234,7 +231,7 @@ export function PlatformPage() {
                   <div
                     className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[14px] ${card.iconBg}`}
                   >
-                    {card.icon}
+                    <card.Icon />
                   </div>
                   <span
                     className={`font-body rounded-full px-3 py-[5px] text-[9px] font-semibold uppercase tracking-[0.12em] ${card.tagStyle}`}
@@ -276,7 +273,7 @@ export function PlatformPage() {
       </section>
 
       {/* Tools section */}
-      <section className="bg-white px-5 pb-10">
+      <section className="dark:bg-background bg-white px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
           <SectionKicker className="mb-4">WHAT&apos;S INSIDE</SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
@@ -287,11 +284,11 @@ export function PlatformPage() {
             {TOOLS.map((tool) => (
               <div
                 key={tool.id}
-                className="flex flex-col gap-3 rounded-[18px] bg-white p-4"
+                className="dark:bg-surface flex flex-col gap-3 rounded-[18px] bg-white p-4"
                 style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
               >
                 <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#a6a6a6]">
-                  {tool.icon}
+                  <tool.Icon />
                 </div>
                 <div>
                   <p className="text-foreground mb-[4px] font-sans text-[14px] font-semibold">
@@ -322,7 +319,7 @@ export function PlatformPage() {
                 key={dev.label}
                 className="flex flex-col items-center gap-2 rounded-[14px] bg-white py-4"
               >
-                {dev.icon}
+                <dev.Icon />
                 <span className="font-body text-foreground text-[11px] font-medium">
                   {dev.label}
                 </span>

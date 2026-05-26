@@ -75,7 +75,7 @@ const NAV_GROUPS = [
       { label: 'Legal Prose Page', href: '/terms' },
       { label: 'FAQ Accordion', href: '/faqs' },
       { label: 'Contact Form', href: '/contact' },
-      { label: 'Live Chat', href: '/live chat' },
+      { label: 'Live Chat', href: '/live-chat' },
     ],
   },
 ] as const;
@@ -158,7 +158,7 @@ function MobileMenu({ open, onClose }: MobileMenuProps) {
             )}
             {group.items.map(({ label, href }) => (
               <Link
-                key={href}
+                key={label}
                 href={`/${locale}${href === '/' ? '' : href}`}
                 onClick={onClose}
                 className="group flex items-center justify-between py-[15px]"
@@ -198,7 +198,7 @@ function MobileMenu({ open, onClose }: MobileMenuProps) {
           {t('openLive')}
         </Link>
         <Link
-          href={`/${locale}/demo`}
+          href={`/${locale}/demo-account`}
           onClick={onClose}
           className="border-border text-foreground font-body hover:border-foreground flex h-[52px] items-center justify-center rounded-full border text-[15px] font-medium transition-colors"
         >

@@ -1,69 +1,18 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-const ASSET_ICONS = {
-  forex: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <circle cx="9" cy="12" r="6" stroke="currentColor" strokeWidth="1.5" />
-      <circle cx="15" cy="12" r="6" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  ),
-  indices: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M3 17l4-5 4 3 4-6 4 4"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path d="M3 21h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  ),
-  commodities: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-    </svg>
-  ),
-  stocks: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <rect x="3" y="14" width="4" height="7" rx="1" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="10" y="9" width="4" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="17" y="4" width="4" height="17" rx="1" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  ),
-  crypto: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M9 8h4.5a2 2 0 010 4H9m0-4v8m0-4h5a2 2 0 010 4H9"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  ),
-  etfs: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="3" y="13" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="13" y="13" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  ),
-};
+const ASSET_ICON_FILES = {
+  forex: '/icons/forex.png',
+  indices: '/icons/performance.png',
+  commodities: '/icons/commodities.png',
+  stocks: '/icons/exchange.png',
+  crypto: '/icons/crypto.png',
+  etfs: '/icons/products.png',
+} as const;
 
 export function MarketsSection() {
   const t = useTranslations('home');
@@ -79,12 +28,9 @@ export function MarketsSection() {
   ] as const;
 
   return (
-    <section
-      className="px-5 pb-9 pt-10"
-      style={{ background: 'linear-gradient(180deg, rgba(19,19,19,0.43) 0%, #ffffff 100%)' }}
-    >
+    <section className="px-5 pb-9 pt-10" style={{ background: 'var(--gradient-markets)' }}>
       <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-        <SectionKicker className="mb-5">{t('marketsKicker')}</SectionKicker>
+        <SectionKicker className="text-muted mb-5">{t('marketsKicker')}</SectionKicker>
 
         <h2 className="text-foreground mb-3 font-sans text-[32px] font-semibold leading-[1.1]">
           {t('marketsHeading')}
@@ -98,10 +44,16 @@ export function MarketsSection() {
           {assets.map((asset) => (
             <div
               key={asset.key}
-              className="flex flex-col gap-[14px] rounded-[18px] bg-[#e0e0e0] px-4 py-[18px]"
+              className="flex flex-col gap-[14px] rounded-[18px] bg-[#e0e0e061] pb-[18px] pl-[16px] pr-[16px] pt-[18px] shadow-[0px_4px_16px_0px_#0000000F] dark:bg-[#1c1c1c] dark:shadow-none"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-[#efefef] text-[#374151]">
-                {ASSET_ICONS[asset.key]}
+              <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-[#efefef] dark:bg-[#2a2a2a]">
+                <Image
+                  src={ASSET_ICON_FILES[asset.key]}
+                  alt={asset.name}
+                  width={22}
+                  height={22}
+                  className="dark:invert"
+                />
               </div>
               <div>
                 <p className="text-foreground font-sans text-[16px] font-semibold">{asset.name}</p>

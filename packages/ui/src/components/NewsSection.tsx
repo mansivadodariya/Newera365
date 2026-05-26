@@ -14,12 +14,12 @@ export interface NewsSectionItem {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  forex: 'bg-blue-100 text-blue-700',
-  commodities: 'bg-yellow-100 text-yellow-700',
-  indices: 'bg-purple-100 text-purple-700',
-  crypto: 'bg-orange-100 text-orange-700',
-  company: 'bg-green-100 text-green-700',
-  regulation: 'bg-red-100 text-red-700',
+  forex: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400',
+  commodities: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400',
+  indices: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-400',
+  crypto: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400',
+  company: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400',
+  regulation: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400',
 };
 
 function formatDate(iso: string) {
@@ -45,7 +45,7 @@ export function NewsSection({ news }: NewsSectionProps) {
   if (!news.length) return null;
 
   return (
-    <section className="bg-[#F7F7F5] px-5 pb-10 pt-10">
+    <section className="dark:bg-surface bg-[#F7F7F5] px-5 pb-10 pt-10">
       <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
         <div className="mb-6 flex items-center justify-between">
           <div>
@@ -76,7 +76,7 @@ export function NewsSection({ news }: NewsSectionProps) {
             <Link
               key={item.id}
               href={`/${locale}/news/${item.slug}`}
-              className="group flex flex-col gap-3 rounded-[18px] bg-white p-4 transition-shadow hover:shadow-md"
+              className="dark:bg-surface-elevated group flex flex-col gap-3 rounded-[18px] bg-white p-4 transition-shadow hover:shadow-md dark:hover:shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
             >
               <div className="flex items-center justify-between">
                 <span

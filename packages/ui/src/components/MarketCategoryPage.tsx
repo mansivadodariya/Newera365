@@ -1,0 +1,315 @@
+'use client';
+
+import Link from 'next/link';
+import { useLocale } from 'next-intl';
+import { SectionKicker } from './SectionKicker';
+import type { InstrumentItem } from './InstrumentsPage';
+
+const CATEGORY_META: Record<
+  string,
+  {
+    label: string;
+    headline: string;
+    sub: string;
+    kicker: string;
+    staticRows: { symbol: string; name: string; spread: string; change: string; up: boolean }[];
+  }
+> = {
+  forex: {
+    label: 'Forex',
+    headline: 'Trade Forex.',
+    sub: 'Tight spreads, fast execution across 70+ currency pairs.',
+    kicker: 'FOREX · CURRENCY PAIRS',
+    staticRows: [
+      { symbol: 'EUR/USD', name: 'Euro / US Dollar', spread: '0.8', change: '+0.14%', up: true },
+      { symbol: 'GBP/USD', name: 'Pound / US Dollar', spread: '1.0', change: '-0.08%', up: false },
+      { symbol: 'USD/JPY', name: 'US Dollar / Yen', spread: '0.9', change: '+0.21%', up: true },
+      { symbol: 'AUD/USD', name: 'Aussie / US Dollar', spread: '0.9', change: '-0.05%', up: false },
+      { symbol: 'USD/CAD', name: 'US Dollar / CAD', spread: '1.2', change: '+0.09%', up: true },
+      { symbol: 'EUR/GBP', name: 'Euro / Pound', spread: '1.1', change: '-0.11%', up: false },
+      { symbol: 'XAU/USD', name: 'Gold / US Dollar', spread: '1.6', change: '+1.24%', up: true },
+      { symbol: 'XAG/USD', name: 'Silver / US Dollar', spread: '2.0', change: '+0.87%', up: true },
+    ],
+  },
+  indices: {
+    label: 'Indices',
+    headline: 'Trade Indices.',
+    sub: "Access the world's leading stock market indices with tight spreads.",
+    kicker: 'INDICES · GLOBAL MARKETS',
+    staticRows: [
+      { symbol: 'SPX500', name: 'S&P 500', spread: '0.4', change: '-0.12%', up: false },
+      { symbol: 'NAS100', name: 'Nasdaq 100', spread: '0.6', change: '+0.31%', up: true },
+      { symbol: 'DJI30', name: 'Dow Jones 30', spread: '1.0', change: '+0.09%', up: true },
+      { symbol: 'GER40', name: 'DAX 40', spread: '1.2', change: '+0.44%', up: true },
+      { symbol: 'UK100', name: 'FTSE 100', spread: '1.0', change: '-0.21%', up: false },
+      { symbol: 'JPN225', name: 'Nikkei 225', spread: '5.0', change: '+0.18%', up: true },
+    ],
+  },
+  commodities: {
+    label: 'Commodities',
+    headline: 'Trade Commodities.',
+    sub: 'Gold, silver, oil and more — trade real assets at institutional pricing.',
+    kicker: 'COMMODITIES · METALS & ENERGY',
+    staticRows: [
+      { symbol: 'XAU/USD', name: 'Gold', spread: '1.6', change: '+1.24%', up: true },
+      { symbol: 'XAG/USD', name: 'Silver', spread: '2.0', change: '+0.87%', up: true },
+      { symbol: 'USOIL', name: 'Crude Oil WTI', spread: '0.03', change: '-0.52%', up: false },
+      { symbol: 'UKOIL', name: 'Brent Crude', spread: '0.04', change: '-0.48%', up: false },
+      { symbol: 'NATGAS', name: 'Natural Gas', spread: '0.005', change: '+1.10%', up: true },
+      { symbol: 'XCU/USD', name: 'Copper', spread: '0.02', change: '+0.33%', up: true },
+    ],
+  },
+  stocks: {
+    label: 'Stocks',
+    headline: 'Trade Stocks.',
+    sub: 'CFDs on global equities — trade Apple, Tesla, Amazon and hundreds more.',
+    kicker: 'STOCKS · GLOBAL EQUITIES',
+    staticRows: [
+      { symbol: 'AAPL', name: 'Apple Inc.', spread: '0.1', change: '+0.44%', up: true },
+      { symbol: 'TSLA', name: 'Tesla Inc.', spread: '0.2', change: '-1.21%', up: false },
+      { symbol: 'AMZN', name: 'Amazon.com', spread: '0.1', change: '+0.55%', up: true },
+      { symbol: 'MSFT', name: 'Microsoft', spread: '0.1', change: '+0.28%', up: true },
+      { symbol: 'NVDA', name: 'NVIDIA Corp.', spread: '0.2', change: '+2.14%', up: true },
+      { symbol: 'GOOGL', name: 'Alphabet Inc.', spread: '0.1', change: '+0.19%', up: true },
+    ],
+  },
+  etfs: {
+    label: 'ETFs',
+    headline: 'Trade ETFs.',
+    sub: "Diversified exposure in a single instrument — trade the world's top ETFs.",
+    kicker: 'ETFs · EXCHANGE-TRADED FUNDS',
+    staticRows: [
+      { symbol: 'SPY', name: 'SPDR S&P 500 ETF', spread: '0.05', change: '-0.10%', up: false },
+      { symbol: 'QQQ', name: 'Invesco QQQ ETF', spread: '0.05', change: '+0.28%', up: true },
+      { symbol: 'GLD', name: 'SPDR Gold Shares', spread: '0.10', change: '+1.15%', up: true },
+      { symbol: 'TLT', name: 'iShares 20Y Bond', spread: '0.05', change: '-0.22%', up: false },
+      { symbol: 'EEM', name: 'iShares EM ETF', spread: '0.05', change: '+0.07%', up: true },
+      { symbol: 'XLE', name: 'Energy Select ETF', spread: '0.05', change: '-0.41%', up: false },
+    ],
+  },
+  crypto: {
+    label: 'Crypto',
+    headline: 'Trade Crypto.',
+    sub: 'Bitcoin, Ethereum and major altcoins — 24/7 crypto markets at your fingertips.',
+    kicker: 'CRYPTO · DIGITAL ASSETS',
+    staticRows: [
+      { symbol: 'BTC/USD', name: 'Bitcoin', spread: '12', change: '+1.82%', up: true },
+      { symbol: 'ETH/USD', name: 'Ethereum', spread: '1.5', change: '+2.14%', up: true },
+      { symbol: 'SOL/USD', name: 'Solana', spread: '0.5', change: '+3.41%', up: true },
+      { symbol: 'XRP/USD', name: 'Ripple', spread: '0.002', change: '-0.88%', up: false },
+      { symbol: 'ADA/USD', name: 'Cardano', spread: '0.001', change: '+0.44%', up: true },
+      { symbol: 'DOGE/USD', name: 'Dogecoin', spread: '0.0005', change: '-1.12%', up: false },
+    ],
+  },
+};
+
+const SPEC_ROWS = [
+  { label: 'Minimum spread', value: 'from 0.0 pip' },
+  { label: 'Maximum leverage', value: '1:500' },
+  { label: 'Order execution', value: '< 12 ms' },
+  { label: 'Minimum trade size', value: '0.01 lot' },
+  { label: 'Stop-out level', value: '20%' },
+];
+
+export interface MarketCategoryPageProps {
+  category: string;
+  instruments?: InstrumentItem[];
+}
+
+export function MarketCategoryPage({ category, instruments }: MarketCategoryPageProps) {
+  const locale = useLocale();
+  const validKey = (category in CATEGORY_META ? category : 'forex') as keyof typeof CATEGORY_META;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const meta = CATEGORY_META[validKey]!;
+
+  const cmsRows = instruments && instruments.length > 0 ? instruments : null;
+
+  return (
+    <>
+      {/* Hero */}
+      <section className="dark:bg-background bg-white px-5 pb-7 pt-9">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+          <Link
+            href={`/${locale}/markets/instruments`}
+            className="font-body text-muted hover:text-foreground mb-5 flex items-center gap-1 text-[13px] transition-colors"
+          >
+            <svg width="6" height="10" viewBox="0 0 7 12" fill="none">
+              <path
+                d="M6 1L1 6L6 11"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            All markets
+          </Link>
+
+          <SectionKicker className="mb-4">{meta.kicker}</SectionKicker>
+          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[105%] tracking-[-0.03em]">
+            {meta.headline}
+          </h1>
+          <p className="font-body text-muted max-w-[310px] text-[14px] leading-[155%]">
+            {meta.sub}
+          </p>
+        </div>
+      </section>
+
+      {/* Instrument list */}
+      <section className="dark:bg-background bg-white px-5 pb-6">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+          <div className="mb-4 flex items-center justify-between">
+            <SectionKicker>
+              {cmsRows
+                ? `${meta.label.toUpperCase()} · ${cmsRows.length} INSTRUMENTS`
+                : `${meta.label.toUpperCase()} · TOP INSTRUMENTS`}
+            </SectionKicker>
+          </div>
+
+          <div className="flex flex-col divide-y divide-[#f0f0f0] dark:divide-[#1f1f1f]">
+            {cmsRows
+              ? cmsRows.map((item) => (
+                  <div key={item.id} className="flex items-center justify-between py-[13px]">
+                    <div>
+                      <p className="text-foreground font-sans text-[14px] font-semibold">
+                        {item.symbol}
+                      </p>
+                      <p className="font-body text-muted mt-[2px] text-[11px]">{item.name}</p>
+                    </div>
+                    <div className="text-right">
+                      {item.spread != null && (
+                        <p className="font-body text-foreground text-[12px] font-medium">
+                          Spread: {item.spread} pip
+                        </p>
+                      )}
+                      {item.leverage && (
+                        <p className="font-body text-muted mt-[2px] text-[11px]">{item.leverage}</p>
+                      )}
+                    </div>
+                  </div>
+                ))
+              : meta.staticRows.map((row) => (
+                  <div key={row.symbol} className="flex items-center justify-between py-[13px]">
+                    <div>
+                      <p className="text-foreground font-sans text-[14px] font-semibold">
+                        {row.symbol}
+                      </p>
+                      <p className="font-body text-muted mt-[2px] text-[11px]">{row.name}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-body text-foreground text-[12px] font-medium">
+                        Spread: {row.spread}
+                      </p>
+                      <p
+                        className={`font-body mt-[2px] text-[11px] ${row.up ? 'text-[#26A69A]' : 'text-[#EE5250]'}`}
+                      >
+                        {row.change}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+          </div>
+
+          <Link
+            href={`/${locale}/trade/accounts`}
+            className="dark:bg-surface mt-5 flex w-full items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
+          >
+            <span className="font-body text-foreground text-[13px] font-medium">
+              Open an account to trade all {meta.label.toLowerCase()} instruments
+            </span>
+            <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M3 8h10M9 4l4 4-4 4"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </Link>
+        </div>
+      </section>
+
+      {/* Specs section */}
+      <section className="rounded-t-[32px] bg-[#111111] px-5 pb-10 pt-10">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-white [&>span:last-child]:text-white">
+            TRADING SPECS
+          </SectionKicker>
+          <h2 className="mb-6 font-sans text-[28px] font-semibold leading-[1.1] tracking-[-0.02em] text-white">
+            Institutional pricing, retail simplicity.
+          </h2>
+
+          <div className="mb-5 overflow-hidden rounded-[18px] bg-[#111111]">
+            {SPEC_ROWS.map((row, i) => (
+              <div
+                key={row.label}
+                className={`flex items-center justify-between px-5 py-[13px] ${i < SPEC_ROWS.length - 1 ? 'border-b border-[#1f1c1c]' : ''}`}
+              >
+                <span className="font-body text-[13px] text-[#FFFFFFB2]">{row.label}</span>
+                <span className="font-body text-[14px] font-semibold text-white">{row.value}</span>
+              </div>
+            ))}
+          </div>
+
+          <Link
+            href={`/${locale}/register`}
+            className="bg-accent font-body hover:bg-accent-hover flex h-[48px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
+          >
+            Start trading {meta.label}
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M3 8h10M9 4l4 4-4 4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Link>
+        </div>
+      </section>
+
+      {/* Other markets */}
+      <section className="dark:bg-background bg-white px-5 pb-12 pt-10">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+          <SectionKicker className="mb-4">OTHER MARKETS</SectionKicker>
+          <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.025em]">
+            Explore other asset classes.
+          </h2>
+          <div className="flex flex-col gap-[10px]">
+            {Object.entries(CATEGORY_META)
+              .filter(([key]) => key !== category)
+              .map(([key, m]) => (
+                <Link
+                  key={key}
+                  href={`/${locale}/markets/${key}`}
+                  className="dark:bg-surface flex items-center justify-between rounded-[18px] bg-[#FAFAF9] px-5 py-4 transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
+                >
+                  <div>
+                    <p className="text-foreground font-sans text-[15px] font-semibold">{m.label}</p>
+                    <p className="font-body text-muted mt-[3px] text-[11px]">
+                      Live spec table · MT5-driven
+                    </p>
+                  </div>
+                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                      <path
+                        d="M4 12L12 4M12 4H7M12 4v5"
+                        stroke="white"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </Link>
+              ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

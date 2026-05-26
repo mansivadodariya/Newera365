@@ -43,7 +43,7 @@ export function FeesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-white px-5 pb-8 pt-9">
+      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
           <SectionKicker className="mb-4">Fees</SectionKicker>
           <h1 className="mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
@@ -59,7 +59,7 @@ export function FeesPage() {
       </section>
 
       {/* Spreads table */}
-      <section className="bg-white px-5 pb-10">
+      <section className="dark:bg-background bg-white px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
           <SectionKicker className="mb-5">LIVE SPREADS · PIP</SectionKicker>
 
@@ -105,7 +105,7 @@ export function FeesPage() {
           {/* View all link */}
           <Link
             href={`/${locale}/markets/instruments`}
-            className="mt-3 flex items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee]"
+            className="dark:bg-surface mt-3 flex items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
           >
             <span className="font-body text-foreground text-[13px] font-medium">
               View all 200+ instruments
@@ -126,14 +126,14 @@ export function FeesPage() {
       </section>
 
       {/* Other Charges */}
-      <section className="bg-white px-5 pb-10">
+      <section className="dark:bg-background bg-white px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
           <SectionKicker className="mb-5">OTHER CHARGES</SectionKicker>
           <div className="flex flex-col gap-[10px]">
             {OTHER_CHARGES.map((charge) => (
               <div
                 key={charge.label}
-                className="flex items-center justify-between gap-4 rounded-[14px] bg-[#FAFAF9] px-4 py-4"
+                className="dark:bg-surface flex items-center justify-between gap-4 rounded-[14px] bg-[#FAFAF9] px-4 py-4"
               >
                 <div className="min-w-0 flex-1">
                   <p className="font-body text-foreground mb-[3px] text-[13px] font-medium">

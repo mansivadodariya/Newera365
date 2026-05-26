@@ -83,28 +83,29 @@ export function FeaturesSection() {
   ];
 
   return (
-    <section
-      className="px-5 pb-9 pt-10"
-      style={{ background: 'linear-gradient(180deg, #f8f8f7 0%, #ffffff 100%)' }}
-    >
+    <section className="px-5 pb-9 pt-10" style={{ background: 'var(--gradient-features)' }}>
       <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-        <SectionKicker className="mb-5">{t('whyKicker')}</SectionKicker>
+        <SectionKicker className="mb-5 font-mono text-[10px] font-medium leading-[100%] tracking-[0.18em] text-[#6B7280]">
+          {t('whyKicker')}
+        </SectionKicker>
 
-        <h2 className="text-foreground mb-[14px] font-sans text-[32px] font-semibold leading-[1.1]">
+        <h2 className="text-foreground mb-[14px] font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.025em]">
           {t('whyTitle')}
         </h2>
 
         <div className="flex flex-col gap-[14px]">
           {features.map((f) => (
-            <div key={f.title} className="flex gap-4 rounded-[20px] bg-white p-5">
-              <div className="mt-0.5 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#a6a6a6] text-white">
+            <div key={f.title} className="dark:bg-surface flex gap-4 rounded-[20px] bg-white p-5">
+              <div className="mt-0.5 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#a6a6a6] text-white dark:bg-[#374151]">
                 {ICONS[f.icon]}
               </div>
               <div>
                 <h3 className="text-foreground mb-1.5 font-sans text-[16px] font-semibold">
                   {f.title}
                 </h3>
-                <p className="font-body text-muted text-[13px] leading-relaxed">{f.desc}</p>
+                <p className="font-body text-muted text-[13px] font-medium leading-[150%] tracking-[0]">
+                  {f.desc}
+                </p>
               </div>
             </div>
           ))}

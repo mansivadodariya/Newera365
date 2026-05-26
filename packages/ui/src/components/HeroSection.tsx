@@ -39,7 +39,7 @@ export function HeroSection() {
             </svg>
           </Link>
           <Link
-            href={`/${locale}/demo`}
+            href={`/${locale}/demo-account`}
             className="text-foreground font-body flex h-[50px] flex-1 items-center justify-center text-[15px] font-medium transition-opacity hover:opacity-70"
           >
             {t('heroCTADemo')}
@@ -47,33 +47,30 @@ export function HeroSection() {
         </div>
 
         {/* Chart card */}
-        <div className="overflow-hidden rounded-[24px]">
+        <div className="dark:bg-background overflow-hidden rounded-[24px] bg-white">
           {/* Trading screen photo */}
           <div className="relative w-full" style={{ aspectRatio: '700/354' }}>
             <Image
               src="/images/hero-chart.png"
               alt="Live trading screen"
               fill
-              className="object-cover"
+              className="object-cover object-center"
               priority
             />
           </div>
 
-          {/* Specs row — white background, matches Figma */}
-          <div className="grid grid-cols-3 border-t border-[#e5e7eb] bg-white">
+          {/* Specs row */}
+          <div className="dark:border-background dark:bg-background grid grid-cols-3 border-t border-[#e5e7eb] bg-white pb-[12px] pt-[12px]">
             {[
               { label: t('heroSpreadLabel'), value: t('heroSpreadValue') },
               { label: t('heroLeverageLabel'), value: t('heroLeverageValue') },
               { label: t('heroExecutionLabel'), value: t('heroExecutionValue') },
             ].map((spec, i) => (
-              <div
-                key={spec.label}
-                className={`flex flex-col items-center gap-[2px] py-3 ${i < 2 ? 'border-r border-[#e5e7eb]' : ''}`}
-              >
-                <span className="font-body text-[9px] uppercase tracking-widest text-[#9ca3af]">
+              <div key={spec.label} className={`flex flex-col items-center gap-[2px]`}>
+                <span className="text-muted font-mono text-[9px] font-normal uppercase leading-[100%] tracking-[0.15em]">
                   {spec.label}
                 </span>
-                <span className="font-body text-[14px] font-semibold text-[#111111]">
+                <span className="text-foreground font-sans text-[14px] font-semibold">
                   {spec.value}
                 </span>
               </div>

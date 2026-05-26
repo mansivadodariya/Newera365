@@ -87,7 +87,7 @@
     "stepsGetStarted": "ابدأ الآن"
   },
   "footer": {
-    "tagline": "تداول منظم في الفوركس وعقود الفروقات والمؤشرات والعملات الرقمية.",
+    "tagline": "منصة تداول عالمية متميزة مبنية لعصر جديد من الأسواق.",
     "trading": "التداول",
     "instruments": "الأدوات",
     "accountTypes": "أنواع الحسابات",
@@ -108,7 +108,29 @@
     "privacy": "سياسة الخصوصية",
     "riskDisclosure": "إفصاح المخاطر",
     "aml": "سياسة مكافحة غسيل الأموال",
-    "riskWarning": "تحذير المخاطر: ينطوي تداول عقود الفروقات والفوركس على مخاطر كبيرة لرأس مالك. يجب أن تتداول فقط بالأموال التي يمكنك تحمل خسارتها.",
-    "copyright": "© 2025 NewEra365. جميع الحقوق محفوظة."
+    "riskWarning": "التداول ينطوي على مخاطر. الأداء السابق ليس مؤشراً على النتائج المستقبلية. تداول بمسؤولية.",
+    "copyright": "© 2026 NEWERA365",
+    "headingMarkets": "الأسواق",
+    "headingPlatform": "المنصة",
+    "headingCompany": "الشركة",
+    "headingSupport": "الدعم",
+    "linkForex": "فوركس",
+    "linkIndices": "مؤشرات",
+    "linkCommodities": "سلع",
+    "linkStocks": "أسهم",
+    "linkEtfs": "صناديق المؤشرات",
+    "linkCrypto": "عملات رقمية",
+    "linkMT5": "MetaTrader 5",
+    "linkWebTrader": "منصة الويب",
+    "linkMobileApp": "تطبيق الجوال",
+    "linkTools": "الأدوات",
+    "linkAbout": "من نحن",
+    "linkCareers": "الوظائف",
+    "linkAwards": "الجوائز",
+    "linkMedia": "الإعلام",
+    "linkContact": "اتصل بنا",
+    "linkFaqs": "الأسئلة الشائعة",
+    "linkLiveChat": "الدردشة المباشرة",
+    "linkLegal": "القانونية"
   }
 }

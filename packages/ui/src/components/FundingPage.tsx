@@ -181,7 +181,7 @@ export function FundingPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-white px-5 pb-8 pt-9">
+      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
           <SectionKicker className="mb-4">Funding</SectionKicker>
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
@@ -195,14 +195,14 @@ export function FundingPage() {
       </section>
 
       {/* Payment Methods */}
-      <section className="bg-white px-5 pb-10">
+      <section className="dark:bg-background bg-white px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
           <SectionKicker className="mb-5">PAYMENT METHODS</SectionKicker>
           <div className="flex flex-col gap-[14px]">
             {PAYMENT_METHODS.map((method) => (
               <div
                 key={method.id}
-                className="flex flex-col gap-[14px] rounded-[18px] bg-white p-5"
+                className="dark:bg-surface flex flex-col gap-[14px] rounded-[18px] bg-white p-5"
                 style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}
               >
                 {/* Card header: icon box + type pill */}
@@ -210,7 +210,7 @@ export function FundingPage() {
                   <div className="bg-accent flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[11px]">
                     {method.icon}
                   </div>
-                  <span className="font-body rounded-full border border-[#e5e7eb] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-[#6b7280]">
+                  <span className="font-body text-muted rounded-full border border-[#e5e7eb] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] dark:border-[#2a2a2a]">
                     {method.type}
                   </span>
                 </div>
@@ -219,7 +219,7 @@ export function FundingPage() {
                 <p className="text-foreground font-sans text-[17px] font-semibold">{method.name}</p>
 
                 {/* Stats 2×2 grid */}
-                <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[10px] bg-[#f0f0f0]">
+                <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[10px] bg-[#f0f0f0] dark:bg-[#2a2a2a]">
                   {[
                     { label: 'DEPOSIT', value: method.deposit },
                     { label: 'WITHDRAW', value: method.withdraw },
@@ -228,7 +228,7 @@ export function FundingPage() {
                   ].map((stat) => (
                     <div
                       key={stat.label}
-                      className="flex flex-col gap-[3px] bg-[#fafafa] px-4 py-3"
+                      className="dark:bg-surface flex flex-col gap-[3px] bg-[#fafafa] px-4 py-3"
                     >
                       <span className="font-body text-[9px] uppercase tracking-[0.12em] text-[#9ca3af]">
                         {stat.label}

@@ -17,24 +17,26 @@ export function ThreeStepsSection() {
   return (
     <section className="dark:bg-background bg-white px-5 pb-9 pt-10">
       <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-        <SectionKicker className="mb-5">{t('stepsKicker')}</SectionKicker>
+        <SectionKicker className="mb-5 font-mono text-[10px] font-medium leading-[100%] tracking-[0.18em] text-[#6B7280]">
+          {t('stepsKicker')}
+        </SectionKicker>
 
-        <h2 className="text-foreground mb-4 font-sans text-[32px] font-semibold leading-[1.1]">
+        <h2 className="text-foreground mb-4 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.025em]">
           {t('stepsHeading')}
         </h2>
 
-        <div className="flex flex-col gap-[14px]">
+        <div className="flex flex-col gap-[16px]">
           {steps.map((step) => (
-            <div key={step.num} className="flex items-start gap-4 py-5">
+            <div key={step.num} className="flex items-start gap-4 p-[20px]">
               {/* Step number */}
-              <span className="text-accent w-[42px] flex-shrink-0 font-sans text-[28px] font-semibold leading-none">
+              <span className="text-accent w-[42px] flex-shrink-0 font-sans text-[28px] font-semibold leading-[100%] tracking-[-0.02em]">
                 {step.num}
               </span>
-              <div className="pt-0.5">
+              <div className="flex-1 gap-[6px] pt-0.5">
                 <h3 className="text-foreground mb-[6px] font-sans text-[16px] font-semibold">
                   {step.title}
                 </h3>
-                <p className="font-body text-muted text-[13px] leading-relaxed">{step.desc}</p>
+                <p className="font-body text-muted text-[13px] leading-[150%]">{step.desc}</p>
               </div>
             </div>
           ))}
