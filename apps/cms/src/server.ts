@@ -4,6 +4,7 @@ import express, { type Request, type Response, type NextFunction } from 'express
 import payload from 'payload';
 import { registerCustomEndpoints } from './endpoints';
 import { runSlugIndexMigration } from './db/runSlugIndexMigration';
+import { startMt5SyncJob } from './jobs/mt5Sync';
 
 const app = express();
 const port = Number(process.env.PORT ?? 3001);
@@ -83,6 +84,11 @@ const start = async (): Promise<void> => {
   // Pass the initialized payload instance so endpoints can query collections
   // and globals (e.g. reading mt5SyncEnabled from SiteSettings).
   await registerCustomEndpoints(app, payload);
+
+  // Background MT5 sync job — polls the MT5 bridge on the interval configured
+  // in Site Settings → MT5 Integration and writes sync status back to each
+  // instrument/account-type record. Also pre-populates the in-process cache.
+  startMt5SyncJob(payload);
 
   // Redirect /admin → /admin/ so browsers don't get a bare Express 404.
   app.get('/admin', (_req: Request, res: Response) => res.redirect(301, '/admin/'));

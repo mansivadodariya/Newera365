@@ -64,10 +64,11 @@ export function PromoPage() {
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-4">Promotions</SectionKicker>
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
-            Get more from <span className="text-accent">every trade.</span>
+            Get more
+            <br />
+            from <span className="text-accent">every trade.</span>
           </h1>
           <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
             Active offers, refreshed monthly. Eligible to all verified accounts unless noted.
@@ -77,7 +78,7 @@ export function PromoPage() {
 
       {/* Promo cards */}
       <section className="dark:bg-background bg-white px-5 pb-10">
-        <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl xl:max-w-[1200px]">
           {PROMOS.map((promo) => (
             <div
               key={promo.id}
@@ -116,7 +117,7 @@ export function PromoPage() {
 
               {/* Footer + CTA */}
               <div className="flex items-center justify-between px-5 py-4">
-                <span className="font-body text-muted text-[11px]">{promo.footer}</span>
+                <span className="text-muted font-mono text-[11px]">{promo.footer}</span>
                 <Link
                   href={`/${locale}/register`}
                   className="bg-accent hover:bg-accent-hover font-body flex h-8 items-center gap-1.5 rounded-full px-4 text-[12px] font-medium text-white transition-colors"
@@ -139,21 +140,21 @@ export function PromoPage() {
       </section>
 
       {/* T&C band */}
-      <section className="bg-[#111111] px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-4 [&>span:last-child]:text-white/50 [&>span]:bg-white/40">
+      <section className="rounded-t-[32px] bg-[#000000] px-5 pb-12 pt-10">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/60 [&>span:last-child]:text-white/60">
             FULL TERMS
           </SectionKicker>
           <h2 className="mb-3 font-sans text-[28px] font-semibold leading-[1.1] text-white">
             Read before you claim.
           </h2>
-          <p className="font-body mb-7 max-w-[320px] text-[13px] leading-relaxed text-white/60">
+          <p className="font-body mb-7 max-w-[350px] text-[13px] leading-relaxed text-white/60">
             Each promotion has unique eligibility — minimum deposit, trade volume, regional
             availability. Full terms are linked in every offer card and on each promo page.
           </p>
           <Link
             href={`/${locale}/legal`}
-            className="font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"
+            className="font-body bg-accent flex h-[50px] w-full items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors"
           >
             Read all promo terms
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">

@@ -6,18 +6,8 @@ import { useLocale } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 const CATEGORIES = ['Forex', 'Indices', 'Commodities', 'Stocks', 'ETFs', 'Crypto'] as const;
-type Category = (typeof CATEGORIES)[number];
 
-const STATIC_FOREX_ROWS = [
-  { pair: 'EUR/USD', bid: '1.0856', spread: '0.8', change: '+0.14%', up: true },
-  { pair: 'GBP/USD', bid: '1.2741', spread: '1.0', change: '-0.08%', up: false },
-  { pair: 'USD/JPY', bid: '156.42', spread: '0.9', change: '+0.21%', up: true },
-  { pair: 'AUD/USD', bid: '0.6512', spread: '0.9', change: '-0.05%', up: false },
-  { pair: 'USD/CAD', bid: '1.3617', spread: '1.2', change: '+0.09%', up: true },
-  { pair: 'EUR/GBP', bid: '0.8518', spread: '1.1', change: '-0.11%', up: false },
-  { pair: 'XAU/USD', bid: '2,418.5', spread: '1.6', change: '+1.24%', up: true },
-  { pair: 'XAG/USD', bid: '29.12', spread: '2.0', change: '+0.87%', up: true },
-];
+type Category = (typeof CATEGORIES)[number];
 
 const SPEC_ROWS = [
   { label: 'Minimum spread', value: 'from 0.0 pip' },
@@ -65,9 +55,9 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-7 pt-9">
-        <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl xl:max-w-[1200px]">
           <span>
-            <h1 className="whitespace-pre-line font-sans text-[40px] font-semibold leading-[105%] tracking-[-0.03em] text-[#111111]">
+            <h1 className="text-foreground whitespace-pre-line font-sans text-[40px] font-semibold leading-[105%] tracking-[-0.03em] text-[#111111]">
               {'Every market.\n'}
             </h1>
             <h1 className="whitespace-pre-line font-sans text-[40px] font-semibold leading-[105%] tracking-[-0.03em] text-[#00B050]">
@@ -94,7 +84,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
       </section>
 
       {/* Category nav strip */}
-      <section className="dark:bg-background bg-white pb-4">
+      <section className="dark:bg-background mx-auto bg-white px-5 pb-4">
         <div
           className="scrollbar-hide flex gap-[8px] overflow-x-auto px-5"
           style={{ scrollPaddingLeft: '20px' }}
@@ -117,7 +107,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
 
       {/* Instrument list */}
       <section className="dark:bg-background bg-white px-5 pb-6">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="mb-4 flex items-center justify-between">
             <SectionKicker className="text-mono text-[10px] font-medium leading-[100%] tracking-[0.18em] text-[#6B7280]">
               {hasCmsData
@@ -138,53 +128,8 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
             </button>
           </div>
 
-          {/* Instrument rows */}
-          <div className="flex flex-col divide-y divide-[#f0f0f0] dark:divide-[#1f1f1f]">
-            {hasCmsData
-              ? cmsRows.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between py-[11px]">
-                    <div>
-                      <p className="text-foreground font-sans text-[14px] font-semibold">
-                        {item.symbol}
-                      </p>
-                      <p className="font-body text-muted mt-[2px] text-[11px]">{item.name}</p>
-                    </div>
-                    <div className="text-right">
-                      {item.spread != null && (
-                        <p className="font-body text-foreground text-[12px] font-medium">
-                          Spread: {item.spread} pip
-                        </p>
-                      )}
-                      {item.leverage && (
-                        <p className="font-body text-muted mt-[2px] text-[11px]">{item.leverage}</p>
-                      )}
-                    </div>
-                  </div>
-                ))
-              : STATIC_FOREX_ROWS.map((row) => (
-                  <div key={row.pair} className="flex items-center justify-between py-[11px]">
-                    <div>
-                      <p className="text-foreground font-sans text-[14px] font-semibold">
-                        {row.pair}
-                      </p>
-                      <p className="font-body text-muted mt-[2px] text-[11px]">
-                        Spread: {row.spread} pip
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-body text-foreground text-[13px] font-medium">{row.bid}</p>
-                      <p
-                        className={`font-body mt-[2px] text-[11px] ${row.up ? 'text-[#26A69A]' : 'text-[#EE5250]'}`}
-                      >
-                        {row.change}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-          </div>
-
           {/* View all button */}
-          <button className="dark:bg-surface mt-4 flex w-full items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]">
+          <button className="dark:bg-surface mt-3 flex w-full items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]">
             <span className="font-body text-foreground text-[13px] font-medium">
               {hasCmsData
                 ? `View all ${cmsRows.length} ${activeCategory.toLowerCase()} instruments`
@@ -203,14 +148,15 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
             </div>
           </button>
 
-          {/* Watchlist-style dark widget */}
-          <div className="mt-5 flex flex-col gap-4 rounded-[32px] bg-[#07090D] p-5">
-            <div className="flex gap-2">
+          {/* Chart + Index watchlist widget */}
+          <div className="mt-3 gap-[16px] overflow-hidden rounded-[32px] bg-[#07090D] p-[16px] pb-3">
+            {/* Tab bar */}
+            <div className="flex justify-between">
               {['Indices', 'Futures', 'Bonds', 'Forex'].map((tab) => (
                 <button
                   key={tab}
-                  className={`font-body rounded-[8px] px-3 py-[5px] text-[12px] ${
-                    tab === 'Indices' ? 'bg-[#1F262E] text-white' : 'text-[#ADB5C2]'
+                  className={`font-body rounded-[8px] px-[14px] py-[8px] text-[12px] font-medium transition-colors ${
+                    tab === 'Indices' ? 'bg-[#1c2033] text-white' : 'text-white/40'
                   }`}
                 >
                   {tab}
@@ -218,24 +164,53 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
               ))}
             </div>
 
-            <div className="flex h-[80px] items-end px-1">
-              <svg viewBox="0 0 340 80" className="h-full w-full" preserveAspectRatio="none">
-                <polyline
-                  points="0,65 40,55 80,60 120,40 160,45 200,30 240,38 280,20 340,25"
+            {/* Chart area */}
+            <div className="relative px-3 pt-2">
+              <svg
+                viewBox="0 0 480 160"
+                className="w-full"
+                preserveAspectRatio="none"
+                style={{ height: 140 }}
+              >
+                <defs>
+                  <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                {/* Gradient fill */}
+                <path
+                  d="M0,130 C30,126 60,122 90,112 C120,102 150,90 180,75 C210,60 240,50 270,44 C300,38 330,36 360,38 C390,40 420,52 450,62 C462,67 472,72 480,78 L480,160 L0,160 Z"
+                  fill="url(#chartFill)"
+                />
+                {/* Line */}
+                <path
+                  d="M0,130 C30,126 60,122 90,112 C120,102 150,90 180,75 C210,60 240,50 270,44 C300,38 330,36 360,38 C390,40 420,52 450,62 C462,67 472,72 480,78"
                   fill="none"
-                  stroke="white"
-                  strokeWidth="1.5"
+                  stroke="#3B82F6"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                 />
               </svg>
+
+              {/* X-axis date labels */}
+              <div className="mt-1 flex justify-between px-1">
+                {['Jun', 'Sep', '2026', 'Apr'].map((label) => (
+                  <span key={label} className="font-body text-[9px] text-white/30">
+                    {label}
+                  </span>
+                ))}
+              </div>
             </div>
 
-            <div className="flex gap-1">
+            {/* Time period selector */}
+            <div className="mt-2 flex gap-0.5 px-3">
               {['1D', '1M', '3M', '1Y', '5Y', 'All'].map((p) => (
                 <button
                   key={p}
-                  className={`font-body flex-1 rounded-[8px] py-[5px] text-[11px] ${
-                    p === '1Y' ? 'bg-[#1F262E] text-white' : 'text-[#B8BFC8]'
+                  className={`font-body flex-1 rounded-[7px] py-[5px] text-[10px] font-medium transition-colors ${
+                    p === '1Y' ? 'bg-[#1c2033] text-white' : 'text-white/35'
                   }`}
                 >
                   {p}
@@ -243,71 +218,112 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
               ))}
             </div>
 
-            <div className="flex flex-col gap-[2px]">
-              {[
-                {
-                  code: 'SPXUSD',
-                  name: 'S&P 500',
-                  price: '7,404.5',
-                  change: '−0.12%',
-                  up: false,
-                  color: '#DB213D',
-                },
-                {
-                  code: 'NSXUSD',
-                  name: 'US 100',
-                  price: '29,146.1',
-                  change: '−0.14%',
-                  up: false,
-                  color: '#5CC7E5',
-                },
-                {
-                  code: 'DJI',
-                  name: 'Dow Jones',
-                  price: '42,312.8',
-                  change: '+0.09%',
-                  up: true,
-                  color: '#1A5ED5',
-                },
-              ].map((item) => (
+            {/* Divider */}
+            <div className="mx-3 mt-3 border-t border-white/[0.06]" />
+
+            {/* Index rows */}
+            {[
+              {
+                label: '500',
+                name: 'SPXUSD',
+                full: 'S&P 500',
+                price: '7,404.5',
+                pts: '−8.90',
+                pct: '−0.12%',
+                color: '#DC2626',
+                up: false,
+              },
+              {
+                label: '100',
+                name: 'NSXUSD',
+                full: 'US 100',
+                price: '29,146.1',
+                pts: '−40.70',
+                pct: '−0.14%',
+                color: '#06B6D4',
+                up: false,
+              },
+              {
+                label: '30',
+                name: 'DJI',
+                full: 'Dow 30',
+                price: '49,927.0',
+                pts: '−34.30',
+                pct: '−0.07%',
+                color: '#2563EB',
+                up: false,
+              },
+              {
+                label: '225',
+                name: 'NKY',
+                full: 'Nikkei 225',
+                price: '61,684.14',
+                pts: '+1,879.73',
+                pct: '+5.34%',
+                color: '#E11D48',
+                up: true,
+              },
+              {
+                label: '40',
+                name: 'DEU40',
+                full: 'DAX Index',
+                price: '24,737.24',
+                pts: '+336.59',
+                pct: '+1.38%',
+                color: '#7C3AED',
+                up: true,
+              },
+              {
+                label: '100',
+                name: 'UKXGBP',
+                full: 'FTSE 100',
+                price: '10,464.0',
+                pts: '−5.20',
+                pct: '−0.05%',
+                color: '#9D174D',
+                up: false,
+              },
+            ].map((item, i, arr) => (
+              <div
+                key={item.name}
+                className={`flex items-center gap-3 px-3 py-[11px] ${i < arr.length - 1 ? 'border-b border-white/[0.05]' : ''}`}
+              >
+                {/* Avatar */}
                 <div
-                  key={item.code}
-                  className="flex items-center justify-between rounded-[12px] bg-[#0A1326] px-3 py-[10px]"
+                  className="font-body flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white"
+                  style={{ backgroundColor: item.color }}
                 >
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="font-body flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[8px] font-semibold text-white"
-                      style={{ backgroundColor: item.color }}
-                    >
-                      {item.code.slice(0, 3)}
-                    </div>
-                    <div>
-                      <p className="font-body text-[12px] font-medium text-white">{item.code}</p>
-                      <p className="font-body text-[10px] text-[#8C939E]">{item.name}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p
-                      className={`font-body text-[12px] font-medium ${item.up ? 'text-white' : 'text-[#EF5350]'}`}
-                    >
-                      {item.price}
-                    </p>
-                    <p
-                      className={`font-body text-[10px] ${item.up ? 'text-[#26A69A]' : 'text-[#EF5350]'}`}
-                    >
-                      {item.change}
-                    </p>
-                  </div>
+                  {item.label}
                 </div>
-              ))}
-            </div>
+                {/* Symbol + full name */}
+                <div className="min-w-0 flex-1">
+                  <p className="font-sans text-[13px] font-semibold leading-none text-white">
+                    {item.name}
+                  </p>
+                  <p className="font-body mt-[3px] text-[10px] text-white/40">{item.full}</p>
+                </div>
+                {/* Price + changes */}
+                <div className="text-right">
+                  <p
+                    className={`font-sans text-[13px] font-semibold ${item.up ? 'text-white' : 'text-[#EE5250]'}`}
+                  >
+                    {item.price}
+                  </p>
+                  <p
+                    className={`font-body mt-[2px] text-[10px] ${item.up ? 'text-[#26A69A]' : 'text-[#EE5250]'}`}
+                  >
+                    {item.pts}&nbsp;&nbsp;{item.pct}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Specs section */}
       <section className="rounded-t-[32px] bg-[#111111] px-5 pb-10 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* <SectionKicker className="mb-4 [&>span]:bg-white/40 [&>span:last-child]:text-white/50"> */}
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white [&>span:last-child]:text-white">
             TRADING SPECS
@@ -350,7 +366,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
 
       {/* Other markets */}
       <section className="dark:bg-background bg-white px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 font-mono text-[10px] font-medium leading-[100%] tracking-[0.18em] text-[#6B7280]">
             OTHER MARKETS
           </SectionKicker>

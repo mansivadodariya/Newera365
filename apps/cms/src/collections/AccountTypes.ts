@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
+import Mt5SyncStatusCell from '../components/Mt5SyncStatusCell';
 
 // Powers the /accounts comparison table, /fees-charges, and the Spread
 // Comparator widget. Language-neutral.
@@ -18,7 +19,7 @@ export const AccountTypes: CollectionConfig = {
   admin: {
     group: 'Trading Data',
     useAsTitle: 'name',
-    defaultColumns: ['name', 'minDeposit', 'spreadFrom', 'usesMT5Data', 'status'],
+    defaultColumns: ['name', 'minDeposit', 'spreadFrom', 'usesMT5Data', 'mt5SyncStatus', 'status'],
     description:
       'Account type records power the comparison table and calculators. Toggle "Use MT5 Live Data" per account to switch between live and manual spread data.',
   },
@@ -129,6 +130,53 @@ export const AccountTypes: CollectionConfig = {
       required: true,
       defaultValue: 'active',
       options: ['active', 'inactive'],
+    },
+
+    // ── MT5 Sync Status (written by the background sync job) ────────────────
+    // Account types share the same MT5 bridge connection as instruments.
+    // The sync job marks these based on overall MT5 connectivity — if the bridge
+    // is reachable and serving data, all enabled account types are marked synced.
+    {
+      type: 'collapsible',
+      label: 'MT5 Sync Status',
+      admin: { initCollapsed: false },
+      fields: [
+        {
+          name: 'mt5SyncStatus',
+          type: 'select',
+          defaultValue: 'never',
+          options: [
+            { label: 'Never synced', value: 'never' },
+            { label: 'Synced', value: 'synced' },
+            { label: 'Failed', value: 'failed' },
+          ],
+          admin: {
+            readOnly: true,
+            description: 'Set automatically by the background MT5 sync job. Not editable here.',
+            components: {
+              Cell: Mt5SyncStatusCell,
+            },
+          },
+        },
+        {
+          name: 'mt5LastSyncedAt',
+          type: 'date',
+          admin: {
+            readOnly: true,
+            description: 'Timestamp of the last MT5 connectivity check for this account type.',
+            date: { displayFormat: 'dd/MM/yyyy HH:mm:ss' },
+          },
+        },
+        {
+          name: 'mt5SyncFailureReason',
+          type: 'text',
+          admin: {
+            readOnly: true,
+            condition: (data) => data?.mt5SyncStatus === 'failed',
+            description: 'Error detail from the most recent failed sync attempt.',
+          },
+        },
+      ],
     },
   ],
 };

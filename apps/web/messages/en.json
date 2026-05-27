@@ -7,7 +7,9 @@
     "about": "About",
     "contact": "Contact",
     "openLive": "Open Live Account",
-    "tryDemo": "Try Demo"
+    "tryDemo": "Try Demo",
+    "signIn": "Sign in",
+    "getStarted": "Get started"
   },
   "home": {
     "heroLine1": "Trade global markets, the",
@@ -25,7 +27,7 @@
     "statsByNumbers": "By the numbers",
     "statsHeading": "Built on trust.\nScaled by traders.",
     "statsRegBadgeTitle": "Multi-jurisdiction regulated",
-    "statsRegBadgeDesc": "FCA · ASIC · CySEC oversight",
+    "statsRegBadgeDesc": "FCA Â· ASIC Â· CySEC oversight",
     "statsYearsValue": "12+",
     "statsYearsLabel": "Years in Markets",
     "statsTradersValue": "180k",
@@ -109,7 +111,7 @@
     "riskDisclosure": "Risk Disclosure",
     "aml": "AML Policy",
     "riskWarning": "Trading involves risk. Past performance is not indicative of future results. Trade responsibly.",
-    "copyright": "© 2026 NEWERA365",
+    "copyright": "Â© 2026 NEWERA365",
     "headingMarkets": "MARKETS",
     "headingPlatform": "PLATFORM",
     "headingCompany": "COMPANY",

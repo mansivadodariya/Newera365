@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 
 const NAV_GROUPS = [
@@ -16,7 +17,7 @@ const NAV_GROUPS = [
       { label: 'Account Comparison', href: '/trade/accounts' },
       { label: 'Payment Info', href: '/trade/funding' },
       { label: 'Fee Table', href: '/trade/fees' },
-      { label: 'Promo Cards', href: '/trade/promo' },
+      { label: 'Promo Cards', href: '/trade/promotions' },
       { label: 'IB Registration', href: '/trade/ib' },
     ],
   },
@@ -35,7 +36,7 @@ const NAV_GROUPS = [
     section: 'EDUCATION HUB',
     items: [
       { label: 'Section Hub Landing', href: '/education' },
-      { label: 'Media Content Listing', href: '/education' },
+      { label: 'Media Content Listing', href: '/education/media' },
       { label: 'Gated Content Page', href: '/ebooks' },
       { label: 'A-Z Glossary', href: '/glossary' },
       { label: 'Long-form Guide', href: '/guides' },
@@ -88,6 +89,13 @@ interface MobileMenuProps {
 function MobileMenu({ open, onClose }: MobileMenuProps) {
   const locale = useLocale();
   const t = useTranslations('nav');
+  const pathname = usePathname();
+
+  function isActive(href: string): boolean {
+    const full = `/${locale}${href === '/' ? '' : href}`;
+    if (href === '/') return pathname === full || pathname === `/${locale}`;
+    return pathname === full || pathname.startsWith(`${full}/`);
+  }
 
   useEffect(() => {
     if (open) document.body.style.overflow = 'hidden';
@@ -156,34 +164,43 @@ function MobileMenu({ open, onClose }: MobileMenuProps) {
                 {group.section}
               </p>
             )}
-            {group.items.map(({ label, href }) => (
-              <Link
-                key={label}
-                href={`/${locale}${href === '/' ? '' : href}`}
-                onClick={onClose}
-                className="group flex items-center justify-between py-[15px]"
-              >
-                <span className="text-foreground group-hover:text-accent font-sans text-[16px] font-medium transition-colors">
-                  {label}
-                </span>
-                <svg
-                  width="7"
-                  height="12"
-                  viewBox="0 0 7 12"
-                  fill="none"
-                  aria-hidden="true"
-                  className="text-muted group-hover:text-accent flex-shrink-0 transition-colors"
+            {group.items.map(({ label, href }) => {
+              const active = isActive(href);
+              return (
+                <Link
+                  key={label}
+                  href={`/${locale}${href === '/' ? '' : href}`}
+                  onClick={onClose}
+                  className="group flex items-center justify-between py-[15px]"
                 >
-                  <path
-                    d="M1 1L6 6L1 11"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Link>
-            ))}
+                  <span
+                    className={`font-sans text-[16px] font-medium transition-colors ${
+                      active ? 'text-accent' : 'text-foreground group-hover:text-accent'
+                    }`}
+                  >
+                    {label}
+                  </span>
+                  <svg
+                    width="7"
+                    height="12"
+                    viewBox="0 0 7 12"
+                    fill="none"
+                    aria-hidden="true"
+                    className={`flex-shrink-0 transition-colors ${
+                      active ? 'text-accent' : 'text-muted group-hover:text-accent'
+                    }`}
+                  >
+                    <path
+                      d="M1 1L6 6L1 11"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+              );
+            })}
           </div>
         ))}
       </nav>

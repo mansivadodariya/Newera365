@@ -29,8 +29,10 @@ export function MarketsSection() {
 
   return (
     <section className="px-5 pb-9 pt-10" style={{ background: 'var(--gradient-markets)' }}>
-      <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-        <SectionKicker className="text-muted mb-5">{t('marketsKicker')}</SectionKicker>
+      <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <SectionKicker className="mb-5 text-[#000000] dark:text-[#FFFFFF]">
+          {t('marketsKicker')}
+        </SectionKicker>
 
         <h2 className="text-foreground mb-3 font-sans text-[32px] font-semibold leading-[1.1]">
           {t('marketsHeading')}

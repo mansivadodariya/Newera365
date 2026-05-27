@@ -128,7 +128,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-7 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <Link
             href={`/${locale}/markets/instruments`}
             className="font-body text-muted hover:text-foreground mb-5 flex items-center gap-1 text-[13px] transition-colors"
@@ -155,56 +155,95 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
         </div>
       </section>
 
-      {/* Instrument list */}
+      {/* Instrument list — watchlist widget */}
       <section className="dark:bg-background bg-white px-5 pb-6">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <div className="mb-4 flex items-center justify-between">
-            <SectionKicker>
-              {cmsRows
-                ? `${meta.label.toUpperCase()} · ${cmsRows.length} INSTRUMENTS`
-                : `${meta.label.toUpperCase()} · TOP INSTRUMENTS`}
-            </SectionKicker>
-          </div>
-
-          <div className="flex flex-col divide-y divide-[#f0f0f0] dark:divide-[#1f1f1f]">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-3">
             {cmsRows
-              ? cmsRows.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between py-[13px]">
-                    <div>
-                      <p className="text-foreground font-sans text-[14px] font-semibold">
-                        {item.symbol}
-                      </p>
-                      <p className="font-body text-muted mt-[2px] text-[11px]">{item.name}</p>
-                    </div>
-                    <div className="text-right">
-                      {item.spread != null && (
-                        <p className="font-body text-foreground text-[12px] font-medium">
-                          Spread: {item.spread} pip
+              ? `${meta.label.toUpperCase()} · ${cmsRows.length} INSTRUMENTS`
+              : `${meta.label.toUpperCase()} · LIVE WATCHLIST`}
+          </SectionKicker>
+
+          {/* Dark watchlist container */}
+          <div className="overflow-hidden rounded-[20px] bg-[#111111]">
+            {/* Column header */}
+            <div className="border-white/8 grid grid-cols-[1fr_64px_64px] border-b px-4 py-2">
+              <span className="font-body text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
+                Symbol
+              </span>
+              <span className="font-body text-right text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
+                Spread
+              </span>
+              <span className="font-body text-right text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
+                Change
+              </span>
+            </div>
+
+            {/* Rows */}
+            {cmsRows
+              ? cmsRows.map((item, i) => (
+                  <div
+                    key={item.id}
+                    className={`grid grid-cols-[1fr_64px_64px] items-center px-4 py-[11px] ${i < cmsRows.length - 1 ? 'border-b border-white/[0.06]' : ''}`}
+                  >
+                    {/* Left: indicator dot + symbol + name */}
+                    <div className="flex min-w-0 items-center gap-3">
+                      <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#26A69A]" />
+                      <div className="min-w-0">
+                        <p className="font-sans text-[13px] font-semibold leading-none text-white">
+                          {item.symbol}
                         </p>
-                      )}
-                      {item.leverage && (
-                        <p className="font-body text-muted mt-[2px] text-[11px]">{item.leverage}</p>
-                      )}
+                        <p className="font-body mt-[3px] truncate text-[10px] text-white/40">
+                          {item.name}
+                        </p>
+                      </div>
+                    </div>
+                    {/* Spread */}
+                    <p className="font-body text-right text-[12px] font-medium text-white/70">
+                      {item.spread != null ? `${item.spread}` : '—'}
+                    </p>
+                    {/* Change — CMS rows have no change data, show neutral */}
+                    <div className="flex justify-end">
+                      <span className="font-body inline-flex items-center rounded-[6px] bg-white/10 px-2 py-[3px] text-[10px] font-semibold text-white/50">
+                        —
+                      </span>
                     </div>
                   </div>
                 ))
-              : meta.staticRows.map((row) => (
-                  <div key={row.symbol} className="flex items-center justify-between py-[13px]">
-                    <div>
-                      <p className="text-foreground font-sans text-[14px] font-semibold">
-                        {row.symbol}
-                      </p>
-                      <p className="font-body text-muted mt-[2px] text-[11px]">{row.name}</p>
+              : meta.staticRows.map((row, i) => (
+                  <div
+                    key={row.symbol}
+                    className={`grid grid-cols-[1fr_64px_64px] items-center px-4 py-[11px] ${i < meta.staticRows.length - 1 ? 'border-b border-white/[0.06]' : ''}`}
+                  >
+                    {/* Left: indicator dot + symbol + name */}
+                    <div className="flex min-w-0 items-center gap-3">
+                      <span
+                        className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${row.up ? 'bg-[#26A69A]' : 'bg-[#EE5250]'}`}
+                      />
+                      <div className="min-w-0">
+                        <p className="font-sans text-[13px] font-semibold leading-none text-white">
+                          {row.symbol}
+                        </p>
+                        <p className="font-body mt-[3px] truncate text-[10px] text-white/40">
+                          {row.name}
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-body text-foreground text-[12px] font-medium">
-                        Spread: {row.spread}
-                      </p>
-                      <p
-                        className={`font-body mt-[2px] text-[11px] ${row.up ? 'text-[#26A69A]' : 'text-[#EE5250]'}`}
+                    {/* Spread */}
+                    <p className="font-body text-right text-[12px] font-medium text-white/70">
+                      {row.spread}
+                    </p>
+                    {/* Change pill */}
+                    <div className="flex justify-end">
+                      <span
+                        className={`font-body inline-flex items-center rounded-[6px] px-2 py-[3px] text-[10px] font-semibold ${
+                          row.up
+                            ? 'bg-[#26A69A]/20 text-[#26A69A]'
+                            : 'bg-[#EE5250]/20 text-[#EE5250]'
+                        }`}
                       >
                         {row.change}
-                      </p>
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -212,12 +251,12 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
 
           <Link
             href={`/${locale}/trade/accounts`}
-            className="dark:bg-surface mt-5 flex w-full items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
+            className="dark:bg-surface mt-3 flex w-full items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
           >
             <span className="font-body text-foreground text-[13px] font-medium">
               Open an account to trade all {meta.label.toLowerCase()} instruments
             </span>
-            <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
+            <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#111111] dark:bg-white">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M3 8h10M9 4l4 4-4 4"
@@ -234,7 +273,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
 
       {/* Specs section */}
       <section className="rounded-t-[32px] bg-[#111111] px-5 pb-10 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white [&>span:last-child]:text-white">
             TRADING SPECS
           </SectionKicker>
@@ -274,7 +313,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
 
       {/* Other markets */}
       <section className="dark:bg-background bg-white px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">OTHER MARKETS</SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.025em]">
             Explore other asset classes.

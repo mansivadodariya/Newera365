@@ -189,10 +189,12 @@ export function PlatformPage() {
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">Platforms</SectionKicker>
-          <h1 className="text-foreground mb-4 whitespace-pre-line font-sans text-[40px] font-semibold leading-[1.1]">
-            {'A platform that\nmoves with markets.'}
+          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
+            A platform that
+            <br />
+            moves with markets.
           </h1>
           <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
             Trade the way you want — on the world&apos;s most trusted terminal, native mobile or
@@ -214,7 +216,7 @@ export function PlatformPage() {
 
       {/* Terminal section */}
       <section className="dark:bg-background bg-white px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">PICK YOUR TERMINAL</SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
             Trade anywhere.
@@ -273,8 +275,8 @@ export function PlatformPage() {
       </section>
 
       {/* Tools section */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+      <section className="dark:bg-background gap-[14px] rounded-[32px] bg-white bg-gradient-to-b from-[#F8F8F7] to-[#FFFFFF] pb-[36px] pl-[20px] pr-[20px] pt-[40px]">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">WHAT&apos;S INSIDE</SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
             Pro tools, made approachable.
@@ -304,12 +306,14 @@ export function PlatformPage() {
 
       {/* Works Everywhere */}
       <section className="bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-4 [&>span:last-child]:text-white/50 [&>span]:bg-white/40">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-white [&>span:last-child]:text-white">
             WORKS EVERYWHERE
           </SectionKicker>
-          <h2 className="mb-7 whitespace-pre-line font-sans text-[32px] font-semibold leading-[1.1] text-white">
-            {'One login.\nEvery device.'}
+          <h2 className="mb-7 font-sans text-[32px] font-semibold leading-[1.1] text-white">
+            One login.
+            <br />
+            Every device.
           </h2>
 
           {/* Device grid */}

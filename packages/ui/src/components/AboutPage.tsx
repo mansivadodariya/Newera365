@@ -90,7 +90,7 @@ export function AboutPage() {
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">About Us</SectionKicker>
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05]">
             Trading, built for the new era.
@@ -104,7 +104,7 @@ export function AboutPage() {
 
       {/* Stats strip */}
       <section className="dark:bg-background bg-white px-5 pb-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-[#2a2a2a]">
             {[
               { value: '12+', label: 'Years in markets' },
@@ -125,7 +125,7 @@ export function AboutPage() {
 
       {/* Values */}
       <section className="bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:last-child]:text-white/50 [&>span]:bg-white/40">
             OUR VALUES
           </SectionKicker>
@@ -155,7 +155,7 @@ export function AboutPage() {
 
       {/* Regulation */}
       <section className="dark:bg-background bg-white px-5 pb-10 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">REGULATION</SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[1.1]">
             Regulated where it matters.
@@ -179,7 +179,7 @@ export function AboutPage() {
 
       {/* Timeline */}
       <section className="dark:bg-background bg-white px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">MILESTONES</SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[1.1]">
             12 years of building trust.
@@ -209,7 +209,7 @@ export function AboutPage() {
 
       {/* CTA */}
       <section className="bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="mb-5 font-sans text-[32px] font-semibold leading-[1.1] text-white">
             Ready to trade with us?
           </h2>

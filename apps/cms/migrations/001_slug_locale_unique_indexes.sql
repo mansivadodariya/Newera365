@@ -44,3 +44,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS uidx_news_slug_locale
 
 CREATE UNIQUE INDEX IF NOT EXISTS uidx_webinars_slug_locale
   ON webinars (slug, locale);
+
+CREATE UNIQUE INDEX IF NOT EXISTS uidx_awards_slug_locale
+  ON awards (slug, locale);

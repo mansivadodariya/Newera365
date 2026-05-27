@@ -84,8 +84,8 @@ export function FeaturesSection() {
 
   return (
     <section className="px-5 pb-9 pt-10" style={{ background: 'var(--gradient-features)' }}>
-      <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-        <SectionKicker className="mb-5 font-mono text-[10px] font-medium leading-[100%] tracking-[0.18em] text-[#6B7280]">
+      <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <SectionKicker className="[&>span:first-child]:bg-muted mb-5 font-mono text-[10px] font-medium leading-[100%] tracking-[0.18em] text-[#6B7280]">
           {t('whyKicker')}
         </SectionKicker>
 

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
+import Mt5SyncStatusCell from '../components/Mt5SyncStatusCell';
 
 // Powers all 6 Markets pages, the 3 calculator widgets, and /fees-charges.
 // Language-neutral — instrument specs are not locale-specific.
@@ -21,7 +22,7 @@ export const ProductsInstruments: CollectionConfig = {
   admin: {
     group: 'Trading Data',
     useAsTitle: 'name',
-    defaultColumns: ['name', 'symbol', 'assetClass', 'usesMT5Data', 'status'],
+    defaultColumns: ['name', 'symbol', 'assetClass', 'usesMT5Data', 'mt5SyncStatus', 'status'],
     description:
       'Each instrument can pull live data from MT5 or be updated manually. Use the "Use MT5 Live Data" toggle per row to switch modes.',
   },
@@ -168,6 +169,51 @@ export const ProductsInstruments: CollectionConfig = {
       required: true,
       defaultValue: 'active',
       options: ['active', 'inactive'],
+    },
+
+    // ── MT5 Sync Status (written by the background sync job) ────────────────
+    {
+      type: 'collapsible',
+      label: 'MT5 Sync Status',
+      admin: { initCollapsed: false },
+      fields: [
+        {
+          name: 'mt5SyncStatus',
+          type: 'select',
+          defaultValue: 'never',
+          options: [
+            { label: 'Never synced', value: 'never' },
+            { label: 'Synced', value: 'synced' },
+            { label: 'Failed', value: 'failed' },
+          ],
+          admin: {
+            readOnly: true,
+            description: 'Set automatically by the background MT5 sync job. Not editable here.',
+            components: {
+              Cell: Mt5SyncStatusCell,
+            },
+          },
+        },
+        {
+          name: 'mt5LastSyncedAt',
+          type: 'date',
+          admin: {
+            readOnly: true,
+            description: 'Timestamp of the last MT5 sync attempt for this instrument.',
+            date: { displayFormat: 'dd/MM/yyyy HH:mm:ss' },
+          },
+        },
+        {
+          name: 'mt5SyncFailureReason',
+          type: 'text',
+          admin: {
+            readOnly: true,
+            // Only shown when the last sync failed — no point cluttering the UI otherwise.
+            condition: (data) => data?.mt5SyncStatus === 'failed',
+            description: 'Error detail from the most recent failed sync attempt.',
+          },
+        },
+      ],
     },
   ],
 };

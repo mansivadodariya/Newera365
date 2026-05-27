@@ -22,6 +22,7 @@ export interface Config {
     'newsletter-subscribers': NewsletterSubscriber;
     careers: Career;
     'legal-pages': LegalPage;
+    awards: Award;
     'company-content': CompanyContent;
     'team-members': TeamMember;
     'webinar-registrations': WebinarRegistration;
@@ -166,6 +167,9 @@ export interface ProductsInstrument {
   tickSize?: number | null;
   sortOrder?: number | null;
   status: 'active' | 'inactive';
+  mt5SyncStatus?: ('never' | 'synced' | 'failed') | null;
+  mt5LastSyncedAt?: string | null;
+  mt5SyncFailureReason?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -291,6 +295,9 @@ export interface AccountType {
   isPopular?: boolean | null;
   sortOrder?: number | null;
   status: 'active' | 'inactive';
+  mt5SyncStatus?: ('never' | 'synced' | 'failed') | null;
+  mt5LastSyncedAt?: string | null;
+  mt5SyncFailureReason?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -408,6 +415,25 @@ export interface LegalPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "awards".
+ */
+export interface Award {
+  id: number;
+  title: string;
+  slug: string;
+  date: string;
+  description?: string | null;
+  logo?: number | Media | null;
+  externalUrl?: string | null;
+  sortOrder?: number | null;
+  status: 'published' | 'draft';
+  translationKey?: string | null;
+  locale: 'en' | 'ar';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "company-content".
  */
 export interface CompanyContent {
@@ -505,6 +531,49 @@ export interface PayloadMigration {
 export interface SiteSetting {
   id: number;
   mt5SyncEnabled?: boolean | null;
+  mt5ApiEndpoint?: string | null;
+  mt5ApiKey?: string | null;
+  mt5RefreshIntervalSecs?: number | null;
+  kpiStats?:
+    | {
+        valueEn: string;
+        valueAr: string;
+        labelEn: string;
+        labelAr: string;
+        id?: string | null;
+      }[]
+    | null;
+  socialProofLogos?:
+    | {
+        logo: number | Media;
+        altEn?: string | null;
+        altAr?: string | null;
+        href?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  downloadMt5Windows?: string | null;
+  downloadMt5Mac?: string | null;
+  downloadMt5Ios?: string | null;
+  downloadMt5Android?: string | null;
+  downloadWebTrader?: string | null;
+  contactEmail?: string | null;
+  contactEmailCompliance?: string | null;
+  contactPhone?: string | null;
+  contactAddressEn?: string | null;
+  contactAddressAr?: string | null;
+  supportHoursEn?: string | null;
+  supportHoursAr?: string | null;
+  socialFacebook?: string | null;
+  socialX?: string | null;
+  socialLinkedIn?: string | null;
+  socialInstagram?: string | null;
+  socialYoutube?: string | null;
+  socialTelegram?: string | null;
+  socialTiktok?: string | null;
+  riskBannerEnabled?: boolean | null;
+  riskBannerEn?: string | null;
+  riskBannerAr?: string | null;
   navEn?:
     | {
         label: string;

@@ -37,3 +37,12 @@ export { FaqPage } from './components/FaqPage';
 export { ContactPage } from './components/ContactPage';
 export { AboutPage } from './components/AboutPage';
 export { LegalPage } from './components/LegalPage';
+
+export { IBPage } from './components/IBPage';
+export { EducationHubPage } from './components/EducationHubPage';
+export { MediaListingPage } from './components/MediaListingPage';
+export { EbooksPage } from './components/EbooksPage';
+export { GlossaryPage } from './components/GlossaryPage';
+export { GuidesPage } from './components/GuidesPage';
+export { GuideDetailPage } from './components/GuideDetailPage';
+export type { GuideDetailProps } from './components/GuideDetailPage';

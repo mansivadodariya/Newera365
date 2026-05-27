@@ -122,10 +122,13 @@ export function AccountsPage() {
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-4">Account Types</SectionKicker>
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
-            Choose the account that <span className="text-accent">fits.</span>
+            Choose the
+            <br />
+            account that
+            <br />
+            <span className="text-accent">fits.</span>
           </h1>
           <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
             Whether you trade a few times a week or a few hundred times a day — we have an account
@@ -175,7 +178,7 @@ export function AccountsPage() {
 
               {/* Spec rows */}
               <div
-                className={`flex flex-col gap-px overflow-hidden rounded-[14px] ${account.rowsContainerBg}`}
+                className={`flex flex-col overflow-hidden rounded-[14px] ${account.rowsContainerBg}`}
               >
                 {account.rows.map((row) => (
                   <div
@@ -215,8 +218,8 @@ export function AccountsPage() {
 
       {/* Feature Matrix */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-4 [&>span:last-child]:text-white/50">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/60 [&>span:last-child]:text-white/60">
             FEATURE MATRIX
           </SectionKicker>
           <h2 className="mb-7 font-sans text-[26px] font-semibold leading-[1.1] text-white">
@@ -236,13 +239,14 @@ export function AccountsPage() {
               </div>
               {['Std', 'Raw', 'VIP'].map((h) => (
                 <div key={h} className="flex items-center justify-center py-3">
-                  <span className="font-body text-[9px] uppercase tracking-[0.1em] text-[#FFFFFF8C]">
+                  <span
+                    className={`font-body text-[9px] uppercase tracking-[0.1em] ${h === 'Raw' ? 'text-[#00B050]' : 'text-[#FFFFFF8C]'}`}
+                  >
                     {h}
                   </span>
                 </div>
               ))}
             </div>
-
             {MATRIX_ROWS.map((row, i) => (
               <div
                 key={row.feature}

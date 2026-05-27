@@ -1,7 +1,8 @@
 import type { GlobalConfig } from 'payload/types';
 
-// Global site chrome — navigation, footer, regulatory risk disclaimer, and
-// the MT5 integration master switch. All copy fields are localized (EN + AR).
+// Global site chrome — all CMS-editable values that the frontend should never hardcode.
+// Locale pattern: separate EN / AR fields mirror the per-document locale approach used
+// by all collections (Payload native localization is intentionally NOT used).
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   access: { read: () => true },
@@ -26,75 +27,452 @@ export const SiteSettings: GlobalConfig = {
               'Turn this OFF during MT5 server maintenance windows or when credentials are not yet configured.',
           },
         },
+        {
+          name: 'mt5ApiEndpoint',
+          type: 'text',
+          label: 'MT5 Bridge URL',
+          admin: {
+            description:
+              'Base URL of the MT5 Manager API bridge service, e.g. https://mt5-bridge.example.com. ' +
+              'When set, overrides the MT5_SERVICE_URL environment variable. Leave blank to use the env var.',
+          },
+          // Never serialised to public API responses — only admin users may read this.
+          access: { read: ({ req }) => Boolean(req?.user) },
+        },
+        {
+          name: 'mt5ApiKey',
+          type: 'text',
+          label: 'MT5 Bridge API Key',
+          admin: {
+            description:
+              'Bearer token sent in the Authorization header to the MT5 bridge. ' +
+              'When set, overrides the MT5_INTERNAL_API_TOKEN environment variable. Leave blank to use the env var.',
+          },
+          access: { read: ({ req }) => Boolean(req?.user) },
+        },
+        {
+          name: 'mt5RefreshIntervalSecs',
+          type: 'number',
+          label: 'Sync Interval (seconds)',
+          defaultValue: 60,
+          min: 10,
+          max: 3600,
+          admin: {
+            description:
+              'How often the background sync job pulls data from the MT5 bridge and updates instrument sync status. ' +
+              'Min 10 s, max 3600 s (1 hour). Default 60 s. Change takes effect on the next sync cycle.',
+          },
+        },
+      ],
+    },
+
+    // ── Homepage KPI Stats ───────────────────────────────────────────────────
+    // Displayed on the homepage hero / stats strip.
+    // Each stat has separate EN and AR value+label pairs so editors control
+    // both the numeral format and the phrasing per locale.
+    {
+      type: 'collapsible',
+      label: 'Homepage KPI Stats',
+      admin: {
+        initCollapsed: true,
+        description:
+          'Statistics shown on the homepage (e.g. "10+ Years in Business", "100,000+ Active Clients"). ' +
+          'Add up to 6 stats; drag to reorder.',
+      },
+      fields: [
+        {
+          name: 'kpiStats',
+          type: 'array',
+          maxRows: 6,
+          labels: { singular: 'KPI Stat', plural: 'KPI Stats' },
+          fields: [
+            {
+              name: 'valueEn',
+              type: 'text',
+              required: true,
+              maxLength: 20,
+              admin: { description: 'Numeric or text value — EN, e.g. "10+".' },
+            },
+            {
+              name: 'valueAr',
+              type: 'text',
+              required: true,
+              maxLength: 20,
+              admin: { description: 'Numeric or text value — AR, e.g. "+١٠".' },
+            },
+            {
+              name: 'labelEn',
+              type: 'text',
+              required: true,
+              maxLength: 60,
+              admin: { description: 'Descriptor — EN, e.g. "Years in Business".' },
+            },
+            {
+              name: 'labelAr',
+              type: 'text',
+              required: true,
+              maxLength: 60,
+              admin: { description: 'Descriptor — AR.' },
+            },
+          ],
+        },
+      ],
+    },
+
+    // ── Social Proof Logos ───────────────────────────────────────────────────
+    // Partner, award, and regulatory body logos shown on the homepage trust strip.
+    {
+      type: 'collapsible',
+      label: 'Social Proof / Partner Logos',
+      admin: {
+        initCollapsed: true,
+        description:
+          'Logos displayed on the homepage trust/partner strip (awards, regulators, media mentions). ' +
+          'Upload via the Media library first; select here. Drag to reorder.',
+      },
+      fields: [
+        {
+          name: 'socialProofLogos',
+          type: 'array',
+          maxRows: 16,
+          labels: { singular: 'Logo', plural: 'Logos' },
+          fields: [
+            {
+              name: 'logo',
+              type: 'upload',
+              relationTo: 'media',
+              required: true,
+              admin: { description: 'Logo image — use SVG or transparent PNG for best results.' },
+            },
+            {
+              name: 'altEn',
+              type: 'text',
+              maxLength: 100,
+              admin: { description: 'Alt text for accessibility — EN.' },
+            },
+            {
+              name: 'altAr',
+              type: 'text',
+              maxLength: 100,
+              admin: { description: 'Alt text for accessibility — AR.' },
+            },
+            {
+              name: 'href',
+              type: 'text',
+              maxLength: 500,
+              admin: {
+                description:
+                  'Optional: wrap logo in a link (e.g. regulator website). Leave blank for no link.',
+              },
+            },
+          ],
+        },
+      ],
+    },
+
+    // ── Platform Download Links ──────────────────────────────────────────────
+    // URLs for all MT5 platform variants and the web trader.
+    // The frontend reads these so there are zero hardcoded download links.
+    {
+      type: 'collapsible',
+      label: 'Platform Download Links',
+      admin: {
+        initCollapsed: true,
+        description:
+          'Download URLs for all supported trading platforms. Paste the full URL including https://.',
+      },
+      fields: [
+        {
+          name: 'downloadMt5Windows',
+          type: 'text',
+          label: 'MT5 for Windows',
+          maxLength: 500,
+          admin: { description: 'Direct installer URL or MetaQuotes download page.' },
+        },
+        {
+          name: 'downloadMt5Mac',
+          type: 'text',
+          label: 'MT5 for macOS',
+          maxLength: 500,
+          admin: { description: 'Direct installer URL or Mac App Store link.' },
+        },
+        {
+          name: 'downloadMt5Ios',
+          type: 'text',
+          label: 'MT5 for iOS',
+          maxLength: 500,
+          admin: { description: 'Apple App Store product URL.' },
+        },
+        {
+          name: 'downloadMt5Android',
+          type: 'text',
+          label: 'MT5 for Android',
+          maxLength: 500,
+          admin: { description: 'Google Play Store product URL.' },
+        },
+        {
+          name: 'downloadWebTrader',
+          type: 'text',
+          label: 'Web Trader',
+          maxLength: 500,
+          admin: { description: 'Browser-based trading platform URL.' },
+        },
+      ],
+    },
+
+    // ── Contact Details ──────────────────────────────────────────────────────
+    {
+      type: 'collapsible',
+      label: 'Contact Details',
+      admin: {
+        initCollapsed: true,
+        description:
+          'Used on the Contact page, footer, and any component that displays company contact info.',
+      },
+      fields: [
+        {
+          name: 'contactEmail',
+          type: 'email',
+          label: 'Support Email',
+          admin: { description: 'Primary customer-facing support email address.' },
+        },
+        {
+          name: 'contactEmailCompliance',
+          type: 'email',
+          label: 'Compliance / Legal Email',
+          admin: { description: 'Shown on Legal pages and the Contact page compliance section.' },
+        },
+        {
+          name: 'contactPhone',
+          type: 'text',
+          label: 'Phone Number',
+          maxLength: 30,
+          admin: { description: 'International format, e.g. +971 4 123 4567.' },
+        },
+        {
+          name: 'contactAddressEn',
+          type: 'textarea',
+          label: 'Office Address — EN',
+          admin: { description: 'Full postal address in English.' },
+        },
+        {
+          name: 'contactAddressAr',
+          type: 'textarea',
+          label: 'Office Address — AR',
+          admin: { description: 'Full postal address in Arabic.' },
+        },
+        {
+          name: 'supportHoursEn',
+          type: 'text',
+          label: 'Support Hours — EN',
+          maxLength: 100,
+          admin: { description: 'e.g. "Monday – Friday, 08:00 – 22:00 UTC".' },
+        },
+        {
+          name: 'supportHoursAr',
+          type: 'text',
+          label: 'Support Hours — AR',
+          maxLength: 100,
+          admin: { description: 'Arabic version of support hours.' },
+        },
+      ],
+    },
+
+    // ── Social Media Links ───────────────────────────────────────────────────
+    {
+      type: 'collapsible',
+      label: 'Social Media Links',
+      admin: {
+        initCollapsed: true,
+        description: 'Leave blank to hide the icon in the footer and social share components.',
+      },
+      fields: [
+        {
+          name: 'socialFacebook',
+          type: 'text',
+          label: 'Facebook',
+          maxLength: 300,
+          admin: { description: 'Full profile URL, e.g. https://facebook.com/newera365.' },
+        },
+        {
+          name: 'socialX',
+          type: 'text',
+          label: 'X (Twitter)',
+          maxLength: 300,
+          admin: { description: 'Full profile URL, e.g. https://x.com/newera365.' },
+        },
+        {
+          name: 'socialLinkedIn',
+          type: 'text',
+          label: 'LinkedIn',
+          maxLength: 300,
+          admin: { description: 'Company page URL, e.g. https://linkedin.com/company/newera365.' },
+        },
+        {
+          name: 'socialInstagram',
+          type: 'text',
+          label: 'Instagram',
+          maxLength: 300,
+          admin: { description: 'Full profile URL, e.g. https://instagram.com/newera365.' },
+        },
+        {
+          name: 'socialYoutube',
+          type: 'text',
+          label: 'YouTube',
+          maxLength: 300,
+          admin: { description: 'Channel URL, e.g. https://youtube.com/@newera365.' },
+        },
+        {
+          name: 'socialTelegram',
+          type: 'text',
+          label: 'Telegram',
+          maxLength: 300,
+          admin: { description: 'Channel or group link, e.g. https://t.me/newera365.' },
+        },
+        {
+          name: 'socialTiktok',
+          type: 'text',
+          label: 'TikTok',
+          maxLength: 300,
+          admin: { description: 'Profile URL, e.g. https://tiktok.com/@newera365.' },
+        },
+      ],
+    },
+
+    // ── Risk Warning Banner ──────────────────────────────────────────────────
+    // Dismissible top-of-page banner — separate from the detailed footer disclaimer below.
+    {
+      type: 'collapsible',
+      label: 'Risk Warning Banner',
+      admin: {
+        initCollapsed: true,
+        description:
+          'Toggleable site-wide banner displayed at the top of every page. ' +
+          'Typically used for time-sensitive risk notices or regulatory requirements. ' +
+          'Separate from the persistent footer disclaimer below.',
+      },
+      fields: [
+        {
+          name: 'riskBannerEnabled',
+          type: 'checkbox',
+          label: 'Show Risk Warning Banner',
+          defaultValue: false,
+          admin: { description: 'ON → banner is visible across all pages. OFF → hidden.' },
+        },
+        {
+          name: 'riskBannerEn',
+          type: 'textarea',
+          label: 'Banner Text — EN',
+          admin: {
+            condition: (data) => Boolean(data?.riskBannerEnabled),
+            description: 'Short risk notice displayed in the banner — English.',
+          },
+        },
+        {
+          name: 'riskBannerAr',
+          type: 'textarea',
+          label: 'Banner Text — AR',
+          admin: {
+            condition: (data) => Boolean(data?.riskBannerEnabled),
+            description: 'Short risk notice displayed in the banner — Arabic.',
+          },
+        },
       ],
     },
 
     // ── Navigation ───────────────────────────────────────────────────────────
-    // Payload's native localization is NOT used (see payload.config.ts).
-    // Separate EN / AR arrays mirror the per-document locale pattern used by all collections.
     {
-      name: 'navEn',
-      type: 'array',
-      label: 'Header Navigation — EN',
+      type: 'collapsible',
+      label: 'Header Navigation',
+      admin: { initCollapsed: true },
       fields: [
-        { name: 'label', type: 'text', required: true },
-        { name: 'href', type: 'text', required: true },
-      ],
-    },
-    {
-      name: 'navAr',
-      type: 'array',
-      label: 'Header Navigation — AR',
-      fields: [
-        { name: 'label', type: 'text', required: true },
-        { name: 'href', type: 'text', required: true },
+        {
+          name: 'navEn',
+          type: 'array',
+          label: 'Header Navigation — EN',
+          fields: [
+            { name: 'label', type: 'text', required: true },
+            { name: 'href', type: 'text', required: true },
+          ],
+        },
+        {
+          name: 'navAr',
+          type: 'array',
+          label: 'Header Navigation — AR',
+          fields: [
+            { name: 'label', type: 'text', required: true },
+            { name: 'href', type: 'text', required: true },
+          ],
+        },
       ],
     },
 
     // ── Footer ───────────────────────────────────────────────────────────────
     {
-      name: 'footerEn',
-      type: 'array',
-      label: 'Footer Columns — EN',
+      type: 'collapsible',
+      label: 'Footer Columns',
+      admin: { initCollapsed: true },
       fields: [
-        { name: 'heading', type: 'text' },
         {
-          name: 'links',
+          name: 'footerEn',
           type: 'array',
+          label: 'Footer Columns — EN',
           fields: [
-            { name: 'label', type: 'text' },
-            { name: 'href', type: 'text' },
+            { name: 'heading', type: 'text' },
+            {
+              name: 'links',
+              type: 'array',
+              fields: [
+                { name: 'label', type: 'text' },
+                { name: 'href', type: 'text' },
+              ],
+            },
           ],
         },
-      ],
-    },
-    {
-      name: 'footerAr',
-      type: 'array',
-      label: 'Footer Columns — AR',
-      fields: [
-        { name: 'heading', type: 'text' },
         {
-          name: 'links',
+          name: 'footerAr',
           type: 'array',
+          label: 'Footer Columns — AR',
           fields: [
-            { name: 'label', type: 'text' },
-            { name: 'href', type: 'text' },
+            { name: 'heading', type: 'text' },
+            {
+              name: 'links',
+              type: 'array',
+              fields: [
+                { name: 'label', type: 'text' },
+                { name: 'href', type: 'text' },
+              ],
+            },
           ],
         },
       ],
     },
 
-    // ── Risk Disclaimer ──────────────────────────────────────────────────────
+    // ── Risk Disclaimer (footer) ─────────────────────────────────────────────
+    // Persistent small-print shown at the bottom of every page.
+    // For the dismissible top banner see "Risk Warning Banner" above.
     {
-      name: 'riskDisclaimerEn',
-      type: 'textarea',
-      admin: { description: 'Regulatory risk warning shown site-wide — English version.' },
-    },
-    {
-      name: 'riskDisclaimerAr',
-      type: 'textarea',
-      admin: { description: 'Regulatory risk warning shown site-wide — Arabic version.' },
+      type: 'collapsible',
+      label: 'Risk Disclaimer (Footer)',
+      admin: { initCollapsed: true },
+      fields: [
+        {
+          name: 'riskDisclaimerEn',
+          type: 'textarea',
+          label: 'Risk Disclaimer — EN',
+          admin: {
+            description: 'Regulatory risk warning shown in the footer site-wide — English version.',
+          },
+        },
+        {
+          name: 'riskDisclaimerAr',
+          type: 'textarea',
+          label: 'Risk Disclaimer — AR',
+          admin: {
+            description: 'Regulatory risk warning shown in the footer site-wide — Arabic version.',
+          },
+        },
+      ],
     },
   ],
 };

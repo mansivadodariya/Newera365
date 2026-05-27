@@ -49,7 +49,6 @@ const CANDLES = [
 function CandlestickChart() {
   const W = 280;
   const H = 100;
-  const n = CANDLES.length;
   const cw = 10;
   const gap = 4;
   const step = cw + gap;
@@ -82,7 +81,7 @@ export function WebTraderPage() {
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">TRADING PLATFORM</SectionKicker>
           <h1 className="text-foreground mb-3 font-sans text-[44px] font-semibold leading-[1.05]">
             WebTrader.
@@ -96,7 +95,7 @@ export function WebTraderPage() {
 
       {/* Embed mockup */}
       <section className="dark:bg-background bg-white px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="overflow-hidden rounded-[22px] bg-[#111111]">
             {/* Toolbar */}
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
@@ -213,7 +212,7 @@ export function WebTraderPage() {
 
       {/* Features */}
       <section className="dark:bg-background bg-white px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5">WHAT YOU GET</SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
             No download.
@@ -250,9 +249,9 @@ export function WebTraderPage() {
       </section>
 
       {/* Launch CTA */}
-      <section className="bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-4 [&>span:last-child]:text-white/50 [&>span]:bg-white/40">
+      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/50">
             WEBTRADER
           </SectionKicker>
           <h2 className="mb-4 font-sans text-[32px] font-semibold leading-[1.1] text-white">

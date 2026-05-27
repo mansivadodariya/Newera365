@@ -46,7 +46,7 @@ export function NewsSection({ news }: NewsSectionProps) {
 
   return (
     <section className="dark:bg-surface bg-[#F7F7F5] px-5 pb-10 pt-10">
-      <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+      <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <div className="mb-6 flex items-center justify-between">
           <div>
             <SectionKicker className="mb-2">NEWS</SectionKicker>

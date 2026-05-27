@@ -182,10 +182,14 @@ export function FundingPage() {
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-4">Funding</SectionKicker>
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
-            Money in, money out — <span className="text-accent">fast.</span>
+            <span>
+              Money in,
+              <br /> money out —
+            </span>
+            <br />
+            <span className="text-accent">fast.</span>
           </h1>
           <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
             Free deposits, same-day withdrawals on most methods. Choose the channel that works for
@@ -196,8 +200,10 @@ export function FundingPage() {
 
       {/* Payment Methods */}
       <section className="dark:bg-background bg-white px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-5">PAYMENT METHODS</SectionKicker>
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+            PAYMENT METHODS
+          </SectionKicker>
           <div className="flex flex-col gap-[14px]">
             {PAYMENT_METHODS.map((method) => (
               <div
@@ -207,10 +213,10 @@ export function FundingPage() {
               >
                 {/* Card header: icon box + type pill */}
                 <div className="flex items-center justify-between">
-                  <div className="bg-accent flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[11px]">
+                  <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[11px] bg-[#00b04fbf] dark:bg-[#00b04f61]">
                     {method.icon}
                   </div>
-                  <span className="font-body text-muted rounded-full border border-[#e5e7eb] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] dark:border-[#2a2a2a]">
+                  <span className="font-body text-muted rounded-full bg-[#1111110D] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] dark:bg-[#363636]">
                     {method.type}
                   </span>
                 </div>
@@ -246,9 +252,9 @@ export function FundingPage() {
       </section>
 
       {/* Trust section */}
-      <section className="bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-4 [&>span:last-child]:text-white/50 [&>span]:bg-white/40">
+      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
             WHY IT&apos;S SAFE
           </SectionKicker>
           <h2 className="mb-7 font-sans text-[32px] font-semibold leading-[1.1] text-white">

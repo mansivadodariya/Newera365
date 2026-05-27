@@ -4,6 +4,7 @@ import type { Payload } from 'payload';
 import type { Where } from 'payload/dist/types';
 import rateLimit from 'express-rate-limit';
 import { createRateLimitStoreFactory } from '../rateLimit/postgresStore';
+import { cacheGet, cacheSet } from '../cache/mt5Cache';
 import {
   ASSET_CLASSES,
   isAssetClass,
@@ -82,12 +83,14 @@ const MT5_INTERNAL_API_TOKEN = process.env.MT5_INTERNAL_API_TOKEN;
 
 // Returns the fetch Response (Node 18+ global). Return type inferred to avoid
 // a name clash with Express's `Response` type in this file.
-// Attaches the internal auth token if configured (required in production).
-const fetchWithTimeout = async (url: string, timeoutMs: number) => {
+// tokenOverride takes precedence over the MT5_INTERNAL_API_TOKEN env var so
+// the admin can rotate the key via SiteSettings without a redeploy.
+const fetchWithTimeout = async (url: string, timeoutMs: number, tokenOverride?: string | null) => {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   const headers: Record<string, string> = {};
-  if (MT5_INTERNAL_API_TOKEN) headers['authorization'] = `Bearer ${MT5_INTERNAL_API_TOKEN}`;
+  const token = tokenOverride != null ? tokenOverride : MT5_INTERNAL_API_TOKEN;
+  if (token) headers['authorization'] = `Bearer ${token}`;
   try {
     return await fetch(url, { signal: controller.signal, headers });
   } finally {
@@ -151,9 +154,19 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
       typeof rawAssetClass === 'string' ? (rawAssetClass as AssetClass) : undefined;
 
     try {
-      // Step 1 — read the global master switch from SiteSettings
-      const settings = await payload.findGlobal({ slug: 'site-settings' });
-      const globalEnabled = (settings as { mt5SyncEnabled?: boolean }).mt5SyncEnabled !== false;
+      // Step 1 — read global settings (overrideAccess so API key field is included).
+      const settings = (await payload.findGlobal({
+        slug: 'site-settings',
+        overrideAccess: true,
+      })) as {
+        mt5SyncEnabled?: boolean;
+        mt5ApiEndpoint?: string;
+        mt5ApiKey?: string;
+        mt5RefreshIntervalSecs?: number;
+      };
+      const globalEnabled = settings.mt5SyncEnabled !== false;
+      const cacheTtlMs =
+        Math.min(Math.max(Number(settings.mt5RefreshIntervalSecs ?? 60), 10), 3600) * 1_000;
 
       if (!globalEnabled) {
         // Global switch is OFF → serve all instruments from CMS manual data
@@ -178,12 +191,26 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         } satisfies MT5Response<unknown[]>);
       }
 
-      // Step 2 — global is ON; call the MT5 bridge service
-      const mt5Base = process.env.MT5_SERVICE_URL ?? 'http://localhost:4000';
+      // Step 2 — check in-process cache before calling the MT5 bridge.
+      // The cron job pre-populates 'mt5:instruments:all' after every successful sync.
+      // Per-asset-class keys are populated lazily on first miss.
+      const cacheKey = `mt5:instruments:${assetClass ?? 'all'}`;
+      const cached = cacheGet<MT5Response<unknown[]>>(cacheKey);
+      if (cached) {
+        res.set('Cache-Control', `public, max-age=${Math.round(cacheTtlMs / 1000)}`);
+        return res.json(cached);
+      }
+
+      // Step 3 — global is ON and cache miss; call the MT5 bridge service.
+      const mt5Base =
+        (settings.mt5ApiEndpoint?.trim() || undefined) ??
+        process.env.MT5_SERVICE_URL ??
+        'http://localhost:4000';
+      const mt5ApiKey = settings.mt5ApiKey?.trim() || undefined;
       const mt5Url = new URL(`${mt5Base}/instruments`);
       if (assetClass) mt5Url.searchParams.set('assetClass', assetClass);
 
-      const mt5Res = await fetchWithTimeout(mt5Url.toString(), MT5_FETCH_TIMEOUT_MS);
+      const mt5Res = await fetchWithTimeout(mt5Url.toString(), MT5_FETCH_TIMEOUT_MS, mt5ApiKey);
       if (!mt5Res.ok) {
         payload.logger.error(
           { requestId: req.requestId, status: mt5Res.status },
@@ -194,7 +221,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
 
       const mt5Payload = (await mt5Res.json()) as MT5Response<InstrumentSpec[]>;
 
-      // Step 3 — per-instrument overrides: find instruments where the
+      // Step 4 — per-instrument overrides: find instruments where the
       //          per-doc toggle is OFF so we can substitute CMS values.
       // NOTE: Hard-capped at MAX_PAYLOAD_RESULTS to prevent memory exhaustion.
       const manualQuery = await payload.find({
@@ -217,58 +244,64 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         );
       }
 
+      let responseBody: MT5Response<unknown[]>;
+
       if (!manualQuery.docs?.length) {
-        res.set('Cache-Control', 'public, max-age=60');
-        return res.json(mt5Payload);
+        responseBody = mt5Payload;
+      } else {
+        // Build a lookup map: mt5Symbol (or symbol) → CMS doc
+        const manualMap = new Map<string, Record<string, unknown>>();
+        for (const doc of manualQuery.docs as Array<Record<string, unknown>>) {
+          const mt5Sym = doc.mt5Symbol as string | undefined;
+          const sym = doc.symbol as string | undefined;
+          const key = mt5Sym ?? sym;
+          if (!key) {
+            payload.logger.warn(
+              { requestId: req.requestId, docId: doc.id },
+              'products-instruments doc missing both symbol and mt5Symbol — skipping override',
+            );
+            continue;
+          }
+          manualMap.set(key, doc);
+        }
+
+        // Merge: replace live MT5 rows with CMS values where applicable
+        const merged = mt5Payload.data.map((live) => {
+          const override = manualMap.get(live.symbol);
+          if (override) {
+            return {
+              ...live,
+              spread:
+                typeof override.spread === 'number' && !Number.isNaN(override.spread)
+                  ? override.spread
+                  : live.spread,
+              swapLong:
+                typeof override.swapLong === 'number' && !Number.isNaN(override.swapLong)
+                  ? override.swapLong
+                  : live.swapLong,
+              swapShort:
+                typeof override.swapShort === 'number' && !Number.isNaN(override.swapShort)
+                  ? override.swapShort
+                  : live.swapShort,
+              _source: 'cms-manual' as const,
+            };
+          }
+          return { ...live, _source: 'mt5-live' as const };
+        });
+
+        responseBody = {
+          usesMT5Data: mt5Payload.usesMT5Data,
+          source: 'mt5-live',
+          fetchedAt: mt5Payload.fetchedAt,
+          data: merged,
+        };
       }
 
-      // Build a lookup map: mt5Symbol (or symbol) → CMS doc
-      const manualMap = new Map<string, Record<string, unknown>>();
-      for (const doc of manualQuery.docs as Array<Record<string, unknown>>) {
-        const mt5Sym = doc.mt5Symbol as string | undefined;
-        const sym = doc.symbol as string | undefined;
-        const key = mt5Sym ?? sym;
-        if (!key) {
-          payload.logger.warn(
-            { requestId: req.requestId, docId: doc.id },
-            'products-instruments doc missing both symbol and mt5Symbol — skipping override',
-          );
-          continue;
-        }
-        manualMap.set(key, doc);
-      }
+      // Populate cache so subsequent requests within the TTL window skip the MT5 call.
+      cacheSet(cacheKey, responseBody, cacheTtlMs);
 
-      // Merge: replace live MT5 rows with CMS values where applicable
-      const merged = mt5Payload.data.map((live) => {
-        const override = manualMap.get(live.symbol);
-        if (override) {
-          return {
-            ...live,
-            spread:
-              typeof override.spread === 'number' && !Number.isNaN(override.spread)
-                ? override.spread
-                : live.spread,
-            swapLong:
-              typeof override.swapLong === 'number' && !Number.isNaN(override.swapLong)
-                ? override.swapLong
-                : live.swapLong,
-            swapShort:
-              typeof override.swapShort === 'number' && !Number.isNaN(override.swapShort)
-                ? override.swapShort
-                : live.swapShort,
-            _source: 'cms-manual' as const,
-          };
-        }
-        return { ...live, _source: 'mt5-live' as const };
-      });
-
-      res.set('Cache-Control', 'public, max-age=60');
-      return res.json({
-        usesMT5Data: mt5Payload.usesMT5Data,
-        source: 'mt5-live',
-        fetchedAt: mt5Payload.fetchedAt,
-        data: merged,
-      } satisfies MT5Response<unknown[]>);
+      res.set('Cache-Control', `public, max-age=${Math.round(cacheTtlMs / 1000)}`);
+      return res.json(responseBody);
     } catch (err) {
       // Graceful degradation — MT5 unreachable, timed out, or credentials missing.
       // Never expose upstream status to the client.
@@ -318,14 +351,24 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
       const cmsDoc = cmsResult.docs[0] as Record<string, unknown> | undefined;
       if (!cmsDoc) return res.status(404).json({ error: 'Instrument not found' });
 
-      // Read global switch
-      const settings = await payload.findGlobal({ slug: 'site-settings' });
-      const globalEnabled = (settings as { mt5SyncEnabled?: boolean }).mt5SyncEnabled !== false;
+      // Read global settings (overrideAccess so API key field is included).
+      const settings = (await payload.findGlobal({
+        slug: 'site-settings',
+        overrideAccess: true,
+      })) as {
+        mt5SyncEnabled?: boolean;
+        mt5ApiEndpoint?: string;
+        mt5ApiKey?: string;
+        mt5RefreshIntervalSecs?: number;
+      };
+      const globalEnabled = settings.mt5SyncEnabled !== false;
       const docEnabled = cmsDoc.usesMT5Data !== false;
+      const cacheTtlMs =
+        Math.min(Math.max(Number(settings.mt5RefreshIntervalSecs ?? 60), 10), 3600) * 1_000;
 
       if (!globalEnabled || !docEnabled) {
-        // Either global or per-doc is OFF → return CMS data
-        res.set('Cache-Control', 'public, max-age=300');
+        // Either global or per-doc is OFF → return CMS data (no cache needed)
+        res.set('Cache-Control', `public, max-age=${Math.round(cacheTtlMs / 1000)}`);
         return res.json({
           usesMT5Data: false,
           source: globalEnabled ? 'cms-manual' : 'cms-global-override',
@@ -334,15 +377,27 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         } satisfies MT5Response<unknown>);
       }
 
-      // Both switches ON → fetch the specific instrument from the MT5 service.
-      // Previously called /instruments (all) and filtered client-side — wasteful.
-      const mt5Base = process.env.MT5_SERVICE_URL ?? 'http://localhost:4000';
+      // Check in-process cache before calling MT5.
+      const cacheKey = `mt5:instrument:${symbol}`;
+      const cached = cacheGet<MT5Response<unknown>>(cacheKey);
+      if (cached) {
+        res.set('Cache-Control', `public, max-age=${Math.round(cacheTtlMs / 1000)}`);
+        return res.json(cached);
+      }
+
+      // Both switches ON and cache miss → fetch the specific instrument from the MT5 service.
+      const mt5Base =
+        (settings.mt5ApiEndpoint?.trim() || undefined) ??
+        process.env.MT5_SERVICE_URL ??
+        'http://localhost:4000';
+      const mt5ApiKey = settings.mt5ApiKey?.trim() || undefined;
       const cmsMt5Symbol = typeof cmsDoc.mt5Symbol === 'string' ? cmsDoc.mt5Symbol : undefined;
       // Prefer the MT5 symbol alias if configured, otherwise use the CMS symbol.
       const lookupSymbol = cmsMt5Symbol ?? symbol;
       const mt5Res = await fetchWithTimeout(
         `${mt5Base}/instruments/${encodeURIComponent(lookupSymbol)}`,
         MT5_FETCH_TIMEOUT_MS,
+        mt5ApiKey,
       );
       if (!mt5Res.ok) {
         payload.logger.error(
@@ -356,7 +411,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
       const live = mt5Single.data;
 
       if (!live) {
-        res.set('Cache-Control', 'public, max-age=300');
+        res.set('Cache-Control', `public, max-age=${Math.round(cacheTtlMs / 1000)}`);
         return res.json({
           usesMT5Data: false,
           source: 'cms-fallback',
@@ -365,13 +420,17 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         } satisfies MT5Response<unknown>);
       }
 
-      res.set('Cache-Control', 'public, max-age=300');
-      return res.json({
+      const responseBody: MT5Response<unknown> = {
         usesMT5Data: true,
         source: 'mt5-live',
         fetchedAt: mt5Single.fetchedAt,
         data: { ...live, _source: 'mt5-live' as const },
-      } satisfies MT5Response<unknown>);
+      };
+
+      cacheSet(cacheKey, responseBody, cacheTtlMs);
+
+      res.set('Cache-Control', `public, max-age=${Math.round(cacheTtlMs / 1000)}`);
+      return res.json(responseBody);
     } catch (err) {
       payload.logger.error(
         { requestId: req.requestId, err, symbol },
@@ -385,7 +444,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
       });
       const doc = fallback.docs[0];
       if (!doc) return res.status(404).json({ error: 'Instrument not found' });
-      res.set('Cache-Control', 'public, max-age=300');
+      res.set('Cache-Control', 'public, max-age=60');
       return res.json({
         usesMT5Data: false,
         source: 'cms-fallback',

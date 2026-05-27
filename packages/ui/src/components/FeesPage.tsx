@@ -44,14 +44,13 @@ export function FeesPage() {
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-4">Fees</SectionKicker>
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             <span className="text-foreground">No fine print.</span>
             <br />
             <span className="text-accent">Just the price.</span>
           </h1>
-          <p className="font-body text-muted max-w-[340px] text-[14px] leading-[1.55]">
+          <p className="font-body text-muted text-[14px] leading-[1.55] sm:max-w-[350px]">
             Every charge in one place — spreads, commissions, overnight fees, conversions. Pulled
             live from MT5.
           </p>
@@ -60,8 +59,10 @@ export function FeesPage() {
 
       {/* Spreads table */}
       <section className="dark:bg-background bg-white px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-5">LIVE SPREADS · PIP</SectionKicker>
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+            LIVE SPREADS · PIP
+          </SectionKicker>
 
           <div className="overflow-hidden rounded-[18px] bg-black">
             {/* Header */}
@@ -105,16 +106,16 @@ export function FeesPage() {
           {/* View all link */}
           <Link
             href={`/${locale}/markets/instruments`}
-            className="dark:bg-surface mt-3 flex items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
+            className="dark:bg-surface mt-3 flex items-center justify-center rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
           >
             <span className="font-body text-foreground text-[13px] font-medium">
               View all 200+ instruments
             </span>
-            <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
+            <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M3 8h10M9 4l4 4-4 4"
-                  stroke="white"
+                  stroke="currentColor"
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -127,8 +128,10 @@ export function FeesPage() {
 
       {/* Other Charges */}
       <section className="dark:bg-background bg-white px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-5">OTHER CHARGES</SectionKicker>
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+            OTHER CHARGES
+          </SectionKicker>
           <div className="flex flex-col gap-[10px]">
             {OTHER_CHARGES.map((charge) => (
               <div
@@ -136,10 +139,10 @@ export function FeesPage() {
                 className="dark:bg-surface flex items-center justify-between gap-4 rounded-[14px] bg-[#FAFAF9] px-4 py-4"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="font-body text-foreground mb-[3px] text-[13px] font-medium">
+                  <p className="text-foreground mb-[3px] font-sans text-[14px] font-semibold">
                     {charge.label}
                   </p>
-                  <p className="font-body text-muted text-[11px] leading-snug">{charge.desc}</p>
+                  <p className="font-body text-muted text-[12px] leading-snug">{charge.desc}</p>
                 </div>
                 <span
                   className={`flex-shrink-0 font-sans text-[13px] font-semibold ${charge.green ? 'text-accent' : 'text-foreground'}`}
@@ -153,9 +156,9 @@ export function FeesPage() {
       </section>
 
       {/* Closing dark band */}
-      <section className="bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-          <SectionKicker className="mb-4 [&>span:last-child]:text-white/50 [&>span]:bg-white/40">
+      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/60 [&>span:last-child]:text-white/60">
             TRANSPARENT · ALWAYS
           </SectionKicker>
           <h2 className="mb-5 font-sans text-[32px] font-semibold leading-[1.15] text-white">

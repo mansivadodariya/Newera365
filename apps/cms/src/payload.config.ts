@@ -18,6 +18,7 @@ import { FAQs } from './collections/FAQs';
 import { NewsletterSubscribers } from './collections/NewsletterSubscribers';
 import { Careers } from './collections/Careers';
 import { LegalPages } from './collections/LegalPages';
+import { Awards } from './collections/Awards';
 import { CompanyContent } from './collections/CompanyContent';
 import { TeamMembers } from './collections/TeamMembers';
 import { WebinarRegistrations } from './collections/WebinarRegistrations';
@@ -132,6 +133,10 @@ export default buildConfig({
       idleTimeoutMillis: 10_000,
       connectionTimeoutMillis: 10_000,
     },
+    // Schema is managed via manual SQL migrations (migrations/*.sql) — disable
+    // Drizzle's interactive dev-push to avoid blocking on stdin prompts for
+    // tables/columns not in Payload's schema (e.g. rate_limit_hits).
+    push: false,
   }),
   // Locale is an explicit per-document field — see collections/_fields.ts
   // (localizationFields) and hooks/ (ensureTranslationKey, uniqueSlugPerLocale).
@@ -151,6 +156,7 @@ export default buildConfig({
     NewsletterSubscribers,
     Careers,
     LegalPages,
+    Awards,
     CompanyContent,
     TeamMembers,
     WebinarRegistrations,

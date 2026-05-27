@@ -75,7 +75,7 @@ export function ContactPage() {
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">Contact</SectionKicker>
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05]">
             We&apos;re here to help.
@@ -88,7 +88,7 @@ export function ContactPage() {
 
       {/* Quick contact methods */}
       <section className="dark:bg-background bg-white px-5 pb-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="flex flex-col gap-[10px]">
             {CONTACT_METHODS.map((m) => (
               <div
@@ -110,7 +110,7 @@ export function ContactPage() {
 
       {/* Contact form */}
       <section className="dark:bg-background bg-white px-5 pb-12">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">SEND A MESSAGE</SectionKicker>
 
           {submitted ? (

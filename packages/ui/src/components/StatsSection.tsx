@@ -15,9 +15,12 @@ export function StatsSection() {
   ];
 
   return (
-    <section className="px-5 pb-9 pt-10" style={{ background: 'var(--gradient-stats)' }}>
-      <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
-        <SectionKicker className="text-muted mb-5 font-mono text-[10px] leading-[100%]">
+    <section
+      className="px-5 pb-9 pt-10 xl:pb-14 xl:pt-5"
+      style={{ background: 'var(--gradient-stats)' }}
+    >
+      <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <SectionKicker className="mb-5 text-[#000000] dark:text-[#FFFFFF]">
           {t('statsByNumbers')}
         </SectionKicker>
 
@@ -25,9 +28,9 @@ export function StatsSection() {
           {t('statsHeading')}
         </h2>
 
-        {/* Stats grid — dark cards, white numbers */}
-        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[20px] bg-[#e5e7eb] dark:bg-[#2a2a2a]">
-          {stats.map((stat, i) => (
+        {/* Stats grid — 2 cols mobile, 4 cols desktop */}
+        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[20px] bg-[#e5e7eb] xl:grid-cols-4 dark:bg-[#2a2a2a]">
+          {stats.map((stat) => (
             <div
               key={stat.label}
               className="flex flex-col justify-center gap-[6px] bg-[#000000BA] p-[22px]"
@@ -45,7 +48,7 @@ export function StatsSection() {
         {/* Regulated badge */}
         <div className="mt-6 flex items-center gap-[14px] rounded-[16px] bg-[linear-gradient(135deg,rgba(0,176,80,0.1)_0%,rgba(255,255,255,0.02)_71.43%)] px-5 py-[18px]">
           <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-none">
-            <Image src="/icons/authority.png" alt="Authority" width={24} height={24} />
+            <Image src="/icons/authority.png" alt="Authority" width={28} height={28} />
           </div>
           <div className="min-w-0 flex-1 items-center justify-center">
             <p className="font-body items-center text-[13px] font-medium leading-tight text-white">

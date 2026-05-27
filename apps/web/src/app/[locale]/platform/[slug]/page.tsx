@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { PlatformPage, WebTraderPage } from '@newera365/ui';
 
-const VALID_SLUGS = ['metatrader-5', 'webtrader', 'mobile', 'tools'] as const;
+const VALID_SLUGS = ['mt5', 'metatrader-5', 'webtrader', 'mobile', 'tools'] as const;
 type PlatformSlug = (typeof VALID_SLUGS)[number];
 
 interface Props {

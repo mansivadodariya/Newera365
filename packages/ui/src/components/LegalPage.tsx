@@ -51,7 +51,7 @@ export function LegalPage() {
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">Legal</SectionKicker>
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05]">
             Legal documents.
@@ -65,7 +65,7 @@ export function LegalPage() {
       {/* Legal sections */}
       {LEGAL_SECTIONS.map((section) => (
         <section key={section.slug} className="dark:bg-background bg-white px-5 pb-6">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="dark:bg-surface rounded-[18px] bg-[#FAFAF9] p-5">
               <h2 className="text-foreground mb-3 font-sans text-[18px] font-semibold">
                 {section.title}
@@ -85,7 +85,7 @@ export function LegalPage() {
 
       {/* Last updated */}
       <section className="dark:bg-background bg-white px-5 pb-12">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="font-body text-muted text-[11px]">
             Last updated: January 2026. Subject to change with 30 days notice.
           </p>

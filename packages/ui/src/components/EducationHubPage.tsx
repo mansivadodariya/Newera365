@@ -1,0 +1,336 @@
+'use client';
+
+import Link from 'next/link';
+import { useState } from 'react';
+import { useLocale } from 'next-intl';
+import { SectionKicker } from './SectionKicker';
+
+const CATEGORY_ICONS: Record<string, React.ReactNode> = {
+  guides: (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+      <rect x="3" y="2" width="14" height="16" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M7 7h6M7 10.5h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  ),
+  glossary: (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+      <path
+        d="M4 5h12M4 10h8M4 15h6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  ),
+  webinars: (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+      <rect x="2" y="5" width="13" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M15 8l3-2v8l-3-2V8z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
+  ebooks: (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+      <path
+        d="M10 3v10M6 9l4 4 4-4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M3 16h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  ),
+  videos: (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M8 7.5l5 2.5-5 2.5V7.5z" fill="currentColor" />
+    </svg>
+  ),
+  audio: (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+      <path
+        d="M6 8a4 4 0 018 0v5a4 4 0 01-8 0V8zM10 17v2M7 19h6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
+};
+
+const CATEGORIES = [
+  {
+    id: 'guides',
+    title: 'Guides',
+    desc: '5 in-depth articles on core trading concepts.',
+    count: '4x GUIDES',
+    href: '/guides',
+  },
+  {
+    id: 'glossary',
+    title: 'Glossary',
+    desc: 'Every trading term, defined in plain English.',
+    count: '100+ TERMS',
+    href: '/glossary',
+  },
+  {
+    id: 'webinars',
+    title: 'Webinars',
+    desc: 'Live sessions from market experts.',
+    count: 'LIVE + 8',
+    href: '/education/media',
+  },
+  {
+    id: 'ebooks',
+    title: 'E-Books',
+    desc: 'Free downloadable trading guides.',
+    count: '4x EBOOKS',
+    href: '/ebooks',
+  },
+  {
+    id: 'videos',
+    title: 'Videos',
+    desc: 'Short-form analysis and market breakdowns.',
+    count: '30+ VIDEOS',
+    href: '/education/media',
+  },
+  {
+    id: 'audio',
+    title: 'Audio',
+    desc: 'Podcast episodes from trading experts.',
+    count: '20+ EPISODES',
+    href: '/education/media',
+  },
+] as const;
+
+const FEATURED = [
+  {
+    id: 'macro',
+    tag: 'MACRO',
+    tagClass: 'bg-[#F59E0B]/15 text-[#F59E0B]',
+    title: 'The 2026 macro outlook',
+    desc: 'Rising inflation or rate cuts? We break down what every scenario means for your positions.',
+    readTime: '6 min',
+    href: '/guides/macro-outlook-2026',
+  },
+  {
+    id: 'risk',
+    tag: 'RISK',
+    tagClass: 'bg-[#EF4444]/15 text-[#EF4444]',
+    title: 'Risk management essentials',
+    desc: 'Four frameworks that protect every account from outsized drawdowns.',
+    readTime: '8 min',
+    href: '/guides/risk-management',
+  },
+  {
+    id: 'candle',
+    tag: 'TECHNICAL',
+    tagClass: 'bg-accent/10 text-accent',
+    title: 'Reading a candlestick chart',
+    desc: 'From opening price to daily wick — everything you need to parse a chart.',
+    readTime: '5 min',
+    href: '/guides/candlestick-chart',
+  },
+] as const;
+
+const PINNED_GUIDES = [
+  { title: 'What is leverage, and how does it work?', href: '/guides/leverage-and-margin' },
+  { title: 'How to size a position correctly', href: '/guides/position-sizing' },
+  { title: 'The difference between a stop-loss and stop-out', href: '/guides/stop-loss' },
+  { title: "Beginner's guide to reading economic data", href: '/guides/economic-data' },
+] as const;
+
+export function EducationHubPage() {
+  const locale = useLocale();
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  function handleSubscribe(e: React.FormEvent) {
+    e.preventDefault();
+    if (email) setSubmitted(true);
+  }
+
+  return (
+    <>
+      {/* Hero */}
+      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-4">Education Hub</SectionKicker>
+          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
+            Learn to trade,
+            <br />
+            <span className="text-accent">properly.</span>
+          </h1>
+          <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
+            Guides, video series, market news and analysis. All from experts who do this for a
+            living.
+          </p>
+        </div>
+      </section>
+
+      {/* Category grid */}
+      <section className="dark:bg-background bg-white px-5 pb-10">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-5">BROWSE BY TYPE</SectionKicker>
+          <div className="grid grid-cols-2 gap-[10px]">
+            {CATEGORIES.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/${locale}${cat.href}`}
+                className="group flex flex-col gap-3 rounded-[18px] bg-[#f9f9f9] p-4 transition-colors hover:bg-[#f0f0ee] dark:bg-[#1c1c1c] dark:hover:bg-[#252525]"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="text-accent bg-accent/10 flex h-9 w-9 items-center justify-center rounded-[11px]">
+                    {CATEGORY_ICONS[cat.id]}
+                  </div>
+                  <span className="font-body text-accent bg-accent/10 rounded-full px-2 py-[3px] text-[8px] font-semibold uppercase tracking-[0.1em]">
+                    {cat.count}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-foreground mb-1 font-sans text-[14px] font-semibold">
+                    {cat.title}
+                  </p>
+                  <p className="font-body text-muted text-[11px] leading-[1.5]">{cat.desc}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured this week */}
+      <section className="dark:bg-background bg-[#f9f9f9] px-5 pb-10 pt-8">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-5">FEATURED THIS WEEK</SectionKicker>
+          <div className="flex flex-col gap-[10px]">
+            {FEATURED.map((article) => (
+              <Link
+                key={article.id}
+                href={`/${locale}${article.href}`}
+                className="group flex flex-col gap-3 rounded-[18px] bg-white p-5 transition-shadow hover:shadow-sm dark:bg-[#1c1c1c]"
+                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}
+              >
+                <div className="flex items-center justify-between">
+                  <span
+                    className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${article.tagClass}`}
+                  >
+                    {article.tag}
+                  </span>
+                  <span className="font-body text-muted text-[11px]">{article.readTime} read</span>
+                </div>
+                <div>
+                  <p className="text-foreground group-hover:text-accent mb-1 font-sans text-[15px] font-semibold transition-colors">
+                    {article.title}
+                  </p>
+                  <p className="font-body text-muted text-[12px] leading-[1.55]">{article.desc}</p>
+                </div>
+                <div className="text-accent flex items-center gap-1.5">
+                  <span className="font-body text-[12px] font-medium">Read</span>
+                  <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M3 8h10M9 4l4 4-4 4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pinned guides */}
+      <section className="dark:bg-background bg-white px-5 pb-10 pt-8">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-5">PINNED GUIDES</SectionKicker>
+          <div className="flex flex-col">
+            {PINNED_GUIDES.map((guide, i) => (
+              <Link
+                key={guide.href}
+                href={`/${locale}${guide.href}`}
+                className={`group flex items-center justify-between py-4 ${i < PINNED_GUIDES.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]' : ''}`}
+              >
+                <span className="text-foreground font-body group-hover:text-accent pr-4 text-[14px] font-medium transition-colors">
+                  {guide.title}
+                </span>
+                <svg
+                  width="7"
+                  height="12"
+                  viewBox="0 0 7 12"
+                  fill="none"
+                  className="text-muted group-hover:text-accent flex-shrink-0 transition-colors"
+                >
+                  <path
+                    d="M1 1L6 6L1 11"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter CTA */}
+      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
+            STAY UPDATED
+          </SectionKicker>
+          <h2 className="mb-2 font-sans text-[28px] font-semibold leading-[1.1] text-white">
+            Want it in your practice?
+          </h2>
+          <p className="font-body mb-6 text-[13px] leading-relaxed text-white/60">
+            New guides and lessons as they drop.
+          </p>
+          {submitted ? (
+            <div className="bg-accent/20 flex items-center gap-3 rounded-[14px] px-4 py-4">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                <path
+                  d="M4 10l4 4 8-8"
+                  stroke="#00B050"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span className="font-body text-[14px] text-white">
+                You&apos;re on the list. Check your inbox.
+              </span>
+            </div>
+          ) : (
+            <form onSubmit={handleSubscribe} className="flex gap-2">
+              <input
+                type="email"
+                required
+                placeholder="Your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="font-body focus:border-accent flex-1 rounded-full border border-white/20 bg-white/[0.07] px-4 py-3 text-[13px] text-white placeholder-white/40 outline-none"
+              />
+              <button
+                type="submit"
+                className="bg-accent hover:bg-accent/90 font-body flex-shrink-0 rounded-full px-5 py-3 text-[13px] font-medium text-white transition-colors"
+              >
+                Subscribe
+              </button>
+            </form>
+          )}
+        </div>
+      </section>
+    </>
+  );
+}

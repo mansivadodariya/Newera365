@@ -100,7 +100,7 @@ export function FaqPage() {
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">FAQ</SectionKicker>
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05]">
             Quick answers.
@@ -120,7 +120,7 @@ export function FaqPage() {
       {/* FAQ accordion groups */}
       {FAQ_GROUPS.map((group) => (
         <section key={group.section} className="dark:bg-background bg-white px-5 pb-6">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="mb-3">{group.section.toUpperCase()}</SectionKicker>
             <div className="flex flex-col gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-[#2a2a2a]">
               {group.items.map((item, idx) => {
@@ -166,7 +166,7 @@ export function FaqPage() {
 
       {/* Dark CTA */}
       <section className="bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl lg:max-w-5xl">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:last-child]:text-white/50 [&>span]:bg-white/40">
             STILL HAVE QUESTIONS?
           </SectionKicker>
