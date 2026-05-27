@@ -61,17 +61,17 @@ export function HeroSection() {
           </div>
 
           {/* Specs row */}
-          <div className="grid grid-cols-3 border-t border-[#e5e7eb] bg-white pb-[12px] pt-[12px] xl:border-white/10 xl:bg-transparent">
+          <div className="grid grid-cols-3 bg-transparent pb-[12px] pt-[12px] xl:border-white/10">
             {[
               { label: t('heroSpreadLabel'), value: t('heroSpreadValue') },
               { label: t('heroLeverageLabel'), value: t('heroLeverageValue') },
               { label: t('heroExecutionLabel'), value: t('heroExecutionValue') },
             ].map((spec) => (
               <div key={spec.label} className="flex flex-col items-center gap-[2px]">
-                <span className="font-mono text-[9px] font-normal uppercase leading-[100%] tracking-[0.15em] text-[#6b7280] xl:text-white/50">
+                <span className="text-foreground font-mono text-[9px] font-normal uppercase leading-[100%] tracking-[0.15em]">
                   {spec.label}
                 </span>
-                <span className="font-sans text-[14px] font-semibold text-[#111827] xl:text-white">
+                <span className="text-foreground font-sans text-[14px] font-semibold">
                   {spec.value}
                 </span>
               </div>
