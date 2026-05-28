@@ -78,7 +78,6 @@ export function GuidesPage() {
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">Guides</SectionKicker>
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             Deep dives worth
             <br />
@@ -144,7 +143,7 @@ export function GuidesPage() {
       {/* All guides */}
       <section className="dark:bg-background bg-white px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">ALL GUIDES</SectionKicker>
+          <SectionKicker className="mt-5">ALL GUIDES</SectionKicker>
           <div className="flex flex-col gap-0">
             {rest.map((guide, i) => (
               <Link

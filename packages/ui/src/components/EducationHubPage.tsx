@@ -112,8 +112,8 @@ const CATEGORIES = [
 const FEATURED = [
   {
     id: 'macro',
-    tag: 'MACRO',
-    tagClass: 'bg-[#F59E0B]/15 text-[#F59E0B]',
+    tag: 'NEW',
+    tagClass: 'bg-accent/10 text-accent',
     title: 'The 2026 macro outlook',
     desc: 'Rising inflation or rate cuts? We break down what every scenario means for your positions.',
     readTime: '6 min',
@@ -121,8 +121,8 @@ const FEATURED = [
   },
   {
     id: 'risk',
-    tag: 'RISK',
-    tagClass: 'bg-[#EF4444]/15 text-[#EF4444]',
+    tag: 'POPULAR',
+    tagClass: 'bg-[#6B7280]/10 text-[#6B7280]',
     title: 'Risk management essentials',
     desc: 'Four frameworks that protect every account from outsized drawdowns.',
     readTime: '8 min',
@@ -130,8 +130,8 @@ const FEATURED = [
   },
   {
     id: 'candle',
-    tag: 'TECHNICAL',
-    tagClass: 'bg-accent/10 text-accent',
+    tag: 'UPDATED',
+    tagClass: 'bg-[#3B82F6]/10 text-[#3B82F6]',
     title: 'Reading a candlestick chart',
     desc: 'From opening price to daily wick — everything you need to parse a chart.',
     readTime: '5 min',
@@ -161,9 +161,10 @@ export function EducationHubPage() {
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">Education Hub</SectionKicker>
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
-            Learn to trade,
+            Learn to
+            <br />
+            trade,
             <br />
             <span className="text-accent">properly.</span>
           </h1>
@@ -177,7 +178,9 @@ export function EducationHubPage() {
       {/* Category grid */}
       <section className="dark:bg-background bg-white px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">BROWSE BY TYPE</SectionKicker>
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+            BROWSE BY TYPE
+          </SectionKicker>
           <div className="grid grid-cols-2 gap-[10px]">
             {CATEGORIES.map((cat) => (
               <Link
@@ -208,14 +211,15 @@ export function EducationHubPage() {
       {/* Featured this week */}
       <section className="dark:bg-background bg-[#f9f9f9] px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">FEATURED THIS WEEK</SectionKicker>
-          <div className="flex flex-col gap-[10px]">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+            FEATURED THIS WEEK
+          </SectionKicker>
+          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
             {FEATURED.map((article) => (
               <Link
                 key={article.id}
                 href={`/${locale}${article.href}`}
-                className="group flex flex-col gap-3 rounded-[18px] bg-white p-5 transition-shadow hover:shadow-sm dark:bg-[#1c1c1c]"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}
+                className="group flex flex-col gap-2 py-5 first:pt-0 last:pb-0"
               >
                 <div className="flex items-center justify-between">
                   <span
@@ -225,17 +229,22 @@ export function EducationHubPage() {
                   </span>
                   <span className="font-body text-muted text-[11px]">{article.readTime} read</span>
                 </div>
-                <div>
-                  <p className="text-foreground group-hover:text-accent mb-1 font-sans text-[15px] font-semibold transition-colors">
-                    {article.title}
+                <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] transition-colors">
+                  {article.title}
+                </p>
+                <div className="flex items-end justify-between gap-4">
+                  <p className="font-body text-muted flex-1 text-[12px] leading-[1.55]">
+                    {article.desc}
                   </p>
-                  <p className="font-body text-muted text-[12px] leading-[1.55]">{article.desc}</p>
-                </div>
-                <div className="text-accent flex items-center gap-1.5">
-                  <span className="font-body text-[12px] font-medium">Read</span>
-                  <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
+                  <svg
+                    width="7"
+                    height="12"
+                    viewBox="0 0 7 12"
+                    fill="none"
+                    className="text-muted group-hover:text-accent mb-0.5 flex-shrink-0 transition-colors"
+                  >
                     <path
-                      d="M3 8h10M9 4l4 4-4 4"
+                      d="M1 1L6 6L1 11"
                       stroke="currentColor"
                       strokeWidth="1.5"
                       strokeLinecap="round"
@@ -252,7 +261,9 @@ export function EducationHubPage() {
       {/* Pinned guides */}
       <section className="dark:bg-background bg-white px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">PINNED GUIDES</SectionKicker>
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+            PINNED GUIDES
+          </SectionKicker>
           <div className="flex flex-col">
             {PINNED_GUIDES.map((guide, i) => (
               <Link

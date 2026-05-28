@@ -9,7 +9,7 @@ function IconMt5() {
     <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
       <polyline
         points="2,14 7,9 11,12 18,5"
-        stroke="#111111"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -20,17 +20,17 @@ function IconMt5() {
 function IconWeb() {
   return (
     <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-      <circle cx="10" cy="10" r="8" stroke="#111111" strokeWidth="1.5" />
-      <path d="M10 2v16M2 10h16" stroke="#111111" strokeWidth="1.5" />
-      <ellipse cx="10" cy="10" rx="4" ry="8" stroke="#111111" strokeWidth="1.5" />
+      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M10 2v16M2 10h16" stroke="currentColor" strokeWidth="1.5" />
+      <ellipse cx="10" cy="10" rx="4" ry="8" stroke="currentColor" strokeWidth="1.5" />
     </svg>
   );
 }
 function IconMobile() {
   return (
     <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-      <rect x="5" y="2" width="10" height="16" rx="2" stroke="#111111" strokeWidth="1.5" />
-      <circle cx="10" cy="15.5" r="1" fill="#111111" />
+      <rect x="5" y="2" width="10" height="16" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="10" cy="15.5" r="1" fill="currentColor" />
     </svg>
   );
 }
@@ -79,24 +79,24 @@ function IconHedging() {
 function IconPhone() {
   return (
     <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-      <rect x="5" y="2" width="10" height="16" rx="2" stroke="#111111" strokeWidth="1.5" />
-      <circle cx="10" cy="15.5" r="1" fill="#111111" />
+      <rect x="5" y="2" width="10" height="16" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="10" cy="15.5" r="1" fill="currentColor" />
     </svg>
   );
 }
 function IconTablet() {
   return (
     <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-      <rect x="3" y="3" width="14" height="14" rx="2" stroke="#111111" strokeWidth="1.5" />
-      <circle cx="16.5" cy="10" r="1" fill="#111111" />
+      <rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="16.5" cy="10" r="1" fill="currentColor" />
     </svg>
   );
 }
 function IconDesktop() {
   return (
     <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-      <rect x="2" y="3" width="16" height="11" rx="1.5" stroke="#111111" strokeWidth="1.5" />
-      <path d="M6 17h8M10 14v3" stroke="#111111" strokeWidth="1.5" strokeLinecap="round" />
+      <rect x="2" y="3" width="16" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M6 17h8M10 14v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
@@ -113,7 +113,7 @@ const PLATFORM_CARDS = [
     cardBg: 'bg-[#111111]',
     nameColor: 'text-white',
     descColor: 'text-white/60',
-    iconBg: 'bg-[#f2f2f4]',
+    iconBg: 'bg-[#f2f2f4] text-[#111111]',
     Icon: IconMt5,
   },
   {
@@ -123,11 +123,11 @@ const PLATFORM_CARDS = [
     name: 'Web Trader',
     desc: 'Full MT5 power, runs in any browser. No download required.',
     ctaLabel: 'Open web trader',
-    ctaStyle: 'bg-[#111111] text-white',
+    ctaStyle: 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]',
     cardBg: 'bg-[#FAFAF9] dark:bg-surface',
     nameColor: 'text-foreground',
     descColor: 'text-muted',
-    iconBg: 'bg-white dark:bg-[#1c1c1c]',
+    iconBg: 'bg-white dark:bg-[#1c1c1c] text-[#111111] dark:text-white',
     Icon: IconWeb,
   },
   {
@@ -137,11 +137,11 @@ const PLATFORM_CARDS = [
     name: 'Mobile App',
     desc: 'One-tap trading with FaceID. Push alerts for every move.',
     ctaLabel: 'Get the app',
-    ctaStyle: 'bg-[#111111] text-white',
+    ctaStyle: 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]',
     cardBg: 'bg-[#FAFAF9] dark:bg-surface',
     nameColor: 'text-foreground',
     descColor: 'text-muted',
-    iconBg: 'bg-white dark:bg-[#1c1c1c]',
+    iconBg: 'bg-white dark:bg-[#1c1c1c] text-[#111111] dark:text-white',
     Icon: IconMobile,
   },
 ];
@@ -190,26 +190,63 @@ export function PlatformPage() {
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">Platforms</SectionKicker>
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
-            A platform that
+            A platform
             <br />
-            moves with markets.
+            that
+            <span className="text-accent"> moves</span>
+            <br />
+            with markets.
           </h1>
           <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
             Trade the way you want — on the world&apos;s most trusted terminal, native mobile or
             web.
           </p>
 
-          {/* Device mockup placeholder */}
-          <div className="relative mt-6 h-[200px] overflow-hidden rounded-[24px] bg-[#f5f5f5] dark:bg-[#1c1c1c]">
-            {/* Mobile mock */}
-            <div className="absolute right-8 top-4 h-[170px] w-[90px] rounded-[16px] bg-[#d9d9d9]" />
-            {/* Laptop mock */}
-            <div className="absolute left-4 top-8 flex h-[140px] w-[180px] flex-col gap-1 rounded-[8px] bg-[#111111] p-2">
-              <div className="h-2 w-full rounded bg-white/10" />
-              <div className="flex-1 rounded bg-[#1a1a1a]" />
+          {/* Device mockup */}
+          <div className="relative mt-6 h-[200px] overflow-hidden rounded-[24px] bg-gradient-to-br from-[#f0f9f3] to-[#f0f0f0] dark:from-[#0d1f11] dark:to-[#1a1a1a]">
+            {/* Phone mock */}
+            <div className="absolute right-6 top-3 h-[180px] w-[82px] overflow-hidden rounded-[18px] border border-[#e5e7eb] bg-white shadow-lg dark:border-[#2a2a2a] dark:bg-[#111111]">
+              <div className="h-2.5 w-full bg-[#111111] dark:bg-[#000]" />
+              <div className="flex h-full flex-col gap-1 bg-[#111111] p-1.5">
+                <div className="h-1.5 w-3/4 rounded bg-white/10" />
+                <div className="flex-1 rounded bg-[#1a1a1a]">
+                  <div className="flex h-full items-end gap-0.5 p-1.5">
+                    {[40, 55, 35, 70, 60, 80, 65].map((h, i) => (
+                      <div
+                        key={i}
+                        className="flex-1 rounded-sm"
+                        style={{
+                          height: `${h}%`,
+                          background: i % 2 === 0 ? '#26A69A' : '#EE5250',
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
+            {/* Laptop mock */}
+            <div className="absolute left-3 top-6 h-[148px] w-[190px] overflow-hidden rounded-[10px] border border-[#e5e7eb] bg-[#111111] shadow-lg dark:border-[#2a2a2a]">
+              <div className="flex h-6 items-center gap-1 border-b border-white/10 bg-[#1a1a1a] px-2">
+                <span className="font-body text-[8px] font-semibold text-white">EURUSD</span>
+                <span className="font-body ml-1 text-[7px] text-white/40">H1</span>
+              </div>
+              <div className="flex h-[calc(100%-24px)] items-end gap-0.5 px-2 pb-2 pt-1">
+                {[30, 50, 40, 60, 45, 70, 55, 80, 65, 75, 60, 85].map((h, i) => (
+                  <div
+                    key={i}
+                    className="flex-1 rounded-sm"
+                    style={{
+                      height: `${h}%`,
+                      background: i % 2 === 0 ? '#26A69A' : '#EE5250',
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+            {/* Accent glow */}
+            <div className="to-accent/5 pointer-events-none absolute inset-0 bg-gradient-to-t from-transparent" />
           </div>
         </div>
       </section>
@@ -217,7 +254,9 @@ export function PlatformPage() {
       {/* Terminal section */}
       <section className="dark:bg-background bg-white px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">PICK YOUR TERMINAL</SectionKicker>
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+            PICK YOUR TERMINAL
+          </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
             Trade anywhere.
           </h2>
@@ -275,9 +314,11 @@ export function PlatformPage() {
       </section>
 
       {/* Tools section */}
-      <section className="dark:bg-background gap-[14px] rounded-[32px] bg-white bg-gradient-to-b from-[#F8F8F7] to-[#FFFFFF] pb-[36px] pl-[20px] pr-[20px] pt-[40px]">
+      <section className="gap-[14px] rounded-[32px] bg-gradient-to-b from-[#F8F8F7] to-[#FFFFFF] pb-[36px] pl-[20px] pr-[20px] pt-[40px] dark:from-[#1a1a1a] dark:to-[#111111]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">WHAT&apos;S INSIDE</SectionKicker>
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+            WHAT&apos;S INSIDE
+          </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
             Pro tools, made approachable.
           </h2>
@@ -289,7 +330,7 @@ export function PlatformPage() {
                 className="dark:bg-surface flex flex-col gap-3 rounded-[18px] bg-white p-4"
                 style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
               >
-                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#a6a6a6]">
+                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#111111] text-white dark:bg-[#1e1e1e]">
                   <tool.Icon />
                 </div>
                 <div>
@@ -321,12 +362,10 @@ export function PlatformPage() {
             {DEVICES.map((dev) => (
               <div
                 key={dev.label}
-                className="flex flex-col items-center gap-2 rounded-[14px] bg-white py-4"
+                className="flex flex-col items-center gap-2 rounded-[14px] bg-white py-4 text-[#111111] dark:bg-[#1c1c1c] dark:text-white"
               >
                 <dev.Icon />
-                <span className="font-body text-foreground text-[11px] font-medium">
-                  {dev.label}
-                </span>
+                <span className="font-body text-[11px] font-medium">{dev.label}</span>
               </div>
             ))}
           </div>

@@ -50,7 +50,7 @@ const ACCOUNTS = [
   {
     id: 'raw',
     name: 'Raw',
-    tag: 'PRO PRICING',
+    tag: 'BEST ANNUAL',
     desc: 'Institutional-grade spreads from 0.0 pip with a flat per-lot commission.',
     pricingLabel: 'PRICING',
     pricingValue: '$3.50 / lot / side',

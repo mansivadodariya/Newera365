@@ -7,6 +7,7 @@ import {
   FeaturesSection,
   ThreeStepsSection,
   CtaBanner,
+  TickerStrip,
 } from '@newera365/ui';
 import { getLatestNews } from '@/lib/cms';
 
@@ -17,6 +18,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
 
   return (
     <>
+      <TickerStrip />
       <HeroSection />
       <StatsSection />
       <MarketsSection />

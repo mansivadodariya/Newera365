@@ -114,18 +114,43 @@ export function IBPage() {
             reliable settlement, dedicated support.
           </p>
 
-          {/* Stats strip */}
-          <div className="mb-7 flex gap-0 divide-x divide-[#e5e7eb] dark:divide-[#2a2a2a]">
-            {TRUST_STATS.map((s) => (
-              <div key={s.label} className="flex flex-col gap-[2px] pl-6 pr-6 first:pl-0 last:pr-0">
-                <span className="text-foreground font-sans text-[22px] font-semibold">
-                  {s.value}
+          {/* Stats + mini chart */}
+          <div className="mb-7 flex items-stretch gap-3">
+            {/* Stats */}
+            <div className="flex flex-1 flex-col gap-3 divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
+              {TRUST_STATS.map((s) => (
+                <div key={s.label} className="flex flex-col gap-[2px] pt-3 first:pt-0">
+                  <span className="text-foreground font-sans text-[22px] font-semibold">
+                    {s.value}
+                  </span>
+                  <span className="font-body text-muted text-[10px] uppercase tracking-[0.1em]">
+                    {s.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+            {/* Earnings bar chart */}
+            <div className="dark:bg-surface flex w-[130px] flex-shrink-0 flex-col overflow-hidden rounded-[18px] bg-[#f9f9f9] p-3">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
+                  Monthly
                 </span>
-                <span className="font-body text-muted text-[10px] uppercase tracking-[0.1em]">
-                  {s.label}
+                <span className="bg-accent/10 text-accent font-body rounded-full px-2 py-[2px] text-[8px] font-semibold">
+                  Programs
                 </span>
               </div>
-            ))}
+              <div className="flex flex-1 items-end gap-1">
+                {[35, 52, 44, 68, 58, 80, 72, 90].map((h, i) => (
+                  <div
+                    key={i}
+                    className="bg-accent flex-1 rounded-sm"
+                    style={{ height: `${h}%`, opacity: i === 7 ? 1 : 0.4 + i * 0.08 }}
+                  />
+                ))}
+              </div>
+              <p className="text-foreground mt-2 font-sans text-[11px] font-semibold">$4,820</p>
+              <p className="font-body text-muted text-[8px]">avg / mo</p>
+            </div>
           </div>
 
           <div className="flex gap-3">
@@ -163,14 +188,11 @@ export function IBPage() {
           <h1 className="text-foreground mb-7 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.025em]">
             Three ways to partner
           </h1>
-          <div
-            className="scrollbar-hide flex snap-x snap-mandatory gap-[14px] overflow-x-auto pb-2"
-            style={{ scrollPaddingLeft: '0px' }}
-          >
+          <div className="flex flex-col gap-[14px] md:grid md:grid-cols-3">
             {PARTNER_TYPES.map((pt) => (
               <div
                 key={pt.id}
-                className={`flex w-[300px] flex-shrink-0 snap-start flex-col gap-5 rounded-[22px] p-5 ${pt.cardClass}`}
+                className={`flex flex-col gap-5 rounded-[22px] p-5 ${pt.cardClass}`}
                 style={{ boxShadow: '0 2px 20px rgba(0,0,0,0.08)' }}
               >
                 {/* Header */}

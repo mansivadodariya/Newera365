@@ -24,6 +24,7 @@ export { ThreeStepsSection } from './components/ThreeStepsSection';
 export { CtaBanner } from './components/CtaBanner';
 
 export { AccountsPage } from './components/AccountsPage';
+export { AccountComparisonPage } from './components/AccountComparisonPage';
 export { FundingPage } from './components/FundingPage';
 export { FeesPage } from './components/FeesPage';
 export { InstrumentsPage } from './components/InstrumentsPage';
@@ -46,3 +47,14 @@ export { GlossaryPage } from './components/GlossaryPage';
 export { GuidesPage } from './components/GuidesPage';
 export { GuideDetailPage } from './components/GuideDetailPage';
 export type { GuideDetailProps } from './components/GuideDetailPage';
+
+export { ResearchPage } from './components/ResearchPage';
+export { ResearchDetailPage } from './components/ResearchDetailPage';
+export { TraderToolsPage } from './components/TraderToolsPage';
+export { SpreadComparatorPage } from './components/SpreadComparatorPage';
+export { EconomicCalendarPage } from './components/EconomicCalendarPage';
+export { AnalystChartPage } from './components/AnalystChartPage';
+export { LiveWatchlistPage } from './components/LiveWatchlistPage';
+export { NewsletterPage } from './components/NewsletterPage';
+export { LiveChatPage } from './components/LiveChatPage';
+export { CareersPage } from './components/CareersPage';

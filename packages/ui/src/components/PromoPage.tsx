@@ -14,6 +14,14 @@ const TAG_STYLES: Record<TagType, string> = {
   PERK: 'bg-[#111111] dark:bg-white text-white dark:text-[#111111]',
 };
 
+const CARD_GRADIENTS: Record<TagType, string> = {
+  NEW: 'from-accent/[0.07] to-[#FAFAF9] dark:from-accent/[0.12] dark:to-surface',
+  MONTHLY: 'from-[#F59E0B]/[0.07] to-[#FAFAF9] dark:from-[#F59E0B]/[0.12] dark:to-surface',
+  EVERGREEN: 'from-[#3B82F6]/[0.07] to-[#FAFAF9] dark:from-[#3B82F6]/[0.12] dark:to-surface',
+  PERMANENT: 'from-[#8B5CF6]/[0.07] to-[#FAFAF9] dark:from-[#8B5CF6]/[0.12] dark:to-surface',
+  PERK: 'from-[#111111]/[0.05] to-[#FAFAF9] dark:from-white/[0.05] dark:to-surface',
+};
+
 const PROMOS = [
   {
     id: 'welcome',
@@ -82,7 +90,7 @@ export function PromoPage() {
           {PROMOS.map((promo) => (
             <div
               key={promo.id}
-              className="dark:bg-surface flex flex-col gap-0 overflow-hidden rounded-[22px] bg-[#FAFAF9]"
+              className={`flex flex-col gap-0 overflow-hidden rounded-[22px] bg-gradient-to-br ${CARD_GRADIENTS[promo.tagType]}`}
               style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.06)' }}
             >
               {/* Card top: tag row */}
@@ -99,7 +107,7 @@ export function PromoPage() {
 
               {/* Value */}
               <div className="px-5 pt-3">
-                <p className="text-foreground font-sans text-[32px] font-semibold leading-[1.1]">
+                <p className="text-accent font-sans text-[36px] font-semibold leading-[100%] tracking-[-0.02em]">
                   {promo.value}
                 </p>
               </div>

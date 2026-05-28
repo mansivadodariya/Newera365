@@ -86,7 +86,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
       {/* Category nav strip */}
       <section className="dark:bg-background mx-auto bg-white px-5 pb-4">
         <div
-          className="scrollbar-hide flex gap-[8px] overflow-x-auto px-5"
+          className="scrollbar-hide flex gap-[8px] overflow-x-auto"
           style={{ scrollPaddingLeft: '20px' }}
         >
           {CATEGORIES.map((cat) => (

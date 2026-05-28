@@ -70,11 +70,11 @@ const NAV_ITEMS: NavItem[] = [
   },
   {
     label: 'Research',
-    href: '/market-analysis',
+    href: '/research',
     dropdown: [
-      { label: 'Market analysis', sub: 'Analyst commentary & ideas', href: '/market-analysis' },
-      { label: 'Economic calendar', sub: 'Key events & releases', href: '/economic-calendar' },
-      { label: 'Analyst view', sub: "Our desk's chart picks", href: '/research/technical' },
+      { label: 'Market analysis', sub: 'Analyst commentary & ideas', href: '/research' },
+      { label: 'Economic calendar', sub: 'Key events & releases', href: '/tools/calendar' },
+      { label: 'Analyst view', sub: "Our desk's chart picks", href: '/tools/analyst-chart' },
       { label: 'Newsletter', sub: 'Monday briefing, 7am', href: '/newsletter' },
     ],
   },
@@ -86,9 +86,9 @@ const NAV_ITEMS: NavItem[] = [
       {
         label: 'Spread comparator',
         sub: 'Side-by-side account spreads',
-        href: '/spread-comparator',
+        href: '/tools/spread-comparator',
       },
-      { label: 'Live watchlist', sub: 'Real-time market prices', href: '/market-watch' },
+      { label: 'Live watchlist', sub: 'Real-time market prices', href: '/tools/watchlist' },
     ],
   },
   {

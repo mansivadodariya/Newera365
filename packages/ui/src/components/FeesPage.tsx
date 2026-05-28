@@ -86,18 +86,24 @@ export function FeesPage() {
                 className={`grid grid-cols-[1fr_56px_56px_56px] ${i < SPREADS.length - 1 ? 'border-b border-white/10' : ''}`}
               >
                 <div className="px-4 py-[13px]">
-                  <span className="font-body text-[13px] font-medium text-white">
+                  <span className="font-body text-[13px] font-medium leading-[100%] tracking-normal text-white">
                     {row.instrument}
                   </span>
                 </div>
                 <div className="flex items-center justify-center py-[13px]">
-                  <span className="font-body text-accent text-[13px] font-medium">{row.raw}</span>
+                  <span className="text-accent font-mono text-[13px] font-medium leading-[100%] tracking-[0%]">
+                    {row.raw}
+                  </span>
                 </div>
                 <div className="flex items-center justify-center py-[13px]">
-                  <span className="font-body text-[13px] text-white">{row.std}</span>
+                  <span className="font-mono text-[13px] font-medium leading-[100%] tracking-[0%] text-white">
+                    {row.std}
+                  </span>
                 </div>
                 <div className="flex items-center justify-center py-[13px]">
-                  <span className="font-body text-[13px] text-white">{row.vip}</span>
+                  <span className="font-mono text-[13px] font-medium leading-[100%] tracking-[0%] text-white">
+                    {row.vip}
+                  </span>
                 </div>
               </div>
             ))}

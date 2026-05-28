@@ -1,12 +1,13 @@
 {
   "version": "0.0.1",
+  "autoPort": true,
   "configurations": [
     {
-      "name": "web",
+      "name": "newera365-all",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--workspace=apps/web"],
+      "runtimeArgs": ["run", "dev"],
       "port": 3000,
-      "autoPort": false
+      "cwd": "D:\NewEra365\newera365-app"
     }
   ]
 }

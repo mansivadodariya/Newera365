@@ -117,3 +117,72 @@ Brand tokens are placeholders pending Gate 2 design handoff (NE-024).
 CI: lint → type-check → build on push to `main`/`staging` (`.github/workflows/ci.yml`). Husky pre-commit runs Prettier via lint-staged.
 
 Required env vars are validated on CMS startup: `PAYLOAD_SECRET` (warn in dev, error in prod), `FRONTEND_URL`, `RESEND_API_KEY`, `EMAIL_FROM`, `CONSENT_IP_SALT` (all error in prod only). `HEALTH_CHECK_TOKEN` must be set to a non-empty value or the `/api/health` endpoint will always return 401.
+
+## Completed Frontend Pages
+
+All components live in `packages/ui/src/components/` and are exported from `packages/ui/src/index.ts`. Routes are thin wrappers in `apps/web/src/app/[locale]/`.
+
+### Trade
+
+| Component               | Route                        | Notes                                        |
+| ----------------------- | ---------------------------- | -------------------------------------------- |
+| `AccountsPage`          | `/trade/accounts`            | Account type cards                           |
+| `AccountComparisonPage` | `/trade/accounts/comparison` | Feature matrix table; Raw column highlighted |
+| `FundingPage`           | `/trade/funding`             | Payment methods                              |
+| `FeesPage`              | `/trade/fees`                | Fee table                                    |
+| `PromoPage`             | `/trade/promotions`          | Promo cards with gradients                   |
+| `IBPage`                | `/trade/ib`                  | IB registration with SVG earnings chart      |
+
+### Markets
+
+| Component            | Route                  | Notes                      |
+| -------------------- | ---------------------- | -------------------------- |
+| `InstrumentsPage`    | `/markets/instruments` | Full instrument spec table |
+| `MarketCategoryPage` | `/markets/[category]`  | Per-category page          |
+
+### Platform
+
+| Component       | Route              | Notes                                    |
+| --------------- | ------------------ | ---------------------------------------- |
+| `PlatformPage`  | `/platform/[slug]` | Platform feature pages                   |
+| `WebTraderPage` | (embedded)         | Web Trader with fallback disclaimer card |
+
+### Education
+
+| Component          | Route              | Notes                                                |
+| ------------------ | ------------------ | ---------------------------------------------------- |
+| `EducationHubPage` | `/education`       | Featured articles (divider-row layout) + video cards |
+| `MediaListingPage` | `/education/media` | Video listing with dark green gradient thumbnails    |
+| `EbooksPage`       | `/ebooks`          | Gated ebook downloads                                |
+| `GlossaryPage`     | `/glossary`        | A-Z search + category chips                          |
+| `GuidesPage`       | `/guides`          | Guide listing                                        |
+| `GuideDetailPage`  | `/guides/[slug]`   | Guide detail prose                                   |
+
+### Research & Tools
+
+| Component              | Route                      | Notes                                                                                      |
+| ---------------------- | -------------------------- | ------------------------------------------------------------------------------------------ |
+| `ResearchPage`         | `/research` + `/blog`      | "Notes from the trading floor" article listing                                             |
+| `ResearchDetailPage`   | `/research/[slug]`         | Article detail with SVG chart hero                                                         |
+| `TraderToolsPage`      | `/tools`                   | Margin/Pip/Swap calculator; all `.toLocaleString('en-US')` to avoid SSR hydration mismatch |
+| `SpreadComparatorPage` | `/tools/spread-comparator` | Instrument tabs, spread bars, annual saving panel                                          |
+| `EconomicCalendarPage` | `/tools/calendar`          | Filter by impact + currency; 3-dot impact visualization                                    |
+| `AnalystChartPage`     | `/tools/analyst-chart`     | Featured price + SVG chart + analyst commentary                                            |
+| `LiveWatchlistPage`    | `/tools/watchlist`         | Dark table, tab filter (Indices/Futures/Bonds/Forex)                                       |
+
+### Company
+
+| Component     | Route              | Notes                                              |
+| ------------- | ------------------ | -------------------------------------------------- |
+| `AboutPage`   | `/company/about`   | CEO quote card, timeline, team grid, explore links |
+| `CareersPage` | `/company/careers` | Stats, values, job listing with department filter  |
+
+### Support & Legal
+
+| Component        | Route         | Notes                                                                               |
+| ---------------- | ------------- | ----------------------------------------------------------------------------------- |
+| `FaqPage`        | `/faqs`       | Search + category tabs + popular questions                                          |
+| `ContactPage`    | `/contact`    | 3 channel cards (Email/Call/Chat), department dropdown form, Three Cities section   |
+| `LegalPage`      | `/legal`      | 5-document selector, ToC, prose sections                                            |
+| `LiveChatPage`   | `/live-chat`  | Chat UI; scroll happens within container (not page) to prevent page jumping on load |
+| `NewsletterPage` | `/newsletter` | "The Monday Briefing" subscribe form, social proof                                  |

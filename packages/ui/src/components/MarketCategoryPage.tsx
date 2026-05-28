@@ -272,7 +272,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
       </section>
 
       {/* Specs section */}
-      <section className="rounded-t-[32px] bg-[#111111] px-5 pb-10 pt-10">
+      <section className="rounded-[32px] bg-[#111111] px-5 pb-10 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white [&>span:last-child]:text-white">
             TRADING SPECS

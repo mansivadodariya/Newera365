@@ -66,14 +66,13 @@ export function EbooksPage() {
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">Free E-Books</SectionKicker>
           <h1 className="text-foreground mb-3 font-sans text-[42px] font-semibold leading-[1.05]">
             The 5%
             <br />
             <span className="text-accent">Rule.</span>
           </h1>
           <p className="font-body text-muted max-w-[300px] text-[14px] leading-[1.55]">
-            A 5-page framework for never losing more than 5% on a single trade. Used by our desk
+            A 56-page framework for never losing more than 5% on a single trade. Used by our desk
             every day.
           </p>
         </div>
@@ -83,7 +82,7 @@ export function EbooksPage() {
       <section className="dark:bg-background bg-white px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Cover */}
-          <div className="mb-6 flex items-center justify-center overflow-hidden rounded-[22px] bg-[#111111] px-8 py-10">
+          <div className="mb-6 flex items-center justify-center overflow-hidden rounded-[22px] bg-gradient-to-br from-[#0a2614] via-[#0d1f0d] to-[#111111] px-8 py-10">
             <div className="w-full max-w-[200px] rounded-[16px] bg-[#1a1a1a] p-6 shadow-2xl">
               <div className="bg-accent mb-4 flex h-8 w-8 items-center justify-center rounded-[10px]">
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">

@@ -82,7 +82,9 @@ export function WebTraderPage() {
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">TRADING PLATFORM</SectionKicker>
+          <SectionKicker className="[&>span:last-child]:font-body mb-2 [&>span:first-child]:hidden [&>span:last-child]:text-[11px] [&>span:last-child]:font-semibold [&>span:last-child]:leading-[100%] [&>span:last-child]:tracking-[0.08em] [&>span:last-child]:text-[#1AD966]">
+            TRADING PLATFORM
+          </SectionKicker>
           <h1 className="text-foreground mb-3 font-sans text-[44px] font-semibold leading-[1.05]">
             WebTrader.
           </h1>
@@ -166,7 +168,7 @@ export function WebTraderPage() {
           </div>
 
           {/* Fallback banner */}
-          <div className="dark:bg-surface mt-3 flex gap-3 rounded-[16px] bg-[#FAFAF9] p-4">
+          <div className="mt-3 flex gap-3 rounded-[16px] bg-[#FAFAF9] p-4 dark:bg-[#1c1500]">
             <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[10px] bg-[#F59E0B]/15">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                 <path
@@ -213,7 +215,6 @@ export function WebTraderPage() {
       {/* Features */}
       <section className="dark:bg-background bg-white px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">WHAT YOU GET</SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
             No download.
             <br />

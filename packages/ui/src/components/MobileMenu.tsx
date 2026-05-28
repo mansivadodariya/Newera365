@@ -45,9 +45,9 @@ const NAV_GROUPS = [
   {
     section: 'RESEARCH & ANALYSIS',
     items: [
-      { label: 'CMS Article Listing', href: '/market-analysis' },
-      { label: 'Economic Calendar', href: '/economic-calendar' },
-      { label: 'Analyst Chart', href: '/research/technical' },
+      { label: 'CMS Article Listing', href: '/research' },
+      { label: 'Economic Calendar', href: '/tools/calendar' },
+      { label: 'Analyst Chart', href: '/tools/analyst-chart' },
       { label: 'Newsletter', href: '/newsletter' },
     ],
   },
@@ -55,8 +55,8 @@ const NAV_GROUPS = [
     section: 'TRADER TOOLS',
     items: [
       { label: 'Calculator Widget', href: '/tools' },
-      { label: 'Spread Comparator', href: '/spread-comparator' },
-      { label: 'Live Watchlist', href: '/market-watch' },
+      { label: 'Spread Comparator', href: '/tools/spread-comparator' },
+      { label: 'Live Watchlist', href: '/tools/watchlist' },
     ],
   },
   {
@@ -73,7 +73,7 @@ const NAV_GROUPS = [
   {
     section: 'LEGAL & SUPPORT',
     items: [
-      { label: 'Legal Prose Page', href: '/terms' },
+      { label: 'Legal Prose Page', href: '/legal' },
       { label: 'FAQ Accordion', href: '/faqs' },
       { label: 'Contact Form', href: '/contact' },
       { label: 'Live Chat', href: '/live-chat' },

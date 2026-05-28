@@ -252,21 +252,26 @@ const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 export function GlossaryPage() {
   const [search, setSearch] = useState('');
   const [activeLetter, setActiveLetter] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
-    const bySearch = search
-      ? TERMS.filter(
-          (t) =>
-            t.term.toLowerCase().includes(search.toLowerCase()) ||
-            t.definition.toLowerCase().includes(search.toLowerCase()),
-        )
-      : TERMS;
+    let result = TERMS;
 
-    if (activeLetter) {
-      return bySearch.filter((t) => t.term.toUpperCase().startsWith(activeLetter));
+    if (search) {
+      result = result.filter(
+        (t) =>
+          t.term.toLowerCase().includes(search.toLowerCase()) ||
+          t.definition.toLowerCase().includes(search.toLowerCase()),
+      );
     }
-    return bySearch;
-  }, [search, activeLetter]);
+    if (activeLetter) {
+      result = result.filter((t) => t.term.toUpperCase().startsWith(activeLetter));
+    }
+    if (activeCategory) {
+      result = result.filter((t) => t.category === activeCategory);
+    }
+    return result;
+  }, [search, activeLetter, activeCategory]);
 
   const availableLetters = useMemo(
     () => new Set(TERMS.map((t) => t.term[0]?.toUpperCase() ?? '')),
@@ -278,14 +283,22 @@ export function GlossaryPage() {
     setSearch('');
   }
 
+  function handleCategoryClick(cat: string) {
+    setActiveCategory((prev) => (prev === cat ? null : cat));
+    setSearch('');
+    setActiveLetter(null);
+  }
+
   return (
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">Glossary</SectionKicker>
+          <SectionKicker className="mb-4">TRADING DICTIONARY</SectionKicker>
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.1]">
-            Trading glossary.
+            Trading
+            <br />
+            glossary.
           </h1>
           <p className="font-body text-muted mb-6 max-w-[320px] text-[14px] leading-[1.55]">
             Every term, defined in plain English. Searchable, no jargon, no fluff.
@@ -311,7 +324,7 @@ export function GlossaryPage() {
                 setSearch(e.target.value);
                 setActiveLetter(null);
               }}
-              className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-full border bg-[#f9f9f9] py-3 pl-10 pr-4 text-[13px] outline-none dark:bg-[#1c1c1c]"
+              className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-full bg-[#f9f9f9] py-3 pl-10 pr-4 text-[14px] font-medium outline-none dark:bg-[#1c1c1c]"
             />
             {search && (
               <button
@@ -328,6 +341,40 @@ export function GlossaryPage() {
                 </svg>
               </button>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* Category filter pills */}
+      <section className="dark:bg-background bg-white px-5 pb-3">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="scrollbar-hide flex gap-1.5 overflow-x-auto pb-1">
+            <button
+              onClick={() => {
+                setActiveCategory(null);
+                setActiveLetter(null);
+              }}
+              className={`font-body flex-shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
+                !activeCategory
+                  ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                  : 'hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-[#1e1e1e] dark:text-[#9ca3af]'
+              }`}
+            >
+              All
+            </button>
+            {Object.entries(CATEGORY_COLORS).map(([cat, colorClass]) => (
+              <button
+                key={cat}
+                onClick={() => handleCategoryClick(cat)}
+                className={`font-body flex-shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
+                  activeCategory === cat
+                    ? colorClass
+                    : 'hover:text-foreground dark:hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-[#1e1e1e] dark:text-[#9ca3af]'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
         </div>
       </section>
@@ -363,6 +410,13 @@ export function GlossaryPage() {
       {/* Terms list */}
       <section className="dark:bg-background bg-white px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-5">
+            {activeCategory
+              ? `${activeCategory} · ${filtered.length} TERMS`
+              : activeLetter
+                ? `LETTER ${activeLetter} · ${filtered.length} TERMS`
+                : `A–Z · ${filtered.length} TERMS`}
+          </SectionKicker>
           {filtered.length === 0 ? (
             <p className="font-body text-muted py-8 text-center text-[14px]">
               No terms match your search.
@@ -385,7 +439,7 @@ export function GlossaryPage() {
                     <div
                       className={`py-4 ${i < filtered.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]' : ''}`}
                     >
-                      <div className="mb-1.5 flex items-center gap-2">
+                      <div className="mb-1.5 flex items-center justify-between gap-2">
                         <span className="text-foreground font-sans text-[15px] font-semibold">
                           {term.term}
                         </span>

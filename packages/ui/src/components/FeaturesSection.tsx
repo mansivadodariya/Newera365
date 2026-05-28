@@ -96,7 +96,7 @@ export function FeaturesSection() {
         <div className="flex flex-col gap-[14px]">
           {features.map((f) => (
             <div key={f.title} className="dark:bg-surface flex gap-4 rounded-[20px] bg-white p-5">
-              <div className="mt-0.5 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#a6a6a6] text-white dark:bg-[#374151]">
+              <div className="bg-accent/10 text-accent mt-0.5 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px]">
                 {ICONS[f.icon]}
               </div>
               <div>

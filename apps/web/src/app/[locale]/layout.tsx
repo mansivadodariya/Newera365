@@ -4,7 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { Outfit, Inter, JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
-import { ToastProvider, Header, TickerStrip, Footer } from '@newera365/ui';
+import { ToastProvider, Header, Footer } from '@newera365/ui';
 import { dir, LOCALES, type Locale } from '@newera365/types';
 import { routing } from '@/i18n/routing';
 import '../globals.css';
@@ -69,7 +69,6 @@ export default async function LocaleLayout({
           <NextIntlClientProvider messages={messages}>
             <ToastProvider>
               <Header />
-              <TickerStrip />
               <main>{children}</main>
               <Footer />
             </ToastProvider>
