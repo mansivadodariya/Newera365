@@ -167,7 +167,7 @@ export function LiveChatPage() {
         {/* Date chip */}
         <div className="mb-4 flex justify-center">
           <span className="font-body rounded-full bg-[#e5e7eb] px-3 py-[3px] text-[10px] text-[#6b7280] dark:bg-[#2a2a2a] dark:text-[#9ca3af]">
-            TODAY · {INITIAL_MESSAGES[0].time}
+            TODAY · {INITIAL_MESSAGES[0]?.time}
           </span>
         </div>
 

@@ -16,7 +16,7 @@ export function StatsSection() {
 
   return (
     <section
-      className="px-5 pb-9 pt-10 xl:pb-14 xl:pt-5"
+      className="rounded-t-[32px] px-5 pb-9 pt-10 xl:pb-14 xl:pt-10"
       style={{ background: 'var(--gradient-stats)' }}
     >
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">

@@ -127,52 +127,30 @@ export function ContactPage() {
       </section>
 
       {/* Quick channels */}
-      <section className="dark:bg-background bg-white px-5 pb-8">
+      <section className="rounded-t-[32px] bg-background px-5 pb-8 pt-10 xl:pb-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
             Quick channels
           </SectionKicker>
-          <h1 className="text-foreground mb-3 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.025em]">
+          <h2 className="text-foreground mb-[10px] font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
             Choose how to reach us.
-          </h1>
-          <div className="flex flex-col gap-[10px]">
+          </h2>
+          <div className="mt-6 flex flex-col gap-[14px] xl:grid xl:grid-cols-3">
             {CHANNELS.map((ch) => (
               <div
                 key={ch.id}
-                className="flex items-center gap-4 rounded-[16px] bg-[#f9f9f9] px-4 py-4 dark:bg-[#1c1c1c]"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}
+                className="flex items-center gap-[14px] rounded-[18px] bg-surface px-[18px] py-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:shadow-none"
               >
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[12px] bg-[#111111] text-white dark:bg-white dark:text-[#111111]">
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#f2f2f4] text-foreground dark:bg-[#2a2a2a]">
                   {ch.icon}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-foreground font-sans text-[13px] font-semibold">{ch.label}</p>
-                  <p className="font-body text-muted truncate text-[12px]">{ch.value}</p>
+                  <p className="text-foreground font-sans text-[14px] font-semibold leading-normal">{ch.label}</p>
+                  <p className="font-body text-muted truncate text-[12.5px]">{ch.value}</p>
                 </div>
-                <div className="flex flex-shrink-0 flex-col items-end gap-1">
-                  {ch.metaHighlight ? (
-                    <span className="bg-accent/10 font-body text-accent rounded-full px-2 py-[2px] text-[10px] font-semibold">
-                      {ch.meta}
-                    </span>
-                  ) : (
-                    <span className="font-body text-muted text-[10px]">{ch.meta}</span>
-                  )}
-                  {ch.isLink ? (
-                    <Link
-                      href={`/${locale}/live-chat`}
-                      className="font-body text-accent text-[11px] font-medium hover:underline"
-                    >
-                      {ch.actionLabel}
-                    </Link>
-                  ) : (
-                    <a
-                      href={ch.action}
-                      className="font-body text-accent text-[11px] font-medium hover:underline"
-                    >
-                      {ch.actionLabel}
-                    </a>
-                  )}
-                </div>
+                <span className={`font-mono flex-shrink-0 text-[10px] tracking-[1px] ${ch.metaHighlight ? 'text-accent' : 'text-muted'}`}>
+                  {ch.metaHighlight ? '● ONLINE NOW' : ch.meta.toUpperCase()}
+                </span>
               </div>
             ))}
           </div>

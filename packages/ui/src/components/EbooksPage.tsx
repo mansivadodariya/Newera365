@@ -118,10 +118,7 @@ export function EbooksPage() {
           </div>
 
           {/* Gate form */}
-          <div
-            className="rounded-[22px] bg-[#f9f9f9] p-5 dark:bg-[#1c1c1c]"
-            style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.06)' }}
-          >
+          <div className="rounded-[20px] bg-surface p-5 shadow-card dark:shadow-card-dark">
             <p className="text-foreground mb-1 font-sans text-[18px] font-semibold">
               Get the PDF — free
             </p>
@@ -211,10 +208,9 @@ export function EbooksPage() {
             {OTHER_EBOOKS.map((book) => (
               <div
                 key={book.id}
-                className="flex items-center gap-4 rounded-[18px] bg-white p-4 dark:bg-[#1c1c1c]"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}
+                className="bg-background flex items-center gap-4 rounded-[18px] p-4 shadow-card dark:shadow-card-dark"
               >
-                <div className="bg-accent/10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[12px]">
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] dark:bg-[rgba(255,255,255,0.06)]">
                   <svg
                     width="16"
                     height="16"

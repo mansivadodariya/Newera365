@@ -83,29 +83,30 @@ export function FeaturesSection() {
   ];
 
   return (
-    <section className="px-5 pb-9 pt-10" style={{ background: 'var(--gradient-features)' }}>
+    <section className="rounded-[32px] px-5 pb-9 pt-10 xl:pb-16 xl:pt-16" style={{ background: 'var(--gradient-features)' }}>
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-        <SectionKicker className="[&>span:first-child]:bg-muted mb-5 font-mono text-[10px] font-medium leading-[100%] tracking-[0.18em] text-[#6B7280]">
+        <SectionKicker className="[&>span:first-child]:bg-muted mb-4 text-muted">
           {t('whyKicker')}
         </SectionKicker>
 
-        <h2 className="text-foreground mb-[14px] font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.025em]">
+        <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
           {t('whyTitle')}
         </h2>
 
-        <div className="flex flex-col gap-[14px]">
+        <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-2">
           {features.map((f) => (
-            <div key={f.title} className="dark:bg-surface flex gap-4 rounded-[20px] bg-white p-5">
-              <div className="bg-accent/10 text-accent mt-0.5 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px]">
+            <div
+              key={f.title}
+              className="bg-background flex items-start gap-4 rounded-[20px] p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:shadow-[0px_4px_16px_0px_rgba(0,0,0,0.3)]"
+            >
+              <div className="text-foreground flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] dark:bg-[rgba(255,255,255,0.06)]">
                 {ICONS[f.icon]}
               </div>
-              <div>
-                <h3 className="text-foreground mb-1.5 font-sans text-[16px] font-semibold">
+              <div className="flex-1 pt-0.5">
+                <h3 className="text-foreground mb-[6px] font-sans text-[16px] font-semibold leading-normal">
                   {f.title}
                 </h3>
-                <p className="font-body text-muted text-[13px] font-medium leading-[150%] tracking-[0]">
-                  {f.desc}
-                </p>
+                <p className="font-body text-muted text-[13px] leading-[1.5]">{f.desc}</p>
               </div>
             </div>
           ))}

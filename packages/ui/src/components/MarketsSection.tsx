@@ -28,38 +28,38 @@ export function MarketsSection() {
   ] as const;
 
   return (
-    <section className="px-5 pb-9 pt-10" style={{ background: 'var(--gradient-markets)' }}>
+    <section className="rounded-[32px] px-5 pb-9 pt-10 xl:pb-16 xl:pt-10" style={{ background: 'var(--gradient-markets)' }}>
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-        <SectionKicker className="mb-5 text-[#000000] dark:text-[#FFFFFF]">
+        <SectionKicker className="mb-[14px] text-foreground">
           {t('marketsKicker')}
         </SectionKicker>
 
-        <h2 className="text-foreground mb-3 font-sans text-[32px] font-semibold leading-[1.1]">
+        <h2 className="text-foreground mb-3 font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px] xl:text-[36px]">
           {t('marketsHeading')}
         </h2>
-        <p className="font-body text-muted mb-[14px] text-[14px] leading-relaxed">
+        <p className="font-body text-muted mb-[14px] text-[14px] leading-[1.55]">
           {t('marketsSubheading')}
         </p>
 
-        {/* 2×3 asset class grid */}
-        <div className="mb-[14px] grid grid-cols-2 gap-[10px]">
+        {/* 2×3 asset class grid — 3 cols on desktop */}
+        <div className="mb-[14px] grid grid-cols-2 gap-[10px] xl:grid-cols-3">
           {assets.map((asset) => (
             <div
               key={asset.key}
-              className="flex flex-col gap-[14px] rounded-[18px] bg-[#e0e0e061] pb-[18px] pl-[16px] pr-[16px] pt-[18px] shadow-[0px_4px_16px_0px_#0000000F] dark:bg-[#1c1c1c] dark:shadow-none"
+              className="flex flex-col gap-[14px] rounded-[18px] bg-[rgba(224,224,224,0.38)] px-4 py-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:bg-[#1c1c1c] dark:shadow-none"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-[#efefef] dark:bg-[#2a2a2a]">
+              <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-[rgba(239,239,239,0)] dark:bg-[#2a2a2a]">
                 <Image
                   src={ASSET_ICON_FILES[asset.key]}
                   alt={asset.name}
-                  width={22}
-                  height={22}
+                  width={24}
+                  height={24}
                   className="dark:invert"
                 />
               </div>
               <div>
                 <p className="text-foreground font-sans text-[16px] font-semibold">{asset.name}</p>
-                <p className="font-body text-muted mt-0.5 text-[11px]">{asset.count}</p>
+                <p className="font-body text-muted mt-[2px] text-[11px]">{asset.count}</p>
               </div>
             </div>
           ))}
@@ -67,18 +67,12 @@ export function MarketsSection() {
 
         {/* Dark CTA button */}
         <Link
-          href={`/${locale}/markets`}
-          className="bg-foreground text-background font-body flex h-[45px] w-full items-center justify-center gap-2 rounded-2xl text-[14px] font-medium transition-opacity hover:opacity-90"
+          href={`/${locale}/markets/instruments`}
+          className="bg-foreground text-background font-body flex h-[46px] w-full items-center justify-center gap-2 rounded-[16px] text-[14px] font-medium transition-opacity hover:opacity-90 xl:w-auto xl:px-8"
         >
           {t('marketsViewAll')}
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path
-              d="M3 8h10M9 4l4 4-4 4"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </Link>
       </div>

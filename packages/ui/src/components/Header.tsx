@@ -239,7 +239,7 @@ function Header() {
 
   return (
     <>
-      <header className="border-border bg-background sticky top-0 z-40 h-[72px] w-full border-b">
+      <header className="border-border sticky top-0 z-40 h-[72px] w-full border-b bg-[rgba(255,255,255,0.85)] backdrop-blur-[12px] dark:bg-[rgba(17,17,17,0.85)]">
         <div className="flex h-full items-center justify-between px-5 xl:px-[80px]">
           {/* Logo */}
           <Link href={`/${locale}`} aria-label="NewEra365 — go to home" className="flex-shrink-0">

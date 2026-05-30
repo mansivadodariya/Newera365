@@ -9,15 +9,19 @@ module.exports = {
         'surface-elevated': 'var(--surface-elevated)',
         foreground: 'var(--foreground)',
         muted: 'var(--muted)',
+        'text-secondary': 'var(--text-secondary)',
         border: 'var(--border)',
+        section: 'var(--section)',
+        'footer-bg': 'var(--footer-bg)',
         accent: {
           DEFAULT: '#00B050',
           hover: '#15803D',
+          bright: '#1AD966',
           logo: '#337346',
           subtle: 'rgba(0,176,80,0.12)',
         },
         up: '#26A69A',
-        down: '#EE5250',
+        down: '#EF5350',
         ticker: {
           bg: '#030406',
           muted: '#8C939E',
@@ -35,8 +39,9 @@ module.exports = {
         pill: '999px',
       },
       boxShadow: {
-        card: '0 2px 16px rgba(0,0,0,0.06)',
-        'card-dark': '0 2px 16px rgba(0,0,0,0.4)',
+        card: '0px 4px 16px 0px rgba(0,0,0,0.06)',
+        'card-dark': '0px 4px 16px 0px rgba(0,0,0,0.4)',
+        'card-lg': '0px 8px 32px 0px rgba(0,0,0,0.08)',
       },
       keyframes: {
         'fade-in': {

@@ -4,11 +4,14 @@
 
 :root {
   --background: #ffffff;
-  --surface: #f7f8fa;
+  --surface: #FAFAF9;
   --surface-elevated: #ffffff;
   --foreground: #111111;
-  --muted: #6b7280;
-  --border: #e5e7eb;
+  --muted: #6B7280;
+  --text-secondary: #8C949E;
+  --border: #DBE0E5;
+  --section: #F2F2F7;
+  --footer-bg: #000000;
 
   --gradient-stats: linear-gradient(180deg, #ffffff 0%, rgba(17,17,17,0.43) 100%);
   --gradient-markets: linear-gradient(180deg, rgba(19,19,19,0.43) 0%, #FFFFFF 100%);
@@ -21,7 +24,10 @@
   --surface-elevated: #242424;
   --foreground: #ffffff;
   --muted: #9ca3af;
+  --text-secondary: #6b7280;
   --border: #2a2a2a;
+  --section: #1a1a1a;
+  --footer-bg: #0a0a0a;
 
   --gradient-stats: linear-gradient(180deg, #111111 0%, rgba(255,255,255,0.04) 100%);
   --gradient-markets: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, #111111 100%);

@@ -52,7 +52,7 @@ async function fetchCollection<T>(
   const qs = new URLSearchParams(params).toString();
   const url = `${CMS_URL}/api/${slug}${qs ? `?${qs}` : ''}`;
   try {
-    const res = await fetch(url, { next: { revalidate: 60 } });
+    const res = await fetch(url, { next: { revalidate: 60 } } as RequestInit);
     if (!res.ok) throw new Error(`${res.status}`);
     return res.json();
   } catch {
