@@ -112,7 +112,7 @@ export function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05]">
             We&apos;re here.
@@ -160,15 +160,15 @@ export function ContactPage() {
       {/* Contact form */}
       <section className="gap-[14px] rounded-[32px] bg-[linear-gradient(180deg,#F8F8F7_0%,#FFFFFF_100%)] pb-[36px] pl-[20px] pr-[20px] pt-[40px] dark:bg-[linear-gradient(180deg,#07090D_0%,#07090D_100%)]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
             Send us a message
           </SectionKicker>
-          <h1 className="text-foreground mb-3 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.025em]">
+          <h1 className="text-foreground mb-3 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px]">
             Leave us a note.
           </h1>
 
           {submitted ? (
-            <div className="flex flex-col items-center gap-4 rounded-[22px] bg-[#f9f9f9] px-6 py-10 text-center dark:bg-[#1c1c1c]">
+            <div className="flex flex-col items-center gap-4 rounded-[22px] bg-surface px-6 py-10 text-center">
               <div className="bg-accent flex h-14 w-14 items-center justify-center rounded-full">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <path
@@ -204,7 +204,7 @@ export function ContactPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Jane Doe"
-                  className="font-body text-foreground focus:border-accent w-full rounded-[14px] border border-[#e5e7eb] bg-[#f9f9f9] px-4 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-[#2a2a2a] dark:bg-[#1c1c1c]"
+                  className="font-body text-foreground focus:border-accent w-full rounded-[14px] border border-[#e5e7eb] bg-surface px-4 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-[#2a2a2a]"
                 />
               </div>
 
@@ -223,7 +223,7 @@ export function ContactPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="janedoe@gmail.com"
-                  className="font-body text-foreground focus:border-accent w-full rounded-[14px] border border-[#e5e7eb] bg-[#f9f9f9] px-4 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-[#2a2a2a] dark:bg-[#1c1c1c]"
+                  className="font-body text-foreground focus:border-accent w-full rounded-[14px] border border-[#e5e7eb] bg-surface px-4 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-[#2a2a2a]"
                 />
               </div>
 
@@ -239,7 +239,7 @@ export function ContactPage() {
                   id="contact-dept"
                   value={dept}
                   onChange={(e) => setDept(e.target.value)}
-                  className="font-body text-foreground focus:border-accent w-full appearance-none rounded-[14px] border border-[#e5e7eb] bg-[#f9f9f9] px-4 py-[13px] text-[14px] focus:outline-none dark:border-[#2a2a2a] dark:bg-[#1c1c1c]"
+                  className="font-body text-foreground focus:border-accent w-full appearance-none rounded-[14px] border border-[#e5e7eb] bg-surface px-4 py-[13px] text-[14px] focus:outline-none dark:border-[#2a2a2a]"
                 >
                   <option value="" disabled>
                     Select department
@@ -267,7 +267,7 @@ export function ContactPage() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="How can we help?"
-                  className="font-body text-foreground focus:border-accent w-full resize-none rounded-[14px] border border-[#e5e7eb] bg-[#f9f9f9] px-4 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-[#2a2a2a] dark:bg-[#1c1c1c]"
+                  className="font-body text-foreground focus:border-accent w-full resize-none rounded-[14px] border border-[#e5e7eb] bg-surface px-4 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-[#2a2a2a]"
                 />
               </div>
 

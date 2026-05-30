@@ -138,7 +138,7 @@ export function MediaListingPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
+      <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.08]">
             Watch.
@@ -168,14 +168,14 @@ export function MediaListingPage() {
               placeholder="Search episodes..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-xl bg-[#f9f9f9] py-3 pl-10 pr-4 text-[14px] font-medium outline-none dark:bg-[#1c1c1c]"
+              className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-xl bg-surface py-3 pl-10 pr-4 text-[14px] font-medium outline-none"
             />
           </div>
         </div>
       </section>
 
       {/* Tabs */}
-      <section className="dark:bg-background bg-white px-5 pb-4">
+      <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
             {TABS.map((tab) => (
@@ -197,7 +197,7 @@ export function MediaListingPage() {
 
       {/* Featured episode */}
       {featured && (activeTab === 'ALL' || activeTab === featured.tab) && !search && (
-        <section className="dark:bg-background bg-white px-5 pb-6">
+        <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="flex flex-col gap-4 overflow-hidden rounded-[22px] bg-[#0d0d0d] p-5">
               {/* Thumbnail placeholder */}
@@ -242,9 +242,9 @@ export function MediaListingPage() {
         </section>
       )}
       {/* Episode grid */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mx-auto mb-5 mt-2 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mx-auto mb-5 mt-2 [&>span:first-child]:bg-muted text-muted">
             LATEST EPISODES
           </SectionKicker>
           {filtered.length === 0 ? (
@@ -256,7 +256,7 @@ export function MediaListingPage() {
               {filtered.map((ep) => (
                 <div
                   key={ep.id}
-                  className="flex flex-col gap-3 overflow-hidden rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]"
+                  className="flex flex-col gap-3 overflow-hidden rounded-[18px] bg-surface p-4 shadow-card dark:shadow-none"
                 >
                   {/* Thumbnail */}
                   <div className="relative flex h-[90px] items-center justify-center overflow-hidden rounded-[11px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111]">

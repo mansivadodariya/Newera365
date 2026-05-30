@@ -181,7 +181,7 @@ export function FundingPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             <span>
@@ -199,17 +199,16 @@ export function FundingPage() {
       </section>
 
       {/* Payment Methods */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
             PAYMENT METHODS
           </SectionKicker>
           <div className="flex flex-col gap-[14px]">
             {PAYMENT_METHODS.map((method) => (
               <div
                 key={method.id}
-                className="dark:bg-surface flex flex-col gap-[14px] rounded-[18px] bg-white p-5"
-                
+                className="bg-background flex flex-col gap-[14px] rounded-[18px] p-5 shadow-card dark:shadow-none"
               >
                 {/* Card header: icon box + type pill */}
                 <div className="flex items-center justify-between">

@@ -83,7 +83,7 @@ export function GuideDetailPage({ slug }: GuideDetailProps) {
   return (
     <>
       {/* Top breadcrumb */}
-      <section className="dark:bg-background bg-white px-5 pb-0 pt-6">
+      <section className="bg-background px-5 pb-0 pt-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="text-muted flex items-center gap-2">
             <Link
@@ -124,7 +124,7 @@ export function GuideDetailPage({ slug }: GuideDetailProps) {
       </section>
 
       {/* Header */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-5">
+      <section className="bg-background px-5 pb-6 pt-5">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <span
             className={`font-body mb-3 inline-flex rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${guide.categoryClass}`}
@@ -155,9 +155,9 @@ export function GuideDetailPage({ slug }: GuideDetailProps) {
 
       {/* Table of contents */}
       {guide.toc.length > 0 && (
-        <section className="dark:bg-background bg-white px-5 pb-6">
+        <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <div className="rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
+            <div className="rounded-[18px] bg-surface p-4">
               <p className="font-body text-muted mb-3 text-[9px] uppercase tracking-[0.12em]">
                 TABLE OF CONTENTS
               </p>
@@ -187,7 +187,7 @@ export function GuideDetailPage({ slug }: GuideDetailProps) {
       )}
 
       {/* Article body */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="flex flex-col gap-8">
             {guide.sections.map((section, i) => (

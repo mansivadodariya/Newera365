@@ -121,7 +121,7 @@ export function AccountComparisonPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
+      <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             Choose the
@@ -138,7 +138,7 @@ export function AccountComparisonPage() {
       </section>
 
       {/* Horizontal scroll account cards */}
-      <section className="dark:bg-background bg-white py-10">
+      <section className="bg-background py-10">
         <div
           className="scrollbar-hide flex snap-x snap-mandatory gap-[14px] overflow-x-auto px-5"
           style={{ scrollPaddingLeft: '20px' }}
@@ -148,10 +148,9 @@ export function AccountComparisonPage() {
             return (
               <div
                 key={acc.id}
-                className={`relative flex w-[270px] flex-shrink-0 snap-start flex-col gap-[18px] overflow-hidden rounded-[24px] p-6 ${
-                  isRaw ? 'bg-[#111111]' : 'bg-white dark:bg-[#1c1c1c]'
+                className={`relative flex w-[270px] flex-shrink-0 snap-start flex-col gap-[18px] overflow-hidden rounded-[24px] p-6 shadow-card ${
+                  isRaw ? 'bg-[#111111] shadow-card-dark' : 'bg-background'
                 }`}
-                style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.08)' }}
               >
                 {/* Green glow for Raw card */}
                 {isRaw && (

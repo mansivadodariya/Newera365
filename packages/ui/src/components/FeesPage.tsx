@@ -43,7 +43,7 @@ export function FeesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             <span className="text-foreground">No fine print.</span>
@@ -58,9 +58,9 @@ export function FeesPage() {
       </section>
 
       {/* Spreads table */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
             LIVE SPREADS · PIP
           </SectionKicker>
 
@@ -133,9 +133,9 @@ export function FeesPage() {
       </section>
 
       {/* Other Charges */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
             OTHER CHARGES
           </SectionKicker>
           <div className="flex flex-col gap-[10px]">

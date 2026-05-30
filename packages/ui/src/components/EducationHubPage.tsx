@@ -159,7 +159,7 @@ export function EducationHubPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             Learn to
@@ -176,9 +176,9 @@ export function EducationHubPage() {
       </section>
 
       {/* Category grid */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
             BROWSE BY TYPE
           </SectionKicker>
           <div className="grid grid-cols-2 gap-[10px]">
@@ -186,7 +186,7 @@ export function EducationHubPage() {
               <Link
                 key={cat.id}
                 href={`/${locale}${cat.href}`}
-                className="group flex flex-col gap-3 rounded-[18px] bg-[#f9f9f9] p-4 transition-colors hover:bg-[#f0f0ee] dark:bg-[#1c1c1c] dark:hover:bg-[#252525]"
+                className="group flex flex-col gap-3 rounded-[18px] bg-surface p-4 transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#252525]"
               >
                 <div className="flex items-start justify-between">
                   <div className="text-accent bg-accent/10 flex h-9 w-9 items-center justify-center rounded-[11px]">
@@ -209,9 +209,9 @@ export function EducationHubPage() {
       </section>
 
       {/* Featured this week */}
-      <section className="dark:bg-background bg-[#f9f9f9] px-5 pb-10 pt-8">
+      <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
             FEATURED THIS WEEK
           </SectionKicker>
           <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
@@ -259,9 +259,9 @@ export function EducationHubPage() {
       </section>
 
       {/* Pinned guides */}
-      <section className="dark:bg-background bg-white px-5 pb-10 pt-8">
+      <section className="bg-background px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
             PINNED GUIDES
           </SectionKicker>
           <div className="flex flex-col">

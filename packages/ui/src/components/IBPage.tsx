@@ -102,7 +102,7 @@ export function IBPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             Partner with us.
@@ -130,7 +130,7 @@ export function IBPage() {
               ))}
             </div>
             {/* Earnings bar chart */}
-            <div className="dark:bg-surface flex w-[130px] flex-shrink-0 flex-col overflow-hidden rounded-[18px] bg-[#f9f9f9] p-3">
+            <div className="dark:bg-surface flex w-[130px] flex-shrink-0 flex-col overflow-hidden rounded-[18px] bg-surface p-3">
               <div className="mb-2 flex items-center justify-between">
                 <span className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
                   Monthly
@@ -241,9 +241,9 @@ export function IBPage() {
       </section>
 
       {/* Steps */}
-      <section className="dark:bg-background rounded-t-[32px] bg-[#f9f9f9] px-5 pb-10 pt-10">
+      <section className="dark:bg-background rounded-t-[32px] bg-surface px-5 pb-10 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
             HOW IT WORKS
           </SectionKicker>
           <h2 className="text-foreground mb-7 font-sans text-[28px] font-semibold leading-[1.1]">

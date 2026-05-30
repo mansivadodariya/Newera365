@@ -121,7 +121,7 @@ export function AccountsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             Choose the
@@ -138,7 +138,7 @@ export function AccountsPage() {
       </section>
 
       {/* Cards — horizontal scroll snap */}
-      <section className="dark:bg-background bg-white pb-10">
+      <section className="bg-background pb-10">
         <div
           className="scrollbar-hide flex snap-x snap-mandatory gap-[14px] overflow-x-auto px-5 pb-2"
           style={{ scrollPaddingLeft: '20px' }}

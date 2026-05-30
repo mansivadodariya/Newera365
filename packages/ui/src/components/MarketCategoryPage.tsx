@@ -127,7 +127,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-7 pt-9">
+      <section className="bg-background px-5 pb-7 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <Link
             href={`/${locale}/markets/instruments`}
@@ -156,7 +156,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
       </section>
 
       {/* Instrument list — watchlist widget */}
-      <section className="dark:bg-background bg-white px-5 pb-6">
+      <section className="bg-background px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-3">
             {cmsRows
@@ -312,10 +312,10 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
       </section>
 
       {/* Other markets */}
-      <section className="dark:bg-background bg-white px-5 pb-12 pt-10">
+      <section className="bg-background px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">OTHER MARKETS</SectionKicker>
-          <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.025em]">
+          <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.8px]">
             Explore other asset classes.
           </h2>
           <div className="flex flex-col gap-[10px]">

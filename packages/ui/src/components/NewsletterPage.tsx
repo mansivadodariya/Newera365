@@ -17,7 +17,7 @@ export function NewsletterPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-10 pt-9">
+      <section className="bg-background px-5 pb-10 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[44px] font-semibold leading-[1.05]">
             The Monday
@@ -32,10 +32,10 @@ export function NewsletterPage() {
       </section>
 
       {/* Subscribe form */}
-      <section className="dark:bg-background bg-white px-5 pb-8">
+      <section className="bg-background px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {submitted ? (
-            <div className="rounded-[20px] bg-[#f9f9f9] px-6 py-10 text-center dark:bg-[#1c1c1c]">
+            <div className="rounded-[20px] bg-surface px-6 py-10 text-center">
               <div className="bg-accent mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <path
@@ -63,7 +63,7 @@ export function NewsletterPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@gmail.com"
-                  className="font-body text-foreground focus:border-accent flex-1 rounded-full border border-[#e5e7eb] bg-[#f9f9f9] px-5 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-[#2a2a2a] dark:bg-[#1c1c1c]"
+                  className="font-body text-foreground focus:border-accent flex-1 rounded-full border border-[#e5e7eb] bg-surface px-5 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-[#2a2a2a]"
                 />
                 <button
                   type="submit"
@@ -105,7 +105,7 @@ export function NewsletterPage() {
       </section>
 
       {/* As read by */}
-      <section className="dark:bg-background bg-white px-5 pb-8">
+      <section className="bg-background px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="font-body mb-4 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
             AS READ BY —
@@ -124,14 +124,14 @@ export function NewsletterPage() {
       </section>
 
       {/* What you get */}
-      <section className="dark:bg-background bg-white px-5 pb-8">
+      <section className="bg-background px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="font-body mb-4 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
             WHAT YOU GET
           </p>
           <div className="flex flex-col gap-4">
             {/* Preview 1 */}
-            <div className="overflow-hidden rounded-[18px] bg-[#f9f9f9] dark:bg-[#1c1c1c]">
+            <div className="overflow-hidden rounded-[18px] bg-surface">
               <div className="h-[100px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111]" />
               <div className="p-4">
                 <p className="font-body text-accent mb-1 text-[10px] uppercase tracking-[0.1em]">
@@ -147,7 +147,7 @@ export function NewsletterPage() {
             </div>
 
             {/* Preview 2 */}
-            <div className="rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
+            <div className="rounded-[18px] bg-surface p-4">
               <p className="font-body mb-1 text-[10px] uppercase tracking-[0.1em] text-[#3B82F6]">
                 EDUCATION DROPS
               </p>

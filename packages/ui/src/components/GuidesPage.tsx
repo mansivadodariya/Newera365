@@ -76,7 +76,7 @@ export function GuidesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             Deep dives worth
@@ -92,13 +92,12 @@ export function GuidesPage() {
 
       {/* Featured guide */}
       {featured && (
-        <section className="dark:bg-background bg-white px-5 pb-6">
+        <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="mb-4">FEATURED</SectionKicker>
             <Link
               href={`/${locale}/guides/${featured.id}`}
-              className="group block overflow-hidden rounded-[22px] bg-[#111111] p-6"
-              style={{ boxShadow: '0 4px 30px rgba(0,0,0,0.15)' }}
+              className="group block overflow-hidden rounded-[22px] bg-[#111111] p-6 shadow-card-dark"
             >
               <span
                 className={`font-body mb-4 inline-flex rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${featured.categoryClass}`}
@@ -141,7 +140,7 @@ export function GuidesPage() {
       )}
 
       {/* All guides */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mt-5">ALL GUIDES</SectionKicker>
           <div className="flex flex-col gap-0">

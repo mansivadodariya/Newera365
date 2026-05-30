@@ -292,7 +292,7 @@ export function GlossaryPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
+      <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">TRADING DICTIONARY</SectionKicker>
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.1]">
@@ -324,7 +324,7 @@ export function GlossaryPage() {
                 setSearch(e.target.value);
                 setActiveLetter(null);
               }}
-              className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-full bg-[#f9f9f9] py-3 pl-10 pr-4 text-[14px] font-medium outline-none dark:bg-[#1c1c1c]"
+              className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-full bg-surface py-3 pl-10 pr-4 text-[14px] font-medium outline-none"
             />
             {search && (
               <button
@@ -346,7 +346,7 @@ export function GlossaryPage() {
       </section>
 
       {/* Category filter pills */}
-      <section className="dark:bg-background bg-white px-5 pb-3">
+      <section className="bg-background px-5 pb-3">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-1.5 overflow-x-auto pb-1">
             <button
@@ -380,7 +380,7 @@ export function GlossaryPage() {
       </section>
 
       {/* Alphabet filter */}
-      <section className="dark:bg-background bg-white px-5 pb-4">
+      <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-1 overflow-x-auto">
             {ALPHABET.map((letter) => {
@@ -408,7 +408,7 @@ export function GlossaryPage() {
       </section>
 
       {/* Terms list */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5">
             {activeCategory

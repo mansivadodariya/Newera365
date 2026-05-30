@@ -186,7 +186,7 @@ export function LiveChatPage() {
               <div
                 className={`max-w-[75%] rounded-[16px] px-4 py-3 ${
                   msg.from === 'agent'
-                    ? 'rounded-bl-[4px] bg-[#f9f9f9] dark:bg-[#1c1c1c]'
+                    ? 'rounded-bl-[4px] bg-surface'
                     : 'rounded-br-[4px] bg-[#111111]'
                 }`}
                 style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.07)' }}
@@ -212,7 +212,7 @@ export function LiveChatPage() {
                 <span className="font-sans text-[10px] font-bold">SC</span>
               </div>
               <div
-                className="rounded-[16px] rounded-bl-[4px] bg-[#f9f9f9] px-4 py-3 dark:bg-[#1c1c1c]"
+                className="rounded-[16px] rounded-bl-[4px] bg-surface px-4 py-3"
                 style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.07)' }}
               >
                 <p className="font-body text-muted text-[13px]">Sara is typing...</p>
@@ -239,7 +239,7 @@ export function LiveChatPage() {
 
       {/* Message input */}
       <div className="dark:bg-background flex-shrink-0 bg-white px-5 pb-6 pt-3">
-        <div className="flex items-center gap-2 rounded-[16px] border border-[#e5e7eb] bg-[#f9f9f9] px-4 py-3 dark:border-[#2a2a2a] dark:bg-[#1c1c1c]">
+        <div className="flex items-center gap-2 rounded-[16px] border border-[#e5e7eb] bg-surface px-4 py-3 dark:border-[#2a2a2a]">
           <input
             type="text"
             value={input}

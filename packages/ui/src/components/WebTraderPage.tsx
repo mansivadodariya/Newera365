@@ -80,7 +80,7 @@ export function WebTraderPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
+      <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:last-child]:font-body mb-2 [&>span:first-child]:hidden [&>span:last-child]:text-[11px] [&>span:last-child]:font-semibold [&>span:last-child]:leading-[100%] [&>span:last-child]:tracking-[0.08em] [&>span:last-child]:text-[#1AD966]">
             TRADING PLATFORM
@@ -96,7 +96,7 @@ export function WebTraderPage() {
       </section>
 
       {/* Embed mockup */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="overflow-hidden rounded-[22px] bg-[#111111]">
             {/* Toolbar */}
@@ -213,7 +213,7 @@ export function WebTraderPage() {
       </section>
 
       {/* Features */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
             No download.

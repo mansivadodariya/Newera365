@@ -155,7 +155,7 @@ export function TraderToolsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
+      <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[42px] font-semibold leading-[1.05]">
             The math.
@@ -169,7 +169,7 @@ export function TraderToolsPage() {
       </section>
 
       {/* Calculator */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Tab switcher */}
           <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-[#1c1c1c]">
@@ -324,7 +324,7 @@ export function TraderToolsPage() {
           </div>
 
           {/* Formula */}
-          <div className="mt-4 rounded-[14px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
+          <div className="mt-4 rounded-[14px] bg-surface p-4">
             <p className="font-body text-muted mb-2 text-[10px] uppercase tracking-[0.1em]">
               How it&apos;s calculated
             </p>
@@ -369,9 +369,9 @@ export function TraderToolsPage() {
       </section>
 
       {/* Other tools */}
-      <section className="dark:bg-background bg-[#f9f9f9] px-5 pb-10 pt-8">
+      <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
             MORE TOOLS
           </SectionKicker>
           <div className="flex flex-col gap-[10px]">

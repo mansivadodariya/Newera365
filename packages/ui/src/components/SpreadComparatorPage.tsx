@@ -110,9 +110,9 @@ export function SpreadComparatorPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
             TOOLS
           </SectionKicker>
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.1]">
@@ -125,7 +125,7 @@ export function SpreadComparatorPage() {
       </section>
 
       {/* Instrument selector */}
-      <section className="dark:bg-background bg-white px-5 pb-6">
+      <section className="bg-background px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
             {INSTRUMENTS.map((ins) => (
@@ -146,9 +146,9 @@ export function SpreadComparatorPage() {
       </section>
 
       {/* Spread bars */}
-      <section className="dark:bg-background bg-white px-5 pb-6">
+      <section className="bg-background px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="rounded-[18px] bg-[#f9f9f9] p-5 dark:bg-[#1c1c1c]">
+          <div className="rounded-[18px] bg-surface p-5">
             <p className="font-body mb-4 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
               SPREAD COMPARISON
             </p>
@@ -182,12 +182,12 @@ export function SpreadComparatorPage() {
       </section>
 
       {/* Account cards */}
-      <section className="dark:bg-background bg-white px-5 pb-6">
+      <section className="bg-background px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="grid grid-cols-3 gap-[10px]">
             {/* Standard */}
             <div
-              className="flex flex-col gap-3 rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]"
+              className="flex flex-col gap-3 rounded-[18px] bg-surface p-4"
               
             >
               <span className="text-foreground font-sans text-[13px] font-semibold">Standard</span>
@@ -247,7 +247,7 @@ export function SpreadComparatorPage() {
 
             {/* VIP */}
             <div
-              className="flex flex-col gap-3 rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]"
+              className="flex flex-col gap-3 rounded-[18px] bg-surface p-4"
               
             >
               <span className="text-foreground font-sans text-[13px] font-semibold">VIP</span>
@@ -279,7 +279,7 @@ export function SpreadComparatorPage() {
       </section>
 
       {/* Annual saving panel */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div
             className="rounded-[20px] bg-[#111111] px-5 py-6"
@@ -314,9 +314,9 @@ export function SpreadComparatorPage() {
       </section>
 
       {/* How we calculate */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="rounded-[18px] bg-[#f9f9f9] p-5 dark:bg-[#1c1c1c]">
+          <div className="rounded-[18px] bg-surface p-5">
             <p className="font-body mb-2 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
               HOW IT&apos;S CALCULATED
             </p>

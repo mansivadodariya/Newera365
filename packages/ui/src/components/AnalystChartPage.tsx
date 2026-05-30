@@ -93,7 +93,7 @@ export function AnalystChartPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.08]">
             Where the
@@ -109,7 +109,7 @@ export function AnalystChartPage() {
       </section>
 
       {/* Featured price */}
-      <section className="dark:bg-background bg-white px-5 pb-6">
+      <section className="bg-background px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div
             className="rounded-[20px] bg-[#111111] p-5"
@@ -136,7 +136,7 @@ export function AnalystChartPage() {
       </section>
 
       {/* Tab filter + pair list */}
-      <section className="dark:bg-background bg-white px-5 pb-6">
+      <section className="bg-background px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="mb-4 flex gap-2">
             {TABS.map((t) => (
@@ -172,12 +172,12 @@ export function AnalystChartPage() {
       </section>
 
       {/* Analyst commentary */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="font-body mb-4 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
             ANALYST COMMENTARY
           </p>
-          <div className="rounded-[18px] bg-[#f9f9f9] p-5 dark:bg-[#1c1c1c]">
+          <div className="rounded-[18px] bg-surface p-5">
             <div className="mb-4 flex items-center gap-3">
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
                 <span className="font-sans text-[13px] font-semibold text-white">

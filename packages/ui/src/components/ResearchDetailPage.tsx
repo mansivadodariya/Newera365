@@ -37,7 +37,7 @@ export function ResearchDetailPage({ slug: _slug }: ResearchDetailPageProps) {
   return (
     <>
       {/* Breadcrumb */}
-      <section className="dark:bg-background bg-white px-5 pb-0 pt-6">
+      <section className="bg-background px-5 pb-0 pt-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="flex items-center gap-2">
             <Link
@@ -53,7 +53,7 @@ export function ResearchDetailPage({ slug: _slug }: ResearchDetailPageProps) {
       </section>
 
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-4">
+      <section className="bg-background px-5 pb-6 pt-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="mb-3 flex items-center gap-2">
             <span className="font-body rounded-full bg-[#F59E0B]/15 px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] text-[#F59E0B]">
@@ -71,7 +71,7 @@ export function ResearchDetailPage({ slug: _slug }: ResearchDetailPageProps) {
       </section>
 
       {/* Hero chart */}
-      <section className="dark:bg-background bg-white px-5 pb-8">
+      <section className="bg-background px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="overflow-hidden rounded-[18px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111] p-5">
             <svg width="100%" height="100" viewBox="0 0 300 100" preserveAspectRatio="none">
@@ -102,7 +102,7 @@ export function ResearchDetailPage({ slug: _slug }: ResearchDetailPageProps) {
       </section>
 
       {/* Article body */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="prose-custom flex flex-col gap-5">
             <p className="font-body text-foreground text-[15px] leading-[1.7]">
@@ -142,7 +142,7 @@ export function ResearchDetailPage({ slug: _slug }: ResearchDetailPageProps) {
             </p>
 
             {/* Mini bar chart */}
-            <div className="overflow-hidden rounded-[14px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
+            <div className="overflow-hidden rounded-[14px] bg-surface p-4">
               <p className="font-body text-muted mb-3 text-[10px] uppercase tracking-[0.1em]">
                 Rate expectations · next 9 months
               </p>
@@ -224,7 +224,7 @@ export function ResearchDetailPage({ slug: _slug }: ResearchDetailPageProps) {
       </section>
 
       {/* Related articles */}
-      <section className="dark:bg-background bg-[#f9f9f9] px-5 pb-10 pt-8">
+      <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="text-foreground mb-5 font-sans text-[18px] font-semibold">Keep reading.</p>
           <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">

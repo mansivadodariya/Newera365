@@ -130,7 +130,7 @@ export function ResearchPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
+      <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.08]">
             Notes from
@@ -144,7 +144,7 @@ export function ResearchPage() {
       </section>
 
       {/* Category tabs */}
-      <section className="dark:bg-background bg-white px-5 pb-4">
+      <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
             {CATEGORIES.map((cat) => (
@@ -166,12 +166,11 @@ export function ResearchPage() {
 
       {/* Featured article */}
       {activeCategory === 'ALL' && (
-        <section className="dark:bg-background bg-white px-5 pb-6">
+        <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <Link
               href={`/${locale}/research/${featured.slug}`}
-              className="group flex flex-col overflow-hidden rounded-[22px] bg-[#111111]"
-              style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.14)' }}
+              className="group flex flex-col overflow-hidden rounded-[22px] bg-[#111111] shadow-card-dark"
             >
               {/* Thumbnail */}
               <div className="relative h-[180px] overflow-hidden bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111]">
@@ -240,7 +239,7 @@ export function ResearchPage() {
       )}
 
       {/* Article list */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
             {filteredList.map((article) => (

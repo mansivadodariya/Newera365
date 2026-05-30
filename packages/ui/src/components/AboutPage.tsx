@@ -91,7 +91,7 @@ export function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-10 pt-9">
+      <section className="bg-background px-5 pb-10 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-6 font-sans text-[38px] font-semibold leading-[1.08]">
             A new era of trading, <span className="text-accent">built by traders.</span>
@@ -159,10 +159,10 @@ export function AboutPage() {
       {/* Team */}
       <section className="gap-[14px] rounded-[32px] bg-white bg-[linear-gradient(180deg,#F8F8F7_0%,#FFFFFF_100%)] pb-[36px] pl-[20px] pr-[20px] pt-[40px] dark:bg-[linear-gradient(180deg,#07090D_0%,#07090D_100%)]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
             THE TEAM
           </SectionKicker>
-          <h1 className="text-foreground mb-5 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.025em]">
+          <h1 className="text-foreground mb-5 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px]">
             Operators not
             <br /> marketers.
           </h1>

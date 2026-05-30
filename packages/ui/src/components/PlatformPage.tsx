@@ -124,7 +124,7 @@ const PLATFORM_CARDS = [
     desc: 'Full MT5 power, runs in any browser. No download required.',
     ctaLabel: 'Open web trader',
     ctaStyle: 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]',
-    cardBg: 'bg-[#FAFAF9] dark:bg-surface',
+    cardBg: 'bg-surface',
     nameColor: 'text-foreground',
     descColor: 'text-muted',
     iconBg: 'bg-white dark:bg-[#1c1c1c] text-[#111111] dark:text-white',
@@ -138,7 +138,7 @@ const PLATFORM_CARDS = [
     desc: 'One-tap trading with FaceID. Push alerts for every move.',
     ctaLabel: 'Get the app',
     ctaStyle: 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]',
-    cardBg: 'bg-[#FAFAF9] dark:bg-surface',
+    cardBg: 'bg-surface',
     nameColor: 'text-foreground',
     descColor: 'text-muted',
     iconBg: 'bg-white dark:bg-[#1c1c1c] text-[#111111] dark:text-white',
@@ -188,7 +188,7 @@ export function PlatformPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             A platform
@@ -252,9 +252,9 @@ export function PlatformPage() {
       </section>
 
       {/* Terminal section */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
             PICK YOUR TERMINAL
           </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
@@ -316,7 +316,7 @@ export function PlatformPage() {
       {/* Tools section */}
       <section className="gap-[14px] rounded-[32px] bg-gradient-to-b from-[#F8F8F7] to-[#FFFFFF] pb-[36px] pl-[20px] pr-[20px] pt-[40px] dark:from-[#1a1a1a] dark:to-[#111111]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
             WHAT&apos;S INSIDE
           </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
@@ -327,10 +327,10 @@ export function PlatformPage() {
             {TOOLS.map((tool) => (
               <div
                 key={tool.id}
-                className="dark:bg-surface flex flex-col gap-3 rounded-[18px] bg-white p-4"
+                className="bg-background flex flex-col gap-3 rounded-[18px] p-4 shadow-card dark:shadow-none"
                 
               >
-                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#111111] text-white dark:bg-[#1e1e1e]">
+                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] dark:bg-[rgba(255,255,255,0.06)] text-foreground">
                   <tool.Icon />
                 </div>
                 <div>
@@ -346,7 +346,7 @@ export function PlatformPage() {
       </section>
 
       {/* Works Everywhere */}
-      <section className="bg-black px-5 pb-12 pt-10">
+      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white [&>span:last-child]:text-white">
             WORKS EVERYWHERE
@@ -362,7 +362,7 @@ export function PlatformPage() {
             {DEVICES.map((dev) => (
               <div
                 key={dev.label}
-                className="flex flex-col items-center gap-2 rounded-[14px] bg-white py-4 text-[#111111] dark:bg-[#1c1c1c] dark:text-white"
+                className="text-foreground flex flex-col items-center gap-2 rounded-[14px] bg-surface py-4"
               >
                 <dev.Icon />
                 <span className="font-body text-[11px] font-medium">{dev.label}</span>

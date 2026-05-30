@@ -64,7 +64,7 @@ export function EbooksPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[42px] font-semibold leading-[1.05]">
             The 5%
@@ -79,7 +79,7 @@ export function EbooksPage() {
       </section>
 
       {/* Ebook cover + gate form */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Cover */}
           <div className="mb-6 flex items-center justify-center overflow-hidden rounded-[22px] bg-gradient-to-br from-[#0a2614] via-[#0d1f0d] to-[#111111] px-8 py-10">
@@ -201,7 +201,7 @@ export function EbooksPage() {
       </section>
 
       {/* More ebooks */}
-      <section className="dark:bg-background bg-[#f9f9f9] px-5 pb-10 pt-8">
+      <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5">MORE FREE GUIDES</SectionKicker>
           <div className="flex flex-col gap-[10px]">

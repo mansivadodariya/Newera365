@@ -133,7 +133,7 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
               def: 'means the funds required as a deposit to open and maintain a leveraged position.',
             },
           ].map((item) => (
-            <div key={item.term} className="rounded-[12px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
+            <div key={item.term} className="rounded-[12px] bg-surface p-4">
               <span className="font-body text-foreground text-[13px] font-semibold">
                 {item.term}
               </span>
@@ -291,7 +291,7 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
             },
             { type: 'Marketing', desc: 'Used to deliver relevant advertising. Can be opted out.' },
           ].map((c) => (
-            <div key={c.type} className="rounded-[12px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
+            <div key={c.type} className="rounded-[12px] bg-surface p-4">
               <p className="font-body text-foreground text-[13px] font-semibold">{c.type}</p>
               <p className="font-body text-muted mt-0.5 text-[12px]">{c.desc}</p>
             </div>
@@ -308,7 +308,7 @@ export function LegalPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
+      <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.1]">
             Terms &amp;
@@ -322,7 +322,7 @@ export function LegalPage() {
       </section>
 
       {/* Document selector */}
-      <section className="dark:bg-background bg-white px-5 pb-4">
+      <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
             {DOCUMENTS.map((doc) => (
@@ -343,9 +343,9 @@ export function LegalPage() {
       </section>
 
       {/* Table of Contents */}
-      <section className="dark:bg-background bg-white px-5 pb-4">
+      <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="rounded-[16px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
+          <div className="rounded-[16px] bg-surface p-4">
             <p className="font-body text-muted mb-3 text-[10px] uppercase tracking-[0.1em]">
               Contents
             </p>
@@ -366,7 +366,7 @@ export function LegalPage() {
       </section>
 
       {/* Document body */}
-      <section className="dark:bg-background bg-white px-5 pb-12">
+      <section className="bg-background px-5 pb-12">
         <div className="mx-auto flex max-w-[390px] flex-col gap-6 md:max-w-2xl xl:max-w-[1200px]">
           {DOC_CONTENT[activeDoc]}
         </div>

@@ -170,7 +170,7 @@ export function EconomicCalendarPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.1]">
             Economic
@@ -184,7 +184,7 @@ export function EconomicCalendarPage() {
       </section>
 
       {/* Filters */}
-      <section className="dark:bg-background bg-white px-5 pb-3">
+      <section className="bg-background px-5 pb-3">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Impact filter */}
           <div className="mb-3 flex gap-2">
@@ -227,7 +227,7 @@ export function EconomicCalendarPage() {
       </section>
 
       {/* Calendar */}
-      <section className="dark:bg-background bg-white pb-10">
+      <section className="bg-background pb-10">
         <div className="mx-auto max-w-[390px] px-5 md:max-w-2xl xl:max-w-[1200px]">
           {Object.keys(grouped).length === 0 ? (
             <p className="font-body text-muted py-12 text-center text-[14px]">

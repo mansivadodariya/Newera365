@@ -71,7 +71,7 @@ export function PromoPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             Get more
@@ -85,13 +85,12 @@ export function PromoPage() {
       </section>
 
       {/* Promo cards */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl xl:max-w-[1200px]">
           {PROMOS.map((promo) => (
             <div
               key={promo.id}
-              className={`flex flex-col gap-0 overflow-hidden rounded-[22px] bg-gradient-to-br ${CARD_GRADIENTS[promo.tagType]}`}
-              
+              className={`flex flex-col gap-0 overflow-hidden rounded-[22px] bg-gradient-to-br shadow-card dark:shadow-card-dark ${CARD_GRADIENTS[promo.tagType]}`}
             >
               {/* Card top: tag row */}
               <div className="flex items-center justify-between px-5 pt-5">

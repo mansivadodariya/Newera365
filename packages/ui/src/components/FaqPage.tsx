@@ -154,7 +154,7 @@ function AccordionItem({
 }) {
   const isOpen = openIdx === id;
   return (
-    <div className="dark:bg-surface bg-white">
+    <div className="bg-background">
       <button
         onClick={() => setOpenIdx(isOpen ? null : id)}
         className="flex w-full items-start gap-3 px-4 py-[15px] text-left"
@@ -214,7 +214,7 @@ export function FaqPage() {
   return (
     <>
       {/* Hero + Search */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
+      <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05]">
             Got questions?
@@ -243,7 +243,7 @@ export function FaqPage() {
                 setSearch(e.target.value);
                 setOpenIdx(null);
               }}
-              className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-full bg-[#f9f9f9] py-3 pl-10 pr-10 text-[14px] font-medium outline-none dark:bg-[#1c1c1c]"
+              className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-full bg-surface py-3 pl-10 pr-10 text-[14px] font-medium outline-none"
             />
             {search && (
               <button
@@ -265,7 +265,7 @@ export function FaqPage() {
       </section>
 
       {/* Category filter tabs */}
-      <section className="dark:bg-background bg-white px-5 pb-5">
+      <section className="bg-background px-5 pb-5">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
             <button
@@ -297,7 +297,7 @@ export function FaqPage() {
 
       {/* Popular questions — shown only when no search/filter active */}
       {showPopular && (
-        <section className="dark:bg-background bg-white px-5 pb-6">
+        <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="mb-3">POPULAR QUESTIONS</SectionKicker>
             <div className="flex flex-col gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-[#2a2a2a]">
@@ -319,7 +319,7 @@ export function FaqPage() {
 
       {/* Search result count */}
       {search && (
-        <section className="dark:bg-background bg-white px-5 pb-2">
+        <section className="bg-background px-5 pb-2">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <p className="font-body text-muted text-[12px]">
               {totalResults} result{totalResults !== 1 ? 's' : ''} for &ldquo;{search}&rdquo;
@@ -333,7 +333,7 @@ export function FaqPage() {
         filteredGroups.map((group) => {
           const catStyle = CATEGORY_STYLES[group.section];
           return (
-            <section key={group.section} className="dark:bg-background bg-white px-5 pb-6">
+            <section key={group.section} className="bg-background px-5 pb-6">
               <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
                 <SectionKicker className="mb-3">{group.section.toUpperCase()}</SectionKicker>
                 <div className="flex flex-col gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-[#2a2a2a]">
@@ -354,7 +354,7 @@ export function FaqPage() {
           );
         })
       ) : (
-        <section className="dark:bg-background bg-white px-5 pb-6">
+        <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <p className="font-body text-muted py-8 text-center text-[14px]">
               No questions match your search.
@@ -364,7 +364,7 @@ export function FaqPage() {
       )}
 
       {/* Still stuck CTA */}
-      <section className="bg-black px-5 pb-12 pt-10">
+      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:last-child]:text-white/50 [&>span]:bg-white/40">
             STILL STUCK?

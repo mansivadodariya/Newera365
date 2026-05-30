@@ -116,7 +116,7 @@ export function CareersPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             Build the next
@@ -131,7 +131,7 @@ export function CareersPage() {
       </section>
 
       {/* Stats */}
-      <section className="dark:bg-background bg-white px-5 pb-8">
+      <section className="bg-background px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="grid grid-cols-2 gap-[10px]">
             {[
@@ -142,7 +142,7 @@ export function CareersPage() {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-[18px] bg-[#f9f9f9] p-5 dark:bg-[#1c1c1c]"
+                className="rounded-[18px] bg-surface p-5 shadow-card dark:shadow-none"
                 
               >
                 <p className="text-foreground font-sans text-[28px] font-semibold leading-[1]">
@@ -156,16 +156,16 @@ export function CareersPage() {
       </section>
 
       {/* Values */}
-      <section className="dark:bg-background bg-white px-5 pb-8">
+      <section className="bg-background px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
             How we Work
           </SectionKicker>
           <div className="grid grid-cols-2 gap-[10px]">
             {VALUES.map((v) => (
               <div
                 key={v.title}
-                className="flex flex-col gap-2 rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]"
+                className="flex flex-col gap-2 rounded-[18px] bg-surface p-4 shadow-card dark:shadow-none"
                 
               >
                 <p className="text-foreground font-sans text-[13px] font-semibold">{v.title}</p>
@@ -177,9 +177,9 @@ export function CareersPage() {
       </section>
 
       {/* Open roles */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
             Open Roles
           </SectionKicker>
 
