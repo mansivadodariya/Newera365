@@ -332,7 +332,7 @@ export function LegalPage() {
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-medium transition-colors ${
                   activeDoc === doc.id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'text-muted bg-[#F2F2F4] hover:bg-[#e5e5e5] dark:bg-[#2a2a2a] dark:hover:bg-[#3a3a3a]'
+                    : 'text-muted bg-[#F2F2F4] hover:bg-[#e5e5e5] dark:bg-surface-elevated dark:hover:bg-surface-elevated'
                 }`}
               >
                 {doc.label}

@@ -251,7 +251,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
 
           <Link
             href={`/${locale}/trade/accounts`}
-            className="dark:bg-surface mt-3 flex w-full items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
+            className="dark:bg-surface mt-3 flex w-full items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-surface-elevated"
           >
             <span className="font-body text-foreground text-[13px] font-medium">
               Open an account to trade all {meta.label.toLowerCase()} instruments
@@ -325,7 +325,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
                 <Link
                   key={key}
                   href={`/${locale}/markets/${key}`}
-                  className="dark:bg-surface flex items-center justify-between rounded-[18px] bg-[#FAFAF9] px-5 py-4 transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
+                  className="dark:bg-surface flex items-center justify-between rounded-[18px] bg-[#FAFAF9] px-5 py-4 transition-colors hover:bg-[#f0f0ee] dark:hover:bg-surface-elevated"
                 >
                   <div>
                     <p className="text-foreground font-sans text-[15px] font-semibold">{m.label}</p>

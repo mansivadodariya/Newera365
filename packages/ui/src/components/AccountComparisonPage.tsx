@@ -208,14 +208,14 @@ export function AccountComparisonPage() {
                 {/* Feature rows */}
                 <div
                   className={`flex flex-col gap-[1px] overflow-hidden rounded-[12px] ${
-                    isRaw ? 'bg-white' : 'bg-[#111111] dark:bg-[#2a2a2a]'
+                    isRaw ? 'bg-white' : 'bg-[#111111] dark:bg-surface-elevated'
                   }`}
                 >
                   {acc.rows.map((row) => (
                     <div
                       key={row.label}
                       className={`flex items-center justify-between px-[14px] py-3 ${
-                        isRaw ? 'bg-[#111111]' : 'bg-[#fafaf9] dark:bg-[#1c1c1c]'
+                        isRaw ? 'bg-[#111111]' : 'bg-[#fafaf9] dark:bg-surface'
                       }`}
                     >
                       <span
@@ -276,11 +276,11 @@ export function AccountComparisonPage() {
 
           {/* Matrix table card */}
           <div
-            className="overflow-hidden rounded-[16px] bg-white dark:bg-[#1a1a1a]"
+            className="overflow-hidden rounded-[16px] bg-white dark:bg-section"
             
           >
             {/* Header row */}
-            <div className="grid grid-cols-[1fr_52px_52px_52px] items-center gap-2 border-b border-[#e5e7eb] px-[14px] py-3 dark:border-[#2a2a2a]">
+            <div className="grid grid-cols-[1fr_52px_52px_52px] items-center gap-2 border-b border-[#e5e7eb] px-[14px] py-3 dark:border-border">
               <span className="font-body text-[10px] uppercase tracking-[0.1em] text-[#9ca3af]">
                 Feature
               </span>
@@ -288,7 +288,7 @@ export function AccountComparisonPage() {
                 <span
                   key={label}
                   className={`font-body text-center text-[10px] font-semibold uppercase tracking-[0.1em] ${
-                    i === 1 ? 'text-accent' : 'text-[#6b7280] dark:text-[#9ca3af]'
+                    i === 1 ? 'text-accent' : 'text-[#6b7280] dark:text-muted'
                   }`}
                 >
                   {label}
@@ -300,7 +300,7 @@ export function AccountComparisonPage() {
             {FEATURE_MATRIX.map((row, i) => (
               <Fragment key={row.feature}>
                 {row.section && (
-                  <div className="border-b border-[#e5e7eb] px-[14px] pb-1 pt-4 dark:border-[#2a2a2a]">
+                  <div className="border-b border-[#e5e7eb] px-[14px] pb-1 pt-4 dark:border-border">
                     <span className="font-body text-[9px] uppercase tracking-[0.12em] text-[#9ca3af]">
                       {row.section}
                     </span>
@@ -309,11 +309,11 @@ export function AccountComparisonPage() {
                 <div
                   className={`grid grid-cols-[1fr_52px_52px_52px] items-center gap-2 px-[14px] py-[11px] ${
                     i < FEATURE_MATRIX.length - 1
-                      ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]'
+                      ? 'border-b border-[#e5e7eb] dark:border-border'
                       : ''
                   }`}
                 >
-                  <span className="font-body text-[12px] text-[#6b7280] dark:text-[#9ca3af]">
+                  <span className="font-body text-[12px] text-[#6b7280] dark:text-muted">
                     {row.feature}
                   </span>
                   <div className="flex justify-center">

@@ -201,7 +201,7 @@ export function AboutPage() {
                 href={`/${locale}${link.href}`}
                 className="group flex items-center gap-[14px] rounded-[18px] bg-surface px-[18px] py-[18px] shadow-card transition-shadow hover:shadow-card-dark dark:shadow-none"
               >
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[12px] bg-[#f2f2f4] text-foreground dark:bg-[#2a2a2a]">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[12px] bg-[#f2f2f4] text-foreground dark:bg-surface-elevated">
                   {link.icon}
                 </div>
                 <div className="min-w-0 flex-1">

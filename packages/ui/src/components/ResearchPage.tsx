@@ -154,7 +154,7 @@ export function ResearchPage() {
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-medium transition-colors ${
                   activeCategory === cat
                     ? 'bg-accent text-white'
-                    : 'text-muted bg-[#F2F2F4] hover:bg-[#e5e5e5] dark:bg-[#2a2a2a] dark:hover:bg-[#3a3a3a]'
+                    : 'text-muted bg-[#F2F2F4] hover:bg-[#e5e5e5] dark:bg-surface-elevated dark:hover:bg-surface-elevated'
                 }`}
               >
                 {cat === 'ALL' ? 'All' : cat.charAt(0) + cat.slice(1).toLowerCase()}
@@ -241,7 +241,7 @@ export function ResearchPage() {
       {/* Article list */}
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
+          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-border">
             {filteredList.map((article) => (
               <Link
                 key={article.id}

@@ -166,7 +166,7 @@ export function GuideDetailPage({ slug }: GuideDetailProps) {
                   <button
                     key={item}
                     onClick={() => setActiveSection(i)}
-                    className={`flex items-center gap-2 py-[9px] text-left ${i < guide.toc.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]' : ''}`}
+                    className={`flex items-center gap-2 py-[9px] text-left ${i < guide.toc.length - 1 ? 'border-b border-[#e5e7eb] dark:border-border' : ''}`}
                   >
                     <span
                       className={`font-body text-[10px] font-semibold ${activeSection === i ? 'text-accent' : 'text-muted'}`}

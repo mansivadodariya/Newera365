@@ -120,7 +120,7 @@ export function PromoPage() {
               </div>
 
               {/* Divider */}
-              <div className="mx-5 mt-4 border-t border-[#e5e7eb] dark:border-[#2a2a2a]" />
+              <div className="mx-5 mt-4 border-t border-[#e5e7eb] dark:border-border" />
 
               {/* Footer + CTA */}
               <div className="flex items-center justify-between px-5 py-4">

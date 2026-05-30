@@ -88,13 +88,13 @@ export function LiveChatPage() {
       style={{ height: 'calc(100dvh - 72px)' }}
     >
       {/* Agent header */}
-      <div className="dark:bg-background flex flex-shrink-0 items-center justify-between border-b border-[#e5e7eb] bg-white px-5 py-4 dark:border-[#2a2a2a]">
+      <div className="dark:bg-background flex flex-shrink-0 items-center justify-between border-b border-[#e5e7eb] bg-white px-5 py-4 dark:border-border">
         <div className="flex items-center gap-3">
           {/* Back button */}
           <Link
             href={`/${locale}/contact`}
             aria-label="Back to contact"
-            className="text-foreground mr-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8] dark:bg-[#1c1c1c] dark:hover:bg-[#2a2a2a]"
+            className="text-foreground mr-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8] dark:bg-surface dark:hover:bg-surface"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path
@@ -126,7 +126,7 @@ export function LiveChatPage() {
         <div className="flex items-center gap-2">
           <button
             aria-label="Voice call"
-            className="text-foreground flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8] dark:bg-[#1c1c1c] dark:hover:bg-[#2a2a2a]"
+            className="text-foreground flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8] dark:bg-surface dark:hover:bg-surface"
           >
             <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
               <path
@@ -139,7 +139,7 @@ export function LiveChatPage() {
           </button>
           <button
             aria-label="Video call"
-            className="text-foreground flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8] dark:bg-[#1c1c1c] dark:hover:bg-[#2a2a2a]"
+            className="text-foreground flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8] dark:bg-surface dark:hover:bg-surface"
           >
             <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
               <rect
@@ -166,7 +166,7 @@ export function LiveChatPage() {
       <div ref={chatRef} className="flex-1 overflow-y-auto px-5 py-4">
         {/* Date chip */}
         <div className="mb-4 flex justify-center">
-          <span className="font-body rounded-full bg-[#e5e7eb] px-3 py-[3px] text-[10px] text-[#6b7280] dark:bg-[#2a2a2a] dark:text-[#9ca3af]">
+          <span className="font-body rounded-full bg-[#e5e7eb] px-3 py-[3px] text-[10px] text-[#6b7280] dark:bg-surface-elevated dark:text-muted">
             TODAY · {INITIAL_MESSAGES[0]?.time}
           </span>
         </div>
@@ -223,13 +223,13 @@ export function LiveChatPage() {
       </div>
 
       {/* Quick replies */}
-      <div className="dark:bg-background flex-shrink-0 border-t border-[#e5e7eb] bg-white px-5 py-3 dark:border-[#2a2a2a]">
+      <div className="dark:bg-background flex-shrink-0 border-t border-[#e5e7eb] bg-white px-5 py-3 dark:border-border">
         <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
           {QUICK_REPLIES.map((qr) => (
             <button
               key={qr}
               onClick={() => sendMessage(qr)}
-              className="font-body text-foreground hover:border-foreground flex-shrink-0 rounded-full border border-[#e5e7eb] px-3.5 py-2 text-[12px] transition-colors dark:border-[#2a2a2a]"
+              className="font-body text-foreground hover:border-foreground flex-shrink-0 rounded-full border border-[#e5e7eb] px-3.5 py-2 text-[12px] transition-colors dark:border-border"
             >
               {qr}
             </button>
@@ -239,7 +239,7 @@ export function LiveChatPage() {
 
       {/* Message input */}
       <div className="dark:bg-background flex-shrink-0 bg-white px-5 pb-6 pt-3">
-        <div className="flex items-center gap-2 rounded-[16px] border border-[#e5e7eb] bg-surface px-4 py-3 dark:border-[#2a2a2a]">
+        <div className="flex items-center gap-2 rounded-[16px] border border-[#e5e7eb] bg-surface px-4 py-3 dark:border-border">
           <input
             type="text"
             value={input}

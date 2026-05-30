@@ -19,19 +19,19 @@
 }
 
 .dark {
-  --background: #111111;
-  --surface: #1c1c1c;
-  --surface-elevated: #242424;
+  --background: #07090d;
+  --surface: #111111;
+  --surface-elevated: #1c1c1c;
   --foreground: #ffffff;
-  --muted: #9ca3af;
-  --text-secondary: #6b7280;
-  --border: #2a2a2a;
-  --section: #1a1a1a;
-  --footer-bg: #0a0a0a;
+  --muted: #6b7280;
+  --text-secondary: #4b5563;
+  --border: #1a1c22;
+  --section: #0d0f14;
+  --footer-bg: #020408;
 
-  --gradient-stats: linear-gradient(180deg, #111111 0%, rgba(255,255,255,0.04) 100%);
-  --gradient-markets: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, #111111 100%);
-  --gradient-features: linear-gradient(180deg, #1c1c1c 0%, #111111 100%);
+  --gradient-stats: linear-gradient(180deg, #07090d 0%, rgba(17,17,17,0.43) 100%);
+  --gradient-markets: linear-gradient(180deg, rgba(19,19,19,0.43) 0%, #07090d 100%);
+  --gradient-features: linear-gradient(180deg, #07090d 0%, #07090d 100%);
 }
 
 html {
@@ -47,10 +47,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Headings use Outfit */
+/* Headings use Outfit — matches Figma typography scale */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 600;
 }
+
+/* Figma type scale */
+h1 { font-size: 44px; line-height: 1.02; letter-spacing: -1.54px; }
+h2 { font-size: 32px; line-height: 1.08; letter-spacing: -0.8px; }
+h3 { font-size: 22px; line-height: 1.2; letter-spacing: -0.44px; }
+h4 { font-size: 17px; line-height: 1.3; letter-spacing: -0.34px; }
 
 /* Hide scrollbar globally */
 html {

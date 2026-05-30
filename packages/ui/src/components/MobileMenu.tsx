@@ -142,7 +142,7 @@ function MobileMenu({ open, onClose }: MobileMenuProps) {
         <button
           onClick={onClose}
           aria-label="Close menu"
-          className="text-foreground flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8] dark:bg-[#1c1c1c] dark:hover:bg-[#2a2a2a]"
+          className="text-foreground flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8] dark:bg-surface dark:hover:bg-surface"
         >
           <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
             <path

@@ -224,7 +224,7 @@ export function FundingPage() {
                 <p className="text-foreground font-sans text-[17px] font-semibold">{method.name}</p>
 
                 {/* Stats 2×2 grid */}
-                <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[10px] bg-[#f0f0f0] dark:bg-[#2a2a2a]">
+                <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[10px] bg-[#f0f0f0] dark:bg-surface-elevated">
                   {[
                     { label: 'DEPOSIT', value: method.deposit },
                     { label: 'WITHDRAW', value: method.withdraw },

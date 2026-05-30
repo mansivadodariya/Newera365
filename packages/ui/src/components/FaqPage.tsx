@@ -273,7 +273,7 @@ export function FaqPage() {
               className={`font-body flex-shrink-0 rounded-full px-4 py-1.5 text-[12px] font-semibold transition-colors ${
                 !activeCategory
                   ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                  : 'hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-[#1e1e1e] dark:text-[#9ca3af]'
+                  : 'hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-surface dark:text-muted'
               }`}
             >
               All
@@ -285,7 +285,7 @@ export function FaqPage() {
                 className={`font-body flex-shrink-0 rounded-full px-4 py-1.5 text-[12px] font-semibold transition-colors ${
                   activeCategory === cat
                     ? style.activePill
-                    : 'hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-[#1e1e1e] dark:text-[#9ca3af]'
+                    : 'hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-surface dark:text-muted'
                 }`}
               >
                 {cat}
@@ -300,7 +300,7 @@ export function FaqPage() {
         <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="mb-3">POPULAR QUESTIONS</SectionKicker>
-            <div className="flex flex-col gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-[#2a2a2a]">
+            <div className="flex flex-col gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-surface-elevated">
               {POPULAR_ITEMS.map((item, idx) => (
                 <AccordionItem
                   key={idx}
@@ -336,7 +336,7 @@ export function FaqPage() {
             <section key={group.section} className="bg-background px-5 pb-6">
               <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
                 <SectionKicker className="mb-3">{group.section.toUpperCase()}</SectionKicker>
-                <div className="flex flex-col gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-[#2a2a2a]">
+                <div className="flex flex-col gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-surface-elevated">
                   {group.items.map((item, idx) => (
                     <AccordionItem
                       key={idx}

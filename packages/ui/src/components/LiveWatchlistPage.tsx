@@ -206,7 +206,7 @@ export function LiveWatchlistPage() {
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
                   tab === t.id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
+                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-surface dark:text-muted'
                 }`}
               >
                 {t.label}

@@ -76,7 +76,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
             <span className="font-body flex-1 text-[14px] font-medium text-[#6B7280]">
               Search instruments…
             </span>
-            <span className="font-body text-muted flex-shrink-0 rounded-[6px] bg-[#f2f2f4] px-2 py-[3px] text-[11px] dark:bg-[#2a2a2a]">
+            <span className="font-body text-muted flex-shrink-0 rounded-[6px] bg-[#f2f2f4] px-2 py-[3px] text-[11px] dark:bg-surface-elevated">
               ⌘ K
             </span>
           </div>
@@ -96,7 +96,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
               className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[13px] font-medium transition-colors ${
                 activeCategory === cat
                   ? 'bg-foreground text-background'
-                  : 'text-foreground bg-[#f2f2f4] hover:bg-[#e5e5e5] dark:bg-[#1c1c1c] dark:hover:bg-[#2a2a2a]'
+                  : 'text-foreground bg-[#f2f2f4] hover:bg-[#e5e5e5] dark:bg-surface dark:hover:bg-surface'
               }`}
             >
               {cat}
@@ -129,7 +129,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
           </div>
 
           {/* View all button */}
-          <button className="mt-3 flex w-full items-center justify-between rounded-[14px] bg-surface px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]">
+          <button className="mt-3 flex w-full items-center justify-between rounded-[14px] bg-surface px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-surface-elevated">
             <span className="font-body text-foreground text-[13px] font-medium">
               {hasCmsData
                 ? `View all ${cmsRows.length} ${activeCategory.toLowerCase()} instruments`
@@ -378,7 +378,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
               <Link
                 key={market}
                 href={`/${locale}/markets/${market.toLowerCase()}`}
-                className="dark:bg-surface flex items-center justify-between rounded-[18px] bg-surface px-5 py-4 transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
+                className="dark:bg-surface flex items-center justify-between rounded-[18px] bg-surface px-5 py-4 transition-colors hover:bg-[#f0f0ee] dark:hover:bg-surface-elevated"
               >
                 <div>
                   <p className="text-foreground font-sans text-[15px] font-semibold">{market}</p>

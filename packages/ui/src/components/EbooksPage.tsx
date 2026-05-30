@@ -152,7 +152,7 @@ export function EbooksPage() {
                   placeholder="Your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none dark:bg-[#141414]"
+                  className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none dark:bg-section"
                 />
                 <input
                   type="email"
@@ -160,7 +160,7 @@ export function EbooksPage() {
                   placeholder="Your email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none dark:bg-[#141414]"
+                  className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none dark:bg-section"
                 />
                 {error && <p className="font-body text-[12px] text-red-500">{error}</p>}
                 <button

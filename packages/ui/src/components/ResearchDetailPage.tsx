@@ -207,7 +207,7 @@ export function ResearchDetailPage({ slug: _slug }: ResearchDetailPageProps) {
           </div>
 
           {/* Share */}
-          <div className="mt-8 flex items-center justify-between border-t border-[#e5e7eb] pt-5 dark:border-[#2a2a2a]">
+          <div className="mt-8 flex items-center justify-between border-t border-[#e5e7eb] pt-5 dark:border-border">
             <span className="font-body text-muted text-[12px]">Share this article</span>
             <div className="flex gap-3">
               {['X', 'in', 'link'].map((s) => (
@@ -227,7 +227,7 @@ export function ResearchDetailPage({ slug: _slug }: ResearchDetailPageProps) {
       <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="text-foreground mb-5 font-sans text-[18px] font-semibold">Keep reading.</p>
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
+          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-border">
             {RELATED.map((art) => (
               <Link
                 key={art.slug}

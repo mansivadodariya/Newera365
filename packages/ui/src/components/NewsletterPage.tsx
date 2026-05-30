@@ -63,7 +63,7 @@ export function NewsletterPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@gmail.com"
-                  className="font-body text-foreground focus:border-accent flex-1 rounded-full border border-[#e5e7eb] bg-surface px-5 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-[#2a2a2a]"
+                  className="font-body text-foreground focus:border-accent flex-1 rounded-full border border-[#e5e7eb] bg-surface px-5 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-border"
                 />
                 <button
                   type="submit"
@@ -79,7 +79,7 @@ export function NewsletterPage() {
                   className={`mt-0.5 flex h-4 w-4 flex-shrink-0 cursor-pointer items-center justify-center rounded-sm border transition-colors ${
                     agreed
                       ? 'border-accent bg-accent'
-                      : 'border-[#d1d5db] bg-white dark:border-[#4b5563] dark:bg-[#1c1c1c]'
+                      : 'border-[#d1d5db] bg-white dark:border-[#4b5563] dark:bg-surface'
                   }`}
                 >
                   {agreed && (

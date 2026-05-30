@@ -186,7 +186,7 @@ export function EducationHubPage() {
               <Link
                 key={cat.id}
                 href={`/${locale}${cat.href}`}
-                className="group flex flex-col gap-3 rounded-[18px] bg-surface p-4 transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#252525]"
+                className="group flex flex-col gap-3 rounded-[18px] bg-surface p-4 transition-colors hover:bg-[#f0f0ee] dark:hover:bg-surface-elevated"
               >
                 <div className="flex items-start justify-between">
                   <div className="text-accent bg-accent/10 flex h-9 w-9 items-center justify-center rounded-[11px]">
@@ -214,7 +214,7 @@ export function EducationHubPage() {
           <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
             FEATURED THIS WEEK
           </SectionKicker>
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
+          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-border">
             {FEATURED.map((article) => (
               <Link
                 key={article.id}
@@ -269,7 +269,7 @@ export function EducationHubPage() {
               <Link
                 key={guide.href}
                 href={`/${locale}${guide.href}`}
-                className={`group flex items-center justify-between py-4 ${i < PINNED_GUIDES.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]' : ''}`}
+                className={`group flex items-center justify-between py-4 ${i < PINNED_GUIDES.length - 1 ? 'border-b border-[#e5e7eb] dark:border-border' : ''}`}
               >
                 <span className="text-foreground font-body group-hover:text-accent pr-4 text-[14px] font-medium transition-colors">
                   {guide.title}

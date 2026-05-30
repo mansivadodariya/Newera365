@@ -195,7 +195,7 @@ export function EconomicCalendarPage() {
                 className={`font-body flex items-center gap-1.5 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
                   impact === imp.id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
+                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-surface dark:text-muted'
                 }`}
               >
                 {imp.id !== 'ALL' && (
@@ -215,7 +215,7 @@ export function EconomicCalendarPage() {
                 className={`font-body flex flex-shrink-0 items-center gap-1.5 rounded-full px-3 py-[6px] text-[11px] font-semibold uppercase tracking-[0.06em] transition-colors ${
                   currency === cur
                     ? 'bg-accent/10 text-accent'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
+                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-surface dark:text-muted'
                 }`}
               >
                 {cur !== 'ALL' && <span>{CURRENCY_FLAG[cur]}</span>}
@@ -236,7 +236,7 @@ export function EconomicCalendarPage() {
           ) : (
             Object.entries(grouped).map(([date, events]) => (
               <div key={date} className="mb-5">
-                <p className="font-body mb-2 border-b border-[#e5e7eb] pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#9ca3af] dark:border-[#2a2a2a]">
+                <p className="font-body mb-2 border-b border-[#e5e7eb] pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#9ca3af] dark:border-border">
                   {date}
                 </p>
                 <div className="flex flex-col">
@@ -270,7 +270,7 @@ export function EconomicCalendarPage() {
                                   ? IMPACT_DOT[level]
                                   : ev.impact === 'LOW' && level === 'LOW'
                                     ? IMPACT_DOT[level]
-                                    : 'bg-[#e5e7eb] dark:bg-[#2a2a2a]'
+                                    : 'bg-[#e5e7eb] dark:bg-surface-elevated'
                             }`}
                           />
                         ))}

@@ -357,7 +357,7 @@ export function GlossaryPage() {
               className={`font-body flex-shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
                 !activeCategory
                   ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                  : 'hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-[#1e1e1e] dark:text-[#9ca3af]'
+                  : 'hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-surface dark:text-muted'
               }`}
             >
               All
@@ -369,7 +369,7 @@ export function GlossaryPage() {
                 className={`font-body flex-shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
                   activeCategory === cat
                     ? colorClass
-                    : 'hover:text-foreground dark:hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-[#1e1e1e] dark:text-[#9ca3af]'
+                    : 'hover:text-foreground dark:hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-surface dark:text-muted'
                 }`}
               >
                 {cat}
@@ -437,7 +437,7 @@ export function GlossaryPage() {
                       </div>
                     )}
                     <div
-                      className={`py-4 ${i < filtered.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]' : ''}`}
+                      className={`py-4 ${i < filtered.length - 1 ? 'border-b border-[#e5e7eb] dark:border-border' : ''}`}
                     >
                       <div className="mb-1.5 flex items-center justify-between gap-2">
                         <span className="text-foreground font-sans text-[15px] font-semibold">

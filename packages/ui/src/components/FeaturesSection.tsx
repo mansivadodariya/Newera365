@@ -99,7 +99,7 @@ export function FeaturesSection() {
               key={f.title}
               className="bg-background flex items-start gap-4 rounded-[20px] p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:shadow-[0px_4px_16px_0px_rgba(0,0,0,0.3)]"
             >
-              <div className="text-foreground flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] dark:bg-[rgba(255,255,255,0.06)]">
+              <div className="text-foreground flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] dark:bg-[rgba(31,36,46,0.08)]">
                 {ICONS[f.icon]}
               </div>
               <div className="flex-1 pt-0.5">

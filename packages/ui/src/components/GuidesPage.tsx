@@ -148,7 +148,7 @@ export function GuidesPage() {
               <Link
                 key={guide.id}
                 href={`/${locale}/guides/${guide.id}`}
-                className={`group flex flex-col gap-2 py-5 ${i < rest.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]' : ''}`}
+                className={`group flex flex-col gap-2 py-5 ${i < rest.length - 1 ? 'border-b border-[#e5e7eb] dark:border-border' : ''}`}
               >
                 <div className="flex items-center justify-between">
                   <span

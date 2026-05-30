@@ -202,7 +202,7 @@ export function WebTraderPage() {
                 </Link>
                 <Link
                   href={`/${locale}/platform/mobile`}
-                  className="font-body text-foreground flex h-7 items-center rounded-full border border-[#e5e7eb] px-3 text-[11px] font-medium dark:border-[#2a2a2a]"
+                  className="font-body text-foreground flex h-7 items-center rounded-full border border-[#e5e7eb] px-3 text-[11px] font-medium dark:border-border"
                 >
                   Get Mobile App
                 </Link>

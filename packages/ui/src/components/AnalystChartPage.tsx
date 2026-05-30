@@ -146,14 +146,14 @@ export function AnalystChartPage() {
                 className={`font-body rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
                   tab === t.id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
+                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-surface dark:text-muted'
                 }`}
               >
                 {t.label}
               </button>
             ))}
           </div>
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
+          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-border">
             {pairs.map((p) => (
               <div key={p.symbol} className="flex items-center justify-between py-[13px]">
                 <p className="text-foreground font-sans text-[14px] font-semibold">{p.symbol}</p>

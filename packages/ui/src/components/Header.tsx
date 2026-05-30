@@ -118,14 +118,14 @@ function ThemeToggle() {
   useEffect(() => setMounted(true), []);
   if (!mounted)
     return (
-      <div className="h-[38px] w-[38px] flex-shrink-0 rounded-xl bg-[#f4f4f5] dark:bg-[#1c1c1c]" />
+      <div className="h-[38px] w-[38px] flex-shrink-0 rounded-xl bg-[#f4f4f5] dark:bg-surface" />
     );
   const isDark = resolvedTheme === 'dark';
   return (
     <button
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className="text-foreground flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-xl bg-[#f4f4f5] transition-colors dark:bg-[#1c1c1c]"
+      className="text-foreground flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-xl bg-[#f4f4f5] transition-colors dark:bg-surface"
     >
       {isDark ? (
         <svg
@@ -239,7 +239,7 @@ function Header() {
 
   return (
     <>
-      <header className="border-border sticky top-0 z-40 h-[72px] w-full border-b bg-[rgba(255,255,255,0.85)] backdrop-blur-[12px] dark:bg-[rgba(17,17,17,0.85)]">
+      <header className="border-border sticky top-0 z-40 h-[72px] w-full border-b bg-[rgba(255,255,255,0.85)] backdrop-blur-[12px] dark:border-[#1a1c22] dark:bg-[rgba(7,9,13,0.85)]">
         <div className="flex h-full items-center justify-between px-5 xl:px-[80px]">
           {/* Logo */}
           <Link href={`/${locale}`} aria-label="NewEra365 — go to home" className="flex-shrink-0">
@@ -292,7 +292,7 @@ function Header() {
               aria-label="Open navigation menu"
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
-              className="text-foreground flex h-[38px] w-[38px] items-center justify-center rounded-xl bg-[#f4f4f5] dark:bg-[#1c1c1c]"
+              className="text-foreground flex h-[38px] w-[38px] items-center justify-center rounded-xl bg-[#f4f4f5] dark:bg-surface"
             >
               <HamburgerIcon />
             </button>

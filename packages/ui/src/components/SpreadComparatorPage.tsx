@@ -37,7 +37,7 @@ const LOTS_PER_MONTH = 10;
 function SpreadBar({ value, max, color }: { value: number; max: number; color: string }) {
   const pct = max > 0 ? Math.max(4, (value / max) * 100) : 4;
   return (
-    <div className="h-[6px] w-full overflow-hidden rounded-full bg-[#e5e7eb] dark:bg-[#2a2a2a]">
+    <div className="h-[6px] w-full overflow-hidden rounded-full bg-[#e5e7eb] dark:bg-surface-elevated">
       <div
         className="h-full rounded-full transition-all duration-500"
         style={{ width: `${pct}%`, backgroundColor: color }}
@@ -135,7 +135,7 @@ export function SpreadComparatorPage() {
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold uppercase tracking-[0.08em] transition-colors ${
                   instrument === ins.id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
+                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-surface dark:text-muted'
                 }`}
               >
                 {ins.label}
@@ -158,7 +158,7 @@ export function SpreadComparatorPage() {
                   <div className="flex items-center justify-between">
                     <span
                       className={`font-body text-[12px] font-medium ${
-                        row.isHighlighted ? 'text-accent' : 'text-[#6b7280] dark:text-[#9ca3af]'
+                        row.isHighlighted ? 'text-accent' : 'text-[#6b7280] dark:text-muted'
                       }`}
                     >
                       {row.label}
@@ -204,7 +204,7 @@ export function SpreadComparatorPage() {
                 </p>
                 <p className="font-body text-foreground text-[13px] font-semibold">None</p>
               </div>
-              <div className="mt-auto border-t border-[#e5e7eb] pt-3 dark:border-[#2a2a2a]">
+              <div className="mt-auto border-t border-[#e5e7eb] pt-3 dark:border-border">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
                   Cost / lot
                 </p>
@@ -263,7 +263,7 @@ export function SpreadComparatorPage() {
                 </p>
                 <p className="font-body text-foreground text-[13px] font-semibold">From $1.50</p>
               </div>
-              <div className="mt-auto border-t border-[#e5e7eb] pt-3 dark:border-[#2a2a2a]">
+              <div className="mt-auto border-t border-[#e5e7eb] pt-3 dark:border-border">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
                   Cost / lot
                 </p>

@@ -127,7 +127,7 @@ const PLATFORM_CARDS = [
     cardBg: 'bg-surface',
     nameColor: 'text-foreground',
     descColor: 'text-muted',
-    iconBg: 'bg-white dark:bg-[#1c1c1c] text-[#111111] dark:text-white',
+    iconBg: 'bg-white dark:bg-surface text-[#111111] dark:text-white',
     Icon: IconWeb,
   },
   {
@@ -141,7 +141,7 @@ const PLATFORM_CARDS = [
     cardBg: 'bg-surface',
     nameColor: 'text-foreground',
     descColor: 'text-muted',
-    iconBg: 'bg-white dark:bg-[#1c1c1c] text-[#111111] dark:text-white',
+    iconBg: 'bg-white dark:bg-surface text-[#111111] dark:text-white',
     Icon: IconMobile,
   },
 ];
@@ -206,7 +206,7 @@ export function PlatformPage() {
           {/* Device mockup */}
           <div className="relative mt-6 h-[200px] overflow-hidden rounded-[24px] bg-gradient-to-br from-[#f0f9f3] to-[#f0f0f0] dark:from-[#0d1f11] dark:to-[#1a1a1a]">
             {/* Phone mock */}
-            <div className="absolute right-6 top-3 h-[180px] w-[82px] overflow-hidden rounded-[18px] border border-[#e5e7eb] bg-white shadow-lg dark:border-[#2a2a2a] dark:bg-[#111111]">
+            <div className="absolute right-6 top-3 h-[180px] w-[82px] overflow-hidden rounded-[18px] border border-[#e5e7eb] bg-white shadow-lg dark:border-border dark:bg-[#111111]">
               <div className="h-2.5 w-full bg-[#111111] dark:bg-[#000]" />
               <div className="flex h-full flex-col gap-1 bg-[#111111] p-1.5">
                 <div className="h-1.5 w-3/4 rounded bg-white/10" />
@@ -227,7 +227,7 @@ export function PlatformPage() {
               </div>
             </div>
             {/* Laptop mock */}
-            <div className="absolute left-3 top-6 h-[148px] w-[190px] overflow-hidden rounded-[10px] border border-[#e5e7eb] bg-[#111111] shadow-lg dark:border-[#2a2a2a]">
+            <div className="absolute left-3 top-6 h-[148px] w-[190px] overflow-hidden rounded-[10px] border border-[#e5e7eb] bg-[#111111] shadow-lg dark:border-border">
               <div className="flex h-6 items-center gap-1 border-b border-white/10 bg-[#1a1a1a] px-2">
                 <span className="font-body text-[8px] font-semibold text-white">EURUSD</span>
                 <span className="font-body ml-1 text-[7px] text-white/40">H1</span>

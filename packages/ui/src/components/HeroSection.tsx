@@ -42,7 +42,7 @@ export function HeroSection() {
         </div>
 
         {/* Right col / bottom on mobile: chart card */}
-        <div className="overflow-hidden rounded-[24px] bg-gradient-to-b from-[#fafaf9] to-[#f4f4f3] dark:from-[#1c1c1c] dark:to-[#181818] xl:min-w-0 xl:flex-1">
+        <div className="overflow-hidden rounded-[24px] bg-gradient-to-b from-[#fafaf9] to-[#f4f4f3] dark:from-[#07090d] dark:to-[#07090d] xl:min-w-0 xl:flex-1">
           {/* Trading screen photo */}
           <div className="relative w-full" style={{ aspectRatio: '620/342' }}>
             <Image
@@ -55,7 +55,7 @@ export function HeroSection() {
           </div>
 
           {/* Specs row — white bg, grey labels, dark values */}
-          <div className="bg-background grid grid-cols-3 divide-x divide-border py-3">
+          <div className="bg-background grid grid-cols-3 divide-x divide-border py-3 dark:divide-[#1a1c22]">
             {[
               { label: t('heroSpreadLabel'), value: t('heroSpreadValue') },
               { label: t('heroLeverageLabel'), value: t('heroLeverageValue') },

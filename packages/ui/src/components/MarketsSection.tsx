@@ -30,7 +30,7 @@ export function MarketsSection() {
   return (
     <section className="rounded-[32px] px-5 pb-9 pt-10 xl:pb-16 xl:pt-10" style={{ background: 'var(--gradient-markets)' }}>
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-        <SectionKicker className="mb-[14px] text-foreground">
+        <SectionKicker className="mb-[14px] text-foreground [&>span:first-child]:dark:bg-white dark:[&>span:last-child]:text-white">
           {t('marketsKicker')}
         </SectionKicker>
 
@@ -46,9 +46,9 @@ export function MarketsSection() {
           {assets.map((asset) => (
             <div
               key={asset.key}
-              className="flex flex-col gap-[14px] rounded-[18px] bg-[rgba(224,224,224,0.38)] px-4 py-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:bg-[#1c1c1c] dark:shadow-none"
+              className="flex flex-col gap-[14px] rounded-[18px] bg-[rgba(224,224,224,0.38)] px-4 py-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:bg-[rgba(17,17,17,0.38)] dark:shadow-[0px_4px_16px_0px_rgba(0,0,0,0.3)]"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-[rgba(239,239,239,0)] dark:bg-[#2a2a2a]">
+              <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-[rgba(239,239,239,0)] dark:bg-[rgba(17,17,17,0)]">
                 <Image
                   src={ASSET_ICON_FILES[asset.key]}
                   alt={asset.name}

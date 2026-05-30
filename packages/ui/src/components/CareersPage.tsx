@@ -192,7 +192,7 @@ export function CareersPage() {
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
                   dept === d.id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
+                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-surface dark:text-muted'
                 }`}
               >
                 {d.label}
@@ -201,7 +201,7 @@ export function CareersPage() {
           </div>
 
           {/* Job list */}
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
+          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-border">
             {filtered.map((job) => (
               <Link
                 key={job.id}

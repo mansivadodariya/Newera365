@@ -31,7 +31,7 @@ const PARTNER_TYPES = [
     tagClass: 'bg-accent/10 text-accent',
     title: 'Affiliate',
     desc: 'Fixed cost-per-acquisition payouts up to $1,200 per qualified trader. Built for digital marketers.',
-    cardClass: 'bg-surface dark:bg-[#1c1c1c]',
+    cardClass: 'bg-surface dark:bg-surface',
     headColor: 'text-foreground',
     descColor: 'text-muted',
     statLabelColor: 'text-muted',
@@ -51,7 +51,7 @@ const PARTNER_TYPES = [
     tagClass: 'bg-accent/10 text-accent',
     title: 'White Label',
     desc: 'Launch your own brokerage on our infrastructure. Full MT5 stack, KYC, treasury, support.',
-    cardClass: 'bg-surface dark:bg-[#1c1c1c]',
+    cardClass: 'bg-surface dark:bg-surface',
     headColor: 'text-foreground',
     descColor: 'text-muted',
     statLabelColor: 'text-muted',
@@ -117,7 +117,7 @@ export function IBPage() {
           {/* Stats + mini chart */}
           <div className="mb-7 flex items-stretch gap-3">
             {/* Stats */}
-            <div className="flex flex-1 flex-col gap-3 divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
+            <div className="flex flex-1 flex-col gap-3 divide-y divide-[#e5e7eb] dark:divide-border">
               {TRUST_STATS.map((s) => (
                 <div key={s.label} className="flex flex-col gap-[2px] pt-3 first:pt-0">
                   <span className="text-foreground font-sans text-[22px] font-semibold">
@@ -255,7 +255,7 @@ export function IBPage() {
             {STEPS.map((step, i) => (
               <div
                 key={step.num}
-                className={`flex items-start gap-4 py-5 ${i < STEPS.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]' : ''}`}
+                className={`flex items-start gap-4 py-5 ${i < STEPS.length - 1 ? 'border-b border-[#e5e7eb] dark:border-border' : ''}`}
               >
                 <div className="bg-accent mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full">
                   <span className="font-sans text-[11px] font-bold text-white">{step.num}</span>

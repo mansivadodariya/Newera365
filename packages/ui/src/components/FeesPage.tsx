@@ -112,7 +112,7 @@ export function FeesPage() {
           {/* View all link */}
           <Link
             href={`/${locale}/markets/instruments`}
-            className="dark:bg-surface mt-3 flex items-center justify-center rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
+            className="dark:bg-surface mt-3 flex items-center justify-center rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-surface-elevated"
           >
             <span className="font-body text-foreground text-[13px] font-medium">
               View all 200+ instruments

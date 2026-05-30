@@ -185,7 +185,7 @@ export function MediaListingPage() {
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-medium transition-colors ${
                   activeTab === tab
                     ? 'bg-accent text-white'
-                    : 'border-border text-muted hover:border-foreground bg-[#F2F2F4] hover:bg-[#e5e5e5] dark:bg-[#2a2a2a] dark:hover:bg-[#3a3a3a]'
+                    : 'border-border text-muted hover:border-foreground bg-[#F2F2F4] hover:bg-[#e5e5e5] dark:bg-surface-elevated dark:hover:bg-surface-elevated'
                 }`}
               >
                 {tab === 'ALL' ? 'All' : tab.charAt(0) + tab.slice(1).toLowerCase()}

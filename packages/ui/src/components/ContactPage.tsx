@@ -141,7 +141,7 @@ export function ContactPage() {
                 key={ch.id}
                 className="flex items-center gap-[14px] rounded-[18px] bg-surface px-[18px] py-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:shadow-none"
               >
-                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#f2f2f4] text-foreground dark:bg-[#2a2a2a]">
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#f2f2f4] text-foreground dark:bg-surface-elevated">
                   {ch.icon}
                 </div>
                 <div className="min-w-0 flex-1">
@@ -204,7 +204,7 @@ export function ContactPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Jane Doe"
-                  className="font-body text-foreground focus:border-accent w-full rounded-[14px] border border-[#e5e7eb] bg-surface px-4 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-[#2a2a2a]"
+                  className="font-body text-foreground focus:border-accent w-full rounded-[14px] border border-[#e5e7eb] bg-surface px-4 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-border"
                 />
               </div>
 
@@ -223,7 +223,7 @@ export function ContactPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="janedoe@gmail.com"
-                  className="font-body text-foreground focus:border-accent w-full rounded-[14px] border border-[#e5e7eb] bg-surface px-4 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-[#2a2a2a]"
+                  className="font-body text-foreground focus:border-accent w-full rounded-[14px] border border-[#e5e7eb] bg-surface px-4 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-border"
                 />
               </div>
 
@@ -239,7 +239,7 @@ export function ContactPage() {
                   id="contact-dept"
                   value={dept}
                   onChange={(e) => setDept(e.target.value)}
-                  className="font-body text-foreground focus:border-accent w-full appearance-none rounded-[14px] border border-[#e5e7eb] bg-surface px-4 py-[13px] text-[14px] focus:outline-none dark:border-[#2a2a2a]"
+                  className="font-body text-foreground focus:border-accent w-full appearance-none rounded-[14px] border border-[#e5e7eb] bg-surface px-4 py-[13px] text-[14px] focus:outline-none dark:border-border"
                 >
                   <option value="" disabled>
                     Select department
@@ -267,7 +267,7 @@ export function ContactPage() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="How can we help?"
-                  className="font-body text-foreground focus:border-accent w-full resize-none rounded-[14px] border border-[#e5e7eb] bg-surface px-4 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-[#2a2a2a]"
+                  className="font-body text-foreground focus:border-accent w-full resize-none rounded-[14px] border border-[#e5e7eb] bg-surface px-4 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-border"
                 />
               </div>
 

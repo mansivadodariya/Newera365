@@ -51,7 +51,7 @@ function SelectInput({
   return (
     <div className="flex flex-col gap-1.5">
       <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">{label}</label>
-      <div className="border-border relative overflow-hidden rounded-[12px] border bg-white dark:bg-[#1c1c1c]">
+      <div className="border-border relative overflow-hidden rounded-[12px] border bg-white dark:bg-surface">
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
@@ -105,7 +105,7 @@ function NumberInput({
         min={min}
         step={step}
         onChange={(e) => onChange(e.target.value)}
-        className="border-border font-body text-foreground focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[14px] outline-none dark:bg-[#1c1c1c]"
+        className="border-border font-body text-foreground focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[14px] outline-none dark:bg-surface"
       />
     </div>
   );
@@ -172,14 +172,14 @@ export function TraderToolsPage() {
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Tab switcher */}
-          <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-[#1c1c1c]">
+          <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-surface">
             {TABS.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`font-body flex-1 rounded-[11px] py-2.5 text-[13px] font-medium transition-colors ${
                   activeTab === tab.id
-                    ? 'text-foreground bg-white shadow-sm dark:bg-[#2a2a2a] dark:text-white'
+                    ? 'text-foreground bg-white shadow-sm dark:bg-surface-elevated dark:text-white'
                     : 'text-muted hover:text-foreground'
                 }`}
               >
@@ -390,7 +390,7 @@ export function TraderToolsPage() {
               <Link
                 key={tool.label}
                 href={tool.href}
-                className="group flex items-center justify-between rounded-[16px] bg-white p-4 dark:bg-[#1c1c1c]"
+                className="group flex items-center justify-between rounded-[16px] bg-white p-4 dark:bg-surface"
                 
               >
                 <div>
