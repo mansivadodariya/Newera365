@@ -40,15 +40,50 @@ const TEAM = [
 ] as const;
 
 const EXPLORE_LINKS = [
-  { label: 'Careers', href: '/company/careers', desc: 'Join our growing team of 120+' },
+  {
+    label: 'Careers',
+    href: '/company/careers',
+    desc: 'We are hiring across 8 cities',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="8" cy="5.5" r="2.5" stroke="currentColor" strokeWidth="1.3"/>
+        <path d="M2.5 13.5c0-3.04 2.46-5.5 5.5-5.5s5.5 2.46 5.5 5.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
   {
     label: 'Awards & recognition',
     href: '/company/awards',
-    desc: 'Industry awards we are proud of',
+    desc: 'Industry honors and press',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M8 2l1.5 3 3.5.5-2.5 2.5.6 3.5L8 10l-3.1 1.5.6-3.5L3 5.5 6.5 5 8 2z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
+      </svg>
+    ),
   },
-  { label: 'Media & press', href: '/company/media', desc: 'Press kit, logos and media contacts' },
-  { label: 'Get in touch', href: '/contact', desc: 'Real people. Real answers.' },
-] as const;
+  {
+    label: 'Media & press',
+    href: '/company/media',
+    desc: 'Latest coverage of NewEra365',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.3"/>
+        <path d="M5 7h6M5 10h4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+  {
+    label: 'Get in touch',
+    href: '/contact',
+    desc: 'Talk to the team directly',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <rect x="2" y="4" width="12" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.3"/>
+        <path d="M2 5.5l6 4 6-4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+];
 
 export function AboutPage() {
   const locale = useLocale();
@@ -135,8 +170,7 @@ export function AboutPage() {
             {TEAM.map((member) => (
               <div
                 key={member.name}
-                className="rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+                className="rounded-[18px] bg-surface p-4 shadow-card dark:shadow-none"
               >
                 <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#111111]">
                   <span className="font-sans text-[14px] font-semibold text-white">
@@ -152,42 +186,31 @@ export function AboutPage() {
       </section>
 
       {/* Explore links */}
-      <section className="dark:bg-background bg-white px-5 pb-10 pt-[40px]">
+      <section className="rounded-t-[32px] bg-background px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
-            More from the company
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
+            MORE FROM THE COMPANY
           </SectionKicker>
-          <h1 className="text-foreground mb-4 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.025em]">
-            Explore
-          </h1>
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
+          <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
+            Explore.
+          </h2>
+          <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-2">
             {EXPLORE_LINKS.map((link) => (
               <Link
                 key={link.label}
                 href={`/${locale}${link.href}`}
-                className="group flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0"
+                className="group flex items-center gap-[14px] rounded-[18px] bg-surface px-[18px] py-[18px] shadow-card transition-shadow hover:shadow-card-dark dark:shadow-none"
               >
-                <div>
-                  <p className="text-foreground group-hover:text-accent font-sans text-[14px] font-semibold transition-colors">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[12px] bg-[#f2f2f4] text-foreground dark:bg-[#2a2a2a]">
+                  {link.icon}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-foreground font-sans text-[15px] font-semibold leading-normal">
                     {link.label}
                   </p>
-                  <p className="font-body text-muted mt-0.5 text-[12px]">{link.desc}</p>
+                  <p className="font-body text-muted mt-[2px] text-[12px]">{link.desc}</p>
                 </div>
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  className="group-hover:text-accent flex-shrink-0 text-[#9ca3af] transition-colors"
-                >
-                  <path
-                    d="M6 4l4 4-4 4"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <span className="text-muted flex-shrink-0 text-[18px]">›</span>
               </Link>
             ))}
           </div>
