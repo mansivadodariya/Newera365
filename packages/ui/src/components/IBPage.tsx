@@ -7,62 +7,62 @@ import { SectionKicker } from './SectionKicker';
 const PARTNER_TYPES = [
   {
     id: 'ib',
-    tag: 'BEST ANNUAL',
-    tagClass: 'bg-accent text-white',
+    tag: 'MOST POPULAR',
+    tagClass: 'bg-[rgba(242,242,244,0.08)] text-white',
     title: 'Introducing Broker',
-    desc: 'Up to $4 rebate per lot for lifetime. Minimum 3 active traders per referral.',
+    desc: 'Earn up to $8 per lot traded by your referrals. Tiered structure with monthly bonus.',
     cardClass: 'bg-[#111111]',
     headColor: 'text-white',
     descColor: 'text-white/60',
-    statLabelColor: 'text-white/40',
+    statLabelColor: 'text-white/45',
     statValueColor: 'text-white',
-    statRowBg: 'bg-[#1a1a1a]',
-    statBorderColor: 'border-white/[0.07]',
+    statRowBg: 'bg-[#111111]',
+    statGridBg: 'bg-[rgba(255,255,255,0.1)]',
     ctaClass: 'bg-accent text-white',
     stats: [
-      { label: 'REBATE', value: '$4 / lot' },
-      { label: 'PAYMENT', value: 'Monthly' },
-      { label: 'TERM', value: 'Lifetime' },
+      { label: 'UP TO', value: '$8/lot' },
+      { label: 'PAYOUTS', value: 'Monthly' },
+      { label: 'MINIMUM', value: 'None' },
     ],
   },
   {
     id: 'affiliate',
-    tag: 'FLEXIBLE',
-    tagClass: 'bg-[#F59E0B] text-white',
+    tag: 'CPA',
+    tagClass: 'bg-accent/10 text-accent',
     title: 'Affiliate',
-    desc: 'Up to $1,000 per qualified referral. Link-tracked, no minimum volume required.',
-    cardClass: 'bg-white dark:bg-[#1c1c1c]',
-    headColor: 'text-[#111111] dark:text-white',
-    descColor: 'text-[#6b7280] dark:text-[#9ca3af]',
-    statLabelColor: 'text-[#9ca3af]',
-    statValueColor: 'text-[#111111] dark:text-white',
-    statRowBg: 'bg-[#f9f9f9] dark:bg-[#141414]',
-    statBorderColor: 'border-[#e5e7eb] dark:border-[#2a2a2a]',
-    ctaClass: 'bg-[#111111] dark:bg-white text-white dark:text-[#111111]',
+    desc: 'Fixed cost-per-acquisition payouts up to $1,200 per qualified trader. Built for digital marketers.',
+    cardClass: 'bg-surface dark:bg-[#1c1c1c]',
+    headColor: 'text-foreground',
+    descColor: 'text-muted',
+    statLabelColor: 'text-muted',
+    statValueColor: 'text-foreground',
+    statRowBg: 'bg-background',
+    statGridBg: 'bg-[rgba(17,17,17,0.08)] dark:bg-[rgba(255,255,255,0.06)]',
+    ctaClass: 'bg-foreground text-background',
     stats: [
-      { label: 'MAX PAYOUT', value: '$1,000' },
+      { label: 'UP TO', value: '$1,200' },
       { label: 'COOKIE', value: '90 days' },
-      { label: 'MIN PAYOUT', value: '$50' },
+      { label: 'MIN CPA', value: '$50' },
     ],
   },
   {
     id: 'white-label',
     tag: 'ENTERPRISE',
-    tagClass: 'bg-[#8B5CF6] text-white',
+    tagClass: 'bg-accent/10 text-accent',
     title: 'White Label',
-    desc: 'Launch your own brokerage on our infrastructure. Full MT5 setup and KYC, turnkey.',
-    cardClass: 'bg-white dark:bg-[#1c1c1c]',
-    headColor: 'text-[#111111] dark:text-white',
-    descColor: 'text-[#6b7280] dark:text-[#9ca3af]',
-    statLabelColor: 'text-[#9ca3af]',
-    statValueColor: 'text-[#111111] dark:text-white',
-    statRowBg: 'bg-[#f9f9f9] dark:bg-[#141414]',
-    statBorderColor: 'border-[#e5e7eb] dark:border-[#2a2a2a]',
-    ctaClass: 'bg-[#111111] dark:bg-white text-white dark:text-[#111111]',
+    desc: 'Launch your own brokerage on our infrastructure. Full MT5 stack, KYC, treasury, support.',
+    cardClass: 'bg-surface dark:bg-[#1c1c1c]',
+    headColor: 'text-foreground',
+    descColor: 'text-muted',
+    statLabelColor: 'text-muted',
+    statValueColor: 'text-foreground',
+    statRowBg: 'bg-background',
+    statGridBg: 'bg-[rgba(17,17,17,0.08)] dark:bg-[rgba(255,255,255,0.06)]',
+    ctaClass: 'bg-foreground text-background',
     stats: [
       { label: 'SETUP', value: '< 30 days' },
-      { label: 'SPREADS', value: 'Custom' },
-      { label: 'TURNKEY', value: 'Yes' },
+      { label: 'SPREAD MARK-UP', value: 'Custom' },
+      { label: 'TECH', value: 'Turnkey' },
     ],
   },
 ] as const;
@@ -180,53 +180,44 @@ export function IBPage() {
       </section>
 
       {/* Three ways to partner */}
-      <section id="programs" className="dark:bg-background mx-auto bg-white px-5 pb-10">
-        <div className="">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
-            Choose Your Path
+      <section id="programs" className="rounded-t-[32px] bg-background px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
+            CHOOSE YOUR PATH
           </SectionKicker>
-          <h1 className="text-foreground mb-7 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.025em]">
-            Three ways to partner
-          </h1>
-          <div className="flex flex-col gap-[14px] md:grid md:grid-cols-3">
+          <h2 className="text-foreground mb-[10px] font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
+            Three ways to partner.
+          </h2>
+          <div className="mt-6 flex flex-col gap-[14px] xl:grid xl:grid-cols-3">
             {PARTNER_TYPES.map((pt) => (
               <div
                 key={pt.id}
-                className={`flex flex-col gap-5 rounded-[22px] p-5 ${pt.cardClass}`}
-                style={{ boxShadow: '0 2px 20px rgba(0,0,0,0.08)' }}
+                className={`flex flex-col gap-[12px] rounded-[22px] p-[22px] shadow-card dark:shadow-card-dark ${pt.cardClass}`}
               >
                 {/* Header */}
-                <div className="flex items-start justify-between gap-2">
-                  <span
-                    className={`font-sans text-[17px] font-semibold leading-[1.2] ${pt.headColor}`}
-                  >
+                <div className="flex items-center justify-between gap-2">
+                  <span className={`font-sans text-[22px] font-semibold tracking-[-0.44px] ${pt.headColor}`}>
                     {pt.title}
                   </span>
-                  <span
-                    className={`font-body mt-0.5 flex-shrink-0 rounded-full px-2.5 py-[4px] text-[9px] font-semibold uppercase tracking-[0.12em] ${pt.tagClass}`}
-                  >
+                  <span className={`font-mono flex-shrink-0 rounded-full px-[10px] py-[6px] text-[10px] tracking-[1.2px] ${pt.tagClass}`}>
                     {pt.tag}
                   </span>
                 </div>
 
                 {/* Desc */}
-                <p className={`font-body text-[12px] leading-[1.6] ${pt.descColor}`}>{pt.desc}</p>
+                <p className={`font-body text-[13px] leading-[1.55] ${pt.descColor}`}>{pt.desc}</p>
 
                 {/* Stats */}
-                <div
-                  className={`flex flex-col gap-px overflow-hidden rounded-[12px] border ${pt.statBorderColor}`}
-                >
+                <div className={`flex gap-px overflow-hidden rounded-[12px] ${pt.statGridBg}`}>
                   {pt.stats.map((s) => (
                     <div
                       key={s.label}
-                      className={`flex items-center justify-between px-3 py-[10px] ${pt.statRowBg}`}
+                      className={`flex flex-1 flex-col gap-[2px] px-[10px] py-[12px] ${pt.statRowBg}`}
                     >
-                      <span
-                        className={`font-body text-[9px] uppercase tracking-[0.1em] ${pt.statLabelColor}`}
-                      >
+                      <span className={`font-mono text-[9px] tracking-[1.08px] ${pt.statLabelColor}`}>
                         {s.label}
                       </span>
-                      <span className={`font-body text-[13px] font-semibold ${pt.statValueColor}`}>
+                      <span className={`font-sans text-[14px] font-semibold ${pt.statValueColor}`}>
                         {s.value}
                       </span>
                     </div>
@@ -236,17 +227,11 @@ export function IBPage() {
                 {/* CTA */}
                 <Link
                   href={`/${locale}/register?type=partner&program=${pt.id}`}
-                  className={`font-body flex h-[44px] items-center justify-center gap-1.5 rounded-full text-[13px] font-medium transition-opacity hover:opacity-80 ${pt.ctaClass}`}
+                  className={`font-body mt-1 flex items-center justify-center gap-2 rounded-full px-5 py-[14px] text-[14px] font-medium transition-opacity hover:opacity-80 ${pt.ctaClass}`}
                 >
                   Apply
-                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                    <path
-                      d="M3 8h10M9 4l4 4-4 4"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </Link>
               </div>

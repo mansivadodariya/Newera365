@@ -85,32 +85,35 @@ export function AboutPage() {
       </section>
 
       {/* Timeline */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="rounded-t-[32px] bg-background px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <p className="font-body mb-5 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
-            A DECADE OF COMPOUNDING
-          </p>
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
+            THE ROAD SO FAR
+          </SectionKicker>
+          <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
+            A decade of compounding.
+          </h2>
           <div className="flex flex-col">
             {MILESTONES.map((m, i) => (
-              <div key={m.year} className="flex gap-4">
+              <div key={m.year} className="flex gap-[18px] pb-[22px]">
                 {/* Connector */}
-                <div className="flex flex-col items-center pt-1">
+                <div className="flex flex-col items-center">
                   <div
-                    className={`h-2.5 w-2.5 flex-shrink-0 rounded-full ${i === MILESTONES.length - 1 ? 'bg-accent' : 'border-accent border-2 bg-transparent'}`}
+                    className={`mt-1 h-[22px] w-[22px] flex-shrink-0 rounded-full border-2 ${i === MILESTONES.length - 1 ? 'border-accent bg-accent' : 'border-border bg-background'}`}
                   />
                   {i < MILESTONES.length - 1 && (
-                    <div className="my-1 w-px flex-1 bg-[#e5e7eb] dark:bg-[#2a2a2a]" />
+                    <div className="mt-1 w-px flex-1 bg-border" />
                   )}
                 </div>
                 {/* Content */}
-                <div className="pb-6">
-                  <div className="flex items-center gap-2">
-                    <span className="font-body text-accent text-[10px] font-semibold uppercase tracking-[0.1em]">
-                      {m.year}
-                    </span>
-                    <span className="font-body text-[10px] text-[#9ca3af]">· {m.label}</span>
-                  </div>
-                  <p className="font-body text-muted mt-1 text-[13px] leading-relaxed">{m.desc}</p>
+                <div className="flex-1">
+                  <span className="font-mono text-[11px] font-bold text-accent tracking-[1.32px]">
+                    {m.year}
+                  </span>
+                  <p className="text-foreground font-sans text-[17px] font-semibold leading-normal">
+                    {m.label}
+                  </p>
+                  <p className="font-body text-muted mt-1 text-[13px] leading-[1.55]">{m.desc}</p>
                 </div>
               </div>
             ))}
