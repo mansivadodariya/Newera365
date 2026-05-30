@@ -187,8 +187,7 @@ export function SpreadComparatorPage() {
           <div className="grid grid-cols-3 gap-[10px]">
             {/* Standard */}
             <div
-              className="flex flex-col gap-3 rounded-[18px] bg-surface p-4"
-              
+              className="flex flex-col gap-3 rounded-[18px] bg-surface p-4 shadow-card dark:shadow-none"
             >
               <span className="text-foreground font-sans text-[13px] font-semibold">Standard</span>
               <div className="flex flex-col gap-1">
@@ -247,8 +246,7 @@ export function SpreadComparatorPage() {
 
             {/* VIP */}
             <div
-              className="flex flex-col gap-3 rounded-[18px] bg-surface p-4"
-              
+              className="flex flex-col gap-3 rounded-[18px] bg-surface p-4 shadow-card dark:shadow-none"
             >
               <span className="text-foreground font-sans text-[13px] font-semibold">VIP</span>
               <div className="flex flex-col gap-1">
