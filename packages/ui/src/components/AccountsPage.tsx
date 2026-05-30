@@ -146,8 +146,7 @@ export function AccountsPage() {
           {ACCOUNTS.map((account) => (
             <div
               key={account.id}
-              className={`flex w-[350px] flex-shrink-0 snap-start flex-col gap-[18px] rounded-[24px] p-6 ${account.cardBg}`}
-              style={{ boxShadow: '0 2px 24px rgba(0,0,0,0.08)' }}
+              className={`flex w-[350px] flex-shrink-0 snap-start flex-col gap-[18px] rounded-[24px] p-6 shadow-card dark:shadow-card-dark ${account.cardBg}`}
             >
               {/* Head */}
               <div className="flex items-center justify-between">

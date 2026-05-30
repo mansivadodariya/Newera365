@@ -91,7 +91,7 @@ export function PromoPage() {
             <div
               key={promo.id}
               className={`flex flex-col gap-0 overflow-hidden rounded-[22px] bg-gradient-to-br ${CARD_GRADIENTS[promo.tagType]}`}
-              style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.06)' }}
+              
             >
               {/* Card top: tag row */}
               <div className="flex items-center justify-between px-5 pt-5">

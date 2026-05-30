@@ -188,7 +188,7 @@ export function SpreadComparatorPage() {
             {/* Standard */}
             <div
               className="flex flex-col gap-3 rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]"
-              style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+              
             >
               <span className="text-foreground font-sans text-[13px] font-semibold">Standard</span>
               <div className="flex flex-col gap-1">
@@ -248,7 +248,7 @@ export function SpreadComparatorPage() {
             {/* VIP */}
             <div
               className="flex flex-col gap-3 rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]"
-              style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+              
             >
               <span className="text-foreground font-sans text-[13px] font-semibold">VIP</span>
               <div className="flex flex-col gap-1">

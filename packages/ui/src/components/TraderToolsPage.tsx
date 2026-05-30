@@ -391,7 +391,7 @@ export function TraderToolsPage() {
                 key={tool.label}
                 href={tool.href}
                 className="group flex items-center justify-between rounded-[16px] bg-white p-4 dark:bg-[#1c1c1c]"
-                style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}
+                
               >
                 <div>
                   <p className="text-foreground font-sans text-[14px] font-semibold">

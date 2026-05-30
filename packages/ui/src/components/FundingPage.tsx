@@ -209,7 +209,7 @@ export function FundingPage() {
               <div
                 key={method.id}
                 className="dark:bg-surface flex flex-col gap-[14px] rounded-[18px] bg-white p-5"
-                style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}
+                
               >
                 {/* Card header: icon box + type pill */}
                 <div className="flex items-center justify-between">

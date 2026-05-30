@@ -143,7 +143,7 @@ export function CareersPage() {
               <div
                 key={stat.label}
                 className="rounded-[18px] bg-[#f9f9f9] p-5 dark:bg-[#1c1c1c]"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+                
               >
                 <p className="text-foreground font-sans text-[28px] font-semibold leading-[1]">
                   {stat.value}
@@ -166,7 +166,7 @@ export function CareersPage() {
               <div
                 key={v.title}
                 className="flex flex-col gap-2 rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}
+                
               >
                 <p className="text-foreground font-sans text-[13px] font-semibold">{v.title}</p>
                 <p className="font-body text-muted text-[12px] leading-relaxed">{v.desc}</p>

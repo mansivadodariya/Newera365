@@ -278,7 +278,7 @@ export function AccountComparisonPage() {
           {/* Matrix table card */}
           <div
             className="overflow-hidden rounded-[16px] bg-white dark:bg-[#1a1a1a]"
-            style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.06)' }}
+            
           >
             {/* Header row */}
             <div className="grid grid-cols-[1fr_52px_52px_52px] items-center gap-2 border-b border-[#e5e7eb] px-[14px] py-3 dark:border-[#2a2a2a]">

@@ -328,7 +328,7 @@ export function PlatformPage() {
               <div
                 key={tool.id}
                 className="dark:bg-surface flex flex-col gap-3 rounded-[18px] bg-white p-4"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+                
               >
                 <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#111111] text-white dark:bg-[#1e1e1e]">
                   <tool.Icon />
