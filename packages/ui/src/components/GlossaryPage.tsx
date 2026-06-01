@@ -2,11 +2,21 @@
 
 import { useState, useMemo } from 'react';
 import { SectionKicker } from './SectionKicker';
+import { RichText } from './RichText';
+import type { SlateNode } from './RichText';
+
+export interface CmsGlossaryTerm {
+  id: number;
+  glossaryTerm: string;
+  alphabeticalIndex?: string | null;
+  body?: SlateNode[] | null;
+}
 
 type GlossaryTerm = {
   term: string;
   category: string;
   definition: string;
+  body?: SlateNode[] | null;
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -249,13 +259,29 @@ const TERMS: GlossaryTerm[] = [
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
-export function GlossaryPage() {
+interface GlossaryPageProps {
+  terms?: CmsGlossaryTerm[];
+}
+
+export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
   const [search, setSearch] = useState('');
   const [activeLetter, setActiveLetter] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
+  const allTerms: GlossaryTerm[] = useMemo(() => {
+    if (cmsTerms && cmsTerms.length > 0) {
+      return cmsTerms.map((t) => ({
+        term: t.glossaryTerm,
+        category: t.alphabeticalIndex?.toUpperCase() ?? t.glossaryTerm[0]?.toUpperCase() ?? 'A',
+        definition: '',
+        body: t.body,
+      }));
+    }
+    return TERMS;
+  }, [cmsTerms]);
+
   const filtered = useMemo(() => {
-    let result = TERMS;
+    let result = allTerms;
 
     if (search) {
       result = result.filter(
@@ -271,11 +297,11 @@ export function GlossaryPage() {
       result = result.filter((t) => t.category === activeCategory);
     }
     return result;
-  }, [search, activeLetter, activeCategory]);
+  }, [search, activeLetter, activeCategory, allTerms]);
 
   const availableLetters = useMemo(
-    () => new Set(TERMS.map((t) => t.term[0]?.toUpperCase() ?? '')),
-    [],
+    () => new Set(allTerms.map((t) => t.term[0]?.toUpperCase() ?? '')),
+    [allTerms],
   );
 
   function handleLetterClick(letter: string) {
@@ -305,7 +331,7 @@ export function GlossaryPage() {
           </p>
 
           {/* Search */}
-          <div className="relative">
+          <div className="relative xl:max-w-[600px]">
             <svg
               className="text-muted pointer-events-none absolute left-4 top-1/2 -translate-y-1/2"
               width="14"
@@ -422,7 +448,7 @@ export function GlossaryPage() {
               No terms match your search.
             </p>
           ) : (
-            <div className="flex flex-col">
+            <div className="flex flex-col xl:grid xl:grid-cols-2 xl:gap-x-10">
               {filtered.map((term, i) => {
                 const prevTerm = i > 0 ? filtered[i - 1] : undefined;
                 const showLetter =
@@ -449,9 +475,16 @@ export function GlossaryPage() {
                           {term.category}
                         </span>
                       </div>
-                      <p className="font-body text-muted text-[13px] leading-[1.6]">
-                        {term.definition}
-                      </p>
+                      {term.body && term.body.length > 0 ? (
+                        <RichText
+                          content={term.body}
+                          className="font-body text-muted text-[13px] leading-[1.6]"
+                        />
+                      ) : (
+                        <p className="font-body text-muted text-[13px] leading-[1.6]">
+                          {term.definition}
+                        </p>
+                      )}
                     </div>
                   </div>
                 );

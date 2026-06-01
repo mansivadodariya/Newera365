@@ -113,10 +113,89 @@ const MATRIX_ROWS: { feature: string; std: boolean; raw: boolean; vip: boolean }
   { feature: 'Dedicated dealer', std: false, raw: false, vip: true },
   { feature: 'Priority withdrawals', std: false, raw: true, vip: true },
   { feature: 'Free VPS hosting', std: false, raw: true, vip: true },
+  { feature: 'Custom spreads', std: false, raw: false, vip: true },
 ];
 
-export function AccountsPage() {
+export interface CmsAccountTypeItem {
+  id: number;
+  name: string;
+  minDeposit: number;
+  spreadFrom: string;
+  leverage: string;
+  commission?: string | null;
+  features?: { value: string; id?: string | null }[] | null;
+  isPopular?: boolean | null;
+  sortOrder?: number | null;
+}
+
+const CARD_THEMES = [
+  {
+    cardBg: 'bg-white dark:bg-surface-elevated',
+    headTextColor: 'text-[#111111] dark:text-white',
+    descColor: 'text-[#6b7280] dark:text-[#9ca3af]',
+    pricingLabelColor: 'text-[#6b7280] dark:text-[#9ca3af]',
+    pricingValueColor: 'text-[#111111] dark:text-white',
+    rowsContainerBg: 'bg-[#111111] dark:bg-[#2a2a2a]',
+    rowBg: 'bg-[#FAFAF9] dark:bg-[#1c1c1c]',
+    rowLabelColor: 'text-[#6b7280] dark:text-[#9ca3af]',
+    rowValueColor: 'text-[#111111] dark:text-white',
+    ctaBg: 'bg-[#111111] dark:bg-white text-white dark:text-[#111111]',
+  },
+  {
+    cardBg: 'bg-[#111111]',
+    headTextColor: 'text-white',
+    descColor: 'text-white/60',
+    pricingLabelColor: 'text-white/60',
+    pricingValueColor: 'text-white',
+    rowsContainerBg: 'bg-white/[0.07]',
+    rowBg: 'bg-[#1a1a1a]',
+    rowLabelColor: 'text-white/60',
+    rowValueColor: 'text-white',
+    ctaBg: 'bg-accent text-white',
+  },
+  {
+    cardBg: 'bg-gradient-to-b from-[#0d2b1a] to-[#0a1a10]',
+    headTextColor: 'text-white',
+    descColor: 'text-white/60',
+    pricingLabelColor: 'text-white/60',
+    pricingValueColor: 'text-white',
+    rowsContainerBg: 'bg-white/[0.07]',
+    rowBg: 'bg-[#0d2b1a]',
+    rowLabelColor: 'text-white/60',
+    rowValueColor: 'text-white',
+    ctaBg: 'bg-accent text-white',
+  },
+] as const;
+
+interface AccountsPageProps {
+  accounts?: CmsAccountTypeItem[];
+}
+
+export function AccountsPage({ accounts: cmsAccounts }: AccountsPageProps) {
   const locale = useLocale();
+
+  const displayAccounts =
+    cmsAccounts && cmsAccounts.length > 0
+      ? cmsAccounts.map((a, i) => {
+          const theme = CARD_THEMES[i % CARD_THEMES.length]!;
+          return {
+            id: String(a.id),
+            name: a.name,
+            tag: a.isPopular ? 'MOST POPULAR' : '',
+            desc: a.features?.[0]?.value ?? '',
+            pricingLabel: 'SPREAD FROM',
+            pricingValue: a.spreadFrom,
+            ctaLabel: `Open ${a.name}`,
+            rows: [
+              { label: 'Min deposit', value: `$${a.minDeposit}` },
+              { label: 'Spread from', value: a.spreadFrom },
+              { label: 'Commission', value: a.commission ?? 'None' },
+              { label: 'Leverage', value: a.leverage },
+            ],
+            ...theme,
+          };
+        })
+      : ACCOUNTS;
 
   return (
     <>
@@ -137,82 +216,86 @@ export function AccountsPage() {
         </div>
       </section>
 
-      {/* Cards — horizontal scroll snap */}
+      {/* Cards — horizontal scroll snap on mobile, 3-column grid on xl */}
       <section className="dark:bg-background bg-white pb-10">
-        <div
-          className="scrollbar-hide flex snap-x snap-mandatory gap-[14px] overflow-x-auto px-5 pb-2"
-          style={{ scrollPaddingLeft: '20px' }}
-        >
-          {ACCOUNTS.map((account) => (
-            <div
-              key={account.id}
-              className={`flex w-[350px] flex-shrink-0 snap-start flex-col gap-[18px] rounded-[24px] p-6 ${account.cardBg}`}
-              style={{ boxShadow: '0 2px 24px rgba(0,0,0,0.08)' }}
-            >
-              {/* Head */}
-              <div className="flex items-center justify-between">
-                <span className={`font-sans text-[20px] font-semibold ${account.headTextColor}`}>
-                  {account.name}
-                </span>
-                <span className="bg-accent font-body rounded-full px-3 py-[5px] text-[9px] font-semibold uppercase tracking-[0.12em] text-white">
-                  {account.tag}
-                </span>
-              </div>
-
-              {/* Description */}
-              <p className={`font-body text-[13px] leading-[1.55] ${account.descColor}`}>
-                {account.desc}
-              </p>
-
-              {/* Price block */}
-              <div>
-                <p
-                  className={`font-body mb-1 text-[9px] uppercase tracking-[0.14em] ${account.pricingLabelColor}`}
-                >
-                  {account.pricingLabel}
-                </p>
-                <p className={`font-sans text-[20px] font-semibold ${account.pricingValueColor}`}>
-                  {account.pricingValue}
-                </p>
-              </div>
-
-              {/* Spec rows */}
+        <div className="mx-auto xl:max-w-[1200px] xl:px-5">
+          <div
+            className="scrollbar-hide flex snap-x snap-mandatory gap-[14px] overflow-x-auto px-5 pb-2 xl:grid xl:grid-cols-3 xl:overflow-visible xl:px-0 xl:pb-0"
+            style={{ scrollPaddingLeft: '20px' }}
+          >
+            {displayAccounts.map((account) => (
               <div
-                className={`flex flex-col overflow-hidden rounded-[14px] ${account.rowsContainerBg}`}
+                key={account.id}
+                className={`flex w-[350px] flex-shrink-0 snap-start flex-col gap-[18px] rounded-[24px] p-6 xl:w-auto xl:flex-1 xl:flex-none xl:snap-none ${account.cardBg}`}
+                style={{ boxShadow: '0 2px 24px rgba(0,0,0,0.08)' }}
               >
-                {account.rows.map((row) => (
-                  <div
-                    key={row.label}
-                    className={`flex items-center justify-between px-4 py-[11px] ${account.rowBg}`}
-                  >
-                    <span className={`font-body text-[12px] ${account.rowLabelColor}`}>
-                      {row.label}
-                    </span>
-                    <span className={`font-body text-[12px] font-medium ${account.rowValueColor}`}>
-                      {row.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
+                {/* Head */}
+                <div className="flex items-center justify-between">
+                  <span className={`font-sans text-[20px] font-semibold ${account.headTextColor}`}>
+                    {account.name}
+                  </span>
+                  <span className="bg-accent font-body rounded-full px-3 py-[5px] text-[9px] font-semibold uppercase tracking-[0.12em] text-white">
+                    {account.tag}
+                  </span>
+                </div>
 
-              {/* CTA */}
-              <Link
-                href={`/${locale}/register?account=${account.id}`}
-                className={`font-body flex h-[48px] items-center justify-center gap-2 rounded-full text-[14px] font-medium transition-opacity hover:opacity-80 ${account.ctaBg}`}
-              >
-                {account.ctaLabel}
-                <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                  <path
-                    d="M3 8h10M9 4l4 4-4 4"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Link>
-            </div>
-          ))}
+                {/* Description */}
+                <p className={`font-body text-[13px] leading-[1.55] ${account.descColor}`}>
+                  {account.desc}
+                </p>
+
+                {/* Price block */}
+                <div>
+                  <p
+                    className={`font-body mb-1 text-[9px] uppercase tracking-[0.14em] ${account.pricingLabelColor}`}
+                  >
+                    {account.pricingLabel}
+                  </p>
+                  <p className={`font-sans text-[20px] font-semibold ${account.pricingValueColor}`}>
+                    {account.pricingValue}
+                  </p>
+                </div>
+
+                {/* Spec rows */}
+                <div
+                  className={`flex flex-col overflow-hidden rounded-[14px] ${account.rowsContainerBg}`}
+                >
+                  {account.rows.map((row) => (
+                    <div
+                      key={row.label}
+                      className={`flex items-center justify-between px-4 py-[11px] ${account.rowBg}`}
+                    >
+                      <span className={`font-body text-[12px] ${account.rowLabelColor}`}>
+                        {row.label}
+                      </span>
+                      <span
+                        className={`font-body text-[12px] font-medium ${account.rowValueColor}`}
+                      >
+                        {row.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* CTA */}
+                <Link
+                  href={`/${locale}/register?account=${account.id}`}
+                  className={`font-body flex h-[48px] items-center justify-center gap-2 rounded-full text-[14px] font-medium transition-opacity hover:opacity-80 ${account.ctaBg}`}
+                >
+                  {account.ctaLabel}
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M3 8h10M9 4l4 4-4 4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

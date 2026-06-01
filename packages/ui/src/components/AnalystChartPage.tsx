@@ -108,65 +108,70 @@ export function AnalystChartPage() {
         </div>
       </section>
 
-      {/* Featured price */}
+      {/* Featured price + pair list */}
       <section className="dark:bg-background bg-white px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div
-            className="rounded-[20px] bg-[#111111] p-5"
-            style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.12)' }}
-          >
-            <p className="font-body mb-1 text-[11px] uppercase tracking-[0.1em] text-white/40">
-              {featured.symbol}
-            </p>
-            <div className="mb-4 flex items-end gap-3">
-              <p className="font-sans text-[40px] font-semibold tabular-nums leading-none text-white">
-                {featured.price}
+          <div className="xl:grid xl:grid-cols-2 xl:gap-8">
+            {/* Featured price card */}
+            <div
+              className="rounded-[20px] bg-[#111111] p-5"
+              style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.12)' }}
+            >
+              <p className="font-body mb-1 text-[11px] uppercase tracking-[0.1em] text-white/40">
+                {featured.symbol}
               </p>
-              <span
-                className={`font-body mb-1 text-[13px] font-semibold ${featured.up ? 'text-accent' : 'text-[#EF4444]'}`}
-              >
-                {featured.pct}
-              </span>
-            </div>
-            <div className="h-[80px] overflow-hidden rounded-[10px]">
-              <MiniChart />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Tab filter + pair list */}
-      <section className="dark:bg-background bg-white px-5 pb-6">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="mb-4 flex gap-2">
-            {TABS.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setTab(t.id)}
-                className={`font-body rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
-                  tab === t.id
-                    ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
-            {pairs.map((p) => (
-              <div key={p.symbol} className="flex items-center justify-between py-[13px]">
-                <p className="text-foreground font-sans text-[14px] font-semibold">{p.symbol}</p>
-                <div className="flex items-center gap-3">
-                  <p className="font-body text-foreground text-[13px] tabular-nums">{p.price}</p>
-                  <p
-                    className={`font-body text-[12px] font-semibold tabular-nums ${p.up ? 'text-accent' : 'text-[#EF4444]'}`}
-                  >
-                    {p.pct}
-                  </p>
-                </div>
+              <div className="mb-4 flex items-end gap-3">
+                <p className="font-sans text-[40px] font-semibold tabular-nums leading-none text-white">
+                  {featured.price}
+                </p>
+                <span
+                  className={`font-body mb-1 text-[13px] font-semibold ${featured.up ? 'text-accent' : 'text-[#EF4444]'}`}
+                >
+                  {featured.pct}
+                </span>
               </div>
-            ))}
+              <div className="h-[80px] overflow-hidden rounded-[10px]">
+                <MiniChart />
+              </div>
+            </div>
+
+            {/* Tab filter + pair list */}
+            <div className="mt-5 xl:mt-0">
+              <div className="mb-4 flex gap-2">
+                {TABS.map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => setTab(t.id)}
+                    className={`font-body rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
+                      tab === t.id
+                        ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                        : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+              <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
+                {pairs.map((p) => (
+                  <div key={p.symbol} className="flex items-center justify-between py-[13px]">
+                    <p className="text-foreground font-sans text-[14px] font-semibold">
+                      {p.symbol}
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <p className="font-body text-foreground text-[13px] tabular-nums">
+                        {p.price}
+                      </p>
+                      <p
+                        className={`font-body text-[12px] font-semibold tabular-nums ${p.up ? 'text-accent' : 'text-[#EF4444]'}`}
+                      >
+                        {p.pct}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

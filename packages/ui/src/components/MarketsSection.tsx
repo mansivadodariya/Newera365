@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-const ASSET_ICON_FILES = {
-  forex: '/icons/forex.png',
-  indices: '/icons/performance.png',
-  commodities: '/icons/commodities.png',
-  stocks: '/icons/exchange.png',
-  crypto: '/icons/crypto.png',
-  etfs: '/icons/products.png',
+// Real background photos from Figma desktop design (node 821:140)
+const ASSET_BG = {
+  forex: '/images/market-forex.jpg',
+  indices: '/images/market-indices.jpg',
+  commodities: '/images/market-commodities.jpg',
+  stocks: '/images/market-stocks.jpg',
+  crypto: '/images/market-crypto.jpg',
+  etfs: '/images/market-etfs.jpg',
 } as const;
 
 export function MarketsSection() {
@@ -28,50 +29,54 @@ export function MarketsSection() {
   ] as const;
 
   return (
-    <section className="px-5 pb-9 pt-10" style={{ background: 'var(--gradient-markets)' }}>
+    <section className="dark:bg-background bg-white px-5 pb-9 pt-10 xl:px-[120px] xl:pb-[60px] xl:pt-[60px]">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-        <SectionKicker className="mb-5 text-[#000000] dark:text-[#FFFFFF]">
+        <SectionKicker className="mb-[14px] text-black dark:text-white">
           {t('marketsKicker')}
         </SectionKicker>
 
-        <h2 className="text-foreground mb-3 font-sans text-[32px] font-semibold leading-[1.1]">
+        <h2 className="text-foreground mb-2 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px]">
           {t('marketsHeading')}
         </h2>
-        <p className="font-body text-muted mb-[14px] text-[14px] leading-relaxed">
+        <p className="font-body text-muted mb-[14px] text-[14px] leading-[155%]">
           {t('marketsSubheading')}
         </p>
 
-        {/* 2×3 asset class grid */}
-        <div className="mb-[14px] grid grid-cols-2 gap-[10px]">
+        {/* 2-col on mobile, 6-col on desktop — photo cards with dark overlay */}
+        <div className="mb-[10px] grid grid-cols-2 gap-[10px] xl:grid-cols-6">
           {assets.map((asset) => (
             <div
               key={asset.key}
-              className="flex flex-col gap-[14px] rounded-[18px] bg-[#e0e0e061] pb-[18px] pl-[16px] pr-[16px] pt-[18px] shadow-[0px_4px_16px_0px_#0000000F] dark:bg-[#1c1c1c] dark:shadow-none"
+              className="relative h-[110px] overflow-hidden rounded-[16px] shadow-[0px_6px_18px_0px_rgba(0,0,0,0.14)]"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-[#efefef] dark:bg-[#2a2a2a]">
-                <Image
-                  src={ASSET_ICON_FILES[asset.key]}
-                  alt={asset.name}
-                  width={22}
-                  height={22}
-                  className="dark:invert"
-                />
-              </div>
-              <div>
-                <p className="text-foreground font-sans text-[16px] font-semibold">{asset.name}</p>
-                <p className="font-body text-muted mt-0.5 text-[11px]">{asset.count}</p>
+              {/* Background photo */}
+              <Image
+                src={ASSET_BG[asset.key]}
+                alt=""
+                fill
+                sizes="(max-width: 768px) 50vw, 17vw"
+                className="object-cover"
+              />
+              {/* Gradient overlay — heavier at bottom so text is legible */}
+              <div className="absolute inset-0 rounded-[16px] bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
+              {/* Text anchored bottom-left */}
+              <div className="absolute bottom-[14px] left-[14px]">
+                <p className="font-sans text-[16px] font-semibold leading-tight text-white">
+                  {asset.name}
+                </p>
+                <p className="font-body text-[12px] text-white/80">{asset.count}</p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Dark CTA button */}
+        {/* Full-width dark CTA pill */}
         <Link
           href={`/${locale}/markets`}
-          className="bg-foreground text-background font-body flex h-[45px] w-full items-center justify-center gap-2 rounded-2xl text-[14px] font-medium transition-opacity hover:opacity-90"
+          className="font-body flex h-[45px] w-full items-center justify-between rounded-[16px] bg-[#111] px-[16px] text-[14px] font-medium text-white transition-opacity hover:opacity-90"
         >
           {t('marketsViewAll')}
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path
               d="M3 8h10M9 4l4 4-4 4"
               stroke="currentColor"

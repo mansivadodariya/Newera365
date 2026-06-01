@@ -3,11 +3,11 @@
   "autoPort": true,
   "configurations": [
     {
-      "name": "newera365-all",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "name": "newera365-web",
+      "runtimeExecutable": "npm.cmd",
+      "runtimeArgs": ["run", "dev", "--workspace=@newera365/web"],
       "port": 3000,
-      "cwd": "D:\NewEra365\newera365-app"
+      "cwd": "D:\\NewEra365\\newera365-app"
     }
   ]
 }

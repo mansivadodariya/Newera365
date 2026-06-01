@@ -1,7 +1,26 @@
 import { setRequestLocale } from 'next-intl/server';
 import { GlossaryPage } from '@newera365/ui';
+import type { CmsGlossaryTerm } from '@newera365/ui';
+import { getGlossaryTerms } from '@/lib/cms';
+import type { CmsEducationContent } from '@/lib/cms';
+import type { Metadata } from 'next';
 
-export default function GlossaryRoute({ params }: { params: { locale: string } }) {
+export const metadata: Metadata = {
+  title: 'Trading Glossary | NewEra365',
+  description: 'Definitions for hundreds of trading, forex, and financial market terms.',
+};
+
+function mapToGlossaryTerm(item: CmsEducationContent): CmsGlossaryTerm {
+  return {
+    id: item.id,
+    glossaryTerm: item.glossaryTerm ?? item.title,
+    alphabeticalIndex: item.alphabeticalIndex,
+    body: item.body ?? null,
+  };
+}
+
+export default async function GlossaryRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  return <GlossaryPage />;
+  const items = await getGlossaryTerms(params.locale);
+  return <GlossaryPage terms={items.length > 0 ? items.map(mapToGlossaryTerm) : undefined} />;
 }

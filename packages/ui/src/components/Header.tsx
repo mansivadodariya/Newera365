@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { MobileMenu } from './MobileMenu';
+import { LanguageToggle } from './LanguageToggle';
 
 type DropdownItem = { label: string; sub: string; href: string };
 type NavItem = { label: string; href: string; dropdown?: DropdownItem[] };
@@ -51,10 +52,11 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Platform',
     href: '/platform/mt5',
     dropdown: [
-      { label: 'MetaTrader 5', sub: 'Professional desktop platform', href: '/platform/mt5' },
+      { label: 'Platform overview', sub: 'All trading tools & platforms', href: '/platform/mt5' },
+      { label: 'MetaTrader 5', sub: 'Professional desktop & mobile', href: '/platform/mt5' },
       { label: 'Web Trader', sub: 'Trade from any browser', href: '/platform/webtrader' },
       { label: 'Mobile App', sub: 'iOS & Android', href: '/platform/mobile' },
-      { label: 'Tools', sub: 'Calculators & watchlist', href: '/tools' },
+      { label: 'Tools & automation', sub: 'EAs, VPS & copy trading', href: '/tools' },
     ],
   },
   {
@@ -72,33 +74,38 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Research',
     href: '/research',
     dropdown: [
-      { label: 'Market analysis', sub: 'Analyst commentary & ideas', href: '/research' },
-      { label: 'Economic calendar', sub: 'Key events & releases', href: '/tools/calendar' },
-      { label: 'Analyst view', sub: "Our desk's chart picks", href: '/tools/analyst-chart' },
-      { label: 'Newsletter', sub: 'Monday briefing, 7am', href: '/newsletter' },
+      { label: 'Market articles', sub: 'Desk commentary & analysis', href: '/research' },
+      { label: 'Economic calendar', sub: 'Key market events', href: '/tools/calendar' },
+      { label: 'Analyst views', sub: 'Forecasts & signals', href: '/tools/analyst-chart' },
+      { label: 'Newsletter', sub: 'The Monday briefing', href: '/newsletter' },
+      { label: 'Live watchlist', sub: 'Real-time prices', href: '/tools/watchlist' },
     ],
   },
   {
     label: 'Tools',
     href: '/tools',
     dropdown: [
-      { label: 'Calculator', sub: 'Margin, pip & swap', href: '/tools' },
+      { label: 'Calculators', sub: 'Margin, pip & swap', href: '/tools' },
       {
         label: 'Spread comparator',
         sub: 'Side-by-side account spreads',
         href: '/tools/spread-comparator',
       },
       { label: 'Live watchlist', sub: 'Real-time market prices', href: '/tools/watchlist' },
+      { label: 'Economic calendar', sub: 'Key market events & releases', href: '/tools/calendar' },
     ],
   },
   {
     label: 'Company',
     href: '/company/about',
     dropdown: [
-      { label: 'About', sub: 'Who we are', href: '/company/about' },
-      { label: 'Careers', sub: 'Join the team', href: '/company/careers' },
-      { label: 'Contact', sub: 'Get in touch', href: '/contact' },
-      { label: 'FAQs', sub: 'Common questions', href: '/faqs' },
+      { label: 'About us', sub: 'Who we are & our mission', href: '/company/about' },
+      { label: 'Careers', sub: "We're hiring across 8 cities", href: '/company/careers' },
+      { label: 'Legal & policies', sub: 'Terms, privacy & regulation', href: '/legal' },
+      { label: 'Newsletter', sub: 'The Monday briefing, weekly', href: '/newsletter' },
+      { label: 'FAQ', sub: 'Common questions answered', href: '/faqs' },
+      { label: 'Contact', sub: 'Talk to the team directly', href: '/contact' },
+      { label: 'Live chat', sub: 'Chat with support now', href: '/live-chat' },
     ],
   },
 ];
@@ -182,60 +189,62 @@ function DesktopNavItem({
   locale: string;
   pathname: string;
 }) {
-  const [open, setOpen] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   const isActive =
     item.href === '/'
       ? pathname === `/${locale}` || pathname === `/${locale}/`
       : pathname.startsWith(`/${locale}${item.href}`);
 
-  function handleMouseEnter() {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    setOpen(true);
-  }
-  function handleMouseLeave() {
-    timerRef.current = setTimeout(() => setOpen(false), 120);
-  }
-
   return (
-    <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div className="group relative">
       <Link
         href={`/${locale}${item.href === '/' ? '' : item.href}`}
         className={`font-body text-[15px] font-medium transition-colors ${
-          isActive ? 'text-accent' : 'text-foreground hover:text-accent'
+          isActive ? 'text-accent' : 'text-foreground group-hover:text-accent'
         }`}
       >
         {item.label}
       </Link>
 
-      {item.dropdown && open && (
-        <div className="bg-background absolute left-1/2 top-full z-50 mt-3 w-[256px] -translate-x-1/2 rounded-[14px] p-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
-          {item.dropdown.map((d) => (
-            <Link
-              key={d.href}
-              href={`/${locale}${d.href}`}
-              className="hover:bg-surface block rounded-[9px] px-3 py-[9px] transition-colors"
-            >
-              <span className="font-body text-foreground block text-[14px] font-medium leading-[1.2]">
-                {d.label}
-              </span>
-              <span className="font-body text-muted mt-[2px] block text-[12px] leading-[1.3]">
-                {d.sub}
-              </span>
-            </Link>
-          ))}
+      {item.dropdown && (
+        <div className="pointer-events-none invisible absolute left-1/2 top-full z-50 w-[256px] -translate-x-1/2 pt-3 opacity-0 transition-[opacity,visibility] duration-100 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100">
+          <div className="bg-background rounded-[14px] p-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+            {item.dropdown.map((d) => (
+              <Link
+                key={d.href}
+                href={`/${locale}${d.href}`}
+                className="hover:bg-surface block rounded-[9px] px-3 py-[9px] transition-colors"
+              >
+                <span className="font-body text-foreground block text-[14px] font-medium leading-[1.2]">
+                  {d.label}
+                </span>
+                <span className="font-body text-muted mt-[2px] block text-[12px] leading-[1.3]">
+                  {d.sub}
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       )}
     </div>
   );
 }
 
-function Header() {
+export interface CmsNavItem {
+  label: string;
+  href: string;
+  id?: string | null;
+}
+
+function Header({ navItems }: { navItems?: CmsNavItem[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const locale = useLocale();
   const t = useTranslations('nav');
   const pathname = usePathname();
+
+  const displayNav: NavItem[] =
+    navItems && navItems.length > 0
+      ? navItems.map((n) => ({ label: n.label, href: n.href }))
+      : NAV_ITEMS;
 
   return (
     <>
@@ -263,16 +272,18 @@ function Header() {
 
           {/* Desktop nav links */}
           <nav className="hidden items-center gap-7 xl:flex" aria-label="Main navigation">
-            {NAV_ITEMS.map((item) => (
+            {displayNav.map((item) => (
               <DesktopNavItem key={item.label} item={item} locale={locale} pathname={pathname} />
             ))}
           </nav>
 
           {/* Desktop right CTAs */}
-          <div className="hidden items-center gap-6 xl:flex">
+          <div className="hidden items-center gap-3 xl:flex">
+            <LanguageToggle />
+            <ThemeToggle />
             <Link
               href={`/${locale}/login`}
-              className="font-body text-foreground text-[15px] font-medium transition-opacity hover:opacity-70"
+              className="font-body text-foreground ms-3 text-[15px] font-medium transition-opacity hover:opacity-70"
             >
               {t('signIn')}
             </Link>
@@ -286,6 +297,7 @@ function Header() {
 
           {/* Mobile controls */}
           <div className="flex items-center gap-2 xl:hidden">
+            <LanguageToggle />
             <ThemeToggle />
             <button
               onClick={() => setMenuOpen(true)}

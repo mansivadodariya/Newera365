@@ -51,7 +51,7 @@ const nextConfig = {
               "frame-src https://www.tradingview.com https://s.tradingview.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https://media.newera365.com https://cms.newera365.com",
-              "connect-src 'self'",
+              `connect-src 'self' ${process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'}`,
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",

@@ -146,10 +146,10 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
           </Link>
 
           <SectionKicker className="mb-4">{meta.kicker}</SectionKicker>
-          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[105%] tracking-[-0.03em]">
+          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[105%] tracking-[-0.03em] xl:text-[56px]">
             {meta.headline}
           </h1>
-          <p className="font-body text-muted max-w-[310px] text-[14px] leading-[155%]">
+          <p className="font-body text-muted max-w-[310px] text-[14px] leading-[155%] xl:max-w-[480px]">
             {meta.sub}
           </p>
         </div>
@@ -165,9 +165,9 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
           </SectionKicker>
 
           {/* Dark watchlist container */}
-          <div className="overflow-hidden rounded-[20px] bg-[#111111]">
+          <div className="overflow-hidden rounded-[20px] bg-[#111111] xl:rounded-[24px]">
             {/* Column header */}
-            <div className="border-white/8 grid grid-cols-[1fr_64px_64px] border-b px-4 py-2">
+            <div className="border-white/8 grid grid-cols-[1fr_64px_64px] border-b px-4 py-2 xl:grid-cols-[1fr_120px_120px] xl:px-6">
               <span className="font-body text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
                 Symbol
               </span>
@@ -184,7 +184,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
               ? cmsRows.map((item, i) => (
                   <div
                     key={item.id}
-                    className={`grid grid-cols-[1fr_64px_64px] items-center px-4 py-[11px] ${i < cmsRows.length - 1 ? 'border-b border-white/[0.06]' : ''}`}
+                    className={`grid grid-cols-[1fr_64px_64px] items-center px-4 py-[11px] xl:grid-cols-[1fr_120px_120px] xl:px-6 xl:py-[14px] ${i < cmsRows.length - 1 ? 'border-b border-white/[0.06]' : ''}`}
                   >
                     {/* Left: indicator dot + symbol + name */}
                     <div className="flex min-w-0 items-center gap-3">
@@ -213,7 +213,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
               : meta.staticRows.map((row, i) => (
                   <div
                     key={row.symbol}
-                    className={`grid grid-cols-[1fr_64px_64px] items-center px-4 py-[11px] ${i < meta.staticRows.length - 1 ? 'border-b border-white/[0.06]' : ''}`}
+                    className={`grid grid-cols-[1fr_64px_64px] items-center px-4 py-[11px] xl:grid-cols-[1fr_120px_120px] xl:px-6 xl:py-[14px] ${i < meta.staticRows.length - 1 ? 'border-b border-white/[0.06]' : ''}`}
                   >
                     {/* Left: indicator dot + symbol + name */}
                     <div className="flex min-w-0 items-center gap-3">
@@ -318,7 +318,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
           <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.025em]">
             Explore other asset classes.
           </h2>
-          <div className="flex flex-col gap-[10px]">
+          <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
             {Object.entries(CATEGORY_META)
               .filter(([key]) => key !== category)
               .map(([key, m]) => (

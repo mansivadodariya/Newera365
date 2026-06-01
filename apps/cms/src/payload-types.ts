@@ -26,6 +26,8 @@ export interface Config {
     'company-content': CompanyContent;
     'team-members': TeamMember;
     'webinar-registrations': WebinarRegistration;
+    promotions: Promotion;
+    'payment-methods': PaymentMethod;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
@@ -487,6 +489,51 @@ export interface WebinarRegistration {
   locale: 'en' | 'ar';
   registeredAt?: string | null;
   consentIpHash?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "promotions".
+ */
+export interface Promotion {
+  id: number;
+  title: string;
+  slug: string;
+  tag?: string | null;
+  tagColor?: ('accent' | 'amber' | 'blue' | 'purple' | 'red' | 'grey') | null;
+  description: string;
+  terms?: string | null;
+  ctaLabel?: string | null;
+  ctaHref?: string | null;
+  isHighlighted?: boolean | null;
+  sortOrder?: number | null;
+  activeFrom?: string | null;
+  activeTo?: string | null;
+  status: 'active' | 'inactive';
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  translationKey?: string | null;
+  locale: 'en' | 'ar';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payment-methods".
+ */
+export interface PaymentMethod {
+  id: number;
+  name: string;
+  methodType: 'card' | 'bank' | 'ewallet' | 'crypto' | 'local';
+  logo?: number | Media | null;
+  depositTime?: string | null;
+  withdrawalTime?: string | null;
+  minDeposit?: string | null;
+  fee?: string | null;
+  notes?: string | null;
+  sortOrder?: number | null;
+  status: 'active' | 'inactive';
   updatedAt: string;
   createdAt: string;
 }

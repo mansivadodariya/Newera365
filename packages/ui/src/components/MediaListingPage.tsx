@@ -199,9 +199,9 @@ export function MediaListingPage() {
       {featured && (activeTab === 'ALL' || activeTab === featured.tab) && !search && (
         <section className="dark:bg-background bg-white px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <div className="flex flex-col gap-4 overflow-hidden rounded-[22px] bg-[#0d0d0d] p-5">
-              {/* Thumbnail placeholder */}
-              <div className="relative flex h-[180px] items-center justify-center overflow-hidden rounded-[14px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111]">
+            <div className="overflow-hidden rounded-[22px] bg-[#0d0d0d] xl:flex xl:flex-row">
+              {/* Thumbnail */}
+              <div className="relative flex h-[180px] items-center justify-center overflow-hidden bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111] xl:h-auto xl:w-[55%] xl:flex-shrink-0 xl:rounded-none">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 {/* NEW EPISODE badge */}
                 <div className="bg-accent absolute left-3 top-3 rounded-full px-2.5 py-[3px]">
@@ -214,14 +214,20 @@ export function MediaListingPage() {
                   <span className="font-body text-[10px] text-white/80">{featured.duration}</span>
                 </div>
                 {/* Play button */}
-                <div className="bg-accent absolute bottom-4 left-4 flex h-10 w-10 items-center justify-center rounded-full shadow-lg">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <div className="bg-accent absolute bottom-4 left-4 flex h-10 w-10 items-center justify-center rounded-full shadow-lg xl:h-14 xl:w-14">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    className="xl:scale-125"
+                  >
                     <path d="M4 3l10 5-10 5V3z" fill="white" />
                   </svg>
                 </div>
               </div>
               {/* Meta */}
-              <div>
+              <div className="p-5 xl:flex xl:flex-1 xl:flex-col xl:justify-center xl:p-8">
                 <div className="mb-2 flex items-center gap-2">
                   <span
                     className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${TAG_COLORS[featured.tagDisplay]}`}
@@ -229,11 +235,12 @@ export function MediaListingPage() {
                     {featured.tagDisplay}
                   </span>
                   <span className="font-body text-[11px] text-white/40">{featured.type}</span>
+                  <span className="font-body text-[11px] text-white/30">· RELEASED TODAY</span>
                 </div>
-                <p className="mb-1 font-sans text-[17px] font-semibold text-white">
+                <p className="mb-2 font-sans text-[17px] font-semibold leading-[1.3] text-white xl:text-[26px]">
                   {featured.title}
                 </p>
-                <p className="font-body text-[12px] leading-[1.55] text-white/60">
+                <p className="font-body text-[12px] leading-[1.55] text-white/60 xl:text-[14px]">
                   {featured.desc}
                 </p>
               </div>
@@ -252,7 +259,7 @@ export function MediaListingPage() {
               No episodes match your search.
             </p>
           ) : (
-            <div className="grid grid-cols-2 gap-[10px]">
+            <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-3">
               {filtered.map((ep) => (
                 <div
                   key={ep.id}

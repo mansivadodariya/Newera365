@@ -182,31 +182,51 @@ const DEVICES = [
   { label: 'Windows', Icon: IconDesktop },
 ];
 
-export function PlatformPage() {
+export interface CmsPlatformDownloads {
+  windows?: string | null;
+  mac?: string | null;
+  ios?: string | null;
+  android?: string | null;
+  webTrader?: string | null;
+}
+
+interface PlatformPageProps {
+  downloads?: CmsPlatformDownloads;
+}
+
+export function PlatformPage({ downloads }: PlatformPageProps) {
   const locale = useLocale();
 
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
-            A platform
-            <br />
-            that
-            <span className="text-accent"> moves</span>
-            <br />
-            with markets.
-          </h1>
-          <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
-            Trade the way you want — on the world&apos;s most trusted terminal, native mobile or
-            web.
-          </p>
+      <section
+        className="dark:bg-background bg-white px-5 pb-8 pt-9 xl:min-h-[420px] xl:pb-0 xl:pt-0"
+        style={{
+          background: 'linear-gradient(135deg, rgba(0,176,80,0.12) 0%, rgba(255,255,255,0) 60%)',
+        }}
+      >
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:min-h-[420px] xl:max-w-[1200px] xl:items-center xl:gap-12">
+          {/* Text side */}
+          <div className="xl:w-1/2 xl:py-16">
+            <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1] xl:text-[52px]">
+              A platform
+              <br />
+              that
+              <span className="text-accent"> moves</span>
+              <br />
+              with markets.
+            </h1>
+            <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55] xl:max-w-[420px] xl:text-[16px]">
+              Trade the way you want — on the world&apos;s most trusted terminal, native mobile or
+              web.
+            </p>
+          </div>
 
           {/* Device mockup */}
-          <div className="relative mt-6 h-[200px] overflow-hidden rounded-[24px] bg-gradient-to-br from-[#f0f9f3] to-[#f0f0f0] dark:from-[#0d1f11] dark:to-[#1a1a1a]">
+          <div className="relative mt-6 h-[200px] overflow-hidden rounded-[24px] bg-gradient-to-br from-[#f0f9f3] to-[#f0f0f0] xl:mt-0 xl:h-[340px] xl:w-1/2 xl:flex-shrink-0 xl:rounded-[32px] dark:from-[#0d1f11] dark:to-[#1a1a1a]">
             {/* Phone mock */}
-            <div className="absolute right-6 top-3 h-[180px] w-[82px] overflow-hidden rounded-[18px] border border-[#e5e7eb] bg-white shadow-lg dark:border-[#2a2a2a] dark:bg-[#111111]">
+            <div className="absolute right-6 top-3 h-[180px] w-[82px] overflow-hidden rounded-[18px] border border-[#e5e7eb] bg-white shadow-lg xl:right-10 xl:top-6 xl:h-[290px] xl:w-[130px] xl:rounded-[26px] dark:border-[#2a2a2a] dark:bg-[#111111]">
               <div className="h-2.5 w-full bg-[#111111] dark:bg-[#000]" />
               <div className="flex h-full flex-col gap-1 bg-[#111111] p-1.5">
                 <div className="h-1.5 w-3/4 rounded bg-white/10" />
@@ -227,12 +247,14 @@ export function PlatformPage() {
               </div>
             </div>
             {/* Laptop mock */}
-            <div className="absolute left-3 top-6 h-[148px] w-[190px] overflow-hidden rounded-[10px] border border-[#e5e7eb] bg-[#111111] shadow-lg dark:border-[#2a2a2a]">
-              <div className="flex h-6 items-center gap-1 border-b border-white/10 bg-[#1a1a1a] px-2">
-                <span className="font-body text-[8px] font-semibold text-white">EURUSD</span>
-                <span className="font-body ml-1 text-[7px] text-white/40">H1</span>
+            <div className="absolute left-3 top-6 h-[148px] w-[190px] overflow-hidden rounded-[10px] border border-[#e5e7eb] bg-[#111111] shadow-lg xl:left-6 xl:top-10 xl:h-[236px] xl:w-[300px] xl:rounded-[14px] dark:border-[#2a2a2a]">
+              <div className="flex h-6 items-center gap-1 border-b border-white/10 bg-[#1a1a1a] px-2 xl:h-8 xl:px-3">
+                <span className="font-body text-[8px] font-semibold text-white xl:text-[10px]">
+                  EURUSD
+                </span>
+                <span className="font-body ml-1 text-[7px] text-white/40 xl:text-[9px]">H1</span>
               </div>
-              <div className="flex h-[calc(100%-24px)] items-end gap-0.5 px-2 pb-2 pt-1">
+              <div className="flex h-[calc(100%-24px)] items-end gap-0.5 px-2 pb-2 pt-1 xl:h-[calc(100%-32px)] xl:gap-1 xl:px-3 xl:pb-3">
                 {[30, 50, 40, 60, 45, 70, 55, 80, 65, 75, 60, 85].map((h, i) => (
                   <div
                     key={i}
@@ -252,20 +274,20 @@ export function PlatformPage() {
       </section>
 
       {/* Terminal section */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="dark:bg-background bg-white px-5 pb-10 xl:py-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
             PICK YOUR TERMINAL
           </SectionKicker>
-          <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
+          <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1] xl:text-[40px]">
             Trade anywhere.
           </h2>
 
-          <div className="flex flex-col gap-[14px]">
+          <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-3 xl:gap-[18px]">
             {PLATFORM_CARDS.map((card) => (
               <div
                 key={card.id}
-                className={`flex flex-col gap-[18px] rounded-[22px] p-[22px] ${card.cardBg}`}
+                className={`flex flex-col gap-[18px] rounded-[22px] p-[22px] xl:p-[28px] ${card.cardBg}`}
               >
                 {/* Head: icon + tag */}
                 <div className="flex items-center justify-between">
@@ -314,30 +336,32 @@ export function PlatformPage() {
       </section>
 
       {/* Tools section */}
-      <section className="gap-[14px] rounded-[32px] bg-gradient-to-b from-[#F8F8F7] to-[#FFFFFF] pb-[36px] pl-[20px] pr-[20px] pt-[40px] dark:from-[#1a1a1a] dark:to-[#111111]">
+      <section className="dark:bg-surface bg-[#f5f5f5] pb-[36px] pl-[20px] pr-[20px] pt-[40px] xl:px-8 xl:py-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
-            WHAT&apos;S INSIDE
+            BUILT FOR SPEED
           </SectionKicker>
-          <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
+          <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1] xl:mb-8 xl:text-[40px]">
             Pro tools, made approachable.
           </h2>
 
-          <div className="grid grid-cols-2 gap-[10px]">
+          <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-2 xl:gap-[16px]">
             {TOOLS.map((tool) => (
               <div
                 key={tool.id}
-                className="dark:bg-surface flex flex-col gap-3 rounded-[18px] bg-white p-4"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+                className="dark:bg-surface flex flex-col gap-3 rounded-[18px] bg-white p-4 xl:rounded-[24px] xl:p-7"
+                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)', backdropFilter: 'blur(8px)' }}
               >
-                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#111111] text-white dark:bg-[#1e1e1e]">
+                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#111111] text-white xl:h-12 xl:w-12 xl:rounded-[16px] dark:bg-[#1e1e1e]">
                   <tool.Icon />
                 </div>
                 <div>
-                  <p className="text-foreground mb-[4px] font-sans text-[14px] font-semibold">
+                  <p className="text-foreground mb-[4px] font-sans text-[14px] font-semibold xl:mb-1 xl:text-[18px]">
                     {tool.label}
                   </p>
-                  <p className="font-body text-muted text-[11px] leading-snug">{tool.desc}</p>
+                  <p className="font-body text-muted text-[11px] leading-snug xl:text-[13px]">
+                    {tool.desc}
+                  </p>
                 </div>
               </div>
             ))}
@@ -346,46 +370,167 @@ export function PlatformPage() {
       </section>
 
       {/* Works Everywhere */}
-      <section className="bg-black px-5 pb-12 pt-10">
+      <section className="bg-black px-5 pb-12 pt-10 xl:px-8 xl:py-20">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white [&>span:last-child]:text-white">
-            WORKS EVERYWHERE
+            FOREX EVERYWHERE
           </SectionKicker>
-          <h2 className="mb-7 font-sans text-[32px] font-semibold leading-[1.1] text-white">
-            One login.
-            <br />
-            Every device.
+          <h2 className="mb-3 font-sans text-[32px] font-semibold leading-[1.1] text-white xl:text-[40px]">
+            One login. <span className="hidden xl:inline">Every device.</span>
+            <span className="xl:hidden">
+              <br />
+              Every device.
+            </span>
           </h2>
+          <p className="font-body mb-8 max-w-[320px] text-[14px] leading-[1.55] text-white/50 xl:max-w-[460px] xl:text-[15px]">
+            MetaTrader 5 is available on every major platform. One account, zero friction.
+          </p>
 
-          {/* Device grid */}
-          <div className="mb-8 grid grid-cols-3 gap-[10px]">
+          {/* Device grid — 3-col on mobile, 2-col (of 3 rows) on xl */}
+          <div className="mb-8 grid grid-cols-3 gap-[10px] xl:grid-cols-2 xl:gap-x-6 xl:gap-y-3">
             {DEVICES.map((dev) => (
               <div
                 key={dev.label}
-                className="flex flex-col items-center gap-2 rounded-[14px] bg-white py-4 text-[#111111] dark:bg-[#1c1c1c] dark:text-white"
+                className="flex flex-col items-center gap-2 rounded-[14px] border border-white/[0.08] bg-white/[0.06] py-4 text-white xl:flex-row xl:items-center xl:gap-4 xl:rounded-[16px] xl:px-5 xl:py-4"
               >
-                <dev.Icon />
-                <span className="font-body text-[11px] font-medium">{dev.label}</span>
+                <div className="text-white/70 xl:flex-shrink-0">
+                  <dev.Icon />
+                </div>
+                <div className="xl:flex-1">
+                  <span className="font-body block text-[11px] font-medium xl:text-[14px] xl:font-semibold">
+                    {dev.label}
+                  </span>
+                  <span className="font-body hidden text-[10px] text-white/40 xl:block">
+                    {dev.label === 'iOS'
+                      ? 'iPhone · App Store'
+                      : dev.label === 'iPadOS'
+                        ? 'iPad · App Store'
+                        : dev.label === 'macOS'
+                          ? 'Mac · Direct download'
+                          : dev.label === 'Android'
+                            ? 'Google Play'
+                            : dev.label === 'Linux'
+                              ? 'Linux · Direct download'
+                              : 'Windows · Direct download'}
+                  </span>
+                </div>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  className="hidden text-white/30 xl:block"
+                >
+                  <path
+                    d="M4 8h8M9 5l3 3-3 3"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </div>
             ))}
           </div>
 
-          {/* Download CTA */}
-          <Link
-            href={`/${locale}/register`}
-            className="bg-accent font-body hover:bg-accent-hover flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
-          >
-            Download MetaTrader 5
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M8 3v8M4 7l4 4 4-4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
+          {/* CTA row — stacked on mobile, inline on xl with tagline on right */}
+          <div className="xl:flex xl:items-center xl:justify-between xl:gap-6">
+            <div className="flex flex-col gap-3 xl:flex-row xl:gap-4">
+              {/* Download MT5 */}
+              <a
+                href={downloads?.windows ?? '#'}
+                target={downloads?.windows ? '_blank' : undefined}
+                rel={downloads?.windows ? 'noopener noreferrer' : undefined}
+                className="bg-accent font-body hover:bg-accent-hover flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors xl:w-auto xl:px-7"
+              >
+                Download MetaTrader 5
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M8 3v8M4 7l4 4 4-4"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+
+              {/* Open WebTrader */}
+              <Link
+                href={downloads?.webTrader ?? `/${locale}/platform`}
+                className="font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40 xl:w-auto xl:px-7"
+              >
+                Open WebTrader
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M4 8h8M9 5l3 3-3 3"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Link>
+            </div>
+
+            {/* Right tagline — desktop only */}
+            <p className="font-body hidden text-right text-[13px] leading-snug text-white/40 xl:block">
+              Free demo · 2-minute setup
+              <br />
+              MT4 also available
+            </p>
+          </div>
+
+          {/* Mobile app badges — shown only when CMS URLs are configured */}
+          {(downloads?.ios || downloads?.android) && (
+            <div className="mt-3 flex gap-3">
+              {downloads.ios && (
+                <a
+                  href={downloads.ios}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border-border font-body text-foreground flex h-[42px] flex-1 items-center justify-center gap-1.5 rounded-full border text-[13px] font-medium transition-opacity hover:opacity-70"
+                >
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path
+                      d="M11.5 1a3.5 3.5 0 01-3.5 3.5A3.5 3.5 0 0111.5 1z"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                    />
+                    <path
+                      d="M2 11.5C2 8.46 4.46 6 7.5 6h1C11.54 6 14 8.46 14 11.5c0 1.93-.7 3-2 3.5H4c-1.3-.5-2-1.57-2-3.5z"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                    />
+                  </svg>
+                  App Store
+                </a>
+              )}
+              {downloads.android && (
+                <a
+                  href={downloads.android}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border-border font-body text-foreground flex h-[42px] flex-1 items-center justify-center gap-1.5 rounded-full border text-[13px] font-medium transition-opacity hover:opacity-70"
+                >
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path
+                      d="M3 5.5h10v7a1.5 1.5 0 01-1.5 1.5h-7A1.5 1.5 0 013 12.5v-7z"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                    />
+                    <path
+                      d="M5.5 5.5V4a2.5 2.5 0 015 0v1.5M6 14v1.5M10 14v1.5M1.5 7h1M13.5 7h1"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  Google Play
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </section>
     </>

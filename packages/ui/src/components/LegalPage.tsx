@@ -2,6 +2,25 @@
 
 import { useState } from 'react';
 import { useLocale } from 'next-intl';
+import { RichText, extractHeadings } from './RichText';
+import type { SlateNode } from './RichText';
+
+export interface CmsLegalDocument {
+  id: number;
+  pageType: string;
+  title: string;
+  body: SlateNode[];
+  effectiveDate?: string | null;
+  version?: string | null;
+}
+
+const PAGE_TYPE_LABELS: Record<string, string> = {
+  terms: 'Terms & Conditions',
+  'privacy-policy': 'Privacy Policy',
+  'risk-disclosure': 'Risk Warning',
+  'aml-policy': 'AML Policy',
+  'cookie-policy': 'Cookie Policy',
+};
 
 const DOCUMENTS = [
   { id: 'terms', label: 'Terms & Conditions' },
@@ -302,7 +321,17 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
   ),
 };
 
-export function LegalPage() {
+interface LegalPageProps {
+  documents?: CmsLegalDocument[];
+}
+
+export function LegalPage({ documents }: LegalPageProps) {
+  const hasCms = documents && documents.length > 0;
+
+  const cmsDocList = hasCms
+    ? documents.map((d) => ({ id: d.pageType, label: PAGE_TYPE_LABELS[d.pageType] ?? d.title }))
+    : null;
+
   const [activeDoc, setActiveDoc] = useState<DocId>('terms');
 
   return (
@@ -325,10 +354,10 @@ export function LegalPage() {
       <section className="dark:bg-background bg-white px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
-            {DOCUMENTS.map((doc) => (
+            {(cmsDocList ?? DOCUMENTS).map((doc) => (
               <button
                 key={doc.id}
-                onClick={() => setActiveDoc(doc.id)}
+                onClick={() => setActiveDoc(doc.id as DocId)}
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-medium transition-colors ${
                   activeDoc === doc.id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
@@ -342,33 +371,65 @@ export function LegalPage() {
         </div>
       </section>
 
-      {/* Table of Contents */}
-      <section className="dark:bg-background bg-white px-5 pb-4">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="rounded-[16px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
-            <p className="font-body text-muted mb-3 text-[10px] uppercase tracking-[0.1em]">
-              Contents
-            </p>
-            <div className="flex flex-col gap-2">
-              {TOC[activeDoc].map((item) => (
-                <a
-                  key={item.num}
-                  href={`#section-${item.num}`}
-                  className="font-body text-foreground hover:text-accent flex items-center gap-3 text-[13px] transition-colors"
-                >
-                  <span className="text-muted w-5">{item.num}.</span>
-                  {item.title}
-                </a>
-              ))}
+      {/* TOC + Document body — stacked on mobile, 2-column on xl */}
+      <section className="dark:bg-background bg-white px-5 pb-12">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:max-w-[1200px] xl:flex-row xl:items-start xl:gap-10">
+          {/* Table of Contents */}
+          <div className="mb-6 xl:sticky xl:top-[88px] xl:mb-0 xl:w-[280px] xl:flex-shrink-0">
+            <div className="rounded-[16px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
+              <p className="font-body text-muted mb-3 text-[10px] uppercase tracking-[0.1em]">
+                Contents
+              </p>
+              <div className="flex flex-col gap-2">
+                {hasCms
+                  ? extractHeadings(documents.find((d) => d.pageType === activeDoc)?.body).map(
+                      (h, idx) => (
+                        <a
+                          key={h.id}
+                          href={`#${h.id}`}
+                          className="font-body text-foreground hover:text-accent flex items-center gap-3 text-[13px] transition-colors"
+                        >
+                          <span className="text-muted w-5">{idx + 1}.</span>
+                          {h.text}
+                        </a>
+                      ),
+                    )
+                  : (TOC[activeDoc as DocId] ?? []).map((item) => (
+                      <a
+                        key={item.num}
+                        href={`#section-${item.num}`}
+                        className="font-body text-foreground hover:text-accent flex items-center gap-3 text-[13px] transition-colors"
+                      >
+                        <span className="text-muted w-5">{item.num}.</span>
+                        {item.title}
+                      </a>
+                    ))}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Document body */}
-      <section className="dark:bg-background bg-white px-5 pb-12">
-        <div className="mx-auto flex max-w-[390px] flex-col gap-6 md:max-w-2xl xl:max-w-[1200px]">
-          {DOC_CONTENT[activeDoc]}
+          {/* Document body */}
+          <div className="flex flex-1 flex-col gap-6">
+            {hasCms
+              ? (() => {
+                  const doc = documents.find((d) => d.pageType === activeDoc);
+                  if (!doc) return null;
+                  return (
+                    <>
+                      {(doc.effectiveDate || doc.version) && (
+                        <p className="text-muted font-mono text-[11px] uppercase tracking-[0.1em]">
+                          {doc.effectiveDate
+                            ? `Effective ${new Date(doc.effectiveDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`
+                            : ''}
+                          {doc.version ? ` · ${doc.version}` : ''}
+                        </p>
+                      )}
+                      <RichText content={doc.body} />
+                    </>
+                  );
+                })()
+              : DOC_CONTENT[activeDoc as DocId]}
+          </div>
         </div>
       </section>
 

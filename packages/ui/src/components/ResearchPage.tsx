@@ -5,6 +5,18 @@ import { useState, useMemo } from 'react';
 import { useLocale } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
+export interface ArticleItem {
+  id: string;
+  slug: string;
+  category: string;
+  title: string;
+  summary: string;
+  date: string;
+  readTime?: string;
+  featured?: boolean;
+  sparkline?: readonly number[];
+}
+
 type Category = 'ALL' | 'MACRO' | 'STRATEGY' | 'EDUCATION' | 'ANALYSIS';
 
 const CATEGORIES: Category[] = ['ALL', 'MACRO', 'STRATEGY', 'ANALYSIS', 'EDUCATION'];
@@ -113,17 +125,35 @@ function Sparkline({ data, positive = true }: { data: readonly number[]; positiv
   );
 }
 
-export function ResearchPage() {
+interface ResearchPageProps {
+  articles?: ArticleItem[];
+  basePath?: string;
+}
+
+export function ResearchPage({ articles, basePath = 'research' }: ResearchPageProps) {
   const locale = useLocale();
   const [activeCategory, setActiveCategory] = useState<Category>('ALL');
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
-  const featured = ARTICLES.find((a) => a.featured)!;
-  const list = ARTICLES.filter((a) => !a.featured);
+  const allArticles: ArticleItem[] =
+    articles && articles.length > 0 ? articles : (ARTICLES as unknown as ArticleItem[]);
+  const categories = useMemo(() => {
+    if (articles && articles.length > 0) {
+      const cats = ['ALL', ...new Set(articles.map((a) => a.category.toUpperCase()))];
+      return cats as Category[];
+    }
+    return CATEGORIES;
+  }, [articles]);
+
+  const featured = allArticles.find((a) => a.featured) ?? allArticles[0];
+  const list = allArticles.filter((a) => a !== featured);
 
   const filteredList = useMemo(
-    () => (activeCategory === 'ALL' ? list : list.filter((a) => a.category === activeCategory)),
+    () =>
+      activeCategory === 'ALL'
+        ? list
+        : list.filter((a) => a.category.toUpperCase() === activeCategory),
     [activeCategory, list],
   );
 
@@ -147,7 +177,7 @@ export function ResearchPage() {
       <section className="dark:bg-background bg-white px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
-            {CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
@@ -165,11 +195,11 @@ export function ResearchPage() {
       </section>
 
       {/* Featured article */}
-      {activeCategory === 'ALL' && (
+      {activeCategory === 'ALL' && featured && (
         <section className="dark:bg-background bg-white px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <Link
-              href={`/${locale}/research/${featured.slug}`}
+              href={`/${locale}/${basePath}/${featured.slug}`}
               className="group flex flex-col overflow-hidden rounded-[22px] bg-[#111111]"
               style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.14)' }}
             >
@@ -202,7 +232,7 @@ export function ResearchPage() {
                 </div>
                 <div className="absolute left-4 top-4">
                   <span
-                    className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${CAT_COLORS[featured.category]}`}
+                    className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${CAT_COLORS[featured.category.toUpperCase()] ?? 'bg-accent/10 text-accent'}`}
                   >
                     {featured.category}
                   </span>
@@ -242,17 +272,17 @@ export function ResearchPage() {
       {/* Article list */}
       <section className="dark:bg-background bg-white px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
+          <div className="flex flex-col divide-y divide-[#e5e7eb] xl:grid xl:grid-cols-3 xl:divide-x xl:divide-y-0 dark:divide-[#2a2a2a]">
             {filteredList.map((article) => (
               <Link
                 key={article.id}
-                href={`/${locale}/research/${article.slug}`}
-                className="group flex items-start gap-4 py-5"
+                href={`/${locale}/${basePath}/${article.slug}`}
+                className="group flex items-start gap-4 py-5 xl:flex-col xl:gap-3 xl:px-6 xl:py-0 xl:first:pl-0 xl:last:pr-0"
               >
                 <div className="min-w-0 flex-1">
                   <div className="mb-1.5 flex items-center gap-2">
                     <span
-                      className={`font-body rounded-full px-2 py-[2px] text-[9px] font-semibold uppercase tracking-[0.08em] ${CAT_COLORS[article.category]}`}
+                      className={`font-body rounded-full px-2 py-[2px] text-[9px] font-semibold uppercase tracking-[0.08em] ${CAT_COLORS[article.category.toUpperCase()] ?? 'bg-accent/10 text-accent'}`}
                     >
                       {article.category}
                     </span>
@@ -269,7 +299,7 @@ export function ResearchPage() {
                   </span>
                 </div>
                 <div className="flex flex-shrink-0 flex-col items-end gap-2 pt-1">
-                  <Sparkline data={article.sparkline} />
+                  {article.sparkline && <Sparkline data={article.sparkline} />}
                   <svg
                     width="7"
                     height="12"
@@ -305,57 +335,65 @@ export function ResearchPage() {
       {/* Newsletter */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-3 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
-            WEEKLY BRIEFING
-          </SectionKicker>
-          <h2 className="mb-2 font-sans text-[28px] font-semibold leading-[1.1] text-white">
-            Get the briefing.
-            <br />
-            Monday, 7am.
-          </h2>
-          <p className="font-body mb-6 text-[13px] leading-relaxed text-white/60">
-            A 5-minute look at what matters in the new week — straight from the trading desk to your
-            inbox.
-          </p>
-          {subscribed ? (
-            <div className="bg-accent/20 flex items-center gap-3 rounded-[14px] px-4 py-4">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-                <path
-                  d="M4 10l4 4 8-8"
-                  stroke="#00B050"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span className="font-body text-[14px] text-white">
-                You&apos;re on the list. See you Monday.
-              </span>
+          <div className="xl:flex xl:items-center xl:gap-16">
+            {/* Left: heading */}
+            <div className="xl:flex-1">
+              <SectionKicker className="mb-3 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
+                WEEKLY BRIEFING
+              </SectionKicker>
+              <h2 className="mb-2 font-sans text-[28px] font-semibold leading-[1.1] text-white">
+                Get the briefing.
+                <br />
+                Monday, 7am.
+              </h2>
+              <p className="font-body mb-6 text-[13px] leading-relaxed text-white/60 xl:mb-0">
+                A 5-minute look at what matters in the new week — straight from the trading desk to
+                your inbox.
+              </p>
             </div>
-          ) : (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (email) setSubscribed(true);
-              }}
-              className="flex gap-2"
-            >
-              <input
-                type="email"
-                required
-                placeholder="your@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="font-body focus:border-accent flex-1 rounded-full border border-white/20 bg-white/[0.07] px-4 py-3 text-[13px] text-white placeholder-white/40 outline-none"
-              />
-              <button
-                type="submit"
-                className="bg-accent hover:bg-accent/90 font-body flex-shrink-0 rounded-full px-5 py-3 text-[13px] font-medium text-white transition-colors"
-              >
-                Subscribe
-              </button>
-            </form>
-          )}
+            {/* Right: form */}
+            <div className="xl:flex-1">
+              {subscribed ? (
+                <div className="bg-accent/20 flex items-center gap-3 rounded-[14px] px-4 py-4">
+                  <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                    <path
+                      d="M4 10l4 4 8-8"
+                      stroke="#00B050"
+                      strokeWidth="1.75"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <span className="font-body text-[14px] text-white">
+                    You&apos;re on the list. See you Monday.
+                  </span>
+                </div>
+              ) : (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (email) setSubscribed(true);
+                  }}
+                  className="flex gap-2"
+                >
+                  <input
+                    type="email"
+                    required
+                    placeholder="your@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="font-body focus:border-accent flex-1 rounded-full border border-white/20 bg-white/[0.07] px-4 py-3 text-[13px] text-white placeholder-white/40 outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="bg-accent hover:bg-accent/90 font-body flex-shrink-0 rounded-full px-5 py-3 text-[13px] font-medium text-white transition-colors"
+                  >
+                    Subscribe
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
         </div>
       </section>
     </>

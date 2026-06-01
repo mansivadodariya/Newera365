@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
+import { LanguageToggle } from './LanguageToggle';
 
 const NAV_GROUPS = [
   {
@@ -205,7 +206,7 @@ function MobileMenu({ open, onClose }: MobileMenuProps) {
         ))}
       </nav>
 
-      {/* CTA pair */}
+      {/* CTA pair + language toggle */}
       <div className="border-border flex flex-shrink-0 flex-col gap-3 border-t px-5 pb-8 pt-4">
         <Link
           href={`/${locale}/register`}
@@ -221,6 +222,10 @@ function MobileMenu({ open, onClose }: MobileMenuProps) {
         >
           {t('tryDemo')}
         </Link>
+        {/* Language switcher — full width in mobile menu */}
+        <div className="flex items-center justify-center pt-1">
+          <LanguageToggle fullWidth />
+        </div>
       </div>
     </div>
   );

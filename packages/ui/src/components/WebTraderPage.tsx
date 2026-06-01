@@ -7,18 +7,33 @@ import { SectionKicker } from './SectionKicker';
 const FEATURES = [
   {
     id: 'streaming',
-    title: 'Real-time streaming',
-    desc: 'WebSocket-powered price feeds with sub-100ms latency.',
+    title: 'Real-time data',
+    desc: 'Live market prices streamed straight to your browser — no refresh, no lag.',
   },
   {
     id: 'mt5',
-    title: 'MT5 backend',
-    desc: 'Same trade execution engine as the desktop client.',
+    title: 'Powered by MT5',
+    desc: 'The same trade-execution engine that powers the MetaTrader 5 desktop client.',
   },
   {
     id: 'encrypted',
-    title: 'Encrypted sessions',
-    desc: 'TLS 1.3 with hardware-isolated key vault.',
+    title: 'Secure sessions',
+    desc: 'Bank-grade encryption on every session, with client funds held in segregated accounts.',
+  },
+  {
+    id: 'charting',
+    title: 'Full charting',
+    desc: 'Detachable charts, every timeframe and the complete MT5 indicator suite.',
+  },
+  {
+    id: 'depth',
+    title: 'Depth of market',
+    desc: 'See full order-book depth and liquidity before you place a trade.',
+  },
+  {
+    id: 'markets',
+    title: '2,000+ markets',
+    desc: 'Forex, indices, shares, metals, energy and crypto — all from one login.',
   },
 ] as const;
 
@@ -220,7 +235,7 @@ export function WebTraderPage() {
             <br />
             <span className="text-accent">No compromise.</span>
           </h2>
-          <div className="flex flex-col gap-[10px]">
+          <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3 xl:gap-4">
             {FEATURES.map((feat) => (
               <div
                 key={feat.id}

@@ -1,7 +1,30 @@
 import { setRequestLocale } from 'next-intl/server';
 import { EducationHubPage } from '@newera365/ui';
+import type { CmsEducationItem } from '@newera365/ui';
+import { getEducationContent } from '@/lib/cms';
+import type { CmsEducationContent, CmsMedia } from '@/lib/cms';
+import type { Metadata } from 'next';
 
-export default function EducationRoute({ params }: { params: { locale: string } }) {
+export const metadata: Metadata = {
+  title: 'Education Hub | NewEra365',
+  description: 'Guides, glossary, ebooks, webinars, videos and audio — all in one place.',
+};
+
+function mapItem(item: CmsEducationContent): CmsEducationItem {
+  const thumb = item.thumbnail;
+  const thumbnailUrl = thumb && typeof thumb !== 'number' ? (thumb as CmsMedia).url : null;
+  return {
+    id: item.id,
+    slug: item.slug,
+    title: item.title,
+    contentType: item.contentType,
+    isGated: item.isGated,
+    thumbnailUrl,
+  };
+}
+
+export default async function EducationRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  return <EducationHubPage />;
+  const items = await getEducationContent(params.locale);
+  return <EducationHubPage content={items.length > 0 ? items.map(mapItem) : undefined} />;
 }

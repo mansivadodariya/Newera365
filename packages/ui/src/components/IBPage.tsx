@@ -103,19 +103,46 @@ export function IBPage() {
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
-            Partner with us.
-            <br />
-            <span className="text-accent">Grow together.</span>
-          </h1>
-          <p className="font-body text-muted mb-7 max-w-[320px] text-[14px] leading-[1.55]">
-            Earn industry-leading commission for every active trader you refer. Transparent payouts,
-            reliable settlement, dedicated support.
-          </p>
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:max-w-[1200px] xl:flex-row xl:items-center xl:gap-16">
+          {/* Left: text + CTAs */}
+          <div className="xl:flex-1">
+            <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
+              Partner with us.
+              <br />
+              <span className="text-accent">Grow together.</span>
+            </h1>
+            <p className="font-body text-muted mb-7 max-w-[320px] text-[14px] leading-[1.55]">
+              Earn industry-leading commission for every active trader you refer. Transparent
+              payouts, reliable settlement, dedicated support.
+            </p>
 
-          {/* Stats + mini chart */}
-          <div className="mb-7 flex items-stretch gap-3">
+            <div className="flex gap-3">
+              <Link
+                href={`/${locale}/register?type=partner`}
+                className="bg-accent hover:bg-accent/90 font-body flex h-[48px] items-center gap-2 rounded-full px-6 text-[14px] font-medium text-white transition-colors"
+              >
+                Apply now
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M3 8h10M9 4l4 4-4 4"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Link>
+              <a
+                href="#programs"
+                className="border-border text-foreground font-body hover:border-foreground flex h-[48px] items-center rounded-full border px-5 text-[14px] font-medium transition-colors"
+              >
+                See programs
+              </a>
+            </div>
+          </div>
+
+          {/* Right: stats + mini chart */}
+          <div className="mb-7 mt-8 flex items-stretch gap-3 xl:mb-0 xl:mt-0 xl:w-[340px] xl:flex-shrink-0">
             {/* Stats */}
             <div className="flex flex-1 flex-col gap-3 divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
               {TRUST_STATS.map((s) => (
@@ -130,7 +157,7 @@ export function IBPage() {
               ))}
             </div>
             {/* Earnings bar chart */}
-            <div className="dark:bg-surface flex w-[130px] flex-shrink-0 flex-col overflow-hidden rounded-[18px] bg-[#f9f9f9] p-3">
+            <div className="dark:bg-surface flex w-[130px] flex-shrink-0 flex-col overflow-hidden rounded-[18px] bg-[#f9f9f9] p-3 xl:w-[160px]">
               <div className="mb-2 flex items-center justify-between">
                 <span className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
                   Monthly
@@ -152,36 +179,12 @@ export function IBPage() {
               <p className="font-body text-muted text-[8px]">avg / mo</p>
             </div>
           </div>
-
-          <div className="flex gap-3">
-            <Link
-              href={`/${locale}/register?type=partner`}
-              className="bg-accent hover:bg-accent/90 font-body flex h-[48px] items-center gap-2 rounded-full px-6 text-[14px] font-medium text-white transition-colors"
-            >
-              Apply now
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M3 8h10M9 4l4 4-4 4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Link>
-            <a
-              href="#programs"
-              className="border-border text-foreground font-body hover:border-foreground flex h-[48px] items-center rounded-full border px-5 text-[14px] font-medium transition-colors"
-            >
-              See programs
-            </a>
-          </div>
         </div>
       </section>
 
       {/* Three ways to partner */}
       <section id="programs" className="dark:bg-background mx-auto bg-white px-5 pb-10">
-        <div className="">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
             Choose Your Path
           </SectionKicker>
@@ -266,11 +269,11 @@ export function IBPage() {
             <br />
             not weeks.
           </h2>
-          <div className="flex flex-col">
+          <div className="flex flex-col xl:grid xl:grid-cols-2 xl:gap-x-10">
             {STEPS.map((step, i) => (
               <div
                 key={step.num}
-                className={`flex items-start gap-4 py-5 ${i < STEPS.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]' : ''}`}
+                className={`flex items-start gap-4 py-5 ${i < STEPS.length - 1 ? 'border-b border-[#e5e7eb] xl:border-b-0 dark:border-[#2a2a2a]' : ''} xl:border-b xl:border-[#e5e7eb] xl:dark:border-[#2a2a2a]`}
               >
                 <div className="bg-accent mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full">
                   <span className="font-sans text-[11px] font-bold text-white">{step.num}</span>

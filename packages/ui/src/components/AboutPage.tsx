@@ -50,34 +50,67 @@ const EXPLORE_LINKS = [
   { label: 'Get in touch', href: '/contact', desc: 'Real people. Real answers.' },
 ] as const;
 
-export function AboutPage() {
+export interface CmsTeamMemberItem {
+  id: number;
+  name: string;
+  role: string;
+  bio?: string | null;
+  photoUrl?: string | null;
+  photoAlt?: string | null;
+}
+
+export interface CmsAwardItem {
+  id: number;
+  title: string;
+  date: string;
+  description?: string | null;
+  logoUrl?: string | null;
+  logoAlt?: string | null;
+  externalUrl?: string | null;
+}
+
+interface AboutPageProps {
+  team?: CmsTeamMemberItem[];
+  awards?: CmsAwardItem[];
+}
+
+export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
   const locale = useLocale();
+
+  const displayTeam = cmsTeam && cmsTeam.length > 0 ? cmsTeam : null;
 
   return (
     <>
       {/* Hero */}
       <section className="dark:bg-background bg-white px-5 pb-10 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-6 font-sans text-[38px] font-semibold leading-[1.08]">
-            A new era of trading, <span className="text-accent">built by traders.</span>
-          </h1>
+          <div className="xl:flex xl:flex-row xl:items-start xl:gap-12">
+            {/* Left: heading */}
+            <div className="xl:flex-1">
+              <h1 className="text-foreground mb-6 font-sans text-[38px] font-semibold leading-[1.08] xl:text-[56px] xl:leading-[1.04]">
+                A new era of trading, <span className="text-accent">built by traders.</span>
+              </h1>
+            </div>
 
-          {/* Quote card */}
-          <div
-            className="rounded-[20px] bg-[#111111] p-5"
-            style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.10)' }}
-          >
-            <p className="font-body mb-4 text-[14px] leading-[1.65] text-white/80">
-              &ldquo;To give every trader — from first deposit to first million — the tools, the
-              speed, and the trust they need to compete on a level field.&rdquo;
-            </p>
-            <div className="flex items-center gap-3">
-              <div className="bg-accent flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full">
-                <span className="font-sans text-[13px] font-semibold text-white">AM</span>
-              </div>
-              <div>
-                <p className="font-sans text-[13px] font-semibold text-white">Alex M.</p>
-                <p className="font-body text-[11px] text-white/40">CEO &amp; Co-Founder</p>
+            {/* Right: CEO quote card */}
+            <div className="xl:w-[480px] xl:flex-shrink-0">
+              <div
+                className="rounded-[20px] bg-[#111111] p-5 xl:p-7"
+                style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.10)' }}
+              >
+                <p className="font-body mb-4 text-[14px] leading-[1.65] text-white/80 xl:text-[15px]">
+                  &ldquo;To give every trader — from first deposit to first million — the tools, the
+                  speed, and the trust they need to compete on a level field.&rdquo;
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="bg-accent flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full">
+                    <span className="font-sans text-[13px] font-semibold text-white">AM</span>
+                  </div>
+                  <div>
+                    <p className="font-sans text-[13px] font-semibold text-white">Alex M.</p>
+                    <p className="font-body text-[11px] text-white/40">CEO &amp; Co-Founder</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -128,22 +161,42 @@ export function AboutPage() {
             Operators not
             <br /> marketers.
           </h1>
-          <div className="grid grid-cols-2 gap-[10px]">
-            {TEAM.map((member) => (
-              <div
-                key={member.name}
-                className="rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
-              >
-                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#111111]">
-                  <span className="font-sans text-[14px] font-semibold text-white">
-                    {member.initials}
-                  </span>
+          <div className="grid grid-cols-2 gap-[10px] xl:gap-5">
+            {(displayTeam ?? TEAM).map((member) => {
+              const isCms = displayTeam !== null;
+              const name = member.name;
+              const title = isCms
+                ? (member as CmsTeamMemberItem).role
+                : (member as (typeof TEAM)[0]).title;
+              const initials = isCms
+                ? name
+                    .split(' ')
+                    .map((w) => w[0])
+                    .join('')
+                    .toUpperCase()
+                    .slice(0, 2)
+                : (member as (typeof TEAM)[0]).initials;
+              const photoUrl = isCms ? (member as CmsTeamMemberItem).photoUrl : null;
+              return (
+                <div
+                  key={name}
+                  className="rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]"
+                  style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+                >
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-[#111111]">
+                    {photoUrl ? (
+                      <img src={photoUrl} alt={name} className="h-full w-full object-cover" />
+                    ) : (
+                      <span className="font-sans text-[14px] font-semibold text-white">
+                        {initials}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-foreground font-sans text-[14px] font-semibold">{name}</p>
+                  <p className="font-body text-muted mt-0.5 text-[12px]">{title}</p>
                 </div>
-                <p className="text-foreground font-sans text-[14px] font-semibold">{member.name}</p>
-                <p className="font-body text-muted mt-0.5 text-[12px]">{member.title}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -157,12 +210,12 @@ export function AboutPage() {
           <h1 className="text-foreground mb-4 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.025em]">
             Explore
           </h1>
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
+          <div className="flex flex-col divide-y divide-[#e5e7eb] xl:grid xl:grid-cols-2 xl:divide-y-0 xl:border-t xl:border-[#e5e7eb] dark:divide-[#2a2a2a] dark:xl:border-[#2a2a2a]">
             {EXPLORE_LINKS.map((link) => (
               <Link
                 key={link.label}
                 href={`/${locale}${link.href}`}
-                className="group flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0"
+                className="group flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0 xl:border-b xl:border-[#e5e7eb] xl:py-5 xl:first:pt-5 xl:last:pb-5 dark:xl:border-[#2a2a2a]"
               >
                 <div>
                   <p className="text-foreground group-hover:text-accent font-sans text-[14px] font-semibold transition-colors">
@@ -207,7 +260,7 @@ export function AboutPage() {
           </p>
           <Link
             href={`/${locale}/register`}
-            className="bg-accent font-body hover:bg-accent/90 flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
+            className="bg-accent font-body hover:bg-accent/90 flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors xl:w-auto xl:px-8"
           >
             Open an account
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">

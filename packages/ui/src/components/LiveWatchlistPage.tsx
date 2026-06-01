@@ -224,9 +224,12 @@ export function LiveWatchlistPage() {
             style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.10)' }}
           >
             {/* Table header */}
-            <div className="grid grid-cols-[1fr_auto_auto] gap-4 border-b border-white/[0.06] px-5 py-3">
+            <div className="grid grid-cols-[1fr_auto_auto] gap-4 border-b border-white/[0.06] px-5 py-3 xl:grid-cols-[120px_1fr_auto_auto]">
               <span className="font-body text-[10px] uppercase tracking-[0.1em] text-white/30">
                 Symbol
+              </span>
+              <span className="font-body hidden text-[10px] uppercase tracking-[0.1em] text-white/30 xl:block">
+                Name
               </span>
               <span className="font-body text-right text-[10px] uppercase tracking-[0.1em] text-white/30">
                 Price
@@ -240,12 +243,13 @@ export function LiveWatchlistPage() {
               {markets.map((m) => (
                 <div
                   key={m.symbol}
-                  className="grid grid-cols-[1fr_auto_auto] items-center gap-4 px-5 py-[14px]"
+                  className="grid grid-cols-[1fr_auto_auto] items-center gap-4 px-5 py-[14px] xl:grid-cols-[120px_1fr_auto_auto]"
                 >
-                  <div>
+                  <div className="xl:flex xl:flex-col xl:gap-0">
                     <p className="font-sans text-[14px] font-semibold text-white">{m.symbol}</p>
-                    <p className="font-body text-[11px] text-white/40">{m.name}</p>
+                    <p className="font-body text-[11px] text-white/40 xl:hidden">{m.name}</p>
                   </div>
+                  <p className="font-body hidden text-[13px] text-white/60 xl:block">{m.name}</p>
                   <p className="font-body text-[14px] tabular-nums text-white">{m.price}</p>
                   <p
                     className={`font-body w-16 text-right text-[13px] font-semibold tabular-nums ${m.up ? 'text-accent' : 'text-[#EF4444]'}`}

@@ -4,9 +4,11 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { Outfit, Inter, JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
-import { ToastProvider, Header, Footer } from '@newera365/ui';
+import { ToastProvider, Header, Footer, RiskBanner } from '@newera365/ui';
+import type { CmsNavItem, CmsFooterColumn, CmsSocialLinks } from '@newera365/ui';
 import { dir, LOCALES, type Locale } from '@newera365/types';
 import { routing } from '@/i18n/routing';
+import { getSiteSettings } from '@/lib/cms';
 import '../globals.css';
 
 const outfit = Outfit({
@@ -51,6 +53,38 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale);
   const messages = await getMessages();
+  const s = await getSiteSettings();
+
+  const navItems: CmsNavItem[] | undefined = s
+    ? ((locale === 'ar' ? s.navAr : s.navEn)?.filter((n): n is CmsNavItem =>
+        Boolean(n.label && n.href),
+      ) ?? undefined)
+    : undefined;
+
+  const footerColumns: CmsFooterColumn[] | undefined = s
+    ? ((locale === 'ar' ? s.footerAr : s.footerEn) ?? undefined)
+    : undefined;
+
+  const riskDisclaimer = s
+    ? ((locale === 'ar' ? s.riskDisclaimerAr : s.riskDisclaimerEn) ?? undefined)
+    : undefined;
+
+  const riskBannerEnabled = s?.riskBannerEnabled ?? false;
+  const riskBannerMessage = s
+    ? ((locale === 'ar' ? s.riskBannerAr : s.riskBannerEn) ?? undefined)
+    : undefined;
+
+  const socialLinks: CmsSocialLinks | undefined = s
+    ? {
+        facebook: s.socialFacebook ?? null,
+        x: s.socialX ?? null,
+        linkedin: s.socialLinkedIn ?? null,
+        instagram: s.socialInstagram ?? null,
+        youtube: s.socialYoutube ?? null,
+        telegram: s.socialTelegram ?? null,
+        tiktok: s.socialTiktok ?? null,
+      }
+    : undefined;
 
   return (
     <html
@@ -68,9 +102,18 @@ export default async function LocaleLayout({
         >
           <NextIntlClientProvider messages={messages}>
             <ToastProvider>
-              <Header />
+              {/* CMS-controlled dismissible risk banner — shown above header */}
+              <RiskBanner enabled={riskBannerEnabled} message={riskBannerMessage} />
+
+              <Header navItems={navItems && navItems.length > 0 ? navItems : undefined} />
               <main>{children}</main>
-              <Footer />
+              <Footer
+                footerColumns={
+                  footerColumns && footerColumns.length > 0 ? footerColumns : undefined
+                }
+                riskDisclaimer={riskDisclaimer ?? undefined}
+                socialLinks={socialLinks}
+              />
             </ToastProvider>
           </NextIntlClientProvider>
         </ThemeProvider>

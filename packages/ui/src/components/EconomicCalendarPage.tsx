@@ -186,42 +186,53 @@ export function EconomicCalendarPage() {
       {/* Filters */}
       <section className="dark:bg-background bg-white px-5 pb-3">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          {/* Impact filter */}
-          <div className="mb-3 flex gap-2">
-            {IMPACTS.map((imp) => (
-              <button
-                key={imp.id}
-                onClick={() => setImpact(imp.id)}
-                className={`font-body flex items-center gap-1.5 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
-                  impact === imp.id
-                    ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
-                }`}
-              >
-                {imp.id !== 'ALL' && (
-                  <span className={`h-1.5 w-1.5 rounded-full ${IMPACT_DOT[imp.id]}`} />
-                )}
-                {imp.label}
-              </button>
-            ))}
-          </div>
+          <div className="xl:flex xl:items-center xl:gap-8">
+            {/* Impact filter */}
+            <div className="mb-3 flex items-center gap-2 xl:mb-0">
+              <span className="font-body hidden text-[11px] uppercase tracking-[0.1em] text-[#9ca3af] xl:block">
+                Importance
+              </span>
+              {IMPACTS.map((imp) => (
+                <button
+                  key={imp.id}
+                  onClick={() => setImpact(imp.id)}
+                  className={`font-body flex items-center gap-1.5 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
+                    impact === imp.id
+                      ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                      : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
+                  }`}
+                >
+                  {imp.id !== 'ALL' && (
+                    <span className={`h-1.5 w-1.5 rounded-full ${IMPACT_DOT[imp.id]}`} />
+                  )}
+                  {imp.label}
+                </button>
+              ))}
+            </div>
 
-          {/* Currency filter */}
-          <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
-            {CURRENCIES.map((cur) => (
-              <button
-                key={cur}
-                onClick={() => setCurrency(cur)}
-                className={`font-body flex flex-shrink-0 items-center gap-1.5 rounded-full px-3 py-[6px] text-[11px] font-semibold uppercase tracking-[0.06em] transition-colors ${
-                  currency === cur
-                    ? 'bg-accent/10 text-accent'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
-                }`}
-              >
-                {cur !== 'ALL' && <span>{CURRENCY_FLAG[cur]}</span>}
-                {cur}
-              </button>
-            ))}
+            {/* Divider on xl */}
+            <div className="hidden h-5 w-px bg-[#e5e7eb] xl:block dark:bg-[#2a2a2a]" />
+
+            {/* Currency filter */}
+            <div className="scrollbar-hide flex items-center gap-2 overflow-x-auto pb-1 xl:pb-0">
+              <span className="font-body hidden text-[11px] uppercase tracking-[0.1em] text-[#9ca3af] xl:block">
+                Currency
+              </span>
+              {CURRENCIES.map((cur) => (
+                <button
+                  key={cur}
+                  onClick={() => setCurrency(cur)}
+                  className={`font-body flex flex-shrink-0 items-center gap-1.5 rounded-full px-3 py-[6px] text-[11px] font-semibold uppercase tracking-[0.06em] transition-colors ${
+                    currency === cur
+                      ? 'bg-accent/10 text-accent'
+                      : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
+                  }`}
+                >
+                  {cur !== 'ALL' && <span>{CURRENCY_FLAG[cur]}</span>}
+                  {cur}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -229,6 +240,18 @@ export function EconomicCalendarPage() {
       {/* Calendar */}
       <section className="dark:bg-background bg-white pb-10">
         <div className="mx-auto max-w-[390px] px-5 md:max-w-2xl xl:max-w-[1200px]">
+          {/* Desktop table header */}
+          <div className="mb-1 hidden xl:grid xl:grid-cols-[80px_40px_80px_1fr_90px_90px_90px_60px] xl:gap-4 xl:border-b xl:border-[#e5e7eb] xl:pb-2 dark:xl:border-[#2a2a2a]">
+            {['TIME', 'FLAG', 'CCY', 'EVENT', 'PREV', 'FORECAST', 'ACTUAL', 'IMPACT'].map((h) => (
+              <span
+                key={h}
+                className="font-body text-[9px] font-semibold uppercase tracking-[0.1em] text-[#9ca3af]"
+              >
+                {h}
+              </span>
+            ))}
+          </div>
+
           {Object.keys(grouped).length === 0 ? (
             <p className="font-body text-muted py-12 text-center text-[14px]">
               No events match your filters.
@@ -236,44 +259,75 @@ export function EconomicCalendarPage() {
           ) : (
             Object.entries(grouped).map(([date, events]) => (
               <div key={date} className="mb-5">
-                <p className="font-body mb-2 border-b border-[#e5e7eb] pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#9ca3af] dark:border-[#2a2a2a]">
+                <p className="font-body mb-2 border-b border-[#e5e7eb] pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#9ca3af] xl:hidden dark:border-[#2a2a2a]">
+                  {date}
+                </p>
+                {/* Desktop: date as a light row */}
+                <p className="font-body mb-1 hidden text-[10px] font-semibold uppercase tracking-[0.1em] text-[#9ca3af] xl:block">
                   {date}
                 </p>
                 <div className="flex flex-col">
                   {events.map((ev, i) => (
                     <div
                       key={ev.id}
-                      className={`grid grid-cols-[48px_1fr_auto] items-center gap-3 py-3 ${
+                      className={`py-3 ${
                         i < events.length - 1
                           ? 'border-b border-[#f3f4f6] dark:border-[#1c1c1c]'
                           : ''
                       }`}
                     >
-                      {/* Time */}
-                      <span className="font-body text-muted text-[11px]">{ev.time}</span>
-
-                      {/* Event + currency */}
-                      <div className="flex items-center gap-2">
-                        <span className="text-[14px]">{CURRENCY_FLAG[ev.currency]}</span>
-                        <span className="font-body text-foreground text-[13px]">{ev.event}</span>
+                      {/* Mobile layout */}
+                      <div className="grid grid-cols-[48px_1fr_auto] items-center gap-3 xl:hidden">
+                        <span className="font-body text-muted text-[11px]">{ev.time}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[14px]">{CURRENCY_FLAG[ev.currency]}</span>
+                          <span className="font-body text-foreground text-[13px]">{ev.event}</span>
+                        </div>
+                        <div className="flex gap-[3px]">
+                          {(['HIGH', 'MEDIUM', 'LOW'] as const).map((level) => (
+                            <span
+                              key={level}
+                              className={`h-2 w-2 rounded-full ${
+                                ev.impact === 'HIGH'
+                                  ? IMPACT_DOT[level]
+                                  : ev.impact === 'MEDIUM' && level !== 'HIGH'
+                                    ? IMPACT_DOT[level]
+                                    : ev.impact === 'LOW' && level === 'LOW'
+                                      ? IMPACT_DOT[level]
+                                      : 'bg-[#e5e7eb] dark:bg-[#2a2a2a]'
+                              }`}
+                            />
+                          ))}
+                        </div>
                       </div>
 
-                      {/* Impact dots */}
-                      <div className="flex gap-[3px]">
-                        {(['HIGH', 'MEDIUM', 'LOW'] as const).map((level) => (
-                          <span
-                            key={level}
-                            className={`h-2 w-2 rounded-full ${
-                              ev.impact === 'HIGH'
-                                ? IMPACT_DOT[level]
-                                : ev.impact === 'MEDIUM' && level !== 'HIGH'
+                      {/* Desktop layout */}
+                      <div className="hidden xl:grid xl:grid-cols-[80px_40px_80px_1fr_90px_90px_90px_60px] xl:items-center xl:gap-4">
+                        <span className="font-body text-muted text-[12px]">{ev.time}</span>
+                        <span className="text-[16px]">{CURRENCY_FLAG[ev.currency]}</span>
+                        <span className="font-body text-[12px] font-medium text-[#6b7280]">
+                          {ev.currency}
+                        </span>
+                        <span className="font-body text-foreground text-[13px]">{ev.event}</span>
+                        <span className="font-body text-muted text-[12px] tabular-nums">—</span>
+                        <span className="font-body text-muted text-[12px] tabular-nums">—</span>
+                        <span className="font-body text-muted text-[12px] tabular-nums">—</span>
+                        <div className="flex gap-[3px]">
+                          {(['HIGH', 'MEDIUM', 'LOW'] as const).map((level) => (
+                            <span
+                              key={level}
+                              className={`h-2 w-2 rounded-full ${
+                                ev.impact === 'HIGH'
                                   ? IMPACT_DOT[level]
-                                  : ev.impact === 'LOW' && level === 'LOW'
+                                  : ev.impact === 'MEDIUM' && level !== 'HIGH'
                                     ? IMPACT_DOT[level]
-                                    : 'bg-[#e5e7eb] dark:bg-[#2a2a2a]'
-                            }`}
-                          />
-                        ))}
+                                    : ev.impact === 'LOW' && level === 'LOW'
+                                      ? IMPACT_DOT[level]
+                                      : 'bg-[#e5e7eb] dark:bg-[#2a2a2a]'
+                              }`}
+                            />
+                          ))}
+                        </div>
                       </div>
                     </div>
                   ))}

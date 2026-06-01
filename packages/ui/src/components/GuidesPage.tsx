@@ -67,11 +67,29 @@ const GUIDES = [
   },
 ] as const;
 
-export function GuidesPage() {
+export interface CmsGuide {
+  id: number;
+  slug: string;
+  title: string;
+  summary?: string | null;
+  author?: string | null;
+  featured?: boolean;
+}
+
+interface GuidesPageProps {
+  guides?: CmsGuide[];
+}
+
+const CAT_FALLBACK = 'bg-accent/10 text-accent';
+
+export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
   const locale = useLocale();
 
-  const featured = GUIDES.find((g) => g.featured);
-  const rest = GUIDES.filter((g) => !g.featured);
+  const useCms = cmsGuides && cmsGuides.length > 0;
+  const featured = useCms
+    ? (cmsGuides.find((g) => g.featured) ?? cmsGuides[0])
+    : GUIDES.find((g) => g.featured);
+  const rest = useCms ? cmsGuides.filter((g) => g !== featured) : GUIDES.filter((g) => !g.featured);
 
   return (
     <>
@@ -96,22 +114,24 @@ export function GuidesPage() {
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="mb-4">FEATURED</SectionKicker>
             <Link
-              href={`/${locale}/guides/${featured.id}`}
+              href={`/${locale}/guides/${'slug' in featured ? featured.slug : featured.id}`}
               className="group block overflow-hidden rounded-[22px] bg-[#111111] p-6"
               style={{ boxShadow: '0 4px 30px rgba(0,0,0,0.15)' }}
             >
-              <span
-                className={`font-body mb-4 inline-flex rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${featured.categoryClass}`}
-              >
-                {featured.category}
-              </span>
+              {'categoryClass' in featured && (
+                <span
+                  className={`font-body mb-4 inline-flex rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${featured.categoryClass}`}
+                >
+                  {featured.category}
+                </span>
+              )}
               <h2 className="group-hover:text-accent mb-3 font-sans text-[24px] font-semibold leading-[1.1] text-white transition-colors">
                 {featured.title}
               </h2>
               <p className="font-body mb-4 text-[13px] leading-[1.6] text-white/60">
-                {featured.desc}
+                {'desc' in featured ? featured.desc : 'summary' in featured ? featured.summary : ''}
               </p>
-              <div className="flex items-center justify-between">
+              {'author' in featured && featured.author && (
                 <div className="flex items-center gap-2">
                   <div className="bg-accent/20 flex h-6 w-6 items-center justify-center rounded-full">
                     <span className="text-accent font-sans text-[9px] font-semibold">
@@ -120,21 +140,7 @@ export function GuidesPage() {
                   </div>
                   <span className="font-body text-[11px] text-white/50">{featured.author}</span>
                 </div>
-                <div className="text-accent flex items-center gap-1.5">
-                  <span className="font-body text-[12px] font-medium">
-                    {featured.readTime} read
-                  </span>
-                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                    <path
-                      d="M3 8h10M9 4l4 4-4 4"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-              </div>
+              )}
             </Link>
           </div>
         </section>
@@ -144,35 +150,52 @@ export function GuidesPage() {
       <section className="dark:bg-background bg-white px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mt-5">ALL GUIDES</SectionKicker>
-          <div className="flex flex-col gap-0">
-            {rest.map((guide, i) => (
-              <Link
-                key={guide.id}
-                href={`/${locale}/guides/${guide.id}`}
-                className={`group flex flex-col gap-2 py-5 ${i < rest.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]' : ''}`}
-              >
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${guide.categoryClass}`}
-                  >
-                    {guide.category}
-                  </span>
-                  <span className="font-body text-muted text-[11px]">{guide.readTime} read</span>
-                </div>
-                <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] transition-colors">
-                  {guide.title}
-                </p>
-                <p className="font-body text-muted text-[12px] leading-[1.55]">{guide.desc}</p>
-                <div className="flex items-center gap-2">
-                  <div className="border-border flex h-5 w-5 items-center justify-center rounded-full border">
-                    <span className="text-muted font-sans text-[8px] font-semibold">
-                      {guide.author[0]}
-                    </span>
+          <div className="flex flex-col gap-0 xl:grid xl:grid-cols-3 xl:gap-0">
+            {rest.map((guide, i) => {
+              const href = `/${locale}/guides/${'slug' in guide ? guide.slug : guide.id}`;
+              const catClass = 'categoryClass' in guide ? guide.categoryClass : CAT_FALLBACK;
+              const desc =
+                'desc' in guide ? guide.desc : 'summary' in guide ? (guide.summary ?? '') : '';
+              const author = 'author' in guide ? guide.author : null;
+              const readTime = 'readTime' in guide ? guide.readTime : null;
+              const cat = 'category' in guide ? guide.category : null;
+              return (
+                <Link
+                  key={'slug' in guide ? guide.slug : guide.id}
+                  href={href}
+                  className={`group flex flex-col gap-2 py-5 xl:px-5 xl:py-6 xl:first:pl-0 ${i < rest.length - 1 ? 'border-b border-[#e5e7eb] xl:border-b-0 xl:border-r xl:border-[#e5e7eb] dark:border-[#2a2a2a] dark:xl:border-[#2a2a2a]' : ''}`}
+                >
+                  <div className="flex items-center justify-between">
+                    {cat && (
+                      <span
+                        className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${catClass}`}
+                      >
+                        {cat}
+                      </span>
+                    )}
+                    {readTime && (
+                      <span className="font-body text-muted text-[11px]">{readTime} read</span>
+                    )}
                   </div>
-                  <span className="font-body text-muted text-[11px]">{guide.author}</span>
-                </div>
-              </Link>
-            ))}
+                  <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] transition-colors">
+                    {guide.title}
+                  </p>
+                  {desc && (
+                    <p className="font-body text-muted text-[12px] leading-[1.55]">{desc}</p>
+                  )}
+                  {author && (
+                    <div className="flex items-center gap-2">
+                      <div className="border-border flex h-5 w-5 items-center justify-center rounded-full border">
+                        <span className="text-muted font-sans text-[8px] font-semibold">
+                          {author[0]}
+                        </span>
+                      </div>
+                      <span className="font-body text-muted text-[11px]">{author}</span>
+                    </div>
+                  )}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

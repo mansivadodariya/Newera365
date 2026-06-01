@@ -85,30 +85,32 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
 
       {/* Category nav strip */}
       <section className="dark:bg-background mx-auto bg-white px-5 pb-4">
-        <div
-          className="scrollbar-hide flex gap-[8px] overflow-x-auto"
-          style={{ scrollPaddingLeft: '20px' }}
-        >
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[13px] font-medium transition-colors ${
-                activeCategory === cat
-                  ? 'bg-foreground text-background'
-                  : 'text-foreground bg-[#f2f2f4] hover:bg-[#e5e5e5] dark:bg-[#1c1c1c] dark:hover:bg-[#2a2a2a]'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div
+            className="scrollbar-hide flex gap-[8px] overflow-x-auto xl:flex-wrap xl:overflow-x-visible"
+            style={{ scrollPaddingLeft: '20px' }}
+          >
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[13px] font-medium transition-colors ${
+                  activeCategory === cat
+                    ? 'bg-foreground text-background'
+                    : 'text-foreground bg-[#f2f2f4] hover:bg-[#e5e5e5] dark:bg-[#1c1c1c] dark:hover:bg-[#2a2a2a]'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Instrument list */}
       <section className="dark:bg-background bg-white px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between xl:mb-5">
             <SectionKicker className="text-mono text-[10px] font-medium leading-[100%] tracking-[0.18em] text-[#6B7280]">
               {hasCmsData
                 ? `${activeCategory.toUpperCase()} · ${cmsRows.length} INSTRUMENTS`
@@ -149,174 +151,182 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
           </button>
 
           {/* Chart + Index watchlist widget */}
-          <div className="mt-3 gap-[16px] overflow-hidden rounded-[32px] bg-[#07090D] p-[16px] pb-3">
-            {/* Tab bar */}
-            <div className="flex justify-between">
-              {['Indices', 'Futures', 'Bonds', 'Forex'].map((tab) => (
-                <button
-                  key={tab}
-                  className={`font-body rounded-[8px] px-[14px] py-[8px] text-[12px] font-medium transition-colors ${
-                    tab === 'Indices' ? 'bg-[#1c2033] text-white' : 'text-white/40'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-
-            {/* Chart area */}
-            <div className="relative px-3 pt-2">
-              <svg
-                viewBox="0 0 480 160"
-                className="w-full"
-                preserveAspectRatio="none"
-                style={{ height: 140 }}
-              >
-                <defs>
-                  <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.25" />
-                    <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                {/* Gradient fill */}
-                <path
-                  d="M0,130 C30,126 60,122 90,112 C120,102 150,90 180,75 C210,60 240,50 270,44 C300,38 330,36 360,38 C390,40 420,52 450,62 C462,67 472,72 480,78 L480,160 L0,160 Z"
-                  fill="url(#chartFill)"
-                />
-                {/* Line */}
-                <path
-                  d="M0,130 C30,126 60,122 90,112 C120,102 150,90 180,75 C210,60 240,50 270,44 C300,38 330,36 360,38 C390,40 420,52 450,62 C462,67 472,72 480,78"
-                  fill="none"
-                  stroke="#3B82F6"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-
-              {/* X-axis date labels */}
-              <div className="mt-1 flex justify-between px-1">
-                {['Jun', 'Sep', '2026', 'Apr'].map((label) => (
-                  <span key={label} className="font-body text-[9px] text-white/30">
-                    {label}
-                  </span>
+          <div className="mt-3 overflow-hidden rounded-[32px] bg-[#07090D] p-[16px] pb-3 xl:flex xl:flex-row xl:gap-0 xl:p-0">
+            {/* Chart column */}
+            <div className="xl:flex-1 xl:p-[20px] xl:pr-0">
+              {/* Tab bar */}
+              <div className="flex justify-between">
+                {['Indices', 'Futures', 'Bonds', 'Forex'].map((tab) => (
+                  <button
+                    key={tab}
+                    className={`font-body rounded-[8px] px-[14px] py-[8px] text-[12px] font-medium transition-colors ${
+                      tab === 'Indices' ? 'bg-[#1c2033] text-white' : 'text-white/40'
+                    }`}
+                  >
+                    {tab}
+                  </button>
                 ))}
               </div>
-            </div>
 
-            {/* Time period selector */}
-            <div className="mt-2 flex gap-0.5 px-3">
-              {['1D', '1M', '3M', '1Y', '5Y', 'All'].map((p) => (
-                <button
-                  key={p}
-                  className={`font-body flex-1 rounded-[7px] py-[5px] text-[10px] font-medium transition-colors ${
-                    p === '1Y' ? 'bg-[#1c2033] text-white' : 'text-white/35'
-                  }`}
+              {/* Chart area */}
+              <div className="relative px-3 pt-2">
+                <svg
+                  viewBox="0 0 480 160"
+                  className="w-full"
+                  preserveAspectRatio="none"
+                  style={{ height: 140 }}
                 >
-                  {p}
-                </button>
-              ))}
-            </div>
+                  <defs>
+                    <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  {/* Gradient fill */}
+                  <path
+                    d="M0,130 C30,126 60,122 90,112 C120,102 150,90 180,75 C210,60 240,50 270,44 C300,38 330,36 360,38 C390,40 420,52 450,62 C462,67 472,72 480,78 L480,160 L0,160 Z"
+                    fill="url(#chartFill)"
+                  />
+                  {/* Line */}
+                  <path
+                    d="M0,130 C30,126 60,122 90,112 C120,102 150,90 180,75 C210,60 240,50 270,44 C300,38 330,36 360,38 C390,40 420,52 450,62 C462,67 472,72 480,78"
+                    fill="none"
+                    stroke="#3B82F6"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
 
-            {/* Divider */}
-            <div className="mx-3 mt-3 border-t border-white/[0.06]" />
-
-            {/* Index rows */}
-            {[
-              {
-                label: '500',
-                name: 'SPXUSD',
-                full: 'S&P 500',
-                price: '7,404.5',
-                pts: '−8.90',
-                pct: '−0.12%',
-                color: '#DC2626',
-                up: false,
-              },
-              {
-                label: '100',
-                name: 'NSXUSD',
-                full: 'US 100',
-                price: '29,146.1',
-                pts: '−40.70',
-                pct: '−0.14%',
-                color: '#06B6D4',
-                up: false,
-              },
-              {
-                label: '30',
-                name: 'DJI',
-                full: 'Dow 30',
-                price: '49,927.0',
-                pts: '−34.30',
-                pct: '−0.07%',
-                color: '#2563EB',
-                up: false,
-              },
-              {
-                label: '225',
-                name: 'NKY',
-                full: 'Nikkei 225',
-                price: '61,684.14',
-                pts: '+1,879.73',
-                pct: '+5.34%',
-                color: '#E11D48',
-                up: true,
-              },
-              {
-                label: '40',
-                name: 'DEU40',
-                full: 'DAX Index',
-                price: '24,737.24',
-                pts: '+336.59',
-                pct: '+1.38%',
-                color: '#7C3AED',
-                up: true,
-              },
-              {
-                label: '100',
-                name: 'UKXGBP',
-                full: 'FTSE 100',
-                price: '10,464.0',
-                pts: '−5.20',
-                pct: '−0.05%',
-                color: '#9D174D',
-                up: false,
-              },
-            ].map((item, i, arr) => (
-              <div
-                key={item.name}
-                className={`flex items-center gap-3 px-3 py-[11px] ${i < arr.length - 1 ? 'border-b border-white/[0.05]' : ''}`}
-              >
-                {/* Avatar */}
-                <div
-                  className="font-body flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white"
-                  style={{ backgroundColor: item.color }}
-                >
-                  {item.label}
-                </div>
-                {/* Symbol + full name */}
-                <div className="min-w-0 flex-1">
-                  <p className="font-sans text-[13px] font-semibold leading-none text-white">
-                    {item.name}
-                  </p>
-                  <p className="font-body mt-[3px] text-[10px] text-white/40">{item.full}</p>
-                </div>
-                {/* Price + changes */}
-                <div className="text-right">
-                  <p
-                    className={`font-sans text-[13px] font-semibold ${item.up ? 'text-white' : 'text-[#EE5250]'}`}
-                  >
-                    {item.price}
-                  </p>
-                  <p
-                    className={`font-body mt-[2px] text-[10px] ${item.up ? 'text-[#26A69A]' : 'text-[#EE5250]'}`}
-                  >
-                    {item.pts}&nbsp;&nbsp;{item.pct}
-                  </p>
+                {/* X-axis date labels */}
+                <div className="mt-1 flex justify-between px-1">
+                  {['Jun', 'Sep', '2026', 'Apr'].map((label) => (
+                    <span key={label} className="font-body text-[9px] text-white/30">
+                      {label}
+                    </span>
+                  ))}
                 </div>
               </div>
-            ))}
+
+              {/* Time period selector */}
+              <div className="mt-2 flex gap-0.5 px-3">
+                {['1D', '1M', '3M', '1Y', '5Y', 'All'].map((p) => (
+                  <button
+                    key={p}
+                    className={`font-body flex-1 rounded-[7px] py-[5px] text-[10px] font-medium transition-colors ${
+                      p === '1Y' ? 'bg-[#1c2033] text-white' : 'text-white/35'
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+
+              {/* Divider (mobile only) */}
+              <div className="mx-3 mt-3 border-t border-white/[0.06] xl:hidden" />
+            </div>
+            {/* end chart column */}
+
+            {/* Price list column (right on xl, below on mobile) */}
+            <div className="xl:w-[340px] xl:flex-shrink-0 xl:overflow-y-auto xl:border-l xl:border-white/[0.06]">
+              {/* Index rows */}
+              {[
+                {
+                  label: '500',
+                  name: 'SPXUSD',
+                  full: 'S&P 500',
+                  price: '7,404.5',
+                  pts: '−8.90',
+                  pct: '−0.12%',
+                  color: '#DC2626',
+                  up: false,
+                },
+                {
+                  label: '100',
+                  name: 'NSXUSD',
+                  full: 'US 100',
+                  price: '29,146.1',
+                  pts: '−40.70',
+                  pct: '−0.14%',
+                  color: '#06B6D4',
+                  up: false,
+                },
+                {
+                  label: '30',
+                  name: 'DJI',
+                  full: 'Dow 30',
+                  price: '49,927.0',
+                  pts: '−34.30',
+                  pct: '−0.07%',
+                  color: '#2563EB',
+                  up: false,
+                },
+                {
+                  label: '225',
+                  name: 'NKY',
+                  full: 'Nikkei 225',
+                  price: '61,684.14',
+                  pts: '+1,879.73',
+                  pct: '+5.34%',
+                  color: '#E11D48',
+                  up: true,
+                },
+                {
+                  label: '40',
+                  name: 'DEU40',
+                  full: 'DAX Index',
+                  price: '24,737.24',
+                  pts: '+336.59',
+                  pct: '+1.38%',
+                  color: '#7C3AED',
+                  up: true,
+                },
+                {
+                  label: '100',
+                  name: 'UKXGBP',
+                  full: 'FTSE 100',
+                  price: '10,464.0',
+                  pts: '−5.20',
+                  pct: '−0.05%',
+                  color: '#9D174D',
+                  up: false,
+                },
+              ].map((item, i, arr) => (
+                <div
+                  key={item.name}
+                  className={`flex items-center gap-3 px-3 py-[11px] ${i < arr.length - 1 ? 'border-b border-white/[0.05]' : ''}`}
+                >
+                  {/* Avatar */}
+                  <div
+                    className="font-body flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white"
+                    style={{ backgroundColor: item.color }}
+                  >
+                    {item.label}
+                  </div>
+                  {/* Symbol + full name */}
+                  <div className="min-w-0 flex-1">
+                    <p className="font-sans text-[13px] font-semibold leading-none text-white">
+                      {item.name}
+                    </p>
+                    <p className="font-body mt-[3px] text-[10px] text-white/40">{item.full}</p>
+                  </div>
+                  {/* Price + changes */}
+                  <div className="text-right">
+                    <p
+                      className={`font-sans text-[13px] font-semibold ${item.up ? 'text-white' : 'text-[#EE5250]'}`}
+                    >
+                      {item.price}
+                    </p>
+                    <p
+                      className={`font-body mt-[2px] text-[10px] ${item.up ? 'text-[#26A69A]' : 'text-[#EE5250]'}`}
+                    >
+                      {item.pts}&nbsp;&nbsp;{item.pct}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* end price list column */}
           </div>
         </div>
       </section>
@@ -373,7 +383,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
           <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.025em]">
             Diversify across asset classes.
           </h2>
-          <div className="flex flex-col gap-[10px]">
+          <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
             {OTHER_MARKETS.map((market) => (
               <Link
                 key={market}

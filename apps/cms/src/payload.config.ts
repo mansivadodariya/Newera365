@@ -22,6 +22,8 @@ import { Awards } from './collections/Awards';
 import { CompanyContent } from './collections/CompanyContent';
 import { TeamMembers } from './collections/TeamMembers';
 import { WebinarRegistrations } from './collections/WebinarRegistrations';
+import { Promotions } from './collections/Promotions';
+import { PaymentMethods } from './collections/PaymentMethods';
 import { SiteSettings } from './globals/SiteSettings';
 import { emailTransport } from './email/transport';
 import Logo from './graphics/Logo';
@@ -160,6 +162,8 @@ export default buildConfig({
     CompanyContent,
     TeamMembers,
     WebinarRegistrations,
+    Promotions,
+    PaymentMethods,
   ],
   globals: [SiteSettings],
   cors: [corsOrigin],

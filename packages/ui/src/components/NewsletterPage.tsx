@@ -17,9 +17,9 @@ export function NewsletterPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-10 pt-9">
+      <section className="dark:bg-background bg-white px-5 pb-10 pt-9 xl:px-[80px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[44px] font-semibold leading-[1.05]">
+          <h1 className="text-foreground mb-4 font-sans text-[44px] font-semibold leading-[1.05] xl:text-[64px]">
             The Monday
             <br />
             <span className="text-accent">briefing.</span>
@@ -32,8 +32,8 @@ export function NewsletterPage() {
       </section>
 
       {/* Subscribe form */}
-      <section className="dark:bg-background bg-white px-5 pb-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+      <section className="dark:bg-background bg-white px-5 pb-8 xl:px-[80px]">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[600px]">
           {submitted ? (
             <div className="rounded-[20px] bg-[#f9f9f9] px-6 py-10 text-center dark:bg-[#1c1c1c]">
               <div className="bg-accent mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full">
@@ -105,8 +105,8 @@ export function NewsletterPage() {
       </section>
 
       {/* As read by */}
-      <section className="dark:bg-background bg-white px-5 pb-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+      <section className="dark:bg-background bg-white px-5 pb-8 xl:px-[80px]">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[600px]">
           <p className="font-body mb-4 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
             AS READ BY —
           </p>
@@ -124,12 +124,12 @@ export function NewsletterPage() {
       </section>
 
       {/* What you get */}
-      <section className="dark:bg-background bg-white px-5 pb-8">
+      <section className="dark:bg-background bg-white px-5 pb-8 xl:px-[80px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="font-body mb-4 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
             WHAT YOU GET
           </p>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 xl:grid xl:grid-cols-2">
             {/* Preview 1 */}
             <div className="overflow-hidden rounded-[18px] bg-[#f9f9f9] dark:bg-[#1c1c1c]">
               <div className="h-[100px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111]" />
@@ -163,7 +163,7 @@ export function NewsletterPage() {
       </section>
 
       {/* Social proof */}
-      <section className="rounded-t-[32px] bg-[#111111] px-5 pb-12 pt-10">
+      <section className="rounded-t-[32px] bg-[#111111] px-5 pb-12 pt-10 xl:px-[80px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
             Social proof

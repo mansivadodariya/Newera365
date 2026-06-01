@@ -37,8 +37,29 @@ const OTHER_CHARGES = [
   },
 ] as const;
 
-export function FeesPage() {
+export interface CmsSpreadRow {
+  instrument: string;
+  symbol: string;
+  spread?: number | null;
+}
+
+interface FeesPageProps {
+  /** Live instrument spread data from the CMS ProductsInstruments collection */
+  spreadData?: CmsSpreadRow[];
+}
+
+export function FeesPage({ spreadData }: FeesPageProps) {
   const locale = useLocale();
+
+  const displaySpreads =
+    spreadData && spreadData.length > 0
+      ? spreadData.map((r) => ({
+          instrument: r.instrument,
+          raw: r.spread != null ? String(r.spread) : '—',
+          std: r.spread != null ? String((r.spread + 0.8).toFixed(1)) : '—',
+          vip: r.spread != null ? String((r.spread + 1.2).toFixed(1)) : '—',
+        }))
+      : SPREADS;
 
   return (
     <>
@@ -80,10 +101,10 @@ export function FeesPage() {
             </div>
 
             {/* Data rows */}
-            {SPREADS.map((row, i) => (
+            {displaySpreads.map((row, i) => (
               <div
                 key={row.instrument}
-                className={`grid grid-cols-[1fr_56px_56px_56px] ${i < SPREADS.length - 1 ? 'border-b border-white/10' : ''}`}
+                className={`grid grid-cols-[1fr_56px_56px_56px] ${i < displaySpreads.length - 1 ? 'border-b border-white/10' : ''}`}
               >
                 <div className="px-4 py-[13px]">
                   <span className="font-body text-[13px] font-medium leading-[100%] tracking-normal text-white">
@@ -162,7 +183,7 @@ export function FeesPage() {
       </section>
 
       {/* Closing dark band */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
+      <section className="rounded-t-[32px] bg-black px-5 pb-16 pt-14 xl:px-[80px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/60 [&>span:last-child]:text-white/60">
             TRANSPARENT · ALWAYS

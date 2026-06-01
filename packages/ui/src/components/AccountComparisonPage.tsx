@@ -70,7 +70,6 @@ const ACCOUNTS = [
 type FeatureValue = boolean | string;
 
 const FEATURE_MATRIX: {
-  section?: string;
   feature: string;
   standard: FeatureValue;
   raw: FeatureValue;
@@ -80,9 +79,9 @@ const FEATURE_MATRIX: {
   { feature: 'Web & Mobile', standard: true, raw: true, vip: true },
   { feature: 'Expert Advisors', standard: true, raw: true, vip: true },
   { feature: 'Hedging', standard: true, raw: true, vip: true },
-  { feature: 'Free VPS hosting', standard: false, raw: true, vip: true },
-  { feature: 'Priority withdrawals', standard: false, raw: true, vip: true },
   { feature: 'Dedicated dealer', standard: false, raw: false, vip: true },
+  { feature: 'Priority withdrawals', standard: false, raw: true, vip: true },
+  { feature: 'Free VPS hosting', standard: false, raw: true, vip: true },
   { feature: 'Custom spreads', standard: false, raw: false, vip: true },
 ];
 
@@ -101,17 +100,13 @@ function CheckIcon() {
 }
 
 function DashIcon() {
-  return <span className="font-body text-[13px] text-[#6b7280] dark:text-[#4b5563]">—</span>;
+  return <span className="text-[13px] text-[#6b7280] dark:text-[#4b5563]">—</span>;
 }
 
 function MatrixCell({ value }: { value: FeatureValue }) {
-  if (typeof value === 'boolean') {
-    return value ? <CheckIcon /> : <DashIcon />;
-  }
+  if (typeof value === 'boolean') return value ? <CheckIcon /> : <DashIcon />;
   return (
-    <span className="font-body text-[11px] font-medium text-[#111111] dark:text-white">
-      {value}
-    </span>
+    <span className="font-mono text-[11px] font-medium text-[#111] dark:text-white">{value}</span>
   );
 }
 
@@ -120,40 +115,35 @@ export function AccountComparisonPage() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <section className="dark:bg-background bg-white px-5 pb-6 pt-9 xl:px-[120px] xl:pb-10 xl:pt-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
-            Choose the
-            <br />
-            account that
-            <br />
-            <span className="text-accent">fits.</span>
+          {/* Heading: stacks on mobile, inline on desktop */}
+          <h1 className="mb-4 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px] text-[#111] xl:text-[56px] xl:tracking-[-2px] dark:text-white">
+            <span className="block xl:inline">Choose the </span>
+            <span className="block xl:inline">account that </span>
+            <span className="text-accent block xl:inline">fits.</span>
           </h1>
-          <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
+          <p className="font-body max-w-[480px] text-[14px] leading-[1.55] text-[#6b7280]">
             Whether you trade a few times a week or a few hundred times a day — we have an account
             tier built for you.
           </p>
         </div>
       </section>
 
-      {/* Horizontal scroll account cards */}
-      <section className="dark:bg-background bg-white py-10">
-        <div
-          className="scrollbar-hide flex snap-x snap-mandatory gap-[14px] overflow-x-auto px-5"
-          style={{ scrollPaddingLeft: '20px' }}
-        >
+      {/* ── Account cards ────────────────────────────────────── */}
+      <section className="dark:bg-background bg-white px-5 pb-10 pt-2 xl:px-[120px] xl:pb-16">
+        <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl xl:max-w-[1200px] xl:flex-row xl:items-stretch xl:gap-5">
           {ACCOUNTS.map((acc) => {
             const isRaw = acc.isHighlighted;
             return (
               <div
                 key={acc.id}
-                className={`relative flex w-[270px] flex-shrink-0 snap-start flex-col gap-[18px] overflow-hidden rounded-[24px] p-6 ${
-                  isRaw ? 'bg-[#111111]' : 'bg-white dark:bg-[#1c1c1c]'
+                className={`relative flex flex-1 flex-col gap-[18px] overflow-hidden rounded-[24px] p-[24px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] ${
+                  isRaw ? 'bg-[#111]' : 'bg-white dark:bg-[#1c1c1c]'
                 }`}
-                style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.08)' }}
               >
-                {/* Green glow for Raw card */}
+                {/* Green glow — Raw only */}
                 {isRaw && (
                   <div
                     className="bg-accent/25 pointer-events-none absolute left-1/2 top-0 h-[80px] w-[200px] -translate-x-1/2 rounded-full"
@@ -162,16 +152,14 @@ export function AccountComparisonPage() {
                 )}
 
                 {/* Head: name + tag */}
-                <div className="flex items-start gap-2">
+                <div className="flex items-center justify-between">
                   <span
-                    className={`font-sans text-[26px] font-semibold leading-none ${
-                      isRaw ? 'text-white' : 'text-foreground'
-                    }`}
+                    className={`font-sans text-[26px] font-semibold tracking-[-0.52px] ${isRaw ? 'text-white' : 'text-[#111] dark:text-white'}`}
                   >
                     {acc.name}
                   </span>
                   <span
-                    className={`font-body mt-[5px] self-start rounded-full px-[10px] py-[5px] text-[10px] font-semibold uppercase tracking-[0.07em] ${
+                    className={`rounded-full px-[10px] py-[5px] font-mono text-[10px] tracking-[1.2px] ${
                       isRaw ? 'bg-accent/20 text-accent' : 'bg-accent/10 text-accent'
                     }`}
                   >
@@ -181,26 +169,20 @@ export function AccountComparisonPage() {
 
                 {/* Description */}
                 <p
-                  className={`font-body text-[13.5px] leading-[1.5] ${
-                    isRaw ? 'text-white/70' : 'text-muted'
-                  }`}
+                  className={`font-body text-[13.5px] leading-[1.5] ${isRaw ? 'text-white/70' : 'text-[#6b7280]'}`}
                 >
                   {acc.description}
                 </p>
 
                 {/* Price block */}
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-[4px]">
                   <span
-                    className={`font-body text-[10px] uppercase tracking-[0.1em] ${
-                      isRaw ? 'text-white/50' : 'text-muted'
-                    }`}
+                    className={`font-mono text-[10px] tracking-[1.2px] ${isRaw ? 'text-white/50' : 'text-[#6b7280]'}`}
                   >
                     PRICING
                   </span>
                   <span
-                    className={`font-sans text-[22px] font-semibold leading-tight ${
-                      isRaw ? 'text-accent' : 'text-foreground'
-                    }`}
+                    className={`font-sans text-[22px] font-semibold tracking-[-0.44px] ${isRaw ? 'text-accent' : 'text-[#111] dark:text-white'}`}
                   >
                     {acc.pricing}
                   </span>
@@ -208,28 +190,22 @@ export function AccountComparisonPage() {
 
                 {/* Feature rows */}
                 <div
-                  className={`flex flex-col gap-[1px] overflow-hidden rounded-[12px] ${
-                    isRaw ? 'bg-white' : 'bg-[#111111] dark:bg-[#2a2a2a]'
-                  }`}
+                  className={`flex flex-col gap-px overflow-hidden rounded-[12px] ${isRaw ? 'bg-white/10' : 'bg-[rgba(17,17,17,0.08)] dark:bg-white/10'}`}
                 >
                   {acc.rows.map((row) => (
                     <div
                       key={row.label}
-                      className={`flex items-center justify-between px-[14px] py-3 ${
-                        isRaw ? 'bg-[#111111]' : 'bg-[#fafaf9] dark:bg-[#1c1c1c]'
+                      className={`flex items-center justify-between px-[14px] py-[12px] ${
+                        isRaw ? 'bg-[#111]' : 'bg-[#fafaf9] dark:bg-[#1c1c1c]'
                       }`}
                     >
                       <span
-                        className={`font-body text-[13px] ${
-                          isRaw ? 'text-white/60' : 'text-muted'
-                        }`}
+                        className={`font-body text-[13px] ${isRaw ? 'text-white/60' : 'text-[#6b7280]'}`}
                       >
                         {row.label}
                       </span>
                       <span
-                        className={`font-body text-[13px] font-medium ${
-                          isRaw ? 'text-white' : 'text-foreground'
-                        }`}
+                        className={`font-body text-[13px] font-medium ${isRaw ? 'text-white' : 'text-[#111] dark:text-white'}`}
                       >
                         {row.value}
                       </span>
@@ -237,17 +213,17 @@ export function AccountComparisonPage() {
                   ))}
                 </div>
 
-                {/* CTA button */}
+                {/* CTA */}
                 <Link
                   href={`/${locale}/register?account=${acc.registerParam}`}
                   className={`font-body flex h-[48px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium transition-colors ${
                     isRaw
                       ? 'bg-accent hover:bg-accent/90 text-white'
-                      : 'bg-[#111111] text-white hover:bg-[#222] dark:bg-white dark:text-[#111111] dark:hover:bg-white/90'
+                      : 'bg-[#111] text-white hover:bg-[#222] dark:bg-white dark:text-[#111] dark:hover:bg-white/90'
                   }`}
                 >
                   {acc.ctaText}
-                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path
                       d="M3 8h10M9 4l4 4-4 4"
                       stroke="currentColor"
@@ -263,32 +239,28 @@ export function AccountComparisonPage() {
         </div>
       </section>
 
-      {/* Feature matrix — on black bg */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
+      {/* ── Feature matrix ───────────────────────────────────── */}
+      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10 xl:px-[120px] xl:pb-16 xl:pt-14">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
+          <SectionKicker className="mb-5 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/50">
             FEATURE MATRIX
           </SectionKicker>
-          <h2 className="mb-8 font-sans text-[26px] font-semibold leading-[1.1] text-white">
+          <h2 className="mb-8 font-sans text-[26px] font-semibold leading-[1.1] text-white xl:text-[32px]">
             Compare side
             <br />
             by side.
           </h2>
 
-          {/* Matrix table card */}
-          <div
-            className="overflow-hidden rounded-[16px] bg-white dark:bg-[#1a1a1a]"
-            style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.06)' }}
-          >
+          <div className="overflow-hidden rounded-[16px] bg-white shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:bg-[#1a1a1a]">
             {/* Header row */}
-            <div className="grid grid-cols-[1fr_52px_52px_52px] items-center gap-2 border-b border-[#e5e7eb] px-[14px] py-3 dark:border-[#2a2a2a]">
-              <span className="font-body text-[10px] uppercase tracking-[0.1em] text-[#9ca3af]">
+            <div className="grid grid-cols-[1fr_52px_52px_52px] items-center gap-2 border-b border-[#e5e7eb] px-[14px] py-3 xl:grid-cols-[1fr_80px_80px_80px] dark:border-[#2a2a2a]">
+              <span className="font-mono text-[10px] uppercase tracking-[1.2px] text-[#9ca3af]">
                 Feature
               </span>
               {(['Std', 'Raw', 'VIP'] as const).map((label, i) => (
                 <span
                   key={label}
-                  className={`font-body text-center text-[10px] font-semibold uppercase tracking-[0.1em] ${
+                  className={`text-center font-mono text-[10px] font-semibold uppercase tracking-[1.2px] ${
                     i === 1 ? 'text-accent' : 'text-[#6b7280] dark:text-[#9ca3af]'
                   }`}
                 >
@@ -300,15 +272,8 @@ export function AccountComparisonPage() {
             {/* Data rows */}
             {FEATURE_MATRIX.map((row, i) => (
               <Fragment key={row.feature}>
-                {row.section && (
-                  <div className="border-b border-[#e5e7eb] px-[14px] pb-1 pt-4 dark:border-[#2a2a2a]">
-                    <span className="font-body text-[9px] uppercase tracking-[0.12em] text-[#9ca3af]">
-                      {row.section}
-                    </span>
-                  </div>
-                )}
                 <div
-                  className={`grid grid-cols-[1fr_52px_52px_52px] items-center gap-2 px-[14px] py-[11px] ${
+                  className={`grid grid-cols-[1fr_52px_52px_52px] items-center gap-2 px-[14px] py-[11px] xl:grid-cols-[1fr_80px_80px_80px] ${
                     i < FEATURE_MATRIX.length - 1
                       ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]'
                       : ''
@@ -331,9 +296,9 @@ export function AccountComparisonPage() {
             ))}
           </div>
 
-          {/* CTA */}
+          {/* CTA block */}
           <div className="mt-10">
-            <h3 className="mb-2 font-sans text-[22px] font-semibold leading-[1.2] text-white">
+            <h3 className="mb-2 font-sans text-[22px] font-semibold leading-[1.2] text-white xl:text-[26px]">
               Ready to open
               <br />
               your account?
@@ -341,13 +306,13 @@ export function AccountComparisonPage() {
             <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
               Takes under 3 minutes. Verified and funded in 24 hours.
             </p>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 xl:flex-row">
               <Link
                 href={`/${locale}/register?account=raw`}
-                className="bg-accent font-body hover:bg-accent/90 flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
+                className="bg-accent font-body hover:bg-accent/90 flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors xl:w-auto xl:px-8"
               >
                 Open Raw account
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                   <path
                     d="M3 8h10M9 4l4 4-4 4"
                     stroke="currentColor"
@@ -359,7 +324,7 @@ export function AccountComparisonPage() {
               </Link>
               <Link
                 href={`/${locale}/trade/accounts`}
-                className="font-body flex h-[52px] w-full items-center justify-center rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"
+                className="font-body flex h-[52px] w-full items-center justify-center rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40 xl:w-auto xl:px-8"
               >
                 View account details
               </Link>

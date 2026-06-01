@@ -4,16 +4,61 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { RichText } from './RichText';
+import type { SlateNode } from './RichText';
 
 type FaqItem = { q: string; a: string; popular: boolean };
 type FaqGroup = { section: string; items: FaqItem[] };
+
+export interface CmsFaqItem {
+  id: number;
+  question: string;
+  answer: SlateNode[];
+  category: string;
+  sortOrder?: number | null;
+}
 
 const CATEGORY_STYLES: Record<string, { dot: string; activePill: string }> = {
   Platform: { dot: 'bg-[#3B82F6]', activePill: 'bg-[#3B82F6] text-white' },
   Security: { dot: 'bg-accent', activePill: 'bg-accent text-white' },
   Funding: { dot: 'bg-[#F59E0B]', activePill: 'bg-[#F59E0B] text-white' },
   Trading: { dot: 'bg-[#8B5CF6]', activePill: 'bg-[#8B5CF6] text-white' },
+  Accounts: { dot: 'bg-accent', activePill: 'bg-accent text-white' },
+  Deposits: { dot: 'bg-[#F59E0B]', activePill: 'bg-[#F59E0B] text-white' },
+  Withdrawals: { dot: 'bg-[#F59E0B]', activePill: 'bg-[#F59E0B] text-white' },
+  Platforms: { dot: 'bg-[#3B82F6]', activePill: 'bg-[#3B82F6] text-white' },
+  Regulation: { dot: 'bg-[#EF4444]', activePill: 'bg-[#EF4444] text-white' },
+  General: { dot: 'bg-[#6B7280]', activePill: 'bg-[#6B7280] text-white' },
 };
+
+const CMS_CATEGORY_LABELS: Record<string, string> = {
+  trading: 'Trading',
+  accounts: 'Accounts',
+  deposits: 'Deposits',
+  withdrawals: 'Withdrawals',
+  platforms: 'Platforms',
+  regulation: 'Regulation',
+  general: 'General',
+};
+
+function cmsFaqsToGroups(faqs: CmsFaqItem[]): FaqGroup[] {
+  const grouped = new Map<string, FaqItem[]>();
+  for (const faq of faqs) {
+    const label = CMS_CATEGORY_LABELS[faq.category] ?? faq.category;
+    if (!grouped.has(label)) grouped.set(label, []);
+    grouped.get(label)!.push({
+      q: faq.question,
+      a: faq.answer.map((n) => extractPlainText(n)).join(''),
+      popular: (faq.sortOrder ?? 100) < 5,
+    });
+  }
+  return Array.from(grouped, ([section, items]) => ({ section, items }));
+}
+
+function extractPlainText(node: SlateNode): string {
+  if (node.text !== undefined) return node.text;
+  return node.children?.map(extractPlainText).join('') ?? '';
+}
 
 const FAQ_GROUPS: FaqGroup[] = [
   {
@@ -140,6 +185,7 @@ const POPULAR_ITEMS = FAQ_GROUPS.flatMap((g) =>
 function AccordionItem({
   question,
   answer,
+  answerRichText,
   id,
   dotClass,
   openIdx,
@@ -147,6 +193,7 @@ function AccordionItem({
 }: {
   question: string;
   answer: string;
+  answerRichText?: SlateNode[] | null;
   id: string;
   dotClass: string;
   openIdx: string | null;
@@ -175,24 +222,46 @@ function AccordionItem({
         </svg>
       </button>
       {isOpen && (
-        <p className="font-body text-muted pb-[15px] pl-[35px] pr-4 text-[13px] leading-relaxed">
-          {answer}
-        </p>
+        <div className="font-body text-muted pb-[15px] pl-[35px] pr-4 text-[13px] leading-relaxed">
+          {answerRichText && answerRichText.length > 0 ? (
+            <RichText content={answerRichText} />
+          ) : (
+            <p>{answer}</p>
+          )}
+        </div>
       )}
     </div>
   );
 }
 
-export function FaqPage() {
+interface FaqPageProps {
+  faqs?: CmsFaqItem[];
+}
+
+export function FaqPage({ faqs }: FaqPageProps) {
   const locale = useLocale();
   const [openIdx, setOpenIdx] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
+  const allGroups = useMemo(
+    () => (faqs && faqs.length > 0 ? cmsFaqsToGroups(faqs) : FAQ_GROUPS),
+    [faqs],
+  );
+
+  const cmsFaqMap = useMemo(() => {
+    if (!faqs) return null;
+    const map = new Map<string, SlateNode[]>();
+    for (const faq of faqs) {
+      map.set(faq.question, faq.answer);
+    }
+    return map;
+  }, [faqs]);
+
   const filteredGroups = useMemo(() => {
     const groups = activeCategory
-      ? FAQ_GROUPS.filter((g) => g.section === activeCategory)
-      : FAQ_GROUPS;
+      ? allGroups.filter((g) => g.section === activeCategory)
+      : allGroups;
 
     if (!search.trim()) return groups;
 
@@ -206,7 +275,15 @@ export function FaqPage() {
         ),
       }))
       .filter((g) => g.items.length > 0);
-  }, [search, activeCategory]);
+  }, [search, activeCategory, allGroups]);
+
+  const popularItems = useMemo(
+    () =>
+      allGroups.flatMap((g) =>
+        g.items.filter((item) => item.popular).map((item) => ({ ...item, section: g.section })),
+      ),
+    [allGroups],
+  );
 
   const totalResults = filteredGroups.reduce((sum, g) => sum + g.items.length, 0);
   const showPopular = !search && !activeCategory;
@@ -214,7 +291,7 @@ export function FaqPage() {
   return (
     <>
       {/* Hero + Search */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
+      <section className="dark:bg-background bg-white px-5 pb-6 pt-9 xl:px-[80px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05]">
             Got questions?
@@ -224,7 +301,7 @@ export function FaqPage() {
           </p>
 
           {/* Search */}
-          <div className="relative">
+          <div className="relative xl:max-w-full">
             <svg
               className="text-muted pointer-events-none absolute left-4 top-1/2 -translate-y-1/2"
               width="14"
@@ -265,7 +342,7 @@ export function FaqPage() {
       </section>
 
       {/* Category filter tabs */}
-      <section className="dark:bg-background bg-white px-5 pb-5">
+      <section className="dark:bg-background bg-white px-5 pb-5 xl:px-[80px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
             <button
@@ -278,40 +355,46 @@ export function FaqPage() {
             >
               All
             </button>
-            {Object.entries(CATEGORY_STYLES).map(([cat, style]) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-                className={`font-body flex-shrink-0 rounded-full px-4 py-1.5 text-[12px] font-semibold transition-colors ${
-                  activeCategory === cat
-                    ? style.activePill
-                    : 'hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-[#1e1e1e] dark:text-[#9ca3af]'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+            {allGroups.map(({ section }) => {
+              const style = CATEGORY_STYLES[section];
+              return (
+                <button
+                  key={section}
+                  onClick={() => setActiveCategory(activeCategory === section ? null : section)}
+                  className={`font-body flex-shrink-0 rounded-full px-4 py-1.5 text-[12px] font-semibold transition-colors ${
+                    activeCategory === section
+                      ? (style?.activePill ?? 'bg-accent text-white')
+                      : 'hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-[#1e1e1e] dark:text-[#9ca3af]'
+                  }`}
+                >
+                  {section}
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* Popular questions — shown only when no search/filter active */}
       {showPopular && (
-        <section className="dark:bg-background bg-white px-5 pb-6">
+        <section className="dark:bg-background bg-white px-5 pb-6 xl:px-[80px]">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <SectionKicker className="mb-3">POPULAR QUESTIONS</SectionKicker>
-            <div className="flex flex-col gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-[#2a2a2a]">
-              {POPULAR_ITEMS.map((item, idx) => (
-                <AccordionItem
-                  key={idx}
-                  id={`popular-${idx}`}
-                  question={item.q}
-                  answer={item.a}
-                  dotClass={CATEGORY_STYLES[item.section]?.dot ?? 'bg-accent'}
-                  openIdx={openIdx}
-                  setOpenIdx={setOpenIdx}
-                />
-              ))}
+            <div className="xl:mx-auto xl:max-w-[730px]">
+              <SectionKicker className="mb-3">POPULAR QUESTIONS</SectionKicker>
+              <div className="flex flex-col gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-[#2a2a2a]">
+                {popularItems.map((item, idx) => (
+                  <AccordionItem
+                    key={idx}
+                    id={`popular-${idx}`}
+                    question={item.q}
+                    answer={item.a}
+                    answerRichText={cmsFaqMap?.get(item.q)}
+                    dotClass={CATEGORY_STYLES[item.section]?.dot ?? 'bg-accent'}
+                    openIdx={openIdx}
+                    setOpenIdx={setOpenIdx}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -319,11 +402,13 @@ export function FaqPage() {
 
       {/* Search result count */}
       {search && (
-        <section className="dark:bg-background bg-white px-5 pb-2">
+        <section className="dark:bg-background bg-white px-5 pb-2 xl:px-[80px]">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <p className="font-body text-muted text-[12px]">
-              {totalResults} result{totalResults !== 1 ? 's' : ''} for &ldquo;{search}&rdquo;
-            </p>
+            <div className="xl:mx-auto xl:max-w-[730px]">
+              <p className="font-body text-muted text-[12px]">
+                {totalResults} result{totalResults !== 1 ? 's' : ''} for &ldquo;{search}&rdquo;
+              </p>
+            </div>
           </div>
         </section>
       )}
@@ -333,63 +418,90 @@ export function FaqPage() {
         filteredGroups.map((group) => {
           const catStyle = CATEGORY_STYLES[group.section];
           return (
-            <section key={group.section} className="dark:bg-background bg-white px-5 pb-6">
+            <section
+              key={group.section}
+              className="dark:bg-background bg-white px-5 pb-6 xl:px-[80px]"
+            >
               <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-                <SectionKicker className="mb-3">{group.section.toUpperCase()}</SectionKicker>
-                <div className="flex flex-col gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-[#2a2a2a]">
-                  {group.items.map((item, idx) => (
-                    <AccordionItem
-                      key={idx}
-                      id={`${group.section}-${idx}`}
-                      question={item.q}
-                      answer={item.a}
-                      dotClass={catStyle?.dot ?? 'bg-accent'}
-                      openIdx={openIdx}
-                      setOpenIdx={setOpenIdx}
-                    />
-                  ))}
+                <div className="xl:mx-auto xl:max-w-[730px]">
+                  <SectionKicker className="mb-3">{group.section.toUpperCase()}</SectionKicker>
+                  <div className="flex flex-col gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-[#2a2a2a]">
+                    {group.items.map((item, idx) => (
+                      <AccordionItem
+                        key={idx}
+                        id={`${group.section}-${idx}`}
+                        question={item.q}
+                        answer={item.a}
+                        answerRichText={cmsFaqMap?.get(item.q)}
+                        dotClass={catStyle?.dot ?? 'bg-accent'}
+                        openIdx={openIdx}
+                        setOpenIdx={setOpenIdx}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </section>
           );
         })
       ) : (
-        <section className="dark:bg-background bg-white px-5 pb-6">
+        <section className="dark:bg-background bg-white px-5 pb-6 xl:px-[80px]">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <p className="font-body text-muted py-8 text-center text-[14px]">
-              No questions match your search.
-            </p>
+            <div className="xl:mx-auto xl:max-w-[730px]">
+              <p className="font-body text-muted py-8 text-center text-[14px]">
+                No questions match your search.
+              </p>
+            </div>
           </div>
         </section>
       )}
 
       {/* Still stuck CTA */}
-      <section className="bg-black px-5 pb-12 pt-10">
+      <section className="bg-black px-5 pb-12 pt-10 xl:px-[80px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:last-child]:text-white/50 [&>span]:bg-white/40">
-            STILL STUCK?
-          </SectionKicker>
-          <h2 className="mb-3 font-sans text-[32px] font-semibold leading-[1.1] text-white">
-            Talk to us.
-          </h2>
-          <p className="font-body mb-8 max-w-[280px] text-[14px] leading-relaxed text-white/60">
-            Our support team is available 24/5. Average reply time under 90 seconds.
-          </p>
-          <Link
-            href={`/${locale}/contact`}
-            className="bg-accent font-body hover:bg-accent-hover flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
-          >
-            Open live chat
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
+          <div className="xl:flex xl:items-center xl:gap-8">
+            {/* Left: heading + subtitle */}
+            <div className="xl:flex-1">
+              <SectionKicker className="mb-4 [&>span:last-child]:text-white/50 [&>span]:bg-white/40">
+                STILL STUCK?
+              </SectionKicker>
+              <h2 className="mb-3 font-sans text-[32px] font-semibold leading-[1.1] text-white">
+                Talk to us.
+              </h2>
+              <p className="font-body mb-6 max-w-[280px] text-[14px] leading-relaxed text-white/60 xl:mb-0">
+                Our support team is available 24/5. Average reply time under 90 seconds.
+              </p>
+            </div>
+            {/* Right: buttons + stat */}
+            <div className="xl:flex xl:flex-shrink-0 xl:flex-col xl:items-end xl:gap-3">
+              <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:gap-3">
+                <Link
+                  href={`/${locale}/live-chat`}
+                  className="bg-accent font-body hover:bg-accent/90 flex h-[50px] w-full items-center justify-center gap-2 rounded-full px-6 text-[14px] font-medium text-white transition-colors xl:w-auto"
+                >
+                  Open live chat
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M3 8h10M9 4l4 4-4 4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+                <Link
+                  href={`/${locale}/contact`}
+                  className="font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full border border-white/20 px-6 text-[14px] font-medium text-white transition-colors hover:border-white/40 xl:w-auto"
+                >
+                  Email support
+                </Link>
+              </div>
+              <p className="font-body mt-3 text-center text-[11px] text-white/30 xl:mt-0 xl:text-right">
+                Avg reply under 2 min · 24/5
+              </p>
+            </div>
+          </div>
         </div>
       </section>
     </>

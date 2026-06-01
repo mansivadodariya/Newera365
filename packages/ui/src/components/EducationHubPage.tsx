@@ -146,10 +146,30 @@ const PINNED_GUIDES = [
   { title: "Beginner's guide to reading economic data", href: '/guides/economic-data' },
 ] as const;
 
-export function EducationHubPage() {
+export interface CmsEducationItem {
+  id: number;
+  slug: string;
+  title: string;
+  contentType: string;
+  isGated?: boolean | null;
+  thumbnailUrl?: string | null;
+}
+
+interface EducationHubPageProps {
+  content?: CmsEducationItem[];
+}
+
+export function EducationHubPage({ content: cmsContent }: EducationHubPageProps) {
   const locale = useLocale();
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+
+  const cmsCounts = cmsContent
+    ? CATEGORIES.map((cat) => {
+        const count = cmsContent.filter((c) => c.contentType === cat.id).length;
+        return { ...cat, count: count > 0 ? `${count}` : cat.count };
+      })
+    : null;
 
   function handleSubscribe(e: React.FormEvent) {
     e.preventDefault();
@@ -159,7 +179,7 @@ export function EducationHubPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="dark:bg-background bg-white px-5 pb-8 pt-9 xl:px-[80px] xl:py-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             Learn to
@@ -176,13 +196,13 @@ export function EducationHubPage() {
       </section>
 
       {/* Category grid */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="dark:bg-background bg-white px-5 pb-10 xl:px-[80px] xl:py-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
             BROWSE BY TYPE
           </SectionKicker>
-          <div className="grid grid-cols-2 gap-[10px]">
-            {CATEGORIES.map((cat) => (
+          <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-3">
+            {(cmsCounts ?? CATEGORIES).map((cat) => (
               <Link
                 key={cat.id}
                 href={`/${locale}${cat.href}`}
@@ -209,17 +229,17 @@ export function EducationHubPage() {
       </section>
 
       {/* Featured this week */}
-      <section className="dark:bg-background bg-[#f9f9f9] px-5 pb-10 pt-8">
+      <section className="dark:bg-background bg-[#f9f9f9] px-5 pb-10 pt-8 xl:px-[80px] xl:py-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
             FEATURED THIS WEEK
           </SectionKicker>
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
+          <div className="flex flex-col divide-y divide-[#e5e7eb] xl:grid xl:grid-cols-3 xl:divide-x xl:divide-y-0 xl:divide-[#e5e7eb] dark:divide-[#2a2a2a] dark:xl:divide-[#2a2a2a]">
             {FEATURED.map((article) => (
               <Link
                 key={article.id}
                 href={`/${locale}${article.href}`}
-                className="group flex flex-col gap-2 py-5 first:pt-0 last:pb-0"
+                className="group flex flex-col gap-2 py-5 first:pt-0 last:pb-0 xl:px-6 xl:py-0 xl:first:pl-0 xl:last:pr-0"
               >
                 <div className="flex items-center justify-between">
                   <span
@@ -302,7 +322,7 @@ export function EducationHubPage() {
             STAY UPDATED
           </SectionKicker>
           <h2 className="mb-2 font-sans text-[28px] font-semibold leading-[1.1] text-white">
-            Want it in your practice?
+            Want it in your inbox?
           </h2>
           <p className="font-body mb-6 text-[13px] leading-relaxed text-white/60">
             New guides and lessons as they drop.
