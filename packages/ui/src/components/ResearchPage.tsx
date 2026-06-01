@@ -230,7 +230,7 @@ export function ResearchPage({ cmsArticles }: ResearchPageProps) {
       <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
-            {categories.map((cat) => (
+            {CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
@@ -330,7 +330,7 @@ export function ResearchPage({ cmsArticles }: ResearchPageProps) {
             {filteredList.map((article) => (
               <Link
                 key={article.id}
-                href={`/${locale}/${basePath}/${article.slug}`}
+                href={`/${locale}/research/${article.slug}`}
                 className="group flex items-start gap-4 py-5 xl:flex-col xl:gap-3 xl:px-6 xl:py-0 xl:first:pl-0 xl:last:pr-0"
               >
                 <div className="min-w-0 flex-1">

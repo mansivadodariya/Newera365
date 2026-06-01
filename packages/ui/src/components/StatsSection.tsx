@@ -34,7 +34,7 @@ export function StatsSection({ kpiStats, locale }: { kpiStats?: CmsKpiStat[]; lo
       style={{ background: 'var(--gradient-stats)' }}
     >
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-        <SectionKicker className="mb-5 text-foreground [&>span:first-child]:bg-foreground">
+        <SectionKicker className="text-foreground [&>span:first-child]:bg-foreground mb-5">
           {t('statsByNumbers')}
         </SectionKicker>
 
@@ -44,7 +44,7 @@ export function StatsSection({ kpiStats, locale }: { kpiStats?: CmsKpiStat[]; lo
 
         {/* Stats grid — 2 cols mobile, 4 cols desktop */}
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[20px] bg-[#e5e7eb] xl:grid-cols-4 dark:bg-[#1a1c22]">
-          {stats.map((stat) => (
+          {stats.map((stat, i) => (
             <div
               key={stat.label}
               className="flex flex-col justify-center gap-[6px] bg-[rgba(0,0,0,0.73)] p-[22px]"

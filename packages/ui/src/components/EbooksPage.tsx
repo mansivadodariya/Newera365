@@ -124,7 +124,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                 The 5%
                 <br />
                 <span className="text-accent">Rule.</span>
-              </h2>
+              </p>
               <p className="font-body text-muted max-w-[320px] text-[15px] leading-[1.55]">
                 A 56-page framework for never losing more than 5% on a single trade. Used by our
                 desk every day.

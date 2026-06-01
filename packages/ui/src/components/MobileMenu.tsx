@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
+import { LanguageToggle } from './LanguageToggle';
 
 const NAV_GROUPS = [
   {

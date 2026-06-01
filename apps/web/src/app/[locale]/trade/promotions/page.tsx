@@ -17,7 +17,7 @@ function mapPromo(p: CmsPromotion): CmsPromoItem {
     title: p.title,
     tag: p.tag,
     tagColor: p.tagColor,
-    description: p.description,
+    description: p.description ?? '',
     terms: p.terms,
     ctaLabel: p.ctaLabel,
     ctaHref: p.ctaHref,

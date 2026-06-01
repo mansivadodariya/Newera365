@@ -204,7 +204,9 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
                 ))}
               </div>
             </div>
-          )}
+          </div>
+        </section>
+      )}
 
       {/* Article body */}
       <section className="bg-background px-5 pb-10">
@@ -232,9 +234,9 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
                       {section.insight}
                     </p>
                   </div>
-                ))}
+                )}
               </div>
-            )}
+            ))}
           </div>
         </div>
       </section>

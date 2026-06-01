@@ -281,102 +281,6 @@ interface FundingPageProps {
 function HeroContent() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-background px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
-            PAYMENT METHODS
-          </SectionKicker>
-
-          <div className="flex flex-col gap-3 xl:grid xl:grid-cols-3 xl:gap-6">
-            {useCms
-              ? cmsMethods.map((method) => (
-                  <div
-                    key={method.id}
-                    className="dark:bg-surface flex flex-col gap-[14px] overflow-hidden rounded-[18px] bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)]"
-                  >
-                    {/* Icon + type badge — always shown for CMS (no cover image) */}
-                    <div className="flex items-start justify-between">
-                      <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px] bg-[rgba(0,176,80,0.08)]">
-                        <svg
-                          width="18"
-                          height="18"
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <rect
-                            x="1"
-                            y="4"
-                            width="18"
-                            height="12"
-                            rx="2.5"
-                            stroke="#00B050"
-                            strokeWidth="1.4"
-                          />
-                          <path d="M1 8h18" stroke="#00B050" strokeWidth="1.4" />
-                          <rect x="3" y="11" width="4" height="2" rx="0.5" fill="#00B050" />
-                        </svg>
-                      </div>
-                      <span className="text-foreground rounded-full bg-[rgba(17,17,17,0.05)] px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px] dark:bg-[rgba(255,255,255,0.08)] dark:text-white">
-                        {method.methodType}
-                      </span>
-                    </div>
-                    <p className="text-foreground font-sans text-[17px] font-semibold tracking-[-0.17px]">
-                      {method.name}
-                    </p>
-                    <StatsGrid
-                      deposit={method.depositTime ?? '—'}
-                      withdraw={method.withdrawalTime ?? '—'}
-                      min={method.minDeposit ?? '—'}
-                      fee={method.fee ?? '—'}
-                    />
-                    {method.notes && (
-                      <p className="font-body text-muted text-[11px] leading-[1.5]">
-                        {method.notes}
-                      </p>
-                    )}
-                  </div>
-                ))
-              : PAYMENT_METHODS.map((method) => (
-                  <div
-                    key={method.id}
-                    className="dark:bg-surface flex flex-col gap-[14px] overflow-hidden rounded-[18px] bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)]"
-                  >
-                    {/* Mobile: icon + type badge */}
-                    <div className="flex items-start justify-between xl:hidden">
-                      <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px] bg-[rgba(0,176,80,0.08)]">
-                        {method.icon}
-                      </div>
-                      <span className="text-foreground rounded-full bg-[rgba(17,17,17,0.05)] px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px] dark:bg-[rgba(255,255,255,0.08)] dark:text-white">
-                        {method.type}
-                      </span>
-                    </div>
-
-                    {/* Desktop: cover image */}
-                    <div className="relative hidden h-[110px] overflow-hidden rounded-[12px] xl:block">
-                      <img
-                        src={method.cover}
-                        alt={method.name}
-                        className={`absolute inset-0 h-full w-full max-w-none rounded-[12px] ${method.coverFit}`}
-                      />
-                    </div>
-
-                    <p className="text-foreground font-sans text-[17px] font-semibold tracking-[-0.17px]">
-                      {method.name}
-                    </p>
-                    <StatsGrid
-                      deposit={method.deposit}
-                      withdraw={method.withdraw}
-                      min={method.min}
-                      fee={method.fee}
-                    />
-                  </div>
-                ))}
-          </div>
-        </div>
-      </section>
-
       {/* Hero — desktop (shown below cards, above trust) */}
       <section className="dark:bg-background hidden bg-white pb-14 pt-[30px] xl:block xl:px-[120px]">
         <div className="mx-auto max-w-[1200px]">
@@ -488,4 +392,8 @@ function HeroContent() {
       </section>
     </>
   );
+}
+
+export function FundingPage(_props: FundingPageProps) {
+  return <HeroContent />;
 }

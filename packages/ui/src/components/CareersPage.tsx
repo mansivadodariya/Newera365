@@ -241,9 +241,9 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
                 </div>
                 <div className="flex flex-shrink-0 items-center gap-2">
                   <span
-                    className={`font-body rounded-full px-2.5 py-[4px] text-[10px] font-semibold ${TYPE_COLORS[job.type]}`}
+                    className={`font-body rounded-full px-2.5 py-[4px] text-[10px] font-semibold ${TYPE_COLORS['type' in job ? job.type : (job as CmsJobItem).employmentType]}`}
                   >
-                    {job.type}
+                    {'type' in job ? job.type : (job as CmsJobItem).employmentType}
                   </span>
                   <svg
                     width="16"

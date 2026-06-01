@@ -306,10 +306,13 @@ export function EconomicCalendarPage() {
                                   ? IMPACT_DOT[level]
                                   : ev.impact === 'MEDIUM' && level !== 'HIGH'
                                     ? IMPACT_DOT[level]
-                                    : 'dark:bg-surface-elevated bg-[#e5e7eb]'
-                            }`}
-                          />
-                        ))}
+                                    : ev.impact === 'LOW' && level === 'LOW'
+                                      ? IMPACT_DOT[level]
+                                      : 'dark:bg-surface-elevated bg-[#e5e7eb]'
+                              }`}
+                            />
+                          ))}
+                        </div>
                       </div>
                     </div>
                   ))}

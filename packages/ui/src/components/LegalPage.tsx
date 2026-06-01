@@ -395,6 +395,8 @@ export function LegalPage({ documents }: LegalPageProps) {
               ))}
             </div>
           </div>
+        </div>
+      </section>
 
       {/* Document body */}
       <section className="bg-background px-5 pb-12">

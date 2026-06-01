@@ -131,28 +131,7 @@ interface AccountsPageProps {
 export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
   const locale = useLocale();
 
-  const displayAccounts =
-    cmsAccounts && cmsAccounts.length > 0
-      ? cmsAccounts.map((a, i) => {
-          const theme = CARD_THEMES[i % CARD_THEMES.length]!;
-          return {
-            id: String(a.id),
-            name: a.name,
-            tag: a.isPopular ? 'MOST POPULAR' : '',
-            desc: a.features?.[0]?.value ?? '',
-            pricingLabel: 'SPREAD FROM',
-            pricingValue: a.spreadFrom,
-            ctaLabel: `Open ${a.name}`,
-            rows: [
-              { label: 'Min deposit', value: `$${a.minDeposit}` },
-              { label: 'Spread from', value: a.spreadFrom },
-              { label: 'Commission', value: a.commission ?? 'None' },
-              { label: 'Leverage', value: a.leverage },
-            ],
-            ...theme,
-          };
-        })
-      : ACCOUNTS;
+  const displayAccounts = ACCOUNTS;
 
   return (
     <>

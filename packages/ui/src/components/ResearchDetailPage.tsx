@@ -148,8 +148,8 @@ export function ResearchDetailPage({
               EUR/USD · 6 month chart
             </p>
           </div>
-        </section>
-      ) : null}
+        </div>
+      </section>
 
       {/* Article body */}
       <section className="bg-background px-5 pb-10">
@@ -167,19 +167,6 @@ export function ResearchDetailPage({
               <h2 className="text-foreground font-sans text-[20px] font-semibold leading-[1.2]">
                 A three-speed central bank story.
               </h2>
-
-            <p className="font-body text-foreground text-[15px] leading-[1.7]">
-              Raw futures data confirms cuts from the market two times in the next nine months for
-              EUR. One next near the end of the day. That goes EURUSD to 1.0820 at one market — and
-              historically it takes the EURUSD more time to recover policy expectations shift
-              endlessly.
-            </p>
-
-            {/* Mini bar chart */}
-            <div className="bg-surface overflow-hidden rounded-[14px] p-4">
-              <p className="font-body text-muted mb-3 text-[10px] uppercase tracking-[0.1em]">
-                Rate expectations · next 9 months
-              </p>
 
               {/* Pull quote */}
               <div className="border-accent border-l-2 pl-4">

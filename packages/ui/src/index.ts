@@ -32,7 +32,6 @@ export { CtaBanner } from './components/CtaBanner';
 export { ArbitrageSection } from './components/ArbitrageSection';
 
 export { AccountsPage } from './components/AccountsPage';
-export type { CmsAccountTypeItem } from './components/AccountsPage';
 export { AccountComparisonPage } from './components/AccountComparisonPage';
 export { FundingPage } from './components/FundingPage';
 export type { CmsPaymentMethodItem } from './components/FundingPage';
@@ -92,3 +91,4 @@ export type { WidgetType, TradingViewWidgetProps } from './components/TradingVie
 export { PivotCalculatorPage } from './components/PivotCalculatorPage';
 export { ProfitCalculatorPage } from './components/ProfitCalculatorPage';
 export { FibonacciCalculatorPage } from './components/FibonacciCalculatorPage';
+export { AiCrmPage } from './components/AiCrmPage';

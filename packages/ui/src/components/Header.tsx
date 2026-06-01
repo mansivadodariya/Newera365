@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
@@ -210,6 +210,9 @@ function DesktopNavItem({
   locale: string;
   pathname: string;
 }) {
+  const [open, setOpen] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const isActive =
     item.href === '/'
       ? pathname === `/${locale}` || pathname === `/${locale}/`

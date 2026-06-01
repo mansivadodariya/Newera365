@@ -295,15 +295,8 @@ export function AccountComparisonPage({ cmsAccounts }: AccountComparisonPageProp
             </div>
 
             {/* Data rows */}
-            {FEATURE_MATRIX.map((row, i) => (
+            {FEATURE_MATRIX.map((row) => (
               <Fragment key={row.feature}>
-                {row.section && (
-                  <div className="dark:border-border border-b border-[#e5e7eb] px-[14px] pb-1 pt-4">
-                    <span className="font-body text-[9px] uppercase tracking-[0.12em] text-[#9ca3af]">
-                      {row.section}
-                    </span>
-                  </div>
-                )}
                 <div className="grid grid-cols-[1fr_65px_65px_65px] items-center px-[14px] py-[11px]">
                   <span className="font-body text-[12px] text-white/85">{row.feature}</span>
                   <div className="flex justify-center">

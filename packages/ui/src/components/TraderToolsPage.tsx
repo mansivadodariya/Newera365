@@ -340,7 +340,7 @@ export function TraderToolsPage() {
                 options={['USD', 'EUR', 'GBP']}
                 onChange={setCurrency}
               />
-            )}
+            </div>
             {activeTab === 'SWAP' && (
               <>
                 <div className="flex flex-col gap-1.5">
@@ -368,155 +368,6 @@ export function TraderToolsPage() {
                 <NumberInput label="Days held" value={days} onChange={setDays} step="1" min="1" />
               </>
             )}
-          </div>
-
-          {/* Result */}
-          <div
-            className="mt-5 overflow-hidden rounded-[18px] bg-[#111111]"
-            style={{ boxShadow: '0 4px 24px rgba(0,176,80,0.15)' }}
-          >
-            <div className="px-5 pb-5 pt-5">
-              <p className="font-body mb-1 text-[10px] uppercase tracking-[0.12em] text-white/40">
-                {activeTab === 'MARGIN'
-                  ? 'Required Margin'
-                  : activeTab === 'PIP'
-                    ? 'Pip Value'
-                    : 'Swap Cost / Day'}
-              </p>
-              <p className="font-sans text-[42px] font-semibold leading-[1.1] text-white">
-                {activeTab === 'SWAP' && swap < 0 ? '-' : ''}
-                {Math.abs(
-                  activeTab === 'MARGIN' ? margin : activeTab === 'PIP' ? pip : swap,
-                ).toFixed(2)}
-                <span className="ml-1 text-[22px] font-normal text-white/60">{currency}</span>
-              </p>
-            </div>
-            <div className="mx-5 border-t border-white/10" />
-            <div className="grid grid-cols-3 px-5 py-4">
-              {activeTab === 'MARGIN' &&
-                [
-                  {
-                    label: 'Notional',
-                    value: `${(lots * contractSize).toLocaleString('en-US')} ${currency}`,
-                  },
-                  { label: 'Leverage', value: `1:${leverage}` },
-                  { label: 'Contract', value: contractSize.toLocaleString('en-US') },
-                ].map((item) => (
-                  <div key={item.label} className="flex flex-col gap-1">
-                    <span className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
-                      {item.label}
-                    </span>
-                    <span className="font-body text-[12px] font-medium text-white">
-                      {item.value}
-                    </span>
-                  </div>
-                ))}
-              {activeTab === 'PIP' &&
-                [
-                  { label: 'Lot size', value: positionSize },
-                  { label: 'Pip size', value: instrument.includes('JPY') ? '0.01' : '0.0001' },
-                  { label: 'Per pip', value: `${pip.toFixed(2)} ${currency}` },
-                ].map((item) => (
-                  <div key={item.label} className="flex flex-col gap-1">
-                    <span className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
-                      {item.label}
-                    </span>
-                    <span className="font-body text-[12px] font-medium text-white">
-                      {item.value}
-                    </span>
-                  </div>
-                ))}
-              {activeTab === 'SWAP' &&
-                [
-                  {
-                    label: 'Rate / lot',
-                    value: `${direction === 'long' ? swapRate.long : swapRate.short} ${currency}`,
-                  },
-                  { label: 'Lots', value: positionSize },
-                  { label: 'Days', value: days },
-                ].map((item) => (
-                  <div key={item.label} className="flex flex-col gap-1">
-                    <span className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
-                      {item.label}
-                    </span>
-                    <span className="font-body text-[12px] font-medium text-white">
-                      {item.value}
-                    </span>
-                  </div>
-                ))}
-            </div>
-          </div>
-
-          {/* Formula */}
-          <div className="bg-surface mt-4 rounded-[14px] p-4">
-            <p className="font-body text-muted mb-2 text-[10px] uppercase tracking-[0.1em]">
-              How it&apos;s calculated
-            </p>
-            <p className="font-body text-foreground text-[13px] leading-[1.6]">
-              {activeTab === 'MARGIN' && (
-                <>
-                  <span className="font-medium">
-                    Margin = (Position size × Contract size) ÷ Leverage
-                  </span>
-                  <br />
-                  <span className="text-muted">
-                    The margin is the amount of capital required to open and maintain your position.
-                    It scales linearly with position size and inversely with leverage.
-                  </span>
-                </>
-              )}
-              {activeTab === 'PIP' && (
-                <>
-                  <span className="font-medium">
-                    Pip value = Lot size × Pip size × Contract size
-                  </span>
-                  <br />
-                  <span className="text-muted">
-                    Each pip movement on your position is worth this amount. Multiply by your
-                    expected pip gain/loss to estimate P&L.
-                  </span>
-                </>
-              )}
-              {activeTab === 'SWAP' && (
-                <>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">
-                      Direction
-                    </label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {(['long', 'short'] as const).map((d) => (
-                        <button
-                          key={d}
-                          onClick={() => setDirection(d)}
-                          className={`font-body rounded-[12px] border py-3 text-[13px] font-medium transition-colors ${
-                            direction === d
-                              ? d === 'long'
-                                ? 'border-[#26A69A] bg-[#26A69A]/10 text-[#26A69A]'
-                                : 'border-[#EF4444] bg-[#EF4444]/10 text-[#EF4444]'
-                              : 'border-border text-muted'
-                          }`}
-                        >
-                          {d === 'long' ? 'Buy / Long' : 'Sell / Short'}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <NumberInput label="Days held" value={days} onChange={setDays} step="1" min="1" />
-                </>
-              )}
-              {/* Buttons row */}
-              <div className="flex items-center gap-3 xl:col-span-2">
-                <button className="bg-accent hover:bg-accent/90 font-body flex h-[48px] flex-1 items-center justify-center rounded-full text-[14px] font-medium text-white transition-colors xl:flex-none xl:px-8">
-                  Calculate
-                </button>
-                <button className="border-border font-body flex h-[48px] flex-1 items-center justify-center rounded-full border text-[14px] font-medium transition-colors xl:flex-none xl:px-8">
-                  Reset
-                </button>
-                <p className="font-body text-muted hidden text-[11px] xl:block">
-                  Hypothetical · not investment advice.
-                </p>
-              </div>
-            </div>
 
             {/* Result card + formula — right column on xl, hidden below */}
             <div className="hidden xl:flex xl:w-[400px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
@@ -573,19 +424,19 @@ export function TraderToolsPage() {
                 tag: 'Technical',
                 label: 'Pivot calculator',
                 desc: 'Classical, Camarilla, Woodie & Fibonacci pivots for any session.',
-                href: `/${locale}/tools/pivot-calculator`,
+                href: `/${locale}/tools/pivot`,
               },
               {
                 tag: 'P&L',
                 label: 'Profit calculator',
                 desc: 'Model gross P&L by instrument, lots, entry and exit price.',
-                href: `/${locale}/tools/profit-calculator`,
+                href: `/${locale}/tools/profit`,
               },
               {
                 tag: 'Technical',
                 label: 'Fibonacci calculator',
                 desc: 'Retracement and extension levels from your swing high and low.',
-                href: `/${locale}/tools/fibonacci-calculator`,
+                href: `/${locale}/tools/fibonacci`,
               },
             ].map((calc) => (
               <div

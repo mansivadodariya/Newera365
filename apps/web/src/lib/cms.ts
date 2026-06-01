@@ -460,3 +460,190 @@ export async function getResearchArticles(locale: string, limit = 10): Promise<C
   });
   return data.docs;
 }
+
+// ---------------------------------------------------------------------------
+// Site Settings (global)
+// ---------------------------------------------------------------------------
+
+export async function getSiteSettings(): Promise<CmsSiteSettings | null> {
+  return fetchGlobal<CmsSiteSettings>('site-settings');
+}
+
+// ---------------------------------------------------------------------------
+// Blog Posts
+// ---------------------------------------------------------------------------
+
+export async function getBlogPostBySlug(slug: string, locale: string): Promise<CmsBlogPost | null> {
+  return fetchBySlug<CmsBlogPost>('blog-posts', slug, locale);
+}
+
+// ---------------------------------------------------------------------------
+// Market Analysis (detail)
+// ---------------------------------------------------------------------------
+
+export async function getMarketAnalysisBySlug(
+  slug: string,
+  locale: string,
+): Promise<CmsMarketAnalysis | null> {
+  return fetchBySlug<CmsMarketAnalysis>('market-analysis', slug, locale);
+}
+
+// ---------------------------------------------------------------------------
+// Team Members & Awards
+// ---------------------------------------------------------------------------
+
+export async function getTeamMembers(locale: string): Promise<CmsTeamMember[]> {
+  const data = await fetchCollection<CmsTeamMember>('team-members', {
+    'where[status][equals]': 'active',
+    'where[locale][equals]': locale,
+    sort: 'sortOrder',
+    limit: '50',
+  });
+  return data.docs;
+}
+
+export async function getAwards(locale: string): Promise<CmsAward[]> {
+  const data = await fetchCollection<CmsAward>('company-content', {
+    'where[contentType][equals]': 'award',
+    'where[locale][equals]': locale,
+    sort: 'sortOrder',
+    limit: '20',
+  });
+  return data.docs;
+}
+
+// ---------------------------------------------------------------------------
+// Careers
+// ---------------------------------------------------------------------------
+
+export async function getCareers(locale?: string): Promise<CmsCareer[]> {
+  const params: Record<string, string> = {
+    'where[status][equals]': 'active',
+    sort: 'department,title',
+    limit: '100',
+  };
+  if (locale) params['where[locale][equals]'] = locale;
+  const data = await fetchCollection<CmsCareer>('careers', params);
+  return data.docs;
+}
+
+// ---------------------------------------------------------------------------
+// Education Content
+// ---------------------------------------------------------------------------
+
+export async function getEducationContent(
+  contentType?: string,
+  locale?: string,
+  limit = 50,
+): Promise<CmsEducationContent[]> {
+  const params: Record<string, string> = {
+    'where[status][equals]': 'published',
+    sort: '-updatedAt',
+    limit: String(limit),
+  };
+  if (contentType) params['where[contentType][equals]'] = contentType;
+  if (locale) params['where[locale][equals]'] = locale;
+  const data = await fetchCollection<CmsEducationContent>('education-content', params);
+  return data.docs;
+}
+
+export async function getGlossaryTerms(locale: string): Promise<CmsEducationContent[]> {
+  return getEducationContent('glossary', locale, 500);
+}
+
+export async function getGuides(locale: string): Promise<CmsEducationContent[]> {
+  return getEducationContent('guide', locale, 100);
+}
+
+export async function getGuideBySlug(
+  slug: string,
+  locale: string,
+): Promise<CmsEducationContent | null> {
+  return fetchBySlug<CmsEducationContent>('education-content', slug, locale, {
+    'where[contentType][equals]': 'guide',
+  });
+}
+
+// ---------------------------------------------------------------------------
+// FAQs
+// ---------------------------------------------------------------------------
+
+export async function getFaqs(locale: string): Promise<CmsFaq[]> {
+  const data = await fetchCollection<CmsFaq>('faqs', {
+    'where[status][equals]': 'active',
+    'where[locale][equals]': locale,
+    sort: 'sortOrder',
+    limit: '200',
+  });
+  return data.docs;
+}
+
+// ---------------------------------------------------------------------------
+// Legal Pages
+// ---------------------------------------------------------------------------
+
+export async function getLegalPages(locale: string): Promise<CmsLegalPage[]> {
+  const data = await fetchCollection<CmsLegalPage>('legal-pages', {
+    'where[status][equals]': 'published',
+    'where[locale][equals]': locale,
+    sort: 'sortOrder',
+    limit: '20',
+  });
+  return data.docs;
+}
+
+// ---------------------------------------------------------------------------
+// Payment Methods
+// ---------------------------------------------------------------------------
+
+export interface CmsPaymentMethod {
+  id: number;
+  name: string;
+  methodType: 'card' | 'bank-transfer' | 'e-wallet' | 'crypto';
+  depositTime: string;
+  withdrawalTime: string;
+  minDeposit?: string | null;
+  fee?: string | null;
+  notes?: string | null;
+  status: 'active' | 'inactive';
+  sortOrder?: number | null;
+}
+
+export async function getPaymentMethods(): Promise<CmsPaymentMethod[]> {
+  const data = await fetchCollection<CmsPaymentMethod>('payment-methods', {
+    'where[status][equals]': 'active',
+    sort: 'sortOrder',
+    limit: '50',
+  });
+  return data.docs;
+}
+
+// ---------------------------------------------------------------------------
+// Promotions
+// ---------------------------------------------------------------------------
+
+export interface CmsPromotion {
+  id: number;
+  slug: string;
+  title: string;
+  tag?: string | null;
+  tagColor?: string | null;
+  description?: string | null;
+  terms?: string | null;
+  ctaLabel?: string | null;
+  ctaHref?: string | null;
+  isHighlighted?: boolean | null;
+  status: 'active' | 'inactive';
+  locale: 'en' | 'ar';
+}
+
+export async function getPromotions(locale?: string): Promise<CmsPromotion[]> {
+  const params: Record<string, string> = {
+    'where[status][equals]': 'active',
+    sort: 'sortOrder',
+    limit: '50',
+  };
+  if (locale) params['where[locale][equals]'] = locale;
+  const data = await fetchCollection<CmsPromotion>('promotions', params);
+  return data.docs;
+}

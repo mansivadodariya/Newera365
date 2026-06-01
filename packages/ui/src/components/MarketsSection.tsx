@@ -29,9 +29,12 @@ export function MarketsSection() {
   ] as const;
 
   return (
-    <section className="rounded-[32px] px-5 pb-9 pt-10 xl:pb-16 xl:pt-10" style={{ background: 'var(--gradient-markets)' }}>
+    <section
+      className="rounded-[32px] px-5 pb-9 pt-10 xl:pb-16 xl:pt-10"
+      style={{ background: 'var(--gradient-markets)' }}
+    >
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-        <SectionKicker className="mb-[14px] text-foreground [&>span:first-child]:dark:bg-white dark:[&>span:last-child]:text-white">
+        <SectionKicker className="text-foreground mb-[14px] [&>span:first-child]:dark:bg-white dark:[&>span:last-child]:text-white">
           {t('marketsKicker')}
         </SectionKicker>
 
@@ -51,7 +54,7 @@ export function MarketsSection() {
             >
               <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-[rgba(239,239,239,0)] dark:bg-[rgba(17,17,17,0)]">
                 <Image
-                  src={ASSET_ICON_FILES[asset.key]}
+                  src={ASSET_BG[asset.key]}
                   alt={asset.name}
                   width={24}
                   height={24}
@@ -73,7 +76,13 @@ export function MarketsSection() {
         >
           {t('marketsViewAll')}
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-            <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </Link>
       </div>

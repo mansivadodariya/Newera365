@@ -158,41 +158,32 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
               >
                 <div className="flex items-center justify-between">
                   <span
-                    className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${guide.categoryClass}`}
+                    className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${'categoryClass' in guide ? guide.categoryClass : CAT_FALLBACK}`}
                   >
-                    {guide.category}
+                    {'category' in guide ? guide.category : ''}
                   </span>
-                  <span className="font-body text-muted text-[11px]">{guide.readTime} read</span>
+                  <span className="font-body text-muted text-[11px]">
+                    {'readTime' in guide ? `${guide.readTime} read` : ''}
+                  </span>
                 </div>
                 <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] transition-colors">
                   {guide.title}
                 </p>
-                <p className="font-body text-muted text-[12px] leading-[1.55]">{guide.desc}</p>
-                <div className="flex items-center gap-2">
-                  <div className="border-border flex h-5 w-5 items-center justify-center rounded-full border">
-                    <span className="text-muted font-sans text-[8px] font-semibold">
-                      {guide.author[0]}
-                    </span>
-                  </div>
-                  <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] transition-colors">
-                    {guide.title}
-                  </p>
-                  {desc && (
-                    <p className="font-body text-muted text-[12px] leading-[1.55]">{desc}</p>
-                  )}
-                  {author && (
-                    <div className="flex items-center gap-2">
-                      <div className="border-border flex h-5 w-5 items-center justify-center rounded-full border">
-                        <span className="text-muted font-sans text-[8px] font-semibold">
-                          {author[0]}
-                        </span>
-                      </div>
-                      <span className="font-body text-muted text-[11px]">{author}</span>
+                <p className="font-body text-muted text-[12px] leading-[1.55]">
+                  {'desc' in guide ? guide.desc : 'summary' in guide ? guide.summary : ''}
+                </p>
+                {guide.author && (
+                  <div className="flex items-center gap-2">
+                    <div className="border-border flex h-5 w-5 items-center justify-center rounded-full border">
+                      <span className="text-muted font-sans text-[8px] font-semibold">
+                        {guide.author[0]}
+                      </span>
                     </div>
-                  )}
-                </Link>
-              );
-            })}
+                    <span className="font-body text-muted text-[11px]">{guide.author}</span>
+                  </div>
+                )}
+              </Link>
+            ))}
           </div>
         </div>
       </section>
