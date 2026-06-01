@@ -95,7 +95,7 @@ export function AnalystChartPage() {
       {/* Hero */}
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.08]">
+          <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.08] tracking-[-1.14px]">
             Where the
             <br />
             majors are
@@ -146,14 +146,14 @@ export function AnalystChartPage() {
                 className={`font-body rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
                   tab === t.id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-surface dark:text-muted'
+                    : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
                 }`}
               >
                 {t.label}
               </button>
             ))}
           </div>
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-border">
+          <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
             {pairs.map((p) => (
               <div key={p.symbol} className="flex items-center justify-between py-[13px]">
                 <p className="text-foreground font-sans text-[14px] font-semibold">{p.symbol}</p>
@@ -177,7 +177,7 @@ export function AnalystChartPage() {
           <p className="font-body mb-4 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
             ANALYST COMMENTARY
           </p>
-          <div className="rounded-[18px] bg-surface p-5">
+          <div className="bg-surface rounded-[18px] p-5">
             <div className="mb-4 flex items-center gap-3">
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
                 <span className="font-sans text-[13px] font-semibold text-white">

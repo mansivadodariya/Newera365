@@ -13,9 +13,9 @@ const PAYMENT_METHODS = [
     fee: 'Free',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <rect x="1" y="4" width="18" height="12" rx="2" stroke="white" strokeWidth="1.5" />
-        <path d="M1 8h18" stroke="white" strokeWidth="1.5" />
-        <rect x="4" y="11" width="4" height="2" rx="0.5" fill="white" />
+        <rect x="1" y="4" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M1 8h18" stroke="currentColor" strokeWidth="1.5" />
+        <rect x="4" y="11" width="4" height="2" rx="0.5" fill="currentColor" />
       </svg>
     ),
   },
@@ -48,9 +48,9 @@ const PAYMENT_METHODS = [
     fee: 'Free',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="1.5" />
-        <path d="M10 2v16M2 10h16" stroke="white" strokeWidth="1.5" />
-        <ellipse cx="10" cy="10" rx="4" ry="8" stroke="white" strokeWidth="1.5" />
+        <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M10 2v16M2 10h16" stroke="currentColor" strokeWidth="1.5" />
+        <ellipse cx="10" cy="10" rx="4" ry="8" stroke="currentColor" strokeWidth="1.5" />
       </svg>
     ),
   },
@@ -64,9 +64,9 @@ const PAYMENT_METHODS = [
     fee: 'Free',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="1.5" />
-        <path d="M10 2v16M2 10h16" stroke="white" strokeWidth="1.5" />
-        <ellipse cx="10" cy="10" rx="4" ry="8" stroke="white" strokeWidth="1.5" />
+        <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M10 2v16M2 10h16" stroke="currentColor" strokeWidth="1.5" />
+        <ellipse cx="10" cy="10" rx="4" ry="8" stroke="currentColor" strokeWidth="1.5" />
       </svg>
     ),
   },
@@ -86,7 +86,7 @@ const PAYMENT_METHODS = [
           strokeWidth="1.5"
           strokeLinecap="round"
         />
-        <path d="M9 5v10M11 5v10" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M9 5v10M11 5v10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
     ),
   },
@@ -138,9 +138,14 @@ const TRUST_ROWS = [
     desc: 'Payment data is encrypted in transit and at rest, audited annually.',
     icon: (
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-        <rect x="5" y="9" width="10" height="8" rx="1.5" stroke="white" strokeWidth="1.5" />
-        <path d="M7 9V6.5a3 3 0 016 0V9" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-        <circle cx="10" cy="13" r="1" fill="white" />
+        <rect x="5" y="9" width="10" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+        <path
+          d="M7 9V6.5a3 3 0 016 0V9"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+        <circle cx="10" cy="13" r="1" fill="currentColor" />
       </svg>
     ),
   },
@@ -149,7 +154,7 @@ const TRUST_ROWS = [
     desc: 'Withdrawals are processed 7 days a week, including holidays.',
     icon: (
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="10" r="7.5" stroke="white" strokeWidth="1.5" />
+        <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.5" />
         <path
           d="M10 6v4l2.5 2.5"
           stroke="white"
@@ -201,44 +206,52 @@ export function FundingPage() {
       {/* Payment Methods */}
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             PAYMENT METHODS
           </SectionKicker>
           <div className="flex flex-col gap-[14px]">
             {PAYMENT_METHODS.map((method) => (
               <div
                 key={method.id}
-                className="bg-background flex flex-col gap-[14px] rounded-[18px] p-5 shadow-card dark:shadow-none"
+                className="bg-background shadow-card flex flex-col gap-[14px] rounded-[18px] p-5 dark:shadow-none"
               >
                 {/* Card header: icon box + type pill */}
-                <div className="flex items-center justify-between">
-                  <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[11px] bg-[#00b04fbf] dark:bg-[#00b04f61]">
+                <div className="flex items-start justify-between">
+                  <div className="bg-accent/[0.08] text-accent flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px]">
                     {method.icon}
                   </div>
-                  <span className="font-body text-muted rounded-full bg-[#1111110D] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] dark:bg-[#363636]">
+                  <span className="text-foreground dark:bg-surface-elevated dark:text-foreground rounded-full bg-[rgba(17,17,17,0.05)] px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px]">
                     {method.type}
                   </span>
                 </div>
 
-                {/* Name */}
-                <p className="text-foreground font-sans text-[17px] font-semibold">{method.name}</p>
+                {/* Name — Outfit SemiBold 17px tracking-[-0.17px] */}
+                <p className="text-foreground font-sans text-[17px] font-semibold tracking-[-0.17px]">
+                  {method.name}
+                </p>
 
-                {/* Stats 2×2 grid */}
-                <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[10px] bg-[#f0f0f0] dark:bg-surface-elevated">
+                {/* Stats 2×2 grid — matches Figma rgba(17,17,17,0.08) wrapper, #fafaf9 cells */}
+                <div className="dark:bg-surface-elevated grid grid-cols-2 gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)]">
                   {[
-                    { label: 'DEPOSIT', value: method.deposit },
-                    { label: 'WITHDRAW', value: method.withdraw },
-                    { label: 'MIN', value: method.min },
-                    { label: 'FEE', value: method.fee },
+                    {
+                      label: 'DEPOSIT',
+                      value: method.deposit,
+                      green: method.deposit === 'Instant' || method.deposit === 'Same day',
+                    },
+                    { label: 'WITHDRAW', value: method.withdraw, green: false },
+                    { label: 'MIN', value: method.min, green: false },
+                    { label: 'FEE', value: method.fee, green: method.fee === 'Free' },
                   ].map((stat) => (
                     <div
                       key={stat.label}
-                      className="dark:bg-surface flex flex-col gap-[3px] bg-[#fafafa] px-4 py-3"
+                      className="dark:bg-surface flex flex-col gap-[2px] bg-[#fafaf9] px-3 py-[10px]"
                     >
-                      <span className="font-body text-[9px] uppercase tracking-[0.12em] text-[#9ca3af]">
+                      <span className="text-muted font-mono text-[9px] tracking-[1.08px]">
                         {stat.label}
                       </span>
-                      <span className="font-body text-foreground text-[13px] font-medium">
+                      <span
+                        className={`font-sans text-[13px] font-semibold ${stat.green ? 'text-accent' : 'text-foreground'}`}
+                      >
                         {stat.value}
                       </span>
                     </div>
@@ -265,14 +278,14 @@ export function FundingPage() {
                 key={row.title}
                 className="flex items-start gap-4 rounded-[14px] bg-white/[0.06] px-4 py-4"
               >
-                <div className="bg-accent mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[11px]">
+                <div className="bg-accent/[0.12] text-accent flex h-[37px] w-[37px] flex-shrink-0 items-center justify-center rounded-[11px]">
                   {row.icon}
                 </div>
-                <div>
+                <div className="flex-1">
                   <p className="mb-[5px] font-sans text-[14px] font-semibold text-white">
                     {row.title}
                   </p>
-                  <p className="font-body text-[12px] leading-relaxed text-white/60">{row.desc}</p>
+                  <p className="font-body text-[12.5px] leading-[1.5] text-white/55">{row.desc}</p>
                 </div>
               </div>
             ))}

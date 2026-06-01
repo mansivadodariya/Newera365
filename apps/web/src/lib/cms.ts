@@ -88,3 +88,24 @@ export async function getAccountTypes(): Promise<CmsAccountType[]> {
   });
   return data.docs;
 }
+
+export interface CmsArticle {
+  id: number;
+  slug: string;
+  title: string;
+  assetCategory: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
+  analyst?: string | null;
+  publishedDate: string;
+  locale: 'en' | 'ar';
+  status: 'draft' | 'published';
+}
+
+export async function getResearchArticles(locale: string, limit = 10): Promise<CmsArticle[]> {
+  const data = await fetchCollection<CmsArticle>('market-analysis', {
+    'where[status][equals]': 'published',
+    'where[locale][equals]': locale,
+    sort: '-publishedDate',
+    limit: String(limit),
+  });
+  return data.docs;
+}

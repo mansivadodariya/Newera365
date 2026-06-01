@@ -295,7 +295,7 @@ export function GlossaryPage() {
       <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">TRADING DICTIONARY</SectionKicker>
-          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
             Trading
             <br />
             glossary.
@@ -324,7 +324,7 @@ export function GlossaryPage() {
                 setSearch(e.target.value);
                 setActiveLetter(null);
               }}
-              className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-full bg-surface py-3 pl-10 pr-4 text-[14px] font-medium outline-none"
+              className="border-border font-body text-foreground placeholder-muted focus:border-accent bg-surface w-full rounded-[14px] px-4 py-[14px] text-[14px] outline-none"
             />
             {search && (
               <button
@@ -357,7 +357,7 @@ export function GlossaryPage() {
               className={`font-body flex-shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
                 !activeCategory
                   ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                  : 'hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-surface dark:text-muted'
+                  : 'hover:text-foreground dark:bg-surface dark:text-muted bg-[#f0f0f0] text-[#6b7280]'
               }`}
             >
               All
@@ -369,7 +369,7 @@ export function GlossaryPage() {
                 className={`font-body flex-shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
                   activeCategory === cat
                     ? colorClass
-                    : 'hover:text-foreground dark:hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-surface dark:text-muted'
+                    : 'hover:text-foreground dark:hover:text-foreground dark:bg-surface dark:text-muted bg-[#f0f0f0] text-[#6b7280]'
                 }`}
               >
                 {cat}
@@ -430,14 +430,14 @@ export function GlossaryPage() {
                 return (
                   <div key={term.term}>
                     {showLetter && (
-                      <div className="dark:bg-background sticky top-16 z-10 bg-white py-2">
+                      <div className="bg-background sticky top-16 z-10 py-2">
                         <span className="text-accent font-sans text-[11px] font-semibold uppercase tracking-[0.1em]">
                           {term.term[0]?.toUpperCase() ?? ''}
                         </span>
                       </div>
                     )}
                     <div
-                      className={`py-4 ${i < filtered.length - 1 ? 'border-b border-[#e5e7eb] dark:border-border' : ''}`}
+                      className={`py-4 ${i < filtered.length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
                     >
                       <div className="mb-1.5 flex items-center justify-between gap-2">
                         <span className="text-foreground font-sans text-[15px] font-semibold">

@@ -104,64 +104,27 @@ export function IBPage() {
       {/* Hero */}
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
-            Partner with us.
+          {/* h1: 42px tracking-[-1.26px] per Figma */}
+          <h1 className="font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
+            <span className="text-foreground">Partner with us.</span>
             <br />
             <span className="text-accent">Grow together.</span>
           </h1>
-          <p className="font-body text-muted mb-7 max-w-[320px] text-[14px] leading-[1.55]">
-            Earn industry-leading commission for every active trader you refer. Transparent payouts,
-            reliable settlement, dedicated support.
+          <p className="font-body text-muted mb-4 mt-4 max-w-[320px] text-[14px] leading-[1.6]">
+            Earn industry-leading commissions for every active trader you refer. Transparent
+            payouts, monthly settlement, dedicated support.
           </p>
 
-          {/* Stats + mini chart */}
-          <div className="mb-7 flex items-stretch gap-3">
-            {/* Stats */}
-            <div className="flex flex-1 flex-col gap-3 divide-y divide-[#e5e7eb] dark:divide-border">
-              {TRUST_STATS.map((s) => (
-                <div key={s.label} className="flex flex-col gap-[2px] pt-3 first:pt-0">
-                  <span className="text-foreground font-sans text-[22px] font-semibold">
-                    {s.value}
-                  </span>
-                  <span className="font-body text-muted text-[10px] uppercase tracking-[0.1em]">
-                    {s.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-            {/* Earnings bar chart */}
-            <div className="dark:bg-surface flex w-[130px] flex-shrink-0 flex-col overflow-hidden rounded-[18px] bg-surface p-3">
-              <div className="mb-2 flex items-center justify-between">
-                <span className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
-                  Monthly
-                </span>
-                <span className="bg-accent/10 text-accent font-body rounded-full px-2 py-[2px] text-[8px] font-semibold">
-                  Programs
-                </span>
-              </div>
-              <div className="flex flex-1 items-end gap-1">
-                {[35, 52, 44, 68, 58, 80, 72, 90].map((h, i) => (
-                  <div
-                    key={i}
-                    className="bg-accent flex-1 rounded-sm"
-                    style={{ height: `${h}%`, opacity: i === 7 ? 1 : 0.4 + i * 0.08 }}
-                  />
-                ))}
-              </div>
-              <p className="text-foreground mt-2 font-sans text-[11px] font-semibold">$4,820</p>
-              <p className="font-body text-muted text-[8px]">avg / mo</p>
-            </div>
-          </div>
-
-          <div className="flex gap-3">
+          {/* CTAs — matches Figma: green pill + ghost text button */}
+          <div className="mb-6 flex gap-[10px]">
             <Link
               href={`/${locale}/register?type=partner`}
-              className="bg-accent hover:bg-accent/90 font-body flex h-[48px] items-center gap-2 rounded-full px-6 text-[14px] font-medium text-white transition-colors"
+              className="bg-accent font-body hover:bg-accent/90 flex items-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
             >
               Apply now
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                 <path
-                  d="M3 8h10M9 4l4 4-4 4"
+                  d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
                   stroke="currentColor"
                   strokeWidth="1.5"
                   strokeLinecap="round"
@@ -171,18 +134,76 @@ export function IBPage() {
             </Link>
             <a
               href="#programs"
-              className="border-border text-foreground font-body hover:border-foreground flex h-[48px] items-center rounded-full border px-5 text-[14px] font-medium transition-colors"
+              className="text-foreground font-body flex items-center px-[22px] py-4 text-[15px] font-medium transition-opacity hover:opacity-70"
             >
-              See programs
+              Programs
             </a>
+          </div>
+
+          {/* Earnings card — gradient from #fafaf9 to #f4f4f3 per Figma */}
+          <div className="dark:from-surface dark:to-section rounded-[22px] bg-gradient-to-b from-[#fafaf9] to-[#f4f4f3] p-[22px]">
+            <div className="flex items-start justify-between">
+              <div className="flex flex-col gap-[6px]">
+                <span className="text-muted font-mono text-[10px] tracking-[1.2px]">
+                  PROJECTED · PER MONTH
+                </span>
+                <span className="text-foreground font-sans text-[32px] font-semibold tracking-[-0.64px]">
+                  $4,820
+                </span>
+              </div>
+              <div className="bg-accent/[0.08] flex items-center gap-[6px] rounded-full px-[10px] py-[6px]">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path
+                    d="M2 10L10 2M10 2H5M10 2v5"
+                    stroke="#00b050"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span className="font-body text-accent text-[11px] font-bold">+28%</span>
+              </div>
+            </div>
+            {/* Bar chart — 7 bars NOV-MAY */}
+            <div className="mt-[18px] flex h-[60px] items-end gap-[6px]">
+              {[
+                { h: 39, label: 'NOV' },
+                { h: 51, label: 'DEC' },
+                { h: 60, label: 'JAN' },
+                { h: 54, label: 'FEB' },
+                { h: 77, label: 'MAR' },
+                { h: 85, label: 'APR' },
+                { h: 100, label: 'MAY' },
+              ].map((bar, i) => (
+                <div key={bar.label} className="flex flex-1 flex-col items-center gap-0">
+                  <div
+                    className="w-full rounded-[4px]"
+                    style={{
+                      height: `${bar.h * 0.6}px`,
+                      backgroundColor: i === 6 ? '#00b050' : '#e5e5e3',
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="mt-2 flex justify-between">
+              {['NOV', 'DEC', 'JAN', 'FEB', 'MAR', 'APR', 'MAY'].map((m) => (
+                <span key={m} className="text-muted font-mono text-[9px] tracking-[0.9px]">
+                  {m}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Three ways to partner */}
-      <section id="programs" className="rounded-t-[32px] bg-background px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
+      <section
+        id="programs"
+        className="bg-background rounded-t-[32px] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16"
+      >
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             CHOOSE YOUR PATH
           </SectionKicker>
           <h2 className="text-foreground mb-[10px] font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
@@ -192,14 +213,18 @@ export function IBPage() {
             {PARTNER_TYPES.map((pt) => (
               <div
                 key={pt.id}
-                className={`flex flex-col gap-[12px] rounded-[22px] p-[22px] shadow-card dark:shadow-card-dark ${pt.cardClass}`}
+                className={`shadow-card dark:shadow-card-dark flex flex-col gap-[12px] rounded-[22px] p-[22px] ${pt.cardClass}`}
               >
                 {/* Header */}
                 <div className="flex items-center justify-between gap-2">
-                  <span className={`font-sans text-[22px] font-semibold tracking-[-0.44px] ${pt.headColor}`}>
+                  <span
+                    className={`font-sans text-[22px] font-semibold tracking-[-0.44px] ${pt.headColor}`}
+                  >
                     {pt.title}
                   </span>
-                  <span className={`font-mono flex-shrink-0 rounded-full px-[10px] py-[6px] text-[10px] tracking-[1.2px] ${pt.tagClass}`}>
+                  <span
+                    className={`flex-shrink-0 rounded-full px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px] ${pt.tagClass}`}
+                  >
                     {pt.tag}
                   </span>
                 </div>
@@ -214,7 +239,9 @@ export function IBPage() {
                       key={s.label}
                       className={`flex flex-1 flex-col gap-[2px] px-[10px] py-[12px] ${pt.statRowBg}`}
                     >
-                      <span className={`font-mono text-[9px] tracking-[1.08px] ${pt.statLabelColor}`}>
+                      <span
+                        className={`font-mono text-[9px] tracking-[1.08px] ${pt.statLabelColor}`}
+                      >
                         {s.label}
                       </span>
                       <span className={`font-sans text-[14px] font-semibold ${pt.statValueColor}`}>
@@ -231,7 +258,13 @@ export function IBPage() {
                 >
                   Apply
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path
+                      d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </Link>
               </div>
@@ -240,31 +273,33 @@ export function IBPage() {
         </div>
       </section>
 
-      {/* Steps */}
-      <section className="dark:bg-background rounded-t-[32px] bg-surface px-5 pb-10 pt-10">
+      {/* Steps — gradient section, white cards per Figma */}
+      <section
+        className="rounded-[32px] px-5 pb-9 pt-10 xl:pb-16 xl:pt-16"
+        style={{ background: 'var(--gradient-features)' }}
+      >
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             HOW IT WORKS
           </SectionKicker>
-          <h2 className="text-foreground mb-7 font-sans text-[28px] font-semibold leading-[1.1]">
-            Onboard in days,
-            <br />
-            not weeks.
+          <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px]">
+            Onboard in days, not weeks.
           </h2>
-          <div className="flex flex-col">
-            {STEPS.map((step, i) => (
+          <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-2">
+            {STEPS.map((step) => (
               <div
                 key={step.num}
-                className={`flex items-start gap-4 py-5 ${i < STEPS.length - 1 ? 'border-b border-[#e5e7eb] dark:border-border' : ''}`}
+                className="bg-background shadow-card flex items-start gap-4 rounded-[18px] p-[18px] dark:shadow-none"
               >
-                <div className="bg-accent mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full">
-                  <span className="font-sans text-[11px] font-bold text-white">{step.num}</span>
-                </div>
-                <div>
-                  <p className="text-foreground mb-1 font-sans text-[15px] font-semibold">
+                {/* Step number — accent 22px per Figma */}
+                <span className="text-accent w-[38px] flex-shrink-0 font-sans text-[22px] font-semibold leading-none tracking-[-0.44px]">
+                  {step.num}
+                </span>
+                <div className="flex-1">
+                  <p className="text-foreground mb-1 font-sans text-[15px] font-semibold leading-normal">
                     {step.title}
                   </p>
-                  <p className="font-body text-muted text-[12px] leading-[1.55]">{step.desc}</p>
+                  <p className="font-body text-muted text-[12.5px] leading-[1.5]">{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -272,24 +307,31 @@ export function IBPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h2 className="mb-3 text-center font-sans text-[28px] font-semibold leading-[1.1] text-white">
-            Ready to build a<br />
-            new revenue
-            <br /> stream?
+      {/* CTA — matches Figma: centered 32px heading, green pill + ghost text */}
+      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-11 xl:pb-16 xl:pt-16">
+        <div className="mx-auto flex max-w-[390px] flex-col items-center md:max-w-2xl xl:max-w-[1200px]">
+          <h2 className="mb-3 max-w-[280px] text-center font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px] text-white">
+            Ready to build a new revenue stream?
           </h2>
-          <p className="font-body mb-8 text-center text-[13px] leading-relaxed text-white/60">
-            Apply in minutes. Our partnership team reviews every application within 48 hours.
+          <p className="font-body mb-[22px] max-w-[300px] text-center text-[14px] leading-[1.55] text-white/60">
+            Apply today. A partner manager will reach out within 48 hours.
           </p>
           <Link
             href={`/${locale}/register?type=partner`}
-            className="bg-accent hover:bg-accent/90 font-body mb-3 flex h-[52px] w-full items-center justify-center rounded-full text-[15px] font-medium text-white transition-colors"
+            className="bg-accent font-body hover:bg-accent/90 mb-2 flex w-full items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
           >
             Become a partner
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path
+                d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </Link>
-          <button className="font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40">
+          <button className="font-body flex w-full items-center justify-center py-4 text-[15px] font-medium text-white transition-opacity hover:opacity-70">
             Download partner deck
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path

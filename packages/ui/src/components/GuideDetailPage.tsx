@@ -131,7 +131,7 @@ export function GuideDetailPage({ slug }: GuideDetailProps) {
           >
             {guide.category}
           </span>
-          <h1 className="text-foreground mb-3 font-sans text-[30px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-3 font-sans text-[30px] font-semibold leading-[1.1] tracking-[-0.6px]">
             {guide.title}
           </h1>
           <p className="font-body text-muted mb-5 text-[14px] leading-[1.6]">{guide.subtitle}</p>
@@ -157,7 +157,7 @@ export function GuideDetailPage({ slug }: GuideDetailProps) {
       {guide.toc.length > 0 && (
         <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <div className="rounded-[18px] bg-surface p-4">
+            <div className="bg-surface rounded-[18px] p-4">
               <p className="font-body text-muted mb-3 text-[9px] uppercase tracking-[0.12em]">
                 TABLE OF CONTENTS
               </p>
@@ -166,7 +166,7 @@ export function GuideDetailPage({ slug }: GuideDetailProps) {
                   <button
                     key={item}
                     onClick={() => setActiveSection(i)}
-                    className={`flex items-center gap-2 py-[9px] text-left ${i < guide.toc.length - 1 ? 'border-b border-[#e5e7eb] dark:border-border' : ''}`}
+                    className={`flex items-center gap-2 py-[9px] text-left ${i < guide.toc.length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
                   >
                     <span
                       className={`font-body text-[10px] font-semibold ${activeSection === i ? 'text-accent' : 'text-muted'}`}

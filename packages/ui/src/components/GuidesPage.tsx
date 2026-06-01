@@ -78,7 +78,7 @@ export function GuidesPage() {
       {/* Hero */}
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
             Deep dives worth
             <br />
             <span className="text-accent">reading twice.</span>
@@ -97,7 +97,7 @@ export function GuidesPage() {
             <SectionKicker className="mb-4">FEATURED</SectionKicker>
             <Link
               href={`/${locale}/guides/${featured.id}`}
-              className="group block overflow-hidden rounded-[22px] bg-[#111111] p-6 shadow-card-dark"
+              className="shadow-card-dark group block overflow-hidden rounded-[22px] bg-[#111111] p-6"
             >
               <span
                 className={`font-body mb-4 inline-flex rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${featured.categoryClass}`}
@@ -148,7 +148,7 @@ export function GuidesPage() {
               <Link
                 key={guide.id}
                 href={`/${locale}/guides/${guide.id}`}
-                className={`group flex flex-col gap-2 py-5 ${i < rest.length - 1 ? 'border-b border-[#e5e7eb] dark:border-border' : ''}`}
+                className={`group flex flex-col gap-2 py-5 ${i < rest.length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
               >
                 <div className="flex items-center justify-between">
                   <span

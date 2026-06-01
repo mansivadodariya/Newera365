@@ -4,6 +4,14 @@ import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
+interface CmsAccountOverride {
+  name: string;
+  minDeposit: number;
+  spreadFrom: string;
+  leverage: string;
+  commission?: string | null;
+}
+
 const CHECK = (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-label="Yes">
     <path
@@ -115,7 +123,11 @@ const MATRIX_ROWS: { feature: string; std: boolean; raw: boolean; vip: boolean }
   { feature: 'Free VPS hosting', std: false, raw: true, vip: true },
 ];
 
-export function AccountsPage() {
+interface AccountsPageProps {
+  cmsAccounts?: CmsAccountOverride[];
+}
+
+export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
   const locale = useLocale();
 
   return (
@@ -143,75 +155,92 @@ export function AccountsPage() {
           className="scrollbar-hide flex snap-x snap-mandatory gap-[14px] overflow-x-auto px-5 pb-2"
           style={{ scrollPaddingLeft: '20px' }}
         >
-          {ACCOUNTS.map((account) => (
-            <div
-              key={account.id}
-              className={`flex w-[350px] flex-shrink-0 snap-start flex-col gap-[18px] rounded-[24px] p-6 shadow-card dark:shadow-card-dark ${account.cardBg}`}
-            >
-              {/* Head */}
-              <div className="flex items-center justify-between">
-                <span className={`font-sans text-[20px] font-semibold ${account.headTextColor}`}>
-                  {account.name}
-                </span>
-                <span className="bg-accent font-body rounded-full px-3 py-[5px] text-[9px] font-semibold uppercase tracking-[0.12em] text-white">
-                  {account.tag}
-                </span>
-              </div>
-
-              {/* Description */}
-              <p className={`font-body text-[13px] leading-[1.55] ${account.descColor}`}>
-                {account.desc}
-              </p>
-
-              {/* Price block */}
-              <div>
-                <p
-                  className={`font-body mb-1 text-[9px] uppercase tracking-[0.14em] ${account.pricingLabelColor}`}
-                >
-                  {account.pricingLabel}
-                </p>
-                <p className={`font-sans text-[20px] font-semibold ${account.pricingValueColor}`}>
-                  {account.pricingValue}
-                </p>
-              </div>
-
-              {/* Spec rows */}
+          {ACCOUNTS.map((account) => {
+            const cms = cmsAccounts?.find(
+              (a) => a.name.toLowerCase() === account.name.toLowerCase(),
+            );
+            const rows = cms
+              ? [
+                  { label: 'Min deposit', value: `$${cms.minDeposit.toLocaleString('en-US')}` },
+                  { label: 'Spread from', value: cms.spreadFrom },
+                  { label: 'Commission', value: cms.commission ?? 'None' },
+                  { label: 'Leverage', value: cms.leverage },
+                  ...account.rows.slice(4),
+                ]
+              : account.rows;
+            const pricingValue = cms?.commission ?? account.pricingValue;
+            return (
               <div
-                className={`flex flex-col overflow-hidden rounded-[14px] ${account.rowsContainerBg}`}
+                key={account.id}
+                className={`shadow-card dark:shadow-card-dark flex w-[350px] flex-shrink-0 snap-start flex-col gap-[18px] rounded-[24px] p-6 ${account.cardBg}`}
               >
-                {account.rows.map((row) => (
-                  <div
-                    key={row.label}
-                    className={`flex items-center justify-between px-4 py-[11px] ${account.rowBg}`}
-                  >
-                    <span className={`font-body text-[12px] ${account.rowLabelColor}`}>
-                      {row.label}
-                    </span>
-                    <span className={`font-body text-[12px] font-medium ${account.rowValueColor}`}>
-                      {row.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
+                {/* Head */}
+                <div className="flex items-center justify-between">
+                  <span className={`font-sans text-[20px] font-semibold ${account.headTextColor}`}>
+                    {account.name}
+                  </span>
+                  <span className="bg-accent/10 text-accent rounded-full px-[10px] py-[5px] font-mono text-[10px] tracking-[1.2px]">
+                    {account.tag}
+                  </span>
+                </div>
 
-              {/* CTA */}
-              <Link
-                href={`/${locale}/register?account=${account.id}`}
-                className={`font-body flex h-[48px] items-center justify-center gap-2 rounded-full text-[14px] font-medium transition-opacity hover:opacity-80 ${account.ctaBg}`}
-              >
-                {account.ctaLabel}
-                <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                  <path
-                    d="M3 8h10M9 4l4 4-4 4"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Link>
-            </div>
-          ))}
+                {/* Description */}
+                <p className={`font-body text-[13px] leading-[1.55] ${account.descColor}`}>
+                  {account.desc}
+                </p>
+
+                {/* Price block */}
+                <div>
+                  <p
+                    className={`font-body mb-1 text-[9px] uppercase tracking-[0.14em] ${account.pricingLabelColor}`}
+                  >
+                    {account.pricingLabel}
+                  </p>
+                  <p className={`font-sans text-[20px] font-semibold ${account.pricingValueColor}`}>
+                    {pricingValue}
+                  </p>
+                </div>
+
+                {/* Spec rows */}
+                <div
+                  className={`flex flex-col overflow-hidden rounded-[14px] ${account.rowsContainerBg}`}
+                >
+                  {rows.map((row) => (
+                    <div
+                      key={row.label}
+                      className={`flex items-center justify-between px-4 py-[11px] ${account.rowBg}`}
+                    >
+                      <span className={`font-body text-[12px] ${account.rowLabelColor}`}>
+                        {row.label}
+                      </span>
+                      <span
+                        className={`font-body text-[12px] font-medium ${account.rowValueColor}`}
+                      >
+                        {row.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* CTA */}
+                <Link
+                  href={`/${locale}/register?account=${account.id}`}
+                  className={`font-body flex h-[48px] items-center justify-center gap-2 rounded-full text-[14px] font-medium transition-opacity hover:opacity-80 ${account.ctaBg}`}
+                >
+                  {account.ctaLabel}
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M3 8h10M9 4l4 4-4 4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+              </div>
+            );
+          })}
         </div>
       </section>
 

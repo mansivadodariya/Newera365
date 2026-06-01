@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
+import { useTheme } from 'next-themes';
 
 const NAV_GROUPS = [
   {
@@ -14,7 +15,8 @@ const NAV_GROUPS = [
   {
     section: 'TRADE',
     items: [
-      { label: 'Account Comparison', href: '/trade/accounts' },
+      { label: 'Account Types', href: '/trade/accounts' },
+      { label: 'Feature Comparison', href: '/trade/accounts/comparison' },
       { label: 'Payment Info', href: '/trade/funding' },
       { label: 'Fee Table', href: '/trade/fees' },
       { label: 'Promo Cards', href: '/trade/promotions' },
@@ -23,13 +25,20 @@ const NAV_GROUPS = [
   },
   {
     section: 'MARKETS',
-    items: [{ label: 'MT5 Instrument Spec Table', href: '/markets/instruments' }],
+    items: [
+      { label: 'All Instruments', href: '/markets/instruments' },
+      { label: 'Forex', href: '/markets/forex' },
+      { label: 'Indices', href: '/markets/indices' },
+      { label: 'Commodities', href: '/markets/commodities' },
+      { label: 'Crypto', href: '/markets/crypto' },
+    ],
   },
   {
     section: 'PLATFORM',
     items: [
-      { label: 'Platform Feature Page', href: '/platform/mt5' },
-      { label: 'WebTrader Embed', href: '/platform/webtrader' },
+      { label: 'MetaTrader 5', href: '/platform/mt5' },
+      { label: 'Web Trader', href: '/platform/webtrader' },
+      { label: 'Mobile App', href: '/platform/mobile' },
     ],
   },
   {
@@ -67,7 +76,7 @@ const NAV_GROUPS = [
     section: 'COMPANY',
     items: [
       { label: 'About Company', href: '/company/about' },
-      { label: 'CMS Info Page', href: '/company/careers' },
+      { label: 'Careers', href: '/company/careers' },
     ],
   },
   {
@@ -90,6 +99,12 @@ function MobileMenu({ open, onClose }: MobileMenuProps) {
   const locale = useLocale();
   const t = useTranslations('nav');
   const pathname = usePathname();
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const otherLocale = locale === 'en' ? 'ar' : 'en';
+  const otherLocalePath = `/${otherLocale}${pathname.slice(locale.length + 1)}`;
 
   function isActive(href: string): boolean {
     const full = `/${locale}${href === '/' ? '' : href}`;
@@ -139,20 +154,69 @@ function MobileMenu({ open, onClose }: MobileMenuProps) {
           />
         </Link>
 
-        <button
-          onClick={onClose}
-          aria-label="Close menu"
-          className="text-foreground flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8] dark:bg-surface dark:hover:bg-surface"
-        >
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-            <path
-              d="M1 1L11 11M11 1L1 11"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Locale toggle */}
+          <Link
+            href={otherLocalePath}
+            onClick={onClose}
+            aria-label={`Switch to ${otherLocale === 'ar' ? 'Arabic' : 'English'}`}
+            className="text-foreground dark:bg-surface font-body flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] text-[12px] font-semibold transition-colors hover:opacity-80"
+          >
+            {otherLocale.toUpperCase()}
+          </Link>
+          {/* Theme toggle */}
+          {mounted && (
+            <button
+              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+              aria-label={resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="text-foreground dark:bg-surface flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors"
+            >
+              {resolvedTheme === 'dark' ? (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="4"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              ) : (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+            </button>
+          )}
+          {/* Close */}
+          <button
+            onClick={onClose}
+            aria-label="Close menu"
+            className="text-foreground dark:bg-surface dark:hover:bg-surface flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8]"
+          >
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path
+                d="M1 1L11 11M11 1L1 11"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Nav groups — scrollable, no scrollbar */}

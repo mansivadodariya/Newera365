@@ -118,7 +118,7 @@ export function CareersPage() {
       {/* Hero */}
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
             Build the next
             <br />
             era of <span className="text-accent">trading.</span>
@@ -142,8 +142,7 @@ export function CareersPage() {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-[18px] bg-surface p-5 shadow-card dark:shadow-none"
-                
+                className="bg-surface shadow-card rounded-[18px] p-5 dark:shadow-none"
               >
                 <p className="text-foreground font-sans text-[28px] font-semibold leading-[1]">
                   {stat.value}
@@ -158,15 +157,14 @@ export function CareersPage() {
       {/* Values */}
       <section className="bg-background px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             How we Work
           </SectionKicker>
           <div className="grid grid-cols-2 gap-[10px]">
             {VALUES.map((v) => (
               <div
                 key={v.title}
-                className="flex flex-col gap-2 rounded-[18px] bg-surface p-4 shadow-card dark:shadow-none"
-                
+                className="bg-surface shadow-card flex flex-col gap-2 rounded-[18px] p-4 dark:shadow-none"
               >
                 <p className="text-foreground font-sans text-[13px] font-semibold">{v.title}</p>
                 <p className="font-body text-muted text-[12px] leading-relaxed">{v.desc}</p>
@@ -179,7 +177,7 @@ export function CareersPage() {
       {/* Open roles */}
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             Open Roles
           </SectionKicker>
 
@@ -192,7 +190,7 @@ export function CareersPage() {
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
                   dept === d.id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-surface dark:text-muted'
+                    : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
                 }`}
               >
                 {d.label}
@@ -201,7 +199,7 @@ export function CareersPage() {
           </div>
 
           {/* Job list */}
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-border">
+          <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
             {filtered.map((job) => (
               <Link
                 key={job.id}

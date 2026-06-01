@@ -61,7 +61,7 @@ export function ResearchDetailPage({ slug: _slug }: ResearchDetailPageProps) {
             </span>
             <span className="font-body text-muted text-[11px]">May 26, 2025 · 6 min read</span>
           </div>
-          <h1 className="text-foreground mb-3 font-sans text-[28px] font-semibold leading-[1.15]">
+          <h1 className="text-foreground mb-3 font-sans text-[28px] font-semibold leading-[1.15] tracking-[-0.56px]">
             How the new era of central bank policy is reshaping FX.
           </h1>
           <p className="font-body text-muted text-[13px]">
@@ -142,7 +142,7 @@ export function ResearchDetailPage({ slug: _slug }: ResearchDetailPageProps) {
             </p>
 
             {/* Mini bar chart */}
-            <div className="overflow-hidden rounded-[14px] bg-surface p-4">
+            <div className="bg-surface overflow-hidden rounded-[14px] p-4">
               <p className="font-body text-muted mb-3 text-[10px] uppercase tracking-[0.1em]">
                 Rate expectations · next 9 months
               </p>
@@ -207,7 +207,7 @@ export function ResearchDetailPage({ slug: _slug }: ResearchDetailPageProps) {
           </div>
 
           {/* Share */}
-          <div className="mt-8 flex items-center justify-between border-t border-[#e5e7eb] pt-5 dark:border-border">
+          <div className="dark:border-border mt-8 flex items-center justify-between border-t border-[#e5e7eb] pt-5">
             <span className="font-body text-muted text-[12px]">Share this article</span>
             <div className="flex gap-3">
               {['X', 'in', 'link'].map((s) => (
@@ -227,7 +227,7 @@ export function ResearchDetailPage({ slug: _slug }: ResearchDetailPageProps) {
       <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="text-foreground mb-5 font-sans text-[18px] font-semibold">Keep reading.</p>
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-border">
+          <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
             {RELATED.map((art) => (
               <Link
                 key={art.slug}

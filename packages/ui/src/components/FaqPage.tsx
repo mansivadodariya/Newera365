@@ -141,43 +141,54 @@ function AccordionItem({
   question,
   answer,
   id,
-  dotClass,
+  section,
   openIdx,
   setOpenIdx,
 }: {
   question: string;
   answer: string;
   id: string;
-  dotClass: string;
+  section: string;
   openIdx: string | null;
   setOpenIdx: (v: string | null) => void;
 }) {
   const isOpen = openIdx === id;
   return (
-    <div className="bg-background">
+    <div className="bg-background rounded-[16px]">
       <button
         onClick={() => setOpenIdx(isOpen ? null : id)}
-        className="flex w-full items-start gap-3 px-4 py-[15px] text-left"
+        className="flex w-full items-center justify-between gap-[14px] px-5 py-[18px] text-left"
         aria-expanded={isOpen}
       >
-        <span className={`mt-[7px] h-2 w-2 flex-shrink-0 rounded-full ${dotClass}`} />
-        <span className="text-foreground mr-2 flex-1 font-sans text-[14px] font-semibold leading-snug">
+        {/* Category tag — mono tracking-[1.2px] per Figma */}
+        <span className="bg-accent/10 text-accent flex-shrink-0 rounded-full px-[10px] py-[5px] font-mono text-[10px] tracking-[1.2px]">
+          {section.toUpperCase()}
+        </span>
+        <span className="text-foreground flex-1 font-sans text-[15px] font-semibold leading-normal tracking-[-0.15px]">
           {question}
         </span>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          className={`text-muted mt-0.5 flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-45' : ''}`}
-        >
-          <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
+        {/* Plus/X toggle button — bg-[#fafaf9] rounded-[99px] p-[8px] */}
+        <div className="bg-surface dark:bg-surface-elevated flex-shrink-0 rounded-full p-[8px]">
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 13 13"
+            fill="none"
+            className={`text-foreground transition-transform duration-200 ${isOpen ? 'rotate-45' : ''}`}
+          >
+            <path
+              d="M6.5 1v11M1 6.5h11"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+          </svg>
+        </div>
       </button>
       {isOpen && (
-        <p className="font-body text-muted pb-[15px] pl-[35px] pr-4 text-[13px] leading-relaxed">
-          {answer}
-        </p>
+        <div className="pb-5 pl-5 pr-5">
+          <p className="font-body text-muted text-[14px] leading-[1.65]">{answer}</p>
+        </div>
       )}
     </div>
   );
@@ -223,10 +234,10 @@ export function FaqPage() {
             We&apos;ve answered hundreds of them. Search or browse by category below.
           </p>
 
-          {/* Search */}
-          <div className="relative">
+          {/* Search bar — bg-[#fafaf9] rounded-[16px] per Figma */}
+          <div className="bg-surface dark:bg-surface flex items-center gap-[10px] rounded-[16px] px-4 py-[14px]">
             <svg
-              className="text-muted pointer-events-none absolute left-4 top-1/2 -translate-y-1/2"
+              className="text-muted flex-shrink-0"
               width="14"
               height="14"
               viewBox="0 0 16 16"
@@ -237,60 +248,44 @@ export function FaqPage() {
             </svg>
             <input
               type="text"
-              placeholder="Search 100+ FAQs..."
+              placeholder="Search 230+ FAQs…"
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
                 setOpenIdx(null);
               }}
-              className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-full bg-surface py-3 pl-10 pr-10 text-[14px] font-medium outline-none"
+              className="font-body text-foreground placeholder:text-muted flex-1 bg-transparent text-[14px] outline-none"
             />
-            {search && (
-              <button
-                onClick={() => setSearch('')}
-                className="text-muted absolute right-4 top-1/2 -translate-y-1/2"
-              >
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path
-                    d="M1 1L11 11M11 1L1 11"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
-            )}
+            <div className="dark:bg-surface-elevated rounded-[6px] bg-[#f2f2f4] px-[7px] py-[3px]">
+              <span className="text-muted font-mono text-[10px]">⌘ K</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Category filter tabs */}
-      <section className="bg-background px-5 pb-5">
+      {/* Category filter tabs — matches Figma pills */}
+      <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="scrollbar-hide flex gap-2 overflow-x-auto">
-            <button
-              onClick={() => setActiveCategory(null)}
-              className={`font-body flex-shrink-0 rounded-full px-4 py-1.5 text-[12px] font-semibold transition-colors ${
-                !activeCategory
-                  ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                  : 'hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-surface dark:text-muted'
-              }`}
-            >
-              All
-            </button>
-            {Object.entries(CATEGORY_STYLES).map(([cat, style]) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-                className={`font-body flex-shrink-0 rounded-full px-4 py-1.5 text-[12px] font-semibold transition-colors ${
-                  activeCategory === cat
-                    ? style.activePill
-                    : 'hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-surface dark:text-muted'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          <div className="scrollbar-hide flex flex-wrap gap-2 overflow-x-auto">
+            {['All', ...Object.keys(CATEGORY_STYLES)].map((cat) => {
+              const isAll = cat === 'All';
+              const isActive = isAll ? !activeCategory : activeCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() =>
+                    setActiveCategory(isAll ? null : activeCategory === cat ? null : cat)
+                  }
+                  className={`font-body flex-shrink-0 rounded-full px-3 py-[7px] text-[12px] font-medium transition-colors ${
+                    isActive
+                      ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                      : 'text-muted dark:bg-surface-elevated dark:hover:bg-surface bg-[#f2f2f4] hover:bg-[#e5e5e5]'
+                  }`}
+                >
+                  {cat}
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -299,18 +294,36 @@ export function FaqPage() {
       {showPopular && (
         <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <SectionKicker className="mb-3">POPULAR QUESTIONS</SectionKicker>
-            <div className="flex flex-col gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-surface-elevated">
+            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+              POPULAR QUESTIONS
+            </SectionKicker>
+            {/* Flat bg-[#fafaf9] rounded-[14px] cards per Figma */}
+            <div className="flex flex-col gap-[8px]">
               {POPULAR_ITEMS.map((item, idx) => (
-                <AccordionItem
+                <div
                   key={idx}
-                  id={`popular-${idx}`}
-                  question={item.q}
-                  answer={item.a}
-                  dotClass={CATEGORY_STYLES[item.section]?.dot ?? 'bg-accent'}
-                  openIdx={openIdx}
-                  setOpenIdx={setOpenIdx}
-                />
+                  className="bg-surface dark:bg-surface flex items-center justify-between rounded-[14px] px-4 py-[14px]"
+                >
+                  <span className="font-body text-foreground text-[13.5px] font-medium">
+                    {item.q}
+                  </span>
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    className="text-muted ml-3 flex-shrink-0"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M2 12L12 2M12 2H7M12 2v5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
               ))}
             </div>
           </div>
@@ -328,61 +341,55 @@ export function FaqPage() {
         </section>
       )}
 
-      {/* FAQ accordion groups */}
-      {filteredGroups.length > 0 ? (
-        filteredGroups.map((group) => {
-          const catStyle = CATEGORY_STYLES[group.section];
-          return (
-            <section key={group.section} className="bg-background px-5 pb-6">
-              <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-                <SectionKicker className="mb-3">{group.section.toUpperCase()}</SectionKicker>
-                <div className="flex flex-col gap-px overflow-hidden rounded-[18px] bg-[#f0f0f0] dark:bg-surface-elevated">
-                  {group.items.map((item, idx) => (
-                    <AccordionItem
-                      key={idx}
-                      id={`${group.section}-${idx}`}
-                      question={item.q}
-                      answer={item.a}
-                      dotClass={catStyle?.dot ?? 'bg-accent'}
-                      openIdx={openIdx}
-                      setOpenIdx={setOpenIdx}
-                    />
-                  ))}
-                </div>
-              </div>
-            </section>
-          );
-        })
-      ) : (
-        <section className="bg-background px-5 pb-6">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+      {/* ALL FAQs section — Figma: bg-white rounded-[16px] cards, gap-[10px] */}
+      <section className="bg-background px-5 pb-6">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            ALL FAQS
+          </SectionKicker>
+          {filteredGroups.length > 0 ? (
+            <div className="flex flex-col gap-[10px]">
+              {filteredGroups.flatMap((group) =>
+                group.items.map((item, idx) => (
+                  <AccordionItem
+                    key={`${group.section}-${idx}`}
+                    id={`${group.section}-${idx}`}
+                    question={item.q}
+                    answer={item.a}
+                    section={group.section}
+                    openIdx={openIdx}
+                    setOpenIdx={setOpenIdx}
+                  />
+                )),
+              )}
+            </div>
+          ) : (
             <p className="font-body text-muted py-8 text-center text-[14px]">
               No questions match your search.
             </p>
-          </div>
-        </section>
-      )}
+          )}
+        </div>
+      </section>
 
-      {/* Still stuck CTA */}
+      {/* Still stuck CTA — matches Figma: 26px h2, no kicker, green pill button */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:last-child]:text-white/50 [&>span]:bg-white/40">
-            STILL STUCK?
-          </SectionKicker>
-          <h2 className="mb-3 font-sans text-[32px] font-semibold leading-[1.1] text-white">
+          <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] tracking-[-0.52px] text-white">
+            Still stuck?
+            <br />
             Talk to us.
           </h2>
-          <p className="font-body mb-8 max-w-[280px] text-[14px] leading-relaxed text-white/60">
-            Our support team is available 24/5. Average reply time under 90 seconds.
+          <p className="font-body mb-[18px] max-w-[280px] text-[14px] leading-[1.55] text-white/60">
+            Live chat is online right now. Average reply under 90 seconds.
           </p>
           <Link
-            href={`/${locale}/contact`}
-            className="bg-accent font-body hover:bg-accent-hover flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
+            href={`/${locale}/live-chat`}
+            className="bg-accent font-body hover:bg-accent/90 flex items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
           >
             Open live chat
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
               <path
-                d="M3 8h10M9 4l4 4-4 4"
+                d="M2.5 7.5h10M8 3.5l4 4-4 4"
                 stroke="currentColor"
                 strokeWidth="1.5"
                 strokeLinecap="round"

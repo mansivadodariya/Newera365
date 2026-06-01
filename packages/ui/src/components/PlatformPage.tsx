@@ -190,7 +190,7 @@ export function PlatformPage() {
       {/* Hero */}
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
             A platform
             <br />
             that
@@ -206,7 +206,7 @@ export function PlatformPage() {
           {/* Device mockup */}
           <div className="relative mt-6 h-[200px] overflow-hidden rounded-[24px] bg-gradient-to-br from-[#f0f9f3] to-[#f0f0f0] dark:from-[#0d1f11] dark:to-[#1a1a1a]">
             {/* Phone mock */}
-            <div className="absolute right-6 top-3 h-[180px] w-[82px] overflow-hidden rounded-[18px] border border-[#e5e7eb] bg-white shadow-lg dark:border-border dark:bg-[#111111]">
+            <div className="dark:border-border absolute right-6 top-3 h-[180px] w-[82px] overflow-hidden rounded-[18px] border border-[#e5e7eb] bg-white shadow-lg dark:bg-[#111111]">
               <div className="h-2.5 w-full bg-[#111111] dark:bg-[#000]" />
               <div className="flex h-full flex-col gap-1 bg-[#111111] p-1.5">
                 <div className="h-1.5 w-3/4 rounded bg-white/10" />
@@ -227,7 +227,7 @@ export function PlatformPage() {
               </div>
             </div>
             {/* Laptop mock */}
-            <div className="absolute left-3 top-6 h-[148px] w-[190px] overflow-hidden rounded-[10px] border border-[#e5e7eb] bg-[#111111] shadow-lg dark:border-border">
+            <div className="dark:border-border absolute left-3 top-6 h-[148px] w-[190px] overflow-hidden rounded-[10px] border border-[#e5e7eb] bg-[#111111] shadow-lg">
               <div className="flex h-6 items-center gap-1 border-b border-white/10 bg-[#1a1a1a] px-2">
                 <span className="font-body text-[8px] font-semibold text-white">EURUSD</span>
                 <span className="font-body ml-1 text-[7px] text-white/40">H1</span>
@@ -254,7 +254,7 @@ export function PlatformPage() {
       {/* Terminal section */}
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             PICK YOUR TERMINAL
           </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
@@ -316,7 +316,7 @@ export function PlatformPage() {
       {/* Tools section */}
       <section className="gap-[14px] rounded-[32px] bg-gradient-to-b from-[#F8F8F7] to-[#FFFFFF] pb-[36px] pl-[20px] pr-[20px] pt-[40px] dark:from-[#1a1a1a] dark:to-[#111111]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             WHAT&apos;S INSIDE
           </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
@@ -327,10 +327,9 @@ export function PlatformPage() {
             {TOOLS.map((tool) => (
               <div
                 key={tool.id}
-                className="bg-background flex flex-col gap-3 rounded-[18px] p-4 shadow-card dark:shadow-none"
-                
+                className="bg-background shadow-card flex flex-col gap-3 rounded-[18px] p-4 dark:shadow-none"
               >
-                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] dark:bg-[rgba(255,255,255,0.06)] text-foreground">
+                <div className="text-foreground flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] dark:bg-[rgba(255,255,255,0.06)]">
                   <tool.Icon />
                 </div>
                 <div>
@@ -362,7 +361,7 @@ export function PlatformPage() {
             {DEVICES.map((dev) => (
               <div
                 key={dev.label}
-                className="text-foreground flex flex-col items-center gap-2 rounded-[14px] bg-surface py-4"
+                className="text-foreground bg-surface flex flex-col items-center gap-2 rounded-[14px] py-4"
               >
                 <dev.Icon />
                 <span className="font-body text-[11px] font-medium">{dev.label}</span>

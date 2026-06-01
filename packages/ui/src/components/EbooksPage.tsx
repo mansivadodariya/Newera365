@@ -66,7 +66,7 @@ export function EbooksPage() {
       {/* Hero */}
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-3 font-sans text-[42px] font-semibold leading-[1.05]">
+          <h1 className="text-foreground mb-3 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
             The 5%
             <br />
             <span className="text-accent">Rule.</span>
@@ -118,7 +118,7 @@ export function EbooksPage() {
           </div>
 
           {/* Gate form */}
-          <div className="rounded-[20px] bg-surface p-5 shadow-card dark:shadow-card-dark">
+          <div className="bg-surface shadow-card dark:shadow-card-dark rounded-[20px] p-5">
             <p className="text-foreground mb-1 font-sans text-[18px] font-semibold">
               Get the PDF — free
             </p>
@@ -152,7 +152,7 @@ export function EbooksPage() {
                   placeholder="Your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none dark:bg-section"
+                  className="border-border font-body text-foreground placeholder-muted focus:border-accent dark:bg-section w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none"
                 />
                 <input
                   type="email"
@@ -160,7 +160,7 @@ export function EbooksPage() {
                   placeholder="Your email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none dark:bg-section"
+                  className="border-border font-body text-foreground placeholder-muted focus:border-accent dark:bg-section w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none"
                 />
                 {error && <p className="font-body text-[12px] text-red-500">{error}</p>}
                 <button
@@ -208,7 +208,7 @@ export function EbooksPage() {
             {OTHER_EBOOKS.map((book) => (
               <div
                 key={book.id}
-                className="bg-background flex items-center gap-4 rounded-[18px] p-4 shadow-card dark:shadow-card-dark"
+                className="bg-background shadow-card dark:shadow-card-dark flex items-center gap-4 rounded-[18px] p-4"
               >
                 <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] dark:bg-[rgba(255,255,255,0.06)]">
                   <svg

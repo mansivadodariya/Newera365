@@ -35,7 +35,7 @@ export function NewsletterPage() {
       <section className="bg-background px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {submitted ? (
-            <div className="rounded-[20px] bg-surface px-6 py-10 text-center">
+            <div className="bg-surface rounded-[20px] px-6 py-10 text-center">
               <div className="bg-accent mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <path
@@ -63,12 +63,12 @@ export function NewsletterPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@gmail.com"
-                  className="font-body text-foreground focus:border-accent flex-1 rounded-full border border-[#e5e7eb] bg-surface px-5 py-[13px] text-[14px] placeholder:text-[#9ca3af] focus:outline-none dark:border-border"
+                  className="font-body text-foreground focus:border-accent bg-surface placeholder:text-muted flex-1 rounded-[14px] px-4 py-[14px] text-[14px] outline-none"
                 />
                 <button
                   type="submit"
                   disabled={!agreed}
-                  className="bg-accent font-body hover:bg-accent/90 flex h-[50px] flex-shrink-0 items-center justify-center rounded-full px-5 text-[14px] font-medium text-white transition-colors disabled:opacity-50"
+                  className="bg-accent font-body hover:bg-accent/90 flex flex-shrink-0 items-center justify-center rounded-full px-[20px] py-[10px] text-[13px] font-medium text-white transition-colors disabled:opacity-50"
                 >
                   Subscribe
                 </button>
@@ -79,7 +79,7 @@ export function NewsletterPage() {
                   className={`mt-0.5 flex h-4 w-4 flex-shrink-0 cursor-pointer items-center justify-center rounded-sm border transition-colors ${
                     agreed
                       ? 'border-accent bg-accent'
-                      : 'border-[#d1d5db] bg-white dark:border-[#4b5563] dark:bg-surface'
+                      : 'dark:bg-surface border-[#d1d5db] bg-white dark:border-[#4b5563]'
                   }`}
                 >
                   {agreed && (
@@ -131,7 +131,7 @@ export function NewsletterPage() {
           </p>
           <div className="flex flex-col gap-4">
             {/* Preview 1 */}
-            <div className="overflow-hidden rounded-[18px] bg-surface">
+            <div className="bg-surface overflow-hidden rounded-[18px]">
               <div className="h-[100px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111]" />
               <div className="p-4">
                 <p className="font-body text-accent mb-1 text-[10px] uppercase tracking-[0.1em]">
@@ -147,7 +147,7 @@ export function NewsletterPage() {
             </div>
 
             {/* Preview 2 */}
-            <div className="rounded-[18px] bg-surface p-4">
+            <div className="bg-surface rounded-[18px] p-4">
               <p className="font-body mb-1 text-[10px] uppercase tracking-[0.1em] text-[#3B82F6]">
                 EDUCATION DROPS
               </p>

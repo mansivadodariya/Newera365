@@ -73,7 +73,7 @@ export function PromoPage() {
       {/* Hero */}
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
             Get more
             <br />
             from <span className="text-accent">every trade.</span>
@@ -90,7 +90,7 @@ export function PromoPage() {
           {PROMOS.map((promo) => (
             <div
               key={promo.id}
-              className={`flex flex-col gap-0 overflow-hidden rounded-[22px] bg-gradient-to-br shadow-card dark:shadow-card-dark ${CARD_GRADIENTS[promo.tagType]}`}
+              className={`shadow-card dark:shadow-card-dark flex flex-col gap-0 overflow-hidden rounded-[22px] bg-gradient-to-br ${CARD_GRADIENTS[promo.tagType]}`}
             >
               {/* Card top: tag row */}
               <div className="flex items-center justify-between px-5 pt-5">
@@ -120,7 +120,7 @@ export function PromoPage() {
               </div>
 
               {/* Divider */}
-              <div className="mx-5 mt-4 border-t border-[#e5e7eb] dark:border-border" />
+              <div className="dark:border-border mx-5 mt-4 border-t border-[#e5e7eb]" />
 
               {/* Footer + CTA */}
               <div className="flex items-center justify-between px-5 py-4">

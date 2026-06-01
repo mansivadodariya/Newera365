@@ -1,7 +1,9 @@
 import { setRequestLocale } from 'next-intl/server';
 import { AccountsPage } from '@newera365/ui';
+import { getAccountTypes } from '@/lib/cms';
 
-export default function AccountsRoute({ params }: { params: { locale: string } }) {
+export default async function AccountsRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  return <AccountsPage />;
+  const cmsAccounts = await getAccountTypes();
+  return <AccountsPage cmsAccounts={cmsAccounts} />;
 }

@@ -7,6 +7,14 @@ import { SectionKicker } from './SectionKicker';
 
 type AccountRow = { label: string; value: string };
 
+interface CmsAccountOverride {
+  name: string;
+  minDeposit: number;
+  spreadFrom: string;
+  leverage: string;
+  commission?: string | null;
+}
+
 const ACCOUNTS = [
   {
     id: 'standard',
@@ -101,7 +109,7 @@ function CheckIcon() {
 }
 
 function DashIcon() {
-  return <span className="font-body text-[13px] text-[#6b7280] dark:text-[#4b5563]">—</span>;
+  return <span className="font-body text-[14px] text-white/30">—</span>;
 }
 
 function MatrixCell({ value }: { value: FeatureValue }) {
@@ -115,7 +123,11 @@ function MatrixCell({ value }: { value: FeatureValue }) {
   );
 }
 
-export function AccountComparisonPage() {
+interface AccountComparisonPageProps {
+  cmsAccounts?: CmsAccountOverride[];
+}
+
+export function AccountComparisonPage({ cmsAccounts }: AccountComparisonPageProps) {
   const locale = useLocale();
 
   return (
@@ -145,11 +157,22 @@ export function AccountComparisonPage() {
         >
           {ACCOUNTS.map((acc) => {
             const isRaw = acc.isHighlighted;
+            const cms = cmsAccounts?.find((a) => a.name.toLowerCase() === acc.name.toLowerCase());
+            const rows: AccountRow[] = cms
+              ? [
+                  { label: 'Min deposit', value: `$${cms.minDeposit.toLocaleString('en-US')}` },
+                  { label: 'Spread from', value: cms.spreadFrom },
+                  { label: 'Commission', value: cms.commission ?? 'None' },
+                  { label: 'Leverage', value: cms.leverage },
+                  ...acc.rows.slice(4),
+                ]
+              : [...acc.rows];
+            const pricing = cms?.commission ?? acc.pricing;
             return (
               <div
                 key={acc.id}
-                className={`relative flex w-[270px] flex-shrink-0 snap-start flex-col gap-[18px] overflow-hidden rounded-[24px] p-6 shadow-card ${
-                  isRaw ? 'bg-[#111111] shadow-card-dark' : 'bg-background'
+                className={`shadow-card relative flex w-[270px] flex-shrink-0 snap-start flex-col gap-[18px] overflow-hidden rounded-[24px] p-6 ${
+                  isRaw ? 'shadow-card-dark bg-[#111111]' : 'bg-background'
                 }`}
               >
                 {/* Green glow for Raw card */}
@@ -169,11 +192,7 @@ export function AccountComparisonPage() {
                   >
                     {acc.name}
                   </span>
-                  <span
-                    className={`font-body mt-[5px] self-start rounded-full px-[10px] py-[5px] text-[10px] font-semibold uppercase tracking-[0.07em] ${
-                      isRaw ? 'bg-accent/20 text-accent' : 'bg-accent/10 text-accent'
-                    }`}
-                  >
+                  <span className="bg-accent/10 text-accent mt-[5px] self-start rounded-full px-[10px] py-[5px] font-mono text-[10px] tracking-[1.2px]">
                     {acc.tag}
                   </span>
                 </div>
@@ -201,21 +220,21 @@ export function AccountComparisonPage() {
                       isRaw ? 'text-accent' : 'text-foreground'
                     }`}
                   >
-                    {acc.pricing}
+                    {pricing}
                   </span>
                 </div>
 
                 {/* Feature rows */}
                 <div
                   className={`flex flex-col gap-[1px] overflow-hidden rounded-[12px] ${
-                    isRaw ? 'bg-white' : 'bg-[#111111] dark:bg-surface-elevated'
+                    isRaw ? 'bg-white' : 'dark:bg-surface-elevated bg-[#111111]'
                   }`}
                 >
-                  {acc.rows.map((row) => (
+                  {rows.map((row) => (
                     <div
                       key={row.label}
                       className={`flex items-center justify-between px-[14px] py-3 ${
-                        isRaw ? 'bg-[#111111]' : 'bg-[#fafaf9] dark:bg-surface'
+                        isRaw ? 'bg-[#111111]' : 'dark:bg-surface bg-[#fafaf9]'
                       }`}
                     >
                       <span
@@ -274,21 +293,18 @@ export function AccountComparisonPage() {
             by side.
           </h2>
 
-          {/* Matrix table card */}
-          <div
-            className="overflow-hidden rounded-[16px] bg-white dark:bg-section"
-            
-          >
+          {/* Matrix table card — matches Figma: rgba(255,255,255,0.06) container */}
+          <div className="overflow-hidden rounded-[16px] bg-[rgba(255,255,255,0.06)]">
             {/* Header row */}
-            <div className="grid grid-cols-[1fr_52px_52px_52px] items-center gap-2 border-b border-[#e5e7eb] px-[14px] py-3 dark:border-border">
-              <span className="font-body text-[10px] uppercase tracking-[0.1em] text-[#9ca3af]">
+            <div className="grid grid-cols-[1fr_65px_65px_65px] items-center bg-[rgba(255,255,255,0.04)] px-[14px] py-3">
+              <span className="font-mono text-[9px] uppercase tracking-[1.08px] text-white/55">
                 Feature
               </span>
               {(['Std', 'Raw', 'VIP'] as const).map((label, i) => (
                 <span
                   key={label}
-                  className={`font-body text-center text-[10px] font-semibold uppercase tracking-[0.1em] ${
-                    i === 1 ? 'text-accent' : 'text-[#6b7280] dark:text-muted'
+                  className={`text-center font-mono text-[9px] tracking-[1.08px] ${
+                    i === 1 ? 'text-accent' : 'text-white/55'
                   }`}
                 >
                   {label}
@@ -300,26 +316,18 @@ export function AccountComparisonPage() {
             {FEATURE_MATRIX.map((row, i) => (
               <Fragment key={row.feature}>
                 {row.section && (
-                  <div className="border-b border-[#e5e7eb] px-[14px] pb-1 pt-4 dark:border-border">
+                  <div className="dark:border-border border-b border-[#e5e7eb] px-[14px] pb-1 pt-4">
                     <span className="font-body text-[9px] uppercase tracking-[0.12em] text-[#9ca3af]">
                       {row.section}
                     </span>
                   </div>
                 )}
-                <div
-                  className={`grid grid-cols-[1fr_52px_52px_52px] items-center gap-2 px-[14px] py-[11px] ${
-                    i < FEATURE_MATRIX.length - 1
-                      ? 'border-b border-[#e5e7eb] dark:border-border'
-                      : ''
-                  }`}
-                >
-                  <span className="font-body text-[12px] text-[#6b7280] dark:text-muted">
-                    {row.feature}
-                  </span>
+                <div className="grid grid-cols-[1fr_65px_65px_65px] items-center px-[14px] py-[11px]">
+                  <span className="font-body text-[12px] text-white/85">{row.feature}</span>
                   <div className="flex justify-center">
                     <MatrixCell value={row.standard} />
                   </div>
-                  <div className="bg-accent/[0.06] dark:bg-accent/[0.1] flex justify-center rounded-[6px] py-[6px]">
+                  <div className="flex justify-center">
                     <MatrixCell value={row.raw} />
                   </div>
                   <div className="flex justify-center">

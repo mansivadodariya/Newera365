@@ -85,7 +85,7 @@ export function WebTraderPage() {
           <SectionKicker className="[&>span:last-child]:font-body mb-2 [&>span:first-child]:hidden [&>span:last-child]:text-[11px] [&>span:last-child]:font-semibold [&>span:last-child]:leading-[100%] [&>span:last-child]:tracking-[0.08em] [&>span:last-child]:text-[#1AD966]">
             TRADING PLATFORM
           </SectionKicker>
-          <h1 className="text-foreground mb-3 font-sans text-[44px] font-semibold leading-[1.05]">
+          <h1 className="text-foreground mb-3 font-sans text-[44px] font-semibold leading-[1.05] tracking-[-1.54px]">
             WebTrader.
           </h1>
           <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
@@ -202,7 +202,7 @@ export function WebTraderPage() {
                 </Link>
                 <Link
                   href={`/${locale}/platform/mobile`}
-                  className="font-body text-foreground flex h-7 items-center rounded-full border border-[#e5e7eb] px-3 text-[11px] font-medium dark:border-border"
+                  className="font-body text-foreground dark:border-border flex h-7 items-center rounded-full border border-[#e5e7eb] px-3 text-[11px] font-medium"
                 >
                   Get Mobile App
                 </Link>

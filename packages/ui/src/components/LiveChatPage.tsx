@@ -88,13 +88,13 @@ export function LiveChatPage() {
       style={{ height: 'calc(100dvh - 72px)' }}
     >
       {/* Agent header */}
-      <div className="dark:bg-background flex flex-shrink-0 items-center justify-between border-b border-[#e5e7eb] bg-white px-5 py-4 dark:border-border">
+      <div className="border-border bg-surface flex flex-shrink-0 items-center justify-between border-b px-5 py-4">
         <div className="flex items-center gap-3">
           {/* Back button */}
           <Link
             href={`/${locale}/contact`}
             aria-label="Back to contact"
-            className="text-foreground mr-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8] dark:bg-surface dark:hover:bg-surface"
+            className="text-foreground dark:bg-surface dark:hover:bg-surface mr-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8]"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path
@@ -108,7 +108,7 @@ export function LiveChatPage() {
           </Link>
 
           {/* Avatar */}
-          <div className="bg-accent relative flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full text-white">
+          <div className="bg-accent relative flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-full text-white">
             <span className="font-sans text-[15px] font-semibold">SC</span>
             <span className="dark:border-background absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-[#22C55E]" />
           </div>
@@ -126,7 +126,7 @@ export function LiveChatPage() {
         <div className="flex items-center gap-2">
           <button
             aria-label="Voice call"
-            className="text-foreground flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8] dark:bg-surface dark:hover:bg-surface"
+            className="text-foreground dark:bg-surface dark:hover:bg-surface flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8]"
           >
             <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
               <path
@@ -139,7 +139,7 @@ export function LiveChatPage() {
           </button>
           <button
             aria-label="Video call"
-            className="text-foreground flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8] dark:bg-surface dark:hover:bg-surface"
+            className="text-foreground dark:bg-surface dark:hover:bg-surface flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8]"
           >
             <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
               <rect
@@ -163,10 +163,10 @@ export function LiveChatPage() {
       </div>
 
       {/* Chat area — scrollable, fills available height */}
-      <div ref={chatRef} className="flex-1 overflow-y-auto px-5 py-4">
+      <div ref={chatRef} className="dark:bg-section flex-1 overflow-y-auto bg-[#f8f8f7] px-5 py-4">
         {/* Date chip */}
         <div className="mb-4 flex justify-center">
-          <span className="font-body rounded-full bg-[#e5e7eb] px-3 py-[3px] text-[10px] text-[#6b7280] dark:bg-surface-elevated dark:text-muted">
+          <span className="text-muted dark:bg-surface-elevated rounded-full bg-[#e5e7eb] px-3 py-[3px] font-mono text-[10px] tracking-[1.4px]">
             TODAY · {INITIAL_MESSAGES[0]?.time}
           </span>
         </div>
@@ -186,7 +186,7 @@ export function LiveChatPage() {
               <div
                 className={`max-w-[75%] rounded-[16px] px-4 py-3 ${
                   msg.from === 'agent'
-                    ? 'rounded-bl-[4px] bg-surface'
+                    ? 'bg-surface rounded-bl-[4px]'
                     : 'rounded-br-[4px] bg-[#111111]'
                 }`}
                 style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.07)' }}
@@ -212,7 +212,7 @@ export function LiveChatPage() {
                 <span className="font-sans text-[10px] font-bold">SC</span>
               </div>
               <div
-                className="rounded-[16px] rounded-bl-[4px] bg-surface px-4 py-3"
+                className="bg-surface rounded-[16px] rounded-bl-[4px] px-4 py-3"
                 style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.07)' }}
               >
                 <p className="font-body text-muted text-[13px]">Sara is typing...</p>
@@ -223,13 +223,13 @@ export function LiveChatPage() {
       </div>
 
       {/* Quick replies */}
-      <div className="dark:bg-background flex-shrink-0 border-t border-[#e5e7eb] bg-white px-5 py-3 dark:border-border">
+      <div className="dark:bg-background dark:border-border flex-shrink-0 border-t border-[#e5e7eb] bg-white px-5 py-3">
         <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
           {QUICK_REPLIES.map((qr) => (
             <button
               key={qr}
               onClick={() => sendMessage(qr)}
-              className="font-body text-foreground hover:border-foreground flex-shrink-0 rounded-full border border-[#e5e7eb] px-3.5 py-2 text-[12px] transition-colors dark:border-border"
+              className="font-body text-foreground hover:border-foreground dark:border-border flex-shrink-0 rounded-full border border-[#e5e7eb] px-3.5 py-2 text-[12px] transition-colors"
             >
               {qr}
             </button>
@@ -239,7 +239,7 @@ export function LiveChatPage() {
 
       {/* Message input */}
       <div className="dark:bg-background flex-shrink-0 bg-white px-5 pb-6 pt-3">
-        <div className="flex items-center gap-2 rounded-[16px] border border-[#e5e7eb] bg-surface px-4 py-3 dark:border-border">
+        <div className="bg-surface flex items-center gap-2 rounded-[999px] px-4 py-1">
           <input
             type="text"
             value={input}
@@ -251,7 +251,7 @@ export function LiveChatPage() {
           <button
             onClick={() => sendMessage(input)}
             disabled={!input.trim()}
-            className="bg-accent flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full disabled:opacity-40"
+            className="bg-accent flex flex-shrink-0 items-center justify-center rounded-[99px] px-[12px] py-[10px] disabled:opacity-40"
           >
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
               <path

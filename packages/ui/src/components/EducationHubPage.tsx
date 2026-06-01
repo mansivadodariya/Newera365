@@ -161,7 +161,7 @@ export function EducationHubPage() {
       {/* Hero */}
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
             Learn to
             <br />
             trade,
@@ -178,7 +178,7 @@ export function EducationHubPage() {
       {/* Category grid */}
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             BROWSE BY TYPE
           </SectionKicker>
           <div className="grid grid-cols-2 gap-[10px]">
@@ -186,7 +186,7 @@ export function EducationHubPage() {
               <Link
                 key={cat.id}
                 href={`/${locale}${cat.href}`}
-                className="group flex flex-col gap-3 rounded-[18px] bg-surface p-4 transition-colors hover:bg-[#f0f0ee] dark:hover:bg-surface-elevated"
+                className="bg-surface dark:hover:bg-surface-elevated group flex flex-col gap-3 rounded-[18px] p-4 transition-colors hover:bg-[#f0f0ee]"
               >
                 <div className="flex items-start justify-between">
                   <div className="text-accent bg-accent/10 flex h-9 w-9 items-center justify-center rounded-[11px]">
@@ -211,10 +211,10 @@ export function EducationHubPage() {
       {/* Featured this week */}
       <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             FEATURED THIS WEEK
           </SectionKicker>
-          <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-border">
+          <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
             {FEATURED.map((article) => (
               <Link
                 key={article.id}
@@ -261,7 +261,7 @@ export function EducationHubPage() {
       {/* Pinned guides */}
       <section className="bg-background px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             PINNED GUIDES
           </SectionKicker>
           <div className="flex flex-col">
@@ -269,7 +269,7 @@ export function EducationHubPage() {
               <Link
                 key={guide.href}
                 href={`/${locale}${guide.href}`}
-                className={`group flex items-center justify-between py-4 ${i < PINNED_GUIDES.length - 1 ? 'border-b border-[#e5e7eb] dark:border-border' : ''}`}
+                className={`group flex items-center justify-between py-4 ${i < PINNED_GUIDES.length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
               >
                 <span className="text-foreground font-body group-hover:text-accent pr-4 text-[14px] font-medium transition-colors">
                   {guide.title}

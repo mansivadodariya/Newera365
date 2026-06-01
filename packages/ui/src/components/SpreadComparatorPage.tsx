@@ -37,7 +37,7 @@ const LOTS_PER_MONTH = 10;
 function SpreadBar({ value, max, color }: { value: number; max: number; color: string }) {
   const pct = max > 0 ? Math.max(4, (value / max) * 100) : 4;
   return (
-    <div className="h-[6px] w-full overflow-hidden rounded-full bg-[#e5e7eb] dark:bg-surface-elevated">
+    <div className="dark:bg-surface-elevated h-[6px] w-full overflow-hidden rounded-full bg-[#e5e7eb]">
       <div
         className="h-full rounded-full transition-all duration-500"
         style={{ width: `${pct}%`, backgroundColor: color }}
@@ -112,10 +112,10 @@ export function SpreadComparatorPage() {
       {/* Hero */}
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-muted text-muted">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             TOOLS
           </SectionKicker>
-          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
             See where you <span className="text-accent">save.</span>
           </h1>
           <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
@@ -135,7 +135,7 @@ export function SpreadComparatorPage() {
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold uppercase tracking-[0.08em] transition-colors ${
                   instrument === ins.id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-surface dark:text-muted'
+                    : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
                 }`}
               >
                 {ins.label}
@@ -148,7 +148,7 @@ export function SpreadComparatorPage() {
       {/* Spread bars */}
       <section className="bg-background px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="rounded-[18px] bg-surface p-5">
+          <div className="bg-surface rounded-[18px] p-5">
             <p className="font-body mb-4 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
               SPREAD COMPARISON
             </p>
@@ -158,7 +158,7 @@ export function SpreadComparatorPage() {
                   <div className="flex items-center justify-between">
                     <span
                       className={`font-body text-[12px] font-medium ${
-                        row.isHighlighted ? 'text-accent' : 'text-[#6b7280] dark:text-muted'
+                        row.isHighlighted ? 'text-accent' : 'dark:text-muted text-[#6b7280]'
                       }`}
                     >
                       {row.label}
@@ -186,9 +186,7 @@ export function SpreadComparatorPage() {
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="grid grid-cols-3 gap-[10px]">
             {/* Standard */}
-            <div
-              className="flex flex-col gap-3 rounded-[18px] bg-surface p-4 shadow-card dark:shadow-none"
-            >
+            <div className="bg-surface shadow-card flex flex-col gap-3 rounded-[18px] p-4 dark:shadow-none">
               <span className="text-foreground font-sans text-[13px] font-semibold">Standard</span>
               <div className="flex flex-col gap-1">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
@@ -204,7 +202,7 @@ export function SpreadComparatorPage() {
                 </p>
                 <p className="font-body text-foreground text-[13px] font-semibold">None</p>
               </div>
-              <div className="mt-auto border-t border-[#e5e7eb] pt-3 dark:border-border">
+              <div className="dark:border-border mt-auto border-t border-[#e5e7eb] pt-3">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
                   Cost / lot
                 </p>
@@ -245,9 +243,7 @@ export function SpreadComparatorPage() {
             </div>
 
             {/* VIP */}
-            <div
-              className="flex flex-col gap-3 rounded-[18px] bg-surface p-4 shadow-card dark:shadow-none"
-            >
+            <div className="bg-surface shadow-card flex flex-col gap-3 rounded-[18px] p-4 dark:shadow-none">
               <span className="text-foreground font-sans text-[13px] font-semibold">VIP</span>
               <div className="flex flex-col gap-1">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
@@ -263,7 +259,7 @@ export function SpreadComparatorPage() {
                 </p>
                 <p className="font-body text-foreground text-[13px] font-semibold">From $1.50</p>
               </div>
-              <div className="mt-auto border-t border-[#e5e7eb] pt-3 dark:border-border">
+              <div className="dark:border-border mt-auto border-t border-[#e5e7eb] pt-3">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
                   Cost / lot
                 </p>
@@ -314,7 +310,7 @@ export function SpreadComparatorPage() {
       {/* How we calculate */}
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="rounded-[18px] bg-surface p-5">
+          <div className="bg-surface rounded-[18px] p-5">
             <p className="font-body mb-2 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
               HOW IT&apos;S CALCULATED
             </p>

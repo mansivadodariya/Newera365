@@ -51,7 +51,7 @@ function SelectInput({
   return (
     <div className="flex flex-col gap-1.5">
       <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">{label}</label>
-      <div className="border-border relative overflow-hidden rounded-[12px] border bg-white dark:bg-surface">
+      <div className="border-border dark:bg-surface relative overflow-hidden rounded-[12px] border bg-white">
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
@@ -105,7 +105,7 @@ function NumberInput({
         min={min}
         step={step}
         onChange={(e) => onChange(e.target.value)}
-        className="border-border font-body text-foreground focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[14px] outline-none dark:bg-surface"
+        className="border-border font-body text-foreground focus:border-accent dark:bg-surface w-full rounded-[12px] border bg-white px-4 py-3 text-[14px] outline-none"
       />
     </div>
   );
@@ -157,7 +157,7 @@ export function TraderToolsPage() {
       {/* Hero */}
       <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-3 font-sans text-[42px] font-semibold leading-[1.05]">
+          <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
             The math.
             <br />
             <span className="text-accent">Done for you.</span>
@@ -172,14 +172,14 @@ export function TraderToolsPage() {
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Tab switcher */}
-          <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-surface">
+          <div className="dark:bg-surface mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1">
             {TABS.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`font-body flex-1 rounded-[11px] py-2.5 text-[13px] font-medium transition-colors ${
                   activeTab === tab.id
-                    ? 'text-foreground bg-white shadow-sm dark:bg-surface-elevated dark:text-white'
+                    ? 'text-foreground dark:bg-surface-elevated bg-white shadow-sm dark:text-white'
                     : 'text-muted hover:text-foreground'
                 }`}
               >
@@ -324,7 +324,7 @@ export function TraderToolsPage() {
           </div>
 
           {/* Formula */}
-          <div className="mt-4 rounded-[14px] bg-surface p-4">
+          <div className="bg-surface mt-4 rounded-[14px] p-4">
             <p className="font-body text-muted mb-2 text-[10px] uppercase tracking-[0.1em]">
               How it&apos;s calculated
             </p>
@@ -371,7 +371,7 @@ export function TraderToolsPage() {
       {/* Other tools */}
       <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-muted text-muted">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             MORE TOOLS
           </SectionKicker>
           <div className="flex flex-col gap-[10px]">
@@ -390,8 +390,7 @@ export function TraderToolsPage() {
               <Link
                 key={tool.label}
                 href={tool.href}
-                className="group flex items-center justify-between rounded-[16px] bg-white p-4 dark:bg-surface"
-                
+                className="dark:bg-surface group flex items-center justify-between rounded-[16px] bg-white p-4"
               >
                 <div>
                   <p className="text-foreground font-sans text-[14px] font-semibold">
