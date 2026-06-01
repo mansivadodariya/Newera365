@@ -40,15 +40,60 @@ const TEAM = [
 ] as const;
 
 const EXPLORE_LINKS = [
-  { label: 'Careers', href: '/company/careers', desc: 'Join our growing team of 120+' },
+  {
+    label: 'Careers',
+    href: '/company/careers',
+    desc: 'We are hiring across 8 cities',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="8" cy="5.5" r="2.5" stroke="currentColor" strokeWidth="1.3" />
+        <path
+          d="M2.5 13.5c0-3.04 2.46-5.5 5.5-5.5s5.5 2.46 5.5 5.5"
+          stroke="currentColor"
+          strokeWidth="1.3"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
+  },
   {
     label: 'Awards & recognition',
     href: '/company/awards',
-    desc: 'Industry awards we are proud of',
+    desc: 'Industry honors and press',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path
+          d="M8 2l1.5 3 3.5.5-2.5 2.5.6 3.5L8 10l-3.1 1.5.6-3.5L3 5.5 6.5 5 8 2z"
+          stroke="currentColor"
+          strokeWidth="1.3"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
   },
-  { label: 'Media & press', href: '/company/media', desc: 'Press kit, logos and media contacts' },
-  { label: 'Get in touch', href: '/contact', desc: 'Real people. Real answers.' },
-] as const;
+  {
+    label: 'Media & press',
+    href: '/company/media',
+    desc: 'Latest coverage of NewEra365',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+        <path d="M5 7h6M5 10h4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Get in touch',
+    href: '/contact',
+    desc: 'Talk to the team directly',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <rect x="2" y="4" width="12" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+        <path d="M2 5.5l6 4 6-4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+];
 
 export interface CmsTeamMemberItem {
   id: number;
@@ -81,69 +126,73 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
 
   return (
     <>
-      {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-10 pt-9">
+      {/* Hero — 42px tracking-[-1.26px] per Figma */}
+      <section className="bg-background rounded-b-[32px] px-5 pb-7 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="xl:flex xl:flex-row xl:items-start xl:gap-12">
-            {/* Left: heading */}
-            <div className="xl:flex-1">
-              <h1 className="text-foreground mb-6 font-sans text-[38px] font-semibold leading-[1.08] xl:text-[56px] xl:leading-[1.04]">
-                A new era of trading, <span className="text-accent">built by traders.</span>
-              </h1>
-            </div>
+          <h1 className="font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
+            <span className="text-foreground">A new era of trading,</span>
+            <br />
+            <span className="text-accent">built by traders.</span>
+          </h1>
+          <p className="font-body text-muted mt-4 max-w-[320px] text-[14px] leading-[1.6]">
+            We started with a simple belief — traders deserve a broker that&apos;s transparent, fast
+            and obsessed with execution.
+          </p>
+        </div>
+      </section>
 
-            {/* Right: CEO quote card */}
-            <div className="xl:w-[480px] xl:flex-shrink-0">
-              <div
-                className="rounded-[20px] bg-[#111111] p-5 xl:p-7"
-                style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.10)' }}
-              >
-                <p className="font-body mb-4 text-[14px] leading-[1.65] text-white/80 xl:text-[15px]">
-                  &ldquo;To give every trader — from first deposit to first million — the tools, the
-                  speed, and the trust they need to compete on a level field.&rdquo;
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="bg-accent flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full">
-                    <span className="font-sans text-[13px] font-semibold text-white">AM</span>
-                  </div>
-                  <div>
-                    <p className="font-sans text-[13px] font-semibold text-white">Alex M.</p>
-                    <p className="font-body text-[11px] text-white/40">CEO &amp; Co-Founder</p>
-                  </div>
-                </div>
-              </div>
+      {/* Mission section — bg-[#111] per Figma, Outfit Medium 24px quote */}
+      <section className="rounded-t-[32px] bg-[#111111] px-5 pb-11 pt-11">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-4 text-white [&>span:first-child]:bg-white">
+            OUR MISSION
+          </SectionKicker>
+          <p className="font-sans text-[24px] font-medium leading-[1.3] tracking-[-0.36px] text-white">
+            To give every trader — from first deposit to first million — the tools, the speed, and
+            the trust they need to compete on a level field.
+          </p>
+          <div className="my-6 border-t border-white/10" />
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-sans text-[18px] font-semibold text-white">Alex M.</p>
+              <p className="font-body text-[12px] text-white/55">Co-founder &amp; CEO</p>
+            </div>
+            <div className="text-right">
+              <p className="font-mono text-[9px] tracking-[1.35px] text-white/40">LETTER FROM</p>
+              <p className="font-mono text-[9px] tracking-[1.35px] text-white/40">THE FOUNDER →</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Timeline */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background rounded-t-[32px] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <p className="font-body mb-5 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
-            A DECADE OF COMPOUNDING
-          </p>
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            THE ROAD SO FAR
+          </SectionKicker>
+          <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
+            A decade of compounding.
+          </h2>
           <div className="flex flex-col">
             {MILESTONES.map((m, i) => (
-              <div key={m.year} className="flex gap-4">
+              <div key={m.year} className="flex gap-[18px] pb-[22px]">
                 {/* Connector */}
-                <div className="flex flex-col items-center pt-1">
+                <div className="flex flex-col items-center">
                   <div
-                    className={`h-2.5 w-2.5 flex-shrink-0 rounded-full ${i === MILESTONES.length - 1 ? 'bg-accent' : 'border-accent border-2 bg-transparent'}`}
+                    className={`mt-1 h-[22px] w-[22px] flex-shrink-0 rounded-full border-2 ${i === MILESTONES.length - 1 ? 'border-accent bg-accent' : 'border-border bg-background'}`}
                   />
-                  {i < MILESTONES.length - 1 && (
-                    <div className="my-1 w-px flex-1 bg-[#e5e7eb] dark:bg-[#2a2a2a]" />
-                  )}
+                  {i < MILESTONES.length - 1 && <div className="bg-border mt-1 w-px flex-1" />}
                 </div>
                 {/* Content */}
-                <div className="pb-6">
-                  <div className="flex items-center gap-2">
-                    <span className="font-body text-accent text-[10px] font-semibold uppercase tracking-[0.1em]">
-                      {m.year}
-                    </span>
-                    <span className="font-body text-[10px] text-[#9ca3af]">· {m.label}</span>
-                  </div>
-                  <p className="font-body text-muted mt-1 text-[13px] leading-relaxed">{m.desc}</p>
+                <div className="flex-1">
+                  <span className="text-accent font-mono text-[11px] font-bold tracking-[1.32px]">
+                    {m.year}
+                  </span>
+                  <p className="text-foreground font-sans text-[17px] font-semibold leading-normal">
+                    {m.label}
+                  </p>
+                  <p className="font-body text-muted mt-1 text-[13px] leading-[1.55]">{m.desc}</p>
                 </div>
               </div>
             ))}
@@ -151,93 +200,71 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
         </div>
       </section>
 
-      {/* Team */}
-      <section className="gap-[14px] rounded-[32px] bg-white bg-[linear-gradient(180deg,#F8F8F7_0%,#FFFFFF_100%)] pb-[36px] pl-[20px] pr-[20px] pt-[40px] dark:bg-[linear-gradient(180deg,#07090D_0%,#07090D_100%)]">
+      {/* Team — gradient section, white cards per Figma */}
+      <section
+        className="rounded-[32px] px-5 pb-9 pt-10 xl:pb-16 xl:pt-16"
+        style={{ background: 'var(--gradient-features)' }}
+      >
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             THE TEAM
           </SectionKicker>
-          <h1 className="text-foreground mb-5 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.025em]">
-            Operators not
-            <br /> marketers.
-          </h1>
-          <div className="grid grid-cols-2 gap-[10px] xl:gap-5">
-            {(displayTeam ?? TEAM).map((member) => {
-              const isCms = displayTeam !== null;
-              const name = member.name;
-              const title = isCms
-                ? (member as CmsTeamMemberItem).role
-                : (member as (typeof TEAM)[0]).title;
-              const initials = isCms
-                ? name
-                    .split(' ')
-                    .map((w) => w[0])
-                    .join('')
-                    .toUpperCase()
-                    .slice(0, 2)
-                : (member as (typeof TEAM)[0]).initials;
-              const photoUrl = isCms ? (member as CmsTeamMemberItem).photoUrl : null;
-              return (
+          <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
+            Operators, not marketers.
+          </h2>
+          <div className="grid grid-cols-2 gap-[10px]">
+            {TEAM.map((member) => (
+              <div
+                key={member.name}
+                className="bg-background shadow-card flex h-[145px] flex-col gap-[14px] rounded-[18px] p-[18px] dark:shadow-none"
+              >
+                {/* Avatar — dark gradient per Figma */}
                 <div
-                  key={name}
-                  className="rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]"
-                  style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+                  className="flex h-[56px] w-[56px] flex-shrink-0 items-center justify-center rounded-[16px]"
+                  style={{ background: 'linear-gradient(135deg, #111111 0%, #333333 71.43%)' }}
                 >
-                  <div className="mb-3 flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-[#111111]">
-                    {photoUrl ? (
-                      <img src={photoUrl} alt={name} className="h-full w-full object-cover" />
-                    ) : (
-                      <span className="font-sans text-[14px] font-semibold text-white">
-                        {initials}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-foreground font-sans text-[14px] font-semibold">{name}</p>
-                  <p className="font-body text-muted mt-0.5 text-[12px]">{title}</p>
+                  <span className="font-sans text-[16px] font-semibold tracking-[-0.16px] text-white">
+                    {member.initials}
+                  </span>
                 </div>
-              );
-            })}
+                <div>
+                  <p className="text-foreground font-sans text-[15px] font-semibold">
+                    {member.name}
+                  </p>
+                  <p className="font-body text-muted mt-[2px] text-[12px]">{member.title}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Explore links */}
-      <section className="dark:bg-background bg-white px-5 pb-10 pt-[40px]">
+      <section className="bg-background rounded-t-[32px] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
-            More from the company
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            MORE FROM THE COMPANY
           </SectionKicker>
-          <h1 className="text-foreground mb-4 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.025em]">
-            Explore
-          </h1>
-          <div className="flex flex-col divide-y divide-[#e5e7eb] xl:grid xl:grid-cols-2 xl:divide-y-0 xl:border-t xl:border-[#e5e7eb] dark:divide-[#2a2a2a] dark:xl:border-[#2a2a2a]">
+          <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
+            Explore.
+          </h2>
+          <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-2">
             {EXPLORE_LINKS.map((link) => (
               <Link
                 key={link.label}
                 href={`/${locale}${link.href}`}
-                className="group flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0 xl:border-b xl:border-[#e5e7eb] xl:py-5 xl:first:pt-5 xl:last:pb-5 dark:xl:border-[#2a2a2a]"
+                className="bg-surface shadow-card dark:hover:bg-surface-elevated group flex items-center gap-[14px] rounded-[18px] px-[18px] py-[18px] transition-colors hover:bg-[#f0f0ee] dark:shadow-none"
               >
-                <div>
-                  <p className="text-foreground group-hover:text-accent font-sans text-[14px] font-semibold transition-colors">
+                <div className="text-foreground dark:bg-surface-elevated flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[12px] bg-[#f2f2f4]">
+                  {link.icon}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-foreground font-sans text-[15px] font-semibold leading-normal">
                     {link.label}
                   </p>
-                  <p className="font-body text-muted mt-0.5 text-[12px]">{link.desc}</p>
+                  <p className="font-body text-muted mt-[2px] text-[12px]">{link.desc}</p>
                 </div>
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  className="group-hover:text-accent flex-shrink-0 text-[#9ca3af] transition-colors"
-                >
-                  <path
-                    d="M6 4l4 4-4 4"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <span className="text-muted flex-shrink-0 text-[18px]">›</span>
               </Link>
             ))}
           </div>

@@ -108,9 +108,9 @@ export function PromoPage({ promos: cmsPromos }: PromoPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
             Get more
             <br />
             from <span className="text-accent">every trade.</span>
@@ -122,110 +122,64 @@ export function PromoPage({ promos: cmsPromos }: PromoPageProps) {
       </section>
 
       {/* Promo cards */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
-        <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl xl:grid xl:max-w-[1200px] xl:grid-cols-3 xl:gap-5">
-          {useCms
-            ? cmsPromos.map((promo) => {
-                const color = promo.tagColor ?? 'accent';
-                const tagStyle = CMS_TAG_STYLES[color] ?? CMS_TAG_STYLES.accent!;
-                const gradient = CMS_CARD_GRADIENTS[color] ?? CMS_CARD_GRADIENTS.accent!;
-                const href = promo.ctaHref ?? `/${locale}/register`;
-                return (
-                  <div
-                    key={promo.slug}
-                    className={`flex flex-col gap-0 overflow-hidden rounded-[22px] bg-gradient-to-br ${gradient}`}
-                    style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.06)' }}
-                  >
-                    <div className="flex items-center justify-between px-5 pt-5">
-                      {promo.tag && (
-                        <span
-                          className={`font-body inline-flex h-5 items-center rounded-full px-2.5 text-[9px] font-semibold uppercase tracking-[0.12em] ${tagStyle}`}
-                        >
-                          {promo.tag}
-                        </span>
-                      )}
-                      <span className="bg-accent/10 text-accent font-body ms-auto rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em]">
-                        ACTIVE
-                      </span>
-                    </div>
-                    <div className="px-5 pt-2">
-                      <p className="text-foreground mb-1 font-sans text-[17px] font-semibold">
-                        {promo.title}
-                      </p>
-                      <p className="font-body text-muted text-[13px] leading-[1.55]">
-                        {promo.description}
-                      </p>
-                    </div>
-                    <div className="mx-5 mt-4 border-t border-[#e5e7eb] dark:border-[#2a2a2a]" />
-                    <div className="flex items-center justify-between px-5 py-4">
-                      <span className="text-muted font-mono text-[11px]">{promo.terms ?? ''}</span>
-                      <a
-                        href={href}
-                        className="bg-accent hover:bg-accent-hover font-body flex h-8 items-center gap-1.5 rounded-full px-4 text-[12px] font-medium text-white transition-colors"
-                      >
-                        {promo.ctaLabel ?? 'Claim'}
-                        <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                          <path
-                            d="M3 8h10M9 4l4 4-4 4"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                );
-              })
-            : PROMOS.map((promo) => (
-                <div
-                  key={promo.id}
-                  className={`flex flex-col gap-0 overflow-hidden rounded-[22px] bg-gradient-to-br ${CARD_GRADIENTS[promo.tagType]}`}
-                  style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.06)' }}
+      <section className="bg-background px-5 pb-10">
+        <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl xl:max-w-[1200px]">
+          {PROMOS.map((promo) => (
+            <div
+              key={promo.id}
+              className={`shadow-card dark:shadow-card-dark flex flex-col gap-0 overflow-hidden rounded-[22px] bg-gradient-to-br ${CARD_GRADIENTS[promo.tagType]}`}
+            >
+              {/* Card top: tag row */}
+              <div className="flex items-center justify-between px-5 pt-5">
+                <span
+                  className={`font-body inline-flex h-5 items-center rounded-full px-2.5 text-[9px] font-semibold uppercase tracking-[0.12em] ${TAG_STYLES[promo.tagType]}`}
                 >
-                  <div className="flex items-center justify-between px-5 pt-5">
-                    <span
-                      className={`font-body inline-flex h-5 items-center rounded-full px-2.5 text-[9px] font-semibold uppercase tracking-[0.12em] ${TAG_STYLES[promo.tagType]}`}
-                    >
-                      {promo.tagType}
-                    </span>
-                    <span className="bg-accent/10 text-accent font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em]">
-                      ACTIVE
-                    </span>
-                  </div>
-                  <div className="px-5 pt-3">
-                    <p className="text-accent font-sans text-[36px] font-semibold leading-[100%] tracking-[-0.02em]">
-                      {promo.value}
-                    </p>
-                  </div>
-                  <div className="px-5 pt-2">
-                    <p className="text-foreground mb-1 font-sans text-[17px] font-semibold">
-                      {promo.title}
-                    </p>
-                    <p className="font-body text-muted text-[13px] leading-[1.55]">{promo.desc}</p>
-                  </div>
-                  <div className="mx-5 mt-4 border-t border-[#e5e7eb] dark:border-[#2a2a2a]" />
-                  <div className="flex items-center justify-between px-5 py-4">
-                    <span className="text-muted font-mono text-[11px]">{promo.footer}</span>
-                    <Link
-                      href={`/${locale}/register`}
-                      className="bg-accent hover:bg-accent-hover font-body flex h-8 items-center gap-1.5 rounded-full px-4 text-[12px] font-medium text-white transition-colors"
-                    >
-                      Claim
-                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                        <path
-                          d="M3 8h10M9 4l4 4-4 4"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </Link>
-                  </div>
-                </div>
-              ))}
+                  {promo.tagType}
+                </span>
+                <span className="bg-accent/10 text-accent font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em]">
+                  ACTIVE
+                </span>
+              </div>
+
+              {/* Value */}
+              <div className="px-5 pt-3">
+                <p className="text-accent font-sans text-[36px] font-semibold leading-[100%] tracking-[-0.02em]">
+                  {promo.value}
+                </p>
+              </div>
+
+              {/* Title + desc */}
+              <div className="px-5 pt-2">
+                <p className="text-foreground mb-1 font-sans text-[17px] font-semibold">
+                  {promo.title}
+                </p>
+                <p className="font-body text-muted text-[13px] leading-[1.55]">{promo.desc}</p>
+              </div>
+
+              {/* Divider */}
+              <div className="dark:border-border mx-5 mt-4 border-t border-[#e5e7eb]" />
+
+              {/* Footer + CTA */}
+              <div className="flex items-center justify-between px-5 py-4">
+                <span className="text-muted font-mono text-[11px]">{promo.footer}</span>
+                <Link
+                  href={`/${locale}/register`}
+                  className="bg-accent hover:bg-accent-hover font-body flex h-8 items-center gap-1.5 rounded-full px-4 text-[12px] font-medium text-white transition-colors"
+                >
+                  Claim
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M3 8h10M9 4l4 4-4 4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 

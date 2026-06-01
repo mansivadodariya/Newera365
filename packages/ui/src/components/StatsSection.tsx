@@ -29,22 +29,25 @@ export function StatsSection({ kpiStats, locale }: { kpiStats?: CmsKpiStat[]; lo
         ];
 
   return (
-    <section className="bg-[#f2f2f7] px-5 pb-9 pt-10 xl:pb-16 xl:pt-16 dark:bg-[#0f0f0f]">
+    <section
+      className="rounded-t-[32px] px-5 pb-9 pt-10 xl:pb-14 xl:pt-10"
+      style={{ background: 'var(--gradient-stats)' }}
+    >
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-        <SectionKicker className="mb-5 text-[#000000] dark:text-[#FFFFFF]">
+        <SectionKicker className="mb-5 text-foreground [&>span:first-child]:bg-foreground">
           {t('statsByNumbers')}
         </SectionKicker>
 
-        <h2 className="text-foreground mb-4 whitespace-pre-line font-sans text-[28px] font-semibold leading-[110%] tracking-[-0.02em]">
+        <h2 className="text-foreground mb-4 whitespace-pre-line font-sans text-[28px] font-semibold leading-[110%] tracking-[-0.56px] xl:text-[32px]">
           {t('statsHeading')}
         </h2>
 
-        {/* Stats grid — 2 cols mobile, 4 cols desktop, max 4 cards */}
-        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[20px] bg-[#333] xl:grid-cols-4">
-          {stats.slice(0, 4).map((stat, i) => (
+        {/* Stats grid — 2 cols mobile, 4 cols desktop */}
+        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[20px] bg-[#e5e7eb] xl:grid-cols-4 dark:bg-[#1a1c22]">
+          {stats.map((stat) => (
             <div
               key={stat.label}
-              className="flex flex-col justify-center gap-[6px] bg-[#111] p-[22px]"
+              className="flex flex-col justify-center gap-[6px] bg-[rgba(0,0,0,0.73)] p-[22px]"
             >
               <span
                 className={`font-sans text-[30px] font-semibold leading-none tracking-[-0.6px] ${i === 0 ? 'text-white' : 'text-white/80'}`}
@@ -58,16 +61,10 @@ export function StatsSection({ kpiStats, locale }: { kpiStats?: CmsKpiStat[]; lo
           ))}
         </div>
 
-        {/* Regulated badge — white card matching Figma */}
-        <div className="mt-6 flex items-center gap-[14px] rounded-[16px] bg-white px-5 py-[18px] dark:bg-[#1c1c1c]">
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl">
-            <Image
-              src="/icons/authority.png"
-              alt="Authority"
-              width={28}
-              height={28}
-              className="dark:invert"
-            />
+        {/* Regulated badge */}
+        <div className="mt-6 flex items-center gap-[14px] rounded-[16px] bg-[linear-gradient(169deg,rgba(0,176,80,0.1)_0%,rgba(255,255,255,0.02)_71%)] px-5 py-[18px] dark:bg-[linear-gradient(169deg,rgba(0,176,80,0.1)_0%,rgba(7,9,13,0.02)_71%)]">
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-none">
+            <Image src="/icons/authority.png" alt="Authority" width={28} height={28} />
           </div>
           <div className="min-w-0 flex-1">
             <p className="font-body text-[13px] font-medium leading-tight text-[#111] dark:text-white">

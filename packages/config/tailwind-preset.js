@@ -39,8 +39,9 @@ module.exports = {
         pill: '999px',
       },
       boxShadow: {
-        card: '0 2px 16px rgba(0,0,0,0.06)',
-        'card-dark': '0 2px 16px rgba(0,0,0,0.4)',
+        card: '0px 4px 16px 0px rgba(0,0,0,0.06)',
+        'card-dark': '0px 4px 16px 0px rgba(0,0,0,0.4)',
+        'card-lg': '0px 8px 32px 0px rgba(0,0,0,0.08)',
       },
       keyframes: {
         'fade-in': {

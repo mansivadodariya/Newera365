@@ -94,9 +94,9 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
             Deep dives worth
             <br />
             <span className="text-accent">reading twice.</span>
@@ -110,13 +110,12 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
 
       {/* Featured guide */}
       {featured && (
-        <section className="dark:bg-background bg-white px-5 pb-6">
+        <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="mb-4">FEATURED</SectionKicker>
             <Link
-              href={`/${locale}/guides/${'slug' in featured ? featured.slug : featured.id}`}
-              className="group block overflow-hidden rounded-[22px] bg-[#111111] p-6"
-              style={{ boxShadow: '0 4px 30px rgba(0,0,0,0.15)' }}
+              href={`/${locale}/guides/${featured.id}`}
+              className="shadow-card-dark group block overflow-hidden rounded-[22px] bg-[#111111] p-6"
             >
               {'categoryClass' in featured && (
                 <span
@@ -147,35 +146,33 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
       )}
 
       {/* All guides */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mt-5">ALL GUIDES</SectionKicker>
-          <div className="flex flex-col gap-0 xl:grid xl:grid-cols-3 xl:gap-0">
-            {rest.map((guide, i) => {
-              const href = `/${locale}/guides/${'slug' in guide ? guide.slug : guide.id}`;
-              const catClass = 'categoryClass' in guide ? guide.categoryClass : CAT_FALLBACK;
-              const desc =
-                'desc' in guide ? guide.desc : 'summary' in guide ? (guide.summary ?? '') : '';
-              const author = 'author' in guide ? guide.author : null;
-              const readTime = 'readTime' in guide ? guide.readTime : null;
-              const cat = 'category' in guide ? guide.category : null;
-              return (
-                <Link
-                  key={'slug' in guide ? guide.slug : guide.id}
-                  href={href}
-                  className={`group flex flex-col gap-2 py-5 xl:px-5 xl:py-6 xl:first:pl-0 ${i < rest.length - 1 ? 'border-b border-[#e5e7eb] xl:border-b-0 xl:border-r xl:border-[#e5e7eb] dark:border-[#2a2a2a] dark:xl:border-[#2a2a2a]' : ''}`}
-                >
-                  <div className="flex items-center justify-between">
-                    {cat && (
-                      <span
-                        className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${catClass}`}
-                      >
-                        {cat}
-                      </span>
-                    )}
-                    {readTime && (
-                      <span className="font-body text-muted text-[11px]">{readTime} read</span>
-                    )}
+          <div className="flex flex-col gap-0">
+            {rest.map((guide, i) => (
+              <Link
+                key={guide.id}
+                href={`/${locale}/guides/${guide.id}`}
+                className={`group flex flex-col gap-2 py-5 ${i < rest.length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
+              >
+                <div className="flex items-center justify-between">
+                  <span
+                    className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${guide.categoryClass}`}
+                  >
+                    {guide.category}
+                  </span>
+                  <span className="font-body text-muted text-[11px]">{guide.readTime} read</span>
+                </div>
+                <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] transition-colors">
+                  {guide.title}
+                </p>
+                <p className="font-body text-muted text-[12px] leading-[1.55]">{guide.desc}</p>
+                <div className="flex items-center gap-2">
+                  <div className="border-border flex h-5 w-5 items-center justify-center rounded-full border">
+                    <span className="text-muted font-sans text-[8px] font-semibold">
+                      {guide.author[0]}
+                    </span>
                   </div>
                   <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] transition-colors">
                     {guide.title}

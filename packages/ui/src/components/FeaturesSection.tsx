@@ -23,41 +23,30 @@ export function FeaturesSection() {
   const t = useTranslations('home');
 
   return (
-    <section className="bg-gradient-to-br from-white to-[#e2e2e2] px-5 pb-9 pt-10 xl:pb-16 xl:pt-16 dark:from-[#1c1c1c] dark:to-[#111]">
+    <section className="rounded-[32px] px-5 pb-9 pt-10 xl:pb-16 xl:pt-16" style={{ background: 'var(--gradient-features)' }}>
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-        <SectionKicker className="mb-5 text-[#6b7280]">{t('whyKicker')}</SectionKicker>
+        <SectionKicker className="[&>span:first-child]:bg-muted mb-4 text-muted">
+          {t('whyKicker')}
+        </SectionKicker>
 
-        <h2 className="mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] text-[#111] dark:text-white">
+        <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
           {t('whyTitle')}
         </h2>
 
-        {/* Vertical stack on mobile, 2-col on xl — white cards matching Figma */}
-        <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-2">
-          {FEATURES.map((f) => (
+        <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-2">
+          {features.map((f) => (
             <div
-              key={f.titleKey}
-              className="flex items-start gap-[16px] rounded-[20px] bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:bg-[#1c1c1c]"
+              key={f.title}
+              className="bg-background flex items-start gap-4 rounded-[20px] p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:shadow-[0px_4px_16px_0px_rgba(0,0,0,0.3)]"
             >
-              {/* Icon box — 44×44, light bg */}
-              <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.10)] dark:bg-[rgba(255,255,255,0.06)]">
-                <Image
-                  src={f.icon}
-                  alt=""
-                  width={24}
-                  height={24}
-                  unoptimized
-                  className="dark:invert"
-                />
+              <div className="text-foreground flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] dark:bg-[rgba(31,36,46,0.08)]">
+                {ICONS[f.icon]}
               </div>
-
-              {/* Text */}
-              <div className="flex flex-col gap-[6px] pt-[2px]">
-                <p className="font-sans text-[16px] font-semibold leading-tight text-[#111] dark:text-white">
-                  {t(f.titleKey)}
-                </p>
-                <p className="font-body text-[13px] leading-[150%] text-[#6b7280]">
-                  {t(f.descKey)}
-                </p>
+              <div className="flex-1 pt-0.5">
+                <h3 className="text-foreground mb-[6px] font-sans text-[16px] font-semibold leading-normal">
+                  {f.title}
+                </h3>
+                <p className="font-body text-muted text-[13px] leading-[1.5]">{f.desc}</p>
               </div>
             </div>
           ))}

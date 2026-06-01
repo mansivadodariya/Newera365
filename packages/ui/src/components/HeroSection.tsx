@@ -11,11 +11,11 @@ export function HeroSection() {
   const { resolvedTheme } = useTheme();
 
   return (
-    <section className="dark:bg-background bg-white px-5 pb-7 pt-9 xl:pb-0 xl:pt-16">
-      <div className="mx-auto flex max-w-[390px] flex-col gap-[18px] md:max-w-2xl xl:max-w-[1200px] xl:flex-row xl:items-center xl:gap-16">
+    <section className="bg-background rounded-b-[32px] px-5 pb-7 pt-9 xl:pb-0 xl:pt-16">
+      <div className="mx-auto flex max-w-[390px] flex-col gap-[18px] md:max-w-2xl xl:max-w-[1200px] xl:flex-row xl:items-start xl:gap-16">
         {/* Left col: headline + subtitle + CTAs */}
-        <div className="flex flex-col gap-[18px] xl:w-[516px] xl:flex-shrink-0">
-          <h1 className="text-foreground font-sans text-[44px] font-semibold leading-[102%] tracking-[-1.54px] xl:text-[52px] xl:tracking-[-2px]">
+        <div className="flex flex-col gap-[18px] xl:w-[516px] xl:flex-shrink-0 xl:pb-16 xl:pt-4">
+          <h1 className="text-foreground font-sans text-[44px] font-semibold leading-[1.02] tracking-[-1.54px] xl:text-[52px] xl:tracking-[-2px]">
             {t('heroLine1')} <span className="text-accent">{t('heroPremium')}</span>{' '}
             {t('heroLine2')}
           </h1>
@@ -27,22 +27,16 @@ export function HeroSection() {
           <div className="flex gap-[10px]">
             <Link
               href={`/${locale}/register`}
-              className="bg-accent font-body hover:bg-accent-hover flex flex-1 items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors xl:flex-none"
+              className="bg-accent font-body hover:bg-accent-hover flex flex-1 items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium tracking-[-0.075px] text-white transition-colors xl:flex-none"
             >
               {t('heroCTALive')}
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M3 8h10M9 4l4 4-4 4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </Link>
             <Link
               href={`/${locale}/demo-account`}
-              className="text-foreground font-body flex flex-1 items-center justify-center px-[22px] py-4 text-[15px] font-medium transition-opacity hover:opacity-70 xl:flex-none"
+              className="text-foreground font-body flex flex-1 items-center justify-center px-[22px] py-4 text-[15px] font-medium tracking-[-0.075px] transition-opacity hover:opacity-70 xl:flex-none"
             >
               {t('heroCTADemo')}
             </Link>
@@ -50,8 +44,8 @@ export function HeroSection() {
         </div>
 
         {/* Right col / bottom on mobile: chart card */}
-        <div className="overflow-hidden rounded-[24px] bg-[#0E1116] xl:min-w-0 xl:flex-1">
-          {/* TradingView chart */}
+        <div className="overflow-hidden rounded-[24px] bg-gradient-to-b from-[#fafaf9] to-[#f4f4f3] dark:from-[#07090d] dark:to-[#07090d] xl:min-w-0 xl:flex-1">
+          {/* Trading screen photo */}
           <div className="relative w-full" style={{ aspectRatio: '620/342' }}>
             <TradingViewWidget
               type="advanced-chart"
@@ -70,15 +64,15 @@ export function HeroSection() {
             />
           </div>
 
-          {/* Specs row */}
-          <div className="grid grid-cols-3 border-t border-white/10 pb-[12px] pt-[12px]">
+          {/* Specs row — white bg, grey labels, dark values */}
+          <div className="bg-background grid grid-cols-3 divide-x divide-border py-3 dark:divide-[#1a1c22]">
             {[
               { label: t('heroSpreadLabel'), value: t('heroSpreadValue') },
               { label: t('heroLeverageLabel'), value: t('heroLeverageValue') },
               { label: t('heroExecutionLabel'), value: t('heroExecutionValue') },
             ].map((spec) => (
-              <div key={spec.label} className="flex flex-col items-center gap-[2px]">
-                <span className="font-mono text-[9px] font-normal uppercase leading-[100%] tracking-[0.15em] text-white/60">
+              <div key={spec.label} className="flex flex-col items-start gap-[2px] px-[14px] py-[6px]">
+                <span className="font-mono text-[9px] font-normal uppercase leading-none tracking-[1.35px] text-muted">
                   {spec.label}
                 </span>
                 <span className="font-sans text-[14px] font-semibold text-white">{spec.value}</span>

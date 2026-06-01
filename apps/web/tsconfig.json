@@ -11,7 +11,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@newera365/ui": ["../../packages/ui/src/index.ts"],
+      "@newera365/ui/*": ["../../packages/ui/src/*"],
+      "@newera365/types": ["../../packages/types/src/index.ts"],
+      "@newera365/types/*": ["../../packages/types/src/*"]
     },
     "allowJs": true
   },

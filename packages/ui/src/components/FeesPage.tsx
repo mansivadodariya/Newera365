@@ -64,7 +64,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             <span className="text-foreground">No fine print.</span>
@@ -79,53 +79,40 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       </section>
 
       {/* Spreads table */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             LIVE SPREADS · PIP
           </SectionKicker>
 
           <div className="overflow-hidden rounded-[18px] bg-black">
             {/* Header */}
-            <div className="grid grid-cols-[1fr_56px_56px_56px] border-b border-white/10">
-              {['INSTRUMENT', 'RAW', 'STD', 'VIP'].map((h, i) => (
-                <div
+            <div className="grid grid-cols-[1fr_60px_60px_60px] px-4 py-3">
+              <span className="text-muted font-mono text-[9px] tracking-[1.08px]">INSTRUMENT</span>
+              {['RAW', 'STD', 'VIP'].map((h) => (
+                <span
                   key={h}
-                  className={`flex items-center py-3 ${i === 0 ? 'px-4' : 'justify-center'}`}
+                  className="text-muted text-right font-mono text-[9px] tracking-[1.08px]"
                 >
-                  <span className="font-body text-[10px] uppercase tracking-[0.1em] text-[#6b7280]">
-                    {h}
-                  </span>
-                </div>
+                  {h}
+                </span>
               ))}
             </div>
 
             {/* Data rows */}
-            {displaySpreads.map((row, i) => (
+            {SPREADS.map((row) => (
               <div
                 key={row.instrument}
-                className={`grid grid-cols-[1fr_56px_56px_56px] ${i < displaySpreads.length - 1 ? 'border-b border-white/10' : ''}`}
+                className="grid grid-cols-[1fr_60px_60px_60px] px-4 py-[14px]"
               >
-                <div className="px-4 py-[13px]">
-                  <span className="font-body text-[13px] font-medium leading-[100%] tracking-normal text-white">
-                    {row.instrument}
-                  </span>
-                </div>
-                <div className="flex items-center justify-center py-[13px]">
-                  <span className="text-accent font-mono text-[13px] font-medium leading-[100%] tracking-[0%]">
-                    {row.raw}
-                  </span>
-                </div>
-                <div className="flex items-center justify-center py-[13px]">
-                  <span className="font-mono text-[13px] font-medium leading-[100%] tracking-[0%] text-white">
-                    {row.std}
-                  </span>
-                </div>
-                <div className="flex items-center justify-center py-[13px]">
-                  <span className="font-mono text-[13px] font-medium leading-[100%] tracking-[0%] text-white">
-                    {row.vip}
-                  </span>
-                </div>
+                <span className="font-body text-[13px] font-medium text-white">
+                  {row.instrument}
+                </span>
+                <span className="text-accent text-right font-mono text-[13px] font-medium">
+                  {row.raw}
+                </span>
+                <span className="text-right font-mono text-[13px] text-white">{row.std}</span>
+                <span className="text-right font-mono text-[13px] text-white">{row.vip}</span>
               </div>
             ))}
           </div>
@@ -133,37 +120,35 @@ export function FeesPage({ spreadData }: FeesPageProps) {
           {/* View all link */}
           <Link
             href={`/${locale}/markets/instruments`}
-            className="dark:bg-surface mt-3 flex items-center justify-center rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
+            className="bg-surface dark:hover:bg-surface-elevated mt-3 flex items-center justify-center gap-2 rounded-[14px] px-4 py-[14px] transition-colors hover:bg-[#f0f0ee]"
           >
             <span className="font-body text-foreground text-[13px] font-medium">
               View all 200+ instruments
             </span>
-            <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M3 8h10M9 4l4 4-4 4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path
+                d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </Link>
         </div>
       </section>
 
       {/* Other Charges */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             OTHER CHARGES
           </SectionKicker>
           <div className="flex flex-col gap-[10px]">
             {OTHER_CHARGES.map((charge) => (
               <div
                 key={charge.label}
-                className="dark:bg-surface flex items-center justify-between gap-4 rounded-[14px] bg-[#FAFAF9] px-4 py-4"
+                className="bg-surface dark:bg-surface flex h-[68px] items-center justify-between rounded-[14px] px-4 py-4"
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-foreground mb-[3px] font-sans text-[14px] font-semibold">
@@ -172,7 +157,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                   <p className="font-body text-muted text-[12px] leading-snug">{charge.desc}</p>
                 </div>
                 <span
-                  className={`flex-shrink-0 font-sans text-[13px] font-semibold ${charge.green ? 'text-accent' : 'text-foreground'}`}
+                  className={`flex-shrink-0 font-sans text-[16px] font-semibold ${charge.green ? 'text-accent' : 'text-foreground'}`}
                 >
                   {charge.value}
                 </span>
@@ -188,12 +173,12 @@ export function FeesPage({ spreadData }: FeesPageProps) {
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/60 [&>span:last-child]:text-white/60">
             TRANSPARENT · ALWAYS
           </SectionKicker>
-          <h2 className="mb-5 font-sans text-[32px] font-semibold leading-[1.15] text-white">
+          <h2 className="mb-4 font-sans text-[26px] font-semibold leading-[1.1] tracking-[-0.52px] text-white">
             No surprise charges.
             <br />
-            <span className="text-white">Ever.</span>
+            Ever.
           </h2>
-          <p className="font-body max-w-[300px] text-[14px] leading-relaxed text-white/60">
+          <p className="font-body max-w-[300px] text-[13.5px] leading-[1.55] text-white/60">
             Every fee is published here. If we ever change something, we tell you 30 days ahead, in
             plain English.
           </p>

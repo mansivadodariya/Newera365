@@ -80,19 +80,25 @@ interface SectionProps {
 function Section({ id, title, children }: SectionProps) {
   return (
     <section id={id} className="flex flex-col gap-3">
-      <h2 className="text-foreground font-sans text-[20px] font-semibold">{title}</h2>
+      <h2 className="text-foreground font-sans text-[24px] font-semibold tracking-[-0.48px]">
+        {title}
+      </h2>
       {children}
     </section>
   );
 }
 
 function Para({ children }: { children: React.ReactNode }) {
-  return <p className="font-body text-foreground text-[14px] leading-[1.75]">{children}</p>;
+  return (
+    <p className="font-body text-[15px] leading-[1.8] text-[rgba(17,17,17,0.85)] dark:text-white/85">
+      {children}
+    </p>
+  );
 }
 
 function RiskBox({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex gap-3 rounded-[14px] bg-[#FFF7ED] p-4 dark:bg-[#2a1a00]">
+    <div className="flex gap-3 rounded-[14px] bg-[#fef3f2] p-4 dark:bg-[#2a1a00]">
       <svg
         className="mt-0.5 flex-shrink-0 text-[#F59E0B]"
         width="14"
@@ -108,7 +114,7 @@ function RiskBox({ children }: { children: React.ReactNode }) {
         />
         <path d="M8 6v4M8 11.5v.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
-      <p className="font-body text-[12px] leading-[1.6] text-[#92400E] dark:text-[#F59E0B]/80">
+      <p className="font-body text-[12px] leading-[1.6] text-[#7f1d1d] dark:text-[#F59E0B]/80">
         {children}
       </p>
     </div>
@@ -118,7 +124,7 @@ function RiskBox({ children }: { children: React.ReactNode }) {
 const DOC_CONTENT: Record<DocId, React.ReactNode> = {
   terms: (
     <>
-      <p className="text-muted font-mono text-[11px] uppercase tracking-[0.1em]">
+      <p className="text-muted font-mono text-[11px] tracking-[1.54px]">
         Effective Jan 2024 · Updated 26 May 2025
       </p>
       <Section id="section-1" title="1. Introduction">
@@ -152,7 +158,7 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
               def: 'means the funds required as a deposit to open and maintain a leveraged position.',
             },
           ].map((item) => (
-            <div key={item.term} className="rounded-[12px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
+            <div key={item.term} className="bg-surface rounded-[12px] p-4">
               <span className="font-body text-foreground text-[13px] font-semibold">
                 {item.term}
               </span>
@@ -193,7 +199,7 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
   ),
   privacy: (
     <>
-      <p className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">
+      <p className="text-muted font-mono text-[11px] tracking-[1.54px]">
         Effective Jan 2024 · Updated 26 May 2025
       </p>
       <Section id="section-1" title="1. Data we collect">
@@ -228,14 +234,14 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
   ),
   risk: (
     <>
-      <p className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">
+      <p className="text-muted font-mono text-[11px] tracking-[1.54px]">
         Effective Jan 2024 · Updated 26 May 2025
       </p>
-      <div className="rounded-[14px] bg-[#FFF7ED] p-5 dark:bg-[#2a1a00]">
-        <p className="font-body text-[14px] font-semibold text-[#92400E] dark:text-[#F59E0B]">
+      <div className="rounded-[14px] bg-[#fef3f2] p-5 dark:bg-[#2a1a00]">
+        <p className="font-body text-[14px] font-semibold text-[#7f1d1d] dark:text-[#F59E0B]">
           Important: Trading involves significant risk
         </p>
-        <p className="font-body mt-2 text-[13px] leading-[1.65] text-[#92400E] dark:text-[#F59E0B]/80">
+        <p className="font-body mt-2 text-[13px] leading-[1.65] text-[#7f1d1d] dark:text-[#F59E0B]/80">
           CFDs are complex instruments and come with a high risk of losing money rapidly due to
           leverage. You should consider whether you understand how CFDs work and whether you can
           afford to take the high risk of losing your money.
@@ -266,7 +272,7 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
   ),
   aml: (
     <>
-      <p className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">
+      <p className="text-muted font-mono text-[11px] tracking-[1.54px]">
         Effective Jan 2024 · Updated 26 May 2025
       </p>
       <Section id="section-1" title="1. Policy scope">
@@ -287,7 +293,7 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
   ),
   cookies: (
     <>
-      <p className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">
+      <p className="text-muted font-mono text-[11px] tracking-[1.54px]">
         Effective Jan 2024 · Updated 26 May 2025
       </p>
       <Section id="section-1" title="1. What are cookies">
@@ -310,7 +316,7 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
             },
             { type: 'Marketing', desc: 'Used to deliver relevant advertising. Can be opted out.' },
           ].map((c) => (
-            <div key={c.type} className="rounded-[12px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
+            <div key={c.type} className="bg-surface rounded-[12px] p-4">
               <p className="font-body text-foreground text-[13px] font-semibold">{c.type}</p>
               <p className="font-body text-muted mt-0.5 text-[12px]">{c.desc}</p>
             </div>
@@ -337,9 +343,9 @@ export function LegalPage({ documents }: LegalPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
+      <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground font-sans text-[36px] font-semibold leading-[1.08] tracking-[-1.08px]">
             Terms &amp;
             <br />
             <span className="text-accent">Conditions.</span>
@@ -351,7 +357,7 @@ export function LegalPage({ documents }: LegalPageProps) {
       </section>
 
       {/* Document selector */}
-      <section className="dark:bg-background bg-white px-5 pb-4">
+      <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
             {(cmsDocList ?? DOCUMENTS).map((doc) => (
@@ -361,7 +367,7 @@ export function LegalPage({ documents }: LegalPageProps) {
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-medium transition-colors ${
                   activeDoc === doc.id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'text-muted bg-[#F2F2F4] hover:bg-[#e5e5e5] dark:bg-[#2a2a2a] dark:hover:bg-[#3a3a3a]'
+                    : 'text-muted dark:bg-surface-elevated dark:hover:bg-surface-elevated bg-[#F2F2F4] hover:bg-[#e5e5e5]'
                 }`}
               >
                 {doc.label}
@@ -371,65 +377,29 @@ export function LegalPage({ documents }: LegalPageProps) {
         </div>
       </section>
 
-      {/* TOC + Document body — stacked on mobile, 2-column on xl */}
-      <section className="dark:bg-background bg-white px-5 pb-12">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:max-w-[1200px] xl:flex-row xl:items-start xl:gap-10">
-          {/* Table of Contents */}
-          <div className="mb-6 xl:sticky xl:top-[88px] xl:mb-0 xl:w-[280px] xl:flex-shrink-0">
-            <div className="rounded-[16px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
-              <p className="font-body text-muted mb-3 text-[10px] uppercase tracking-[0.1em]">
-                Contents
-              </p>
-              <div className="flex flex-col gap-2">
-                {hasCms
-                  ? extractHeadings(documents.find((d) => d.pageType === activeDoc)?.body).map(
-                      (h, idx) => (
-                        <a
-                          key={h.id}
-                          href={`#${h.id}`}
-                          className="font-body text-foreground hover:text-accent flex items-center gap-3 text-[13px] transition-colors"
-                        >
-                          <span className="text-muted w-5">{idx + 1}.</span>
-                          {h.text}
-                        </a>
-                      ),
-                    )
-                  : (TOC[activeDoc as DocId] ?? []).map((item) => (
-                      <a
-                        key={item.num}
-                        href={`#section-${item.num}`}
-                        className="font-body text-foreground hover:text-accent flex items-center gap-3 text-[13px] transition-colors"
-                      >
-                        <span className="text-muted w-5">{item.num}.</span>
-                        {item.title}
-                      </a>
-                    ))}
-              </div>
+      {/* Table of Contents */}
+      <section className="bg-background px-5 pb-4">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="bg-surface rounded-[14px] p-4">
+            <p className="text-muted mb-3 font-mono text-[10px] tracking-[1.4px]">Contents</p>
+            <div className="flex flex-col gap-2">
+              {TOC[activeDoc].map((item) => (
+                <a
+                  key={item.num}
+                  href={`#section-${item.num}`}
+                  className="font-body text-foreground/75 hover:text-accent flex items-center gap-3 text-[13px] transition-colors dark:text-white/75"
+                >
+                  <span className="text-muted w-5">{item.num}.</span>
+                  {item.title}
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Document body */}
-          <div className="flex flex-1 flex-col gap-6">
-            {hasCms
-              ? (() => {
-                  const doc = documents.find((d) => d.pageType === activeDoc);
-                  if (!doc) return null;
-                  return (
-                    <>
-                      {(doc.effectiveDate || doc.version) && (
-                        <p className="text-muted font-mono text-[11px] uppercase tracking-[0.1em]">
-                          {doc.effectiveDate
-                            ? `Effective ${new Date(doc.effectiveDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`
-                            : ''}
-                          {doc.version ? ` · ${doc.version}` : ''}
-                        </p>
-                      )}
-                      <RichText content={doc.body} />
-                    </>
-                  );
-                })()
-              : DOC_CONTENT[activeDoc as DocId]}
-          </div>
+      {/* Document body */}
+      <section className="bg-background px-5 pb-12">
+        <div className="mx-auto flex max-w-[390px] flex-col gap-6 md:max-w-2xl xl:max-w-[1200px]">
+          {DOC_CONTENT[activeDoc]}
         </div>
       </section>
 

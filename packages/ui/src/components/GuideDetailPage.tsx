@@ -97,7 +97,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
   return (
     <>
       {/* Top breadcrumb */}
-      <section className="dark:bg-background bg-white px-5 pb-0 pt-6">
+      <section className="bg-background px-5 pb-0 pt-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="text-muted flex items-center gap-2">
             <Link
@@ -138,17 +138,15 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
       </section>
 
       {/* Header */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-5">
+      <section className="bg-background px-5 pb-6 pt-5">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          {!hasCmsGuide && (
-            <span
-              className={`font-body mb-3 inline-flex rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${guide.categoryClass}`}
-            >
-              {guide.category}
-            </span>
-          )}
-          <h1 className="text-foreground mb-3 font-sans text-[30px] font-semibold leading-[1.1]">
-            {displayTitle}
+          <span
+            className={`font-body mb-3 inline-flex rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${guide.categoryClass}`}
+          >
+            {guide.category}
+          </span>
+          <h1 className="text-foreground mb-3 font-sans text-[30px] font-semibold leading-[1.1] tracking-[-0.6px]">
+            {guide.title}
           </h1>
           {!hasCmsGuide && (
             <p className="font-body text-muted mb-5 text-[14px] leading-[1.6]">{guide.subtitle}</p>
@@ -177,84 +175,62 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
         </div>
       </section>
 
-      {/* TOC + Article body — stacked on mobile, 2-column on xl */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:max-w-[1200px] xl:flex-row xl:items-start xl:gap-10">
-          {/* Sidebar TOC */}
-          {(hasCmsGuide ? cmsHeadings.length > 0 : guide.toc.length > 0) && (
-            <div className="mb-6 xl:sticky xl:top-[88px] xl:mb-0 xl:w-[260px] xl:flex-shrink-0">
-              <div className="rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
-                <p className="font-body text-muted mb-3 text-[9px] uppercase tracking-[0.12em]">
-                  TABLE OF CONTENTS
-                </p>
-                <div className="flex flex-col gap-0">
-                  {hasCmsGuide
-                    ? cmsHeadings.map((h, i) => (
-                        <a
-                          key={h.id}
-                          href={`#${h.id}`}
-                          className={`flex items-center gap-2 py-[9px] text-left ${i < cmsHeadings.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]' : ''}`}
-                        >
-                          <span className="font-body text-muted text-[10px] font-semibold">
-                            {String(i + 1).padStart(2, '0')}
-                          </span>
-                          <span className="font-body text-muted hover:text-foreground text-[13px]">
-                            {h.text}
-                          </span>
-                        </a>
-                      ))
-                    : guide.toc.map((item, i) => (
-                        <button
-                          key={item}
-                          onClick={() => setActiveSection(i)}
-                          className={`flex items-center gap-2 py-[9px] text-left ${i < guide.toc.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]' : ''}`}
-                        >
-                          <span
-                            className={`font-body text-[10px] font-semibold ${activeSection === i ? 'text-accent' : 'text-muted'}`}
-                          >
-                            {String(i + 1).padStart(2, '0')}
-                          </span>
-                          <span
-                            className={`font-body text-[13px] ${activeSection === i ? 'text-foreground font-medium' : 'text-muted'}`}
-                          >
-                            {item}
-                          </span>
-                        </button>
-                      ))}
-                </div>
+      {/* Table of contents */}
+      {guide.toc.length > 0 && (
+        <section className="bg-background px-5 pb-6">
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <div className="bg-surface rounded-[18px] p-4">
+              <p className="font-body text-muted mb-3 text-[9px] uppercase tracking-[0.12em]">
+                TABLE OF CONTENTS
+              </p>
+              <div className="flex flex-col gap-0">
+                {guide.toc.map((item, i) => (
+                  <button
+                    key={item}
+                    onClick={() => setActiveSection(i)}
+                    className={`flex items-center gap-2 py-[9px] text-left ${i < guide.toc.length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
+                  >
+                    <span
+                      className={`font-body text-[10px] font-semibold ${activeSection === i ? 'text-accent' : 'text-muted'}`}
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span
+                      className={`font-body text-[13px] ${activeSection === i ? 'text-foreground font-medium' : 'text-muted'}`}
+                    >
+                      {item}
+                    </span>
+                  </button>
+                ))}
               </div>
             </div>
           )}
 
-          {/* Article body */}
-          <div className="xl:max-w-[900px] xl:flex-1">
-            {hasCmsGuide ? (
-              <RichText content={cmsGuide.body} />
-            ) : (
-              <div className="flex flex-col gap-8">
-                {guide.sections.map((section, i) => (
-                  <div key={section.heading}>
-                    <h2 className="text-foreground mb-3 font-sans text-[20px] font-semibold leading-[1.2]">
-                      {section.heading}
-                    </h2>
-                    {section.body.split('\n\n').map((para, j) => (
-                      <p
-                        key={j}
-                        className="font-body text-foreground mb-4 text-[14px] leading-[1.7] opacity-80"
-                      >
-                        {para}
-                      </p>
-                    ))}
-                    {section.insight && (
-                      <div className="border-accent bg-accent/5 dark:bg-accent/10 rounded-r-[14px] border-l-[3px] p-4">
-                        <p className="font-body text-accent mb-1 text-[9px] uppercase tracking-[0.12em]">
-                          THE KEY INSIGHT
-                        </p>
-                        <p className="font-body text-foreground text-[13px] leading-[1.6]">
-                          {section.insight}
-                        </p>
-                      </div>
-                    )}
+      {/* Article body */}
+      <section className="bg-background px-5 pb-10">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="flex flex-col gap-8">
+            {guide.sections.map((section, i) => (
+              <div key={section.heading}>
+                <h2 className="text-foreground mb-3 font-sans text-[20px] font-semibold leading-[1.2]">
+                  {section.heading}
+                </h2>
+                {section.body.split('\n\n').map((para, j) => (
+                  <p
+                    key={j}
+                    className="font-body text-foreground mb-4 text-[14px] leading-[1.7] opacity-80"
+                  >
+                    {para}
+                  </p>
+                ))}
+                {section.insight && (
+                  <div className="border-accent bg-accent/5 dark:bg-accent/10 rounded-r-[14px] border-l-[3px] p-4">
+                    <p className="font-body text-accent mb-1 text-[9px] uppercase tracking-[0.12em]">
+                      THE KEY INSIGHT
+                    </p>
+                    <p className="font-body text-foreground text-[13px] leading-[1.6]">
+                      {section.insight}
+                    </p>
                   </div>
                 ))}
               </div>

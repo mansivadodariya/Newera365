@@ -318,10 +318,10 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
+      <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">TRADING DICTIONARY</SectionKicker>
-          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
             Trading
             <br />
             glossary.
@@ -350,7 +350,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                 setSearch(e.target.value);
                 setActiveLetter(null);
               }}
-              className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-full bg-[#f9f9f9] py-3 pl-10 pr-4 text-[14px] font-medium outline-none dark:bg-[#1c1c1c]"
+              className="border-border font-body text-foreground placeholder-muted focus:border-accent bg-surface w-full rounded-[14px] px-4 py-[14px] text-[14px] outline-none"
             />
             {search && (
               <button
@@ -372,7 +372,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
       </section>
 
       {/* Category filter pills */}
-      <section className="dark:bg-background bg-white px-5 pb-3">
+      <section className="bg-background px-5 pb-3">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-1.5 overflow-x-auto pb-1">
             <button
@@ -383,7 +383,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
               className={`font-body flex-shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
                 !activeCategory
                   ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                  : 'hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-[#1e1e1e] dark:text-[#9ca3af]'
+                  : 'hover:text-foreground dark:bg-surface dark:text-muted bg-[#f0f0f0] text-[#6b7280]'
               }`}
             >
               All
@@ -395,7 +395,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                 className={`font-body flex-shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
                   activeCategory === cat
                     ? colorClass
-                    : 'hover:text-foreground dark:hover:text-foreground bg-[#f0f0f0] text-[#6b7280] dark:bg-[#1e1e1e] dark:text-[#9ca3af]'
+                    : 'hover:text-foreground dark:hover:text-foreground dark:bg-surface dark:text-muted bg-[#f0f0f0] text-[#6b7280]'
                 }`}
               >
                 {cat}
@@ -406,7 +406,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
       </section>
 
       {/* Alphabet filter */}
-      <section className="dark:bg-background bg-white px-5 pb-4">
+      <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-1 overflow-x-auto">
             {ALPHABET.map((letter) => {
@@ -434,7 +434,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
       </section>
 
       {/* Terms list */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5">
             {activeCategory
@@ -456,14 +456,14 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                 return (
                   <div key={term.term}>
                     {showLetter && (
-                      <div className="dark:bg-background sticky top-16 z-10 bg-white py-2">
+                      <div className="bg-background sticky top-16 z-10 py-2">
                         <span className="text-accent font-sans text-[11px] font-semibold uppercase tracking-[0.1em]">
                           {term.term[0]?.toUpperCase() ?? ''}
                         </span>
                       </div>
                     )}
                     <div
-                      className={`py-4 ${i < filtered.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#2a2a2a]' : ''}`}
+                      className={`py-4 ${i < filtered.length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
                     >
                       <div className="mb-1.5 flex items-center justify-between gap-2">
                         <span className="text-foreground font-sans text-[15px] font-semibold">

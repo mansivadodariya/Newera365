@@ -54,21 +54,21 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-7 pt-9">
+      <section className="bg-background px-5 pb-7 pt-9">
         <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl xl:max-w-[1200px]">
           <span>
-            <h1 className="text-foreground whitespace-pre-line font-sans text-[40px] font-semibold leading-[105%] tracking-[-0.03em] text-[#111111]">
+            <h1 className="text-foreground whitespace-pre-line font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
               {'Every market.\n'}
             </h1>
-            <h1 className="whitespace-pre-line font-sans text-[40px] font-semibold leading-[105%] tracking-[-0.03em] text-[#00B050]">
+            <h1 className="text-accent whitespace-pre-line font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
               {'One terminal.'}
             </h1>
           </span>
-          <p className="font-body max-w-[310px] text-[14px] font-normal leading-[155%] tracking-[0] text-[#6B7280]">
+          <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
             Real-time spreads across forex, indices, commodities, stocks, ETFs and crypto.
           </p>
           {/* Search bar */}
-          <div className="dark:bg-surface flex h-[46px] items-center gap-3 rounded-[16px] bg-[#FAFAF9] px-4">
+          <div className="bg-surface flex h-[46px] items-center gap-3 rounded-[16px] px-4">
             <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
               <circle cx="9" cy="9" r="6.5" stroke="#9ca3af" strokeWidth="1.5" />
               <path d="M14 14l3.5 3.5" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round" />
@@ -76,7 +76,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
             <span className="font-body flex-1 text-[14px] font-medium text-[#6B7280]">
               Search instruments…
             </span>
-            <span className="font-body text-muted flex-shrink-0 rounded-[6px] bg-[#f2f2f4] px-2 py-[3px] text-[11px] dark:bg-[#2a2a2a]">
+            <span className="font-body text-muted dark:bg-surface-elevated flex-shrink-0 rounded-[6px] bg-[#f2f2f4] px-2 py-[3px] text-[11px]">
               ⌘ K
             </span>
           </div>
@@ -84,34 +84,32 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
       </section>
 
       {/* Category nav strip */}
-      <section className="dark:bg-background mx-auto bg-white px-5 pb-4">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div
-            className="scrollbar-hide flex gap-[8px] overflow-x-auto xl:flex-wrap xl:overflow-x-visible"
-            style={{ scrollPaddingLeft: '20px' }}
-          >
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[13px] font-medium transition-colors ${
-                  activeCategory === cat
-                    ? 'bg-foreground text-background'
-                    : 'text-foreground bg-[#f2f2f4] hover:bg-[#e5e5e5] dark:bg-[#1c1c1c] dark:hover:bg-[#2a2a2a]'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+      <section className="bg-background mx-auto px-5 pb-4">
+        <div
+          className="scrollbar-hide flex gap-[8px] overflow-x-auto"
+          style={{ scrollPaddingLeft: '20px' }}
+        >
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`font-body flex-shrink-0 rounded-full px-4 py-[10px] text-[13px] font-medium transition-colors ${
+                activeCategory === cat
+                  ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                  : 'text-foreground dark:bg-surface-elevated dark:hover:bg-surface bg-[#f2f2f4] hover:bg-[#e5e5e5]'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
       </section>
 
       {/* Instrument list */}
-      <section className="dark:bg-background bg-white px-5 pb-6">
+      <section className="bg-background px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="mb-4 flex items-center justify-between xl:mb-5">
-            <SectionKicker className="text-mono text-[10px] font-medium leading-[100%] tracking-[0.18em] text-[#6B7280]">
+          <div className="mb-4 flex items-center justify-between">
+            <SectionKicker className="[&>span:first-child]:bg-muted text-muted">
               {hasCmsData
                 ? `${activeCategory.toUpperCase()} · ${cmsRows.length} INSTRUMENTS`
                 : 'LIVE SPREADS · 8 OF 70'}
@@ -131,7 +129,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
           </div>
 
           {/* View all button */}
-          <button className="dark:bg-surface mt-3 flex w-full items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]">
+          <button className="bg-surface dark:hover:bg-surface-elevated mt-3 flex w-full items-center justify-between rounded-[14px] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee]">
             <span className="font-body text-foreground text-[13px] font-medium">
               {hasCmsData
                 ? `View all ${cmsRows.length} ${activeCategory.toLowerCase()} instruments`
@@ -375,12 +373,12 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
       </section>
 
       {/* Other markets */}
-      <section className="dark:bg-background bg-white px-5 pb-12 pt-10">
+      <section className="bg-background px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 font-mono text-[10px] font-medium leading-[100%] tracking-[0.18em] text-[#6B7280]">
             OTHER MARKETS
           </SectionKicker>
-          <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.025em]">
+          <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.8px]">
             Diversify across asset classes.
           </h2>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
@@ -388,7 +386,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
               <Link
                 key={market}
                 href={`/${locale}/markets/${market.toLowerCase()}`}
-                className="dark:bg-surface flex items-center justify-between rounded-[18px] bg-[#FAFAF9] px-5 py-4 transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
+                className="dark:bg-surface bg-surface dark:hover:bg-surface-elevated flex items-center justify-between rounded-[18px] px-5 py-4 transition-colors hover:bg-[#f0f0ee]"
               >
                 <div>
                   <p className="text-foreground font-sans text-[15px] font-semibold">{market}</p>

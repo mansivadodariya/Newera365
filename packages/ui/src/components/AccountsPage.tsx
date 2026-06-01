@@ -4,6 +4,14 @@ import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
+interface CmsAccountOverride {
+  name: string;
+  minDeposit: number;
+  spreadFrom: string;
+  leverage: string;
+  commission?: string | null;
+}
+
 const CHECK = (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-label="Yes">
     <path
@@ -28,12 +36,12 @@ const ACCOUNTS = [
     pricingValue: 'No commission',
     cardBg: 'bg-white dark:bg-surface-elevated',
     headTextColor: 'text-[#111111] dark:text-white',
-    descColor: 'text-[#6b7280] dark:text-[#9ca3af]',
-    pricingLabelColor: 'text-[#6b7280] dark:text-[#9ca3af]',
+    descColor: 'text-[#6b7280] dark:text-muted',
+    pricingLabelColor: 'text-[#6b7280] dark:text-muted',
     pricingValueColor: 'text-[#111111] dark:text-white',
-    rowsContainerBg: 'bg-[#111111] dark:bg-[#2a2a2a]',
-    rowBg: 'bg-[#FAFAF9] dark:bg-[#1c1c1c]',
-    rowLabelColor: 'text-[#6b7280] dark:text-[#9ca3af]',
+    rowsContainerBg: 'bg-[#111111] dark:bg-surface-elevated',
+    rowBg: 'bg-[#FAFAF9] dark:bg-surface',
+    rowLabelColor: 'text-[#6b7280] dark:text-muted',
     rowValueColor: 'text-[#111111] dark:text-white',
     ctaBg: 'bg-[#111111] dark:bg-white text-white dark:text-[#111111]',
     ctaLabel: 'Open Standard',
@@ -59,7 +67,7 @@ const ACCOUNTS = [
     descColor: 'text-white/60',
     pricingLabelColor: 'text-white/50',
     pricingValueColor: 'text-accent',
-    rowsContainerBg: 'bg-white dark:bg-[#2a2a2a]',
+    rowsContainerBg: 'bg-white dark:bg-surface-elevated',
     rowBg: 'bg-[#111111]',
     rowLabelColor: 'text-white/60',
     rowValueColor: 'text-white',
@@ -84,12 +92,12 @@ const ACCOUNTS = [
     pricingValue: 'From $1.50 / lot',
     cardBg: 'bg-white dark:bg-surface-elevated',
     headTextColor: 'text-[#111111] dark:text-white',
-    descColor: 'text-[#6b7280] dark:text-[#9ca3af]',
-    pricingLabelColor: 'text-[#6b7280] dark:text-[#9ca3af]',
+    descColor: 'text-[#6b7280] dark:text-muted',
+    pricingLabelColor: 'text-[#6b7280] dark:text-muted',
     pricingValueColor: 'text-[#111111] dark:text-white',
-    rowsContainerBg: 'bg-[#111111] dark:bg-[#2a2a2a]',
-    rowBg: 'bg-[#FAFAF9] dark:bg-[#1c1c1c]',
-    rowLabelColor: 'text-[#6b7280] dark:text-[#9ca3af]',
+    rowsContainerBg: 'bg-[#111111] dark:bg-surface-elevated',
+    rowBg: 'bg-[#FAFAF9] dark:bg-surface',
+    rowLabelColor: 'text-[#6b7280] dark:text-muted',
     rowValueColor: 'text-[#111111] dark:text-white',
     ctaBg: 'bg-[#111111] dark:bg-white text-white dark:text-[#111111]',
     ctaLabel: 'Open VIP',
@@ -116,62 +124,11 @@ const MATRIX_ROWS: { feature: string; std: boolean; raw: boolean; vip: boolean }
   { feature: 'Custom spreads', std: false, raw: false, vip: true },
 ];
 
-export interface CmsAccountTypeItem {
-  id: number;
-  name: string;
-  minDeposit: number;
-  spreadFrom: string;
-  leverage: string;
-  commission?: string | null;
-  features?: { value: string; id?: string | null }[] | null;
-  isPopular?: boolean | null;
-  sortOrder?: number | null;
-}
-
-const CARD_THEMES = [
-  {
-    cardBg: 'bg-white dark:bg-surface-elevated',
-    headTextColor: 'text-[#111111] dark:text-white',
-    descColor: 'text-[#6b7280] dark:text-[#9ca3af]',
-    pricingLabelColor: 'text-[#6b7280] dark:text-[#9ca3af]',
-    pricingValueColor: 'text-[#111111] dark:text-white',
-    rowsContainerBg: 'bg-[#111111] dark:bg-[#2a2a2a]',
-    rowBg: 'bg-[#FAFAF9] dark:bg-[#1c1c1c]',
-    rowLabelColor: 'text-[#6b7280] dark:text-[#9ca3af]',
-    rowValueColor: 'text-[#111111] dark:text-white',
-    ctaBg: 'bg-[#111111] dark:bg-white text-white dark:text-[#111111]',
-  },
-  {
-    cardBg: 'bg-[#111111]',
-    headTextColor: 'text-white',
-    descColor: 'text-white/60',
-    pricingLabelColor: 'text-white/60',
-    pricingValueColor: 'text-white',
-    rowsContainerBg: 'bg-white/[0.07]',
-    rowBg: 'bg-[#1a1a1a]',
-    rowLabelColor: 'text-white/60',
-    rowValueColor: 'text-white',
-    ctaBg: 'bg-accent text-white',
-  },
-  {
-    cardBg: 'bg-gradient-to-b from-[#0d2b1a] to-[#0a1a10]',
-    headTextColor: 'text-white',
-    descColor: 'text-white/60',
-    pricingLabelColor: 'text-white/60',
-    pricingValueColor: 'text-white',
-    rowsContainerBg: 'bg-white/[0.07]',
-    rowBg: 'bg-[#0d2b1a]',
-    rowLabelColor: 'text-white/60',
-    rowValueColor: 'text-white',
-    ctaBg: 'bg-accent text-white',
-  },
-] as const;
-
 interface AccountsPageProps {
-  accounts?: CmsAccountTypeItem[];
+  cmsAccounts?: CmsAccountOverride[];
 }
 
-export function AccountsPage({ accounts: cmsAccounts }: AccountsPageProps) {
+export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
   const locale = useLocale();
 
   const displayAccounts =
@@ -200,7 +157,7 @@ export function AccountsPage({ accounts: cmsAccounts }: AccountsPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             Choose the
@@ -216,25 +173,37 @@ export function AccountsPage({ accounts: cmsAccounts }: AccountsPageProps) {
         </div>
       </section>
 
-      {/* Cards — horizontal scroll snap on mobile, 3-column grid on xl */}
-      <section className="dark:bg-background bg-white pb-10">
-        <div className="mx-auto xl:max-w-[1200px] xl:px-5">
-          <div
-            className="scrollbar-hide flex snap-x snap-mandatory gap-[14px] overflow-x-auto px-5 pb-2 xl:grid xl:grid-cols-3 xl:overflow-visible xl:px-0 xl:pb-0"
-            style={{ scrollPaddingLeft: '20px' }}
-          >
-            {displayAccounts.map((account) => (
+      {/* Cards — horizontal scroll snap */}
+      <section className="bg-background pb-10">
+        <div
+          className="scrollbar-hide flex snap-x snap-mandatory gap-[14px] overflow-x-auto px-5 pb-2"
+          style={{ scrollPaddingLeft: '20px' }}
+        >
+          {ACCOUNTS.map((account) => {
+            const cms = cmsAccounts?.find(
+              (a) => a.name.toLowerCase() === account.name.toLowerCase(),
+            );
+            const rows = cms
+              ? [
+                  { label: 'Min deposit', value: `$${cms.minDeposit.toLocaleString('en-US')}` },
+                  { label: 'Spread from', value: cms.spreadFrom },
+                  { label: 'Commission', value: cms.commission ?? 'None' },
+                  { label: 'Leverage', value: cms.leverage },
+                  ...account.rows.slice(4),
+                ]
+              : account.rows;
+            const pricingValue = cms?.commission ?? account.pricingValue;
+            return (
               <div
                 key={account.id}
-                className={`flex w-[350px] flex-shrink-0 snap-start flex-col gap-[18px] rounded-[24px] p-6 xl:w-auto xl:flex-1 xl:flex-none xl:snap-none ${account.cardBg}`}
-                style={{ boxShadow: '0 2px 24px rgba(0,0,0,0.08)' }}
+                className={`shadow-card dark:shadow-card-dark flex w-[350px] flex-shrink-0 snap-start flex-col gap-[18px] rounded-[24px] p-6 ${account.cardBg}`}
               >
                 {/* Head */}
                 <div className="flex items-center justify-between">
                   <span className={`font-sans text-[20px] font-semibold ${account.headTextColor}`}>
                     {account.name}
                   </span>
-                  <span className="bg-accent font-body rounded-full px-3 py-[5px] text-[9px] font-semibold uppercase tracking-[0.12em] text-white">
+                  <span className="bg-accent/10 text-accent rounded-full px-[10px] py-[5px] font-mono text-[10px] tracking-[1.2px]">
                     {account.tag}
                   </span>
                 </div>
@@ -252,7 +221,7 @@ export function AccountsPage({ accounts: cmsAccounts }: AccountsPageProps) {
                     {account.pricingLabel}
                   </p>
                   <p className={`font-sans text-[20px] font-semibold ${account.pricingValueColor}`}>
-                    {account.pricingValue}
+                    {pricingValue}
                   </p>
                 </div>
 
@@ -260,7 +229,7 @@ export function AccountsPage({ accounts: cmsAccounts }: AccountsPageProps) {
                 <div
                   className={`flex flex-col overflow-hidden rounded-[14px] ${account.rowsContainerBg}`}
                 >
-                  {account.rows.map((row) => (
+                  {rows.map((row) => (
                     <div
                       key={row.label}
                       className={`flex items-center justify-between px-4 py-[11px] ${account.rowBg}`}
@@ -294,8 +263,8 @@ export function AccountsPage({ accounts: cmsAccounts }: AccountsPageProps) {
                   </svg>
                 </Link>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </section>
 

@@ -29,42 +29,38 @@ export function MarketsSection() {
   ] as const;
 
   return (
-    <section className="dark:bg-background bg-white px-5 pb-9 pt-10 xl:px-[120px] xl:pb-[60px] xl:pt-[60px]">
+    <section className="rounded-[32px] px-5 pb-9 pt-10 xl:pb-16 xl:pt-10" style={{ background: 'var(--gradient-markets)' }}>
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-        <SectionKicker className="mb-[14px] text-black dark:text-white">
+        <SectionKicker className="mb-[14px] text-foreground [&>span:first-child]:dark:bg-white dark:[&>span:last-child]:text-white">
           {t('marketsKicker')}
         </SectionKicker>
 
-        <h2 className="text-foreground mb-2 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px]">
+        <h2 className="text-foreground mb-3 font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px] xl:text-[36px]">
           {t('marketsHeading')}
         </h2>
-        <p className="font-body text-muted mb-[14px] text-[14px] leading-[155%]">
+        <p className="font-body text-muted mb-[14px] text-[14px] leading-[1.55]">
           {t('marketsSubheading')}
         </p>
 
-        {/* 2-col on mobile, 6-col on desktop — photo cards with dark overlay */}
-        <div className="mb-[10px] grid grid-cols-2 gap-[10px] xl:grid-cols-6">
+        {/* 2×3 asset class grid — 3 cols on desktop */}
+        <div className="mb-[14px] grid grid-cols-2 gap-[10px] xl:grid-cols-3">
           {assets.map((asset) => (
             <div
               key={asset.key}
-              className="relative h-[110px] overflow-hidden rounded-[16px] shadow-[0px_6px_18px_0px_rgba(0,0,0,0.14)]"
+              className="flex flex-col gap-[14px] rounded-[18px] bg-[rgba(224,224,224,0.38)] px-4 py-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:bg-[rgba(17,17,17,0.38)] dark:shadow-[0px_4px_16px_0px_rgba(0,0,0,0.3)]"
             >
-              {/* Background photo */}
-              <Image
-                src={ASSET_BG[asset.key]}
-                alt=""
-                fill
-                sizes="(max-width: 768px) 50vw, 17vw"
-                className="object-cover"
-              />
-              {/* Gradient overlay — heavier at bottom so text is legible */}
-              <div className="absolute inset-0 rounded-[16px] bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
-              {/* Text anchored bottom-left */}
-              <div className="absolute bottom-[14px] left-[14px]">
-                <p className="font-sans text-[16px] font-semibold leading-tight text-white">
-                  {asset.name}
-                </p>
-                <p className="font-body text-[12px] text-white/80">{asset.count}</p>
+              <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-[rgba(239,239,239,0)] dark:bg-[rgba(17,17,17,0)]">
+                <Image
+                  src={ASSET_ICON_FILES[asset.key]}
+                  alt={asset.name}
+                  width={24}
+                  height={24}
+                  className="dark:invert"
+                />
+              </div>
+              <div>
+                <p className="text-foreground font-sans text-[16px] font-semibold">{asset.name}</p>
+                <p className="font-body text-muted mt-[2px] text-[11px]">{asset.count}</p>
               </div>
             </div>
           ))}
@@ -72,18 +68,12 @@ export function MarketsSection() {
 
         {/* Full-width dark CTA pill */}
         <Link
-          href={`/${locale}/markets`}
-          className="font-body flex h-[45px] w-full items-center justify-between rounded-[16px] bg-[#111] px-[16px] text-[14px] font-medium text-white transition-opacity hover:opacity-90"
+          href={`/${locale}/markets/instruments`}
+          className="bg-foreground text-background font-body flex h-[46px] w-full items-center justify-center gap-2 rounded-[16px] text-[14px] font-medium transition-opacity hover:opacity-90 xl:w-auto xl:px-8"
         >
           {t('marketsViewAll')}
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path
-              d="M3 8h10M9 4l4 4-4 4"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </Link>
       </div>

@@ -81,7 +81,7 @@ export function ResearchDetailPage({
   return (
     <>
       {/* Breadcrumb */}
-      <section className="dark:bg-background bg-white px-5 pb-0 pt-6">
+      <section className="bg-background px-5 pb-0 pt-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="flex items-center gap-2">
             <Link
@@ -99,7 +99,7 @@ export function ResearchDetailPage({
       </section>
 
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-4">
+      <section className="bg-background px-5 pb-6 pt-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="mb-3 flex items-center gap-2">
             <span
@@ -111,8 +111,8 @@ export function ResearchDetailPage({
               {date} · {readTime} read
             </span>
           </div>
-          <h1 className="text-foreground mb-3 font-sans text-[28px] font-semibold leading-[1.15]">
-            {title}
+          <h1 className="text-foreground mb-3 font-sans text-[28px] font-semibold leading-[1.15] tracking-[-0.56px]">
+            How the new era of central bank policy is reshaping FX.
           </h1>
           <p className="font-body text-muted text-[13px]">
             By <span className="text-foreground font-medium">{author}</span> · {authorRole}
@@ -120,48 +120,39 @@ export function ResearchDetailPage({
         </div>
       </section>
 
-      {/* Chart embed (CMS) or hero chart (fallback) */}
-      {article?.chartEmbed ? (
-        <section className="dark:bg-background bg-white px-5 pb-8">
-          <div
-            className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]"
-            dangerouslySetInnerHTML={{ __html: article.chartEmbed }}
-          />
-        </section>
-      ) : !hasCmsBody ? (
-        <section className="dark:bg-background bg-white px-5 pb-8">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <div className="overflow-hidden rounded-[18px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111] p-5">
-              <svg width="100%" height="100" viewBox="0 0 300 100" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="articleGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#00B050" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#00B050" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <polygon
-                  points="0,80 40,70 80,75 120,55 160,60 200,35 240,40 280,20 300,15 300,100 0,100"
-                  fill="url(#articleGrad)"
-                />
-                <polyline
-                  points="0,80 40,70 80,75 120,55 160,60 200,35 240,40 280,20 300,15"
-                  fill="none"
-                  stroke="#00B050"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <p className="font-body mt-2 text-[9px] uppercase tracking-[0.1em] text-white/40">
-                EUR/USD · 6 month chart
-              </p>
-            </div>
+      {/* Hero chart */}
+      <section className="bg-background px-5 pb-8">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="overflow-hidden rounded-[18px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111] p-5">
+            <svg width="100%" height="100" viewBox="0 0 300 100" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="articleGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#00B050" stopOpacity="0.4" />
+                  <stop offset="100%" stopColor="#00B050" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              <polygon
+                points="0,80 40,70 80,75 120,55 160,60 200,35 240,40 280,20 300,15 300,100 0,100"
+                fill="url(#articleGrad)"
+              />
+              <polyline
+                points="0,80 40,70 80,75 120,55 160,60 200,35 240,40 280,20 300,15"
+                fill="none"
+                stroke="#00B050"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <p className="font-body mt-2 text-[9px] uppercase tracking-[0.1em] text-white/40">
+              EUR/USD · 6 month chart
+            </p>
           </div>
         </section>
       ) : null}
 
       {/* Article body */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {hasCmsBody ? (
             <RichText content={article!.body} />
@@ -177,11 +168,17 @@ export function ResearchDetailPage({
                 A three-speed central bank story.
               </h2>
 
-              <p className="font-body text-foreground text-[15px] leading-[1.7]">
-                The Fed is still in a holding pattern. The ECB has followed Growth into a tightening
-                backlash, and the BoJ is finally moving away from its two-decade-long ultra-loose
-                stance. The divergence is what matters — not the R-squared of inflation prints made
-                watchable in 2025.
+            <p className="font-body text-foreground text-[15px] leading-[1.7]">
+              Raw futures data confirms cuts from the market two times in the next nine months for
+              EUR. One next near the end of the day. That goes EURUSD to 1.0820 at one market — and
+              historically it takes the EURUSD more time to recover policy expectations shift
+              endlessly.
+            </p>
+
+            {/* Mini bar chart */}
+            <div className="bg-surface overflow-hidden rounded-[14px] p-4">
+              <p className="font-body text-muted mb-3 text-[10px] uppercase tracking-[0.1em]">
+                Rate expectations · next 9 months
               </p>
 
               {/* Pull quote */}
@@ -270,7 +267,7 @@ export function ResearchDetailPage({
           )}
 
           {/* Share */}
-          <div className="mt-8 flex items-center justify-between border-t border-[#e5e7eb] pt-5 dark:border-[#2a2a2a]">
+          <div className="dark:border-border mt-8 flex items-center justify-between border-t border-[#e5e7eb] pt-5">
             <span className="font-body text-muted text-[12px]">Share this article</span>
             <div className="flex gap-3">
               {['X', 'in', 'link'].map((s) => (
@@ -287,11 +284,10 @@ export function ResearchDetailPage({
       </section>
 
       {/* Related articles */}
-      <section className="dark:bg-background bg-[#f9f9f9] px-5 pb-10 pt-8">
+      <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="text-foreground mb-5 font-sans text-[18px] font-semibold">Keep reading.</p>
-          {/* Mobile: vertical list; Desktop: 3-column card grid */}
-          <div className="flex flex-col divide-y divide-[#e5e7eb] xl:grid xl:grid-cols-3 xl:gap-0 xl:divide-x xl:divide-y-0 dark:divide-[#2a2a2a]">
+          <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
             {RELATED.map((art) => (
               <Link
                 key={art.slug}

@@ -143,9 +143,9 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
             Build the next
             <br />
             era of <span className="text-accent">trading.</span>
@@ -158,7 +158,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       </section>
 
       {/* Stats */}
-      <section className="dark:bg-background bg-white px-5 pb-8">
+      <section className="bg-background px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-4">
             {[
@@ -169,8 +169,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-[18px] bg-[#f9f9f9] p-5 dark:bg-[#1c1c1c]"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+                className="bg-surface shadow-card rounded-[18px] p-5 dark:shadow-none"
               >
                 <p className="text-foreground font-sans text-[28px] font-semibold leading-[1]">
                   {stat.value}
@@ -183,17 +182,16 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       </section>
 
       {/* Values */}
-      <section className="dark:bg-background bg-white px-5 pb-8">
+      <section className="bg-background px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             How we Work
           </SectionKicker>
           <div className="grid grid-cols-2 gap-[10px] xl:gap-5">
             {VALUES.map((v) => (
               <div
                 key={v.title}
-                className="flex flex-col gap-2 rounded-[18px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}
+                className="bg-surface shadow-card flex flex-col gap-2 rounded-[18px] p-4 dark:shadow-none"
               >
                 <p className="text-foreground font-sans text-[13px] font-semibold">{v.title}</p>
                 <p className="font-body text-muted text-[12px] leading-relaxed">{v.desc}</p>
@@ -204,90 +202,67 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       </section>
 
       {/* Open roles */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             Open Roles
           </SectionKicker>
 
           {/* Department tabs */}
           <div className="scrollbar-hide mb-5 flex gap-2 overflow-x-auto pb-1">
-            {(useCms ? allJobDepts : DEPARTMENTS.map((d) => d.id)).map((dId) => {
-              const label = useCms
-                ? dId === 'ALL'
-                  ? 'All'
-                  : dId.charAt(0) + dId.slice(1).toLowerCase()
-                : (DEPARTMENTS.find((d) => d.id === dId)?.label ?? dId);
-              return (
-                <button
-                  key={dId}
-                  onClick={() => setDept(dId as Department)}
-                  className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
-                    dept === dId
-                      ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                      : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
-                  }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
+            {DEPARTMENTS.map((d) => (
+              <button
+                key={d.id}
+                onClick={() => setDept(d.id)}
+                className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
+                  dept === d.id
+                    ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                    : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
+                }`}
+              >
+                {d.label}
+              </button>
+            ))}
           </div>
 
-          {/* Job list — stacked on mobile, 3-col grid on desktop */}
-          <div className="flex flex-col divide-y divide-[#e5e7eb] xl:grid xl:grid-cols-3 xl:gap-4 xl:divide-y-0 dark:divide-[#2a2a2a]">
-            {filtered.map((job) => {
-              const href =
-                useCms && 'slug' in job
-                  ? `/${locale}/company/careers/${(job as CmsJobItem).slug}`
-                  : `/${locale}/company/careers/${job.id}`;
-              const jobType =
-                'type' in job
-                  ? (job as { type: string }).type
-                  : 'employmentType' in job
-                    ? (job as CmsJobItem).employmentType
-                    : '';
-              const typeColor = TYPE_COLORS[jobType] ?? 'bg-[#6B7280]/10 text-[#6B7280]';
-              return (
-                <Link
-                  key={job.id}
-                  href={href}
-                  className="group flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0 xl:flex-col xl:items-start xl:justify-between xl:rounded-[18px] xl:bg-[#f9f9f9] xl:p-5 xl:py-5 xl:first:pt-5 xl:last:pb-5 xl:hover:bg-[#f0f0ee] xl:dark:bg-[#1c1c1c] xl:dark:hover:bg-[#242424]"
-                  style={{ boxShadow: undefined }}
-                >
-                  <div className="flex flex-1 flex-col gap-1 xl:w-full xl:flex-none">
-                    <p className="text-foreground group-hover:text-accent font-sans text-[14px] font-semibold transition-colors">
-                      {job.title}
-                    </p>
-                    <p className="font-body text-muted text-[12px]">{job.location}</p>
-                  </div>
-                  <div className="flex flex-shrink-0 items-center gap-2 xl:mt-auto xl:w-full xl:justify-between xl:pt-3">
-                    {jobType && (
-                      <span
-                        className={`font-body rounded-full px-2.5 py-[4px] text-[10px] font-semibold ${typeColor}`}
-                      >
-                        {jobType}
-                      </span>
-                    )}
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      className="group-hover:text-accent text-[#9ca3af] transition-colors"
-                    >
-                      <path
-                        d="M6 4l4 4-4 4"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </Link>
-              );
-            })}
+          {/* Job list */}
+          <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
+            {filtered.map((job) => (
+              <Link
+                key={job.id}
+                href={`/${locale}/company/careers/${job.id}`}
+                className="group flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0"
+              >
+                <div className="flex flex-col gap-1">
+                  <p className="text-foreground group-hover:text-accent font-sans text-[14px] font-semibold transition-colors">
+                    {job.title}
+                  </p>
+                  <p className="font-body text-muted text-[12px]">{job.location}</p>
+                </div>
+                <div className="flex flex-shrink-0 items-center gap-2">
+                  <span
+                    className={`font-body rounded-full px-2.5 py-[4px] text-[10px] font-semibold ${TYPE_COLORS[job.type]}`}
+                  >
+                    {job.type}
+                  </span>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    className="group-hover:text-accent text-[#9ca3af] transition-colors"
+                  >
+                    <path
+                      d="M6 4l4 4-4 4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </Link>
+            ))}
           </div>
 
           {filtered.length === 0 && (

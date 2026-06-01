@@ -21,6 +21,39 @@ type Category = 'ALL' | 'MACRO' | 'STRATEGY' | 'EDUCATION' | 'ANALYSIS';
 
 const CATEGORIES: Category[] = ['ALL', 'MACRO', 'STRATEGY', 'ANALYSIS', 'EDUCATION'];
 
+interface CmsResearchArticle {
+  id: number;
+  slug: string;
+  title: string;
+  assetCategory: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
+  analyst?: string | null;
+  publishedDate: string;
+}
+
+const ASSET_TO_CATEGORY: Record<string, Exclude<Category, 'ALL'>> = {
+  forex: 'MACRO',
+  commodities: 'ANALYSIS',
+  indices: 'MACRO',
+  stocks: 'ANALYSIS',
+  etfs: 'STRATEGY',
+  crypto: 'ANALYSIS',
+};
+
+const SPARKLINES = [
+  [40, 45, 38, 52, 48, 60, 55, 68, 62, 72],
+  [60, 55, 70, 45, 65, 40, 58, 35, 50, 42],
+  [30, 38, 45, 55, 62, 58, 70, 75, 68, 80],
+  [65, 60, 70, 65, 72, 68, 75, 70, 78, 74],
+] as const;
+
+function formatArticleDate(dateStr: string): string {
+  try {
+    return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  } catch {
+    return '';
+  }
+}
+
 const CAT_COLORS: Record<string, string> = {
   MACRO: 'bg-[#F59E0B]/15 text-[#F59E0B]',
   STRATEGY: 'bg-[#3B82F6]/15 text-[#3B82F6]',
@@ -125,29 +158,49 @@ function Sparkline({ data, positive = true }: { data: readonly number[]; positiv
   );
 }
 
-interface ResearchPageProps {
-  articles?: ArticleItem[];
-  basePath?: string;
+type ArticleDisplay = {
+  id: string;
+  slug: string;
+  category: Exclude<Category, 'ALL'>;
+  title: string;
+  summary: string;
+  date: string;
+  readTime: string;
+  featured: boolean;
+  sparkline: readonly number[];
+};
+
+function toDisplayArticles(cmsArticles?: CmsResearchArticle[]): ArticleDisplay[] {
+  if (!cmsArticles?.length) {
+    return ARTICLES as unknown as ArticleDisplay[];
+  }
+  return cmsArticles.map((a, i) => ({
+    id: String(a.id),
+    slug: a.slug,
+    category: (ASSET_TO_CATEGORY[a.assetCategory] ?? 'ANALYSIS') as Exclude<Category, 'ALL'>,
+    title: a.title,
+    summary: '',
+    date: formatArticleDate(a.publishedDate),
+    readTime: '5 min',
+    featured: i === 0,
+    sparkline: SPARKLINES[i % SPARKLINES.length] as readonly number[],
+  }));
 }
 
-export function ResearchPage({ articles, basePath = 'research' }: ResearchPageProps) {
+interface ResearchPageProps {
+  cmsArticles?: CmsResearchArticle[];
+}
+
+export function ResearchPage({ cmsArticles }: ResearchPageProps) {
   const locale = useLocale();
   const [activeCategory, setActiveCategory] = useState<Category>('ALL');
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
-  const allArticles: ArticleItem[] =
-    articles && articles.length > 0 ? articles : (ARTICLES as unknown as ArticleItem[]);
-  const categories = useMemo(() => {
-    if (articles && articles.length > 0) {
-      const cats = ['ALL', ...new Set(articles.map((a) => a.category.toUpperCase()))];
-      return cats as Category[];
-    }
-    return CATEGORIES;
-  }, [articles]);
+  const articles = useMemo(() => toDisplayArticles(cmsArticles), [cmsArticles]);
 
-  const featured = allArticles.find((a) => a.featured) ?? allArticles[0];
-  const list = allArticles.filter((a) => a !== featured);
+  const featured = articles.find((a) => a.featured) ?? articles[0];
+  const list = articles.filter((a) => !a.featured);
 
   const filteredList = useMemo(
     () =>
@@ -160,9 +213,9 @@ export function ResearchPage({ articles, basePath = 'research' }: ResearchPagePr
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9">
+      <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.08]">
+          <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.08] tracking-[-1.14px]">
             Notes from
             <br />
             the <span className="text-accent">trading floor.</span>
@@ -174,7 +227,7 @@ export function ResearchPage({ articles, basePath = 'research' }: ResearchPagePr
       </section>
 
       {/* Category tabs */}
-      <section className="dark:bg-background bg-white px-5 pb-4">
+      <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
             {categories.map((cat) => (
@@ -184,7 +237,7 @@ export function ResearchPage({ articles, basePath = 'research' }: ResearchPagePr
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-medium transition-colors ${
                   activeCategory === cat
                     ? 'bg-accent text-white'
-                    : 'text-muted bg-[#F2F2F4] hover:bg-[#e5e5e5] dark:bg-[#2a2a2a] dark:hover:bg-[#3a3a3a]'
+                    : 'text-muted dark:bg-surface-elevated dark:hover:bg-surface-elevated bg-[#F2F2F4] hover:bg-[#e5e5e5]'
                 }`}
               >
                 {cat === 'ALL' ? 'All' : cat.charAt(0) + cat.slice(1).toLowerCase()}
@@ -196,12 +249,11 @@ export function ResearchPage({ articles, basePath = 'research' }: ResearchPagePr
 
       {/* Featured article */}
       {activeCategory === 'ALL' && featured && (
-        <section className="dark:bg-background bg-white px-5 pb-6">
+        <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <Link
-              href={`/${locale}/${basePath}/${featured.slug}`}
-              className="group flex flex-col overflow-hidden rounded-[22px] bg-[#111111]"
-              style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.14)' }}
+              href={`/${locale}/research/${featured.slug}`}
+              className="shadow-card-dark group flex flex-col overflow-hidden rounded-[22px] bg-[#111111]"
             >
               {/* Thumbnail */}
               <div className="relative h-[180px] overflow-hidden bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111]">
@@ -243,9 +295,11 @@ export function ResearchPage({ articles, basePath = 'research' }: ResearchPagePr
                 <p className="group-hover:text-accent mb-2 font-sans text-[18px] font-semibold leading-[1.25] text-white transition-colors">
                   {featured.title}
                 </p>
-                <p className="font-body mb-4 text-[13px] leading-[1.55] text-white/60">
-                  {featured.summary}
-                </p>
+                {featured.summary && (
+                  <p className="font-body mb-4 text-[13px] leading-[1.55] text-white/60">
+                    {featured.summary}
+                  </p>
+                )}
                 <div className="flex items-center justify-between">
                   <span className="font-body text-[11px] text-white/40">
                     {featured.date} · {featured.readTime} read
@@ -270,9 +324,9 @@ export function ResearchPage({ articles, basePath = 'research' }: ResearchPagePr
       )}
 
       {/* Article list */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="flex flex-col divide-y divide-[#e5e7eb] xl:grid xl:grid-cols-3 xl:divide-x xl:divide-y-0 dark:divide-[#2a2a2a]">
+          <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
             {filteredList.map((article) => (
               <Link
                 key={article.id}

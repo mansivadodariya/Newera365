@@ -170,9 +170,9 @@ export function EconomicCalendarPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
             Economic
             <br />
             <span className="text-accent">calendar.</span>
@@ -184,61 +184,50 @@ export function EconomicCalendarPage() {
       </section>
 
       {/* Filters */}
-      <section className="dark:bg-background bg-white px-5 pb-3">
+      <section className="bg-background px-5 pb-3">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="xl:flex xl:items-center xl:gap-8">
-            {/* Impact filter */}
-            <div className="mb-3 flex items-center gap-2 xl:mb-0">
-              <span className="font-body hidden text-[11px] uppercase tracking-[0.1em] text-[#9ca3af] xl:block">
-                Importance
-              </span>
-              {IMPACTS.map((imp) => (
-                <button
-                  key={imp.id}
-                  onClick={() => setImpact(imp.id)}
-                  className={`font-body flex items-center gap-1.5 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
-                    impact === imp.id
-                      ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                      : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
-                  }`}
-                >
-                  {imp.id !== 'ALL' && (
-                    <span className={`h-1.5 w-1.5 rounded-full ${IMPACT_DOT[imp.id]}`} />
-                  )}
-                  {imp.label}
-                </button>
-              ))}
-            </div>
+          {/* Impact filter */}
+          <div className="mb-3 flex gap-2">
+            {IMPACTS.map((imp) => (
+              <button
+                key={imp.id}
+                onClick={() => setImpact(imp.id)}
+                className={`font-body flex items-center gap-1.5 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
+                  impact === imp.id
+                    ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                    : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
+                }`}
+              >
+                {imp.id !== 'ALL' && (
+                  <span className={`h-1.5 w-1.5 rounded-full ${IMPACT_DOT[imp.id]}`} />
+                )}
+                {imp.label}
+              </button>
+            ))}
+          </div>
 
-            {/* Divider on xl */}
-            <div className="hidden h-5 w-px bg-[#e5e7eb] xl:block dark:bg-[#2a2a2a]" />
-
-            {/* Currency filter */}
-            <div className="scrollbar-hide flex items-center gap-2 overflow-x-auto pb-1 xl:pb-0">
-              <span className="font-body hidden text-[11px] uppercase tracking-[0.1em] text-[#9ca3af] xl:block">
-                Currency
-              </span>
-              {CURRENCIES.map((cur) => (
-                <button
-                  key={cur}
-                  onClick={() => setCurrency(cur)}
-                  className={`font-body flex flex-shrink-0 items-center gap-1.5 rounded-full px-3 py-[6px] text-[11px] font-semibold uppercase tracking-[0.06em] transition-colors ${
-                    currency === cur
-                      ? 'bg-accent/10 text-accent'
-                      : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
-                  }`}
-                >
-                  {cur !== 'ALL' && <span>{CURRENCY_FLAG[cur]}</span>}
-                  {cur}
-                </button>
-              ))}
-            </div>
+          {/* Currency filter */}
+          <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
+            {CURRENCIES.map((cur) => (
+              <button
+                key={cur}
+                onClick={() => setCurrency(cur)}
+                className={`font-body flex flex-shrink-0 items-center gap-1.5 rounded-full px-3 py-[6px] text-[11px] font-semibold uppercase tracking-[0.06em] transition-colors ${
+                  currency === cur
+                    ? 'bg-accent/10 text-accent'
+                    : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
+                }`}
+              >
+                {cur !== 'ALL' && <span>{CURRENCY_FLAG[cur]}</span>}
+                {cur}
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Calendar */}
-      <section className="dark:bg-background bg-white pb-10">
+      <section className="bg-background pb-10">
         <div className="mx-auto max-w-[390px] px-5 md:max-w-2xl xl:max-w-[1200px]">
           {/* Desktop table header */}
           <div className="mb-1 hidden xl:grid xl:grid-cols-[80px_40px_80px_1fr_90px_90px_90px_60px] xl:gap-4 xl:border-b xl:border-[#e5e7eb] xl:pb-2 dark:xl:border-[#2a2a2a]">
@@ -259,11 +248,7 @@ export function EconomicCalendarPage() {
           ) : (
             Object.entries(grouped).map(([date, events]) => (
               <div key={date} className="mb-5">
-                <p className="font-body mb-2 border-b border-[#e5e7eb] pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#9ca3af] xl:hidden dark:border-[#2a2a2a]">
-                  {date}
-                </p>
-                {/* Desktop: date as a light row */}
-                <p className="font-body mb-1 hidden text-[10px] font-semibold uppercase tracking-[0.1em] text-[#9ca3af] xl:block">
+                <p className="font-body dark:border-border mb-2 border-b border-[#e5e7eb] pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#9ca3af]">
                   {date}
                 </p>
                 <div className="flex flex-col">
@@ -321,13 +306,10 @@ export function EconomicCalendarPage() {
                                   ? IMPACT_DOT[level]
                                   : ev.impact === 'MEDIUM' && level !== 'HIGH'
                                     ? IMPACT_DOT[level]
-                                    : ev.impact === 'LOW' && level === 'LOW'
-                                      ? IMPACT_DOT[level]
-                                      : 'bg-[#e5e7eb] dark:bg-[#2a2a2a]'
-                              }`}
-                            />
-                          ))}
-                        </div>
+                                    : 'dark:bg-surface-elevated bg-[#e5e7eb]'
+                            }`}
+                          />
+                        ))}
                       </div>
                     </div>
                   ))}

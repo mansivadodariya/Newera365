@@ -179,12 +179,12 @@ export function LiveWatchlistPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             MARKETS
           </SectionKicker>
-          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
             Market
             <br />
             <span className="text-accent">watch.</span>
@@ -196,7 +196,7 @@ export function LiveWatchlistPage() {
       </section>
 
       {/* Tab filter */}
-      <section className="dark:bg-background bg-white px-5 pb-4">
+      <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
             {TABS.map((t) => (
@@ -206,7 +206,7 @@ export function LiveWatchlistPage() {
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
                   tab === t.id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
+                    : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
                 }`}
               >
                 {t.label}
@@ -217,7 +217,7 @@ export function LiveWatchlistPage() {
       </section>
 
       {/* Market list — dark card */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div
             className="overflow-hidden rounded-[22px] bg-[#111111]"

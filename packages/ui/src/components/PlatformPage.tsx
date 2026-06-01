@@ -124,10 +124,10 @@ const PLATFORM_CARDS = [
     desc: 'Full MT5 power, runs in any browser. No download required.',
     ctaLabel: 'Open web trader',
     ctaStyle: 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]',
-    cardBg: 'bg-[#FAFAF9] dark:bg-surface',
+    cardBg: 'bg-surface',
     nameColor: 'text-foreground',
     descColor: 'text-muted',
-    iconBg: 'bg-white dark:bg-[#1c1c1c] text-[#111111] dark:text-white',
+    iconBg: 'bg-white dark:bg-surface text-[#111111] dark:text-white',
     Icon: IconWeb,
   },
   {
@@ -138,10 +138,10 @@ const PLATFORM_CARDS = [
     desc: 'One-tap trading with FaceID. Push alerts for every move.',
     ctaLabel: 'Get the app',
     ctaStyle: 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]',
-    cardBg: 'bg-[#FAFAF9] dark:bg-surface',
+    cardBg: 'bg-surface',
     nameColor: 'text-foreground',
     descColor: 'text-muted',
-    iconBg: 'bg-white dark:bg-[#1c1c1c] text-[#111111] dark:text-white',
+    iconBg: 'bg-white dark:bg-surface text-[#111111] dark:text-white',
     Icon: IconMobile,
   },
 ];
@@ -200,33 +200,25 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
   return (
     <>
       {/* Hero */}
-      <section
-        className="dark:bg-background bg-white px-5 pb-8 pt-9 xl:min-h-[420px] xl:pb-0 xl:pt-0"
-        style={{
-          background: 'linear-gradient(135deg, rgba(0,176,80,0.12) 0%, rgba(255,255,255,0) 60%)',
-        }}
-      >
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:min-h-[420px] xl:max-w-[1200px] xl:items-center xl:gap-12">
-          {/* Text side */}
-          <div className="xl:w-1/2 xl:py-16">
-            <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1] xl:text-[52px]">
-              A platform
-              <br />
-              that
-              <span className="text-accent"> moves</span>
-              <br />
-              with markets.
-            </h1>
-            <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55] xl:max-w-[420px] xl:text-[16px]">
-              Trade the way you want — on the world&apos;s most trusted terminal, native mobile or
-              web.
-            </p>
-          </div>
+      <section className="bg-background px-5 pb-8 pt-9">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
+            A platform
+            <br />
+            that
+            <span className="text-accent"> moves</span>
+            <br />
+            with markets.
+          </h1>
+          <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
+            Trade the way you want — on the world&apos;s most trusted terminal, native mobile or
+            web.
+          </p>
 
           {/* Device mockup */}
           <div className="relative mt-6 h-[200px] overflow-hidden rounded-[24px] bg-gradient-to-br from-[#f0f9f3] to-[#f0f0f0] xl:mt-0 xl:h-[340px] xl:w-1/2 xl:flex-shrink-0 xl:rounded-[32px] dark:from-[#0d1f11] dark:to-[#1a1a1a]">
             {/* Phone mock */}
-            <div className="absolute right-6 top-3 h-[180px] w-[82px] overflow-hidden rounded-[18px] border border-[#e5e7eb] bg-white shadow-lg xl:right-10 xl:top-6 xl:h-[290px] xl:w-[130px] xl:rounded-[26px] dark:border-[#2a2a2a] dark:bg-[#111111]">
+            <div className="dark:border-border absolute right-6 top-3 h-[180px] w-[82px] overflow-hidden rounded-[18px] border border-[#e5e7eb] bg-white shadow-lg dark:bg-[#111111]">
               <div className="h-2.5 w-full bg-[#111111] dark:bg-[#000]" />
               <div className="flex h-full flex-col gap-1 bg-[#111111] p-1.5">
                 <div className="h-1.5 w-3/4 rounded bg-white/10" />
@@ -247,12 +239,10 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
               </div>
             </div>
             {/* Laptop mock */}
-            <div className="absolute left-3 top-6 h-[148px] w-[190px] overflow-hidden rounded-[10px] border border-[#e5e7eb] bg-[#111111] shadow-lg xl:left-6 xl:top-10 xl:h-[236px] xl:w-[300px] xl:rounded-[14px] dark:border-[#2a2a2a]">
-              <div className="flex h-6 items-center gap-1 border-b border-white/10 bg-[#1a1a1a] px-2 xl:h-8 xl:px-3">
-                <span className="font-body text-[8px] font-semibold text-white xl:text-[10px]">
-                  EURUSD
-                </span>
-                <span className="font-body ml-1 text-[7px] text-white/40 xl:text-[9px]">H1</span>
+            <div className="dark:border-border absolute left-3 top-6 h-[148px] w-[190px] overflow-hidden rounded-[10px] border border-[#e5e7eb] bg-[#111111] shadow-lg">
+              <div className="flex h-6 items-center gap-1 border-b border-white/10 bg-[#1a1a1a] px-2">
+                <span className="font-body text-[8px] font-semibold text-white">EURUSD</span>
+                <span className="font-body ml-1 text-[7px] text-white/40">H1</span>
               </div>
               <div className="flex h-[calc(100%-24px)] items-end gap-0.5 px-2 pb-2 pt-1 xl:h-[calc(100%-32px)] xl:gap-1 xl:px-3 xl:pb-3">
                 {[30, 50, 40, 60, 45, 70, 55, 80, 65, 75, 60, 85].map((h, i) => (
@@ -274,9 +264,9 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       </section>
 
       {/* Terminal section */}
-      <section className="dark:bg-background bg-white px-5 pb-10 xl:py-16">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             PICK YOUR TERMINAL
           </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1] xl:text-[40px]">
@@ -338,8 +328,8 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       {/* Tools section */}
       <section className="dark:bg-surface bg-[#f5f5f5] pb-[36px] pl-[20px] pr-[20px] pt-[40px] xl:px-8 xl:py-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
-            BUILT FOR SPEED
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            WHAT&apos;S INSIDE
           </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1] xl:mb-8 xl:text-[40px]">
             Pro tools, made approachable.
@@ -349,10 +339,9 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
             {TOOLS.map((tool) => (
               <div
                 key={tool.id}
-                className="dark:bg-surface flex flex-col gap-3 rounded-[18px] bg-white p-4 xl:rounded-[24px] xl:p-7"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)', backdropFilter: 'blur(8px)' }}
+                className="bg-background shadow-card flex flex-col gap-3 rounded-[18px] p-4 dark:shadow-none"
               >
-                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#111111] text-white xl:h-12 xl:w-12 xl:rounded-[16px] dark:bg-[#1e1e1e]">
+                <div className="text-foreground flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] dark:bg-[rgba(255,255,255,0.06)]">
                   <tool.Icon />
                 </div>
                 <div>
@@ -370,7 +359,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       </section>
 
       {/* Works Everywhere */}
-      <section className="bg-black px-5 pb-12 pt-10 xl:px-8 xl:py-20">
+      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white [&>span:last-child]:text-white">
             FOREX EVERYWHERE
@@ -391,7 +380,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
             {DEVICES.map((dev) => (
               <div
                 key={dev.label}
-                className="flex flex-col items-center gap-2 rounded-[14px] border border-white/[0.08] bg-white/[0.06] py-4 text-white xl:flex-row xl:items-center xl:gap-4 xl:rounded-[16px] xl:px-5 xl:py-4"
+                className="text-foreground bg-surface flex flex-col items-center gap-2 rounded-[14px] py-4"
               >
                 <div className="text-white/70 xl:flex-shrink-0">
                   <dev.Icon />

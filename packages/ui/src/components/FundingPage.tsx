@@ -66,9 +66,13 @@ const PAYMENT_METHODS = [
     withdraw: '1-3 days',
     min: '$50',
     fee: 'Free',
-    cover: COVER_VISA,
-    coverFit: 'object-contain opacity-60',
-    icon: <IconCreditCard />,
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <rect x="1" y="4" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M1 8h18" stroke="currentColor" strokeWidth="1.5" />
+        <rect x="4" y="11" width="4" height="2" rx="0.5" fill="currentColor" />
+      </svg>
+    ),
   },
   {
     id: 'bank',
@@ -90,9 +94,13 @@ const PAYMENT_METHODS = [
     withdraw: 'Within 24h',
     min: '$50',
     fee: 'Free',
-    cover: COVER_SKRILL,
-    coverFit: 'object-cover',
-    icon: <IconGlobe />,
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M10 2v16M2 10h16" stroke="currentColor" strokeWidth="1.5" />
+        <ellipse cx="10" cy="10" rx="4" ry="8" stroke="currentColor" strokeWidth="1.5" />
+      </svg>
+    ),
   },
   {
     id: 'neteller',
@@ -102,9 +110,13 @@ const PAYMENT_METHODS = [
     withdraw: 'Within 24h',
     min: '$50',
     fee: 'Free',
-    cover: COVER_NETELLER,
-    coverFit: 'object-cover',
-    icon: <IconGlobe />,
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M10 2v16M2 10h16" stroke="currentColor" strokeWidth="1.5" />
+        <ellipse cx="10" cy="10" rx="4" ry="8" stroke="currentColor" strokeWidth="1.5" />
+      </svg>
+    ),
   },
   {
     id: 'crypto',
@@ -114,9 +126,17 @@ const PAYMENT_METHODS = [
     withdraw: 'Within 24h',
     min: '$50',
     fee: 'Network only',
-    cover: COVER_CRYPTO,
-    coverFit: 'object-cover',
-    icon: <IconBitcoin />,
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path
+          d="M7 10h6M7 7h5.5c1.1 0 2 .9 2 2s-.9 2-2 2H7M7 13h5.5c1.1 0 2-.9 2-2"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+        <path d="M9 5v10M11 5v10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    ),
   },
   {
     id: 'local',
@@ -198,10 +218,15 @@ const TRUST_ROWS = [
     title: 'PCI-DSS Level 1',
     desc: 'Payment data is encrypted in transit and at rest, audited annually.',
     icon: (
-      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-        <rect x="5" y="9" width="10" height="8" rx="1.5" stroke="white" strokeWidth="1.5" />
-        <path d="M7 9V6.5a3 3 0 016 0V9" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-        <circle cx="10" cy="13" r="1" fill="white" />
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+        <rect x="5" y="9" width="10" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+        <path
+          d="M7 9V6.5a3 3 0 016 0V9"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+        <circle cx="10" cy="13" r="1" fill="currentColor" />
       </svg>
     ),
   },
@@ -209,8 +234,8 @@ const TRUST_ROWS = [
     title: 'No weekend hold',
     desc: 'Withdrawals are processed 7 days a week, including holidays.',
     icon: (
-      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-        <circle cx="10" cy="10" r="7.5" stroke="white" strokeWidth="1.5" />
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.5" />
         <path
           d="M10 6v4l2.5 2.5"
           stroke="white"
@@ -256,34 +281,8 @@ interface FundingPageProps {
 function HeroContent() {
   return (
     <>
-      <h1 className="font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
-        <span className="text-foreground block">Money in,</span>
-        <span className="text-foreground block">money out —</span>
-        <span className="block text-[#00b050]">fast.</span>
-      </h1>
-      <div className="h-4" />
-      <p className="font-body text-muted text-[14px] leading-[1.55]">
-        Free deposits, same-day withdrawals on most methods. Choose the channel that works for you.
-      </p>
-    </>
-  );
-}
-
-export function FundingPage({ paymentMethods: cmsMethods }: FundingPageProps) {
-  const useCms = cmsMethods && cmsMethods.length > 0;
-
-  return (
-    <>
-      {/* Hero — mobile (shown above cards) */}
-      <section className="dark:bg-background bg-white px-5 pb-7 pt-8 xl:hidden">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl">
-          <div className="h-[18px]" />
-          <HeroContent />
-        </div>
-      </section>
-
-      {/* Payment Methods */}
-      <section className="dark:bg-background bg-white px-5 pb-10 xl:px-[120px]">
+      {/* Hero */}
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
             PAYMENT METHODS
@@ -398,6 +397,66 @@ export function FundingPage({ paymentMethods: cmsMethods }: FundingPageProps) {
         </div>
       </section>
 
+      {/* Payment Methods */}
+      <section className="bg-background px-5 pb-10">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+            PAYMENT METHODS
+          </SectionKicker>
+          <div className="flex flex-col gap-[14px]">
+            {PAYMENT_METHODS.map((method) => (
+              <div
+                key={method.id}
+                className="bg-background shadow-card flex flex-col gap-[14px] rounded-[18px] p-5 dark:shadow-none"
+              >
+                {/* Card header: icon box + type pill */}
+                <div className="flex items-start justify-between">
+                  <div className="bg-accent/[0.08] text-accent flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px]">
+                    {method.icon}
+                  </div>
+                  <span className="text-foreground dark:bg-surface-elevated dark:text-foreground rounded-full bg-[rgba(17,17,17,0.05)] px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px]">
+                    {method.type}
+                  </span>
+                </div>
+
+                {/* Name — Outfit SemiBold 17px tracking-[-0.17px] */}
+                <p className="text-foreground font-sans text-[17px] font-semibold tracking-[-0.17px]">
+                  {method.name}
+                </p>
+
+                {/* Stats 2×2 grid — matches Figma rgba(17,17,17,0.08) wrapper, #fafaf9 cells */}
+                <div className="dark:bg-surface-elevated grid grid-cols-2 gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)]">
+                  {[
+                    {
+                      label: 'DEPOSIT',
+                      value: method.deposit,
+                      green: method.deposit === 'Instant' || method.deposit === 'Same day',
+                    },
+                    { label: 'WITHDRAW', value: method.withdraw, green: false },
+                    { label: 'MIN', value: method.min, green: false },
+                    { label: 'FEE', value: method.fee, green: method.fee === 'Free' },
+                  ].map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="dark:bg-surface flex flex-col gap-[2px] bg-[#fafaf9] px-3 py-[10px]"
+                    >
+                      <span className="text-muted font-mono text-[9px] tracking-[1.08px]">
+                        {stat.label}
+                      </span>
+                      <span
+                        className={`font-sans text-[13px] font-semibold ${stat.green ? 'text-accent' : 'text-foreground'}`}
+                      >
+                        {stat.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Trust section */}
       <section className="rounded-t-[32px] bg-black px-5 py-10 xl:px-[120px] xl:py-14">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
@@ -413,16 +472,14 @@ export function FundingPage({ paymentMethods: cmsMethods }: FundingPageProps) {
                 key={row.title}
                 className="flex items-start gap-[14px] rounded-[14px] bg-[rgba(255,255,255,0.04)] p-[18px]"
               >
-                <div className="bg-accent-subtle mt-0.5 flex h-[37px] w-[37px] flex-shrink-0 items-center justify-center rounded-[11px]">
+                <div className="bg-accent/[0.12] text-accent flex h-[37px] w-[37px] flex-shrink-0 items-center justify-center rounded-[11px]">
                   {row.icon}
                 </div>
-                <div>
+                <div className="flex-1">
                   <p className="mb-[5px] font-sans text-[14px] font-semibold text-white">
                     {row.title}
                   </p>
-                  <p className="font-body text-[12.5px] leading-[1.5] text-[rgba(255,255,255,0.55)]">
-                    {row.desc}
-                  </p>
+                  <p className="font-body text-[12.5px] leading-[1.5] text-white/55">{row.desc}</p>
                 </div>
               </div>
             ))}

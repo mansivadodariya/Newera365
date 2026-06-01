@@ -93,9 +93,9 @@ export function AnalystChartPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.08]">
+          <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.08] tracking-[-1.14px]">
             Where the
             <br />
             majors are
@@ -108,8 +108,8 @@ export function AnalystChartPage() {
         </div>
       </section>
 
-      {/* Featured price + pair list */}
-      <section className="dark:bg-background bg-white px-5 pb-6">
+      {/* Featured price */}
+      <section className="bg-background px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="xl:grid xl:grid-cols-2 xl:gap-8">
             {/* Featured price card */}
@@ -120,15 +120,49 @@ export function AnalystChartPage() {
               <p className="font-body mb-1 text-[11px] uppercase tracking-[0.1em] text-white/40">
                 {featured.symbol}
               </p>
-              <div className="mb-4 flex items-end gap-3">
-                <p className="font-sans text-[40px] font-semibold tabular-nums leading-none text-white">
-                  {featured.price}
-                </p>
-                <span
-                  className={`font-body mb-1 text-[13px] font-semibold ${featured.up ? 'text-accent' : 'text-[#EF4444]'}`}
-                >
-                  {featured.pct}
-                </span>
+              <span
+                className={`font-body mb-1 text-[13px] font-semibold ${featured.up ? 'text-accent' : 'text-[#EF4444]'}`}
+              >
+                {featured.pct}
+              </span>
+            </div>
+            <div className="h-[80px] overflow-hidden rounded-[10px]">
+              <MiniChart />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Tab filter + pair list */}
+      <section className="bg-background px-5 pb-6">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="mb-4 flex gap-2">
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setTab(t.id)}
+                className={`font-body rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
+                  tab === t.id
+                    ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                    : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+          <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
+            {pairs.map((p) => (
+              <div key={p.symbol} className="flex items-center justify-between py-[13px]">
+                <p className="text-foreground font-sans text-[14px] font-semibold">{p.symbol}</p>
+                <div className="flex items-center gap-3">
+                  <p className="font-body text-foreground text-[13px] tabular-nums">{p.price}</p>
+                  <p
+                    className={`font-body text-[12px] font-semibold tabular-nums ${p.up ? 'text-accent' : 'text-[#EF4444]'}`}
+                  >
+                    {p.pct}
+                  </p>
+                </div>
               </div>
               <div className="h-[80px] overflow-hidden rounded-[10px]">
                 <MiniChart />
@@ -177,12 +211,12 @@ export function AnalystChartPage() {
       </section>
 
       {/* Analyst commentary */}
-      <section className="dark:bg-background bg-white px-5 pb-10">
+      <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="font-body mb-4 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
             ANALYST COMMENTARY
           </p>
-          <div className="rounded-[18px] bg-[#f9f9f9] p-5 dark:bg-[#1c1c1c]">
+          <div className="bg-surface rounded-[18px] p-5">
             <div className="mb-4 flex items-center gap-3">
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
                 <span className="font-sans text-[13px] font-semibold text-white">

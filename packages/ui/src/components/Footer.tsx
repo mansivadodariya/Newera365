@@ -58,8 +58,8 @@ function Footer({
       items: [
         { label: t('linkAbout'), href: '/company/about' },
         { label: t('linkCareers'), href: '/company/careers' },
-        { label: t('linkAwards'), href: '/company/awards' },
-        { label: t('linkMedia'), href: '/company/media' },
+        { label: t('linkAwards'), href: '/company/about' },
+        { label: t('linkMedia'), href: '/education/media' },
       ],
     },
     {

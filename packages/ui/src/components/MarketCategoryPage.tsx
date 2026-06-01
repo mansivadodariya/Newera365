@@ -127,7 +127,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-7 pt-9">
+      <section className="bg-background px-5 pb-7 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <Link
             href={`/${locale}/markets/instruments`}
@@ -146,7 +146,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
           </Link>
 
           <SectionKicker className="mb-4">{meta.kicker}</SectionKicker>
-          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[105%] tracking-[-0.03em] xl:text-[56px]">
+          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
             {meta.headline}
           </h1>
           <p className="font-body text-muted max-w-[310px] text-[14px] leading-[155%] xl:max-w-[480px]">
@@ -156,7 +156,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
       </section>
 
       {/* Instrument list — watchlist widget */}
-      <section className="dark:bg-background bg-white px-5 pb-6">
+      <section className="bg-background px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-3">
             {cmsRows
@@ -251,7 +251,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
 
           <Link
             href={`/${locale}/trade/accounts`}
-            className="dark:bg-surface mt-3 flex w-full items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
+            className="dark:bg-surface dark:hover:bg-surface-elevated mt-3 flex w-full items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee]"
           >
             <span className="font-body text-foreground text-[13px] font-medium">
               Open an account to trade all {meta.label.toLowerCase()} instruments
@@ -312,10 +312,10 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
       </section>
 
       {/* Other markets */}
-      <section className="dark:bg-background bg-white px-5 pb-12 pt-10">
+      <section className="bg-background px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">OTHER MARKETS</SectionKicker>
-          <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.025em]">
+          <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.8px]">
             Explore other asset classes.
           </h2>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
@@ -325,7 +325,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
                 <Link
                   key={key}
                   href={`/${locale}/markets/${key}`}
-                  className="dark:bg-surface flex items-center justify-between rounded-[18px] bg-[#FAFAF9] px-5 py-4 transition-colors hover:bg-[#f0f0ee] dark:hover:bg-[#242424]"
+                  className="dark:bg-surface dark:hover:bg-surface-elevated flex items-center justify-between rounded-[18px] bg-[#FAFAF9] px-5 py-4 transition-colors hover:bg-[#f0f0ee]"
                 >
                   <div>
                     <p className="text-foreground font-sans text-[15px] font-semibold">{m.label}</p>

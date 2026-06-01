@@ -19,9 +19,14 @@ const NAV_ITEMS: NavItem[] = [
     href: '/trade/accounts',
     dropdown: [
       {
-        label: 'Account comparison',
+        label: 'Account types',
         sub: 'Standard, Swap-Free, Professional',
         href: '/trade/accounts',
+      },
+      {
+        label: 'Feature comparison',
+        sub: 'Full feature matrix table',
+        href: '/trade/accounts/comparison',
       },
       { label: 'Payment info', sub: 'Funding & withdrawals', href: '/trade/funding' },
       { label: 'Fee table', sub: 'Spreads & charges', href: '/trade/fees' },
@@ -110,6 +115,22 @@ const NAV_ITEMS: NavItem[] = [
   },
 ];
 
+function LocaleToggle() {
+  const locale = useLocale();
+  const pathname = usePathname();
+  const otherLocale = locale === 'en' ? 'ar' : 'en';
+  const otherPath = `/${otherLocale}${pathname.slice(locale.length + 1)}`;
+  return (
+    <Link
+      href={otherPath}
+      aria-label={`Switch to ${otherLocale === 'ar' ? 'Arabic' : 'English'}`}
+      className="text-foreground dark:bg-surface font-body flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-xl bg-[#f4f4f5] text-[12px] font-semibold transition-colors hover:opacity-80"
+    >
+      {otherLocale.toUpperCase()}
+    </Link>
+  );
+}
+
 function HamburgerIcon() {
   return (
     <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
@@ -125,14 +146,14 @@ function ThemeToggle() {
   useEffect(() => setMounted(true), []);
   if (!mounted)
     return (
-      <div className="h-[38px] w-[38px] flex-shrink-0 rounded-xl bg-[#f4f4f5] dark:bg-[#1c1c1c]" />
+      <div className="dark:bg-surface h-[38px] w-[38px] flex-shrink-0 rounded-xl bg-[#f4f4f5]" />
     );
   const isDark = resolvedTheme === 'dark';
   return (
     <button
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className="text-foreground flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-xl bg-[#f4f4f5] transition-colors dark:bg-[#1c1c1c]"
+      className="text-foreground dark:bg-surface flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-xl bg-[#f4f4f5] transition-colors"
     >
       {isDark ? (
         <svg
@@ -194,8 +215,20 @@ function DesktopNavItem({
       ? pathname === `/${locale}` || pathname === `/${locale}/`
       : pathname.startsWith(`/${locale}${item.href}`);
 
+  function handleMouseEnter() {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    setOpen(true);
+  }
+  function handleMouseLeave() {
+    timerRef.current = setTimeout(() => setOpen(false), 150);
+  }
+
   return (
-    <div className="group relative">
+    <div
+      className="relative flex h-full items-center"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <Link
         href={`/${locale}${item.href === '/' ? '' : item.href}`}
         className={`font-body text-[15px] font-medium transition-colors ${
@@ -205,9 +238,9 @@ function DesktopNavItem({
         {item.label}
       </Link>
 
-      {item.dropdown && (
-        <div className="pointer-events-none invisible absolute left-1/2 top-full z-50 w-[256px] -translate-x-1/2 pt-3 opacity-0 transition-[opacity,visibility] duration-100 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100">
-          <div className="bg-background rounded-[14px] p-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+      {item.dropdown && open && (
+        <div className="absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3">
+          <div className="bg-background w-[256px] rounded-[14px] p-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
             {item.dropdown.map((d) => (
               <Link
                 key={d.href}
@@ -248,7 +281,7 @@ function Header({ navItems }: { navItems?: CmsNavItem[] }) {
 
   return (
     <>
-      <header className="border-border bg-background sticky top-0 z-40 h-[72px] w-full border-b">
+      <header className="border-border sticky top-0 z-40 h-[72px] w-full border-b bg-[rgba(255,255,255,0.85)] backdrop-blur-[12px] dark:border-[#1a1c22] dark:bg-[rgba(7,9,13,0.85)]">
         <div className="flex h-full items-center justify-between px-5 xl:px-[80px]">
           {/* Logo */}
           <Link href={`/${locale}`} aria-label="NewEra365 — go to home" className="flex-shrink-0">
@@ -271,16 +304,17 @@ function Header({ navItems }: { navItems?: CmsNavItem[] }) {
           </Link>
 
           {/* Desktop nav links */}
-          <nav className="hidden items-center gap-7 xl:flex" aria-label="Main navigation">
-            {displayNav.map((item) => (
+          <nav className="hidden h-full items-center gap-7 xl:flex" aria-label="Main navigation">
+            {NAV_ITEMS.map((item) => (
               <DesktopNavItem key={item.label} item={item} locale={locale} pathname={pathname} />
             ))}
           </nav>
 
           {/* Desktop right CTAs */}
           <div className="hidden items-center gap-3 xl:flex">
-            <LanguageToggle />
+            <LocaleToggle />
             <ThemeToggle />
+            <div className="bg-border mx-1 h-5 w-px" />
             <Link
               href={`/${locale}/login`}
               className="font-body text-foreground ms-3 text-[15px] font-medium transition-opacity hover:opacity-70"
@@ -297,14 +331,14 @@ function Header({ navItems }: { navItems?: CmsNavItem[] }) {
 
           {/* Mobile controls */}
           <div className="flex items-center gap-2 xl:hidden">
-            <LanguageToggle />
+            <LocaleToggle />
             <ThemeToggle />
             <button
               onClick={() => setMenuOpen(true)}
               aria-label="Open navigation menu"
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
-              className="text-foreground flex h-[38px] w-[38px] items-center justify-center rounded-xl bg-[#f4f4f5] dark:bg-[#1c1c1c]"
+              className="text-foreground dark:bg-surface flex h-[38px] w-[38px] items-center justify-center rounded-xl bg-[#f4f4f5]"
             >
               <HamburgerIcon />
             </button>
