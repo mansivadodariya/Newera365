@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { EducationHubPage , CtaBanner } from '@newera365/ui';
+import { EducationHubPage, CtaBanner } from '@newera365/ui';
 import type { CmsEducationItem } from '@newera365/ui';
 import { getEducationContent } from '@/lib/cms';
 import type { CmsEducationContent, CmsMedia } from '@/lib/cms';

@@ -422,7 +422,6 @@ export function PivotCalculatorPage() {
           </div>
         </div>
       </section>
-
     </>
   );
 }

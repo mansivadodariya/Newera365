@@ -2,7 +2,7 @@ import { Skeleton, SkeletonText } from '@/components/ui/skeleton';
 
 export default function Loading() {
   return (
-    <main className="py-16 px-5 max-w-[1200px] mx-auto">
+    <main className="mx-auto max-w-[1200px] px-5 py-16">
       <div className="grid grid-cols-[220px_1fr] gap-10">
         {/* Sidebar doc list */}
         <div className="space-y-3">

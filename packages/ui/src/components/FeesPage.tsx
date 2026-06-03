@@ -73,7 +73,9 @@ export function FeesPage({ spreadData }: FeesPageProps) {
           <div className="overflow-hidden rounded-[18px] bg-black">
             {/* Header */}
             <div className="grid grid-cols-[1fr_60px_60px_60px] px-4 py-3">
-              <span className="text-muted font-mono text-[9px] tracking-[1.08px]">{t('colInstrument')}</span>
+              <span className="text-muted font-mono text-[9px] tracking-[1.08px]">
+                {t('colInstrument')}
+              </span>
               {[t('colRaw'), t('colStd'), t('colVip')].map((h) => (
                 <span
                   key={h}
@@ -137,9 +139,15 @@ export function FeesPage({ spreadData }: FeesPageProps) {
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-foreground mb-[3px] font-sans text-[14px] font-semibold">
-                    {t(`charge${charge.key.charAt(0).toUpperCase() + charge.key.slice(1)}` as 'chargeOpening')}
+                    {t(
+                      `charge${charge.key.charAt(0).toUpperCase() + charge.key.slice(1)}` as 'chargeOpening',
+                    )}
                   </p>
-                  <p className="font-body text-muted text-[12px] leading-snug">{t(`charge${charge.key.charAt(0).toUpperCase() + charge.key.slice(1)}Desc` as 'chargeOpeningDesc')}</p>
+                  <p className="font-body text-muted text-[12px] leading-snug">
+                    {t(
+                      `charge${charge.key.charAt(0).toUpperCase() + charge.key.slice(1)}Desc` as 'chargeOpeningDesc',
+                    )}
+                  </p>
                 </div>
                 <span
                   className={`flex-shrink-0 font-sans text-[16px] font-semibold ${charge.green ? 'text-accent' : 'text-foreground'}`}

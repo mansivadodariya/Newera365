@@ -155,7 +155,11 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
           title: stepsFromCms[i]?.stepTitle ?? t(`step${i + 1}Title` as 'step1Title'),
           desc: stepsFromCms[i]?.stepDescription ?? t(`step${i + 1}Desc` as 'step1Desc'),
         }))
-      : STEPS.map((s, i) => ({ num: s.num, title: t(`step${i + 1}Title` as 'step1Title'), desc: t(`step${i + 1}Desc` as 'step1Desc') }));
+      : STEPS.map((s, i) => ({
+          num: s.num,
+          title: t(`step${i + 1}Title` as 'step1Title'),
+          desc: t(`step${i + 1}Desc` as 'step1Desc'),
+        }));
 
   const ctaHeading = cmsContent?.ctaHeading ?? t('ctaHeading');
   const ctaSubtitle = cmsContent?.ctaSubtitle ?? t('ctaSubtitle');
@@ -280,12 +284,20 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                   <span
                     className={`font-sans text-[22px] font-semibold tracking-[-0.44px] ${pt.headColor}`}
                   >
-                    {pt.id === 'ib' ? t('card1Title') : pt.id === 'affiliate' ? t('card2Title') : t('card3Title')}
+                    {pt.id === 'ib'
+                      ? t('card1Title')
+                      : pt.id === 'affiliate'
+                        ? t('card2Title')
+                        : t('card3Title')}
                   </span>
                   <span
                     className={`flex-shrink-0 rounded-full px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px] ${pt.tagClass}`}
                   >
-                    {pt.id === 'ib' ? t('card1Tag') : pt.id === 'affiliate' ? t('card2Tag') : t('card3Tag')}
+                    {pt.id === 'ib'
+                      ? t('card1Tag')
+                      : pt.id === 'affiliate'
+                        ? t('card2Tag')
+                        : t('card3Tag')}
                   </span>
                 </div>
 

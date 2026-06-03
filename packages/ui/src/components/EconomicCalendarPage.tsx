@@ -203,7 +203,13 @@ export function EconomicCalendarPage() {
                 {imp.id !== 'ALL' && (
                   <span className={`h-1.5 w-1.5 rounded-full ${IMPACT_DOT[imp.id]}`} />
                 )}
-                {imp.id === 'ALL' ? t('filterAll') : imp.id === 'HIGH' ? t('filterHigh') : imp.id === 'MEDIUM' ? t('filterMedium') : t('filterLow')}
+                {imp.id === 'ALL'
+                  ? t('filterAll')
+                  : imp.id === 'HIGH'
+                    ? t('filterHigh')
+                    : imp.id === 'MEDIUM'
+                      ? t('filterMedium')
+                      : t('filterLow')}
               </button>
             ))}
           </div>
@@ -233,7 +239,16 @@ export function EconomicCalendarPage() {
         <div className="mx-auto max-w-[390px] px-5 md:max-w-2xl xl:max-w-[1200px]">
           {/* Desktop table header */}
           <div className="mb-1 hidden xl:grid xl:grid-cols-[80px_40px_80px_1fr_90px_90px_90px_60px] xl:gap-4 xl:border-b xl:border-[#e5e7eb] xl:pb-2 dark:xl:border-[#2a2a2a]">
-            {[t('colTime'), t('colFlag'), t('colCurrency'), t('colEvent'), t('colPrev'), t('colForecast'), t('colActual'), t('colImpact')].map((h) => (
+            {[
+              t('colTime'),
+              t('colFlag'),
+              t('colCurrency'),
+              t('colEvent'),
+              t('colPrev'),
+              t('colForecast'),
+              t('colActual'),
+              t('colImpact'),
+            ].map((h) => (
               <span
                 key={h}
                 className="font-body text-[9px] font-semibold uppercase tracking-[0.1em] text-[#9ca3af]"
@@ -244,9 +259,7 @@ export function EconomicCalendarPage() {
           </div>
 
           {Object.keys(grouped).length === 0 ? (
-            <p className="font-body text-muted py-12 text-center text-[14px]">
-              {t('noEvents')}
-            </p>
+            <p className="font-body text-muted py-12 text-center text-[14px]">{t('noEvents')}</p>
           ) : (
             Object.entries(grouped).map(([date, events]) => (
               <div key={date} className="mb-5">
@@ -323,9 +336,7 @@ export function EconomicCalendarPage() {
             ))
           )}
 
-          <p className="font-body text-muted mt-4 text-[11px] leading-relaxed">
-            {t('dataNote')}
-          </p>
+          <p className="font-body text-muted mt-4 text-[11px] leading-relaxed">{t('dataNote')}</p>
         </div>
       </section>
 
@@ -335,9 +346,7 @@ export function EconomicCalendarPage() {
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
             {t('ctaKicker')}
           </SectionKicker>
-          <p className="font-body mb-7 text-[14px] text-white/60">
-            {t('ctaDesc')}
-          </p>
+          <p className="font-body mb-7 text-[14px] text-white/60">{t('ctaDesc')}</p>
           <a
             href="https://trade.newera365.com"
             target="_blank"

@@ -233,7 +233,15 @@ export function LiveChatPage() {
               onClick={() => sendMessage(qr)}
               className="font-body text-foreground hover:border-foreground dark:border-border flex-shrink-0 rounded-full border border-[#e5e7eb] px-3.5 py-2 text-[12px] transition-colors"
             >
-              {idx === 0 ? t('quickReply1') : idx === 1 ? t('quickReply2') : idx === 2 ? t('quickReply3') : idx === 3 ? t('quickReply4') : t('talkHuman')}
+              {idx === 0
+                ? t('quickReply1')
+                : idx === 1
+                  ? t('quickReply2')
+                  : idx === 2
+                    ? t('quickReply3')
+                    : idx === 3
+                      ? t('quickReply4')
+                      : t('talkHuman')}
             </button>
           ))}
         </div>

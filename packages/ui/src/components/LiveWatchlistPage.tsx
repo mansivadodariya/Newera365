@@ -23,36 +23,234 @@ const TAB_SYMBOLS: Record<Tab, string> = {
 
 const MARKETS: Record<
   Tab,
-  { symbol: string; name: string; price: string; change: string; pct: string; up: boolean; badge: string; badgeColor: string }[]
+  {
+    symbol: string;
+    name: string;
+    price: string;
+    change: string;
+    pct: string;
+    up: boolean;
+    badge: string;
+    badgeColor: string;
+  }[]
 > = {
   INDICES: [
-    { symbol: 'SPXUSD', name: 'S&P 500', price: '5,301.4', change: '-12.50', pct: '-0.24%', up: false, badge: '500', badgeColor: '#F97316' },
-    { symbol: 'NSXUSD', name: 'Nasdaq 100', price: '18,742.3', change: '+126.4', pct: '+0.68%', up: true, badge: '100', badgeColor: '#F97316' },
-    { symbol: 'DJI', name: 'Dow 30', price: '39,148.1', change: '-46.90', pct: '-0.12%', up: false, badge: '30', badgeColor: '#2961FF' },
-    { symbol: 'NKY', name: 'Nikkei 225', price: '38,484.14', change: '+324.20', pct: '+0.85%', up: true, badge: '225', badgeColor: '#06B6D4' },
-    { symbol: 'DEU40', name: 'DAX Index', price: '18,464.0', change: '+138.4', pct: '+0.76%', up: true, badge: 'X', badgeColor: '#6B7280' },
-    { symbol: 'UKGBP', name: 'FTSE 100', price: '8,246.3', change: '+21.40', pct: '+0.26%', up: true, badge: '100', badgeColor: '#EF4444' },
+    {
+      symbol: 'SPXUSD',
+      name: 'S&P 500',
+      price: '5,301.4',
+      change: '-12.50',
+      pct: '-0.24%',
+      up: false,
+      badge: '500',
+      badgeColor: '#F97316',
+    },
+    {
+      symbol: 'NSXUSD',
+      name: 'Nasdaq 100',
+      price: '18,742.3',
+      change: '+126.4',
+      pct: '+0.68%',
+      up: true,
+      badge: '100',
+      badgeColor: '#F97316',
+    },
+    {
+      symbol: 'DJI',
+      name: 'Dow 30',
+      price: '39,148.1',
+      change: '-46.90',
+      pct: '-0.12%',
+      up: false,
+      badge: '30',
+      badgeColor: '#2961FF',
+    },
+    {
+      symbol: 'NKY',
+      name: 'Nikkei 225',
+      price: '38,484.14',
+      change: '+324.20',
+      pct: '+0.85%',
+      up: true,
+      badge: '225',
+      badgeColor: '#06B6D4',
+    },
+    {
+      symbol: 'DEU40',
+      name: 'DAX Index',
+      price: '18,464.0',
+      change: '+138.4',
+      pct: '+0.76%',
+      up: true,
+      badge: 'X',
+      badgeColor: '#6B7280',
+    },
+    {
+      symbol: 'UKGBP',
+      name: 'FTSE 100',
+      price: '8,246.3',
+      change: '+21.40',
+      pct: '+0.26%',
+      up: true,
+      badge: '100',
+      badgeColor: '#EF4444',
+    },
   ],
   FUTURES: [
-    { symbol: 'CL1!', name: 'WTI Crude', price: '79.42', change: '-0.58', pct: '-0.73%', up: false, badge: 'CL', badgeColor: '#6B7280' },
-    { symbol: 'NG1!', name: 'Natural Gas', price: '2.18', change: '+0.04', pct: '+1.87%', up: true, badge: 'NG', badgeColor: '#3B82F6' },
-    { symbol: 'GC1!', name: 'Gold Futures', price: '2,463.10', change: '+10.30', pct: '+0.42%', up: true, badge: 'GC', badgeColor: '#F59E0B' },
-    { symbol: 'SI1!', name: 'Silver Futures', price: '28.82', change: '+0.34', pct: '+1.20%', up: true, badge: 'SI', badgeColor: '#9CA3AF' },
-    { symbol: 'HG1!', name: 'Copper', price: '4.61', change: '-0.03', pct: '-0.65%', up: false, badge: 'HG', badgeColor: '#B45309' },
+    {
+      symbol: 'CL1!',
+      name: 'WTI Crude',
+      price: '79.42',
+      change: '-0.58',
+      pct: '-0.73%',
+      up: false,
+      badge: 'CL',
+      badgeColor: '#6B7280',
+    },
+    {
+      symbol: 'NG1!',
+      name: 'Natural Gas',
+      price: '2.18',
+      change: '+0.04',
+      pct: '+1.87%',
+      up: true,
+      badge: 'NG',
+      badgeColor: '#3B82F6',
+    },
+    {
+      symbol: 'GC1!',
+      name: 'Gold Futures',
+      price: '2,463.10',
+      change: '+10.30',
+      pct: '+0.42%',
+      up: true,
+      badge: 'GC',
+      badgeColor: '#F59E0B',
+    },
+    {
+      symbol: 'SI1!',
+      name: 'Silver Futures',
+      price: '28.82',
+      change: '+0.34',
+      pct: '+1.20%',
+      up: true,
+      badge: 'SI',
+      badgeColor: '#9CA3AF',
+    },
+    {
+      symbol: 'HG1!',
+      name: 'Copper',
+      price: '4.61',
+      change: '-0.03',
+      pct: '-0.65%',
+      up: false,
+      badge: 'HG',
+      badgeColor: '#B45309',
+    },
   ],
   BONDS: [
-    { symbol: 'US10Y', name: 'US 10-Year', price: '4.474', change: '-0.012', pct: '-0.27%', up: false, badge: '10Y', badgeColor: '#2961FF' },
-    { symbol: 'US2Y', name: 'US 2-Year', price: '4.912', change: '-0.008', pct: '-0.16%', up: false, badge: '2Y', badgeColor: '#2961FF' },
-    { symbol: 'UK10Y', name: 'UK Gilt 10Y', price: '4.186', change: '+0.006', pct: '+0.14%', up: true, badge: 'UK', badgeColor: '#EF4444' },
-    { symbol: 'DE10Y', name: 'Bund 10Y', price: '2.614', change: '+0.010', pct: '+0.38%', up: true, badge: 'DE', badgeColor: '#6B7280' },
-    { symbol: 'JP10Y', name: 'JGB 10Y', price: '1.062', change: '-0.004', pct: '-0.37%', up: false, badge: 'JP', badgeColor: '#F97316' },
+    {
+      symbol: 'US10Y',
+      name: 'US 10-Year',
+      price: '4.474',
+      change: '-0.012',
+      pct: '-0.27%',
+      up: false,
+      badge: '10Y',
+      badgeColor: '#2961FF',
+    },
+    {
+      symbol: 'US2Y',
+      name: 'US 2-Year',
+      price: '4.912',
+      change: '-0.008',
+      pct: '-0.16%',
+      up: false,
+      badge: '2Y',
+      badgeColor: '#2961FF',
+    },
+    {
+      symbol: 'UK10Y',
+      name: 'UK Gilt 10Y',
+      price: '4.186',
+      change: '+0.006',
+      pct: '+0.14%',
+      up: true,
+      badge: 'UK',
+      badgeColor: '#EF4444',
+    },
+    {
+      symbol: 'DE10Y',
+      name: 'Bund 10Y',
+      price: '2.614',
+      change: '+0.010',
+      pct: '+0.38%',
+      up: true,
+      badge: 'DE',
+      badgeColor: '#6B7280',
+    },
+    {
+      symbol: 'JP10Y',
+      name: 'JGB 10Y',
+      price: '1.062',
+      change: '-0.004',
+      pct: '-0.37%',
+      up: false,
+      badge: 'JP',
+      badgeColor: '#F97316',
+    },
   ],
   FOREX: [
-    { symbol: 'EURUSD', name: 'Euro / USD', price: '1.0842', change: '+0.0034', pct: '+0.31%', up: true, badge: 'EU', badgeColor: '#2961FF' },
-    { symbol: 'GBPUSD', name: 'Cable', price: '1.2691', change: '+0.0021', pct: '+0.17%', up: true, badge: 'GB', badgeColor: '#EF4444' },
-    { symbol: 'USDJPY', name: 'Dollar Yen', price: '156.84', change: '-0.32', pct: '-0.20%', up: false, badge: 'JP', badgeColor: '#F97316' },
-    { symbol: 'XAUUSD', name: 'Gold / USD', price: '2,206.48', change: '+8.20', pct: '+0.37%', up: true, badge: 'XAU', badgeColor: '#F59E0B' },
-    { symbol: 'GBPJPY', name: 'Cable Yen', price: '198.12', change: '-0.48', pct: '-0.24%', up: false, badge: 'GJ', badgeColor: '#8B5CF6' },
+    {
+      symbol: 'EURUSD',
+      name: 'Euro / USD',
+      price: '1.0842',
+      change: '+0.0034',
+      pct: '+0.31%',
+      up: true,
+      badge: 'EU',
+      badgeColor: '#2961FF',
+    },
+    {
+      symbol: 'GBPUSD',
+      name: 'Cable',
+      price: '1.2691',
+      change: '+0.0021',
+      pct: '+0.17%',
+      up: true,
+      badge: 'GB',
+      badgeColor: '#EF4444',
+    },
+    {
+      symbol: 'USDJPY',
+      name: 'Dollar Yen',
+      price: '156.84',
+      change: '-0.32',
+      pct: '-0.20%',
+      up: false,
+      badge: 'JP',
+      badgeColor: '#F97316',
+    },
+    {
+      symbol: 'XAUUSD',
+      name: 'Gold / USD',
+      price: '2,206.48',
+      change: '+8.20',
+      pct: '+0.37%',
+      up: true,
+      badge: 'XAU',
+      badgeColor: '#F59E0B',
+    },
+    {
+      symbol: 'GBPJPY',
+      name: 'Cable Yen',
+      price: '198.12',
+      change: '-0.48',
+      pct: '-0.24%',
+      up: false,
+      badge: 'GJ',
+      badgeColor: '#8B5CF6',
+    },
   ],
 };
 
@@ -95,7 +293,13 @@ export function LiveWatchlistPage() {
                     : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
                 }`}
               >
-                {tabItem.id === 'INDICES' ? t('tabIndices') : tabItem.id === 'FUTURES' ? t('tabFutures') : tabItem.id === 'BONDS' ? t('tabBonds') : t('tabForex')}
+                {tabItem.id === 'INDICES'
+                  ? t('tabIndices')
+                  : tabItem.id === 'FUTURES'
+                    ? t('tabFutures')
+                    : tabItem.id === 'BONDS'
+                      ? t('tabBonds')
+                      : t('tabForex')}
               </button>
             ))}
           </div>
@@ -120,7 +324,10 @@ export function LiveWatchlistPage() {
       {/* Market list — dark card */}
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="overflow-hidden rounded-[22px] bg-[#111111]" style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.10)' }}>
+          <div
+            className="overflow-hidden rounded-[22px] bg-[#111111]"
+            style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.10)' }}
+          >
             {/* Table header */}
             <div className="grid grid-cols-[auto_1fr_auto_auto] gap-3 border-b border-white/[0.06] px-4 py-3">
               <span className="w-8" />
@@ -162,9 +369,7 @@ export function LiveWatchlistPage() {
               ))}
             </div>
           </div>
-          <p className="font-body text-muted mt-3 text-[11px]">
-            {t('disclaimer')}
-          </p>
+          <p className="font-body text-muted mt-3 text-[11px]">{t('disclaimer')}</p>
         </div>
       </section>
 
@@ -174,9 +379,7 @@ export function LiveWatchlistPage() {
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
             {t('ctaKicker')}
           </SectionKicker>
-          <p className="font-body mb-7 text-[14px] text-white/60">
-            {t('ctaDesc')}
-          </p>
+          <p className="font-body mb-7 text-[14px] text-white/60">{t('ctaDesc')}</p>
           <a
             href="https://trade.newera365.com"
             target="_blank"

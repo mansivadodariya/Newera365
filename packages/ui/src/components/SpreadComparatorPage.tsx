@@ -188,7 +188,9 @@ export function SpreadComparatorPage() {
           <div className="grid grid-cols-3 gap-[10px]">
             {/* Standard */}
             <div className="bg-surface shadow-card flex flex-col gap-3 rounded-[18px] p-4 dark:shadow-none">
-              <span className="text-foreground font-sans text-[13px] font-semibold">{t('rowStandard')}</span>
+              <span className="text-foreground font-sans text-[13px] font-semibold">
+                {t('rowStandard')}
+              </span>
               <div className="flex flex-col gap-1">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
                   {t('cardSpreadLabel')}
@@ -201,7 +203,9 @@ export function SpreadComparatorPage() {
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
                   {t('cardCommissionLabel')}
                 </p>
-                <p className="font-body text-foreground text-[13px] font-semibold">{t('cardCommissionNone')}</p>
+                <p className="font-body text-foreground text-[13px] font-semibold">
+                  {t('cardCommissionNone')}
+                </p>
               </div>
               <div className="dark:border-border mt-auto border-t border-[#e5e7eb] pt-3">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
@@ -245,7 +249,9 @@ export function SpreadComparatorPage() {
 
             {/* VIP */}
             <div className="bg-surface shadow-card flex flex-col gap-3 rounded-[18px] p-4 dark:shadow-none">
-              <span className="text-foreground font-sans text-[13px] font-semibold">{t('rowVip')}</span>
+              <span className="text-foreground font-sans text-[13px] font-semibold">
+                {t('rowVip')}
+              </span>
               <div className="flex flex-col gap-1">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
                   {t('cardSpreadLabel')}
@@ -258,7 +264,9 @@ export function SpreadComparatorPage() {
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
                   {t('cardCommissionLabel')}
                 </p>
-                <p className="font-body text-foreground text-[13px] font-semibold">{t('cardVipCommission')}</p>
+                <p className="font-body text-foreground text-[13px] font-semibold">
+                  {t('cardVipCommission')}
+                </p>
               </div>
               <div className="dark:border-border mt-auto border-t border-[#e5e7eb] pt-3">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
@@ -318,9 +326,7 @@ export function SpreadComparatorPage() {
             <p className="text-foreground font-sans text-[14px] font-semibold">
               {t('calcFormula')}
             </p>
-            <p className="font-body text-muted mt-2 text-[12px] leading-relaxed">
-              {t('calcDesc')}
-            </p>
+            <p className="font-body text-muted mt-2 text-[12px] leading-relaxed">{t('calcDesc')}</p>
           </div>
         </div>
       </section>
@@ -336,9 +342,7 @@ export function SpreadComparatorPage() {
             <br />
             <span className="text-accent">{t('ctaHeadingAccent')}</span>
           </h2>
-          <p className="font-body mb-8 text-[13px] leading-relaxed text-white/60">
-            {t('ctaDesc')}
-          </p>
+          <p className="font-body mb-8 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
           <div className="flex flex-col gap-3">
             <Link
               href={`/${locale}/register?account=raw`}

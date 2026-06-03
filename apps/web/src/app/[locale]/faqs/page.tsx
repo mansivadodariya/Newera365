@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { FaqPage , CtaBanner } from '@newera365/ui';
+import { FaqPage, CtaBanner } from '@newera365/ui';
 import type { CmsFaqItem } from '@newera365/ui';
 import { getFaqs } from '@/lib/cms';
 import type { CmsFaq } from '@/lib/cms';

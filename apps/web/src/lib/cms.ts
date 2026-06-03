@@ -555,7 +555,7 @@ export async function getBlogPosts(locale: string, limit = 10): Promise<CmsArtic
   );
   return data.docs.map((post) => {
     const img = post.featuredImage;
-    const thumbnailUrl = img && typeof img !== 'number' ? (img as CmsMedia).url ?? null : null;
+    const thumbnailUrl = img && typeof img !== 'number' ? ((img as CmsMedia).url ?? null) : null;
     return {
       id: post.id,
       slug: post.slug,

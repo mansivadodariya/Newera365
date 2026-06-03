@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { GuidesPage , CtaBanner } from '@newera365/ui';
+import { GuidesPage, CtaBanner } from '@newera365/ui';
 import type { CmsGuide } from '@newera365/ui';
 import { getGuides } from '@/lib/cms';
 import type { CmsEducationContent } from '@/lib/cms';

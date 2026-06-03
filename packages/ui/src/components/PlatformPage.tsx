@@ -296,10 +296,18 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                 {/* Name + desc */}
                 <div>
                   <p className={`mb-2 font-sans text-[22px] font-semibold ${card.nameColor}`}>
-                    {card.id === 'mt5' ? t('card1Name') : card.id === 'web' ? t('card2Name') : t('card3Name')}
+                    {card.id === 'mt5'
+                      ? t('card1Name')
+                      : card.id === 'web'
+                        ? t('card2Name')
+                        : t('card3Name')}
                   </p>
                   <p className={`font-body text-[13px] leading-[1.55] ${card.descColor}`}>
-                    {card.id === 'mt5' ? t('card1Desc') : card.id === 'web' ? t('card2Desc') : t('card3Desc')}
+                    {card.id === 'mt5'
+                      ? t('card1Desc')
+                      : card.id === 'web'
+                        ? t('card2Desc')
+                        : t('card3Desc')}
                   </p>
                 </div>
 
@@ -308,7 +316,11 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                   href={`/${locale}/register`}
                   className={`font-body flex h-[44px] items-center justify-center gap-2 rounded-full text-[13px] font-medium transition-opacity hover:opacity-80 ${card.ctaStyle}`}
                 >
-                  {card.id === 'mt5' ? t('card1Cta') : card.id === 'web' ? t('card2Cta') : t('card3Cta')}
+                  {card.id === 'mt5'
+                    ? t('card1Cta')
+                    : card.id === 'web'
+                      ? t('card2Cta')
+                      : t('card3Cta')}
                   <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                     <path
                       d="M8 3v8M4 7l4 4 4-4"
@@ -346,10 +358,14 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                 </div>
                 <div>
                   <p className="text-foreground mb-[4px] font-sans text-[14px] font-semibold xl:mb-1 xl:text-[18px]">
-                    {t(`feat${(['indicators', 'ea', 'timeframes', 'hedging'].indexOf(tool.id) + 1)}Title` as 'feat1Title')}
+                    {t(
+                      `feat${['indicators', 'ea', 'timeframes', 'hedging'].indexOf(tool.id) + 1}Title` as 'feat1Title',
+                    )}
                   </p>
                   <p className="font-body text-muted text-[11px] leading-snug xl:text-[13px]">
-                    {t(`feat${(['indicators', 'ea', 'timeframes', 'hedging'].indexOf(tool.id) + 1)}Desc` as 'feat1Desc')}
+                    {t(
+                      `feat${['indicators', 'ea', 'timeframes', 'hedging'].indexOf(tool.id) + 1}Desc` as 'feat1Desc',
+                    )}
                   </p>
                 </div>
               </div>

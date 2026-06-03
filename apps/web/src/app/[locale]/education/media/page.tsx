@@ -7,7 +7,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Videos & Audio | NewEra365',
-  description: 'Lessons, interviews, breakdowns and discussions from our trading desk and partners.',
+  description:
+    'Lessons, interviews, breakdowns and discussions from our trading desk and partners.',
 };
 
 function mapMediaItem(item: CmsEducationContent): CmsVideoItem {

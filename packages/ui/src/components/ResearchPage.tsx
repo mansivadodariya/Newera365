@@ -207,7 +207,11 @@ interface ResearchPageProps {
   basePath?: string;
 }
 
-export function ResearchPage({ cmsArticles, cmsReports, basePath = 'research' }: ResearchPageProps) {
+export function ResearchPage({
+  cmsArticles,
+  cmsReports,
+  basePath = 'research',
+}: ResearchPageProps) {
   const locale = useLocale();
   const t = useTranslations('research');
   const [activeCategory, setActiveCategory] = useState<Category>('ALL');
@@ -369,7 +373,9 @@ export function ResearchPage({ cmsArticles, cmsReports, basePath = 'research' }:
                   <span className="rounded-full bg-[rgba(0,176,80,0.1)] px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px] text-[#00b050]">
                     {article.category}
                   </span>
-                  <span className="font-mono text-[10px] text-[#6b7280]">{article.readTime} read</span>
+                  <span className="font-mono text-[10px] text-[#6b7280]">
+                    {article.readTime} read
+                  </span>
                 </div>
 
                 {/* Title */}
@@ -387,8 +393,21 @@ export function ResearchPage({ cmsArticles, cmsReports, basePath = 'research' }:
                 <div className="mt-auto h-px bg-[rgba(17,17,17,0.08)] dark:bg-white/[0.08]" />
                 <div className="mt-[14px] flex items-center justify-between">
                   <span className="font-mono text-[10px] text-[#6b7280]">{article.date}</span>
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="text-muted group-hover:text-accent transition-colors" aria-hidden="true">
-                    <path d="M2 12L12 2M12 2H7M12 2v5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    className="text-muted group-hover:text-accent transition-colors"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M2 12L12 2M12 2H7M12 2v5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </div>
               </Link>
@@ -396,9 +415,7 @@ export function ResearchPage({ cmsArticles, cmsReports, basePath = 'research' }:
           </div>
 
           {filteredList.length === 0 && (
-            <p className="font-body text-muted py-10 text-center text-[14px]">
-              {t('noArticles')}
-            </p>
+            <p className="font-body text-muted py-10 text-center text-[14px]">{t('noArticles')}</p>
           )}
 
           {/* Load more — bg-[#fafaf9] rounded pill matching Figma */}
@@ -406,8 +423,21 @@ export function ResearchPage({ cmsArticles, cmsReports, basePath = 'research' }:
             <button className="font-body text-foreground text-[13px] font-medium">
               {t('loadMore')}
             </button>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="text-[#6b7280]" aria-hidden="true">
-              <path d="M7 2.5v9M3 8l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              className="text-[#6b7280]"
+              aria-hidden="true"
+            >
+              <path
+                d="M7 2.5v9M3 8l4 4 4-4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </div>
         </div>
@@ -443,7 +473,7 @@ export function ResearchPage({ cmsArticles, cmsReports, basePath = 'research' }:
                         {report.summary}
                       </p>
                     )}
-                    <p className="font-mono mt-2 text-[10px] text-[#9ca3af]">
+                    <p className="mt-2 font-mono text-[10px] text-[#9ca3af]">
                       {(() => {
                         try {
                           return new Date(report.publishedDate).toLocaleDateString('en-US', {
@@ -508,9 +538,7 @@ export function ResearchPage({ cmsArticles, cmsReports, basePath = 'research' }:
                       strokeLinejoin="round"
                     />
                   </svg>
-                  <span className="font-body text-[14px] text-white">
-                    {t('briefingSuccess')}
-                  </span>
+                  <span className="font-body text-[14px] text-white">{t('briefingSuccess')}</span>
                 </div>
               ) : (
                 <form

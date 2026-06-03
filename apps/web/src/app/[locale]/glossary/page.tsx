@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { GlossaryPage , CtaBanner } from '@newera365/ui';
+import { GlossaryPage, CtaBanner } from '@newera365/ui';
 import type { CmsGlossaryTerm } from '@newera365/ui';
 import { getGlossaryTerms } from '@/lib/cms';
 import type { CmsEducationContent } from '@/lib/cms';

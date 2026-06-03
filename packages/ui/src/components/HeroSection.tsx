@@ -14,8 +14,7 @@ export function HeroSection() {
         {/* Left col: headline + subtitle + CTAs */}
         <div className="flex flex-col gap-[18px] xl:w-[516px] xl:flex-shrink-0 xl:pb-16 xl:pt-4">
           <h1 className="text-foreground font-sans text-[44px] font-semibold leading-[1.02] tracking-[-1.54px] xl:text-[52px] xl:tracking-[-2px]">
-            {t('heroLine1')}{' '}
-            <span className="text-accent">{t('heroPremium')}</span>{' '}
+            {t('heroLine1')} <span className="text-accent">{t('heroPremium')}</span>{' '}
             {t('heroLine2')}
           </h1>
 
@@ -30,7 +29,13 @@ export function HeroSection() {
             >
               {t('heroCTALive')}
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path
+                  d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </Link>
             <Link
@@ -43,7 +48,7 @@ export function HeroSection() {
         </div>
 
         {/* Right col / bottom on mobile: chart card */}
-        <div className="overflow-hidden rounded-[24px] bg-gradient-to-b from-[#fafaf9] to-[#f4f4f3] dark:from-[#07090d] dark:to-[#0d1117] xl:min-w-0 xl:flex-1">
+        <div className="overflow-hidden rounded-[24px] bg-gradient-to-b from-[#fafaf9] to-[#f4f4f3] xl:min-w-0 xl:flex-1 dark:from-[#07090d] dark:to-[#0d1117]">
           {/* Static trading board image (matches Figma design) */}
           <div className="relative w-full" style={{ aspectRatio: '350/261' }}>
             <Image
@@ -56,13 +61,16 @@ export function HeroSection() {
           </div>
 
           {/* Specs row — white bg, grey mono labels, dark values */}
-          <div className="bg-background grid grid-cols-3 divide-x divide-border dark:divide-[#1a1c22]">
+          <div className="bg-background divide-border grid grid-cols-3 divide-x dark:divide-[#1a1c22]">
             {[
               { label: t('heroSpreadLabel'), value: t('heroSpreadValue') },
               { label: t('heroLeverageLabel'), value: t('heroLeverageValue') },
               { label: t('heroExecutionLabel'), value: t('heroExecutionValue') },
             ].map((spec) => (
-              <div key={spec.label} className="flex flex-col items-start gap-[2px] px-[14px] py-[6px]">
+              <div
+                key={spec.label}
+                className="flex flex-col items-start gap-[2px] px-[14px] py-[6px]"
+              >
                 <span className="font-mono text-[9px] font-normal uppercase leading-none tracking-[1.35px] text-[#6b7280]">
                   {spec.label}
                 </span>

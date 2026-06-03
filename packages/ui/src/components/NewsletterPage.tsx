@@ -51,9 +51,7 @@ export function NewsletterPage() {
               <h2 className="text-foreground mb-2 font-sans text-[22px] font-semibold">
                 {t('successHeading')}
               </h2>
-              <p className="font-body text-muted text-[13px] leading-relaxed">
-                {t('successDesc')}
-              </p>
+              <p className="font-body text-muted text-[13px] leading-relaxed">{t('successDesc')}</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -83,12 +81,16 @@ export function NewsletterPage() {
               >
                 {t('subscribeBtn')}
                 <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path
+                    d="M3 8h10M9 4l4 4-4 4"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </button>
-              <p className="font-body text-muted text-center text-[11px]">
-                {t('privacyNote')}
-              </p>
+              <p className="font-body text-muted text-center text-[11px]">{t('privacyNote')}</p>
             </form>
           )}
         </div>
@@ -119,7 +121,12 @@ export function NewsletterPage() {
                 key: 'setup',
                 icon: (
                   <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                    <path d="M10 3l2 6h6l-5 3.5 2 6L10 15l-5 3.5 2-6L2 9h6z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+                    <path
+                      d="M10 3l2 6h6l-5 3.5 2 6L10 15l-5 3.5 2-6L2 9h6z"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 ),
                 title: t('item2Title'),
@@ -129,8 +136,21 @@ export function NewsletterPage() {
                 key: 'education',
                 icon: (
                   <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                    <rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
-                    <path d="M7 7h6M7 10h6M7 13h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    <rect
+                      x="3"
+                      y="3"
+                      width="14"
+                      height="14"
+                      rx="2"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                    />
+                    <path
+                      d="M7 7h6M7 10h6M7 13h4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 ),
                 title: t('item3Title'),
@@ -141,7 +161,13 @@ export function NewsletterPage() {
                 icon: (
                   <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
                     <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.5" />
-                    <path d="M10 7v3l2 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M10 7v3l2 2"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 ),
                 title: t('item4Title'),
@@ -153,8 +179,12 @@ export function NewsletterPage() {
                   {item.icon}
                 </div>
                 <div className="flex-1 pt-0.5">
-                  <p className="text-foreground font-sans text-[14px] font-semibold">{item.title}</p>
-                  <p className="font-body text-muted mt-[3px] text-[12px] leading-[1.5]">{item.desc}</p>
+                  <p className="text-foreground font-sans text-[14px] font-semibold">
+                    {item.title}
+                  </p>
+                  <p className="font-body text-muted mt-[3px] text-[12px] leading-[1.5]">
+                    {item.desc}
+                  </p>
                 </div>
               </div>
             ))}
@@ -182,7 +212,9 @@ export function NewsletterPage() {
                 <span className="text-accent font-sans text-[12px] font-semibold">MC</span>
               </div>
               <div>
-                <p className="font-sans text-[13px] font-semibold text-white">{t('testimonialAuthor')}</p>
+                <p className="font-sans text-[13px] font-semibold text-white">
+                  {t('testimonialAuthor')}
+                </p>
                 <p className="font-body text-[11px] text-white/40">{t('testimonialSince')}</p>
               </div>
             </div>

@@ -340,7 +340,10 @@ export function FaqPage({ faqs }: FaqPageProps) {
       {/* Category filter tabs — matches Figma pills */}
       <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="scrollbar-hide -mx-5 flex gap-2 overflow-x-auto px-5 pb-1" style={{ scrollbarWidth: 'none' }}>
+          <div
+            className="scrollbar-hide -mx-5 flex gap-2 overflow-x-auto px-5 pb-1"
+            style={{ scrollbarWidth: 'none' }}
+          >
             {[t('filterAll'), ...Object.keys(CATEGORY_STYLES)].map((cat) => {
               const isAll = cat === t('filterAll');
               const isActive = isAll ? !activeCategory : activeCategory === cat;
@@ -350,7 +353,6 @@ export function FaqPage({ faqs }: FaqPageProps) {
                   onClick={() =>
                     setActiveCategory(isAll ? null : activeCategory === cat ? null : cat)
                   }
-
                   className={`font-body flex-shrink-0 rounded-full px-3 py-[7px] text-[12px] font-medium transition-colors ${
                     isActive
                       ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
@@ -379,7 +381,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
                 return (
                   <div
                     key={idx}
-                    className="bg-[#fafaf9] dark:bg-surface flex items-center gap-[10px] rounded-[14px] px-4 py-[14px]"
+                    className="dark:bg-surface flex items-center gap-[10px] rounded-[14px] bg-[#fafaf9] px-4 py-[14px]"
                   >
                     <span className="flex-shrink-0 rounded-full bg-[rgba(0,176,80,0.1)] px-[10px] py-[5px] font-mono text-[9px] tracking-[1.2px] text-[#00b050]">
                       {item.section.toUpperCase()}
@@ -417,7 +419,9 @@ export function FaqPage({ faqs }: FaqPageProps) {
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="xl:mx-auto xl:max-w-[730px]">
               <p className="font-body text-muted text-[12px]">
-                {totalResults !== 1 ? t('resultsForPlural', { count: totalResults, query: search }) : t('resultsFor', { count: totalResults, query: search })}
+                {totalResults !== 1
+                  ? t('resultsForPlural', { count: totalResults, query: search })
+                  : t('resultsFor', { count: totalResults, query: search })}
               </p>
             </div>
           </div>
@@ -447,9 +451,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
               )}
             </div>
           ) : (
-            <p className="font-body text-muted py-8 text-center text-[14px]">
-              {t('noResults')}
-            </p>
+            <p className="font-body text-muted py-8 text-center text-[14px]">{t('noResults')}</p>
           )}
         </div>
       </section>

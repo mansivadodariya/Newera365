@@ -282,14 +282,20 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div
               className="overflow-hidden rounded-[22px] bg-[#0d0d0d] xl:flex xl:flex-row"
-              onClick={() => featured.href && window.open(featured.href, '_blank', 'noopener,noreferrer')}
+              onClick={() =>
+                featured.href && window.open(featured.href, '_blank', 'noopener,noreferrer')
+              }
               style={{ cursor: featured.href ? 'pointer' : 'default' }}
             >
               {/* Thumbnail */}
               <div className="relative flex h-[180px] items-center justify-center overflow-hidden bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111] xl:h-auto xl:w-[55%] xl:flex-shrink-0 xl:rounded-none">
                 {featured.thumbnailUrl && (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={featured.thumbnailUrl} alt={featured.title} className="absolute inset-0 h-full w-full object-cover opacity-70" />
+                  <img
+                    src={featured.thumbnailUrl}
+                    alt={featured.title}
+                    className="absolute inset-0 h-full w-full object-cover opacity-70"
+                  />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 {/* NEW EPISODE badge */}
@@ -344,9 +350,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
             {t('latestEpisodes')}
           </SectionKicker>
           {filtered.length === 0 ? (
-            <p className="font-body text-muted py-8 text-center text-[14px]">
-              {t('noResults')}
-            </p>
+            <p className="font-body text-muted py-8 text-center text-[14px]">{t('noResults')}</p>
           ) : (
             <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-3">
               {filtered.map((ep) => (
@@ -360,7 +364,11 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
                   <div className="relative flex h-[90px] items-center justify-center overflow-hidden rounded-[11px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111]">
                     {ep.thumbnailUrl && (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={ep.thumbnailUrl} alt={ep.title} className="absolute inset-0 h-full w-full object-cover opacity-80" />
+                      <img
+                        src={ep.thumbnailUrl}
+                        alt={ep.title}
+                        className="absolute inset-0 h-full w-full object-cover opacity-80"
+                      />
                     )}
                     <div className="bg-accent/90 relative z-10 flex h-8 w-8 items-center justify-center rounded-full">
                       {ep.type === 'VIDEO' ? (
@@ -412,9 +420,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
             {t('ctaHeading')}
           </h2>
-          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            {t('ctaDesc')}
-          </p>
+          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
           <div className="flex flex-col gap-3">
             <a
               href={`/${locale}/guides`}

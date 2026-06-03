@@ -89,8 +89,16 @@ const NAV_ITEMS: NavItem[] = [
       { label: 'Margin calculator', sub: 'Margin, pip & swap', href: '/tools' },
       { label: 'Pivot calculator', sub: 'Classical, Camarilla, Woodie', href: '/tools/pivot' },
       { label: 'Profit calculator', sub: 'P&L by instrument & size', href: '/tools/profit' },
-      { label: 'Fibonacci calculator', sub: 'Retracement & extension levels', href: '/tools/fibonacci' },
-      { label: 'Spread comparator', sub: 'Side-by-side account spreads', href: '/tools/spread-comparator' },
+      {
+        label: 'Fibonacci calculator',
+        sub: 'Retracement & extension levels',
+        href: '/tools/fibonacci',
+      },
+      {
+        label: 'Spread comparator',
+        sub: 'Side-by-side account spreads',
+        href: '/tools/spread-comparator',
+      },
       { label: 'Live watchlist', sub: 'Real-time market prices', href: '/tools/watchlist' },
       { label: 'Economic calendar', sub: 'Key market events & releases', href: '/tools/calendar' },
       { label: 'AI CRM', sub: 'AI-powered broker tools', href: '/tools/ai-crm' },

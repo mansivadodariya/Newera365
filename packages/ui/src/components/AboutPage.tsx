@@ -157,7 +157,9 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
               <p className="font-body text-[12px] text-white/55">{t('ceoTitle')}</p>
             </div>
             <div className="text-right">
-              <p className="font-mono text-[9px] tracking-[1.35px] text-white/40">{t('founderLetterLabel')}</p>
+              <p className="font-mono text-[9px] tracking-[1.35px] text-white/40">
+                {t('founderLetterLabel')}
+              </p>
             </div>
           </div>
         </div>
@@ -258,10 +260,22 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-foreground font-sans text-[15px] font-semibold leading-normal">
-                    {link.href === '/company/careers' ? t('exploreCareers') : link.href === '/company/awards' ? t('exploreAwards') : link.href === '/company/media' ? t('exploreMedia') : t('exploreContact')}
+                    {link.href === '/company/careers'
+                      ? t('exploreCareers')
+                      : link.href === '/company/awards'
+                        ? t('exploreAwards')
+                        : link.href === '/company/media'
+                          ? t('exploreMedia')
+                          : t('exploreContact')}
                   </p>
                   <p className="font-body text-muted mt-[2px] text-[12px]">
-                    {link.href === '/company/careers' ? t('exploreCareersDesc') : link.href === '/company/awards' ? t('exploreAwardsDesc') : link.href === '/company/media' ? t('exploreMediaDesc') : t('exploreContactDesc')}
+                    {link.href === '/company/careers'
+                      ? t('exploreCareersDesc')
+                      : link.href === '/company/awards'
+                        ? t('exploreAwardsDesc')
+                        : link.href === '/company/media'
+                          ? t('exploreMediaDesc')
+                          : t('exploreContactDesc')}
                   </p>
                 </div>
                 <span className="text-muted flex-shrink-0 text-[18px]">›</span>

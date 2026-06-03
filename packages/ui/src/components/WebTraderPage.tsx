@@ -253,9 +253,15 @@ export function WebTraderPage() {
                 </div>
                 <div>
                   <p className="text-foreground mb-0.5 font-sans text-[14px] font-semibold">
-                    {t(`feat${feat.id.charAt(0).toUpperCase() + feat.id.slice(1)}Title` as 'featStreamingTitle')}
+                    {t(
+                      `feat${feat.id.charAt(0).toUpperCase() + feat.id.slice(1)}Title` as 'featStreamingTitle',
+                    )}
                   </p>
-                  <p className="font-body text-muted text-[12px] leading-relaxed">{t(`feat${feat.id.charAt(0).toUpperCase() + feat.id.slice(1)}Desc` as 'featStreamingDesc')}</p>
+                  <p className="font-body text-muted text-[12px] leading-relaxed">
+                    {t(
+                      `feat${feat.id.charAt(0).toUpperCase() + feat.id.slice(1)}Desc` as 'featStreamingDesc',
+                    )}
+                  </p>
                 </div>
               </div>
             ))}

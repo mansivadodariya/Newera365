@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { LegalPage , CtaBanner } from '@newera365/ui';
+import { LegalPage, CtaBanner } from '@newera365/ui';
 import type { CmsLegalDocument } from '@newera365/ui';
 import { getLegalPages } from '@/lib/cms';
 import type { CmsLegalPage } from '@/lib/cms';

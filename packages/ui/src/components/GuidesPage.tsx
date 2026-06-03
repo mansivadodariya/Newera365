@@ -197,9 +197,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
             {t('ctaHeading')}
           </h2>
-          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            {t('ctaDesc')}
-          </p>
+          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
           <div className="flex flex-col gap-3">
             <Link
               href={`/${locale}/education`}

@@ -78,7 +78,15 @@ function NumberInput({
   );
 }
 
-function ResultCard({ levels, retracementLabel, extensionLabel }: { levels: FibLevel[]; retracementLabel: string; extensionLabel: string }) {
+function ResultCard({
+  levels,
+  retracementLabel,
+  extensionLabel,
+}: {
+  levels: FibLevel[];
+  retracementLabel: string;
+  extensionLabel: string;
+}) {
   const retracements = levels.filter((l) => l.type === 'retracement');
   const extensions = levels.filter((l) => l.type === 'extension');
 
@@ -148,7 +156,17 @@ function ResultCard({ levels, retracementLabel, extensionLabel }: { levels: FibL
   );
 }
 
-function FormulaBox({ direction, calcKicker, calcFormula, calcDesc }: { direction: FibDirection; calcKicker: string; calcFormula: string; calcDesc: string }) {
+function FormulaBox({
+  direction,
+  calcKicker,
+  calcFormula,
+  calcDesc,
+}: {
+  direction: FibDirection;
+  calcKicker: string;
+  calcFormula: string;
+  calcDesc: string;
+}) {
   return (
     <div className="rounded-[14px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
       <p className="font-body text-muted mb-2 text-[10px] uppercase tracking-[0.1em]">
@@ -157,9 +175,7 @@ function FormulaBox({ direction, calcKicker, calcFormula, calcDesc }: { directio
       <p className="font-body text-foreground text-[13px] leading-[1.6]">
         <span className="font-medium">{calcFormula}</span>
         <br />
-        <span className="text-muted">
-          {calcDesc}
-        </span>
+        <span className="text-muted">{calcDesc}</span>
       </p>
     </div>
   );
@@ -231,7 +247,9 @@ export function FibonacciCalculatorPage() {
               {/* Trend dropdown */}
               <div className="xl:col-span-2">
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">{t('fieldTrend')}</label>
+                  <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">
+                    {t('fieldTrend')}
+                  </label>
                   <div className="border-border relative overflow-hidden rounded-[12px] border bg-white dark:bg-[#1c1c1c]">
                     <select
                       value={direction}
@@ -247,8 +265,20 @@ export function FibonacciCalculatorPage() {
                       <option value="Uptrend">{t('trendUp')}</option>
                       <option value="Downtrend">{t('trendDown')}</option>
                     </select>
-                    <svg className="text-muted pointer-events-none absolute right-4 top-1/2 -translate-y-1/2" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                      <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <svg
+                      className="text-muted pointer-events-none absolute right-4 top-1/2 -translate-y-1/2"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                    >
+                      <path
+                        d="M2 4l4 4 4-4"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
                   </div>
                 </div>
@@ -278,15 +308,33 @@ export function FibonacciCalculatorPage() {
 
             {/* Desktop result panel */}
             <div className="hidden xl:flex xl:w-[420px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
-              <ResultCard levels={levels} retracementLabel={t('retracementLabel')} extensionLabel={t('extensionLabel')} />
-              <FormulaBox direction={direction} calcKicker={t('calcKicker')} calcFormula={t('calcFormula')} calcDesc={t('calcDesc')} />
+              <ResultCard
+                levels={levels}
+                retracementLabel={t('retracementLabel')}
+                extensionLabel={t('extensionLabel')}
+              />
+              <FormulaBox
+                direction={direction}
+                calcKicker={t('calcKicker')}
+                calcFormula={t('calcFormula')}
+                calcDesc={t('calcDesc')}
+              />
             </div>
           </div>
 
           {/* Mobile result panel */}
           <div className="mt-5 flex flex-col gap-4 xl:hidden">
-            <ResultCard levels={levels} retracementLabel={t('retracementLabel')} extensionLabel={t('extensionLabel')} />
-            <FormulaBox direction={direction} calcKicker={t('calcKicker')} calcFormula={t('calcFormula')} calcDesc={t('calcDesc')} />
+            <ResultCard
+              levels={levels}
+              retracementLabel={t('retracementLabel')}
+              extensionLabel={t('extensionLabel')}
+            />
+            <FormulaBox
+              direction={direction}
+              calcKicker={t('calcKicker')}
+              calcFormula={t('calcFormula')}
+              calcDesc={t('calcDesc')}
+            />
           </div>
         </div>
       </section>
@@ -345,7 +393,6 @@ export function FibonacciCalculatorPage() {
           </div>
         </div>
       </section>
-
     </>
   );
 }

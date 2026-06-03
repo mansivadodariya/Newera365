@@ -193,8 +193,12 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
                 key={v.title}
                 className="bg-surface shadow-card flex flex-col gap-2 rounded-[18px] p-4 dark:shadow-none"
               >
-                <p className="text-foreground font-sans text-[13px] font-semibold">{t(`val${i + 1}Title` as 'val1Title')}</p>
-                <p className="font-body text-muted text-[12px] leading-relaxed">{t(`val${i + 1}Desc` as 'val1Desc')}</p>
+                <p className="text-foreground font-sans text-[13px] font-semibold">
+                  {t(`val${i + 1}Title` as 'val1Title')}
+                </p>
+                <p className="font-body text-muted text-[12px] leading-relaxed">
+                  {t(`val${i + 1}Desc` as 'val1Desc')}
+                </p>
               </div>
             ))}
           </div>
@@ -220,7 +224,17 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
                     : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
                 }`}
               >
-                {d.id === 'ALL' ? t('filterAll') : d.id === 'ENGINEERING' ? t('deptEngineering') : d.id === 'RESEARCH' ? t('deptResearch') : d.id === 'TRADING' ? t('deptTrading') : d.id === 'DESIGN' ? t('deptDesign') : t('deptOperations')}
+                {d.id === 'ALL'
+                  ? t('filterAll')
+                  : d.id === 'ENGINEERING'
+                    ? t('deptEngineering')
+                    : d.id === 'RESEARCH'
+                      ? t('deptResearch')
+                      : d.id === 'TRADING'
+                        ? t('deptTrading')
+                        : d.id === 'DESIGN'
+                          ? t('deptDesign')
+                          : t('deptOperations')}
               </button>
             ))}
           </div>
@@ -266,9 +280,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
           </div>
 
           {filtered.length === 0 && (
-            <p className="font-body text-muted py-8 text-center text-[14px]">
-              {t('noRoles')}
-            </p>
+            <p className="font-body text-muted py-8 text-center text-[14px]">{t('noRoles')}</p>
           )}
         </div>
       </section>

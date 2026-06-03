@@ -218,9 +218,15 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                 </div>
                 <div>
                   <p className="text-foreground mb-1 font-sans text-[14px] font-semibold">
-                    {t(`type${cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}Title` as 'typeGuidesTitle')}
+                    {t(
+                      `type${cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}Title` as 'typeGuidesTitle',
+                    )}
                   </p>
-                  <p className="font-body text-muted text-[11px] leading-[1.5]">{t(`type${cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}Desc` as 'typeGuidesDesc')}</p>
+                  <p className="font-body text-muted text-[11px] leading-[1.5]">
+                    {t(
+                      `type${cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}Desc` as 'typeGuidesDesc',
+                    )}
+                  </p>
                 </div>
               </Link>
             ))}
@@ -338,9 +344,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                   strokeLinejoin="round"
                 />
               </svg>
-              <span className="font-body text-[14px] text-white">
-                {t('inboxSuccess')}
-              </span>
+              <span className="font-body text-[14px] text-white">{t('inboxSuccess')}</span>
             </div>
           ) : (
             <form onSubmit={handleSubscribe} className="flex gap-2">

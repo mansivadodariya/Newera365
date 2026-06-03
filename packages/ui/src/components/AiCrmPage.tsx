@@ -206,7 +206,7 @@ export function AiCrmPage() {
 
       {/* CTA — matches Figma 1641:98 (light) / 1648:98 (dark) */}
       <section className="overflow-hidden rounded-t-[32px] bg-[#111] px-6 py-10 text-center xl:px-24 xl:py-16">
-        <h2 className="mb-2 font-sans text-[26px] font-semibold text-white dark:text-[#8c949e] xl:text-[32px]">
+        <h2 className="mb-2 font-sans text-[26px] font-semibold text-white xl:text-[32px] dark:text-[#8c949e]">
           {t('ctaHeading')}
         </h2>
         <p className="font-body mb-[18px] text-[13px] leading-[1.55] text-[#b8bfcc] dark:text-[#8c949e]">
@@ -222,7 +222,7 @@ export function AiCrmPage() {
           </Link>
           <Link
             href={`/${locale}/contact`}
-            className="font-body flex items-center rounded-[22px] border border-white/30 px-[16px] py-[12px] text-[13px] font-semibold text-white transition-colors hover:border-white/60 dark:border-[#1f242e] dark:text-[#8c949e] xl:text-[14px]"
+            className="font-body flex items-center rounded-[22px] border border-white/30 px-[16px] py-[12px] text-[13px] font-semibold text-white transition-colors hover:border-white/60 xl:text-[14px] dark:border-[#1f242e] dark:text-[#8c949e]"
           >
             {t('ctaSalesBtn')}
           </Link>

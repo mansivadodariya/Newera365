@@ -160,9 +160,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                   <p className="text-foreground font-sans text-[16px] font-semibold">
                     {t('successHeading')}
                   </p>
-                  <p className="font-body text-muted text-[13px]">
-                    {t('successDesc', { email })}
-                  </p>
+                  <p className="font-body text-muted text-[13px]">{t('successDesc', { email })}</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -201,9 +199,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                       </svg>
                     )}
                   </button>
-                  <p className="font-body text-muted text-center text-[11px]">
-                    {t('privacyNote')}
-                  </p>
+                  <p className="font-body text-muted text-center text-[11px]">{t('privacyNote')}</p>
                 </form>
               )}
             </div>
@@ -214,9 +210,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
             <p className="text-foreground mb-1 font-sans text-[18px] font-semibold">
               {t('gateHeading')}
             </p>
-            <p className="font-body text-muted mb-5 text-[12px] leading-[1.55]">
-              {t('gateDesc2')}
-            </p>
+            <p className="font-body text-muted mb-5 text-[12px] leading-[1.55]">{t('gateDesc2')}</p>
 
             {success ? (
               <div className="flex flex-col items-center gap-3 py-4 text-center">
@@ -355,9 +349,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
             {t('ctaHeading')}
           </h2>
-          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            {t('ctaDesc')}
-          </p>
+          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
           <a
             href="/demo-account"
             className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center rounded-full text-[15px] font-medium text-white transition-colors"

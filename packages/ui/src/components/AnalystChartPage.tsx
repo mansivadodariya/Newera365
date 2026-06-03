@@ -262,7 +262,15 @@ export function AnalystChartPage() {
                     : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
                 }`}
               >
-                {tabItem === 'All' ? t('filterAll') : tabItem === 'Majors' ? t('filterMajors') : tabItem === 'Crosses' ? t('filterCrosses') : tabItem === 'Commodities' ? t('filterCommodities') : t('filterCrypto')}
+                {tabItem === 'All'
+                  ? t('filterAll')
+                  : tabItem === 'Majors'
+                    ? t('filterMajors')
+                    : tabItem === 'Crosses'
+                      ? t('filterCrosses')
+                      : tabItem === 'Commodities'
+                        ? t('filterCommodities')
+                        : t('filterCrypto')}
               </button>
             ))}
           </div>
@@ -355,9 +363,7 @@ export function AnalystChartPage() {
           <h2 className="mb-2 font-sans text-[28px] font-semibold leading-[1.1] text-white xl:text-[36px]">
             {t('ctaHeading')}
           </h2>
-          <p className="font-body mb-7 text-[14px] text-white/60">
-            {t('ctaDesc')}
-          </p>
+          <p className="font-body mb-7 text-[14px] text-white/60">{t('ctaDesc')}</p>
           <a
             href="/en/register"
             className="bg-accent font-body hover:bg-accent/90 inline-flex h-[52px] items-center justify-center gap-2 rounded-full px-8 text-[14px] font-medium text-white transition-colors"

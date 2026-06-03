@@ -4,14 +4,14 @@ Forex/CFD broker website — `newera365.com`. Reference: **CSL-NE365-2026-Q2** (
 
 ## Monorepo layout
 
-| Workspace            | Purpose                                                        |
-| -------------------- | -------------------------------------------------------------- |
-| `apps/web`           | Next.js 14 App Router frontend — EN (LTR) + AR (RTL), 51 routes |
-| `apps/cms`           | Payload CMS v2 + Express — PostgreSQL (Neon), media on R2      |
-| `apps/mt5-service`   | Mock MT5 Manager API bridge — live spreads/swaps/specs         |
-| `packages/ui`        | Shared React component library                                 |
-| `packages/types`     | Shared TypeScript types + locale constants                     |
-| `packages/config`    | Shared ESLint + Tailwind presets                               |
+| Workspace          | Purpose                                                         |
+| ------------------ | --------------------------------------------------------------- |
+| `apps/web`         | Next.js 14 App Router frontend — EN (LTR) + AR (RTL), 51 routes |
+| `apps/cms`         | Payload CMS v2 + Express — PostgreSQL (Neon), media on R2       |
+| `apps/mt5-service` | Mock MT5 Manager API bridge — live spreads/swaps/specs          |
+| `packages/ui`      | Shared React component library                                  |
+| `packages/types`   | Shared TypeScript types + locale constants                      |
+| `packages/config`  | Shared ESLint + Tailwind presets                                |
 
 ## Getting started
 

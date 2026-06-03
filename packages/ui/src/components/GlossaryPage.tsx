@@ -446,9 +446,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                 : `A–Z · ${filtered.length} TERMS`}
           </SectionKicker>
           {filtered.length === 0 ? (
-            <p className="font-body text-muted py-8 text-center text-[14px]">
-              {t('noResults')}
-            </p>
+            <p className="font-body text-muted py-8 text-center text-[14px]">{t('noResults')}</p>
           ) : (
             <div className="flex flex-col xl:grid xl:grid-cols-2 xl:gap-x-10">
               {filtered.map((term, i) => {
@@ -505,9 +503,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
             {t('ctaHeading')}
           </h2>
-          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            {t('ctaDesc')}
-          </p>
+          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
           <a
             href="/guides"
             className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[15px] font-medium text-white transition-colors"

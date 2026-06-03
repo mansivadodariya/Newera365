@@ -134,7 +134,9 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                     <p className="text-foreground font-sans text-[14px] font-semibold">
                       {t('channelChat')}
                     </p>
-                    <p className="font-body text-muted mt-[3px] text-[12.5px]">{t('channelChatBtn')}</p>
+                    <p className="font-body text-muted mt-[3px] text-[12.5px]">
+                      {t('channelChatBtn')}
+                    </p>
                   </div>
                   <span className="text-accent flex-shrink-0 font-mono text-[10px] tracking-[1px]">
                     {t('channelChatStatus')}
@@ -171,9 +173,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                 {t('promiseKicker')}
               </span>
             </div>
-            <p className="font-sans text-[16px] font-semibold text-white">
-              {t('promiseHeading')}
-            </p>
+            <p className="font-sans text-[16px] font-semibold text-white">{t('promiseHeading')}</p>
             <p className="font-body mt-1 text-[12px] leading-[1.5] text-[#b8bfcc]">
               {t('promiseDesc')}
             </p>
@@ -269,7 +269,9 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
 
               {/* Topic — pill buttons per Figma (not dropdown) */}
               <div className="flex flex-col gap-2">
-                <span className="text-muted font-mono text-[10px] tracking-[1.5px]">{t('fieldTopic')}</span>
+                <span className="text-muted font-mono text-[10px] tracking-[1.5px]">
+                  {t('fieldTopic')}
+                </span>
                 <div className="flex flex-wrap gap-[6px]">
                   {TOPICS.map((topicVal) => (
                     <button
@@ -282,7 +284,15 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                           : 'text-foreground dark:bg-surface-elevated bg-[#f2f2f4]'
                       }`}
                     >
-                      {topicVal === 'General' ? t('topicGeneral') : topicVal === 'Account' ? t('topicAccount') : topicVal === 'Funding' ? t('topicFunding') : topicVal === 'Technical' ? t('topicTechnical') : t('topicPartnership')}
+                      {topicVal === 'General'
+                        ? t('topicGeneral')
+                        : topicVal === 'Account'
+                          ? t('topicAccount')
+                          : topicVal === 'Funding'
+                            ? t('topicFunding')
+                            : topicVal === 'Technical'
+                              ? t('topicTechnical')
+                              : t('topicPartnership')}
                     </button>
                   ))}
                 </div>
@@ -321,9 +331,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                   />
                 </svg>
               </button>
-              <p className="font-body text-muted text-center text-[11px]">
-                {t('submitPrivacy')}
-              </p>
+              <p className="font-body text-muted text-center text-[11px]">{t('submitPrivacy')}</p>
             </form>
           )}
         </div>
@@ -342,9 +350,21 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
           </h2>
           <div className="flex flex-col gap-[10px]">
             {[
-              { city: t('officeLondon'), tag: t('officeLondonTag'), address: '1 Finsbury Avenue, EC2M' },
-              { city: t('officeSingapore'), tag: t('officeSingaporeTag'), address: '8 Marina View, #43-01' },
-              { city: t('officeDubai'), tag: t('officeDubaiTag'), address: 'DIFC Gate Village, Tower 4' },
+              {
+                city: t('officeLondon'),
+                tag: t('officeLondonTag'),
+                address: '1 Finsbury Avenue, EC2M',
+              },
+              {
+                city: t('officeSingapore'),
+                tag: t('officeSingaporeTag'),
+                address: '8 Marina View, #43-01',
+              },
+              {
+                city: t('officeDubai'),
+                tag: t('officeDubaiTag'),
+                address: 'DIFC Gate Village, Tower 4',
+              },
             ].map((office) => (
               <div
                 key={office.city}

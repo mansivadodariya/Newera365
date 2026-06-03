@@ -175,7 +175,9 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
           opening process and to keep that information up-to-date throughout our relationship.
         </Para>
         <RiskBox>
-          <strong>Risk warning:</strong> Trading leveraged products such as CFDs carries a high level of risk. You may lose more than your initial deposit. Ensure you understand the risks and seek independent advice if needed.
+          <strong>Risk warning:</strong> Trading leveraged products such as CFDs carries a high
+          level of risk. You may lose more than your initial deposit. Ensure you understand the
+          risks and seek independent advice if needed.
         </RiskBox>
       </Section>
       <Section id="section-4" title="4. Trading policy">
@@ -240,7 +242,9 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
           Important: Trading involves significant risk
         </p>
         <p className="font-body mt-2 text-[13px] leading-[1.65] text-[#7f1d1d] dark:text-[#F59E0B]/80">
-          CFDs are complex instruments and come with a high risk of losing money rapidly due to leverage. You should consider whether you understand how CFDs work and whether you can afford to take the high risk of losing your money.
+          CFDs are complex instruments and come with a high risk of losing money rapidly due to
+          leverage. You should consider whether you understand how CFDs work and whether you can
+          afford to take the high risk of losing your money.
         </p>
       </div>
       <Section id="section-1" title="1. Nature of CFDs">
@@ -367,7 +371,17 @@ export function LegalPage({ documents }: LegalPageProps) {
                     : 'text-muted dark:bg-surface-elevated dark:hover:bg-surface-elevated bg-[#F2F2F4] hover:bg-[#e5e5e5]'
                 }`}
               >
-                {doc.id === 'terms' ? t('docTerms') : doc.id === 'privacy' ? t('docPrivacy') : doc.id === 'risk' ? t('docRisk') : doc.id === 'aml' ? t('docAml') : doc.id === 'cookies' ? t('docCookies') : doc.label}
+                {doc.id === 'terms'
+                  ? t('docTerms')
+                  : doc.id === 'privacy'
+                    ? t('docPrivacy')
+                    : doc.id === 'risk'
+                      ? t('docRisk')
+                      : doc.id === 'aml'
+                        ? t('docAml')
+                        : doc.id === 'cookies'
+                          ? t('docCookies')
+                          : doc.label}
               </button>
             ))}
           </div>
@@ -378,7 +392,9 @@ export function LegalPage({ documents }: LegalPageProps) {
       <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="bg-surface rounded-[14px] p-4">
-            <p className="text-muted mb-3 font-mono text-[10px] tracking-[1.4px]">{t('tocHeading')}</p>
+            <p className="text-muted mb-3 font-mono text-[10px] tracking-[1.4px]">
+              {t('tocHeading')}
+            </p>
             <div className="flex flex-col gap-2">
               {TOC[activeDoc].map((item) => (
                 <a
@@ -415,7 +431,15 @@ export function LegalPage({ documents }: LegalPageProps) {
                 onClick={() => setActiveDoc(doc.id)}
                 className="font-body rounded-full border border-white/20 px-4 py-2 text-[12px] text-white/70 transition-colors hover:border-white/40 hover:text-white"
               >
-                {doc.id === 'terms' ? t('docTerms') : doc.id === 'privacy' ? t('docPrivacy') : doc.id === 'risk' ? t('docRisk') : doc.id === 'aml' ? t('docAml') : t('docCookies')}
+                {doc.id === 'terms'
+                  ? t('docTerms')
+                  : doc.id === 'privacy'
+                    ? t('docPrivacy')
+                    : doc.id === 'risk'
+                      ? t('docRisk')
+                      : doc.id === 'aml'
+                        ? t('docAml')
+                        : t('docCookies')}
               </button>
             ))}
           </div>

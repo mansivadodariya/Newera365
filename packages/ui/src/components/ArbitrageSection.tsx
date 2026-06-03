@@ -37,9 +37,7 @@ export function ArbitrageSection() {
         <div className="h-[10px]" />
 
         {/* Description */}
-        <p className="font-body text-[14px] leading-[22px] text-[#6b7280]">
-          {t('arbDesc')}
-        </p>
+        <p className="font-body text-[14px] leading-[22px] text-[#6b7280]">{t('arbDesc')}</p>
 
         <div className="h-[20px]" />
 
@@ -59,7 +57,7 @@ export function ArbitrageSection() {
                 </p>
               </div>
               {i < CARDS.length - 1 && (
-                <div className="h-px bg-[#d9dbe0] dark:bg-[#2a2a2a] xl:hidden" />
+                <div className="h-px bg-[#d9dbe0] xl:hidden dark:bg-[#2a2a2a]" />
               )}
             </div>
           ))}

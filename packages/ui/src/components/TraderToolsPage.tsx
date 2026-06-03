@@ -444,7 +444,13 @@ export function TraderToolsPage() {
                     ))}
                   </div>
                 </div>
-                <NumberInput label={t('fieldDays')} value={days} onChange={setDays} step="1" min="1" />
+                <NumberInput
+                  label={t('fieldDays')}
+                  value={days}
+                  onChange={setDays}
+                  step="1"
+                  min="1"
+                />
               </>
             )}
 
@@ -588,9 +594,7 @@ export function TraderToolsPage() {
             <br />
             {t('ctaHeadingLine2')}
           </h2>
-          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            {t('ctaDesc')}
-          </p>
+          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
           <Link
             href={`/${locale}/register`}
             className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"

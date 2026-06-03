@@ -282,7 +282,9 @@ export function ResearchDetailPage({
       {article?.relatedInstruments && article.relatedInstruments.length > 0 && (
         <section className="bg-background px-5 pb-6 pt-2">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <p className="text-foreground mb-3 font-sans text-[15px] font-semibold">{t('relatedMarketsLabel')}</p>
+            <p className="text-foreground mb-3 font-sans text-[15px] font-semibold">
+              {t('relatedMarketsLabel')}
+            </p>
             <div className="flex flex-wrap gap-2">
               {article.relatedInstruments.map((inst) => (
                 <Link
@@ -290,10 +292,12 @@ export function ResearchDetailPage({
                   href={`/${locale}/markets/${inst.assetClass}`}
                   className="border-border hover:border-accent bg-surface flex items-center gap-2 rounded-full border px-4 py-2 transition-colors"
                 >
-                  <span className="font-sans text-[13px] font-semibold text-foreground">{inst.symbol}</span>
-                  <span className="font-body text-[11px] text-muted">{inst.name}</span>
+                  <span className="text-foreground font-sans text-[13px] font-semibold">
+                    {inst.symbol}
+                  </span>
+                  <span className="font-body text-muted text-[11px]">{inst.name}</span>
                   {inst.spread != null && (
-                    <span className="font-mono text-[10px] text-accent">{inst.spread} pip</span>
+                    <span className="text-accent font-mono text-[10px]">{inst.spread} pip</span>
                   )}
                 </Link>
               ))}
@@ -305,7 +309,9 @@ export function ResearchDetailPage({
       {/* Related articles */}
       <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <p className="text-foreground mb-5 font-sans text-[18px] font-semibold">{t('keepReadingHeading')}</p>
+          <p className="text-foreground mb-5 font-sans text-[18px] font-semibold">
+            {t('keepReadingHeading')}
+          </p>
           <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
             {RELATED.map((art) => (
               <Link
@@ -357,9 +363,7 @@ export function ResearchDetailPage({
             <br />
             {t('ctaHeadingLine2')}
           </h2>
-          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            {t('ctaDesc')}
-          </p>
+          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
           <Link
             href={`/${locale}/register`}
             className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"

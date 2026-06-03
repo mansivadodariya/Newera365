@@ -131,12 +131,7 @@ function ResultCard({
 }) {
   const isPositive = result.profit >= 0;
   const valueColor = isPositive ? '#00B050' : '#EF4444';
-  const label =
-    mode === 'R/R'
-      ? labelRR
-      : mode === 'Profit'
-        ? labelProfit
-        : labelLoss;
+  const label = mode === 'R/R' ? labelRR : mode === 'Profit' ? labelProfit : labelLoss;
 
   return (
     <div
@@ -147,7 +142,10 @@ function ResultCard({
         <p className="font-body mb-1 text-[10px] uppercase tracking-[0.12em] text-white/40">
           {label}
         </p>
-        <p className="font-sans text-[42px] font-semibold leading-[1.1]" style={{ color: valueColor }}>
+        <p
+          className="font-sans text-[42px] font-semibold leading-[1.1]"
+          style={{ color: valueColor }}
+        >
           {mode === 'R/R' ? (
             <>
               {Math.abs(result.profit).toFixed(2)}
@@ -165,7 +163,10 @@ function ResultCard({
       <div className="mx-5 border-t border-white/10" />
       <div className="grid grid-cols-3 px-5 py-4">
         {[
-          { label: infoNotional, value: `$${result.notional.toLocaleString('en-US', { maximumFractionDigits: 0 })}` },
+          {
+            label: infoNotional,
+            value: `$${result.notional.toLocaleString('en-US', { maximumFractionDigits: 0 })}`,
+          },
           { label: infoPips, value: Math.abs(result.pips).toFixed(0) },
           { label: infoPipVal, value: `$${result.pipValue.toFixed(2)}` },
         ].map((item) => (
@@ -181,7 +182,15 @@ function ResultCard({
   );
 }
 
-function FormulaBox({ calcKicker, calcFormula, calcDesc }: { calcKicker: string; calcFormula: string; calcDesc: string }) {
+function FormulaBox({
+  calcKicker,
+  calcFormula,
+  calcDesc,
+}: {
+  calcKicker: string;
+  calcFormula: string;
+  calcDesc: string;
+}) {
   return (
     <div className="rounded-[14px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
       <p className="font-body text-muted mb-2 text-[10px] uppercase tracking-[0.1em]">
@@ -190,9 +199,7 @@ function FormulaBox({ calcKicker, calcFormula, calcDesc }: { calcKicker: string;
       <p className="font-body text-foreground text-[13px] leading-[1.6]">
         <span className="font-medium">{calcFormula}</span>
         <br />
-        <span className="text-muted">
-          {calcDesc}
-        </span>
+        <span className="text-muted">{calcDesc}</span>
       </p>
     </div>
   );
@@ -211,7 +218,13 @@ export function ProfitCalculatorPage() {
   const [lots, setLots] = useState('0.50');
 
   const computeResult = useCallback(
-    (inst: Instrument, open: number, close: number, lotsVal: number, type: 'Buy' | 'Sell'): ProfitResult => {
+    (
+      inst: Instrument,
+      open: number,
+      close: number,
+      lotsVal: number,
+      type: 'Buy' | 'Sell',
+    ): ProfitResult => {
       const contractSize = CONTRACT_SIZES[inst];
       const pipSize = PIP_SIZES[inst];
       const pipValue = contractSize * pipSize * lotsVal;
@@ -301,9 +314,25 @@ export function ProfitCalculatorPage() {
                 options={['Buy', 'Sell']}
                 onChange={(v) => setTradeType(v as 'Buy' | 'Sell')}
               />
-              <NumberInput label={t('fieldOpen')} value={openPrice} onChange={setOpenPrice} step="0.00001" />
-              <NumberInput label={t('fieldClose')} value={closePrice} onChange={setClosePrice} step="0.00001" />
-              <NumberInput label={t('fieldLots')} value={lots} onChange={setLots} step="0.01" min="0.01" />
+              <NumberInput
+                label={t('fieldOpen')}
+                value={openPrice}
+                onChange={setOpenPrice}
+                step="0.00001"
+              />
+              <NumberInput
+                label={t('fieldClose')}
+                value={closePrice}
+                onChange={setClosePrice}
+                step="0.00001"
+              />
+              <NumberInput
+                label={t('fieldLots')}
+                value={lots}
+                onChange={setLots}
+                step="0.01"
+                min="0.01"
+              />
 
               {/* Buttons */}
               <div className="flex items-center gap-3 xl:col-span-2">
@@ -313,7 +342,13 @@ export function ProfitCalculatorPage() {
                 >
                   {t('calcBtn')}
                   <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M3 8h10M9 4l4 4-4 4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
                 <button
@@ -327,15 +362,43 @@ export function ProfitCalculatorPage() {
 
             {/* Desktop result panel */}
             <div className="hidden xl:flex xl:w-[400px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
-              <ResultCard result={result} currency={currency} mode={mode} labelProfit={t('resultProfit')} labelLoss={t('resultLoss')} labelRR={t('resultRR')} infoNotional={t('infoNotional')} infoPips={t('infoPips')} infoPipVal={t('infoPipVal')} />
-              <FormulaBox calcKicker={t('calcKicker')} calcFormula={t('calcFormula')} calcDesc={t('calcDesc')} />
+              <ResultCard
+                result={result}
+                currency={currency}
+                mode={mode}
+                labelProfit={t('resultProfit')}
+                labelLoss={t('resultLoss')}
+                labelRR={t('resultRR')}
+                infoNotional={t('infoNotional')}
+                infoPips={t('infoPips')}
+                infoPipVal={t('infoPipVal')}
+              />
+              <FormulaBox
+                calcKicker={t('calcKicker')}
+                calcFormula={t('calcFormula')}
+                calcDesc={t('calcDesc')}
+              />
             </div>
           </div>
 
           {/* Mobile result panel */}
           <div className="mt-5 flex flex-col gap-4 xl:hidden">
-            <ResultCard result={result} currency={currency} mode={mode} labelProfit={t('resultProfit')} labelLoss={t('resultLoss')} labelRR={t('resultRR')} infoNotional={t('infoNotional')} infoPips={t('infoPips')} infoPipVal={t('infoPipVal')} />
-            <FormulaBox calcKicker={t('calcKicker')} calcFormula={t('calcFormula')} calcDesc={t('calcDesc')} />
+            <ResultCard
+              result={result}
+              currency={currency}
+              mode={mode}
+              labelProfit={t('resultProfit')}
+              labelLoss={t('resultLoss')}
+              labelRR={t('resultRR')}
+              infoNotional={t('infoNotional')}
+              infoPips={t('infoPips')}
+              infoPipVal={t('infoPipVal')}
+            />
+            <FormulaBox
+              calcKicker={t('calcKicker')}
+              calcFormula={t('calcFormula')}
+              calcDesc={t('calcDesc')}
+            />
           </div>
         </div>
       </section>
@@ -376,8 +439,12 @@ export function ProfitCalculatorPage() {
                   {calc.tag}
                 </span>
                 <div>
-                  <p className="text-foreground font-sans text-[14px] font-semibold">{calc.label}</p>
-                  <p className="font-body text-muted mt-1 text-[12px] leading-[1.55]">{calc.desc}</p>
+                  <p className="text-foreground font-sans text-[14px] font-semibold">
+                    {calc.label}
+                  </p>
+                  <p className="font-body text-muted mt-1 text-[12px] leading-[1.55]">
+                    {calc.desc}
+                  </p>
                 </div>
                 <Link
                   href={calc.href}

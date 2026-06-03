@@ -251,9 +251,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
             {t('ctaHeading')}
           </h2>
-          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            {t('ctaDesc')}
-          </p>
+          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
           <Link
             href={`/${locale}/demo-account`}
             className="bg-accent hover:bg-accent/90 font-body mb-3 flex h-[52px] w-full items-center justify-center rounded-full text-[15px] font-medium text-white transition-colors"

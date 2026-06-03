@@ -48,7 +48,10 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
   const [activeCategory, setActiveCategory] = useState<Category>('Forex');
 
   const cmsRows = useMemo(
-    () => (instruments ? instruments.filter((i) => ASSET_CLASS_MAP[i.assetClass] === activeCategory) : []),
+    () =>
+      instruments
+        ? instruments.filter((i) => ASSET_CLASS_MAP[i.assetClass] === activeCategory)
+        : [],
     [instruments, activeCategory],
   );
   const hasCmsData = cmsRows.length > 0;
@@ -158,9 +161,15 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
             <div className="mt-3 overflow-hidden rounded-[20px] bg-[#07090D]">
               {/* Column header */}
               <div className="border-white/8 grid grid-cols-[1fr_80px_80px] border-b px-4 py-2 xl:grid-cols-[1fr_120px_120px] xl:px-6">
-                <span className="font-body text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">{t('colSymbol')}</span>
-                <span className="font-body text-right text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">{t('colSpread')}</span>
-                <span className="font-body text-right text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">{t('colLeverage')}</span>
+                <span className="font-body text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
+                  {t('colSymbol')}
+                </span>
+                <span className="font-body text-right text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
+                  {t('colSpread')}
+                </span>
+                <span className="font-body text-right text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
+                  {t('colLeverage')}
+                </span>
               </div>
               {cmsRows.slice(0, 8).map((item, i) => (
                 <div
@@ -170,8 +179,12 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
                   <div className="flex min-w-0 items-center gap-3">
                     <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#26A69A]" />
                     <div className="min-w-0">
-                      <p className="font-sans text-[13px] font-semibold leading-none text-white">{item.symbol}</p>
-                      <p className="font-body mt-[3px] truncate text-[10px] text-white/40">{item.name}</p>
+                      <p className="font-sans text-[13px] font-semibold leading-none text-white">
+                        {item.symbol}
+                      </p>
+                      <p className="font-body mt-[3px] truncate text-[10px] text-white/40">
+                        {item.name}
+                      </p>
                     </div>
                   </div>
                   <p className="font-body text-right text-[12px] font-medium text-white/70">
@@ -186,184 +199,185 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
           )}
 
           {/* Chart + Index watchlist widget — shown when no CMS data for the active category */}
-          {!hasCmsData && <div className="mt-3 overflow-hidden rounded-[32px] bg-[#07090D] p-[16px] pb-3 xl:flex xl:flex-row xl:gap-0 xl:p-0">
-            {/* Chart column */}
-            <div className="xl:flex-1 xl:p-[20px] xl:pr-0">
-              {/* Tab bar */}
-              <div className="flex justify-between">
-                {(['Indices', 'Futures', 'Bonds', 'Forex'] as const).map((tab) => (
-                  <button
-                    key={tab}
-                    className={`font-body rounded-[8px] px-[14px] py-[8px] text-[12px] font-medium transition-colors ${
-                      tab === 'Indices' ? 'bg-[#1c2033] text-white' : 'text-white/40'
-                    }`}
-                  >
-                    {t(`tab${tab}` as 'tabIndices')}
-                  </button>
-                ))}
-              </div>
-
-              {/* Chart area */}
-              <div className="relative px-3 pt-2">
-                <svg
-                  viewBox="0 0 480 160"
-                  className="w-full"
-                  preserveAspectRatio="none"
-                  style={{ height: 140 }}
-                >
-                  <defs>
-                    <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.25" />
-                      <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
-                    </linearGradient>
-                  </defs>
-                  {/* Gradient fill */}
-                  <path
-                    d="M0,130 C30,126 60,122 90,112 C120,102 150,90 180,75 C210,60 240,50 270,44 C300,38 330,36 360,38 C390,40 420,52 450,62 C462,67 472,72 480,78 L480,160 L0,160 Z"
-                    fill="url(#chartFill)"
-                  />
-                  {/* Line */}
-                  <path
-                    d="M0,130 C30,126 60,122 90,112 C120,102 150,90 180,75 C210,60 240,50 270,44 C300,38 330,36 360,38 C390,40 420,52 450,62 C462,67 472,72 480,78"
-                    fill="none"
-                    stroke="#3B82F6"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-
-                {/* X-axis date labels */}
-                <div className="mt-1 flex justify-between px-1">
-                  {['Jun', 'Sep', '2026', 'Apr'].map((label) => (
-                    <span key={label} className="font-body text-[9px] text-white/30">
-                      {label}
-                    </span>
+          {!hasCmsData && (
+            <div className="mt-3 overflow-hidden rounded-[32px] bg-[#07090D] p-[16px] pb-3 xl:flex xl:flex-row xl:gap-0 xl:p-0">
+              {/* Chart column */}
+              <div className="xl:flex-1 xl:p-[20px] xl:pr-0">
+                {/* Tab bar */}
+                <div className="flex justify-between">
+                  {(['Indices', 'Futures', 'Bonds', 'Forex'] as const).map((tab) => (
+                    <button
+                      key={tab}
+                      className={`font-body rounded-[8px] px-[14px] py-[8px] text-[12px] font-medium transition-colors ${
+                        tab === 'Indices' ? 'bg-[#1c2033] text-white' : 'text-white/40'
+                      }`}
+                    >
+                      {t(`tab${tab}` as 'tabIndices')}
+                    </button>
                   ))}
                 </div>
-              </div>
 
-              {/* Time period selector */}
-              <div className="mt-2 flex gap-0.5 px-3">
-                {['1D', '1M', '3M', '1Y', '5Y', 'All'].map((p) => (
-                  <button
-                    key={p}
-                    className={`font-body flex-1 rounded-[7px] py-[5px] text-[10px] font-medium transition-colors ${
-                      p === '1Y' ? 'bg-[#1c2033] text-white' : 'text-white/35'
-                    }`}
+                {/* Chart area */}
+                <div className="relative px-3 pt-2">
+                  <svg
+                    viewBox="0 0 480 160"
+                    className="w-full"
+                    preserveAspectRatio="none"
+                    style={{ height: 140 }}
                   >
-                    {p}
-                  </button>
-                ))}
-              </div>
+                    <defs>
+                      <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.25" />
+                        <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                    {/* Gradient fill */}
+                    <path
+                      d="M0,130 C30,126 60,122 90,112 C120,102 150,90 180,75 C210,60 240,50 270,44 C300,38 330,36 360,38 C390,40 420,52 450,62 C462,67 472,72 480,78 L480,160 L0,160 Z"
+                      fill="url(#chartFill)"
+                    />
+                    {/* Line */}
+                    <path
+                      d="M0,130 C30,126 60,122 90,112 C120,102 150,90 180,75 C210,60 240,50 270,44 C300,38 330,36 360,38 C390,40 420,52 450,62 C462,67 472,72 480,78"
+                      fill="none"
+                      stroke="#3B82F6"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
 
-              {/* Divider (mobile only) */}
-              <div className="mx-3 mt-3 border-t border-white/[0.06] xl:hidden" />
-            </div>
-            {/* end chart column */}
-
-            {/* Price list column (right on xl, below on mobile) */}
-            <div className="xl:w-[340px] xl:flex-shrink-0 xl:overflow-y-auto xl:border-l xl:border-white/[0.06]">
-              {/* Index rows */}
-              {[
-                {
-                  label: '500',
-                  name: 'SPXUSD',
-                  full: 'S&P 500',
-                  price: '7,404.5',
-                  pts: '−8.90',
-                  pct: '−0.12%',
-                  color: '#DC2626',
-                  up: false,
-                },
-                {
-                  label: '100',
-                  name: 'NSXUSD',
-                  full: 'US 100',
-                  price: '29,146.1',
-                  pts: '−40.70',
-                  pct: '−0.14%',
-                  color: '#06B6D4',
-                  up: false,
-                },
-                {
-                  label: '30',
-                  name: 'DJI',
-                  full: 'Dow 30',
-                  price: '49,927.0',
-                  pts: '−34.30',
-                  pct: '−0.07%',
-                  color: '#2563EB',
-                  up: false,
-                },
-                {
-                  label: '225',
-                  name: 'NKY',
-                  full: 'Nikkei 225',
-                  price: '61,684.14',
-                  pts: '+1,879.73',
-                  pct: '+5.34%',
-                  color: '#E11D48',
-                  up: true,
-                },
-                {
-                  label: '40',
-                  name: 'DEU40',
-                  full: 'DAX Index',
-                  price: '24,737.24',
-                  pts: '+336.59',
-                  pct: '+1.38%',
-                  color: '#7C3AED',
-                  up: true,
-                },
-                {
-                  label: '100',
-                  name: 'UKXGBP',
-                  full: 'FTSE 100',
-                  price: '10,464.0',
-                  pts: '−5.20',
-                  pct: '−0.05%',
-                  color: '#9D174D',
-                  up: false,
-                },
-              ].map((item, i, arr) => (
-                <div
-                  key={item.name}
-                  className={`flex items-center gap-3 px-3 py-[11px] ${i < arr.length - 1 ? 'border-b border-white/[0.05]' : ''}`}
-                >
-                  {/* Avatar */}
-                  <div
-                    className="font-body flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white"
-                    style={{ backgroundColor: item.color }}
-                  >
-                    {item.label}
-                  </div>
-                  {/* Symbol + full name */}
-                  <div className="min-w-0 flex-1">
-                    <p className="font-sans text-[13px] font-semibold leading-none text-white">
-                      {item.name}
-                    </p>
-                    <p className="font-body mt-[3px] text-[10px] text-white/40">{item.full}</p>
-                  </div>
-                  {/* Price + changes */}
-                  <div className="text-right">
-                    <p
-                      className={`font-sans text-[13px] font-semibold ${item.up ? 'text-white' : 'text-[#EE5250]'}`}
-                    >
-                      {item.price}
-                    </p>
-                    <p
-                      className={`font-body mt-[2px] text-[10px] ${item.up ? 'text-[#26A69A]' : 'text-[#EE5250]'}`}
-                    >
-                      {item.pts}&nbsp;&nbsp;{item.pct}
-                    </p>
+                  {/* X-axis date labels */}
+                  <div className="mt-1 flex justify-between px-1">
+                    {['Jun', 'Sep', '2026', 'Apr'].map((label) => (
+                      <span key={label} className="font-body text-[9px] text-white/30">
+                        {label}
+                      </span>
+                    ))}
                   </div>
                 </div>
-              ))}
+
+                {/* Time period selector */}
+                <div className="mt-2 flex gap-0.5 px-3">
+                  {['1D', '1M', '3M', '1Y', '5Y', 'All'].map((p) => (
+                    <button
+                      key={p}
+                      className={`font-body flex-1 rounded-[7px] py-[5px] text-[10px] font-medium transition-colors ${
+                        p === '1Y' ? 'bg-[#1c2033] text-white' : 'text-white/35'
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Divider (mobile only) */}
+                <div className="mx-3 mt-3 border-t border-white/[0.06] xl:hidden" />
+              </div>
+              {/* end chart column */}
+
+              {/* Price list column (right on xl, below on mobile) */}
+              <div className="xl:w-[340px] xl:flex-shrink-0 xl:overflow-y-auto xl:border-l xl:border-white/[0.06]">
+                {/* Index rows */}
+                {[
+                  {
+                    label: '500',
+                    name: 'SPXUSD',
+                    full: 'S&P 500',
+                    price: '7,404.5',
+                    pts: '−8.90',
+                    pct: '−0.12%',
+                    color: '#DC2626',
+                    up: false,
+                  },
+                  {
+                    label: '100',
+                    name: 'NSXUSD',
+                    full: 'US 100',
+                    price: '29,146.1',
+                    pts: '−40.70',
+                    pct: '−0.14%',
+                    color: '#06B6D4',
+                    up: false,
+                  },
+                  {
+                    label: '30',
+                    name: 'DJI',
+                    full: 'Dow 30',
+                    price: '49,927.0',
+                    pts: '−34.30',
+                    pct: '−0.07%',
+                    color: '#2563EB',
+                    up: false,
+                  },
+                  {
+                    label: '225',
+                    name: 'NKY',
+                    full: 'Nikkei 225',
+                    price: '61,684.14',
+                    pts: '+1,879.73',
+                    pct: '+5.34%',
+                    color: '#E11D48',
+                    up: true,
+                  },
+                  {
+                    label: '40',
+                    name: 'DEU40',
+                    full: 'DAX Index',
+                    price: '24,737.24',
+                    pts: '+336.59',
+                    pct: '+1.38%',
+                    color: '#7C3AED',
+                    up: true,
+                  },
+                  {
+                    label: '100',
+                    name: 'UKXGBP',
+                    full: 'FTSE 100',
+                    price: '10,464.0',
+                    pts: '−5.20',
+                    pct: '−0.05%',
+                    color: '#9D174D',
+                    up: false,
+                  },
+                ].map((item, i, arr) => (
+                  <div
+                    key={item.name}
+                    className={`flex items-center gap-3 px-3 py-[11px] ${i < arr.length - 1 ? 'border-b border-white/[0.05]' : ''}`}
+                  >
+                    {/* Avatar */}
+                    <div
+                      className="font-body flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white"
+                      style={{ backgroundColor: item.color }}
+                    >
+                      {item.label}
+                    </div>
+                    {/* Symbol + full name */}
+                    <div className="min-w-0 flex-1">
+                      <p className="font-sans text-[13px] font-semibold leading-none text-white">
+                        {item.name}
+                      </p>
+                      <p className="font-body mt-[3px] text-[10px] text-white/40">{item.full}</p>
+                    </div>
+                    {/* Price + changes */}
+                    <div className="text-right">
+                      <p
+                        className={`font-sans text-[13px] font-semibold ${item.up ? 'text-white' : 'text-[#EE5250]'}`}
+                      >
+                        {item.price}
+                      </p>
+                      <p
+                        className={`font-body mt-[2px] text-[10px] ${item.up ? 'text-[#26A69A]' : 'text-[#EE5250]'}`}
+                      >
+                        {item.pts}&nbsp;&nbsp;{item.pct}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* end price list column */}
             </div>
-            {/* end price list column */}
-          </div>
-          }
+          )}
         </div>
       </section>
 
@@ -384,7 +398,11 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
                 key={row.key}
                 className={`flex items-center justify-between px-5 py-[13px] ${i < SPEC_ROWS.length - 1 ? 'border-b border-[#1f1c1c]' : ''}`}
               >
-                <span className="font-body text-[13px] text-[#FFFFFFB2]">{t(`spec${row.key.charAt(0).toUpperCase() + row.key.slice(1)}` as 'specMinSpread')}</span>
+                <span className="font-body text-[13px] text-[#FFFFFFB2]">
+                  {t(
+                    `spec${row.key.charAt(0).toUpperCase() + row.key.slice(1)}` as 'specMinSpread',
+                  )}
+                </span>
                 <span className="font-body text-[14px] font-semibold text-[#FFFFFF]">
                   {row.value}
                 </span>
@@ -428,9 +446,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
               >
                 <div>
                   <p className="text-foreground font-sans text-[15px] font-semibold">{market}</p>
-                  <p className="font-body text-muted mt-[3px] text-[11px]">
-                    {t('liveTag')}
-                  </p>
+                  <p className="font-body text-muted mt-[3px] text-[11px]">{t('liveTag')}</p>
                 </div>
                 <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
                   <svg width="12" height="12" viewBox="0 0 16 16" fill="none">

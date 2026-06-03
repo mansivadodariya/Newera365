@@ -288,7 +288,11 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
                 key={row.key}
                 className={`flex items-center justify-between px-5 py-[13px] ${i < SPEC_ROWS.length - 1 ? 'border-b border-[#1f1c1c]' : ''}`}
               >
-                <span className="font-body text-[13px] text-[#FFFFFFB2]">{t(`spec${row.key.charAt(0).toUpperCase() + row.key.slice(1)}` as 'specMinSpread')}</span>
+                <span className="font-body text-[13px] text-[#FFFFFFB2]">
+                  {t(
+                    `spec${row.key.charAt(0).toUpperCase() + row.key.slice(1)}` as 'specMinSpread',
+                  )}
+                </span>
                 <span className="font-body text-[14px] font-semibold text-white">{row.value}</span>
               </div>
             ))}
@@ -330,9 +334,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
                 >
                   <div>
                     <p className="text-foreground font-sans text-[15px] font-semibold">{m.label}</p>
-                    <p className="font-body text-muted mt-[3px] text-[11px]">
-                      {t('liveTag')}
-                    </p>
+                    <p className="font-body text-muted mt-[3px] text-[11px]">{t('liveTag')}</p>
                   </div>
                   <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none">

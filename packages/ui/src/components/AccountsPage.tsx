@@ -33,7 +33,8 @@ const STATIC_ACCOUNTS = [
     name: 'Standard',
     subtitle: 'For active retail traders',
     isPopular: true,
-    headerGradient: 'radial-gradient(ellipse at 50% 210%, rgba(18,107,48,1) 0%, rgba(11,66,31,1) 50%, rgba(5,26,13,1) 100%)',
+    headerGradient:
+      'radial-gradient(ellipse at 50% 210%, rgba(18,107,48,1) 0%, rgba(11,66,31,1) 50%, rgba(5,26,13,1) 100%)',
     commission: '$0',
     commissionSub: '(per lot per side)',
     spreadsFrom: '1.2',
@@ -49,7 +50,8 @@ const STATIC_ACCOUNTS = [
     name: 'Professional',
     subtitle: 'For high-volume traders',
     isPopular: false,
-    headerGradient: 'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
+    headerGradient:
+      'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
     commission: '$1.5',
     commissionSub: '(per lot per side)',
     spreadsFrom: '0.0',
@@ -65,7 +67,8 @@ const STATIC_ACCOUNTS = [
     name: 'Swap-Free',
     subtitle: 'Sharia-compliant, no swaps',
     isPopular: false,
-    headerGradient: 'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
+    headerGradient:
+      'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
     commission: '$0',
     commissionSub: '(per lot per side)',
     spreadsFrom: '1.4',
@@ -93,7 +96,13 @@ const MATRIX_ROWS = [
 function Check() {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-label="Yes">
-      <path d="M2.5 7l3 3 6-6" stroke="#00b050" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M2.5 7l3 3 6-6"
+        stroke="#00b050"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -108,44 +117,47 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
   const staticSubtitles = [t('subtitleStandard'), t('subtitleRaw'), t('subtitleSwapFree')] as const;
 
   // Build display accounts from CMS data + static defaults
-  const displayAccounts = cmsAccounts && cmsAccounts.length > 0
-    ? cmsAccounts.map((cms, i) => {
-        const fallback = STATIC_ACCOUNTS[i % STATIC_ACCOUNTS.length];
-        return {
-          id: cms.id,
-          badge: cms.isPopular ? t('badgePopular') : staticBadges[i % staticBadges.length] ?? t('badgePro'),
-          name: cms.name,
-          subtitle: staticSubtitles[i % staticSubtitles.length] ?? t('subtitleStandard'),
-          isPopular: Boolean(cms.isPopular),
-          headerGradient: cms.isPopular
-            ? 'radial-gradient(ellipse at 50% 210%, rgba(18,107,48,1) 0%, rgba(11,66,31,1) 50%, rgba(5,26,13,1) 100%)'
-            : 'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
-          commission: cms.commission ?? '$0',
+  const displayAccounts =
+    cmsAccounts && cmsAccounts.length > 0
+      ? cmsAccounts.map((cms, i) => {
+          const fallback = STATIC_ACCOUNTS[i % STATIC_ACCOUNTS.length];
+          return {
+            id: cms.id,
+            badge: cms.isPopular
+              ? t('badgePopular')
+              : (staticBadges[i % staticBadges.length] ?? t('badgePro')),
+            name: cms.name,
+            subtitle: staticSubtitles[i % staticSubtitles.length] ?? t('subtitleStandard'),
+            isPopular: Boolean(cms.isPopular),
+            headerGradient: cms.isPopular
+              ? 'radial-gradient(ellipse at 50% 210%, rgba(18,107,48,1) 0%, rgba(11,66,31,1) 50%, rgba(5,26,13,1) 100%)'
+              : 'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
+            commission: cms.commission ?? '$0',
+            commissionSub: t('perLotSide'),
+            spreadsFrom: cms.spreadFrom ?? '—',
+            spreadsSub: t('pips'),
+            minDeposit: `$${cms.minDeposit.toLocaleString('en-US')}`,
+            features: cms.features?.map((f) => f.value) ?? fallback?.features ?? [],
+            ctaLabel: t('startTrading'),
+            ctaFilled: Boolean(cms.isPopular),
+          };
+        })
+      : STATIC_ACCOUNTS.map((a, i) => ({
+          ...a,
+          id: a.id,
+          badge: staticBadges[i] ?? a.badge,
+          subtitle: staticSubtitles[i] ?? a.subtitle,
           commissionSub: t('perLotSide'),
-          spreadsFrom: cms.spreadFrom ?? '—',
           spreadsSub: t('pips'),
-          minDeposit: `$${cms.minDeposit.toLocaleString('en-US')}`,
-          features: cms.features?.map((f) => f.value) ?? fallback?.features ?? [],
           ctaLabel: t('startTrading'),
-          ctaFilled: Boolean(cms.isPopular),
-        };
-      })
-    : STATIC_ACCOUNTS.map((a, i) => ({
-        ...a,
-        id: a.id,
-        badge: staticBadges[i] ?? a.badge,
-        subtitle: staticSubtitles[i] ?? a.subtitle,
-        commissionSub: t('perLotSide'),
-        spreadsSub: t('pips'),
-        ctaLabel: t('startTrading'),
-      }));
+        }));
 
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px] text-[#111] dark:text-white xl:text-[48px]">
+          <div className="font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px] text-[#111] xl:text-[48px] dark:text-white">
             <p>{t('heroLine1')}</p>
             <p>{t('heroLine2')}</p>
             <p className="text-accent">{t('heroAccent')}</p>
@@ -163,7 +175,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
           {displayAccounts.map((account) => (
             <div
               key={String(account.id)}
-              className={`w-full overflow-hidden rounded-[20px] bg-white shadow-[0px_4px_16px_rgba(0,0,0,0.08)] dark:bg-[#1a1c22] xl:flex-1 ${
+              className={`w-full overflow-hidden rounded-[20px] bg-white shadow-[0px_4px_16px_rgba(0,0,0,0.08)] xl:flex-1 dark:bg-[#1a1c22] ${
                 account.isPopular ? 'border-2 border-[#00b050]' : ''
               }`}
             >
@@ -173,10 +185,12 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                 style={{ background: account.headerGradient }}
               >
                 {/* Badge */}
-                <span className="rounded-[20px] bg-[#00b050] px-[12px] py-[5px] font-body text-[11px] font-bold tracking-[0.6px] text-[#111]">
+                <span className="font-body rounded-[20px] bg-[#00b050] px-[12px] py-[5px] text-[11px] font-bold tracking-[0.6px] text-[#111]">
                   {account.badge}
                 </span>
-                <p className="font-body text-[15px] font-normal text-white/75">{t('cardAccountLabel')}</p>
+                <p className="font-body text-[15px] font-normal text-white/75">
+                  {t('cardAccountLabel')}
+                </p>
                 <p className="font-body text-[30px] font-bold text-[#f0f0f0]">{account.name}</p>
                 <p className="font-body text-[13px] text-white/70">{account.subtitle}</p>
               </div>
@@ -197,8 +211,12 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                 {/* Commission */}
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col gap-px">
-                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">{t('commission')}</span>
-                    <span className="font-body text-[12px] text-[#6b7380]">{account.commissionSub}</span>
+                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                      {t('commission')}
+                    </span>
+                    <span className="font-body text-[12px] text-[#6b7380]">
+                      {account.commissionSub}
+                    </span>
                   </div>
                   <span className="font-sans text-[26px] font-bold text-[#111] dark:text-white">
                     {account.commission}
@@ -209,8 +227,12 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                 {/* Spreads from */}
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col gap-px">
-                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">{t('spreadsFrom')}</span>
-                    <span className="font-body text-[12px] text-[#6b7380]">{account.spreadsSub}</span>
+                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                      {t('spreadsFrom')}
+                    </span>
+                    <span className="font-body text-[12px] text-[#6b7380]">
+                      {account.spreadsSub}
+                    </span>
                   </div>
                   <span className="font-sans text-[26px] font-bold text-[#111] dark:text-white">
                     {account.spreadsFrom}
@@ -220,7 +242,9 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
 
                 {/* Min deposit */}
                 <div className="flex items-center justify-between">
-                  <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">{t('minDeposit')}</span>
+                  <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                    {t('minDeposit')}
+                  </span>
                   <span className="font-sans text-[20px] font-bold text-[#111] dark:text-white">
                     {account.minDeposit}
                   </span>
@@ -240,7 +264,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                 {/* CTA */}
                 <Link
                   href={`/${locale}/register?account=${String(account.id)}`}
-                  className={`flex h-[49px] w-full items-center justify-center rounded-[10px] font-body text-[15px] font-semibold transition-opacity hover:opacity-90 ${
+                  className={`font-body flex h-[49px] w-full items-center justify-center rounded-[10px] text-[15px] font-semibold transition-opacity hover:opacity-90 ${
                     account.ctaFilled
                       ? 'bg-[#00b050] text-[#f0f0f0]'
                       : 'border-[1.5px] border-[#00b050] bg-white text-[#111] dark:bg-transparent dark:text-white'
@@ -252,7 +276,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                 {/* Demo link */}
                 <Link
                   href={`/${locale}/demo-account`}
-                  className="text-center font-body text-[12px] font-bold tracking-[0.6px] text-[#00b050]"
+                  className="font-body text-center text-[12px] font-bold tracking-[0.6px] text-[#00b050]"
                 >
                   {t('tryFreeDemo')}
                 </Link>
@@ -281,10 +305,14 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
           <div className="overflow-hidden rounded-[16px] bg-white/[0.06]">
             {/* Header row */}
             <div className="grid grid-cols-[1fr_65px_65px_65px] bg-white/[0.04] px-[14px] py-3">
-              <span className="font-mono text-[9px] uppercase tracking-[1.08px] text-white/55">{t('featureCol')}</span>
+              <span className="font-mono text-[9px] uppercase tracking-[1.08px] text-white/55">
+                {t('featureCol')}
+              </span>
               {[t('stdCol'), t('rawCol'), t('vipCol')].map((h) => (
                 <div key={h} className="flex items-center justify-center">
-                  <span className={`font-mono text-[9px] uppercase tracking-[1.08px] ${h === 'Raw' ? 'text-[#00b050]' : 'text-white/55'}`}>
+                  <span
+                    className={`font-mono text-[9px] uppercase tracking-[1.08px] ${h === 'Raw' ? 'text-[#00b050]' : 'text-white/55'}`}
+                  >
                     {h}
                   </span>
                 </div>
