@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 export function AiCrmPage() {
   const locale = useLocale();
+  const t = useTranslations('aiCrm');
 
   return (
     <>
@@ -13,17 +14,16 @@ export function AiCrmPage() {
       <section className="bg-[#07090d] px-5 pb-10 pt-9 xl:px-[80px] xl:py-20">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5 [&>span:first-child]:bg-[#00B050]/20 [&>span:last-child]:text-[#00B050]">
-            AI CRM
+            {t('kicker')}
           </SectionKicker>
 
           <h1 className="mb-3 font-sans text-[40px] font-semibold leading-[1.05] text-white xl:text-[56px]">
-            Built for brokers.
+            {t('heroLine1')}
             <br />
-            <span className="text-[#00B050]">Powered by AI.</span>
+            <span className="text-[#00B050]">{t('heroLine2')}</span>
           </h1>
           <p className="font-body mb-8 max-w-[340px] text-[14px] leading-[1.6] text-white/60 xl:max-w-[480px] xl:text-[16px]">
-            An AI-native CRM purpose-built for brokerages. Automate onboarding, score every lead,
-            read your book in real time.
+            {t('heroSubtitle')}
           </p>
 
           <div className="flex flex-wrap gap-3">
@@ -31,7 +31,7 @@ export function AiCrmPage() {
               href={`/${locale}/contact`}
               className="font-body flex h-[48px] items-center gap-2 rounded-full bg-[#00B050] px-6 text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90"
             >
-              Request demo
+              {t('demoBtn')}
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M3 8h10M9 4l4 4-4 4"
@@ -46,7 +46,7 @@ export function AiCrmPage() {
               href={`/${locale}/contact`}
               className="font-body flex h-[48px] items-center rounded-full border border-white/20 px-6 text-[14px] font-medium text-white/80 transition-colors hover:border-white/40 hover:text-white"
             >
-              Talk to sales
+              {t('salesBtn')}
             </Link>
           </div>
 
@@ -57,16 +57,16 @@ export function AiCrmPage() {
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-[#00B050]" />
                 <span className="font-body text-[11px] font-semibold uppercase tracking-[0.1em] text-white/60">
-                  AI CoPilot · live
+                  {t('dashboardKicker')}
                 </span>
               </div>
             </div>
             {/* Stats */}
             <div className="grid grid-cols-3 divide-x divide-white/10 px-0">
               {[
-                { value: '2.1k', label: 'Leads' },
-                { value: '92%', label: 'Score' },
-                { value: '$1.4M', label: 'ATC' },
+                { value: '2.1k', label: t('tabLeads') },
+                { value: '92%', label: t('tabScore') },
+                { value: '$1.4M', label: t('tabAtc') },
               ].map((stat) => (
                 <div key={stat.label} className="px-5 py-4">
                   <p className="font-sans text-[22px] font-semibold text-white">{stat.value}</p>
@@ -79,10 +79,10 @@ export function AiCrmPage() {
             {/* Insight */}
             <div className="border-t border-white/10 px-5 py-4">
               <p className="font-body mb-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-[#00B050]">
-                AI INSIGHT
+                {t('insightLabel')}
               </p>
               <p className="font-body text-[13px] leading-[1.5] text-white/80">
-                148 dormant accounts likely to fund this week.
+                {t('insightText')}
               </p>
             </div>
           </div>
@@ -93,12 +93,12 @@ export function AiCrmPage() {
       <section className="bg-white px-5 py-12 xl:px-[80px] xl:py-20">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-6 [&>span:first-child]:bg-[#6B7280]/20 [&>span:last-child]:text-[#6B7280]">
-            WHAT IT DOES
+            {t('featuresKicker')}
           </SectionKicker>
           <h2 className="mb-10 font-sans text-[30px] font-semibold leading-[1.1] text-[#07090d] xl:text-[40px]">
-            AI at the heart of
+            {t('featuresLine1')}
             <br />
-            every workflow.
+            {t('featuresLine2')}
           </h2>
 
           <div className="flex flex-col gap-8 xl:grid xl:grid-cols-3 xl:gap-6">
@@ -106,20 +106,20 @@ export function AiCrmPage() {
               {
                 category: 'CRM',
                 dot: '#00B050',
-                title: 'AI Based CRM',
-                desc: 'Every contact, ticket and KYC in one place with an AI co-pilot.',
+                title: t('feat1Title'),
+                desc: t('feat1Desc'),
               },
               {
                 category: 'SYSTEM',
                 dot: '#3B82F6',
-                title: 'AI Integrated System',
-                desc: 'One platform connected to MT5, payments and KYC providers.',
+                title: t('feat2Title'),
+                desc: t('feat2Desc'),
               },
               {
                 category: 'REPORTING',
                 dot: '#8B5CF6',
-                title: 'AI Trading Reports',
-                desc: 'Daily desk reports written by AI — exposure, P&L, churn signals.',
+                title: t('feat3Title'),
+                desc: t('feat3Desc'),
               },
             ].map((item) => (
               <div
@@ -150,31 +150,31 @@ export function AiCrmPage() {
       <section className="bg-white px-5 pb-14 xl:px-[80px] xl:pb-20">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-6 [&>span:first-child]:bg-[#6B7280]/20 [&>span:last-child]:text-[#6B7280]">
-            AUTOMATION
+            {t('autoKicker')}
           </SectionKicker>
           <h2 className="mb-10 font-sans text-[30px] font-semibold leading-[1.1] text-[#07090d] xl:text-[40px]">
-            Less ops.
+            {t('autoLine1')}
             <br />
-            More signal.
+            {t('autoLine2')}
           </h2>
 
           <div className="flex flex-col gap-5 xl:grid xl:grid-cols-2 xl:gap-6">
             {[
               {
-                title: 'Client management automation',
-                desc: 'Onboarding, KYC and renewals run on their own.',
+                title: t('auto1Title'),
+                desc: t('auto1Desc'),
               },
               {
-                title: 'Smart lead tracking',
-                desc: 'Scored by funding likelihood. Auto-routes by region.',
+                title: t('auto2Title'),
+                desc: t('auto2Desc'),
               },
               {
-                title: 'Broker dashboards',
-                desc: 'Real-time exposure, deposits, sessions.',
+                title: t('auto3Title'),
+                desc: t('auto3Desc'),
               },
               {
-                title: 'Admin & compliance',
-                desc: 'Audit trail, RBAC, one-click reports.',
+                title: t('auto4Title'),
+                desc: t('auto4Desc'),
               },
             ].map((item) => (
               <div
@@ -204,38 +204,28 @@ export function AiCrmPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-[#07090d] px-5 py-14 xl:px-[80px] xl:py-20">
-        <div className="mx-auto max-w-[390px] text-center md:max-w-2xl xl:max-w-[700px]">
-          <h2 className="mb-3 font-sans text-[30px] font-semibold leading-[1.1] text-white xl:text-[40px]">
-            Run a smarter desk.
-          </h2>
-          <p className="font-body mb-8 text-[14px] leading-[1.6] text-white/60">
-            Sign up to Newera365 AI CRM on a 14-day trial.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Link
-              href={`/${locale}/contact`}
-              className="font-body flex h-[48px] items-center gap-2 rounded-full bg-[#00B050] px-6 text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90"
-            >
-              Request demo
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M3 8h10M9 4l4 4-4 4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Link>
-            <Link
-              href={`/${locale}/contact`}
-              className="font-body flex h-[48px] items-center rounded-full border border-white/20 px-6 text-[14px] font-medium text-white/80 transition-colors hover:border-white/40 hover:text-white"
-            >
-              Talk to sales
-            </Link>
-          </div>
+      {/* CTA — matches Figma 1641:98 (light) / 1648:98 (dark) */}
+      <section className="overflow-hidden rounded-t-[32px] bg-[#111] px-6 py-10 text-center xl:px-24 xl:py-16">
+        <h2 className="mb-2 font-sans text-[26px] font-semibold text-white dark:text-[#8c949e] xl:text-[32px]">
+          {t('ctaHeading')}
+        </h2>
+        <p className="font-body mb-[18px] text-[13px] leading-[1.55] text-[#b8bfcc] dark:text-[#8c949e]">
+          {t('ctaDesc')}
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-[10px]">
+          <Link
+            href={`/${locale}/contact`}
+            className="font-body flex items-center gap-[6px] rounded-[22px] bg-[#00b050] px-[18px] py-[12px] text-[13px] font-semibold text-white transition-colors hover:bg-[#00b050]/90 xl:text-[14px]"
+          >
+            {t('ctaDemoBtn')}
+            <span aria-hidden>→</span>
+          </Link>
+          <Link
+            href={`/${locale}/contact`}
+            className="font-body flex items-center rounded-[22px] border border-white/30 px-[16px] py-[12px] text-[13px] font-semibold text-white transition-colors hover:border-white/60 dark:border-[#1f242e] dark:text-[#8c949e] xl:text-[14px]"
+          >
+            {t('ctaSalesBtn')}
+          </Link>
         </div>
       </section>
     </>

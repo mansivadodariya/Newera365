@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { FaqPage } from '@newera365/ui';
+import { FaqPage , CtaBanner } from '@newera365/ui';
 import type { CmsFaqItem } from '@newera365/ui';
 import { getFaqs } from '@/lib/cms';
 import type { CmsFaq } from '@/lib/cms';
@@ -27,5 +27,10 @@ function mapFaq(faq: CmsFaq): CmsFaqItem {
 export default async function FaqsRoute({ params }: Props) {
   setRequestLocale(params.locale);
   const faqs = await getFaqs(params.locale);
-  return <FaqPage faqs={faqs.length > 0 ? faqs.map(mapFaq) : undefined} />;
+  return (
+    <>
+      <FaqPage faqs={faqs.length > 0 ? faqs.map(mapFaq) : undefined} />
+      <CtaBanner />
+    </>
+  );
 }

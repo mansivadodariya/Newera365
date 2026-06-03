@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 const BENEFITS = [
@@ -46,6 +47,7 @@ interface EbooksPageProps {
 }
 
 export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
+  const t = useTranslations('ebooks');
   const displayEbooks =
     cmsEbooks && cmsEbooks.length > 0
       ? cmsEbooks
@@ -86,13 +88,12 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
-            The 5%
+            {t('heroLine1')}
             <br />
-            <span className="text-accent">Rule.</span>
+            <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted max-w-[300px] text-[14px] leading-[1.55]">
-            A 56-page framework for never losing more than 5% on a single trade. Used by our desk
-            every day.
+            {t('heroDesc')}
           </p>
         </div>
       </section>
@@ -137,10 +138,10 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
               style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.06)' }}
             >
               <p className="text-foreground mb-1 font-sans text-[18px] font-semibold">
-                Get the PDF — free
+                {t('gateHeading')}
               </p>
               <p className="font-body text-muted mb-5 text-[12px] leading-[1.55]">
-                One email, one download. We&apos;ll send it straight to your inbox.
+                {t('gateDesc')}
               </p>
 
               {success ? (
@@ -157,10 +158,10 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                     </svg>
                   </div>
                   <p className="text-foreground font-sans text-[16px] font-semibold">
-                    Check your inbox!
+                    {t('successHeading')}
                   </p>
                   <p className="font-body text-muted text-[13px]">
-                    The PDF is on its way to {email}
+                    {t('successDesc', { email })}
                   </p>
                 </div>
               ) : (
@@ -168,7 +169,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                   <input
                     type="text"
                     required
-                    placeholder="Your name"
+                    placeholder={t('namePlaceholder')}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none dark:bg-[#141414]"
@@ -176,7 +177,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                   <input
                     type="email"
                     required
-                    placeholder="you@email.com"
+                    placeholder={t('emailPlaceholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none dark:bg-[#141414]"
@@ -187,7 +188,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                     disabled={loading}
                     className="bg-accent hover:bg-accent/90 font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors disabled:opacity-60"
                   >
-                    {loading ? 'Sending...' : 'Send me the PDF'}
+                    {loading ? t('sendingLabel') : t('submitBtn')}
                     {!loading && (
                       <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                         <path
@@ -201,7 +202,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                     )}
                   </button>
                   <p className="font-body text-muted text-center text-[11px]">
-                    No spam. No sharing. GDPR-compliant.
+                    {t('privacyNote')}
                   </p>
                 </form>
               )}
@@ -211,10 +212,10 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
           {/* Gate form */}
           <div className="bg-surface shadow-card dark:shadow-card-dark rounded-[20px] p-5">
             <p className="text-foreground mb-1 font-sans text-[18px] font-semibold">
-              Get the PDF — free
+              {t('gateHeading')}
             </p>
             <p className="font-body text-muted mb-5 text-[12px] leading-[1.55]">
-              One email, we&apos;ll send it straight away. No drip sequence, no spam.
+              {t('gateDesc2')}
             </p>
 
             {success ? (
@@ -231,7 +232,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                   </svg>
                 </div>
                 <p className="text-foreground font-sans text-[16px] font-semibold">
-                  Check your inbox!
+                  {t('successHeading')}
                 </p>
               </div>
             ) : (
@@ -239,7 +240,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                 <input
                   type="text"
                   required
-                  placeholder="Your name"
+                  placeholder={t('namePlaceholder')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="border-border font-body text-foreground placeholder-muted focus:border-accent dark:bg-section w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none"
@@ -247,7 +248,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                 <input
                   type="email"
                   required
-                  placeholder="Your email address"
+                  placeholder={t('emailPlaceholderFull')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="border-border font-body text-foreground placeholder-muted focus:border-accent dark:bg-section w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none"
@@ -258,7 +259,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                   disabled={loading}
                   className="bg-accent hover:bg-accent/90 font-body flex h-[50px] w-full items-center justify-center rounded-full text-[14px] font-medium text-white transition-colors disabled:opacity-60"
                 >
-                  {loading ? 'Sending...' : 'Send me the PDF'}
+                  {loading ? t('sendingLabel') : t('submitBtn')}
                 </button>
               </form>
             )}
@@ -266,7 +267,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
             {/* What's inside */}
             <div>
               <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
-                WHAT&apos;S INSIDE
+                {t('whatsInsideKicker')}
               </SectionKicker>
               <div className="flex flex-col gap-[10px]">
                 {BENEFITS.map((b) => (
@@ -298,7 +299,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
       {/* More ebooks */}
       <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">MORE FREE GUIDES</SectionKicker>
+          <SectionKicker className="mb-5">{t('moreGuidesKicker')}</SectionKicker>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
             {displayEbooks.map((book) => (
               <div
@@ -349,19 +350,19 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:last-child]:text-white/50">
-            READY TO TRADE?
+            {t('ctaKicker')}
           </SectionKicker>
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            Put it into practice.
+            {t('ctaHeading')}
           </h2>
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            Apply the 5% rule on a risk-free demo account — no deposit, no pressure.
+            {t('ctaDesc')}
           </p>
           <a
             href="/demo-account"
             className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center rounded-full text-[15px] font-medium text-white transition-colors"
           >
-            Open demo account
+            {t('ctaBtn')}
           </a>
         </div>
       </section>

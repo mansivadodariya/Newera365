@@ -1,18 +1,53 @@
 'use client';
 
-import { useState } from 'react';
-import { useLocale } from 'next-intl';
+import { useState, useMemo } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-type Tab = 'ALL' | 'MACRO' | 'STRATEGY' | 'EDUCATION' | 'INTERVIEWS' | 'LIVE';
+type Tab = 'ALL' | 'VIDEO' | 'AUDIO';
 
-const TABS: Tab[] = ['ALL', 'MACRO', 'STRATEGY', 'EDUCATION', 'INTERVIEWS', 'LIVE'];
+const TABS: Tab[] = ['ALL', 'VIDEO', 'AUDIO'];
 
-const EPISODES = [
+// Kept for backward-compat — no longer used by the page
+export interface CmsWebinarItem {
+  id: number;
+  title: string;
+  slug: string;
+  speaker: string;
+  speakerBio?: string | null;
+  scheduledAt: string;
+  status: 'upcoming' | 'live' | 'completed' | 'cancelled';
+  replayUrl?: string | null;
+}
+
+export interface CmsVideoItem {
+  id: number;
+  slug: string;
+  title: string;
+  contentType: 'video' | 'audio';
+  thumbnailUrl?: string | null;
+  videoEmbed?: string | null;
+  description?: string | null;
+}
+
+interface EpisodeItem {
+  id: string;
+  tab: Tab;
+  tagDisplay: string;
+  duration: string;
+  title: string;
+  desc: string;
+  type: 'VIDEO' | 'AUDIO';
+  featured: boolean;
+  thumbnailUrl?: string | null;
+  href?: string | null;
+}
+
+const FALLBACK_EPISODES: EpisodeItem[] = [
   {
     id: 'fed-trader',
-    tab: 'MACRO' as Tab,
-    tagDisplay: 'MACRO',
+    tab: 'VIDEO',
+    tagDisplay: 'VIDEO',
     duration: '42 min',
     title: "Inside the Fed: a former trader's view",
     desc: 'Ex-Goldman macro desk head on reading Fed minutes, rate expectations and what the bond market is pricing.',
@@ -21,8 +56,8 @@ const EPISODES = [
   },
   {
     id: 'cot-report',
-    tab: 'STRATEGY' as Tab,
-    tagDisplay: 'STRATEGY',
+    tab: 'VIDEO',
+    tagDisplay: 'VIDEO',
     duration: '18 min',
     title: 'Reading the COT report',
     desc: 'How institutional positioning data can give retail traders a real edge.',
@@ -31,8 +66,8 @@ const EPISODES = [
   },
   {
     id: 'why-moves',
-    tab: 'MACRO' as Tab,
-    tagDisplay: 'MACRO',
+    tab: 'AUDIO',
+    tagDisplay: 'AUDIO',
     duration: '24 min',
     title: 'Why oil moves on Tuesday',
     desc: 'EIA inventory data, production caps and the weekly cycle that drives crude.',
@@ -41,8 +76,8 @@ const EPISODES = [
   },
   {
     id: 'carry-trade',
-    tab: 'STRATEGY' as Tab,
-    tagDisplay: 'STRATEGY',
+    tab: 'VIDEO',
+    tagDisplay: 'VIDEO',
     duration: '31 min',
     title: 'The carry trade explained',
     desc: 'Currency pairs, interest rate differentials and how to run a carry position through volatility.',
@@ -51,8 +86,8 @@ const EPISODES = [
   },
   {
     id: 'boe',
-    tab: 'LIVE' as Tab,
-    tagDisplay: 'LIVE',
+    tab: 'VIDEO',
+    tagDisplay: 'VIDEO',
     duration: '15 min',
     title: 'Live BOE rate decision',
     desc: "Real-time breakdown of the Bank of England's rate decision and market reaction.",
@@ -61,8 +96,8 @@ const EPISODES = [
   },
   {
     id: 'london',
-    tab: 'INTERVIEWS' as Tab,
-    tagDisplay: 'INTERVIEWS',
+    tab: 'AUDIO',
+    tagDisplay: 'AUDIO',
     duration: '22 min',
     title: 'Interview: a London market maker',
     desc: 'What actually happens on the other side of your trade — a rare look inside market making.',
@@ -71,8 +106,8 @@ const EPISODES = [
   },
   {
     id: 'position',
-    tab: 'EDUCATION' as Tab,
-    tagDisplay: 'EDUCATION',
+    tab: 'VIDEO',
+    tagDisplay: 'VIDEO',
     duration: '19 min',
     title: 'Position sizing without the guesswork',
     desc: 'A practical framework for calculating lot size based on account risk, not gut feel.',
@@ -81,17 +116,49 @@ const EPISODES = [
   },
   {
     id: 'tech-analysis',
-    tab: 'STRATEGY' as Tab,
-    tagDisplay: 'STRATEGY',
+    tab: 'VIDEO',
+    tagDisplay: 'VIDEO',
     duration: '27 min',
     title: 'Technical analysis that actually works',
     desc: 'Which chart setups have a statistical edge — and which ones traders just like the look of.',
     type: 'VIDEO',
     featured: false,
   },
-] as const;
+];
+
+function videoItemToEpisode(v: CmsVideoItem, index: number): EpisodeItem {
+  const type: 'VIDEO' | 'AUDIO' = v.contentType === 'audio' ? 'AUDIO' : 'VIDEO';
+  return {
+    id: v.slug,
+    tab: type,
+    tagDisplay: type,
+    duration: '',
+    title: v.title,
+    desc: v.description ?? '',
+    type,
+    featured: index === 0,
+    thumbnailUrl: v.thumbnailUrl,
+    href: v.videoEmbed ?? null,
+  };
+}
+
+function webinarToEpisode(w: CmsWebinarItem, index: number): EpisodeItem {
+  const tab: Tab = w.status === 'upcoming' || w.status === 'live' ? 'VIDEO' : 'VIDEO';
+  return {
+    id: w.slug,
+    tab,
+    tagDisplay: tab,
+    duration: '',
+    title: w.title,
+    desc: w.speakerBio ?? `Presented by ${w.speaker}`,
+    type: 'VIDEO',
+    featured: index === 0,
+  };
+}
 
 const TAG_COLORS: Record<string, string> = {
+  VIDEO: 'bg-accent/10 text-accent',
+  AUDIO: 'bg-[#8B5CF6]/15 text-[#8B5CF6]',
   MACRO: 'bg-[#F59E0B]/15 text-[#F59E0B]',
   STRATEGY: 'bg-[#3B82F6]/15 text-[#3B82F6]',
   EDUCATION: 'bg-accent/10 text-accent',
@@ -118,13 +185,27 @@ function AudioIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-export function MediaListingPage() {
+interface MediaListingPageProps {
+  cmsVideos?: CmsVideoItem[];
+  /** @deprecated use cmsVideos */
+  cmsWebinars?: CmsWebinarItem[];
+}
+
+export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPageProps) {
   const locale = useLocale();
+  const t = useTranslations('media');
   const [activeTab, setActiveTab] = useState<Tab>('ALL');
   const [search, setSearch] = useState('');
 
-  const featured = EPISODES.find((e) => e.featured);
-  const rest = EPISODES.filter((e) => !e.featured);
+  const episodes = useMemo<EpisodeItem[]>(() => {
+    if (cmsVideos?.length) return cmsVideos.map(videoItemToEpisode);
+    if (cmsWebinars?.length)
+      return cmsWebinars.filter((w) => w.status !== 'cancelled').map(webinarToEpisode);
+    return FALLBACK_EPISODES;
+  }, [cmsVideos, cmsWebinars]);
+
+  const featured = episodes.find((e) => e.featured);
+  const rest = episodes.filter((e) => !e.featured);
 
   const filtered = rest.filter((ep) => {
     const matchTab = activeTab === 'ALL' || ep.tab === activeTab;
@@ -141,14 +222,14 @@ export function MediaListingPage() {
       <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.08] tracking-[-1.2px]">
-            Watch.
+            {t('heroLine1')}
             <br />
-            Listen.
+            {t('heroLine2')}
             <br />
-            <span className="text-accent">Learn.</span>
+            <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted mb-6 max-w-[320px] text-[14px] leading-[1.55]">
-            Lessons, interviews, breakdowns and discussions from our trading desk and partners.
+            {t('heroDesc')}
           </p>
 
           {/* Search */}
@@ -165,7 +246,7 @@ export function MediaListingPage() {
             </svg>
             <input
               type="text"
-              placeholder="Search episodes..."
+              placeholder={t('searchPlaceholder')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="border-border font-body text-foreground placeholder-muted focus:border-accent bg-surface w-full rounded-xl py-3 pl-10 pr-4 text-[14px] font-medium outline-none"
@@ -188,7 +269,7 @@ export function MediaListingPage() {
                     : 'border-border text-muted hover:border-foreground dark:bg-surface-elevated dark:hover:bg-surface-elevated bg-[#F2F2F4] hover:bg-[#e5e5e5]'
                 }`}
               >
-                {tab === 'ALL' ? 'All' : tab.charAt(0) + tab.slice(1).toLowerCase()}
+                {tab === 'ALL' ? t('filterAll') : tab.charAt(0) + tab.slice(1).toLowerCase()}
               </button>
             ))}
           </div>
@@ -199,14 +280,22 @@ export function MediaListingPage() {
       {featured && (activeTab === 'ALL' || activeTab === featured.tab) && !search && (
         <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <div className="overflow-hidden rounded-[22px] bg-[#0d0d0d] xl:flex xl:flex-row">
+            <div
+              className="overflow-hidden rounded-[22px] bg-[#0d0d0d] xl:flex xl:flex-row"
+              onClick={() => featured.href && window.open(featured.href, '_blank', 'noopener,noreferrer')}
+              style={{ cursor: featured.href ? 'pointer' : 'default' }}
+            >
               {/* Thumbnail */}
               <div className="relative flex h-[180px] items-center justify-center overflow-hidden bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111] xl:h-auto xl:w-[55%] xl:flex-shrink-0 xl:rounded-none">
+                {featured.thumbnailUrl && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={featured.thumbnailUrl} alt={featured.title} className="absolute inset-0 h-full w-full object-cover opacity-70" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 {/* NEW EPISODE badge */}
                 <div className="bg-accent absolute left-3 top-3 rounded-full px-2.5 py-[3px]">
                   <span className="font-body text-[9px] font-semibold uppercase tracking-[0.1em] text-white">
-                    New Episode
+                    {t('newEpisodeBadge')}
                   </span>
                 </div>
                 {/* Duration */}
@@ -235,7 +324,7 @@ export function MediaListingPage() {
                     {featured.tagDisplay}
                   </span>
                   <span className="font-body text-[11px] text-white/40">{featured.type}</span>
-                  <span className="font-body text-[11px] text-white/30">· RELEASED TODAY</span>
+                  <span className="font-body text-[11px] text-white/30">{t('releasedToday')}</span>
                 </div>
                 <p className="mb-2 font-sans text-[17px] font-semibold leading-[1.3] text-white xl:text-[26px]">
                   {featured.title}
@@ -252,11 +341,11 @@ export function MediaListingPage() {
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mx-auto mb-5 mt-2">
-            LATEST EPISODES
+            {t('latestEpisodes')}
           </SectionKicker>
           {filtered.length === 0 ? (
             <p className="font-body text-muted py-8 text-center text-[14px]">
-              No episodes match your search.
+              {t('noResults')}
             </p>
           ) : (
             <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-3">
@@ -264,10 +353,16 @@ export function MediaListingPage() {
                 <div
                   key={ep.id}
                   className="bg-surface shadow-card flex flex-col gap-3 overflow-hidden rounded-[18px] p-4 dark:shadow-none"
+                  onClick={() => ep.href && window.open(ep.href, '_blank', 'noopener,noreferrer')}
+                  style={{ cursor: ep.href ? 'pointer' : 'default' }}
                 >
                   {/* Thumbnail */}
                   <div className="relative flex h-[90px] items-center justify-center overflow-hidden rounded-[11px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111]">
-                    <div className="bg-accent/90 flex h-8 w-8 items-center justify-center rounded-full">
+                    {ep.thumbnailUrl && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={ep.thumbnailUrl} alt={ep.title} className="absolute inset-0 h-full w-full object-cover opacity-80" />
+                    )}
+                    <div className="bg-accent/90 relative z-10 flex h-8 w-8 items-center justify-center rounded-full">
                       {ep.type === 'VIDEO' ? (
                         <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
                           <path d="M4 3l10 5-10 5V3z" fill="white" />
@@ -312,20 +407,20 @@ export function MediaListingPage() {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
-            MORE LEARNING
+            {t('ctaKicker')}
           </SectionKicker>
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            Prefer to read?
+            {t('ctaHeading')}
           </h2>
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            In-depth guides and a complete trading glossary — all free.
+            {t('ctaDesc')}
           </p>
           <div className="flex flex-col gap-3">
             <a
               href={`/${locale}/guides`}
               className="font-body flex h-[50px] items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"
             >
-              Browse guides
+              {t('ctaGuides')}
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M3 8h10M9 4l4 4-4 4"
@@ -340,7 +435,7 @@ export function MediaListingPage() {
               href={`/${locale}/glossary`}
               className="font-body flex h-[50px] items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"
             >
-              Trading glossary
+              {t('ctaGlossary')}
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M3 8h10M9 4l4 4-4 4"

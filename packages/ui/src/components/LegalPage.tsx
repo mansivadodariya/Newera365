@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { RichText, extractHeadings } from './RichText';
 import type { SlateNode } from './RichText';
 
@@ -175,9 +175,7 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
           opening process and to keep that information up-to-date throughout our relationship.
         </Para>
         <RiskBox>
-          <strong>Risk warning:</strong> Trading leveraged products such as CFDs carries a high
-          level of risk. You may lose more than your initial deposit. Ensure you understand the
-          risks and seek independent advice if needed.
+          <strong>Risk warning:</strong> Trading leveraged products such as CFDs carries a high level of risk. You may lose more than your initial deposit. Ensure you understand the risks and seek independent advice if needed.
         </RiskBox>
       </Section>
       <Section id="section-4" title="4. Trading policy">
@@ -242,9 +240,7 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
           Important: Trading involves significant risk
         </p>
         <p className="font-body mt-2 text-[13px] leading-[1.65] text-[#7f1d1d] dark:text-[#F59E0B]/80">
-          CFDs are complex instruments and come with a high risk of losing money rapidly due to
-          leverage. You should consider whether you understand how CFDs work and whether you can
-          afford to take the high risk of losing your money.
+          CFDs are complex instruments and come with a high risk of losing money rapidly due to leverage. You should consider whether you understand how CFDs work and whether you can afford to take the high risk of losing your money.
         </p>
       </div>
       <Section id="section-1" title="1. Nature of CFDs">
@@ -332,6 +328,7 @@ interface LegalPageProps {
 }
 
 export function LegalPage({ documents }: LegalPageProps) {
+  const t = useTranslations('legal');
   const hasCms = documents && documents.length > 0;
 
   const cmsDocList = hasCms
@@ -346,12 +343,12 @@ export function LegalPage({ documents }: LegalPageProps) {
       <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground font-sans text-[36px] font-semibold leading-[1.08] tracking-[-1.08px]">
-            Terms &amp;
+            {t('heroLine1')}
             <br />
-            <span className="text-accent">Conditions.</span>
+            <span className="text-accent">{t('heroLine2')}</span>
           </h1>
           <p className="font-body text-muted max-w-[300px] text-[14px] leading-[1.55]">
-            All regulatory documents, policies and disclosures governing your account.
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -370,7 +367,7 @@ export function LegalPage({ documents }: LegalPageProps) {
                     : 'text-muted dark:bg-surface-elevated dark:hover:bg-surface-elevated bg-[#F2F2F4] hover:bg-[#e5e5e5]'
                 }`}
               >
-                {doc.label}
+                {doc.id === 'terms' ? t('docTerms') : doc.id === 'privacy' ? t('docPrivacy') : doc.id === 'risk' ? t('docRisk') : doc.id === 'aml' ? t('docAml') : doc.id === 'cookies' ? t('docCookies') : doc.label}
               </button>
             ))}
           </div>
@@ -381,7 +378,7 @@ export function LegalPage({ documents }: LegalPageProps) {
       <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="bg-surface rounded-[14px] p-4">
-            <p className="text-muted mb-3 font-mono text-[10px] tracking-[1.4px]">Contents</p>
+            <p className="text-muted mb-3 font-mono text-[10px] tracking-[1.4px]">{t('tocHeading')}</p>
             <div className="flex flex-col gap-2">
               {TOC[activeDoc].map((item) => (
                 <a
@@ -409,8 +406,7 @@ export function LegalPage({ documents }: LegalPageProps) {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="font-body mb-5 text-[12px] leading-[1.7] text-white/50">
-            Trading involves risk. Past performance is not indicative of future results. Trade
-            responsibly. NewEra365 Ltd is regulated by FCA, ASIC, and CySEC.
+            {t('footerDisclaimer')}
           </p>
           <div className="flex flex-wrap gap-3">
             {DOCUMENTS.filter((d) => d.id !== activeDoc).map((doc) => (
@@ -419,7 +415,7 @@ export function LegalPage({ documents }: LegalPageProps) {
                 onClick={() => setActiveDoc(doc.id)}
                 className="font-body rounded-full border border-white/20 px-4 py-2 text-[12px] text-white/70 transition-colors hover:border-white/40 hover:text-white"
               >
-                {doc.label}
+                {doc.id === 'terms' ? t('docTerms') : doc.id === 'privacy' ? t('docPrivacy') : doc.id === 'risk' ? t('docRisk') : doc.id === 'aml' ? t('docAml') : t('docCookies')}
               </button>
             ))}
           </div>

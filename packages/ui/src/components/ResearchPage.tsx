@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useMemo } from 'react';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 export interface ArticleItem {
@@ -28,6 +28,18 @@ interface CmsResearchArticle {
   assetCategory: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
   analyst?: string | null;
   publishedDate: string;
+  thumbnailUrl?: string | null;
+  summary?: string | null;
+}
+
+export interface CmsResearchReportItem {
+  id: number;
+  title: string;
+  slug: string;
+  summary?: string | null;
+  publishedDate: string;
+  isGated?: boolean | null;
+  reportUrl: string | null;
 }
 
 const ASSET_TO_CATEGORY: Record<string, Exclude<Category, 'ALL'>> = {
@@ -168,6 +180,7 @@ type ArticleDisplay = {
   readTime: string;
   featured: boolean;
   sparkline: readonly number[];
+  thumbnailUrl?: string | null;
 };
 
 function toDisplayArticles(cmsArticles?: CmsResearchArticle[]): ArticleDisplay[] {
@@ -179,20 +192,24 @@ function toDisplayArticles(cmsArticles?: CmsResearchArticle[]): ArticleDisplay[]
     slug: a.slug,
     category: (ASSET_TO_CATEGORY[a.assetCategory] ?? 'ANALYSIS') as Exclude<Category, 'ALL'>,
     title: a.title,
-    summary: '',
+    summary: a.summary ?? '',
     date: formatArticleDate(a.publishedDate),
     readTime: '5 min',
     featured: i === 0,
     sparkline: SPARKLINES[i % SPARKLINES.length] as readonly number[],
+    thumbnailUrl: a.thumbnailUrl ?? null,
   }));
 }
 
 interface ResearchPageProps {
   cmsArticles?: CmsResearchArticle[];
+  cmsReports?: CmsResearchReportItem[];
+  basePath?: string;
 }
 
-export function ResearchPage({ cmsArticles }: ResearchPageProps) {
+export function ResearchPage({ cmsArticles, cmsReports, basePath = 'research' }: ResearchPageProps) {
   const locale = useLocale();
+  const t = useTranslations('research');
   const [activeCategory, setActiveCategory] = useState<Category>('ALL');
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -216,12 +233,12 @@ export function ResearchPage({ cmsArticles }: ResearchPageProps) {
       <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.08] tracking-[-1.14px]">
-            Notes from
+            {t('heroLine1')}
             <br />
-            the <span className="text-accent">trading floor.</span>
+            {t('heroLine2')}
           </h1>
           <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
-            Market analysis, commentary and research from our trading desk and partners.
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -234,13 +251,13 @@ export function ResearchPage({ cmsArticles }: ResearchPageProps) {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-medium transition-colors ${
+                className={`font-body flex-shrink-0 rounded-full px-[14px] py-[8px] text-[13px] font-medium transition-colors ${
                   activeCategory === cat
-                    ? 'bg-accent text-white'
-                    : 'text-muted dark:bg-surface-elevated dark:hover:bg-surface-elevated bg-[#F2F2F4] hover:bg-[#e5e5e5]'
+                    ? 'bg-[#111] text-white dark:bg-white dark:text-[#111]'
+                    : 'bg-[#f2f2f4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22]'
                 }`}
               >
-                {cat === 'ALL' ? 'All' : cat.charAt(0) + cat.slice(1).toLowerCase()}
+                {cat === 'ALL' ? t('filterAll') : cat.charAt(0) + cat.slice(1).toLowerCase()}
               </button>
             ))}
           </div>
@@ -252,7 +269,7 @@ export function ResearchPage({ cmsArticles }: ResearchPageProps) {
         <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <Link
-              href={`/${locale}/research/${featured.slug}`}
+              href={`/${locale}/${basePath}/${featured.slug}`}
               className="shadow-card-dark group flex flex-col overflow-hidden rounded-[22px] bg-[#111111]"
             >
               {/* Thumbnail */}
@@ -305,7 +322,7 @@ export function ResearchPage({ cmsArticles }: ResearchPageProps) {
                     {featured.date} · {featured.readTime} read
                   </span>
                   <span className="font-body text-accent flex items-center gap-1.5 text-[12px] font-medium">
-                    Read article
+                    {t('readArticle')}
                     <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
                       <path
                         d="M3 8h10M9 4l4 4-4 4"
@@ -323,51 +340,55 @@ export function ResearchPage({ cmsArticles }: ResearchPageProps) {
         </section>
       )}
 
-      {/* Article list */}
+      {/* Article list — white cards matching Figma */}
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
+          <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-3 xl:gap-6">
             {filteredList.map((article) => (
               <Link
                 key={article.id}
-                href={`/${locale}/research/${article.slug}`}
-                className="group flex items-start gap-4 py-5 xl:flex-col xl:gap-3 xl:px-6 xl:py-0 xl:first:pl-0 xl:last:pr-0"
+                href={`/${locale}/${basePath}/${article.slug}`}
+                className="group flex flex-col overflow-hidden rounded-[18px] bg-white p-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0px_8px_24px_rgba(0,0,0,0.1)] dark:bg-[#1a1c22]"
               >
-                <div className="min-w-0 flex-1">
-                  <div className="mb-1.5 flex items-center gap-2">
-                    <span
-                      className={`font-body rounded-full px-2 py-[2px] text-[9px] font-semibold uppercase tracking-[0.08em] ${CAT_COLORS[article.category.toUpperCase()] ?? 'bg-accent/10 text-accent'}`}
-                    >
-                      {article.category}
-                    </span>
-                    <span className="font-body text-muted text-[11px]">{article.date}</span>
-                  </div>
-                  <p className="text-foreground group-hover:text-accent mb-1 font-sans text-[14px] font-semibold leading-[1.35] transition-colors">
-                    {article.title}
-                  </p>
-                  <p className="font-body text-muted text-[12px] leading-[1.5]">
+                {/* Thumbnail — CMS image if available, SVG sparkline fallback */}
+                <div className="relative mb-[14px] flex h-[120px] w-full items-end overflow-hidden rounded-[12px] bg-gradient-to-br from-[#f4f4f2] to-[#e8e8e5] p-3 dark:from-[#1c1c1c] dark:to-[#111]">
+                  {article.thumbnailUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={article.thumbnailUrl}
+                      alt={article.title}
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                  ) : (
+                    <Sparkline data={article.sparkline} positive />
+                  )}
+                </div>
+
+                {/* Meta: category + readTime */}
+                <div className="mb-[14px] flex items-center gap-[8px]">
+                  <span className="rounded-full bg-[rgba(0,176,80,0.1)] px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px] text-[#00b050]">
+                    {article.category}
+                  </span>
+                  <span className="font-mono text-[10px] text-[#6b7280]">{article.readTime} read</span>
+                </div>
+
+                {/* Title */}
+                <p className="text-foreground group-hover:text-accent mb-[14px] font-sans text-[17px] font-semibold leading-[1.22] tracking-[-0.255px] transition-colors">
+                  {article.title}
+                </p>
+
+                {article.summary && (
+                  <p className="font-body mb-[14px] text-[13px] leading-[1.5] text-[#6b7280]">
                     {article.summary}
                   </p>
-                  <span className="font-body text-muted mt-2 block text-[11px]">
-                    {article.readTime} read
-                  </span>
-                </div>
-                <div className="flex flex-shrink-0 flex-col items-end gap-2 pt-1">
-                  {article.sparkline && <Sparkline data={article.sparkline} />}
-                  <svg
-                    width="7"
-                    height="12"
-                    viewBox="0 0 7 12"
-                    fill="none"
-                    className="text-muted group-hover:text-accent transition-colors"
-                  >
-                    <path
-                      d="M1 1L6 6L1 11"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
+                )}
+
+                {/* Footer: date + arrow */}
+                <div className="mt-auto h-px bg-[rgba(17,17,17,0.08)] dark:bg-white/[0.08]" />
+                <div className="mt-[14px] flex items-center justify-between">
+                  <span className="font-mono text-[10px] text-[#6b7280]">{article.date}</span>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="text-muted group-hover:text-accent transition-colors" aria-hidden="true">
+                    <path d="M2 12L12 2M12 2H7M12 2v5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
               </Link>
@@ -376,15 +397,85 @@ export function ResearchPage({ cmsArticles }: ResearchPageProps) {
 
           {filteredList.length === 0 && (
             <p className="font-body text-muted py-10 text-center text-[14px]">
-              No articles in this category yet.
+              {t('noArticles')}
             </p>
           )}
 
-          <button className="font-body text-muted hover:text-foreground mt-6 flex w-full items-center justify-center gap-2 py-3 text-[13px] font-medium underline underline-offset-4 transition-colors">
-            Load more articles
-          </button>
+          {/* Load more — bg-[#fafaf9] rounded pill matching Figma */}
+          <div className="mt-6 flex items-center justify-center gap-[8px] rounded-[14px] bg-[#fafaf9] px-[14px] py-[14px] dark:bg-[#1a1c22]">
+            <button className="font-body text-foreground text-[13px] font-medium">
+              {t('loadMore')}
+            </button>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="text-[#6b7280]" aria-hidden="true">
+              <path d="M7 2.5v9M3 8l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
         </div>
       </section>
+
+      {/* Research Reports downloads */}
+      {cmsReports && cmsReports.length > 0 && (
+        <section className="bg-background px-5 pb-10">
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <div className="mb-5 flex items-center gap-3">
+              <h2 className="text-foreground font-sans text-[22px] font-semibold leading-tight tracking-[-0.33px]">
+                {t('reportsHeading')}
+              </h2>
+              <span className="font-mono text-[11px] text-[#6b7280]">{t('reportsSubtitle')}</span>
+            </div>
+            <div className="flex flex-col gap-3 xl:grid xl:grid-cols-2 xl:gap-4">
+              {cmsReports.map((report) => (
+                <div
+                  key={report.id}
+                  className="flex items-start justify-between gap-4 rounded-[16px] bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:bg-[#1a1c22]"
+                >
+                  <div className="min-w-0 flex-1">
+                    {report.isGated && (
+                      <span className="mb-2 inline-block rounded-full bg-[#F59E0B]/15 px-2.5 py-[3px] font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-[#F59E0B]">
+                        {t('reportGated')}
+                      </span>
+                    )}
+                    <p className="text-foreground font-sans text-[15px] font-semibold leading-[1.3] tracking-[-0.225px]">
+                      {report.title}
+                    </p>
+                    {report.summary && (
+                      <p className="font-body mt-1 text-[12px] leading-[1.5] text-[#6b7280]">
+                        {report.summary}
+                      </p>
+                    )}
+                    <p className="font-mono mt-2 text-[10px] text-[#9ca3af]">
+                      {(() => {
+                        try {
+                          return new Date(report.publishedDate).toLocaleDateString('en-US', {
+                            month: 'short',
+                            year: 'numeric',
+                          });
+                        } catch {
+                          return '';
+                        }
+                      })()}
+                    </p>
+                  </div>
+                  {report.reportUrl ? (
+                    <a
+                      href={report.reportUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-accent hover:bg-accent/90 flex-shrink-0 rounded-full px-4 py-2 font-sans text-[12px] font-medium text-white transition-colors"
+                    >
+                      {t('reportDownload')}
+                    </a>
+                  ) : (
+                    <span className="flex-shrink-0 rounded-full bg-[#f2f2f4] px-4 py-2 font-sans text-[12px] text-[#9ca3af] dark:bg-[#1c1c1c]">
+                      {t('reportComingSoon')}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Newsletter */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
@@ -393,16 +484,15 @@ export function ResearchPage({ cmsArticles }: ResearchPageProps) {
             {/* Left: heading */}
             <div className="xl:flex-1">
               <SectionKicker className="mb-3 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
-                WEEKLY BRIEFING
+                {t('briefingKicker')}
               </SectionKicker>
               <h2 className="mb-2 font-sans text-[28px] font-semibold leading-[1.1] text-white">
-                Get the briefing.
+                {t('briefingHeading')}
                 <br />
-                Monday, 7am.
+                {t('briefingTime')}
               </h2>
               <p className="font-body mb-6 text-[13px] leading-relaxed text-white/60 xl:mb-0">
-                A 5-minute look at what matters in the new week — straight from the trading desk to
-                your inbox.
+                {t('briefingDesc')}
               </p>
             </div>
             {/* Right: form */}
@@ -419,7 +509,7 @@ export function ResearchPage({ cmsArticles }: ResearchPageProps) {
                     />
                   </svg>
                   <span className="font-body text-[14px] text-white">
-                    You&apos;re on the list. See you Monday.
+                    {t('briefingSuccess')}
                   </span>
                 </div>
               ) : (
@@ -433,7 +523,7 @@ export function ResearchPage({ cmsArticles }: ResearchPageProps) {
                   <input
                     type="email"
                     required
-                    placeholder="your@email.com"
+                    placeholder={t('briefingPlaceholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="font-body focus:border-accent flex-1 rounded-full border border-white/20 bg-white/[0.07] px-4 py-3 text-[13px] text-white placeholder-white/40 outline-none"
@@ -442,7 +532,7 @@ export function ResearchPage({ cmsArticles }: ResearchPageProps) {
                     type="submit"
                     className="bg-accent hover:bg-accent/90 font-body flex-shrink-0 rounded-full px-5 py-3 text-[13px] font-medium text-white transition-colors"
                   >
-                    Subscribe
+                    {t('briefingSubscribe')}
                   </button>
                 </form>
               )}

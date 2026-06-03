@@ -29,10 +29,10 @@ export { MarketsSection } from './components/MarketsSection';
 export { FeaturesSection } from './components/FeaturesSection';
 export { ThreeStepsSection } from './components/ThreeStepsSection';
 export { CtaBanner } from './components/CtaBanner';
+export { SmartCtaBanner } from './components/SmartCtaBanner';
 export { ArbitrageSection } from './components/ArbitrageSection';
 
 export { AccountsPage } from './components/AccountsPage';
-export { AccountComparisonPage } from './components/AccountComparisonPage';
 export { FundingPage } from './components/FundingPage';
 export type { CmsPaymentMethodItem } from './components/FundingPage';
 export { FeesPage } from './components/FeesPage';
@@ -56,9 +56,11 @@ export { LegalPage } from './components/LegalPage';
 export type { CmsLegalDocument } from './components/LegalPage';
 
 export { IBPage } from './components/IBPage';
+export type { IBCmsContent } from './components/IBPage';
 export { EducationHubPage } from './components/EducationHubPage';
 export type { CmsEducationItem } from './components/EducationHubPage';
 export { MediaListingPage } from './components/MediaListingPage';
+export type { CmsWebinarItem, CmsVideoItem } from './components/MediaListingPage';
 export { EbooksPage } from './components/EbooksPage';
 export type { CmsEbookItem } from './components/EbooksPage';
 export { GlossaryPage } from './components/GlossaryPage';
@@ -69,9 +71,9 @@ export { GuideDetailPage } from './components/GuideDetailPage';
 export type { GuideDetailProps, CmsGuideDetail } from './components/GuideDetailPage';
 
 export { ResearchPage } from './components/ResearchPage';
-export type { ArticleItem } from './components/ResearchPage';
+export type { ArticleItem, CmsResearchReportItem } from './components/ResearchPage';
 export { ResearchDetailPage } from './components/ResearchDetailPage';
-export type { ArticleDetailData } from './components/ResearchDetailPage';
+export type { ArticleDetailData, RelatedInstrument } from './components/ResearchDetailPage';
 export { TraderToolsPage } from './components/TraderToolsPage';
 export { SpreadComparatorPage } from './components/SpreadComparatorPage';
 export { EconomicCalendarPage } from './components/EconomicCalendarPage';

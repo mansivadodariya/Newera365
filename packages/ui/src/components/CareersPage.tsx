@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 type Department = 'ALL' | 'ENGINEERING' | 'RESEARCH' | 'TRADING' | 'DESIGN' | 'OPERATIONS';
@@ -124,6 +124,7 @@ interface CareersPageProps {
 
 export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
   const locale = useLocale();
+  const t = useTranslations('careers');
   const [dept, setDept] = useState<Department>('ALL');
 
   const useCms = cmsJobs && cmsJobs.length > 0;
@@ -146,13 +147,12 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
-            Build the next
+            {t('heroLine1')}
             <br />
-            era of <span className="text-accent">trading.</span>
+            era of <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
-            We&apos;re 120+ people across London, Singapore and Dubai. Engineers, traders, analysts,
-            designers and compliance experts.
+            {t('heroDesc')}
           </p>
         </div>
       </section>
@@ -162,10 +162,10 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-4">
             {[
-              { value: '120+', label: 'Team members' },
-              { value: '12+', label: 'Countries' },
-              { value: '3', label: 'Offices' },
-              { value: '200K+', label: 'Clients served' },
+              { value: '120+', label: t('statTeam') },
+              { value: '12+', label: t('statCountries') },
+              { value: '3', label: t('statOffices') },
+              { value: '200K+', label: t('statClients') },
             ].map((stat) => (
               <div
                 key={stat.label}
@@ -185,16 +185,16 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       <section className="bg-background px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            How we Work
+            {t('valuesKicker')}
           </SectionKicker>
           <div className="grid grid-cols-2 gap-[10px] xl:gap-5">
-            {VALUES.map((v) => (
+            {VALUES.map((v, i) => (
               <div
                 key={v.title}
                 className="bg-surface shadow-card flex flex-col gap-2 rounded-[18px] p-4 dark:shadow-none"
               >
-                <p className="text-foreground font-sans text-[13px] font-semibold">{v.title}</p>
-                <p className="font-body text-muted text-[12px] leading-relaxed">{v.desc}</p>
+                <p className="text-foreground font-sans text-[13px] font-semibold">{t(`val${i + 1}Title` as 'val1Title')}</p>
+                <p className="font-body text-muted text-[12px] leading-relaxed">{t(`val${i + 1}Desc` as 'val1Desc')}</p>
               </div>
             ))}
           </div>
@@ -205,7 +205,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            Open Roles
+            {t('rolesHeading')}
           </SectionKicker>
 
           {/* Department tabs */}
@@ -220,7 +220,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
                     : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
                 }`}
               >
-                {d.label}
+                {d.id === 'ALL' ? t('filterAll') : d.id === 'ENGINEERING' ? t('deptEngineering') : d.id === 'RESEARCH' ? t('deptResearch') : d.id === 'TRADING' ? t('deptTrading') : d.id === 'DESIGN' ? t('deptDesign') : t('deptOperations')}
               </button>
             ))}
           </div>
@@ -267,7 +267,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
 
           {filtered.length === 0 && (
             <p className="font-body text-muted py-8 text-center text-[14px]">
-              No open roles in this department right now.
+              {t('noRoles')}
             </p>
           )}
         </div>
@@ -280,15 +280,15 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
             {/* Left: text */}
             <div className="xl:flex-1">
               <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
-                OPEN APPLICATION
+                {t('openAppKicker')}
               </SectionKicker>
               <h2 className="mb-3 font-sans text-[28px] font-semibold leading-[1.1] text-white xl:text-[36px]">
-                Don&apos;t see
+                {t('openAppLine1')}
                 <br />
-                your role?
+                {t('openAppLine2')}
               </h2>
               <p className="font-body mb-8 text-[13px] leading-relaxed text-white/60 xl:mb-0">
-                Send us a thoughtful note — we hire for talent and character, not just job titles.
+                {t('openAppDesc')}
               </p>
             </div>
 
@@ -298,7 +298,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
                 href={`/${locale}/contact`}
                 className="bg-accent font-body hover:bg-accent/90 flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors xl:w-auto xl:px-8"
               >
-                Open application
+                {t('openAppCta')}
                 <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                   <path
                     d="M3 8h10M9 4l4 4-4 4"
@@ -314,7 +314,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
             {/* Right: review note */}
             <div className="mt-4 xl:mt-0 xl:flex-shrink-0 xl:text-right">
               <p className="font-body text-[12px] text-white/40 xl:max-w-[180px]">
-                Most applications reviewed same day.
+                {t('openAppNote')}
               </p>
             </div>
           </div>

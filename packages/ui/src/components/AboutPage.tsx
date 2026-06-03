@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 const MILESTONES = [
@@ -17,8 +17,8 @@ const MILESTONES = [
   },
   {
     year: '2019',
-    label: '500k traders',
-    desc: 'Crossed half a million active accounts during a period of global expansion across 6 countries.',
+    label: '100k traders',
+    desc: 'Crossed six figures of active accounts during a period of rapid expansion across 6 countries.',
   },
   {
     year: '2022',
@@ -121,6 +121,7 @@ interface AboutPageProps {
 
 export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
   const locale = useLocale();
+  const t = useTranslations('about');
 
   const displayTeam = cmsTeam && cmsTeam.length > 0 ? cmsTeam : null;
 
@@ -130,13 +131,12 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
       <section className="bg-background rounded-b-[32px] px-5 pb-7 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
-            <span className="text-foreground">A new era of trading,</span>
+            <span className="text-foreground">{t('heroLine1')}</span>
             <br />
-            <span className="text-accent">built by traders.</span>
+            <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted mt-4 max-w-[320px] text-[14px] leading-[1.6]">
-            We started with a simple belief — traders deserve a broker that&apos;s transparent, fast
-            and obsessed with execution.
+            {t('heroDesc')}
           </p>
         </div>
       </section>
@@ -145,21 +145,19 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
       <section className="rounded-t-[32px] bg-[#111111] px-5 pb-11 pt-11">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 text-white [&>span:first-child]:bg-white">
-            OUR MISSION
+            {t('missionKicker')}
           </SectionKicker>
           <p className="font-sans text-[24px] font-medium leading-[1.3] tracking-[-0.36px] text-white">
-            To give every trader — from first deposit to first million — the tools, the speed, and
-            the trust they need to compete on a level field.
+            {t('missionText')}
           </p>
           <div className="my-6 border-t border-white/10" />
           <div className="flex items-center justify-between">
             <div>
               <p className="font-sans text-[18px] font-semibold text-white">Alex M.</p>
-              <p className="font-body text-[12px] text-white/55">Co-founder &amp; CEO</p>
+              <p className="font-body text-[12px] text-white/55">{t('ceoTitle')}</p>
             </div>
             <div className="text-right">
-              <p className="font-mono text-[9px] tracking-[1.35px] text-white/40">LETTER FROM</p>
-              <p className="font-mono text-[9px] tracking-[1.35px] text-white/40">THE FOUNDER →</p>
+              <p className="font-mono text-[9px] tracking-[1.35px] text-white/40">{t('founderLetterLabel')}</p>
             </div>
           </div>
         </div>
@@ -169,10 +167,10 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
       <section className="bg-background rounded-t-[32px] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            THE ROAD SO FAR
+            {t('timelineKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
-            A decade of compounding.
+            {t('timelineHeading')}
           </h2>
           <div className="flex flex-col">
             {MILESTONES.map((m, i) => (
@@ -207,15 +205,15 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
       >
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            THE TEAM
+            {t('teamKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
-            Operators, not marketers.
+            {t('teamHeading')}
           </h2>
           <div className="grid grid-cols-2 gap-[10px]">
-            {TEAM.map((member) => (
+            {TEAM.map((member, i) => (
               <div
-                key={member.name}
+                key={`team-${i}-${member.name}`}
                 className="bg-background shadow-card flex h-[145px] flex-col gap-[14px] rounded-[18px] p-[18px] dark:shadow-none"
               >
                 {/* Avatar — dark gradient per Figma */}
@@ -243,10 +241,10 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
       <section className="bg-background rounded-t-[32px] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            MORE FROM THE COMPANY
+            {t('exploreKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
-            Explore.
+            {t('exploreHeading')}
           </h2>
           <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-2">
             {EXPLORE_LINKS.map((link) => (
@@ -260,9 +258,11 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-foreground font-sans text-[15px] font-semibold leading-normal">
-                    {link.label}
+                    {link.href === '/company/careers' ? t('exploreCareers') : link.href === '/company/awards' ? t('exploreAwards') : link.href === '/company/media' ? t('exploreMedia') : t('exploreContact')}
                   </p>
-                  <p className="font-body text-muted mt-[2px] text-[12px]">{link.desc}</p>
+                  <p className="font-body text-muted mt-[2px] text-[12px]">
+                    {link.href === '/company/careers' ? t('exploreCareersDesc') : link.href === '/company/awards' ? t('exploreAwardsDesc') : link.href === '/company/media' ? t('exploreMediaDesc') : t('exploreContactDesc')}
+                  </p>
                 </div>
                 <span className="text-muted flex-shrink-0 text-[18px]">›</span>
               </Link>
@@ -275,21 +275,21 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
-            GET STARTED
+            {t('ctaKicker')}
           </SectionKicker>
           <h2 className="mb-3 font-sans text-[28px] font-semibold leading-[1.1] text-white">
-            A premium global
+            {t('ctaLine1')}
             <br />
-            <span className="text-accent">trading platform.</span>
+            <span className="text-accent">{t('ctaLine2')}</span>
           </h2>
           <p className="font-body mb-8 text-[13px] leading-relaxed text-white/60">
-            Built for the new era of markets.
+            {t('ctaLine3')}
           </p>
           <Link
             href={`/${locale}/register`}
             className="bg-accent font-body hover:bg-accent/90 flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors xl:w-auto xl:px-8"
           >
-            Open an account
+            {t('ctaBtn')}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path
                 d="M3 8h10M9 4l4 4-4 4"

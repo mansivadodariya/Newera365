@@ -8,6 +8,13 @@
       "runtimeArgs": ["run", "dev", "--workspace=@newera365/web"],
       "port": 3000,
       "cwd": "D:\\NewEra365\\newera365-app"
+    },
+    {
+      "name": "newera365-cms",
+      "runtimeExecutable": "npm.cmd",
+      "runtimeArgs": ["run", "dev", "--workspace=@newera365/cms"],
+      "port": 3001,
+      "cwd": "D:\\NewEra365\\newera365-app"
     }
   ]
 }

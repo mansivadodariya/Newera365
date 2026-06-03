@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
-import { localizationFields, seoFields, slugField } from './_fields';
-import { ensureTranslationKey, uniqueSlugPerLocale } from '../hooks';
+import { seoFields, slugField } from './_fields';
 
 // Powers /blog (listing) and /blog/[slug] (article).
 export const BlogPosts: CollectionConfig = {
@@ -8,15 +7,11 @@ export const BlogPosts: CollectionConfig = {
   admin: {
     group: 'Editorial',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'status', 'locale', 'publishedDate'],
+    defaultColumns: ['title', 'category', 'status', 'publishedDate'],
   },
   access: { read: () => true },
-  hooks: {
-    beforeValidate: [uniqueSlugPerLocale('blog-posts')],
-    beforeChange: [ensureTranslationKey],
-  },
   fields: [
-    { name: 'title', type: 'text', required: true, maxLength: 200 },
+    { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),
     {
       name: 'status',
@@ -32,11 +27,16 @@ export const BlogPosts: CollectionConfig = {
       required: true,
       options: ['market-news', 'analysis', 'tutorials', 'company-updates'],
     },
-    { name: 'author', type: 'text', maxLength: 100, admin: { description: 'Display name only.' } },
-    { name: 'excerpt', type: 'textarea', maxLength: 300 },
+    {
+      name: 'author',
+      type: 'text',
+      maxLength: 100,
+      localized: true,
+      admin: { description: 'Display name only.' },
+    },
+    { name: 'excerpt', type: 'textarea', maxLength: 300, localized: true },
     { name: 'featuredImage', type: 'upload', relationTo: 'media' },
-    { name: 'body', type: 'richText', required: true },
+    { name: 'body', type: 'richText', required: true, localized: true },
     ...seoFields,
-    ...localizationFields,
   ],
 };

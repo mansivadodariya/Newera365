@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 interface Channel {
@@ -81,6 +81,7 @@ interface ContactPageProps {
 
 export function ContactPage({ contactDetails }: ContactPageProps) {
   const locale = useLocale();
+  const t = useTranslations('contact');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [topic, setTopic] = useState<Topic>('General');
@@ -98,13 +99,12 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
       <section className="bg-background rounded-b-[32px] px-5 pb-7 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
-            <span className="text-foreground">We&apos;re here.</span>
+            <span className="text-foreground">{t('heroLine1')}</span>
             <br />
-            <span className="text-accent">Talk to us.</span>
+            <span className="text-accent">{t('heroLine2')}</span>
           </h1>
           <p className="font-body text-muted mt-4 max-w-[320px] text-[14px] leading-[1.6]">
-            Real people, fast answers. Pick the channel that fits — we monitor all of them around
-            the clock.
+            {t('heroDesc')}
           </p>
         </div>
       </section>
@@ -113,10 +113,10 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
       <section className="bg-background rounded-t-[32px] px-5 pb-8 pt-10 xl:pb-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            QUICK CHANNELS
+            {t('channelsKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px]">
-            Choose how to reach us.
+            {t('channelsHeading')}
           </h2>
 
           <div className="flex flex-col gap-[14px]">
@@ -132,12 +132,12 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-foreground font-sans text-[14px] font-semibold">
-                      {ch.label}
+                      {t('channelChat')}
                     </p>
-                    <p className="font-body text-muted mt-[3px] text-[12.5px]">{ch.value}</p>
+                    <p className="font-body text-muted mt-[3px] text-[12.5px]">{t('channelChatBtn')}</p>
                   </div>
                   <span className="text-accent flex-shrink-0 font-mono text-[10px] tracking-[1px]">
-                    ● ONLINE NOW
+                    {t('channelChatStatus')}
                   </span>
                 </Link>
               ) : (
@@ -151,12 +151,12 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-foreground font-sans text-[14px] font-semibold">
-                      {ch.label}
+                      {ch.id === 'email' ? t('channelEmail') : t('channelCall')}
                     </p>
                     <p className="font-body text-muted mt-[3px] text-[12.5px]">{ch.value}</p>
                   </div>
                   <span className="text-muted flex-shrink-0 font-mono text-[10px] tracking-[1px]">
-                    {ch.meta}
+                    {ch.id === 'email' ? t('channelEmailReply') : t('channelCallHours')}
                   </span>
                 </a>
               ),
@@ -168,20 +168,20 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
             <div className="mb-2 flex items-center gap-2">
               <span className="bg-accent inline-block h-[7px] w-[7px] rounded-full" />
               <span className="font-body text-[10px] font-medium tracking-[1.4px] text-white">
-                OUR PROMISE
+                {t('promiseKicker')}
               </span>
             </div>
             <p className="font-sans text-[16px] font-semibold text-white">
-              Real humans. Fast answers.
+              {t('promiseHeading')}
             </p>
             <p className="font-body mt-1 text-[12px] leading-[1.5] text-[#b8bfcc]">
-              Average first response under 6 minutes during market hours.
+              {t('promiseDesc')}
             </p>
             <div className="mt-3 flex gap-[24px]">
               {[
-                { v: '< 6 min', l: 'First reply' },
-                { v: '24/5', l: 'Always on' },
-                { v: '8', l: 'Languages' },
+                { v: '< 6 min', l: t('promiseStat1') },
+                { v: '24/5', l: t('promiseStat2') },
+                { v: '8', l: t('promiseStat3') },
               ].map((s) => (
                 <div key={s.l} className="flex flex-col gap-[2px]">
                   <span className="font-sans text-[13px] font-semibold text-[#1ad966]">{s.v}</span>
@@ -202,10 +202,10 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
       >
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            SEND A MESSAGE
+            {t('formKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px]">
-            Write us a note.
+            {t('formHeading')}
           </h2>
 
           {submitted ? (
@@ -222,10 +222,10 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                 </svg>
               </div>
               <h2 className="text-foreground font-sans text-[22px] font-semibold">
-                Message received
+                {t('successHeading')}
               </h2>
               <p className="font-body text-muted max-w-[240px] text-[13px] leading-relaxed">
-                We&apos;ll get back to you shortly. Check your inbox.
+                {t('successDesc')}
               </p>
             </div>
           ) : (
@@ -236,7 +236,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                   htmlFor="contact-name"
                   className="text-muted font-mono text-[10px] tracking-[1.5px]"
                 >
-                  YOUR NAME
+                  {t('fieldName')}
                 </label>
                 <input
                   id="contact-name"
@@ -244,7 +244,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Jane Doe"
+                  placeholder={t('fieldNamePlaceholder')}
                   className="font-body text-foreground bg-surface placeholder:text-muted w-full rounded-[14px] px-4 py-[14px] text-[14px] outline-none"
                 />
               </div>
@@ -254,7 +254,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                   htmlFor="contact-email"
                   className="text-muted font-mono text-[10px] tracking-[1.5px]"
                 >
-                  EMAIL
+                  {t('fieldEmail')}
                 </label>
                 <input
                   id="contact-email"
@@ -262,27 +262,27 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="jane@email.com"
+                  placeholder={t('fieldEmailPlaceholder')}
                   className="font-body text-foreground bg-surface placeholder:text-muted w-full rounded-[14px] px-4 py-[14px] text-[14px] outline-none"
                 />
               </div>
 
               {/* Topic — pill buttons per Figma (not dropdown) */}
               <div className="flex flex-col gap-2">
-                <span className="text-muted font-mono text-[10px] tracking-[1.5px]">TOPIC</span>
+                <span className="text-muted font-mono text-[10px] tracking-[1.5px]">{t('fieldTopic')}</span>
                 <div className="flex flex-wrap gap-[6px]">
-                  {TOPICS.map((t) => (
+                  {TOPICS.map((topicVal) => (
                     <button
-                      key={t}
+                      key={topicVal}
                       type="button"
-                      onClick={() => setTopic(t)}
+                      onClick={() => setTopic(topicVal)}
                       className={`font-body rounded-full px-[14px] py-[8px] text-[12px] font-medium transition-colors ${
-                        topic === t
+                        topic === topicVal
                           ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
                           : 'text-foreground dark:bg-surface-elevated bg-[#f2f2f4]'
                       }`}
                     >
-                      {t}
+                      {topicVal === 'General' ? t('topicGeneral') : topicVal === 'Account' ? t('topicAccount') : topicVal === 'Funding' ? t('topicFunding') : topicVal === 'Technical' ? t('topicTechnical') : t('topicPartnership')}
                     </button>
                   ))}
                 </div>
@@ -293,7 +293,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                   htmlFor="contact-message"
                   className="text-muted font-mono text-[10px] tracking-[1.5px]"
                 >
-                  MESSAGE
+                  {t('fieldMessage')}
                 </label>
                 <textarea
                   id="contact-message"
@@ -301,7 +301,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                   rows={4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Tell us what's on your mind…"
+                  placeholder={t('fieldMessagePlaceholder')}
                   className="font-body text-foreground bg-surface placeholder:text-muted w-full resize-none rounded-[14px] px-4 py-[14px] text-[14px] outline-none"
                 />
               </div>
@@ -310,7 +310,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                 type="submit"
                 className="bg-accent font-body hover:bg-accent/90 flex items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
               >
-                Send message
+                {t('submitBtn')}
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                   <path
                     d="M1 7h9.5M7 3.5l3.5 3.5L7 10.5"
@@ -322,7 +322,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                 </svg>
               </button>
               <p className="font-body text-muted text-center text-[11px]">
-                🔒 Your data is encrypted and never shared.
+                {t('submitPrivacy')}
               </p>
             </form>
           )}
@@ -333,18 +333,18 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-11">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-3 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/60">
-            OFFICES
+            {t('officesKicker')}
           </SectionKicker>
           <h2 className="mb-7 font-sans text-[28px] font-semibold leading-[1.1] tracking-[-0.56px] text-white">
-            Three cities.
+            {t('officesLine1')}
             <br />
-            One trading desk.
+            {t('officesLine2')}
           </h2>
           <div className="flex flex-col gap-[10px]">
             {[
-              { city: 'London', tag: 'HQ', address: '1 Finsbury Avenue, EC2M' },
-              { city: 'Singapore', tag: 'APAC', address: '8 Marina View, #43-01' },
-              { city: 'Dubai', tag: 'MENA', address: 'DIFC Gate Village, Tower 4' },
+              { city: t('officeLondon'), tag: t('officeLondonTag'), address: '1 Finsbury Avenue, EC2M' },
+              { city: t('officeSingapore'), tag: t('officeSingaporeTag'), address: '8 Marina View, #43-01' },
+              { city: t('officeDubai'), tag: t('officeDubaiTag'), address: 'DIFC Gate Village, Tower 4' },
             ].map((office) => (
               <div
                 key={office.city}

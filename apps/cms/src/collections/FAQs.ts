@@ -1,6 +1,4 @@
 import type { CollectionConfig } from 'payload/types';
-import { localizationFields } from './_fields';
-import { ensureTranslationKey } from '../hooks';
 
 // Powers /faqs — searchable accordion.
 export const FAQs: CollectionConfig = {
@@ -8,15 +6,12 @@ export const FAQs: CollectionConfig = {
   admin: {
     group: 'Support',
     useAsTitle: 'question',
-    defaultColumns: ['question', 'category', 'status', 'locale'],
+    defaultColumns: ['question', 'category', 'status'],
   },
   access: { read: () => true },
-  hooks: {
-    beforeChange: [ensureTranslationKey],
-  },
   fields: [
-    { name: 'question', type: 'text', required: true, maxLength: 300 },
-    { name: 'answer', type: 'richText', required: true },
+    { name: 'question', type: 'text', required: true, maxLength: 300, localized: true },
+    { name: 'answer', type: 'richText', required: true, localized: true },
     {
       name: 'category',
       type: 'select',
@@ -44,6 +39,5 @@ export const FAQs: CollectionConfig = {
       defaultValue: 'active',
       options: ['active', 'inactive'],
     },
-    ...localizationFields,
   ],
 };

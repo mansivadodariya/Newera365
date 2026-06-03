@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { FeesPage } from '@newera365/ui';
+import { FeesPage, CtaBanner } from '@newera365/ui';
 import type { CmsSpreadRow } from '@newera365/ui';
 import { getInstruments } from '@/lib/cms';
 import type { CmsInstrument } from '@/lib/cms';
@@ -23,5 +23,10 @@ export default async function FeesRoute({ params }: { params: { locale: string }
   // Fetch the 6 most popular instruments by sort order for the spread table
   const instruments = await getInstruments(undefined, 6);
   const spreadData: CmsSpreadRow[] = instruments.length > 0 ? instruments.map(mapToSpreadRow) : [];
-  return <FeesPage spreadData={spreadData.length > 0 ? spreadData : undefined} />;
+  return (
+    <>
+      <FeesPage spreadData={spreadData.length > 0 ? spreadData : undefined} />
+      <CtaBanner />
+    </>
+  );
 }

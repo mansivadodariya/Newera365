@@ -1,23 +1,21 @@
 import type { CollectionConfig } from 'payload/types';
-import { localizationFields, seoFields, slugField } from './_fields';
-import { deriveAlphabeticalIndex, ensureTranslationKey, uniqueSlugPerLocale } from '../hooks';
+import { seoFields, slugField } from './_fields';
+import { deriveAlphabeticalIndex } from '../hooks';
 
-// Powers /videos, /audio, /ebooks, /glossary, /guides. Webinar content is
-// managed in the dedicated Webinars collection.
+// Powers /videos, /audio, /ebooks, /glossary, /guides.
 export const EducationContent: CollectionConfig = {
   slug: 'education-content',
   admin: {
     group: 'Education',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'contentType', 'status', 'locale'],
+    defaultColumns: ['title', 'contentType', 'status'],
   },
   access: { read: () => true },
   hooks: {
-    beforeValidate: [uniqueSlugPerLocale('education-content')],
-    beforeChange: [ensureTranslationKey, deriveAlphabeticalIndex],
+    beforeChange: [deriveAlphabeticalIndex],
   },
   fields: [
-    { name: 'title', type: 'text', required: true, maxLength: 200 },
+    { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),
     {
       name: 'contentType',
@@ -69,6 +67,7 @@ export const EducationContent: CollectionConfig = {
       type: 'text',
       maxLength: 100,
       index: true,
+      localized: true,
       admin: {
         description: 'The term being defined.',
         condition: (data) => data?.contentType === 'glossary',
@@ -78,6 +77,7 @@ export const EducationContent: CollectionConfig = {
       name: 'alphabeticalIndex',
       type: 'text',
       index: true,
+      localized: true,
       admin: {
         readOnly: true,
         description: 'Auto-derived from the glossary term for A-Z grouping.',
@@ -87,6 +87,7 @@ export const EducationContent: CollectionConfig = {
     {
       name: 'body',
       type: 'richText',
+      localized: true,
       admin: { description: 'Required for guide and glossary content types.' },
       validate: (value, { data }) => {
         const contentType = (data as { contentType?: string } | undefined)?.contentType;
@@ -101,7 +102,15 @@ export const EducationContent: CollectionConfig = {
       relationTo: 'media',
       admin: { description: 'Hub listing card image.' },
     },
+    {
+      name: 'isFeatured',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Pin this item as the featured card at the top of its listing page.',
+        condition: (data) => data?.contentType === 'guide',
+      },
+    },
     ...seoFields,
-    ...localizationFields,
   ],
 };

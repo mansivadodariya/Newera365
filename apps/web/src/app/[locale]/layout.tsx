@@ -4,7 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { Outfit, Inter, JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
-import { ToastProvider, Header, Footer, RiskBanner } from '@newera365/ui';
+import { ToastProvider, Header, Footer, RiskBanner, SmartCtaBanner } from '@newera365/ui';
 import type { CmsNavItem, CmsFooterColumn, CmsSocialLinks } from '@newera365/ui';
 import { dir, LOCALES, type Locale } from '@newera365/types';
 import { routing } from '@/i18n/routing';

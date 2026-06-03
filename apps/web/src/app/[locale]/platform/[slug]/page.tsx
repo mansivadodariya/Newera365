@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
-import { PlatformPage, WebTraderPage } from '@newera365/ui';
+import { PlatformPage, WebTraderPage , CtaBanner } from '@newera365/ui';
 import type { CmsPlatformDownloads } from '@newera365/ui';
 import { getSiteSettings } from '@/lib/cms';
 
@@ -18,7 +18,12 @@ export function generateStaticParams() {
 export default async function PlatformRoute({ params }: Props) {
   setRequestLocale(params.locale);
   if (!VALID_SLUGS.includes(params.slug as PlatformSlug)) notFound();
-  if (params.slug === 'webtrader') return <WebTraderPage />;
+  if (params.slug === 'webtrader') return (
+    <>
+      <WebTraderPage />
+      <CtaBanner />
+    </>
+  );
 
   const s = await getSiteSettings();
   const downloads: CmsPlatformDownloads | undefined = s
@@ -31,5 +36,10 @@ export default async function PlatformRoute({ params }: Props) {
       }
     : undefined;
 
-  return <PlatformPage downloads={downloads} />;
+  return (
+    <>
+      <PlatformPage downloads={downloads} />
+      <CtaBanner />
+    </>
+  );
 }

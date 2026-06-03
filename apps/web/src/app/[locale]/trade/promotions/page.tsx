@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { PromoPage } from '@newera365/ui';
+import { PromoPage, CtaBanner } from '@newera365/ui';
 import type { CmsPromoItem } from '@newera365/ui';
 import { getPromotions } from '@/lib/cms';
 import type { CmsPromotion } from '@/lib/cms';
@@ -28,5 +28,10 @@ function mapPromo(p: CmsPromotion): CmsPromoItem {
 export default async function PromotionsRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
   const promos = await getPromotions(params.locale);
-  return <PromoPage promos={promos.length > 0 ? promos.map(mapPromo) : undefined} />;
+  return (
+    <>
+      <PromoPage promos={promos.length > 0 ? promos.map(mapPromo) : undefined} />
+      <CtaBanner />
+    </>
+  );
 }

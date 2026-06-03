@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 const SPREADS = [
@@ -14,27 +14,12 @@ const SPREADS = [
 ] as const;
 
 const OTHER_CHARGES = [
-  { label: 'Account opening', desc: 'No setup fee, ever.', value: 'Free', green: true },
-  { label: 'Deposits', desc: 'On all 6 supported methods.', value: 'Free', green: true },
-  {
-    label: 'Withdrawals',
-    desc: 'Network/bank fees may apply for crypto/wire.',
-    value: 'Free',
-    green: true,
-  },
-  {
-    label: 'Inactivity',
-    desc: 'After 12 months of zero activity.',
-    value: '$10 / mo',
-    green: false,
-  },
-  { label: 'Swap (overnight)', desc: 'See calculator.', value: 'Per-instrument', green: false },
-  {
-    label: 'Currency conversion',
-    desc: 'Non-base currency deposits.',
-    value: '0.5%',
-    green: false,
-  },
+  { key: 'opening', label: 'Account opening', value: 'Free', green: true },
+  { key: 'deposits', label: 'Deposits', value: 'Free', green: true },
+  { key: 'withdrawals', label: 'Withdrawals', value: 'Free', green: true },
+  { key: 'inactivity', label: 'Inactivity', value: '$10 / mo', green: false },
+  { key: 'swap', label: 'Swap (overnight)', value: 'Per-instrument', green: false },
+  { key: 'fx', label: 'Currency conversion', value: '0.5%', green: false },
 ] as const;
 
 export interface CmsSpreadRow {
@@ -50,6 +35,7 @@ interface FeesPageProps {
 
 export function FeesPage({ spreadData }: FeesPageProps) {
   const locale = useLocale();
+  const t = useTranslations('fees');
 
   const displaySpreads =
     spreadData && spreadData.length > 0
@@ -67,13 +53,12 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
-            <span className="text-foreground">No fine print.</span>
+            <span className="text-foreground">{t('heroLine1')}</span>
             <br />
-            <span className="text-accent">Just the price.</span>
+            <span className="text-accent">{t('heroLine2')}</span>
           </h1>
           <p className="font-body text-muted text-[14px] leading-[1.55] sm:max-w-[350px]">
-            Every charge in one place — spreads, commissions, overnight fees, conversions. Pulled
-            live from MT5.
+            {t('heroDesc')}
           </p>
         </div>
       </section>
@@ -82,14 +67,14 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
-            LIVE SPREADS · PIP
+            {t('spreadKicker')}
           </SectionKicker>
 
           <div className="overflow-hidden rounded-[18px] bg-black">
             {/* Header */}
             <div className="grid grid-cols-[1fr_60px_60px_60px] px-4 py-3">
-              <span className="text-muted font-mono text-[9px] tracking-[1.08px]">INSTRUMENT</span>
-              {['RAW', 'STD', 'VIP'].map((h) => (
+              <span className="text-muted font-mono text-[9px] tracking-[1.08px]">{t('colInstrument')}</span>
+              {[t('colRaw'), t('colStd'), t('colVip')].map((h) => (
                 <span
                   key={h}
                   className="text-muted text-right font-mono text-[9px] tracking-[1.08px]"
@@ -123,7 +108,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
             className="bg-surface dark:hover:bg-surface-elevated mt-3 flex items-center justify-center gap-2 rounded-[14px] px-4 py-[14px] transition-colors hover:bg-[#f0f0ee]"
           >
             <span className="font-body text-foreground text-[13px] font-medium">
-              View all 200+ instruments
+              {t('viewAll')}
             </span>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path
@@ -142,7 +127,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
-            OTHER CHARGES
+            {t('otherChargesKicker')}
           </SectionKicker>
           <div className="flex flex-col gap-[10px]">
             {OTHER_CHARGES.map((charge) => (
@@ -152,9 +137,9 @@ export function FeesPage({ spreadData }: FeesPageProps) {
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-foreground mb-[3px] font-sans text-[14px] font-semibold">
-                    {charge.label}
+                    {t(`charge${charge.key.charAt(0).toUpperCase() + charge.key.slice(1)}` as 'chargeOpening')}
                   </p>
-                  <p className="font-body text-muted text-[12px] leading-snug">{charge.desc}</p>
+                  <p className="font-body text-muted text-[12px] leading-snug">{t(`charge${charge.key.charAt(0).toUpperCase() + charge.key.slice(1)}Desc` as 'chargeOpeningDesc')}</p>
                 </div>
                 <span
                   className={`flex-shrink-0 font-sans text-[16px] font-semibold ${charge.green ? 'text-accent' : 'text-foreground'}`}
@@ -171,16 +156,15 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       <section className="rounded-t-[32px] bg-black px-5 pb-16 pt-14 xl:px-[80px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/60 [&>span:last-child]:text-white/60">
-            TRANSPARENT · ALWAYS
+            {t('transparentKicker')}
           </SectionKicker>
           <h2 className="mb-4 font-sans text-[26px] font-semibold leading-[1.1] tracking-[-0.52px] text-white">
-            No surprise charges.
+            {t('transparentHeading')}
             <br />
-            Ever.
+            {t('transparentHeadingLine2')}
           </h2>
           <p className="font-body max-w-[300px] text-[13.5px] leading-[1.55] text-white/60">
-            Every fee is published here. If we ever change something, we tell you 30 days ahead, in
-            plain English.
+            {t('transparentDesc')}
           </p>
         </div>
       </section>

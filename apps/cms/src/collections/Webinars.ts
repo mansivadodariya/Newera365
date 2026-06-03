@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
-import { localizationFields, seoFields, slugField } from './_fields';
-import { ensureTranslationKey, uniqueSlugPerLocale } from '../hooks';
+import { seoFields, slugField } from './_fields';
 
 // Powers /webinars — upcoming sessions + replay archive.
 export const Webinars: CollectionConfig = {
@@ -8,18 +7,14 @@ export const Webinars: CollectionConfig = {
   admin: {
     group: 'Education',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'speaker', 'status', 'scheduledAt', 'locale'],
+    defaultColumns: ['title', 'speaker', 'status', 'scheduledAt'],
   },
   access: { read: () => true },
-  hooks: {
-    beforeValidate: [uniqueSlugPerLocale('webinars')],
-    beforeChange: [ensureTranslationKey],
-  },
   fields: [
-    { name: 'title', type: 'text', required: true, maxLength: 200 },
+    { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),
     { name: 'speaker', type: 'text', required: true, maxLength: 100 },
-    { name: 'speakerBio', type: 'textarea', maxLength: 300 },
+    { name: 'speakerBio', type: 'textarea', maxLength: 300, localized: true },
     {
       name: 'scheduledAt',
       type: 'date',
@@ -61,6 +56,5 @@ export const Webinars: CollectionConfig = {
     },
     { name: 'thumbnail', type: 'upload', relationTo: 'media' },
     ...seoFields,
-    ...localizationFields,
   ],
 };

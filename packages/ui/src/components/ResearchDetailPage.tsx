@@ -1,9 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { RichText } from './RichText';
 import type { SlateNode } from './RichText';
+
+export interface RelatedInstrument {
+  id: number;
+  name: string;
+  symbol: string;
+  assetClass: string;
+  spread?: number | null;
+}
 
 export interface ArticleDetailData {
   title: string;
@@ -14,6 +22,7 @@ export interface ArticleDetailData {
   readTime?: string | null;
   body?: SlateNode[] | null;
   chartEmbed?: string | null;
+  relatedInstruments?: RelatedInstrument[] | null;
 }
 
 const CAT_COLORS: Record<string, string> = {
@@ -62,6 +71,7 @@ export function ResearchDetailPage({
   basePath = 'research',
 }: ResearchDetailPageProps) {
   const locale = useLocale();
+  const t = useTranslations('researchDetail');
 
   const title = article?.title ?? 'How the new era of central bank policy is reshaping FX.';
   const category = article?.category?.toUpperCase() ?? 'MACRO';
@@ -88,7 +98,7 @@ export function ResearchDetailPage({
               href={`/${locale}/${basePath}`}
               className="font-body text-muted hover:text-foreground text-[12px] transition-colors"
             >
-              {basePath === 'blog' ? 'Blog' : 'Research'}
+              {basePath === 'blog' ? t('backBlog') : t('backResearch')}
             </Link>
             <span className="text-muted text-[12px]">/</span>
             <span className="font-body text-muted text-[12px]">
@@ -245,9 +255,7 @@ export function ResearchDetailPage({
                   />
                 </svg>
                 <p className="font-body text-[12px] leading-[1.55] text-[#92400E] dark:text-[#F59E0B]/80">
-                  Trading leveraged products such as CFDs carries a high level of risk and may not
-                  be suitable for all investors. You may lose more than your initial deposit. Past
-                  performance is not indicative of future results.
+                  {t('disclaimer')}
                 </p>
               </div>
             </div>
@@ -255,7 +263,7 @@ export function ResearchDetailPage({
 
           {/* Share */}
           <div className="dark:border-border mt-8 flex items-center justify-between border-t border-[#e5e7eb] pt-5">
-            <span className="font-body text-muted text-[12px]">Share this article</span>
+            <span className="font-body text-muted text-[12px]">{t('shareLabel')}</span>
             <div className="flex gap-3">
               {['X', 'in', 'link'].map((s) => (
                 <button
@@ -270,10 +278,34 @@ export function ResearchDetailPage({
         </div>
       </section>
 
+      {/* Related instruments — shown when article has relatedInstruments from CMS */}
+      {article?.relatedInstruments && article.relatedInstruments.length > 0 && (
+        <section className="bg-background px-5 pb-6 pt-2">
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <p className="text-foreground mb-3 font-sans text-[15px] font-semibold">{t('relatedMarketsLabel')}</p>
+            <div className="flex flex-wrap gap-2">
+              {article.relatedInstruments.map((inst) => (
+                <Link
+                  key={inst.id}
+                  href={`/${locale}/markets/${inst.assetClass}`}
+                  className="border-border hover:border-accent bg-surface flex items-center gap-2 rounded-full border px-4 py-2 transition-colors"
+                >
+                  <span className="font-sans text-[13px] font-semibold text-foreground">{inst.symbol}</span>
+                  <span className="font-body text-[11px] text-muted">{inst.name}</span>
+                  {inst.spread != null && (
+                    <span className="font-mono text-[10px] text-accent">{inst.spread} pip</span>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Related articles */}
       <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <p className="text-foreground mb-5 font-sans text-[18px] font-semibold">Keep reading.</p>
+          <p className="text-foreground mb-5 font-sans text-[18px] font-semibold">{t('keepReadingHeading')}</p>
           <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
             {RELATED.map((art) => (
               <Link
@@ -321,18 +353,18 @@ export function ResearchDetailPage({
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            Trade what
+            {t('ctaHeading')}
             <br />
-            you just read.
+            {t('ctaHeadingLine2')}
           </h2>
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            Apply the analysis on a live or demo account — same execution, no risk on demo.
+            {t('ctaDesc')}
           </p>
           <Link
             href={`/${locale}/register`}
             className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
           >
-            Open account
+            {t('ctaBtn')}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path
                 d="M3 8h10M9 4l4 4-4 4"

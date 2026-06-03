@@ -38,7 +38,7 @@ export interface CmsMedia {
 }
 
 // ---------------------------------------------------------------------------
-// Existing collection types
+// Collection types — locale/translationKey removed (native Payload localization)
 // ---------------------------------------------------------------------------
 
 export interface CmsNews {
@@ -50,7 +50,6 @@ export interface CmsNews {
   publishedDate: string;
   category: 'forex' | 'commodities' | 'indices' | 'crypto' | 'company' | 'regulation';
   status: 'draft' | 'published';
-  locale: 'en' | 'ar';
 }
 
 export interface CmsInstrument {
@@ -72,6 +71,7 @@ export interface CmsAccountType {
   name: string;
   minDeposit: number;
   spreadFrom: string;
+  spreadFromNumeric?: number | null;
   leverage: string;
   platforms: ('mt5' | 'web-trader' | 'mobile')[];
   commission?: string | null;
@@ -80,10 +80,6 @@ export interface CmsAccountType {
   sortOrder?: number | null;
   status: 'active' | 'inactive';
 }
-
-// ---------------------------------------------------------------------------
-// New collection types
-// ---------------------------------------------------------------------------
 
 export interface CmsBlogPost {
   id: number;
@@ -98,8 +94,6 @@ export interface CmsBlogPost {
   body: SlateNode[];
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
 }
 
 export interface CmsMarketAnalysis {
@@ -112,11 +106,9 @@ export interface CmsMarketAnalysis {
   analyst?: string | null;
   body: SlateNode[];
   chartEmbed?: string | null;
-  relatedInstruments?: (CmsInstrument | number)[] | null;
+  relatedInstruments?: CmsInstrument[] | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
 }
 
 export interface CmsResearchReport {
@@ -131,8 +123,17 @@ export interface CmsResearchReport {
   isGated?: boolean | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
+}
+
+// Resolved variant passed to the UI — reportFile URL already extracted
+export interface CmsResearchReportItem {
+  id: number;
+  title: string;
+  slug: string;
+  summary?: string | null;
+  publishedDate: string;
+  isGated?: boolean | null;
+  reportUrl: string | null;
 }
 
 export interface CmsEducationContent {
@@ -142,6 +143,7 @@ export interface CmsEducationContent {
   contentType: 'video' | 'audio' | 'ebook' | 'guide' | 'glossary';
   status: 'draft' | 'published';
   isGated?: boolean | null;
+  isFeatured?: boolean | null;
   videoEmbed?: string | null;
   audioFile?: CmsMedia | number | null;
   pdfFile?: CmsMedia | number | null;
@@ -151,8 +153,6 @@ export interface CmsEducationContent {
   thumbnail?: CmsMedia | number | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
 }
 
 export interface CmsFaq {
@@ -169,8 +169,6 @@ export interface CmsFaq {
     | 'general';
   sortOrder?: number | null;
   status: 'active' | 'inactive';
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
 }
 
 export interface CmsLegalPage {
@@ -185,8 +183,6 @@ export interface CmsLegalPage {
   status: 'draft' | 'published';
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
 }
 
 export interface CmsCareer {
@@ -212,8 +208,6 @@ export interface CmsCareer {
   status: 'open' | 'closed';
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
 }
 
 export interface CmsTeamMember {
@@ -225,8 +219,6 @@ export interface CmsTeamMember {
   photo?: CmsMedia | number | null;
   sortOrder?: number | null;
   status: 'active' | 'inactive';
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
 }
 
 export interface CmsAward {
@@ -239,8 +231,6 @@ export interface CmsAward {
   externalUrl?: string | null;
   sortOrder?: number | null;
   status: 'draft' | 'published';
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
 }
 
 export interface CmsWebinar {
@@ -258,8 +248,18 @@ export interface CmsWebinar {
   thumbnail?: CmsMedia | number | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
+}
+
+export interface CmsArticle {
+  id: number;
+  slug: string;
+  title: string;
+  assetCategory: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
+  analyst?: string | null;
+  publishedDate: string;
+  status: 'draft' | 'published';
+  thumbnailUrl?: string | null;
+  summary?: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -330,6 +330,60 @@ export interface CmsSiteSettings {
 }
 
 // ---------------------------------------------------------------------------
+// Payment Methods
+// ---------------------------------------------------------------------------
+
+export interface CmsPaymentMethod {
+  id: number;
+  name: string;
+  methodType: 'card' | 'bank' | 'ewallet' | 'crypto' | 'local';
+  depositTime?: string | null;
+  withdrawalTime?: string | null;
+  minDeposit?: string | null;
+  fee?: string | null;
+  notes?: string | null;
+  status: 'active' | 'inactive';
+  sortOrder?: number | null;
+}
+
+// ---------------------------------------------------------------------------
+// IB / Partners page content
+// ---------------------------------------------------------------------------
+
+export interface CmsIBContent {
+  id: number;
+  slug: string;
+  heroSubtitle?: string | null;
+  ibDescription?: string | null;
+  affiliateDescription?: string | null;
+  whiteLabelDescription?: string | null;
+  ibRateDisplay?: string | null;
+  affiliateCpaMax?: string | null;
+  steps?: { stepTitle: string; stepDescription: string; id?: string | null }[] | null;
+  ctaHeading?: string | null;
+  ctaSubtitle?: string | null;
+  status: 'draft' | 'published';
+}
+
+// ---------------------------------------------------------------------------
+// Promotions
+// ---------------------------------------------------------------------------
+
+export interface CmsPromotion {
+  id: number;
+  slug: string;
+  title: string;
+  tag?: string | null;
+  tagColor?: string | null;
+  description?: string | null;
+  terms?: string | null;
+  ctaLabel?: string | null;
+  ctaHref?: string | null;
+  isHighlighted?: boolean | null;
+  status: 'active' | 'inactive';
+}
+
+// ---------------------------------------------------------------------------
 // Generic fetch helpers
 // ---------------------------------------------------------------------------
 
@@ -342,11 +396,15 @@ interface PaginatedResponse<T> {
   hasPrevPage: boolean;
 }
 
-async function fetchCollection<T>(
+// locale is passed as a Payload native locale param (?locale=en/ar)
+// rather than a where-clause filter — requires native localization in the CMS.
+export async function fetchCollection<T>(
   slug: string,
   params: Record<string, string> = {},
+  locale?: string,
 ): Promise<PaginatedResponse<T>> {
-  const qs = new URLSearchParams(params).toString();
+  const allParams = locale ? { ...params, locale } : params;
+  const qs = new URLSearchParams(allParams).toString();
   const url = `${CMS_URL}/api/${slug}${qs ? `?${qs}` : ''}`;
   try {
     const res = await fetch(url, { next: { revalidate: 60 } } as RequestInit);
@@ -389,32 +447,38 @@ async function fetchBySlug<T>(
   locale: string,
   extraParams: Record<string, string> = {},
 ): Promise<T | null> {
-  const data = await fetchCollection<T>(collection, {
-    'where[slug][equals]': slug,
-    'where[locale][equals]': locale,
-    depth: '1',
-    limit: '1',
-    ...extraParams,
-  });
+  const data = await fetchCollection<T>(
+    collection,
+    {
+      'where[slug][equals]': slug,
+      depth: '1',
+      limit: '1',
+      ...extraParams,
+    },
+    locale,
+  );
   return data.docs[0] ?? null;
 }
 
 // ---------------------------------------------------------------------------
-// News (existing)
+// News
 // ---------------------------------------------------------------------------
 
 export async function getLatestNews(locale: string, limit = 4): Promise<CmsNews[]> {
-  const data = await fetchCollection<CmsNews>('news', {
-    'where[status][equals]': 'published',
-    'where[locale][equals]': locale,
-    sort: '-publishedDate',
-    limit: String(limit),
-  });
+  const data = await fetchCollection<CmsNews>(
+    'news',
+    {
+      'where[status][equals]': 'published',
+      sort: '-publishedDate',
+      limit: String(limit),
+    },
+    locale,
+  );
   return data.docs;
 }
 
 // ---------------------------------------------------------------------------
-// Products / Instruments (existing)
+// Products / Instruments (language-neutral — no locale param)
 // ---------------------------------------------------------------------------
 
 export async function getInstruments(assetClass?: string, limit = 50): Promise<CmsInstrument[]> {
@@ -429,40 +493,37 @@ export async function getInstruments(assetClass?: string, limit = 50): Promise<C
 }
 
 // ---------------------------------------------------------------------------
-// Account Types (existing — was defined but unused)
+// Account Types (language-neutral — no locale param)
 // ---------------------------------------------------------------------------
 
 export async function getAccountTypes(): Promise<CmsAccountType[]> {
   const data = await fetchCollection<CmsAccountType>('account-types', {
     'where[status][equals]': 'active',
     sort: 'sortOrder',
-  });
-  return data.docs;
-}
-
-export interface CmsArticle {
-  id: number;
-  slug: string;
-  title: string;
-  assetCategory: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
-  analyst?: string | null;
-  publishedDate: string;
-  locale: 'en' | 'ar';
-  status: 'draft' | 'published';
-}
-
-export async function getResearchArticles(locale: string, limit = 10): Promise<CmsArticle[]> {
-  const data = await fetchCollection<CmsArticle>('market-analysis', {
-    'where[status][equals]': 'published',
-    'where[locale][equals]': locale,
-    sort: '-publishedDate',
-    limit: String(limit),
+    limit: '3',
   });
   return data.docs;
 }
 
 // ---------------------------------------------------------------------------
-// Site Settings (global)
+// Market Analysis
+// ---------------------------------------------------------------------------
+
+export async function getResearchArticles(locale: string, limit = 10): Promise<CmsArticle[]> {
+  const data = await fetchCollection<CmsArticle>(
+    'market-analysis',
+    {
+      'where[status][equals]': 'published',
+      sort: '-publishedDate',
+      limit: String(limit),
+    },
+    locale,
+  );
+  return data.docs;
+}
+
+// ---------------------------------------------------------------------------
+// Site Settings (global — locale-neutral, bilingual fields inside)
 // ---------------------------------------------------------------------------
 
 export async function getSiteSettings(): Promise<CmsSiteSettings | null> {
@@ -472,6 +533,42 @@ export async function getSiteSettings(): Promise<CmsSiteSettings | null> {
 // ---------------------------------------------------------------------------
 // Blog Posts
 // ---------------------------------------------------------------------------
+
+// Map blog category to the assetCategory shape ResearchPage expects
+const BLOG_CAT_TO_ASSET: Record<string, CmsArticle['assetCategory']> = {
+  'market-news': 'forex',
+  analysis: 'commodities',
+  tutorials: 'etfs',
+  'company-updates': 'indices',
+};
+
+export async function getBlogPosts(locale: string, limit = 10): Promise<CmsArticle[]> {
+  const data = await fetchCollection<CmsBlogPost>(
+    'blog-posts',
+    {
+      'where[status][equals]': 'published',
+      sort: '-publishedDate',
+      depth: '1',
+      limit: String(limit),
+    },
+    locale,
+  );
+  return data.docs.map((post) => {
+    const img = post.featuredImage;
+    const thumbnailUrl = img && typeof img !== 'number' ? (img as CmsMedia).url ?? null : null;
+    return {
+      id: post.id,
+      slug: post.slug,
+      title: post.title,
+      assetCategory: BLOG_CAT_TO_ASSET[post.category] ?? 'forex',
+      analyst: post.author ?? null,
+      publishedDate: post.publishedDate ?? new Date().toISOString(),
+      status: post.status,
+      thumbnailUrl,
+      summary: post.excerpt ?? null,
+    };
+  });
+}
 
 export async function getBlogPostBySlug(slug: string, locale: string): Promise<CmsBlogPost | null> {
   return fetchBySlug<CmsBlogPost>('blog-posts', slug, locale);
@@ -493,37 +590,45 @@ export async function getMarketAnalysisBySlug(
 // ---------------------------------------------------------------------------
 
 export async function getTeamMembers(locale: string): Promise<CmsTeamMember[]> {
-  const data = await fetchCollection<CmsTeamMember>('team-members', {
-    'where[status][equals]': 'active',
-    'where[locale][equals]': locale,
-    sort: 'sortOrder',
-    limit: '50',
-  });
+  const data = await fetchCollection<CmsTeamMember>(
+    'team-members',
+    {
+      'where[status][equals]': 'active',
+      sort: 'sortOrder',
+      limit: '50',
+    },
+    locale,
+  );
   return data.docs;
 }
 
 export async function getAwards(locale: string): Promise<CmsAward[]> {
-  const data = await fetchCollection<CmsAward>('company-content', {
-    'where[contentType][equals]': 'award',
-    'where[locale][equals]': locale,
-    sort: 'sortOrder',
-    limit: '20',
-  });
+  const data = await fetchCollection<CmsAward>(
+    'awards',
+    {
+      'where[status][equals]': 'published',
+      sort: 'sortOrder',
+      limit: '20',
+    },
+    locale,
+  );
   return data.docs;
 }
 
 // ---------------------------------------------------------------------------
-// Careers
+// Careers — status is 'open'/'closed' (not 'active')
 // ---------------------------------------------------------------------------
 
 export async function getCareers(locale?: string): Promise<CmsCareer[]> {
-  const params: Record<string, string> = {
-    'where[status][equals]': 'active',
-    sort: 'department,title',
-    limit: '100',
-  };
-  if (locale) params['where[locale][equals]'] = locale;
-  const data = await fetchCollection<CmsCareer>('careers', params);
+  const data = await fetchCollection<CmsCareer>(
+    'careers',
+    {
+      'where[status][equals]': 'open',
+      sort: 'sortOrder,title',
+      limit: '100',
+    },
+    locale,
+  );
   return data.docs;
 }
 
@@ -542,8 +647,7 @@ export async function getEducationContent(
     limit: String(limit),
   };
   if (contentType) params['where[contentType][equals]'] = contentType;
-  if (locale) params['where[locale][equals]'] = locale;
-  const data = await fetchCollection<CmsEducationContent>('education-content', params);
+  const data = await fetchCollection<CmsEducationContent>('education-content', params, locale);
   return data.docs;
 }
 
@@ -569,12 +673,15 @@ export async function getGuideBySlug(
 // ---------------------------------------------------------------------------
 
 export async function getFaqs(locale: string): Promise<CmsFaq[]> {
-  const data = await fetchCollection<CmsFaq>('faqs', {
-    'where[status][equals]': 'active',
-    'where[locale][equals]': locale,
-    sort: 'sortOrder',
-    limit: '200',
-  });
+  const data = await fetchCollection<CmsFaq>(
+    'faqs',
+    {
+      'where[status][equals]': 'active',
+      sort: 'sortOrder',
+      limit: '200',
+    },
+    locale,
+  );
   return data.docs;
 }
 
@@ -583,67 +690,108 @@ export async function getFaqs(locale: string): Promise<CmsFaq[]> {
 // ---------------------------------------------------------------------------
 
 export async function getLegalPages(locale: string): Promise<CmsLegalPage[]> {
-  const data = await fetchCollection<CmsLegalPage>('legal-pages', {
-    'where[status][equals]': 'published',
-    'where[locale][equals]': locale,
-    sort: 'sortOrder',
-    limit: '20',
-  });
+  const data = await fetchCollection<CmsLegalPage>(
+    'legal-pages',
+    {
+      'where[status][equals]': 'published',
+      sort: 'pageType',
+      limit: '20',
+    },
+    locale,
+  );
   return data.docs;
 }
 
 // ---------------------------------------------------------------------------
-// Payment Methods
+// Payment Methods — locale-aware after localized fields were added
 // ---------------------------------------------------------------------------
 
-export interface CmsPaymentMethod {
-  id: number;
-  name: string;
-  methodType: 'card' | 'bank-transfer' | 'e-wallet' | 'crypto';
-  depositTime: string;
-  withdrawalTime: string;
-  minDeposit?: string | null;
-  fee?: string | null;
-  notes?: string | null;
-  status: 'active' | 'inactive';
-  sortOrder?: number | null;
+export async function getPaymentMethods(locale?: string): Promise<CmsPaymentMethod[]> {
+  const data = await fetchCollection<CmsPaymentMethod>(
+    'payment-methods',
+    {
+      'where[status][equals]': 'active',
+      sort: 'sortOrder',
+      limit: '50',
+    },
+    locale,
+  );
+  return data.docs;
 }
 
-export async function getPaymentMethods(): Promise<CmsPaymentMethod[]> {
-  const data = await fetchCollection<CmsPaymentMethod>('payment-methods', {
-    'where[status][equals]': 'active',
-    sort: 'sortOrder',
+// ---------------------------------------------------------------------------
+// Webinars
+// ---------------------------------------------------------------------------
+
+export async function getWebinars(locale?: string, status?: string): Promise<CmsWebinar[]> {
+  const params: Record<string, string> = {
+    sort: '-scheduledAt',
     limit: '50',
-  });
+  };
+  if (status) {
+    params['where[status][equals]'] = status;
+  } else {
+    params['where[status][not_equals]'] = 'cancelled';
+  }
+  const data = await fetchCollection<CmsWebinar>('webinars', params, locale);
   return data.docs;
+}
+
+// ---------------------------------------------------------------------------
+// Research Reports
+// ---------------------------------------------------------------------------
+
+export async function getResearchReports(locale?: string): Promise<CmsResearchReport[]> {
+  const data = await fetchCollection<CmsResearchReport>(
+    'research-reports',
+    {
+      'where[status][equals]': 'published',
+      sort: '-publishedDate',
+      depth: '1',
+      limit: '20',
+    },
+    locale,
+  );
+  return data.docs;
+}
+
+// ---------------------------------------------------------------------------
+// IB / Partners page content
+// ---------------------------------------------------------------------------
+
+export async function getIBContent(locale: string): Promise<CmsIBContent | null> {
+  // Fetch the first published IB content document — no slug hardcoding.
+  const data = await fetchCollection<CmsIBContent>(
+    'ib-content',
+    {
+      'where[status][equals]': 'published',
+      limit: '1',
+    },
+    locale,
+  );
+  return data.docs[0] ?? null;
 }
 
 // ---------------------------------------------------------------------------
 // Promotions
 // ---------------------------------------------------------------------------
 
-export interface CmsPromotion {
-  id: number;
-  slug: string;
-  title: string;
-  tag?: string | null;
-  tagColor?: string | null;
-  description?: string | null;
-  terms?: string | null;
-  ctaLabel?: string | null;
-  ctaHref?: string | null;
-  isHighlighted?: boolean | null;
-  status: 'active' | 'inactive';
-  locale: 'en' | 'ar';
-}
-
 export async function getPromotions(locale?: string): Promise<CmsPromotion[]> {
-  const params: Record<string, string> = {
-    'where[status][equals]': 'active',
-    sort: 'sortOrder',
-    limit: '50',
-  };
-  if (locale) params['where[locale][equals]'] = locale;
-  const data = await fetchCollection<CmsPromotion>('promotions', params);
+  const now = new Date().toISOString();
+  const data = await fetchCollection<CmsPromotion>(
+    'promotions',
+    {
+      'where[and][0][status][equals]': 'active',
+      // activeTo is null (evergreen) OR activeTo >= now
+      'where[and][1][or][0][activeTo][exists]': 'false',
+      'where[and][1][or][1][activeTo][greater_than_equal]': now,
+      // activeFrom is null (evergreen) OR activeFrom <= now
+      'where[and][2][or][0][activeFrom][exists]': 'false',
+      'where[and][2][or][1][activeFrom][less_than_equal]': now,
+      sort: 'sortOrder',
+      limit: '50',
+    },
+    locale,
+  );
   return data.docs;
 }

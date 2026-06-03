@@ -1,7 +1,14 @@
 import { setRequestLocale } from 'next-intl/server';
-import { IBPage } from '@newera365/ui';
+import { IBPage, CtaBanner } from '@newera365/ui';
+import { getIBContent } from '@/lib/cms';
 
-export default function IBRoute({ params }: { params: { locale: string } }) {
+export default async function IBRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  return <IBPage />;
+  const cmsContent = await getIBContent(params.locale);
+  return (
+    <>
+      <IBPage cmsContent={cmsContent} />
+      <CtaBanner />
+    </>
+  );
 }

@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
-import { localizationFields, seoFields, slugField } from './_fields';
-import { ensureTranslationKey, uniqueSlugPerLocale } from '../hooks';
+import { seoFields, slugField } from './_fields';
 
 // Powers /daily-news and /news-feed.
 export const News: CollectionConfig = {
@@ -8,15 +7,11 @@ export const News: CollectionConfig = {
   admin: {
     group: 'Editorial',
     useAsTitle: 'headline',
-    defaultColumns: ['headline', 'category', 'status', 'locale', 'publishedDate'],
+    defaultColumns: ['headline', 'category', 'status', 'publishedDate'],
   },
   access: { read: () => true },
-  hooks: {
-    beforeValidate: [uniqueSlugPerLocale('news')],
-    beforeChange: [ensureTranslationKey],
-  },
   fields: [
-    { name: 'headline', type: 'text', required: true, maxLength: 200 },
+    { name: 'headline', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('headline'),
     {
       name: 'source',
@@ -38,7 +33,12 @@ export const News: CollectionConfig = {
       required: true,
       options: ['forex', 'commodities', 'indices', 'crypto', 'company', 'regulation'],
     },
-    { name: 'body', type: 'richText', admin: { description: 'Optional full article body.' } },
+    {
+      name: 'body',
+      type: 'richText',
+      localized: true,
+      admin: { description: 'Optional full article body.' },
+    },
     {
       name: 'status',
       type: 'select',
@@ -47,6 +47,5 @@ export const News: CollectionConfig = {
       options: ['draft', 'published'],
     },
     ...seoFields,
-    ...localizationFields,
   ],
 };

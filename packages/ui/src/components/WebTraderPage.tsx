@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 const FEATURES = [
@@ -91,6 +91,7 @@ function CandlestickChart() {
 
 export function WebTraderPage() {
   const locale = useLocale();
+  const t = useTranslations('webtrader');
 
   return (
     <>
@@ -98,14 +99,13 @@ export function WebTraderPage() {
       <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:last-child]:font-body mb-2 [&>span:first-child]:hidden [&>span:last-child]:text-[11px] [&>span:last-child]:font-semibold [&>span:last-child]:leading-[100%] [&>span:last-child]:tracking-[0.08em] [&>span:last-child]:text-[#1AD966]">
-            TRADING PLATFORM
+            {t('kicker')}
           </SectionKicker>
           <h1 className="text-foreground mb-3 font-sans text-[44px] font-semibold leading-[1.05] tracking-[-1.54px]">
-            WebTrader.
+            {t('heading')}
           </h1>
           <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
-            Trade global markets directly in your browser. No download, no install — just open and
-            go.
+            {t('subheading')}
           </p>
         </div>
       </section>
@@ -151,21 +151,21 @@ export function WebTraderPage() {
               <div className="mb-3 grid grid-cols-2 gap-2">
                 <div className="rounded-[10px] bg-[#26A69A]/20 px-3 py-2 text-center">
                   <p className="font-body mb-0.5 text-[9px] uppercase tracking-[0.1em] text-[#26A69A]">
-                    BUY
+                    {t('buyLabel')}
                   </p>
                   <p className="font-sans text-[18px] font-semibold text-white">1.08562</p>
-                  <p className="font-body text-[9px] text-white/40">Ask</p>
+                  <p className="font-body text-[9px] text-white/40">{t('askLabel')}</p>
                 </div>
                 <div className="rounded-[10px] bg-[#EE5250]/20 px-3 py-2 text-center">
                   <p className="font-body mb-0.5 text-[9px] uppercase tracking-[0.1em] text-[#EE5250]">
-                    SELL
+                    {t('sellLabel')}
                   </p>
                   <p className="font-sans text-[18px] font-semibold text-white">1.08549</p>
-                  <p className="font-body text-[9px] text-white/40">Bid</p>
+                  <p className="font-body text-[9px] text-white/40">{t('bidLabel')}</p>
                 </div>
               </div>
               <div className="flex items-center justify-between rounded-[10px] bg-white/5 px-3 py-2">
-                <span className="font-body text-[11px] text-white/50">Volume (lots)</span>
+                <span className="font-body text-[11px] text-white/50">{t('volumeLabel')}</span>
                 <div className="flex items-center gap-3">
                   <button className="font-body flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-[14px] text-white/60 hover:bg-white/20">
                     –
@@ -177,7 +177,7 @@ export function WebTraderPage() {
                 </div>
               </div>
               <p className="font-body mt-3 text-center text-[9px] uppercase tracking-[0.1em] text-white/20">
-                WEBTRADER · POWERED BY MT5
+                {t('poweredBy')}
               </p>
             </div>
           </div>
@@ -202,24 +202,23 @@ export function WebTraderPage() {
             </div>
             <div className="min-w-0">
               <p className="text-foreground mb-1 font-sans text-[13px] font-semibold">
-                Browser doesn&apos;t support WebTrader?
+                {t('fallbackHeading')}
               </p>
               <p className="font-body text-muted mb-3 text-[11px] leading-relaxed">
-                Some browsers block the WebSocket connection WebTrader uses to stream live prices.
-                Try a different browser, disable VPN/ad blockers, or fall back to our native apps.
+                {t('fallbackDesc')}
               </p>
               <div className="flex gap-2">
                 <Link
                   href={`/${locale}/platform/metatrader-5`}
                   className="font-body flex h-7 items-center rounded-full bg-[#111111] px-3 text-[11px] font-medium text-white dark:bg-white dark:text-[#111111]"
                 >
-                  Download Desktop
+                  {t('fallbackDesktopBtn')}
                 </Link>
                 <Link
                   href={`/${locale}/platform/mobile`}
                   className="font-body text-foreground dark:border-border flex h-7 items-center rounded-full border border-[#e5e7eb] px-3 text-[11px] font-medium"
                 >
-                  Get Mobile App
+                  {t('fallbackMobileBtn')}
                 </Link>
               </div>
             </div>
@@ -231,9 +230,9 @@ export function WebTraderPage() {
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
-            No download.
+            {t('featuresHeading')}
             <br />
-            <span className="text-accent">No compromise.</span>
+            <span className="text-accent">{t('featuresHeadingAccent')}</span>
           </h2>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3 xl:gap-4">
             {FEATURES.map((feat) => (
@@ -254,9 +253,9 @@ export function WebTraderPage() {
                 </div>
                 <div>
                   <p className="text-foreground mb-0.5 font-sans text-[14px] font-semibold">
-                    {feat.title}
+                    {t(`feat${feat.id.charAt(0).toUpperCase() + feat.id.slice(1)}Title` as 'featStreamingTitle')}
                   </p>
-                  <p className="font-body text-muted text-[12px] leading-relaxed">{feat.desc}</p>
+                  <p className="font-body text-muted text-[12px] leading-relaxed">{t(`feat${feat.id.charAt(0).toUpperCase() + feat.id.slice(1)}Desc` as 'featStreamingDesc')}</p>
                 </div>
               </div>
             ))}
@@ -268,21 +267,21 @@ export function WebTraderPage() {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/50">
-            WEBTRADER
+            {t('ctaKicker')}
           </SectionKicker>
           <h2 className="mb-4 font-sans text-[32px] font-semibold leading-[1.1] text-white">
-            Open a position
+            {t('ctaHeading')}
             <br />
-            in 30 seconds.
+            {t('ctaHeadingLine2')}
           </h2>
           <p className="font-body mb-8 max-w-[290px] text-[14px] leading-relaxed text-white/60">
-            No download. No setup. Full MT5 power — straight from your browser.
+            {t('ctaDesc')}
           </p>
           <Link
             href={`/${locale}/register`}
             className="bg-accent hover:bg-accent-hover font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
           >
-            Launch WebTrader
+            {t('ctaBtn')}
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
               <path
                 d="M3 8h10M9 4l4 4-4 4"

@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
-import { localizationFields, seoFields, slugField } from './_fields';
-import { ensureTranslationKey, uniqueSlugPerLocale } from '../hooks';
+import { seoFields, slugField } from './_fields';
 
 // Powers /research — gated PDF download section. PDFs served via R2 signed URL.
 export const ResearchReports: CollectionConfig = {
@@ -8,15 +7,11 @@ export const ResearchReports: CollectionConfig = {
   admin: {
     group: 'Editorial',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'status', 'isGated', 'locale', 'publishedDate'],
+    defaultColumns: ['title', 'status', 'isGated', 'publishedDate'],
   },
   access: { read: () => true },
-  hooks: {
-    beforeValidate: [uniqueSlugPerLocale('research-reports')],
-    beforeChange: [ensureTranslationKey],
-  },
   fields: [
-    { name: 'title', type: 'text', required: true, maxLength: 200 },
+    { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),
     {
       name: 'status',
@@ -30,6 +25,7 @@ export const ResearchReports: CollectionConfig = {
       name: 'summary',
       type: 'textarea',
       maxLength: 500,
+      localized: true,
       admin: { description: 'Listing card preview text.' },
     },
     {
@@ -52,6 +48,5 @@ export const ResearchReports: CollectionConfig = {
       admin: { description: 'Require an email submission before serving the PDF.' },
     },
     ...seoFields,
-    ...localizationFields,
   ],
 };

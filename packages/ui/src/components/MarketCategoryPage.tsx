@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import type { InstrumentItem } from './InstrumentsPage';
 
@@ -104,11 +104,11 @@ const CATEGORY_META: Record<
 };
 
 const SPEC_ROWS = [
-  { label: 'Minimum spread', value: 'from 0.0 pip' },
-  { label: 'Maximum leverage', value: '1:500' },
-  { label: 'Order execution', value: '< 12 ms' },
-  { label: 'Minimum trade size', value: '0.01 lot' },
-  { label: 'Stop-out level', value: '20%' },
+  { key: 'minSpread', value: 'from 0.0 pip' },
+  { key: 'maxLeverage', value: '1:500' },
+  { key: 'execution', value: '< 12 ms' },
+  { key: 'minTrade', value: '0.01 lot' },
+  { key: 'stopOut', value: '20%' },
 ];
 
 export interface MarketCategoryPageProps {
@@ -118,6 +118,7 @@ export interface MarketCategoryPageProps {
 
 export function MarketCategoryPage({ category, instruments }: MarketCategoryPageProps) {
   const locale = useLocale();
+  const t = useTranslations('markets');
   const validKey = (category in CATEGORY_META ? category : 'forex') as keyof typeof CATEGORY_META;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const meta = CATEGORY_META[validKey]!;
@@ -142,7 +143,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
                 strokeLinejoin="round"
               />
             </svg>
-            All markets
+            {t('backLink')}
           </Link>
 
           <SectionKicker className="mb-4">{meta.kicker}</SectionKicker>
@@ -169,13 +170,13 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
             {/* Column header */}
             <div className="border-white/8 grid grid-cols-[1fr_64px_64px] border-b px-4 py-2 xl:grid-cols-[1fr_120px_120px] xl:px-6">
               <span className="font-body text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
-                Symbol
+                {t('colSymbol')}
               </span>
               <span className="font-body text-right text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
-                Spread
+                {t('colSpread')}
               </span>
               <span className="font-body text-right text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
-                Change
+                {t('colChange')}
               </span>
             </div>
 
@@ -254,7 +255,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
             className="dark:bg-surface dark:hover:bg-surface-elevated mt-3 flex w-full items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee]"
           >
             <span className="font-body text-foreground text-[13px] font-medium">
-              Open an account to trade all {meta.label.toLowerCase()} instruments
+              {t('openAccountLabel', { category: meta.label.toLowerCase() })}
             </span>
             <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#111111] dark:bg-white">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
@@ -275,19 +276,19 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
       <section className="rounded-[32px] bg-[#111111] px-5 pb-10 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white [&>span:last-child]:text-white">
-            TRADING SPECS
+            {t('specsKicker')}
           </SectionKicker>
           <h2 className="mb-6 font-sans text-[28px] font-semibold leading-[1.1] tracking-[-0.02em] text-white">
-            Institutional pricing, retail simplicity.
+            {t('specsHeading')}
           </h2>
 
           <div className="mb-5 overflow-hidden rounded-[18px] bg-[#111111]">
             {SPEC_ROWS.map((row, i) => (
               <div
-                key={row.label}
+                key={row.key}
                 className={`flex items-center justify-between px-5 py-[13px] ${i < SPEC_ROWS.length - 1 ? 'border-b border-[#1f1c1c]' : ''}`}
               >
-                <span className="font-body text-[13px] text-[#FFFFFFB2]">{row.label}</span>
+                <span className="font-body text-[13px] text-[#FFFFFFB2]">{t(`spec${row.key.charAt(0).toUpperCase() + row.key.slice(1)}` as 'specMinSpread')}</span>
                 <span className="font-body text-[14px] font-semibold text-white">{row.value}</span>
               </div>
             ))}
@@ -297,7 +298,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
             href={`/${locale}/register`}
             className="bg-accent font-body hover:bg-accent-hover flex h-[48px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
           >
-            Start trading {meta.label}
+            {t('startTradingBtn', { category: meta.label })}
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
               <path
                 d="M3 8h10M9 4l4 4-4 4"
@@ -314,9 +315,9 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
       {/* Other markets */}
       <section className="bg-background px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">OTHER MARKETS</SectionKicker>
+          <SectionKicker className="mb-4">{t('otherMarketsKicker')}</SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.8px]">
-            Explore other asset classes.
+            {t('otherMarketsHeading')}
           </h2>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
             {Object.entries(CATEGORY_META)
@@ -330,7 +331,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
                   <div>
                     <p className="text-foreground font-sans text-[15px] font-semibold">{m.label}</p>
                     <p className="font-body text-muted mt-[3px] text-[11px]">
-                      Live spec table · MT5-driven
+                      {t('liveTag')}
                     </p>
                   </div>
                   <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">

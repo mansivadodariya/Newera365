@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 type PivotMethod = 'Classical' | 'Camarilla' | 'Woodie' | 'Fibonacci';
@@ -151,7 +151,7 @@ function NumberInput({
   );
 }
 
-function FormulaBox({ method }: { method: PivotMethod }) {
+function FormulaBox({ method, calcKicker }: { method: PivotMethod; calcKicker: string }) {
   const formulas: Record<PivotMethod, { formula: string; desc: string }> = {
     Classical: {
       formula: 'P = (High + Low + Close) ÷ 3 · R1 = 2P – Low · S1 = 2P – High',
@@ -174,7 +174,7 @@ function FormulaBox({ method }: { method: PivotMethod }) {
   return (
     <div className="rounded-[14px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
       <p className="font-body text-muted mb-2 text-[10px] uppercase tracking-[0.1em]">
-        How it&apos;s calculated
+        {calcKicker}
       </p>
       <p className="font-body text-foreground text-[13px] leading-[1.6]">
         <span className="font-medium">{formula}</span>
@@ -185,7 +185,7 @@ function FormulaBox({ method }: { method: PivotMethod }) {
   );
 }
 
-function ResultCard({ levels }: { levels: PivotLevels }) {
+function ResultCard({ levels, resultLabel }: { levels: PivotLevels; resultLabel: string }) {
   const rows: { label: string; value: number; color: string }[] = [
     { label: 'R3', value: levels.R3, color: '#EF4444' },
     { label: 'R2', value: levels.R2, color: '#F97316' },
@@ -203,7 +203,7 @@ function ResultCard({ levels }: { levels: PivotLevels }) {
     >
       <div className="px-5 pb-4 pt-5">
         <p className="font-body mb-1 text-[10px] uppercase tracking-[0.12em] text-white/40">
-          Today&apos;s Pivot
+          {resultLabel}
         </p>
         <p className="font-sans text-[42px] font-semibold leading-[1.1] text-[#00B050]">
           {fmt(levels.P)}
@@ -232,6 +232,7 @@ function ResultCard({ levels }: { levels: PivotLevels }) {
 
 export function PivotCalculatorPage() {
   const locale = useLocale();
+  const t = useTranslations('pivot');
 
   const [method, setMethod] = useState<PivotMethod>('Classical');
   const [high, setHigh] = useState('1.0925');
@@ -244,10 +245,10 @@ export function PivotCalculatorPage() {
   const METHODS: PivotMethod[] = ['Classical', 'Camarilla', 'Woodie', 'Fibonacci'];
 
   const TAB_LABELS: Record<PivotMethod, string> = {
-    Classical: 'Pivot points',
-    Camarilla: 'Camarilla',
-    Woodie: 'Woodie',
-    Fibonacci: 'Fibonacci',
+    Classical: t('tabClassic'),
+    Camarilla: t('tabCamarilla'),
+    Woodie: t('tabWoodie'),
+    Fibonacci: t('tabFib'),
   };
 
   const handleCalculate = useCallback(() => {
@@ -272,13 +273,12 @@ export function PivotCalculatorPage() {
       <section className="dark:bg-background bg-white px-5 pb-6 pt-9 xl:px-[80px] xl:py-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[42px] font-semibold leading-[1.05]">
-            Pivot levels.
+            {t('heroLine1')}
             <br />
-            <span className="text-[#00B050]">Plotted instantly.</span>
+            <span className="text-[#00B050]">{t('heroLine2')}</span>
           </h1>
           <p className="font-body text-muted max-w-[340px] text-[14px] leading-[1.55]">
-            Compute Classical, Camarilla, Woodie or Fibonacci pivots from yesterday&apos;s high, low
-            and close — ready for today&apos;s session.
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -315,7 +315,7 @@ export function PivotCalculatorPage() {
           <div className="xl:flex xl:gap-8">
             <div className="flex flex-col gap-4 xl:grid xl:flex-1 xl:grid-cols-2 xl:gap-4">
               <SelectInput
-                label="Method"
+                label={t('fieldMethod')}
                 value={method}
                 options={METHODS}
                 onChange={(v) => {
@@ -329,9 +329,9 @@ export function PivotCalculatorPage() {
                   }
                 }}
               />
-              <NumberInput label="High" value={high} onChange={setHigh} />
-              <NumberInput label="Low" value={low} onChange={setLow} />
-              <NumberInput label="Close" value={close} onChange={setClose} />
+              <NumberInput label={t('fieldHigh')} value={high} onChange={setHigh} />
+              <NumberInput label={t('fieldLow')} value={low} onChange={setLow} />
+              <NumberInput label={t('fieldClose')} value={close} onChange={setClose} />
 
               {/* Buttons */}
               <div className="flex items-center gap-3 xl:col-span-2">
@@ -339,31 +339,31 @@ export function PivotCalculatorPage() {
                   onClick={handleCalculate}
                   className="font-body flex h-[48px] flex-1 items-center justify-center rounded-full bg-[#00B050] text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90 xl:flex-none xl:px-8"
                 >
-                  Calculate
+                  {t('calcBtn')}
                 </button>
                 <button
                   onClick={handleReset}
                   className="border-border font-body flex h-[48px] flex-1 items-center justify-center rounded-full border text-[14px] font-medium transition-colors xl:flex-none xl:px-8"
                 >
-                  Reset
+                  {t('resetBtn')}
                 </button>
                 <p className="font-body text-muted hidden text-[11px] xl:block">
-                  Hypothetical · not investment advice.
+                  {t('disclaimer')}
                 </p>
               </div>
             </div>
 
             {/* Desktop result panel */}
             <div className="hidden xl:flex xl:w-[400px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
-              <ResultCard levels={levels} />
-              <FormulaBox method={method} />
+              <ResultCard levels={levels} resultLabel={t('resultLabel')} />
+              <FormulaBox method={method} calcKicker={t('calcKicker')} />
             </div>
           </div>
 
           {/* Mobile result panel */}
           <div className="mt-5 flex flex-col gap-4 xl:hidden">
-            <ResultCard levels={levels} />
-            <FormulaBox method={method} />
+            <ResultCard levels={levels} resultLabel={t('resultLabel')} />
+            <FormulaBox method={method} calcKicker={t('calcKicker')} />
           </div>
         </div>
       </section>
@@ -372,26 +372,26 @@ export function PivotCalculatorPage() {
       <section className="dark:bg-background bg-[#f9f9f9] px-5 pb-10 pt-8 xl:px-[80px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
-            MORE CALCULATORS
+            {t('moreKicker')}
           </SectionKicker>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3 xl:gap-5">
             {[
               {
                 tag: 'Pre-trade',
-                label: 'Margin & pip calculator',
-                desc: 'Margin, pip value and swap — pre-trade math without the spreadsheet.',
+                label: t('marginTitle'),
+                desc: t('marginDesc'),
                 href: `/${locale}/tools`,
               },
               {
                 tag: 'P&L',
-                label: 'Profit calculator',
-                desc: 'Model gross P&L by instrument, lots, entry and exit price.',
+                label: t('profitTitle'),
+                desc: t('profitDesc'),
                 href: `/${locale}/tools/profit`,
               },
               {
                 tag: 'Technical',
-                label: 'Fibonacci calculator',
-                desc: 'Retracement and extension levels from your swing high and low.',
+                label: t('fibTitle'),
+                desc: t('fibDesc'),
                 href: `/${locale}/tools/fibonacci`,
               },
             ].map((calc) => (
@@ -415,7 +415,7 @@ export function PivotCalculatorPage() {
                   href={calc.href}
                   className="font-body mt-auto text-[13px] font-semibold text-[#00B050] hover:underline"
                 >
-                  Open calculator →
+                  {t('openBtn')}
                 </Link>
               </div>
             ))}
@@ -423,34 +423,6 @@ export function PivotCalculatorPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10 xl:px-[80px]">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            Ready to put
-            <br />
-            the levels to work?
-          </h2>
-          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            Open a live or demo account and trade with professional-grade pivot analysis.
-          </p>
-          <Link
-            href={`/${locale}/register`}
-            className="font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full bg-[#00B050] text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90"
-          >
-            Open account
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
-        </div>
-      </section>
     </>
   );
 }

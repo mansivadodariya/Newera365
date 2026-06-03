@@ -89,7 +89,7 @@ Brand tokens are placeholders pending Gate 2 design handoff (NE-024).
 
 ## Conventions & gotchas
 
-**Localization model** — Payload's native `localization` config is intentionally **not** used. Every locale-aware collection stores one document per locale with an explicit `locale` select (`en`/`ar`) and a `translationKey` UUID that links the EN/AR counterparts. The `(slug, locale)` pair must be unique per collection, enforced by the `uniqueSlugPerLocale` hook in `src/hooks/index.ts`. A Postgres partial unique index for belt-and-braces protection is applied by the slug-indexes migration. Shared field helpers (`seoFields`, `localizationFields`, `slugField()`) live in `src/collections/_fields.ts`; shared hooks in `src/hooks/`.
+**Localization model** — Payload's native `localization` config is used (`locales: ['en', 'ar']`, `defaultLocale: 'en'`, `fallback: true`). Each locale-aware field carries `localized: true`; non-text fields (dates, numbers, images, enums) are not localized. The frontend passes `?locale=en` or `?locale=ar` to Payload's REST API — no `where[locale]` filter needed. Slug fields are non-localized and globally unique (one document per slug, all locales on that document). Shared field helpers (`seoFields`, `slugField()`) live in `src/collections/_fields.ts`; `localizationFields` is a deprecated no-op export kept for compile compat. `deriveAlphabeticalIndex` and `archivePreviousLegalVersion` are the only active collection hooks (`src/hooks/index.ts`).
 
 **MT5 fallback pattern** — all MT5 data is wrapped in `MT5Response<T>` (`packages/types/src/mt5.ts`). When `usesMT5Data: false` or `source: 'cms-fallback'`, the bridge was unreachable or overridden and the UI must show a static-data notice. The dual-toggle logic (`mt5SyncEnabled` global master switch + per-instrument `usesMT5Data` field) lives entirely in the CMS endpoint.
 
@@ -124,14 +124,13 @@ All components live in `packages/ui/src/components/` and are exported from `pack
 
 ### Trade
 
-| Component               | Route                        | Notes                                        |
-| ----------------------- | ---------------------------- | -------------------------------------------- |
-| `AccountsPage`          | `/trade/accounts`            | Account type cards                           |
-| `AccountComparisonPage` | `/trade/accounts/comparison` | Feature matrix table; Raw column highlighted |
-| `FundingPage`           | `/trade/funding`             | Payment methods                              |
-| `FeesPage`              | `/trade/fees`                | Fee table                                    |
-| `PromoPage`             | `/trade/promotions`          | Promo cards with gradients                   |
-| `IBPage`                | `/trade/ib`                  | IB registration with SVG earnings chart      |
+| Component      | Route               | Notes                                                                                                                                                    |
+| -------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AccountsPage` | `/trade/accounts`   | Account type comparison cards (Standard, Raw, VIP); Raw column highlighted — same component as what was previously referenced as `AccountComparisonPage` |
+| `FundingPage`  | `/trade/funding`    | Payment methods                                                                                                                                          |
+| `FeesPage`     | `/trade/fees`       | Fee table                                                                                                                                                |
+| `PromoPage`    | `/trade/promotions` | Promo cards with gradients                                                                                                                               |
+| `IBPage`       | `/trade/ib`         | IB registration with SVG earnings chart                                                                                                                  |
 
 ### Markets
 

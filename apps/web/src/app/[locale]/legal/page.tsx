@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { LegalPage } from '@newera365/ui';
+import { LegalPage , CtaBanner } from '@newera365/ui';
 import type { CmsLegalDocument } from '@newera365/ui';
 import { getLegalPages } from '@/lib/cms';
 import type { CmsLegalPage } from '@/lib/cms';
@@ -29,5 +29,10 @@ function mapLegalPage(page: CmsLegalPage): CmsLegalDocument {
 export default async function LegalRoute({ params }: Props) {
   setRequestLocale(params.locale);
   const pages = await getLegalPages(params.locale);
-  return <LegalPage documents={pages.length > 0 ? pages.map(mapLegalPage) : undefined} />;
+  return (
+    <>
+      <LegalPage documents={pages.length > 0 ? pages.map(mapLegalPage) : undefined} />
+      <CtaBanner />
+    </>
+  );
 }

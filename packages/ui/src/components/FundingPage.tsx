@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 /* Desktop cover images — Figma assets (7-day expiry, replace with permanent assets before launch) */
@@ -279,24 +280,26 @@ interface FundingPageProps {
 }
 
 function HeroContent() {
+  const t = useTranslations('funding');
+
+  const trustRows = [
+    { key: 'seg1', icon: TRUST_ROWS[0]!.icon, title: t('seg1Title'), desc: t('seg1Desc') },
+    { key: 'seg2', icon: TRUST_ROWS[1]!.icon, title: t('seg2Title'), desc: t('seg2Desc') },
+    { key: 'seg3', icon: TRUST_ROWS[2]!.icon, title: t('seg3Title'), desc: t('seg3Desc') },
+    { key: 'seg4', icon: TRUST_ROWS[3]!.icon, title: t('seg4Title'), desc: t('seg4Desc') },
+  ];
+
   return (
     <>
-      {/* Hero — desktop (shown below cards, above trust) */}
-      <section className="dark:bg-background hidden bg-white pb-14 pt-[30px] xl:block xl:px-[120px]">
-        <div className="mx-auto max-w-[1200px]">
-          <div className="h-[18px]" />
-          <div className="flex items-baseline gap-0">
-            <span className="text-foreground font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
-              Money in,&nbsp;money out —&nbsp;
-            </span>
-            <span className="font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px] text-[#00b050]">
-              fast.
-            </span>
-          </div>
-          <div className="h-4" />
-          <p className="font-body text-muted max-w-[720px] text-[14px] leading-[1.55]">
-            Free deposits, same-day withdrawals on most methods. Choose the channel that works for
-            you.
+      {/* Hero — visible on all screen sizes per Figma */}
+      <section className="bg-background px-5 pb-5 pt-9 xl:px-[120px] xl:pb-8 xl:pt-[48px]">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <h1 className="font-sans text-[36px] font-semibold leading-[1.05] tracking-[-1.08px] xl:text-[48px] xl:tracking-[-1.44px]">
+            <span className="text-foreground">{t('heroLine1')}&nbsp;—&nbsp;</span>
+            <span className="text-[#00b050]">{t('heroAccent')}</span>
+          </h1>
+          <p className="font-body text-muted mt-4 max-w-[500px] text-[14px] leading-[1.55]">
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -305,7 +308,7 @@ function HeroContent() {
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
-            PAYMENT METHODS
+            {t('methodsKicker')}
           </SectionKicker>
           <div className="flex flex-col gap-[14px]">
             {PAYMENT_METHODS.map((method) => (
@@ -332,13 +335,13 @@ function HeroContent() {
                 <div className="dark:bg-surface-elevated grid grid-cols-2 gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)]">
                   {[
                     {
-                      label: 'DEPOSIT',
+                      label: t('colDeposit'),
                       value: method.deposit,
                       green: method.deposit === 'Instant' || method.deposit === 'Same day',
                     },
-                    { label: 'WITHDRAW', value: method.withdraw, green: false },
-                    { label: 'MIN', value: method.min, green: false },
-                    { label: 'FEE', value: method.fee, green: method.fee === 'Free' },
+                    { label: t('colWithdraw'), value: method.withdraw, green: false },
+                    { label: t('colMin'), value: method.min, green: false },
+                    { label: t('colFee'), value: method.fee, green: method.fee === 'Free' },
                   ].map((stat) => (
                     <div
                       key={stat.label}
@@ -365,15 +368,15 @@ function HeroContent() {
       <section className="rounded-t-[32px] bg-black px-5 py-10 xl:px-[120px] xl:py-14">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-3 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/60">
-            WHY IT&apos;S SAFE
+            {t('safetyKicker')}
           </SectionKicker>
           <h2 className="mb-[22px] font-sans text-[26px] font-semibold leading-[1.1] tracking-[-0.52px] text-white">
-            Trust, by design.
+            {t('safetyHeading')}
           </h2>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-2 xl:gap-6">
-            {TRUST_ROWS.map((row) => (
+            {trustRows.map((row) => (
               <div
-                key={row.title}
+                key={row.key}
                 className="flex items-start gap-[14px] rounded-[14px] bg-[rgba(255,255,255,0.04)] p-[18px]"
               >
                 <div className="bg-accent/[0.12] text-accent flex h-[37px] w-[37px] flex-shrink-0 items-center justify-center rounded-[11px]">

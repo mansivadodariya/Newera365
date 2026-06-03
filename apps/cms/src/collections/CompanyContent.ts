@@ -1,26 +1,22 @@
 import type { CollectionConfig } from 'payload/types';
-import { localizationFields, slugField } from './_fields';
-import { ensureTranslationKey, uniqueSlugPerLocale } from '../hooks';
+import { slugField } from './_fields';
 
-// Powers /awards and /media (press mentions).
+// Powers /about (press mentions section).
 export const CompanyContent: CollectionConfig = {
   slug: 'company-content',
   admin: {
     group: 'Company',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'section', 'status', 'locale', 'date'],
+    defaultColumns: ['title', 'section', 'status', 'date'],
   },
   access: { read: () => true },
-  hooks: {
-    beforeValidate: [uniqueSlugPerLocale('company-content')],
-    beforeChange: [ensureTranslationKey],
-  },
   fields: [
     {
       name: 'title',
       type: 'text',
       required: true,
       maxLength: 200,
+      localized: true,
       admin: { description: 'Award name or press headline.' },
     },
     slugField('title'),
@@ -37,10 +33,11 @@ export const CompanyContent: CollectionConfig = {
       required: true,
       admin: { description: 'Award or article date. Drives sort order.' },
     },
-    { name: 'description', type: 'textarea', maxLength: 300 },
+    { name: 'description', type: 'textarea', maxLength: 300, localized: true },
     {
       name: 'body',
       type: 'richText',
+      localized: true,
       admin: {
         description: 'Optional extended content. Shown on the detail view for press items.',
         condition: (data) => data?.section === 'press',
@@ -70,6 +67,5 @@ export const CompanyContent: CollectionConfig = {
       defaultValue: 'draft',
       options: ['draft', 'published'],
     },
-    ...localizationFields,
   ],
 };

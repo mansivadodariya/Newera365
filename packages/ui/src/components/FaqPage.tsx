@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { RichText } from './RichText';
 import type { SlateNode } from './RichText';
@@ -48,7 +48,7 @@ function cmsFaqsToGroups(faqs: CmsFaqItem[]): FaqGroup[] {
     if (!grouped.has(label)) grouped.set(label, []);
     grouped.get(label)!.push({
       q: faq.question,
-      a: faq.answer.map((n) => extractPlainText(n)).join(''),
+      a: (faq.answer ?? []).map((n) => extractPlainText(n)).join(''),
       popular: (faq.sortOrder ?? 100) < 5,
     });
   }
@@ -247,6 +247,7 @@ interface FaqPageProps {
 
 export function FaqPage({ faqs }: FaqPageProps) {
   const locale = useLocale();
+  const t = useTranslations('faq');
   const [openIdx, setOpenIdx] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -301,10 +302,10 @@ export function FaqPage({ faqs }: FaqPageProps) {
       <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05]">
-            Got questions?
+            {t('heroHeading')}
           </h1>
           <p className="font-body text-muted mb-6 max-w-[300px] text-[14px] leading-[1.55]">
-            We&apos;ve answered hundreds of them. Search or browse by category below.
+            {t('heroSubtitle')}
           </p>
 
           {/* Search bar — bg-[#fafaf9] rounded-[16px] per Figma */}
@@ -321,7 +322,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
             </svg>
             <input
               type="text"
-              placeholder="Search 230+ FAQs…"
+              placeholder={t('searchPlaceholder')}
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
@@ -339,9 +340,9 @@ export function FaqPage({ faqs }: FaqPageProps) {
       {/* Category filter tabs — matches Figma pills */}
       <section className="bg-background px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="scrollbar-hide flex flex-wrap gap-2 overflow-x-auto">
-            {['All', ...Object.keys(CATEGORY_STYLES)].map((cat) => {
-              const isAll = cat === 'All';
+          <div className="scrollbar-hide -mx-5 flex gap-2 overflow-x-auto px-5 pb-1" style={{ scrollbarWidth: 'none' }}>
+            {[t('filterAll'), ...Object.keys(CATEGORY_STYLES)].map((cat) => {
+              const isAll = cat === t('filterAll');
               const isActive = isAll ? !activeCategory : activeCategory === cat;
               return (
                 <button
@@ -349,6 +350,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
                   onClick={() =>
                     setActiveCategory(isAll ? null : activeCategory === cat ? null : cat)
                   }
+
                   className={`font-body flex-shrink-0 rounded-full px-3 py-[7px] text-[12px] font-medium transition-colors ${
                     isActive
                       ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
@@ -368,36 +370,42 @@ export function FaqPage({ faqs }: FaqPageProps) {
         <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-              POPULAR QUESTIONS
+              {t('sectionPopular')}
             </SectionKicker>
-            {/* Flat bg-[#fafaf9] rounded-[14px] cards per Figma */}
+            {/* Flat rounded-[14px] cards per Figma with category tag */}
             <div className="flex flex-col gap-[8px]">
-              {POPULAR_ITEMS.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="bg-surface dark:bg-surface flex items-center justify-between rounded-[14px] px-4 py-[14px]"
-                >
-                  <span className="font-body text-foreground text-[13.5px] font-medium">
-                    {item.q}
-                  </span>
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    className="text-muted ml-3 flex-shrink-0"
-                    aria-hidden="true"
+              {popularItems.map((item, idx) => {
+                const style = CATEGORY_STYLES[item.section];
+                return (
+                  <div
+                    key={idx}
+                    className="bg-[#fafaf9] dark:bg-surface flex items-center gap-[10px] rounded-[14px] px-4 py-[14px]"
                   >
-                    <path
-                      d="M2 12L12 2M12 2H7M12 2v5"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-              ))}
+                    <span className="flex-shrink-0 rounded-full bg-[rgba(0,176,80,0.1)] px-[10px] py-[5px] font-mono text-[9px] tracking-[1.2px] text-[#00b050]">
+                      {item.section.toUpperCase()}
+                    </span>
+                    <span className="font-body text-foreground flex-1 text-[13.5px] font-medium leading-snug">
+                      {item.q}
+                    </span>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      className="text-muted ml-1 flex-shrink-0"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M2 12L12 2M12 2H7M12 2v5"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -409,7 +417,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="xl:mx-auto xl:max-w-[730px]">
               <p className="font-body text-muted text-[12px]">
-                {totalResults} result{totalResults !== 1 ? 's' : ''} for &ldquo;{search}&rdquo;
+                {totalResults !== 1 ? t('resultsForPlural', { count: totalResults, query: search }) : t('resultsFor', { count: totalResults, query: search })}
               </p>
             </div>
           </div>
@@ -420,7 +428,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
       <section className="bg-background px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            ALL FAQS
+            {t('sectionAll')}
           </SectionKicker>
           {filteredGroups.length > 0 ? (
             <div className="flex flex-col gap-[10px]">
@@ -440,7 +448,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
             </div>
           ) : (
             <p className="font-body text-muted py-8 text-center text-[14px]">
-              No questions match your search.
+              {t('noResults')}
             </p>
           )}
         </div>
@@ -450,18 +458,18 @@ export function FaqPage({ faqs }: FaqPageProps) {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] tracking-[-0.52px] text-white">
-            Still stuck?
+            {t('stuckHeading')}
             <br />
-            Talk to us.
+            {t('stuckSubheading')}
           </h2>
           <p className="font-body mb-[18px] max-w-[280px] text-[14px] leading-[1.55] text-white/60">
-            Live chat is online right now. Average reply under 90 seconds.
+            {t('stuckDesc')}
           </p>
           <Link
             href={`/${locale}/live-chat`}
             className="bg-accent font-body hover:bg-accent/90 flex items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
           >
-            Open live chat
+            {t('openChat')}
             <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
               <path
                 d="M2.5 7.5h10M8 3.5l4 4-4 4"

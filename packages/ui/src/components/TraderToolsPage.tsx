@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 type ToolTab = 'MARGIN' | 'PIP' | 'SWAP';
@@ -125,6 +125,7 @@ function ResultCard({
   swapRate,
   direction,
   days,
+  labels,
 }: {
   activeTab: ToolTab;
   margin: number;
@@ -139,6 +140,20 @@ function ResultCard({
   swapRate: { long: number; short: number };
   direction: 'long' | 'short';
   days: string;
+  labels: {
+    resultMargin: string;
+    resultPip: string;
+    resultSwap: string;
+    infoNotional: string;
+    infoLeverage: string;
+    infoContract: string;
+    infoLotSize: string;
+    infoPipSize: string;
+    infoPerPip: string;
+    infoRateLot: string;
+    infoLots: string;
+    infoDays: string;
+  };
 }) {
   return (
     <div
@@ -148,10 +163,10 @@ function ResultCard({
       <div className="px-5 pb-5 pt-5">
         <p className="font-body mb-1 text-[10px] uppercase tracking-[0.12em] text-white/40">
           {activeTab === 'MARGIN'
-            ? 'Required Margin'
+            ? labels.resultMargin
             : activeTab === 'PIP'
-              ? 'Pip Value'
-              : 'Swap Cost / Day'}
+              ? labels.resultPip
+              : labels.resultSwap}
         </p>
         <p className="font-sans text-[42px] font-semibold leading-[1.1] text-white">
           {activeTab === 'SWAP' && swap < 0 ? '-' : ''}
@@ -164,11 +179,11 @@ function ResultCard({
         {activeTab === 'MARGIN' &&
           [
             {
-              label: 'Notional',
+              label: labels.infoNotional,
               value: `${(lots * contractSize).toLocaleString('en-US')} ${currency}`,
             },
-            { label: 'Leverage', value: `1:${leverage}` },
-            { label: 'Contract', value: contractSize.toLocaleString('en-US') },
+            { label: labels.infoLeverage, value: `1:${leverage}` },
+            { label: labels.infoContract, value: contractSize.toLocaleString('en-US') },
           ].map((item) => (
             <div key={item.label} className="flex flex-col gap-1">
               <span className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
@@ -179,9 +194,9 @@ function ResultCard({
           ))}
         {activeTab === 'PIP' &&
           [
-            { label: 'Lot size', value: positionSize },
-            { label: 'Pip size', value: instrument.includes('JPY') ? '0.01' : '0.0001' },
-            { label: 'Per pip', value: `${pip.toFixed(2)} ${currency}` },
+            { label: labels.infoLotSize, value: positionSize },
+            { label: labels.infoPipSize, value: instrument.includes('JPY') ? '0.01' : '0.0001' },
+            { label: labels.infoPerPip, value: `${pip.toFixed(2)} ${currency}` },
           ].map((item) => (
             <div key={item.label} className="flex flex-col gap-1">
               <span className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
@@ -193,11 +208,11 @@ function ResultCard({
         {activeTab === 'SWAP' &&
           [
             {
-              label: 'Rate / lot',
+              label: labels.infoRateLot,
               value: `${direction === 'long' ? swapRate.long : swapRate.short} ${currency}`,
             },
-            { label: 'Lots', value: positionSize },
-            { label: 'Days', value: days },
+            { label: labels.infoLots, value: positionSize },
+            { label: labels.infoDays, value: days },
           ].map((item) => (
             <div key={item.label} className="flex flex-col gap-1">
               <span className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
@@ -211,41 +226,50 @@ function ResultCard({
   );
 }
 
-function FormulaBox({ activeTab }: { activeTab: ToolTab }) {
+function FormulaBox({
+  activeTab,
+  calcKicker,
+  marginFormula,
+  marginDesc,
+  pipFormula,
+  pipDesc,
+  swapFormula,
+  swapDesc,
+}: {
+  activeTab: ToolTab;
+  calcKicker: string;
+  marginFormula: string;
+  marginDesc: string;
+  pipFormula: string;
+  pipDesc: string;
+  swapFormula: string;
+  swapDesc: string;
+}) {
   return (
     <div className="rounded-[14px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
       <p className="font-body text-muted mb-2 text-[10px] uppercase tracking-[0.1em]">
-        How it&apos;s calculated
+        {calcKicker}
       </p>
       <p className="font-body text-foreground text-[13px] leading-[1.6]">
         {activeTab === 'MARGIN' && (
           <>
-            <span className="font-medium">Margin = (Position size × Contract size) ÷ Leverage</span>
+            <span className="font-medium">{marginFormula}</span>
             <br />
-            <span className="text-muted">
-              The margin is the amount of capital required to open and maintain your position. It
-              scales linearly with position size and inversely with leverage.
-            </span>
+            <span className="text-muted">{marginDesc}</span>
           </>
         )}
         {activeTab === 'PIP' && (
           <>
-            <span className="font-medium">Pip value = Lot size × Pip size × Contract size</span>
+            <span className="font-medium">{pipFormula}</span>
             <br />
-            <span className="text-muted">
-              Each pip movement on your position is worth this amount. Multiply by your expected pip
-              gain/loss to estimate P&L.
-            </span>
+            <span className="text-muted">{pipDesc}</span>
           </>
         )}
         {activeTab === 'SWAP' && (
           <>
-            <span className="font-medium">Swap = Swap rate × Lot size × Days</span>
+            <span className="font-medium">{swapFormula}</span>
             <br />
-            <span className="text-muted">
-              Swap is charged daily for holding positions overnight. Wednesday swap is tripled to
-              account for the weekend.
-            </span>
+            <span className="text-muted">{swapDesc}</span>
           </>
         )}
       </p>
@@ -255,6 +279,7 @@ function FormulaBox({ activeTab }: { activeTab: ToolTab }) {
 
 export function TraderToolsPage() {
   const locale = useLocale();
+  const t = useTranslations('tools');
   const [activeTab, setActiveTab] = useState<ToolTab>('MARGIN');
   const [currency, setCurrency] = useState('USD');
   const [instrument, setInstrument] = useState<Instrument>('EUR/USD');
@@ -289,9 +314,63 @@ export function TraderToolsPage() {
   const swap = swapCalc();
 
   const TABS: { id: ToolTab; label: string }[] = [
-    { id: 'MARGIN', label: 'Margin' },
-    { id: 'PIP', label: 'Pip value' },
-    { id: 'SWAP', label: 'Swap' },
+    { id: 'MARGIN', label: t('tabMargin') },
+    { id: 'PIP', label: t('tabPip') },
+    { id: 'SWAP', label: t('tabSwap') },
+  ];
+
+  const resultCardLabels = {
+    resultMargin: t('resultMargin'),
+    resultPip: t('resultPip'),
+    resultSwap: t('resultSwap'),
+    infoNotional: t('infoNotional'),
+    infoLeverage: t('infoLeverage'),
+    infoContract: t('infoContract'),
+    infoLotSize: t('infoLotSize'),
+    infoPipSize: t('infoPipSize'),
+    infoPerPip: t('infoPerPip'),
+    infoRateLot: t('infoRateLot'),
+    infoLots: t('infoLots'),
+    infoDays: t('infoDays'),
+  };
+
+  const CALC_TOOLS = [
+    {
+      id: 'pivot',
+      tag: 'Technical',
+      label: t('pivotTitle'),
+      desc: t('pivotDesc'),
+      href: `/${locale}/tools/pivot`,
+    },
+    {
+      id: 'profit',
+      tag: 'P&L',
+      label: t('profitTitle'),
+      desc: t('profitDesc'),
+      href: `/${locale}/tools/profit`,
+    },
+    {
+      id: 'fib',
+      tag: 'Technical',
+      label: t('fibTitle'),
+      desc: t('fibDesc'),
+      href: `/${locale}/tools/fibonacci`,
+    },
+  ];
+
+  const OTHER_TOOLS = [
+    {
+      id: 'spread',
+      label: t('spreadTitle'),
+      desc: t('spreadDesc'),
+      href: `/${locale}/tools/spread-comparator`,
+    },
+    {
+      id: 'calendar',
+      label: t('calendarTitle'),
+      desc: t('calendarDesc'),
+      href: `/${locale}/tools/calendar`,
+    },
   ];
 
   return (
@@ -300,12 +379,12 @@ export function TraderToolsPage() {
       <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
-            The math.
+            {t('heroLine1')}
             <br />
-            <span className="text-accent">Done for you.</span>
+            <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted max-w-[300px] text-[14px] leading-[1.55]">
-            Margin, pip value, swap — pre-trade math without the spreadsheet.
+            {t('heroDesc')}
           </p>
         </div>
       </section>
@@ -335,7 +414,7 @@ export function TraderToolsPage() {
             {/* Input fields: 2-col grid on xl */}
             <div className="flex flex-col gap-4 xl:grid xl:flex-1 xl:grid-cols-2 xl:gap-4">
               <SelectInput
-                label="Account Currency"
+                label={t('fieldCurrency')}
                 value={currency}
                 options={['USD', 'EUR', 'GBP']}
                 onChange={setCurrency}
@@ -345,7 +424,7 @@ export function TraderToolsPage() {
               <>
                 <div className="flex flex-col gap-1.5">
                   <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">
-                    Direction
+                    {t('fieldDirection')}
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     {(['long', 'short'] as const).map((d) => (
@@ -360,12 +439,12 @@ export function TraderToolsPage() {
                             : 'border-border text-muted'
                         }`}
                       >
-                        {d === 'long' ? 'Buy / Long' : 'Sell / Short'}
+                        {d === 'long' ? t('dirBuy') : t('dirSell')}
                       </button>
                     ))}
                   </div>
                 </div>
-                <NumberInput label="Days held" value={days} onChange={setDays} step="1" min="1" />
+                <NumberInput label={t('fieldDays')} value={days} onChange={setDays} step="1" min="1" />
               </>
             )}
 
@@ -385,8 +464,18 @@ export function TraderToolsPage() {
                 swapRate={swapRate}
                 direction={direction}
                 days={days}
+                labels={resultCardLabels}
               />
-              <FormulaBox activeTab={activeTab} />
+              <FormulaBox
+                activeTab={activeTab}
+                calcKicker={t('calcKicker')}
+                marginFormula={t('calcMarginFormula')}
+                marginDesc={t('calcMarginDesc')}
+                pipFormula={t('calcPipFormula')}
+                pipDesc={t('calcPipDesc')}
+                swapFormula={t('calcSwapFormula')}
+                swapDesc={t('calcSwapDesc')}
+              />
             </div>
           </div>
 
@@ -406,8 +495,18 @@ export function TraderToolsPage() {
               swapRate={swapRate}
               direction={direction}
               days={days}
+              labels={resultCardLabels}
             />
-            <FormulaBox activeTab={activeTab} />
+            <FormulaBox
+              activeTab={activeTab}
+              calcKicker={t('calcKicker')}
+              marginFormula={t('calcMarginFormula')}
+              marginDesc={t('calcMarginDesc')}
+              pipFormula={t('calcPipFormula')}
+              pipDesc={t('calcPipDesc')}
+              swapFormula={t('calcSwapFormula')}
+              swapDesc={t('calcSwapDesc')}
+            />
           </div>
         </div>
       </section>
@@ -416,31 +515,12 @@ export function TraderToolsPage() {
       <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
-            MORE TOOLS
+            {t('moreKicker')}
           </SectionKicker>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3 xl:gap-5">
-            {[
-              {
-                tag: 'Technical',
-                label: 'Pivot calculator',
-                desc: 'Classical, Camarilla, Woodie & Fibonacci pivots for any session.',
-                href: `/${locale}/tools/pivot`,
-              },
-              {
-                tag: 'P&L',
-                label: 'Profit calculator',
-                desc: 'Model gross P&L by instrument, lots, entry and exit price.',
-                href: `/${locale}/tools/profit`,
-              },
-              {
-                tag: 'Technical',
-                label: 'Fibonacci calculator',
-                desc: 'Retracement and extension levels from your swing high and low.',
-                href: `/${locale}/tools/fibonacci`,
-              },
-            ].map((calc) => (
+            {CALC_TOOLS.map((calc) => (
               <div
-                key={calc.label}
+                key={calc.id}
                 className="flex flex-col gap-3 rounded-[16px] bg-white p-5 dark:bg-[#1c1c1c]"
                 style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}
               >
@@ -459,7 +539,7 @@ export function TraderToolsPage() {
                   href={calc.href}
                   className="text-accent font-body mt-auto text-[13px] font-semibold hover:underline"
                 >
-                  Open calculator →
+                  {t('openCalcBtn')}
                 </Link>
               </div>
             ))}
@@ -467,20 +547,9 @@ export function TraderToolsPage() {
 
           {/* Other tools */}
           <div className="mt-6 flex flex-col gap-[10px] xl:flex-row xl:gap-4">
-            {[
-              {
-                label: 'Spread Comparator',
-                desc: 'See where you save vs. the market average.',
-                href: `/${locale}/tools/spread-comparator`,
-              },
-              {
-                label: 'Economic Calendar',
-                desc: 'Key macro events and impact ratings.',
-                href: `/${locale}/tools/calendar`,
-              },
-            ].map((tool) => (
+            {OTHER_TOOLS.map((tool) => (
               <Link
-                key={tool.label}
+                key={tool.id}
                 href={tool.href}
                 className="dark:bg-surface group flex items-center justify-between rounded-[16px] bg-white p-4"
               >
@@ -515,18 +584,18 @@ export function TraderToolsPage() {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            Ready to put
+            {t('ctaHeading')}
             <br />
-            the math to work?
+            {t('ctaHeadingLine2')}
           </h2>
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            Open a live or demo account and trade with the same math your desk uses.
+            {t('ctaDesc')}
           </p>
           <Link
             href={`/${locale}/register`}
             className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
           >
-            Open account
+            {t('ctaBtn')}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path
                 d="M3 8h10M9 4l4 4-4 4"

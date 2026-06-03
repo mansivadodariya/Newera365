@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 function IconMt5() {
@@ -196,6 +196,7 @@ interface PlatformPageProps {
 
 export function PlatformPage({ downloads }: PlatformPageProps) {
   const locale = useLocale();
+  const t = useTranslations('platform');
 
   return (
     <>
@@ -203,16 +204,15 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
-            A platform
+            {t('heroLine1')}
             <br />
-            that
-            <span className="text-accent"> moves</span>
+            {t('heroLine2')}
+            <span className="text-accent"> {t('heroAccent')}</span>
             <br />
-            with markets.
+            {t('heroLine3')}
           </h1>
           <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
-            Trade the way you want — on the world&apos;s most trusted terminal, native mobile or
-            web.
+            {t('heroDesc')}
           </p>
 
           {/* Device mockup */}
@@ -267,10 +267,10 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            PICK YOUR TERMINAL
+            {t('terminalKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1] xl:text-[40px]">
-            Trade anywhere.
+            {t('terminalHeading')}
           </h2>
 
           <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-3 xl:gap-[18px]">
@@ -296,10 +296,10 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                 {/* Name + desc */}
                 <div>
                   <p className={`mb-2 font-sans text-[22px] font-semibold ${card.nameColor}`}>
-                    {card.name}
+                    {card.id === 'mt5' ? t('card1Name') : card.id === 'web' ? t('card2Name') : t('card3Name')}
                   </p>
                   <p className={`font-body text-[13px] leading-[1.55] ${card.descColor}`}>
-                    {card.desc}
+                    {card.id === 'mt5' ? t('card1Desc') : card.id === 'web' ? t('card2Desc') : t('card3Desc')}
                   </p>
                 </div>
 
@@ -308,7 +308,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                   href={`/${locale}/register`}
                   className={`font-body flex h-[44px] items-center justify-center gap-2 rounded-full text-[13px] font-medium transition-opacity hover:opacity-80 ${card.ctaStyle}`}
                 >
-                  {card.ctaLabel}
+                  {card.id === 'mt5' ? t('card1Cta') : card.id === 'web' ? t('card2Cta') : t('card3Cta')}
                   <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                     <path
                       d="M8 3v8M4 7l4 4 4-4"
@@ -329,10 +329,10 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       <section className="dark:bg-surface bg-[#f5f5f5] pb-[36px] pl-[20px] pr-[20px] pt-[40px] xl:px-8 xl:py-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            WHAT&apos;S INSIDE
+            {t('featuresKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1] xl:mb-8 xl:text-[40px]">
-            Pro tools, made approachable.
+            {t('featuresHeading')}
           </h2>
 
           <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-2 xl:gap-[16px]">
@@ -346,10 +346,10 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                 </div>
                 <div>
                   <p className="text-foreground mb-[4px] font-sans text-[14px] font-semibold xl:mb-1 xl:text-[18px]">
-                    {tool.label}
+                    {t(`feat${(['indicators', 'ea', 'timeframes', 'hedging'].indexOf(tool.id) + 1)}Title` as 'feat1Title')}
                   </p>
                   <p className="font-body text-muted text-[11px] leading-snug xl:text-[13px]">
-                    {tool.desc}
+                    {t(`feat${(['indicators', 'ea', 'timeframes', 'hedging'].indexOf(tool.id) + 1)}Desc` as 'feat1Desc')}
                   </p>
                 </div>
               </div>
@@ -362,17 +362,13 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white [&>span:last-child]:text-white">
-            FOREX EVERYWHERE
+            {t('devicesKicker')}
           </SectionKicker>
           <h2 className="mb-3 font-sans text-[32px] font-semibold leading-[1.1] text-white xl:text-[40px]">
-            One login. <span className="hidden xl:inline">Every device.</span>
-            <span className="xl:hidden">
-              <br />
-              Every device.
-            </span>
+            {t('devicesHeading')}
           </h2>
           <p className="font-body mb-8 max-w-[320px] text-[14px] leading-[1.55] text-white/50 xl:max-w-[460px] xl:text-[15px]">
-            MetaTrader 5 is available on every major platform. One account, zero friction.
+            {t('devicesDesc')}
           </p>
 
           {/* Device grid — 3-col on mobile, 2-col (of 3 rows) on xl */}
@@ -432,7 +428,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                 rel={downloads?.windows ? 'noopener noreferrer' : undefined}
                 className="bg-accent font-body hover:bg-accent-hover flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors xl:w-auto xl:px-7"
               >
-                Download MetaTrader 5
+                {t('downloadMt5Btn')}
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                   <path
                     d="M8 3v8M4 7l4 4 4-4"
@@ -449,7 +445,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                 href={downloads?.webTrader ?? `/${locale}/platform`}
                 className="font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40 xl:w-auto xl:px-7"
               >
-                Open WebTrader
+                {t('openWebtraderBtn')}
                 <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                   <path
                     d="M4 8h8M9 5l3 3-3 3"
@@ -464,9 +460,9 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
 
             {/* Right tagline — desktop only */}
             <p className="font-body hidden text-right text-[13px] leading-snug text-white/40 xl:block">
-              Free demo · 2-minute setup
+              {t('freeDemo')}
               <br />
-              MT4 also available
+              {t('mt4Note')}
             </p>
           </div>
 

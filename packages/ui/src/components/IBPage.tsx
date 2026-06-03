@@ -1,8 +1,20 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+
+export interface IBCmsContent {
+  heroSubtitle?: string | null;
+  ibDescription?: string | null;
+  affiliateDescription?: string | null;
+  whiteLabelDescription?: string | null;
+  ibRateDisplay?: string | null;
+  affiliateCpaMax?: string | null;
+  steps?: { stepTitle: string; stepDescription: string }[] | null;
+  ctaHeading?: string | null;
+  ctaSubtitle?: string | null;
+}
 
 const PARTNER_TYPES = [
   {
@@ -96,8 +108,57 @@ const TRUST_STATS = [
   { value: '48h', label: 'Approval time' },
 ] as const;
 
-export function IBPage() {
+type StepItem = { num: string; title: string; desc: string };
+
+export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
   const locale = useLocale();
+  const t = useTranslations('ib');
+
+  const heroSubtitle = cmsContent?.heroSubtitle ?? t('heroSubtitle');
+
+  const resolvedPartnerTypes = [
+    {
+      ...PARTNER_TYPES[0],
+      desc: cmsContent?.ibDescription ?? PARTNER_TYPES[0].desc,
+      stats: [
+        {
+          label: PARTNER_TYPES[0].stats[0].label,
+          value: cmsContent?.ibRateDisplay ?? PARTNER_TYPES[0].stats[0].value,
+        },
+        PARTNER_TYPES[0].stats[1],
+        PARTNER_TYPES[0].stats[2],
+      ],
+    },
+    {
+      ...PARTNER_TYPES[1],
+      desc: cmsContent?.affiliateDescription ?? PARTNER_TYPES[1].desc,
+      stats: [
+        {
+          label: PARTNER_TYPES[1].stats[0].label,
+          value: cmsContent?.affiliateCpaMax ?? PARTNER_TYPES[1].stats[0].value,
+        },
+        PARTNER_TYPES[1].stats[1],
+        PARTNER_TYPES[1].stats[2],
+      ],
+    },
+    {
+      ...PARTNER_TYPES[2],
+      desc: cmsContent?.whiteLabelDescription ?? PARTNER_TYPES[2].desc,
+    },
+  ];
+
+  const stepsFromCms = cmsContent?.steps;
+  const resolvedSteps: StepItem[] =
+    stepsFromCms && stepsFromCms.length >= 4
+      ? STEPS.map((s, i) => ({
+          num: s.num,
+          title: stepsFromCms[i]?.stepTitle ?? t(`step${i + 1}Title` as 'step1Title'),
+          desc: stepsFromCms[i]?.stepDescription ?? t(`step${i + 1}Desc` as 'step1Desc'),
+        }))
+      : STEPS.map((s, i) => ({ num: s.num, title: t(`step${i + 1}Title` as 'step1Title'), desc: t(`step${i + 1}Desc` as 'step1Desc') }));
+
+  const ctaHeading = cmsContent?.ctaHeading ?? t('ctaHeading');
+  const ctaSubtitle = cmsContent?.ctaSubtitle ?? t('ctaSubtitle');
 
   return (
     <>
@@ -106,13 +167,12 @@ export function IBPage() {
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* h1: 42px tracking-[-1.26px] per Figma */}
           <h1 className="font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
-            <span className="text-foreground">Partner with us.</span>
+            <span className="text-foreground">{t('heroLine1')}</span>
             <br />
-            <span className="text-accent">Grow together.</span>
+            <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted mb-4 mt-4 max-w-[320px] text-[14px] leading-[1.6]">
-            Earn industry-leading commissions for every active trader you refer. Transparent
-            payouts, monthly settlement, dedicated support.
+            {heroSubtitle}
           </p>
 
           {/* CTAs — matches Figma: green pill + ghost text button */}
@@ -121,7 +181,7 @@ export function IBPage() {
               href={`/${locale}/register?type=partner`}
               className="bg-accent font-body hover:bg-accent/90 flex items-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
             >
-              Apply now
+              {t('heroApplyBtn')}
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                 <path
                   d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
@@ -136,7 +196,7 @@ export function IBPage() {
               href="#programs"
               className="text-foreground font-body flex items-center px-[22px] py-4 text-[15px] font-medium transition-opacity hover:opacity-70"
             >
-              Programs
+              {t('heroProgramsBtn')}
             </a>
           </div>
 
@@ -145,7 +205,7 @@ export function IBPage() {
             <div className="flex items-start justify-between">
               <div className="flex flex-col gap-[6px]">
                 <span className="text-muted font-mono text-[10px] tracking-[1.2px]">
-                  PROJECTED · PER MONTH
+                  {t('earningsKicker')}
                 </span>
                 <span className="text-foreground font-sans text-[32px] font-semibold tracking-[-0.64px]">
                   $4,820
@@ -204,13 +264,13 @@ export function IBPage() {
       >
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            CHOOSE YOUR PATH
+            {t('programsKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-[10px] font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
-            Three ways to partner.
+            {t('programsHeading')}
           </h2>
           <div className="mt-6 flex flex-col gap-[14px] xl:grid xl:grid-cols-3">
-            {PARTNER_TYPES.map((pt) => (
+            {resolvedPartnerTypes.map((pt) => (
               <div
                 key={pt.id}
                 className={`shadow-card dark:shadow-card-dark flex flex-col gap-[12px] rounded-[22px] p-[22px] ${pt.cardClass}`}
@@ -220,12 +280,12 @@ export function IBPage() {
                   <span
                     className={`font-sans text-[22px] font-semibold tracking-[-0.44px] ${pt.headColor}`}
                   >
-                    {pt.title}
+                    {pt.id === 'ib' ? t('card1Title') : pt.id === 'affiliate' ? t('card2Title') : t('card3Title')}
                   </span>
                   <span
                     className={`flex-shrink-0 rounded-full px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px] ${pt.tagClass}`}
                   >
-                    {pt.tag}
+                    {pt.id === 'ib' ? t('card1Tag') : pt.id === 'affiliate' ? t('card2Tag') : t('card3Tag')}
                   </span>
                 </div>
 
@@ -242,7 +302,18 @@ export function IBPage() {
                       <span
                         className={`font-mono text-[9px] tracking-[1.08px] ${pt.statLabelColor}`}
                       >
-                        {s.label}
+                        {(
+                          {
+                            'UP TO': t('statUpTo'),
+                            PAYOUTS: t('statPayouts'),
+                            MINIMUM: t('statMinimum'),
+                            COOKIE: t('statCookie'),
+                            'MIN CPA': t('statMinCpa'),
+                            SETUP: t('statSetup'),
+                            'SPREAD MARK-UP': t('statSpreadMarkUp'),
+                            TECH: t('statTech'),
+                          } as Record<string, string>
+                        )[s.label] ?? s.label}
                       </span>
                       <span className={`font-sans text-[14px] font-semibold ${pt.statValueColor}`}>
                         {s.value}
@@ -256,7 +327,7 @@ export function IBPage() {
                   href={`/${locale}/register?type=partner&program=${pt.id}`}
                   className={`font-body mt-1 flex items-center justify-center gap-2 rounded-full px-5 py-[14px] text-[14px] font-medium transition-opacity hover:opacity-80 ${pt.ctaClass}`}
                 >
-                  Apply
+                  {t('cardApplyBtn')}
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                     <path
                       d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
@@ -280,13 +351,13 @@ export function IBPage() {
       >
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            HOW IT WORKS
+            {t('stepsKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px]">
-            Onboard in days, not weeks.
+            {t('stepsHeading')}
           </h2>
           <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-2">
-            {STEPS.map((step) => (
+            {resolvedSteps.map((step) => (
               <div
                 key={step.num}
                 className="bg-background shadow-card flex items-start gap-4 rounded-[18px] p-[18px] dark:shadow-none"
@@ -311,16 +382,16 @@ export function IBPage() {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-11 xl:pb-16 xl:pt-16">
         <div className="mx-auto flex max-w-[390px] flex-col items-center md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="mb-3 max-w-[280px] text-center font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px] text-white">
-            Ready to build a new revenue stream?
+            {ctaHeading}
           </h2>
           <p className="font-body mb-[22px] max-w-[300px] text-center text-[14px] leading-[1.55] text-white/60">
-            Apply today. A partner manager will reach out within 48 hours.
+            {ctaSubtitle}
           </p>
           <Link
             href={`/${locale}/register?type=partner`}
             className="bg-accent font-body hover:bg-accent/90 mb-2 flex w-full items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
           >
-            Become a partner
+            {t('ctaBtn')}
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path
                 d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
@@ -332,7 +403,7 @@ export function IBPage() {
             </svg>
           </Link>
           <button className="font-body flex w-full items-center justify-center py-4 text-[15px] font-medium text-white transition-opacity hover:opacity-70">
-            Download partner deck
+            {t('ctaDownloadBtn')}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path
                 d="M8 3v8M4 9l4 4 4-4"

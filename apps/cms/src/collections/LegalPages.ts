@@ -1,25 +1,23 @@
 import type { CollectionConfig } from 'payload/types';
-import { localizationFields, seoFields, slugField } from './_fields';
-import { archivePreviousLegalVersion, ensureTranslationKey, uniqueSlugPerLocale } from '../hooks';
+import { seoFields, slugField } from './_fields';
+import { archivePreviousLegalVersion } from '../hooks';
 
 // Powers /terms, /privacy-policy, /risk-disclosure, /aml-policy, /cookie-policy.
-// Only one published document per pageType + locale is served — publishing a
+// Only one published document per pageType + locale may be live — publishing a
 // new version auto-archives the previous one (archivePreviousLegalVersion).
 export const LegalPages: CollectionConfig = {
   slug: 'legal-pages',
   admin: {
     group: 'Compliance',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'pageType', 'status', 'locale', 'effectiveDate'],
+    defaultColumns: ['title', 'pageType', 'status', 'effectiveDate'],
   },
   access: { read: () => true },
   hooks: {
-    beforeValidate: [uniqueSlugPerLocale('legal-pages')],
-    beforeChange: [ensureTranslationKey],
     afterChange: [archivePreviousLegalVersion],
   },
   fields: [
-    { name: 'title', type: 'text', required: true, maxLength: 200 },
+    { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),
     {
       name: 'pageType',
@@ -28,7 +26,7 @@ export const LegalPages: CollectionConfig = {
       options: ['terms', 'privacy-policy', 'risk-disclosure', 'aml-policy', 'cookie-policy'],
       admin: { description: 'One published document per type per locale.' },
     },
-    { name: 'body', type: 'richText', required: true },
+    { name: 'body', type: 'richText', required: true, localized: true },
     {
       name: 'effectiveDate',
       type: 'date',
@@ -44,6 +42,7 @@ export const LegalPages: CollectionConfig = {
     {
       name: 'riskWarningBanner',
       type: 'textarea',
+      localized: true,
       admin: {
         description:
           'If populated, overrides the global site-wide risk banner on this page. Text supplied by client (NE-038).',
@@ -57,6 +56,5 @@ export const LegalPages: CollectionConfig = {
       options: ['draft', 'published'],
     },
     ...seoFields,
-    ...localizationFields,
   ],
 };

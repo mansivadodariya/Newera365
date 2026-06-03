@@ -24,6 +24,8 @@ import { TeamMembers } from './collections/TeamMembers';
 import { WebinarRegistrations } from './collections/WebinarRegistrations';
 import { Promotions } from './collections/Promotions';
 import { PaymentMethods } from './collections/PaymentMethods';
+import { IBContent } from './collections/IBContent';
+import { ContactSubmissions } from './collections/ContactSubmissions';
 import { SiteSettings } from './globals/SiteSettings';
 import { emailTransport } from './email/transport';
 import Logo from './graphics/Logo';
@@ -73,6 +75,11 @@ const fromAddress = IS_PROD
 
 export default buildConfig({
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
+  localization: {
+    locales: ['en', 'ar'],
+    defaultLocale: 'en',
+    fallback: true,
+  },
   admin: {
     user: Users.slug,
     bundler: webpackBundler(),
@@ -135,14 +142,10 @@ export default buildConfig({
       idleTimeoutMillis: 10_000,
       connectionTimeoutMillis: 10_000,
     },
-    // Schema is managed via manual SQL migrations (migrations/*.sql) — disable
-    // Drizzle's interactive dev-push to avoid blocking on stdin prompts for
-    // tables/columns not in Payload's schema (e.g. rate_limit_hits).
+    // Schema managed via migrations (apply-localization-schema.js for localization).
+    // push: false prevents Drizzle from running interactive schema comparison.
     push: false,
   }),
-  // Locale is an explicit per-document field — see collections/_fields.ts
-  // (localizationFields) and hooks/ (ensureTranslationKey, uniqueSlugPerLocale).
-  // Payload's native `localization` config is intentionally NOT used.
   collections: [
     Users,
     Media,
@@ -164,6 +167,8 @@ export default buildConfig({
     WebinarRegistrations,
     Promotions,
     PaymentMethods,
+    IBContent,
+    ContactSubmissions,
   ],
   globals: [SiteSettings],
   cors: [corsOrigin],

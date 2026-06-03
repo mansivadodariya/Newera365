@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
-import { localizationFields, seoFields, slugField } from './_fields';
-import { ensureTranslationKey, uniqueSlugPerLocale } from '../hooks';
+import { seoFields, slugField } from './_fields';
 
 // Powers /trade/promotions — promotional offers, bonuses, and campaigns.
 export const Promotions: CollectionConfig = {
@@ -8,20 +7,17 @@ export const Promotions: CollectionConfig = {
   admin: {
     group: 'Trading',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'tag', 'status', 'locale', 'activeTo'],
+    defaultColumns: ['title', 'tag', 'status', 'activeTo'],
     description: 'Manage promotional cards shown on the /trade/promotions page.',
   },
   access: { read: () => true },
-  hooks: {
-    beforeValidate: [uniqueSlugPerLocale('promotions')],
-    beforeChange: [ensureTranslationKey],
-  },
   fields: [
     {
       name: 'title',
       type: 'text',
       required: true,
       maxLength: 100,
+      localized: true,
       admin: { description: 'Promotion headline, e.g. "Welcome Boost — Up to $5,000".' },
     },
     slugField('title'),
@@ -29,6 +25,7 @@ export const Promotions: CollectionConfig = {
       name: 'tag',
       type: 'text',
       maxLength: 20,
+      localized: true,
       admin: {
         description: 'Short badge label shown on the card, e.g. "NEW", "MONTHLY", "PERMANENT".',
       },
@@ -52,18 +49,21 @@ export const Promotions: CollectionConfig = {
       type: 'textarea',
       maxLength: 300,
       required: true,
+      localized: true,
       admin: { description: 'Card body — visible at a glance.' },
     },
     {
       name: 'terms',
       type: 'textarea',
       maxLength: 500,
+      localized: true,
       admin: { description: 'Small-print terms shown at the bottom of the card.' },
     },
     {
       name: 'ctaLabel',
       type: 'text',
       maxLength: 50,
+      localized: true,
       admin: { description: 'Button text, e.g. "Claim Now".' },
     },
     {
@@ -105,6 +105,5 @@ export const Promotions: CollectionConfig = {
       admin: { description: 'Inactive promos are hidden from the website.' },
     },
     ...seoFields,
-    ...localizationFields,
   ],
 };

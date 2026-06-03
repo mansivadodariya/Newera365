@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
-import { localizationFields, seoFields, slugField } from './_fields';
-import { ensureTranslationKey, uniqueSlugPerLocale } from '../hooks';
+import { seoFields, slugField } from './_fields';
 
 // Powers /careers — job listings.
 export const Careers: CollectionConfig = {
@@ -8,15 +7,11 @@ export const Careers: CollectionConfig = {
   admin: {
     group: 'Company',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'department', 'status', 'locale', 'publishedDate'],
+    defaultColumns: ['title', 'department', 'status', 'publishedDate'],
   },
   access: { read: () => true },
-  hooks: {
-    beforeValidate: [uniqueSlugPerLocale('careers')],
-    beforeChange: [ensureTranslationKey],
-  },
   fields: [
-    { name: 'title', type: 'text', required: true, maxLength: 100 },
+    { name: 'title', type: 'text', required: true, maxLength: 100, localized: true },
     slugField('title'),
     {
       name: 'department',
@@ -38,6 +33,7 @@ export const Careers: CollectionConfig = {
       type: 'text',
       required: true,
       maxLength: 100,
+      localized: true,
       admin: { description: 'e.g. "Remote" or "Dubai, UAE".' },
     },
     {
@@ -50,12 +46,14 @@ export const Careers: CollectionConfig = {
       name: 'summary',
       type: 'textarea',
       maxLength: 300,
+      localized: true,
       admin: { description: 'Listing card preview.' },
     },
     {
       name: 'body',
       type: 'richText',
       required: true,
+      localized: true,
       admin: { description: 'Responsibilities, requirements, benefits.' },
     },
     {
@@ -85,6 +83,5 @@ export const Careers: CollectionConfig = {
       admin: { description: 'Closed listings are hidden from /careers but retained in the CMS.' },
     },
     ...seoFields,
-    ...localizationFields,
   ],
 };

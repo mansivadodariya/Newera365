@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 type TagType = 'NEW' | 'MONTHLY' | 'EVERGREEN' | 'PERMANENT' | 'PERK';
@@ -103,6 +103,7 @@ interface PromoPageProps {
 
 export function PromoPage({ promos: cmsPromos }: PromoPageProps) {
   const locale = useLocale();
+  const t = useTranslations('promos');
   const useCms = cmsPromos && cmsPromos.length > 0;
 
   return (
@@ -111,12 +112,12 @@ export function PromoPage({ promos: cmsPromos }: PromoPageProps) {
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
-            Get more
+            {t('heroLine1')}
             <br />
-            from <span className="text-accent">every trade.</span>
+            from <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
-            Active offers, refreshed monthly. Eligible to all verified accounts unless noted.
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -137,7 +138,7 @@ export function PromoPage({ promos: cmsPromos }: PromoPageProps) {
                   {promo.tagType}
                 </span>
                 <span className="bg-accent/10 text-accent font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em]">
-                  ACTIVE
+                  {t('activeLabel')}
                 </span>
               </div>
 
@@ -166,7 +167,7 @@ export function PromoPage({ promos: cmsPromos }: PromoPageProps) {
                   href={`/${locale}/register`}
                   className="bg-accent hover:bg-accent-hover font-body flex h-8 items-center gap-1.5 rounded-full px-4 text-[12px] font-medium text-white transition-colors"
                 >
-                  Claim
+                  {t('claimBtn')}
                   <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                     <path
                       d="M3 8h10M9 4l4 4-4 4"
@@ -187,20 +188,19 @@ export function PromoPage({ promos: cmsPromos }: PromoPageProps) {
       <section className="rounded-t-[32px] bg-[#000000] px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/60 [&>span:last-child]:text-white/60">
-            FULL TERMS
+            {t('termsKicker')}
           </SectionKicker>
           <h2 className="mb-3 font-sans text-[28px] font-semibold leading-[1.1] text-white">
-            Read before you claim.
+            {t('termsHeading')}
           </h2>
           <p className="font-body mb-7 max-w-[350px] text-[13px] leading-relaxed text-white/60">
-            Each promotion has unique eligibility — minimum deposit, trade volume, regional
-            availability. Full terms are linked in every offer card and on each promo page.
+            {t('termsDesc')}
           </p>
           <Link
             href={`/${locale}/legal`}
             className="font-body bg-accent flex h-[50px] w-full items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors"
           >
-            Read all promo terms
+            {t('termsLink')}
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
               <path
                 d="M3 8h10M9 4l4 4-4 4"

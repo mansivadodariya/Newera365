@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { AboutPage } from '@newera365/ui';
+import { AboutPage, CtaBanner } from '@newera365/ui';
 import type { CmsTeamMemberItem, CmsAwardItem } from '@newera365/ui';
 import { getTeamMembers, getAwards } from '@/lib/cms';
 import type { CmsTeamMember, CmsAward, CmsMedia } from '@/lib/cms';
@@ -45,9 +45,12 @@ export default async function AboutRoute({ params }: { params: { locale: string 
     getAwards(params.locale),
   ]);
   return (
-    <AboutPage
-      team={members.length > 0 ? members.map(mapTeamMember) : undefined}
-      awards={awards.length > 0 ? awards.map(mapAward) : undefined}
-    />
+    <>
+      <AboutPage
+        team={members.length > 0 ? members.map(mapTeamMember) : undefined}
+        awards={awards.length > 0 ? awards.map(mapAward) : undefined}
+      />
+      <CtaBanner />
+    </>
   );
 }

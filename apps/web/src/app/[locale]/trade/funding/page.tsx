@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { FundingPage } from '@newera365/ui';
+import { FundingPage, CtaBanner } from '@newera365/ui';
 import type { CmsPaymentMethodItem } from '@newera365/ui';
 import { getPaymentMethods } from '@/lib/cms';
 import type { CmsPaymentMethod } from '@/lib/cms';
@@ -25,6 +25,11 @@ function mapMethod(m: CmsPaymentMethod): CmsPaymentMethodItem {
 
 export default async function FundingRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  const methods = await getPaymentMethods();
-  return <FundingPage paymentMethods={methods.length > 0 ? methods.map(mapMethod) : undefined} />;
+  const methods = await getPaymentMethods(params.locale);
+  return (
+    <>
+      <FundingPage paymentMethods={methods.length > 0 ? methods.map(mapMethod) : undefined} />
+      <CtaBanner />
+    </>
+  );
 }

@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { CareersPage } from '@newera365/ui';
+import { CareersPage, CtaBanner } from '@newera365/ui';
 import type { CmsJobItem } from '@newera365/ui';
 import { getCareers } from '@/lib/cms';
 import type { CmsCareer } from '@/lib/cms';
@@ -26,5 +26,10 @@ function mapCareer(career: CmsCareer): CmsJobItem {
 export default async function CareersRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
   const careers = await getCareers(params.locale);
-  return <CareersPage jobs={careers.length > 0 ? careers.map(mapCareer) : undefined} />;
+  return (
+    <>
+      <CareersPage jobs={careers.length > 0 ? careers.map(mapCareer) : undefined} />
+      <CtaBanner />
+    </>
+  );
 }

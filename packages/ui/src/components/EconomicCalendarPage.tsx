@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 type Impact = 'ALL' | 'HIGH' | 'MEDIUM' | 'LOW';
@@ -152,6 +153,7 @@ const CURRENCY_FLAG: Record<string, string> = {
 };
 
 export function EconomicCalendarPage() {
+  const t = useTranslations('calendar');
   const [impact, setImpact] = useState<Impact>('ALL');
   const [currency, setCurrency] = useState<Currency>('ALL');
 
@@ -173,12 +175,12 @@ export function EconomicCalendarPage() {
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
-            Economic
+            {t('heroLine1')}
             <br />
-            <span className="text-accent">calendar.</span>
+            <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted max-w-[300px] text-[14px] leading-[1.55]">
-            Stay market-leading news, ranked by impact. Filter by country and importance.
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -201,7 +203,7 @@ export function EconomicCalendarPage() {
                 {imp.id !== 'ALL' && (
                   <span className={`h-1.5 w-1.5 rounded-full ${IMPACT_DOT[imp.id]}`} />
                 )}
-                {imp.label}
+                {imp.id === 'ALL' ? t('filterAll') : imp.id === 'HIGH' ? t('filterHigh') : imp.id === 'MEDIUM' ? t('filterMedium') : t('filterLow')}
               </button>
             ))}
           </div>
@@ -231,7 +233,7 @@ export function EconomicCalendarPage() {
         <div className="mx-auto max-w-[390px] px-5 md:max-w-2xl xl:max-w-[1200px]">
           {/* Desktop table header */}
           <div className="mb-1 hidden xl:grid xl:grid-cols-[80px_40px_80px_1fr_90px_90px_90px_60px] xl:gap-4 xl:border-b xl:border-[#e5e7eb] xl:pb-2 dark:xl:border-[#2a2a2a]">
-            {['TIME', 'FLAG', 'CCY', 'EVENT', 'PREV', 'FORECAST', 'ACTUAL', 'IMPACT'].map((h) => (
+            {[t('colTime'), t('colFlag'), t('colCurrency'), t('colEvent'), t('colPrev'), t('colForecast'), t('colActual'), t('colImpact')].map((h) => (
               <span
                 key={h}
                 className="font-body text-[9px] font-semibold uppercase tracking-[0.1em] text-[#9ca3af]"
@@ -243,7 +245,7 @@ export function EconomicCalendarPage() {
 
           {Object.keys(grouped).length === 0 ? (
             <p className="font-body text-muted py-12 text-center text-[14px]">
-              No events match your filters.
+              {t('noEvents')}
             </p>
           ) : (
             Object.entries(grouped).map(([date, events]) => (
@@ -322,8 +324,7 @@ export function EconomicCalendarPage() {
           )}
 
           <p className="font-body text-muted mt-4 text-[11px] leading-relaxed">
-            Data powered by third-party feed. NewEra365 is not responsible for accuracy or delays.
-            All times are GMT.
+            {t('dataNote')}
           </p>
         </div>
       </section>
@@ -332,18 +333,18 @@ export function EconomicCalendarPage() {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
-            TRADE THE NEWS
+            {t('ctaKicker')}
           </SectionKicker>
-          <h2 className="mb-3 font-sans text-[28px] font-semibold leading-[1.1] text-white">
-            A premium global trading platform built for the new era of markets.
-          </h2>
+          <p className="font-body mb-7 text-[14px] text-white/60">
+            {t('ctaDesc')}
+          </p>
           <a
             href="https://trade.newera365.com"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-accent font-body hover:bg-accent/90 mt-8 flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
           >
-            Start trading
+            {t('ctaBtn')}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path
                 d="M3 8h10M9 4l4 4-4 4"

@@ -5,31 +5,21 @@ import type { Field } from 'payload/types';
  *
  * Uses `\p{L}` / `\p{N}` (Unicode property escapes, Node 12+) so Arabic,
  * Chinese, and other non-Latin scripts are preserved rather than stripped.
- * Previously `[^a-z0-9]+` silently deleted all Arabic characters, producing
- * an empty slug that broke creation of every AR document.
  */
 export function slugify(input: string): string {
   return input
     .toLowerCase()
     .trim()
     .replace(/['"]/g, '')
-    .replace(/\s+/gu, '-') // spaces → hyphens first
-    .replace(/[^\p{L}\p{N}-]+/gu, '-') // strip non-letter/number/hyphen
-    .replace(/-{2,}/gu, '-') // collapse consecutive hyphens
-    .replace(/^-+|-+$/gu, ''); // trim leading/trailing hyphens
+    .replace(/\s+/gu, '-')
+    .replace(/[^\p{L}\p{N}-]+/gu, '-')
+    .replace(/-{2,}/gu, '-')
+    .replace(/^-+|-+$/gu, '');
 }
 
 /**
  * Slug field — auto-derived from `sourceField` when left empty.
- *
- * Uniqueness is per-(slug, locale) and enforced by the `uniqueSlugPerLocale`
- * collection hook. We deliberately do NOT set `unique: true` here because
- * Payload v2's single-field unique constraint would reject legitimate EN/AR
- * pairs that intentionally share a slug.
- *
- * For full belt-and-braces protection against the application-level race,
- * a Postgres partial unique index `(slug, locale)` per collection table is
- * applied via apps/cms/migrations/001_slug_locale_unique_indexes.sql.
+ * Globally unique (one document per slug; each document stores all locales).
  */
 export function slugField(sourceField: string): Field {
   return {
@@ -37,6 +27,7 @@ export function slugField(sourceField: string): Field {
     type: 'text',
     required: true,
     index: true,
+    unique: true,
     admin: { description: `Auto-generated from ${sourceField} if left blank. URL-safe.` },
     hooks: {
       beforeValidate: [
@@ -50,45 +41,29 @@ export function slugField(sourceField: string): Field {
   };
 }
 
-/** Flat SEO override fields (NE-044). */
+/**
+ * SEO fields — localized so each locale has its own title/description.
+ */
 export const seoFields: Field[] = [
   {
     name: 'seoTitle',
     type: 'text',
     maxLength: 60,
+    localized: true,
     admin: { description: 'Overrides the <title> tag. Falls back to title if empty.' },
   },
   {
     name: 'seoDescription',
     type: 'textarea',
     maxLength: 160,
+    localized: true,
     admin: { description: 'Meta description. Falls back to excerpt/summary if empty.' },
   },
 ];
 
 /**
- * Per-locale document model: every locale-aware collection stores one
- * document per locale. `translationKey` links the EN/AR counterparts and
- * is auto-filled by the `ensureTranslationKey` hook.
+ * @deprecated — native Payload localization is used instead.
+ * Kept as empty array so existing imports compile without changes.
+ * Remove `...localizationFields` spreads from collections as you update them.
  */
-export const localizationFields: Field[] = [
-  {
-    name: 'translationKey',
-    type: 'text',
-    index: true,
-    admin: {
-      readOnly: true,
-      description:
-        'Shared UUID linking the EN and AR versions. Copy onto the translated counterpart.',
-    },
-  },
-  {
-    name: 'locale',
-    type: 'select',
-    required: true,
-    options: [
-      { label: 'English', value: 'en' },
-      { label: 'Arabic', value: 'ar' },
-    ],
-  },
-];
+export const localizationFields: Field[] = [];

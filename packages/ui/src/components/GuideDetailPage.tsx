@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { RichText, extractHeadings } from './RichText';
 import type { SlateNode } from './RichText';
@@ -85,6 +85,7 @@ const GUIDES_DATA: Record<
 
 export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
   const locale = useLocale();
+  const t = useTranslations('guideDetail');
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const guide = (GUIDES_DATA[slug] ?? GUIDES_DATA['default'])!;
   const [activeSection, setActiveSection] = useState(0);
@@ -104,7 +105,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
               href={`/${locale}/education`}
               className="font-body hover:text-accent text-[11px] uppercase tracking-[0.1em] transition-colors"
             >
-              Education Hub
+              {t('breadcrumbEducation')}
             </Link>
             <svg width="5" height="8" viewBox="0 0 5 8" fill="none">
               <path
@@ -119,7 +120,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
               href={`/${locale}/guides`}
               className="font-body hover:text-accent text-[11px] uppercase tracking-[0.1em] transition-colors"
             >
-              Guides
+              {t('breadcrumbGuides')}
             </Link>
             <svg width="5" height="8" viewBox="0 0 5 8" fill="none">
               <path
@@ -181,7 +182,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="bg-surface rounded-[18px] p-4">
               <p className="font-body text-muted mb-3 text-[9px] uppercase tracking-[0.12em]">
-                TABLE OF CONTENTS
+                {t('tocHeading')}
               </p>
               <div className="flex flex-col gap-0">
                 {guide.toc.map((item, i) => (
@@ -228,7 +229,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
                 {section.insight && (
                   <div className="border-accent bg-accent/5 dark:bg-accent/10 rounded-r-[14px] border-l-[3px] p-4">
                     <p className="font-body text-accent mb-1 text-[9px] uppercase tracking-[0.12em]">
-                      THE KEY INSIGHT
+                      {t('insightLabel')}
                     </p>
                     <p className="font-body text-foreground text-[13px] leading-[1.6]">
                       {section.insight}
@@ -245,25 +246,25 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:last-child]:text-white/50">
-            READY TO APPLY IT?
+            {t('ctaKicker')}
           </SectionKicker>
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            Ready to put it into practice?
+            {t('ctaHeading')}
           </h2>
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            Apply the concepts in a risk-free demo account. No deposit required.
+            {t('ctaDesc')}
           </p>
           <Link
             href={`/${locale}/demo-account`}
             className="bg-accent hover:bg-accent/90 font-body mb-3 flex h-[52px] w-full items-center justify-center rounded-full text-[15px] font-medium text-white transition-colors"
           >
-            Open demo account
+            {t('ctaBtn')}
           </Link>
           <Link
             href={`/${locale}/guides`}
             className="font-body flex h-[52px] w-full items-center justify-center rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"
           >
-            More guides
+            {t('moreGuides')}
           </Link>
         </div>
       </section>

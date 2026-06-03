@@ -1,119 +1,83 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-interface CmsAccountOverride {
+// ─── Types ──────────────────────────────────────────────────────────────────
+
+export interface CmsAccountType {
+  id: number;
   name: string;
   minDeposit: number;
   spreadFrom: string;
   leverage: string;
+  platforms: string[];
   commission?: string | null;
+  features?: { value: string; id?: string | null }[] | null;
+  isPopular?: boolean | null;
+  sortOrder?: number | null;
+  status: string;
 }
 
-const CHECK = (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-label="Yes">
-    <path
-      d="M3 8l3.5 3.5L13 5"
-      stroke="#00B050"
-      strokeWidth="1.75"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+interface AccountsPageProps {
+  cmsAccounts?: CmsAccountType[];
+}
 
-const DASH = <span className="font-body text-[13px] text-[#6b7280]">—</span>;
+// ─── Static fallback data (Figma spec) ──────────────────────────────────────
 
-const ACCOUNTS = [
+const STATIC_ACCOUNTS = [
   {
     id: 'standard',
+    badge: 'POPULAR',
     name: 'Standard',
-    tag: 'MOST POPULAR',
-    desc: 'Built for active retail traders. No commission, friendly spreads.',
-    pricingLabel: 'PRICING',
-    pricingValue: 'No commission',
-    cardBg: 'bg-white dark:bg-surface-elevated',
-    headTextColor: 'text-[#111111] dark:text-white',
-    descColor: 'text-[#6b7280] dark:text-muted',
-    pricingLabelColor: 'text-[#6b7280] dark:text-muted',
-    pricingValueColor: 'text-[#111111] dark:text-white',
-    rowsContainerBg: 'bg-[#111111] dark:bg-surface-elevated',
-    rowBg: 'bg-[#FAFAF9] dark:bg-surface',
-    rowLabelColor: 'text-[#6b7280] dark:text-muted',
-    rowValueColor: 'text-[#111111] dark:text-white',
-    ctaBg: 'bg-[#111111] dark:bg-white text-white dark:text-[#111111]',
-    ctaLabel: 'Open Standard',
-    rows: [
-      { label: 'Min deposit', value: '$100' },
-      { label: 'Spread from', value: '1.0 pip' },
-      { label: 'Commission', value: 'None' },
-      { label: 'Leverage', value: 'Up to 1:500' },
-      { label: 'Instruments', value: 'All 6 classes' },
-      { label: 'Execution', value: 'Market' },
-      { label: 'Stop-out', value: '20%' },
-    ],
+    subtitle: 'For active retail traders',
+    isPopular: true,
+    headerGradient: 'radial-gradient(ellipse at 50% 210%, rgba(18,107,48,1) 0%, rgba(11,66,31,1) 50%, rgba(5,26,13,1) 100%)',
+    commission: '$0',
+    commissionSub: '(per lot per side)',
+    spreadsFrom: '1.2',
+    spreadsSub: '(pips)',
+    minDeposit: '$50',
+    features: ['All 2000+ instruments', 'Zero commission', '24/7 expert support'],
+    ctaLabel: 'Start Trading now',
+    ctaFilled: true,
   },
   {
     id: 'raw',
-    name: 'Raw',
-    tag: 'BEST ANNUAL',
-    desc: 'Institutional-grade spreads from 0.0 pip with a flat per-lot commission.',
-    pricingLabel: 'PRICING',
-    pricingValue: '$3.50 / lot / side',
-    cardBg: 'bg-[#111111]',
-    headTextColor: 'text-white',
-    descColor: 'text-white/60',
-    pricingLabelColor: 'text-white/50',
-    pricingValueColor: 'text-accent',
-    rowsContainerBg: 'bg-white dark:bg-surface-elevated',
-    rowBg: 'bg-[#111111]',
-    rowLabelColor: 'text-white/60',
-    rowValueColor: 'text-white',
-    ctaBg: 'bg-accent text-white',
-    ctaLabel: 'Open Raw',
-    rows: [
-      { label: 'Min deposit', value: '$500' },
-      { label: 'Spread from', value: '0.0 pip' },
-      { label: 'Commission', value: '$3.50 / lot' },
-      { label: 'Leverage', value: 'Up to 1:500' },
-      { label: 'Instruments', value: 'All 6 classes' },
-      { label: 'Execution', value: 'Market / ECN' },
-      { label: 'Stop-out', value: '20%' },
-    ],
+    badge: 'PRO',
+    name: 'Professional',
+    subtitle: 'For high-volume traders',
+    isPopular: false,
+    headerGradient: 'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
+    commission: '$1.5',
+    commissionSub: '(per lot per side)',
+    spreadsFrom: '0.0',
+    spreadsSub: '(pips)',
+    minDeposit: '$2,500',
+    features: ['Raw spreads from 0.0', 'Priority execution', 'Dedicated account manager'],
+    ctaLabel: 'Start Trading now',
+    ctaFilled: false,
   },
   {
-    id: 'vip',
-    name: 'VIP',
-    tag: 'HIGH VOLUME',
-    desc: 'Dedicated dealer, custom spreads, priority withdrawals for $10k+ accounts.',
-    pricingLabel: 'PRICING',
-    pricingValue: 'From $1.50 / lot',
-    cardBg: 'bg-white dark:bg-surface-elevated',
-    headTextColor: 'text-[#111111] dark:text-white',
-    descColor: 'text-[#6b7280] dark:text-muted',
-    pricingLabelColor: 'text-[#6b7280] dark:text-muted',
-    pricingValueColor: 'text-[#111111] dark:text-white',
-    rowsContainerBg: 'bg-[#111111] dark:bg-surface-elevated',
-    rowBg: 'bg-[#FAFAF9] dark:bg-surface',
-    rowLabelColor: 'text-[#6b7280] dark:text-muted',
-    rowValueColor: 'text-[#111111] dark:text-white',
-    ctaBg: 'bg-[#111111] dark:bg-white text-white dark:text-[#111111]',
-    ctaLabel: 'Open VIP',
-    rows: [
-      { label: 'Min deposit', value: '$10,000' },
-      { label: 'Spread from', value: '0.0 pip' },
-      { label: 'Commission', value: 'From $1.50' },
-      { label: 'Leverage', value: 'Up to 1:500' },
-      { label: 'Instruments', value: 'All + early access' },
-      { label: 'Execution', value: 'ECN priority' },
-      { label: 'Stop-out', value: '15%' },
-    ],
+    id: 'swap-free',
+    badge: 'ISLAMIC',
+    name: 'Swap-Free',
+    subtitle: 'Sharia-compliant, no swaps',
+    isPopular: false,
+    headerGradient: 'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
+    commission: '$0',
+    commissionSub: '(per lot per side)',
+    spreadsFrom: '1.4',
+    spreadsSub: '(pips)',
+    minDeposit: '$50',
+    features: ['No overnight swaps', 'Sharia-compliant structure', 'Full market access'],
+    ctaLabel: 'Start Trading now',
+    ctaFilled: false,
   },
 ] as const;
 
-const MATRIX_ROWS: { feature: string; std: boolean; raw: boolean; vip: boolean }[] = [
+const MATRIX_ROWS = [
   { feature: 'MetaTrader 5', std: true, raw: true, vip: true },
   { feature: 'Web & Mobile', std: true, raw: true, vip: true },
   { feature: 'Expert Advisors', std: true, raw: true, vip: true },
@@ -122,173 +86,226 @@ const MATRIX_ROWS: { feature: string; std: boolean; raw: boolean; vip: boolean }
   { feature: 'Priority withdrawals', std: false, raw: true, vip: true },
   { feature: 'Free VPS hosting', std: false, raw: true, vip: true },
   { feature: 'Custom spreads', std: false, raw: false, vip: true },
-];
+] as const;
 
-interface AccountsPageProps {
-  cmsAccounts?: CmsAccountOverride[];
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function Check() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-label="Yes">
+      <path d="M2.5 7l3 3 6-6" stroke="#00b050" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
 }
+
+// ─── Component ───────────────────────────────────────────────────────────────
 
 export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
   const locale = useLocale();
+  const t = useTranslations('accounts');
 
-  const displayAccounts = ACCOUNTS;
+  const staticBadges = [t('badgePopular'), t('badgePro'), t('badgeIslamic')] as const;
+  const staticSubtitles = [t('subtitleStandard'), t('subtitleRaw'), t('subtitleSwapFree')] as const;
+
+  // Build display accounts from CMS data + static defaults
+  const displayAccounts = cmsAccounts && cmsAccounts.length > 0
+    ? cmsAccounts.map((cms, i) => {
+        const fallback = STATIC_ACCOUNTS[i % STATIC_ACCOUNTS.length];
+        return {
+          id: cms.id,
+          badge: cms.isPopular ? t('badgePopular') : staticBadges[i % staticBadges.length] ?? t('badgePro'),
+          name: cms.name,
+          subtitle: staticSubtitles[i % staticSubtitles.length] ?? t('subtitleStandard'),
+          isPopular: Boolean(cms.isPopular),
+          headerGradient: cms.isPopular
+            ? 'radial-gradient(ellipse at 50% 210%, rgba(18,107,48,1) 0%, rgba(11,66,31,1) 50%, rgba(5,26,13,1) 100%)'
+            : 'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
+          commission: cms.commission ?? '$0',
+          commissionSub: t('perLotSide'),
+          spreadsFrom: cms.spreadFrom ?? '—',
+          spreadsSub: t('pips'),
+          minDeposit: `$${cms.minDeposit.toLocaleString('en-US')}`,
+          features: cms.features?.map((f) => f.value) ?? fallback?.features ?? [],
+          ctaLabel: t('startTrading'),
+          ctaFilled: Boolean(cms.isPopular),
+        };
+      })
+    : STATIC_ACCOUNTS.map((a, i) => ({
+        ...a,
+        id: a.id,
+        badge: staticBadges[i] ?? a.badge,
+        subtitle: staticSubtitles[i] ?? a.subtitle,
+        commissionSub: t('perLotSide'),
+        spreadsSub: t('pips'),
+        ctaLabel: t('startTrading'),
+      }));
 
   return (
     <>
-      {/* Hero */}
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
-            Choose the
-            <br />
-            account that
-            <br />
-            <span className="text-accent">fits.</span>
-          </h1>
-          <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
-            Whether you trade a few times a week or a few hundred times a day — we have an account
-            tier built for you.
+          <div className="font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px] text-[#111] dark:text-white xl:text-[48px]">
+            <p>{t('heroLine1')}</p>
+            <p>{t('heroLine2')}</p>
+            <p className="text-accent">{t('heroAccent')}</p>
+          </div>
+          <div className="h-[16px]" />
+          <p className="font-body max-w-[320px] text-[14px] leading-[1.55] text-[#6b7280]">
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
 
-      {/* Cards — horizontal scroll snap */}
-      <section className="bg-background pb-10">
-        <div
-          className="scrollbar-hide flex snap-x snap-mandatory gap-[14px] overflow-x-auto px-5 pb-2"
-          style={{ scrollPaddingLeft: '20px' }}
-        >
-          {ACCOUNTS.map((account) => {
-            const cms = cmsAccounts?.find(
-              (a) => a.name.toLowerCase() === account.name.toLowerCase(),
-            );
-            const rows = cms
-              ? [
-                  { label: 'Min deposit', value: `$${cms.minDeposit.toLocaleString('en-US')}` },
-                  { label: 'Spread from', value: cms.spreadFrom },
-                  { label: 'Commission', value: cms.commission ?? 'None' },
-                  { label: 'Leverage', value: cms.leverage },
-                  ...account.rows.slice(4),
-                ]
-              : account.rows;
-            const pricingValue = cms?.commission ?? account.pricingValue;
-            return (
+      {/* ── Account Cards ─────────────────────────────────────────────────── */}
+      <section className="bg-background px-5 pb-10">
+        <div className="mx-auto flex max-w-[390px] flex-col gap-[18px] md:max-w-2xl xl:max-w-[1200px] xl:flex-row xl:items-start xl:gap-6">
+          {displayAccounts.map((account) => (
+            <div
+              key={String(account.id)}
+              className={`w-full overflow-hidden rounded-[20px] bg-white shadow-[0px_4px_16px_rgba(0,0,0,0.08)] dark:bg-[#1a1c22] xl:flex-1 ${
+                account.isPopular ? 'border-2 border-[#00b050]' : ''
+              }`}
+            >
+              {/* Gradient header */}
               <div
-                key={account.id}
-                className={`shadow-card dark:shadow-card-dark flex w-[350px] flex-shrink-0 snap-start flex-col gap-[18px] rounded-[24px] p-6 ${account.cardBg}`}
+                className="flex flex-col items-center gap-[6px] pb-[34px] pt-[26px]"
+                style={{ background: account.headerGradient }}
               >
-                {/* Head */}
+                {/* Badge */}
+                <span className="rounded-[20px] bg-[#00b050] px-[12px] py-[5px] font-body text-[11px] font-bold tracking-[0.6px] text-[#111]">
+                  {account.badge}
+                </span>
+                <p className="font-body text-[15px] font-normal text-white/75">{t('cardAccountLabel')}</p>
+                <p className="font-body text-[30px] font-bold text-[#f0f0f0]">{account.name}</p>
+                <p className="font-body text-[13px] text-white/70">{account.subtitle}</p>
+              </div>
+
+              {/* Card body */}
+              <div className="flex flex-col gap-[18px] px-[22px] py-[28px]">
+                {/* Trading Platform row */}
                 <div className="flex items-center justify-between">
-                  <span className={`font-sans text-[20px] font-semibold ${account.headTextColor}`}>
-                    {account.name}
+                  <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                    {t('tradingPlatform')}
                   </span>
-                  <span className="bg-accent/10 text-accent rounded-full px-[10px] py-[5px] font-mono text-[10px] tracking-[1.2px]">
-                    {account.tag}
+                  <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                    MetaTrader 5
                   </span>
                 </div>
+                <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
 
-                {/* Description */}
-                <p className={`font-body text-[13px] leading-[1.55] ${account.descColor}`}>
-                  {account.desc}
-                </p>
-
-                {/* Price block */}
-                <div>
-                  <p
-                    className={`font-body mb-1 text-[9px] uppercase tracking-[0.14em] ${account.pricingLabelColor}`}
-                  >
-                    {account.pricingLabel}
-                  </p>
-                  <p className={`font-sans text-[20px] font-semibold ${account.pricingValueColor}`}>
-                    {pricingValue}
-                  </p>
+                {/* Commission */}
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-px">
+                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">{t('commission')}</span>
+                    <span className="font-body text-[12px] text-[#6b7380]">{account.commissionSub}</span>
+                  </div>
+                  <span className="font-sans text-[26px] font-bold text-[#111] dark:text-white">
+                    {account.commission}
+                  </span>
                 </div>
+                <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
 
-                {/* Spec rows */}
-                <div
-                  className={`flex flex-col overflow-hidden rounded-[14px] ${account.rowsContainerBg}`}
-                >
-                  {rows.map((row) => (
-                    <div
-                      key={row.label}
-                      className={`flex items-center justify-between px-4 py-[11px] ${account.rowBg}`}
-                    >
-                      <span className={`font-body text-[12px] ${account.rowLabelColor}`}>
-                        {row.label}
-                      </span>
-                      <span
-                        className={`font-body text-[12px] font-medium ${account.rowValueColor}`}
-                      >
-                        {row.value}
-                      </span>
+                {/* Spreads from */}
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-px">
+                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">{t('spreadsFrom')}</span>
+                    <span className="font-body text-[12px] text-[#6b7380]">{account.spreadsSub}</span>
+                  </div>
+                  <span className="font-sans text-[26px] font-bold text-[#111] dark:text-white">
+                    {account.spreadsFrom}
+                  </span>
+                </div>
+                <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
+
+                {/* Min deposit */}
+                <div className="flex items-center justify-between">
+                  <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">{t('minDeposit')}</span>
+                  <span className="font-sans text-[20px] font-bold text-[#111] dark:text-white">
+                    {account.minDeposit}
+                  </span>
+                </div>
+                <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
+
+                {/* Features */}
+                <div className="flex flex-col gap-[11px]">
+                  {(account.features as string[]).slice(0, 3).map((feat: string, i: number) => (
+                    <div key={i} className="flex items-center gap-[10px]">
+                      <span className="font-body text-[13px] font-bold text-[#00b050]">✓</span>
+                      <span className="font-body text-[13px] text-[#6b7280]">{feat}</span>
                     </div>
                   ))}
                 </div>
 
                 {/* CTA */}
                 <Link
-                  href={`/${locale}/register?account=${account.id}`}
-                  className={`font-body flex h-[48px] items-center justify-center gap-2 rounded-full text-[14px] font-medium transition-opacity hover:opacity-80 ${account.ctaBg}`}
+                  href={`/${locale}/register?account=${String(account.id)}`}
+                  className={`flex h-[49px] w-full items-center justify-center rounded-[10px] font-body text-[15px] font-semibold transition-opacity hover:opacity-90 ${
+                    account.ctaFilled
+                      ? 'bg-[#00b050] text-[#f0f0f0]'
+                      : 'border-[1.5px] border-[#00b050] bg-white text-[#111] dark:bg-transparent dark:text-white'
+                  }`}
                 >
                   {account.ctaLabel}
-                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                    <path
-                      d="M3 8h10M9 4l4 4-4 4"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                </Link>
+
+                {/* Demo link */}
+                <Link
+                  href={`/${locale}/demo-account`}
+                  className="text-center font-body text-[12px] font-bold tracking-[0.6px] text-[#00b050]"
+                >
+                  {t('tryFreeDemo')}
                 </Link>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Feature Matrix */}
+      {/* ── Feature Matrix ────────────────────────────────────────────────── */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/60 [&>span:last-child]:text-white/60">
-            FEATURE MATRIX
-          </SectionKicker>
-          <h2 className="mb-7 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            Compare side
-            <br />
-            by side.
+          {/* Kicker */}
+          <div className="mb-3 flex items-center gap-[6px]">
+            <span className="h-px w-[18px] bg-white/40" />
+            <span className="font-mono text-[10px] uppercase tracking-[1.8px] text-white/60">
+              {t('featureMatrixKicker')}
+            </span>
+          </div>
+
+          <h2 className="mb-6 font-sans text-[26px] font-semibold leading-[1.1] tracking-[-0.52px] text-white">
+            {t('featureMatrixHeading')}
           </h2>
 
           {/* Table */}
-          <div className="overflow-hidden rounded-[18px] bg-[#111111]">
+          <div className="overflow-hidden rounded-[16px] bg-white/[0.06]">
             {/* Header row */}
-            <div className="grid grid-cols-[1fr_52px_52px_52px] border-b border-white/10">
-              <div className="px-4 py-3">
-                <span className="font-body text-[9px] uppercase tracking-[0.1em] text-[#FFFFFF8C]">
-                  Feature
-                </span>
-              </div>
-              {['Std', 'Raw', 'VIP'].map((h) => (
-                <div key={h} className="flex items-center justify-center py-3">
-                  <span
-                    className={`font-body text-[9px] uppercase tracking-[0.1em] ${h === 'Raw' ? 'text-[#00B050]' : 'text-[#FFFFFF8C]'}`}
-                  >
+            <div className="grid grid-cols-[1fr_65px_65px_65px] bg-white/[0.04] px-[14px] py-3">
+              <span className="font-mono text-[9px] uppercase tracking-[1.08px] text-white/55">{t('featureCol')}</span>
+              {[t('stdCol'), t('rawCol'), t('vipCol')].map((h) => (
+                <div key={h} className="flex items-center justify-center">
+                  <span className={`font-mono text-[9px] uppercase tracking-[1.08px] ${h === 'Raw' ? 'text-[#00b050]' : 'text-white/55'}`}>
                     {h}
                   </span>
                 </div>
               ))}
             </div>
+
             {MATRIX_ROWS.map((row, i) => (
               <div
                 key={row.feature}
-                className={`grid grid-cols-[1fr_52px_52px_52px] ${i < MATRIX_ROWS.length - 1 ? 'border-b border-white/10' : ''}`}
+                className={`grid grid-cols-[1fr_65px_65px_65px] px-[14px] py-[11px] ${
+                  i < MATRIX_ROWS.length - 1 ? 'border-b border-white/[0.06]' : ''
+                }`}
               >
-                <div className="px-4 py-[13px]">
-                  <span className="font-body text-[13px] text-white/80">{row.feature}</span>
-                </div>
+                <span className="font-body text-[12px] text-white/85">{row.feature}</span>
                 {[row.std, row.raw, row.vip].map((val, j) => (
-                  <div key={j} className="flex items-center justify-center py-[13px]">
-                    {val ? CHECK : DASH}
+                  <div key={j} className="flex items-center justify-center">
+                    {val ? (
+                      <Check />
+                    ) : (
+                      <span className="font-body text-[14px] text-white/30">—</span>
+                    )}
                   </div>
                 ))}
               </div>

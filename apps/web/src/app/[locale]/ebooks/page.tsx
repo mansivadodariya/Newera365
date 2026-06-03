@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { EbooksPage } from '@newera365/ui';
+import { EbooksPage, CtaBanner } from '@newera365/ui';
 import type { CmsEbookItem } from '@newera365/ui';
 import { getEducationContent } from '@/lib/cms';
 import type { CmsEducationContent, CmsMedia } from '@/lib/cms';
@@ -25,6 +25,11 @@ function mapEbook(item: CmsEducationContent): CmsEbookItem {
 
 export default async function EbooksRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  const items = await getEducationContent(params.locale, 'ebook');
-  return <EbooksPage ebooks={items.length > 0 ? items.map(mapEbook) : undefined} />;
+  const items = await getEducationContent('ebook', params.locale);
+  return (
+    <>
+      <EbooksPage ebooks={items.length > 0 ? items.map(mapEbook) : undefined} />
+      <CtaBanner />
+    </>
+  );
 }

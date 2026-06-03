@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { EducationHubPage } from '@newera365/ui';
+import { EducationHubPage , CtaBanner } from '@newera365/ui';
 import type { CmsEducationItem } from '@newera365/ui';
 import { getEducationContent } from '@/lib/cms';
 import type { CmsEducationContent, CmsMedia } from '@/lib/cms';
@@ -25,6 +25,11 @@ function mapItem(item: CmsEducationContent): CmsEducationItem {
 
 export default async function EducationRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  const items = await getEducationContent(params.locale);
-  return <EducationHubPage content={items.length > 0 ? items.map(mapItem) : undefined} />;
+  const items = await getEducationContent(undefined, params.locale);
+  return (
+    <>
+      <EducationHubPage content={items.length > 0 ? items.map(mapItem) : undefined} />
+      <CtaBanner />
+    </>
+  );
 }

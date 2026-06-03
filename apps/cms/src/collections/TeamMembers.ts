@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
-import { localizationFields, slugField } from './_fields';
-import { ensureTranslationKey, uniqueSlugPerLocale } from '../hooks';
+import { slugField } from './_fields';
 
 // Powers the /about team section.
 export const TeamMembers: CollectionConfig = {
@@ -8,24 +7,21 @@ export const TeamMembers: CollectionConfig = {
   admin: {
     group: 'Company',
     useAsTitle: 'name',
-    defaultColumns: ['name', 'role', 'status', 'locale'],
+    defaultColumns: ['name', 'role', 'status'],
   },
   access: { read: () => true },
-  hooks: {
-    beforeValidate: [uniqueSlugPerLocale('team-members')],
-    beforeChange: [ensureTranslationKey],
-  },
   fields: [
-    { name: 'name', type: 'text', required: true, maxLength: 100 },
+    { name: 'name', type: 'text', required: true, maxLength: 100, localized: true },
     slugField('name'),
     {
       name: 'role',
       type: 'text',
       required: true,
       maxLength: 100,
+      localized: true,
       admin: { description: 'Job title shown under the name.' },
     },
-    { name: 'bio', type: 'textarea', maxLength: 400 },
+    { name: 'bio', type: 'textarea', maxLength: 400, localized: true },
     {
       name: 'photo',
       type: 'upload',
@@ -46,6 +42,5 @@ export const TeamMembers: CollectionConfig = {
       options: ['active', 'inactive'],
       admin: { description: 'Inactive members are hidden from /about without deletion.' },
     },
-    ...localizationFields,
   ],
 };

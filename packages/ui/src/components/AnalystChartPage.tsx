@@ -1,55 +1,131 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-type Tab = 'FOREX' | 'INDICES' | 'COMMODITIES';
+type FilterTab = 'All' | 'Majors' | 'Crosses' | 'Commodities' | 'Crypto';
+type Sentiment = 'BULLISH' | 'BEARISH' | 'NEUTRAL';
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: 'FOREX', label: 'Forex' },
-  { id: 'INDICES', label: 'Indices' },
-  { id: 'COMMODITIES', label: 'Commodities' },
-];
+interface PairCall {
+  symbol: string;
+  price: string;
+  target: string;
+  conf: number;
+  sentiment: Sentiment;
+  up: boolean;
+  category: FilterTab;
+  sparkPoints: number[];
+}
 
-const PAIRS: Record<
-  Tab,
-  { symbol: string; price: string; change: string; pct: string; up: boolean }[]
-> = {
-  FOREX: [
-    { symbol: 'EURUSD', price: '1.0842', change: '+0.0034', pct: '+0.31%', up: true },
-    { symbol: 'GBPUSD', price: '1.2691', change: '+0.0021', pct: '+0.17%', up: true },
-    { symbol: 'GBPJPY', price: '198.12', change: '-0.48', pct: '-0.24%', up: false },
-    { symbol: 'XAUUSD', price: '2,206.48', change: '+8.20', pct: '+0.37%', up: true },
-  ],
-  INDICES: [
-    { symbol: 'SP500', price: '5,301.4', change: '-12.50', pct: '-0.24%', up: false },
-    { symbol: 'NAS100', price: '18,744.2', change: '+45.10', pct: '+0.24%', up: true },
-    { symbol: 'UK100', price: '8,264.0', change: '+18.40', pct: '+0.22%', up: true },
-    { symbol: 'GER40', price: '18,512.3', change: '-34.20', pct: '-0.18%', up: false },
-  ],
-  COMMODITIES: [
-    { symbol: 'XAUUSD', price: '2,206.48', change: '+8.20', pct: '+0.37%', up: true },
-    { symbol: 'XAGUSD', price: '28.14', change: '+0.22', pct: '+0.79%', up: true },
-    { symbol: 'USOIL', price: '79.42', change: '-0.58', pct: '-0.73%', up: false },
-    { symbol: 'NATGAS', price: '2.18', change: '+0.04', pct: '+1.87%', up: true },
-  ],
-};
-
-const ANALYSTS = [
+const CALLS: PairCall[] = [
   {
-    initials: 'DR',
-    name: 'Diego Romero',
-    title: 'FX Desk · Senior Analyst',
-    commentary: `EURUSD has continued to grind higher as the ECB pushes back against July cut expectations. With Q2 data softening and the Fed holding above 5% — well above its long-run average, we see room for a move toward 1.10 before the summer recess. This week's NFP print is the key trigger. A miss below 150K could prompt a sharp reversal toward the 1.09 handle.`,
-    updated: '26 May 2025',
-    pair: 'EURUSD',
+    symbol: 'EUR/USD',
+    price: '1.0842',
+    target: '+ 1.0980',
+    conf: 80,
+    sentiment: 'BULLISH',
+    up: true,
+    category: 'Majors',
+    sparkPoints: [28, 30, 29, 33, 31, 35, 34, 37, 36, 40],
+  },
+  {
+    symbol: 'USD/JPY',
+    price: '157.34',
+    target: '± 35.20',
+    conf: 65,
+    sentiment: 'BEARISH',
+    up: false,
+    category: 'Majors',
+    sparkPoints: [40, 38, 39, 37, 36, 35, 33, 32, 30, 28],
+  },
+  {
+    symbol: 'GBP/USD',
+    price: '1.2718',
+    target: '+ 1.3710',
+    conf: 50,
+    sentiment: 'NEUTRAL',
+    up: true,
+    category: 'Majors',
+    sparkPoints: [30, 31, 30, 32, 31, 33, 32, 33, 32, 34],
+  },
+  {
+    symbol: 'XAU/USD',
+    price: '2,318.40',
+    target: '+ 1,360.00',
+    conf: 72,
+    sentiment: 'BULLISH',
+    up: true,
+    category: 'Commodities',
+    sparkPoints: [26, 29, 27, 32, 30, 35, 34, 38, 37, 42],
+  },
+  {
+    symbol: 'BTC/USD',
+    price: '67,250',
+    target: '+ 72,000',
+    conf: 60,
+    sentiment: 'BULLISH',
+    up: true,
+    category: 'Crypto',
+    sparkPoints: [25, 30, 28, 33, 31, 36, 35, 39, 38, 44],
+  },
+  {
+    symbol: 'GBP/JPY',
+    price: '198.12',
+    target: '± 2.10',
+    conf: 45,
+    sentiment: 'NEUTRAL',
+    up: false,
+    category: 'Crosses',
+    sparkPoints: [34, 33, 35, 32, 34, 31, 33, 30, 32, 31],
   },
 ];
 
-function MiniChart() {
-  const points = [30, 34, 32, 36, 38, 35, 39, 42, 40, 44, 43, 46];
-  const w = 300;
-  const h = 80;
+const ANALYST = {
+  initials: 'DR',
+  name: 'Diego Romero',
+  title: 'Senior FX Analyst',
+  updated: '20 May, 09:14 UTC',
+  commentary: `EUR/USD continues to grind higher as the ECB pushes back against July cut expectations. With US data softening and the dollar index breaking below the 200-day average, we see room for a move toward 1.0980 in the coming weeks. Key risk: a hot NFP print could trigger a sharp reversal back toward 1.0750.`,
+};
+
+const TABS: FilterTab[] = ['All', 'Majors', 'Crosses', 'Commodities', 'Crypto'];
+
+const TIMEFRAMES = ['1H', '4H', '1D', '1W'];
+
+function Sparkline({ points, up }: { points: number[]; up: boolean }) {
+  const w = 60;
+  const h = 28;
+  const max = Math.max(...points);
+  const min = Math.min(...points);
+  const range = max - min || 1;
+  const coords = points
+    .map((v, i) => {
+      const x = (i / (points.length - 1)) * w;
+      const y = h - ((v - min) / range) * (h - 4) - 2;
+      return `${x},${y}`;
+    })
+    .join(' ');
+  const color = up ? '#00B050' : '#EF4444';
+  return (
+    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} className="block">
+      <polyline
+        points={coords}
+        fill="none"
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function FeaturedChart({ pair }: { pair: PairCall }) {
+  const [tf, setTf] = useState('1D');
+  const w = 320;
+  const h = 100;
+  const points = pair.sparkPoints;
   const max = Math.max(...points);
   const min = Math.min(...points);
   const range = max - min || 1;
@@ -63,110 +139,187 @@ function MiniChart() {
   const areaCoords = `0,${h} ${coords} ${w},${h}`;
 
   return (
-    <svg width="100%" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="block">
-      <defs>
-        <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#00B050" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#00B050" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <polygon points={areaCoords} fill="url(#chartGrad)" />
-      <polyline
-        points={coords}
-        fill="none"
-        stroke="#00B050"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    <div
+      className="overflow-hidden rounded-[20px] bg-[#111111]"
+      style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.12)' }}
+    >
+      {/* Header row */}
+      <div className="flex items-center justify-between px-5 pt-4">
+        <p className="font-body text-[11px] uppercase tracking-[0.1em] text-white/50">
+          {pair.symbol} <span className="text-white/30">·</span> D1
+        </p>
+        <div className="flex gap-1">
+          {TIMEFRAMES.map((t) => (
+            <button
+              key={t}
+              onClick={() => setTf(t)}
+              className={`font-body rounded px-2 py-[3px] text-[10px] transition-colors ${
+                tf === t ? 'bg-[#00B050] text-white' : 'text-white/40 hover:text-white/70'
+              }`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Price */}
+      <div className="px-5 pb-3 pt-2">
+        <span className="font-sans text-[32px] font-semibold text-white">{pair.price}</span>
+        <span className="ml-2 font-sans text-[14px] font-medium text-[#00B050]">+1.27%</span>
+      </div>
+
+      {/* Chart */}
+      <div className="relative px-0">
+        <svg
+          width="100%"
+          viewBox={`0 0 ${w} ${h}`}
+          preserveAspectRatio="none"
+          className="block h-[100px]"
+        >
+          <defs>
+            <linearGradient id="featuredChartGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#00B050" stopOpacity="0.25" />
+              <stop offset="100%" stopColor="#00B050" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <polygon points={areaCoords} fill="url(#featuredChartGrad)" />
+          <polyline
+            points={coords}
+            fill="none"
+            stroke="#00B050"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+
+      {/* Target */}
+      <div className="flex justify-end px-5 pb-4 pt-1">
+        <span className="font-body text-[10px] uppercase tracking-[0.1em] text-white/40">
+          TARGET {pair.target.replace('+ ', '')}
+        </span>
+      </div>
+    </div>
   );
 }
 
-export function AnalystChartPage() {
-  const [tab, setTab] = useState<Tab>('FOREX');
+const SENTIMENT_STYLES: Record<Sentiment, string> = {
+  BULLISH: 'bg-[#00B050]/10 text-[#00B050]',
+  BEARISH: 'bg-[#EF4444]/10 text-[#EF4444]',
+  NEUTRAL: 'bg-[#6B7280]/10 text-[#6B7280]',
+};
 
-  const pairs = PAIRS[tab];
-  const featured = pairs[0]!;
-  const analyst = ANALYSTS[0]!;
+export function AnalystChartPage() {
+  const t = useTranslations('analystChart');
+  const [tab, setTab] = useState<FilterTab>('All');
+  const analyst = ANALYST;
+  const featured = CALLS[0]!;
+
+  const filtered = tab === 'All' ? CALLS : CALLS.filter((c) => c.category === tab);
 
   return (
     <>
       {/* Hero */}
-      <section className="bg-background px-5 pb-8 pt-9">
+      <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.08] tracking-[-1.14px]">
-            Where the
+            {t('heroLine1')}
             <br />
-            majors are
+            {t('heroLine2')}
             <br />
-            <span className="text-accent"> headed next.</span>
+            <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted max-w-[300px] text-[14px] leading-[1.55]">
-            Our trading desk is live on the top five currency pairs — updated weekly.
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
 
-      {/* Featured price */}
+      {/* Featured chart card */}
       <section className="bg-background px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="xl:grid xl:grid-cols-2 xl:gap-8">
-            {/* Featured price card */}
-            <div
-              className="rounded-[20px] bg-[#111111] p-5"
-              style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.12)' }}
-            >
-              <p className="font-body mb-1 text-[11px] uppercase tracking-[0.1em] text-white/40">
-                {featured.symbol}
-              </p>
-              <span
-                className={`font-body mb-1 text-[13px] font-semibold ${featured.up ? 'text-accent' : 'text-[#EF4444]'}`}
-              >
-                {featured.pct}
-              </span>
-            </div>
-            <div className="h-[80px] overflow-hidden rounded-[10px]">
-              <MiniChart />
-            </div>
-          </div>
+          <FeaturedChart pair={featured} />
         </div>
       </section>
 
-      {/* Tab filter + pair list */}
+      {/* Pair filter + This week's calls */}
       <section className="bg-background px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="mt-5 xl:mt-0">
-            <div className="mb-4 flex gap-2">
-              {TABS.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => setTab(t.id)}
-                  className={`font-body rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
-                    tab === t.id
-                      ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                      : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
-                  }`}
-                >
-                  {t.label}
-                </button>
-              ))}
-            </div>
-            <div className="flex flex-col divide-y divide-[#e5e7eb] dark:divide-[#2a2a2a]">
-              {pairs.map((p) => (
-                <div key={p.symbol} className="flex items-center justify-between py-[13px]">
-                  <p className="text-foreground font-sans text-[14px] font-semibold">{p.symbol}</p>
-                  <div className="flex items-center gap-3">
-                    <p className="font-body text-foreground text-[13px] tabular-nums">{p.price}</p>
-                    <p
-                      className={`font-body text-[12px] font-semibold tabular-nums ${p.up ? 'text-accent' : 'text-[#EF4444]'}`}
+          {/* Filter */}
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            {t('filterKicker')}
+          </SectionKicker>
+          <div className="mb-5 flex flex-wrap gap-2">
+            {TABS.map((tabItem) => (
+              <button
+                key={tabItem}
+                onClick={() => setTab(tabItem)}
+                className={`font-body rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
+                  tab === tabItem
+                    ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
+                }`}
+              >
+                {tabItem === 'All' ? t('filterAll') : tabItem === 'Majors' ? t('filterMajors') : tabItem === 'Crosses' ? t('filterCrosses') : tabItem === 'Commodities' ? t('filterCommodities') : t('filterCrypto')}
+              </button>
+            ))}
+          </div>
+
+          {/* This week's calls */}
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
+            {t('callsKicker')}
+          </SectionKicker>
+          <div className="flex flex-col gap-[10px]">
+            {filtered.map((p) => (
+              <div
+                key={p.symbol}
+                className="bg-surface shadow-card flex items-center gap-3 rounded-[16px] px-4 py-3 dark:shadow-none"
+              >
+                {/* Symbol + sparkline */}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`font-body rounded-full px-2 py-[2px] text-[9px] font-semibold uppercase tracking-[0.06em] ${SENTIMENT_STYLES[p.sentiment]}`}
                     >
-                      {p.pct}
-                    </p>
+                      {p.sentiment === 'BULLISH' ? '▲' : p.sentiment === 'BEARISH' ? '▼' : '●'}{' '}
+                      {p.sentiment}
+                    </span>
                   </div>
+                  <p className="text-foreground mt-[3px] font-sans text-[15px] font-semibold">
+                    {p.symbol}
+                  </p>
                 </div>
-              ))}
-            </div>
+
+                {/* Sparkline */}
+                <div className="flex-shrink-0">
+                  <Sparkline points={p.sparkPoints} up={p.up} />
+                </div>
+
+                {/* Price + target */}
+                <div className="flex-shrink-0 text-right">
+                  <p className="text-foreground font-sans text-[14px] font-semibold tabular-nums">
+                    {p.price}
+                  </p>
+                  <p
+                    className={`font-body text-[11px] tabular-nums ${p.up ? 'text-accent' : 'text-[#EF4444]'}`}
+                  >
+                    {p.target}
+                  </p>
+                </div>
+
+                {/* Confidence */}
+                <div className="w-[48px] flex-shrink-0 text-right">
+                  <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
+                    {t('confLabel')}
+                  </p>
+                  <p className="font-sans text-[13px] font-semibold text-[#111] dark:text-white">
+                    {p.conf}%
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -174,45 +327,42 @@ export function AnalystChartPage() {
       {/* Analyst commentary */}
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <p className="font-body mb-4 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
-            ANALYST COMMENTARY
-          </p>
-          <div className="bg-surface rounded-[18px] p-5">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
-                <span className="font-sans text-[13px] font-semibold text-white">
-                  {analyst.initials}
-                </span>
-              </div>
-              <div>
-                <p className="text-foreground font-sans text-[13px] font-semibold">
-                  {analyst.name}
-                </p>
-                <p className="font-body text-muted text-[11px]">{analyst.title}</p>
-              </div>
-              <span className="font-body text-muted ml-auto text-[10px]">{analyst.updated}</span>
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            {t('commentaryLabel')}
+          </SectionKicker>
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
+              <span className="font-sans text-[13px] font-semibold text-white">
+                {analyst.initials}
+              </span>
             </div>
-            <p className="font-body text-muted text-[13px] leading-[1.7]">{analyst.commentary}</p>
+            <div>
+              <p className="text-foreground font-sans text-[14px] font-semibold">{analyst.name}</p>
+              <p className="font-body text-muted text-[11px]">
+                {analyst.title} · {analyst.updated}
+              </p>
+            </div>
           </div>
+          <p className="font-body text-foreground mt-4 text-[14px] leading-[1.7]">
+            {analyst.commentary}
+          </p>
         </div>
       </section>
 
       {/* CTA */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
-            TRADE NOW
-          </SectionKicker>
-          <h2 className="mb-3 font-sans text-[28px] font-semibold leading-[1.1] text-white">
-            A premium global trading platform built for the new era of markets.
+        <div className="mx-auto max-w-[390px] text-center md:max-w-2xl xl:max-w-[1200px]">
+          <h2 className="mb-2 font-sans text-[28px] font-semibold leading-[1.1] text-white xl:text-[36px]">
+            {t('ctaHeading')}
           </h2>
+          <p className="font-body mb-7 text-[14px] text-white/60">
+            {t('ctaDesc')}
+          </p>
           <a
-            href="https://trade.newera365.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-accent font-body hover:bg-accent/90 mt-8 flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
+            href="/en/register"
+            className="bg-accent font-body hover:bg-accent/90 inline-flex h-[52px] items-center justify-center gap-2 rounded-full px-8 text-[14px] font-medium text-white transition-colors"
           >
-            Open free account
+            {t('ctaBtn')}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path
                 d="M3 8h10M9 4l4 4-4 4"

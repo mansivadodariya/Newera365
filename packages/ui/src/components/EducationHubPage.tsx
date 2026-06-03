@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
@@ -76,7 +76,7 @@ const CATEGORIES = [
     id: 'glossary',
     title: 'Glossary',
     desc: 'Every trading term, defined in plain English.',
-    count: '100+ TERMS',
+    count: '430 TERMS',
     href: '/glossary',
   },
   {
@@ -161,6 +161,7 @@ interface EducationHubPageProps {
 
 export function EducationHubPage({ content: cmsContent }: EducationHubPageProps) {
   const locale = useLocale();
+  const t = useTranslations('education');
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
@@ -182,15 +183,14 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
-            Learn to
+            {t('heroLine1')}
             <br />
-            trade,
+            {t('heroLine2')}
             <br />
-            <span className="text-accent">properly.</span>
+            <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
-            Guides, video series, market news and analysis. All from experts who do this for a
-            living.
+            {t('heroDesc')}
           </p>
         </div>
       </section>
@@ -199,7 +199,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
-            BROWSE BY TYPE
+            {t('browseKicker')}
           </SectionKicker>
           <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-3">
             {(cmsCounts ?? CATEGORIES).map((cat) => (
@@ -218,9 +218,9 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                 </div>
                 <div>
                   <p className="text-foreground mb-1 font-sans text-[14px] font-semibold">
-                    {cat.title}
+                    {t(`type${cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}Title` as 'typeGuidesTitle')}
                   </p>
-                  <p className="font-body text-muted text-[11px] leading-[1.5]">{cat.desc}</p>
+                  <p className="font-body text-muted text-[11px] leading-[1.5]">{t(`type${cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}Desc` as 'typeGuidesDesc')}</p>
                 </div>
               </Link>
             ))}
@@ -232,7 +232,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
       <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
-            FEATURED THIS WEEK
+            {t('featuredKicker')}
           </SectionKicker>
           <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
             {FEATURED.map((article) => (
@@ -282,7 +282,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
       <section className="bg-background px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
-            PINNED GUIDES
+            {t('pinnedKicker')}
           </SectionKicker>
           <div className="flex flex-col">
             {PINNED_GUIDES.map((guide, i) => (
@@ -319,13 +319,13 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
-            STAY UPDATED
+            {t('inboxKicker')}
           </SectionKicker>
           <h2 className="mb-2 font-sans text-[28px] font-semibold leading-[1.1] text-white">
-            Want it in your inbox?
+            {t('inboxHeading')}
           </h2>
           <p className="font-body mb-6 text-[13px] leading-relaxed text-white/60">
-            New guides and lessons as they drop.
+            {t('inboxDesc')}
           </p>
           {submitted ? (
             <div className="bg-accent/20 flex items-center gap-3 rounded-[14px] px-4 py-4">
@@ -339,7 +339,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                 />
               </svg>
               <span className="font-body text-[14px] text-white">
-                You&apos;re on the list. Check your inbox.
+                {t('inboxSuccess')}
               </span>
             </div>
           ) : (
@@ -347,7 +347,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
               <input
                 type="email"
                 required
-                placeholder="Your email"
+                placeholder={t('inboxPlaceholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="font-body focus:border-accent flex-1 rounded-full border border-white/20 bg-white/[0.07] px-4 py-3 text-[13px] text-white placeholder-white/40 outline-none"
@@ -356,7 +356,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                 type="submit"
                 className="bg-accent hover:bg-accent/90 font-body flex-shrink-0 rounded-full px-5 py-3 text-[13px] font-medium text-white transition-colors"
               >
-                Subscribe
+                {t('inboxBtn')}
               </button>
             </form>
           )}

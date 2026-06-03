@@ -1,14 +1,12 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { useTheme } from 'next-themes';
-import { TradingViewWidget } from './TradingViewWidget';
 
 export function HeroSection() {
   const t = useTranslations('home');
   const locale = useLocale();
-  const { resolvedTheme } = useTheme();
 
   return (
     <section className="bg-background rounded-b-[32px] px-5 pb-7 pt-9 xl:pb-0 xl:pt-16">
@@ -16,7 +14,8 @@ export function HeroSection() {
         {/* Left col: headline + subtitle + CTAs */}
         <div className="flex flex-col gap-[18px] xl:w-[516px] xl:flex-shrink-0 xl:pb-16 xl:pt-4">
           <h1 className="text-foreground font-sans text-[44px] font-semibold leading-[1.02] tracking-[-1.54px] xl:text-[52px] xl:tracking-[-2px]">
-            {t('heroLine1')} <span className="text-accent">{t('heroPremium')}</span>{' '}
+            {t('heroLine1')}{' '}
+            <span className="text-accent">{t('heroPremium')}</span>{' '}
             {t('heroLine2')}
           </h1>
 
@@ -24,10 +23,10 @@ export function HeroSection() {
             {t('heroSubtitle')}
           </p>
 
-          <div className="flex gap-[10px]">
+          <div className="flex items-center gap-[10px]">
             <Link
               href={`/${locale}/register`}
-              className="bg-accent font-body hover:bg-accent-hover flex flex-1 items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium tracking-[-0.075px] text-white transition-colors xl:flex-none"
+              className="bg-accent font-body hover:bg-accent/90 inline-flex flex-none items-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium tracking-[-0.075px] text-white transition-colors"
             >
               {t('heroCTALive')}
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -36,7 +35,7 @@ export function HeroSection() {
             </Link>
             <Link
               href={`/${locale}/demo-account`}
-              className="text-foreground font-body flex flex-1 items-center justify-center px-[22px] py-4 text-[15px] font-medium tracking-[-0.075px] transition-opacity hover:opacity-70 xl:flex-none"
+              className="text-foreground font-body inline-flex flex-none items-center px-[22px] py-4 text-[15px] font-medium tracking-[-0.075px] transition-opacity hover:opacity-70"
             >
               {t('heroCTADemo')}
             </Link>
@@ -44,38 +43,32 @@ export function HeroSection() {
         </div>
 
         {/* Right col / bottom on mobile: chart card */}
-        <div className="overflow-hidden rounded-[24px] bg-gradient-to-b from-[#fafaf9] to-[#f4f4f3] dark:from-[#07090d] dark:to-[#07090d] xl:min-w-0 xl:flex-1">
-          {/* Trading screen photo */}
-          <div className="relative w-full" style={{ aspectRatio: '620/342' }}>
-            <TradingViewWidget
-              type="advanced-chart"
-              symbol="OANDA:EURUSD"
-              theme={resolvedTheme === 'dark' ? 'dark' : 'dark'}
-              config={{
-                hide_top_toolbar: true,
-                hide_legend: true,
-                hide_side_toolbar: true,
-                allow_symbol_change: false,
-                save_image: false,
-                style: '1',
-                backgroundColor: '#0E1116',
-                gridColor: 'rgba(255,255,255,0.04)',
-              }}
+        <div className="overflow-hidden rounded-[24px] bg-gradient-to-b from-[#fafaf9] to-[#f4f4f3] dark:from-[#07090d] dark:to-[#0d1117] xl:min-w-0 xl:flex-1">
+          {/* Static trading board image (matches Figma design) */}
+          <div className="relative w-full" style={{ aspectRatio: '350/261' }}>
+            <Image
+              src="/images/hero-chart.png"
+              alt="Trading chart"
+              fill
+              className="object-cover object-center"
+              priority
             />
           </div>
 
-          {/* Specs row — white bg, grey labels, dark values */}
-          <div className="bg-background grid grid-cols-3 divide-x divide-border py-3 dark:divide-[#1a1c22]">
+          {/* Specs row — white bg, grey mono labels, dark values */}
+          <div className="bg-background grid grid-cols-3 divide-x divide-border dark:divide-[#1a1c22]">
             {[
               { label: t('heroSpreadLabel'), value: t('heroSpreadValue') },
               { label: t('heroLeverageLabel'), value: t('heroLeverageValue') },
               { label: t('heroExecutionLabel'), value: t('heroExecutionValue') },
             ].map((spec) => (
               <div key={spec.label} className="flex flex-col items-start gap-[2px] px-[14px] py-[6px]">
-                <span className="font-mono text-[9px] font-normal uppercase leading-none tracking-[1.35px] text-muted">
+                <span className="font-mono text-[9px] font-normal uppercase leading-none tracking-[1.35px] text-[#6b7280]">
                   {spec.label}
                 </span>
-                <span className="font-sans text-[14px] font-semibold text-white">{spec.value}</span>
+                <span className="font-sans text-[14px] font-semibold text-[#111] dark:text-white">
+                  {spec.value}
+                </span>
               </div>
             ))}
           </div>

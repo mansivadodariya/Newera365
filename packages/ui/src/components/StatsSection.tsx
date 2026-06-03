@@ -29,10 +29,7 @@ export function StatsSection({ kpiStats, locale }: { kpiStats?: CmsKpiStat[]; lo
         ];
 
   return (
-    <section
-      className="rounded-t-[32px] px-5 pb-9 pt-10 xl:pb-14 xl:pt-10"
-      style={{ background: 'var(--gradient-stats)' }}
-    >
+    <section className="bg-[#f2f2f7] rounded-t-[32px] px-5 pb-9 pt-10 xl:pb-14 xl:pt-10 dark:bg-[#0f0f14]">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <SectionKicker className="text-foreground [&>span:first-child]:bg-foreground mb-5">
           {t('statsByNumbers')}
@@ -42,37 +39,37 @@ export function StatsSection({ kpiStats, locale }: { kpiStats?: CmsKpiStat[]; lo
           {t('statsHeading')}
         </h2>
 
-        {/* Stats grid — 2 cols mobile, 4 cols desktop */}
+        {/* Stats grid — solid #111 cells, 2×2 mobile, 4 cols desktop */}
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[20px] bg-[#e5e7eb] xl:grid-cols-4 dark:bg-[#1a1c22]">
           {stats.map((stat, i) => (
             <div
               key={stat.label}
-              className="flex flex-col justify-center gap-[6px] bg-[rgba(0,0,0,0.73)] p-[22px]"
+              className="flex flex-col gap-[6px] bg-[#111] p-[22px] dark:bg-[#111]"
             >
               <span
-                className={`font-sans text-[30px] font-semibold leading-none tracking-[-0.6px] ${i === 0 ? 'text-white' : 'text-white/80'}`}
+                className={`font-sans text-[30px] font-semibold leading-none tracking-[-0.6px] ${
+                  i === 0 ? 'text-white' : 'text-white/80'
+                }`}
               >
                 {stat.value}
               </span>
-              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-white">
+              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-[#8c949e]">
                 {stat.label}
               </span>
             </div>
           ))}
         </div>
 
-        {/* Regulated badge */}
-        <div className="mt-6 flex items-center gap-[14px] rounded-[16px] bg-[linear-gradient(169deg,rgba(0,176,80,0.1)_0%,rgba(255,255,255,0.02)_71%)] px-5 py-[18px] dark:bg-[linear-gradient(169deg,rgba(0,176,80,0.1)_0%,rgba(7,9,13,0.02)_71%)]">
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-none">
-            <Image src="/icons/authority.png" alt="Authority" width={28} height={28} />
-          </div>
+        {/* Regulated badge — plain white card */}
+        <div className="mt-6 flex items-center gap-[14px] rounded-[16px] bg-white px-5 py-[18px] dark:bg-[#1a1c22]">
+          <Image src="/icons/authority.png" alt="Authority" width={24} height={24} className="flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <p className="font-body text-[13px] font-medium leading-tight text-[#111] dark:text-white">
               {t('statsRegBadgeTitle')}
             </p>
             <p className="font-body mt-0.5 text-[11px] text-[#6b7280]">{t('statsRegBadgeDesc')}</p>
           </div>
-          <span className="font-body flex-shrink-0 text-[16px] text-[#b0b0b0]">›</span>
+          <span className="font-body flex-shrink-0 text-[16px] text-black dark:text-white">›</span>
         </div>
       </div>
     </section>

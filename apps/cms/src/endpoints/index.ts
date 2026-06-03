@@ -59,6 +59,7 @@ if (!process.env.CONSENT_IP_SALT && process.env.NODE_ENV !== 'production') {
 const CONSENT_IP_SALT = process.env.CONSENT_IP_SALT ?? '';
 
 const SYMBOL_PATTERN = /^[A-Z0-9._-]{1,20}$/;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type ReqWithId = Request & { requestId?: string };
 
@@ -120,6 +121,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
   const contactLimiter = makeLimiter(CONTACT_RATE_LIMIT, 'contact');
   const webinarLimiter = makeLimiter(WEBINAR_RATE_LIMIT, 'webinar');
   const newsletterLimiter = makeLimiter(NEWSLETTER_RATE_LIMIT, 'newsletter');
+  const partnersLimiter = makeLimiter(NEWSLETTER_RATE_LIMIT, 'partners');
 
   // ── Health ─────────────────────────────────────────────────────────────────
   // Token-gated to prevent uptime fingerprinting and DDoS amplification.
@@ -464,7 +466,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
     async (req: ReqWithId, res: Response) => {
       const { email, locale, source, utmParams } = req.body ?? {};
 
-      if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      if (typeof email !== 'string' || !EMAIL_PATTERN.test(email)) {
         return res.status(400).json({ error: 'A valid email address is required.' });
       }
       const safeLocale = locale === 'ar' ? 'ar' : 'en';
@@ -771,7 +773,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
   // On success returns the content URL (plain in dev; signed R2 URL in prod).
   app.post('/api/education/gate', newsletterLimiter, async (req: ReqWithId, res: Response) => {
     const { email, contentId, locale } = req.body ?? {};
-    if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (typeof email !== 'string' || !EMAIL_PATTERN.test(email)) {
       return res.status(400).json({ error: 'A valid email address is required.' });
     }
     if (!contentId) {
@@ -879,7 +881,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         .status(400)
         .json({ errors: [{ field: 'name', message: 'Name must be 200 characters or fewer.' }] });
     }
-    if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (typeof email !== 'string' || !EMAIL_PATTERN.test(email)) {
       return res
         .status(400)
         .json({ errors: [{ field: 'email', message: 'A valid email address is required.' }] });
@@ -906,12 +908,41 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
     }
 
     try {
-      await sendContactNotification({
-        name: name.trim(),
-        email,
-        subject: subject.trim(),
-        message: message.trim(),
+      // Persist the submission first — so a misconfigured email transport never loses the data.
+      const rawIp = req.ip ?? req.socket.remoteAddress ?? '';
+      const ipHash = createHash('sha256')
+        .update(CONSENT_IP_SALT + rawIp)
+        .digest('hex');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await payload.create({
+        collection: 'contact-submissions',
+        data: {
+          name: name.trim(),
+          email,
+          subject: subject.trim(),
+          message: message.trim(),
+          submittedAt: new Date().toISOString(),
+          ipHash,
+          status: 'new',
+        } as any,
+        depth: 0,
       });
+
+      // Email notification is best-effort — DB record is the source of truth.
+      try {
+        await sendContactNotification({
+          name: name.trim(),
+          email,
+          subject: subject.trim(),
+          message: message.trim(),
+        });
+      } catch (emailErr) {
+        payload.logger.error(
+          { requestId: req.requestId, emailErr },
+          'contact form: notification email failed — submission saved to CMS',
+        );
+      }
+
       return res.json({ message: 'Your message has been sent. We will get back to you shortly.' });
     } catch (err) {
       payload.logger.error({ requestId: req.requestId, err }, 'contact form error');
@@ -920,7 +951,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
   });
 
   // ── Partners / IB application ─────────────────────────────────────────────
-  app.post('/api/partners/apply', newsletterLimiter, async (req: ReqWithId, res: Response) => {
+  app.post('/api/partners/apply', partnersLimiter, async (req: ReqWithId, res: Response) => {
     const { name, email, company, website, country, message } = req.body ?? {};
 
     if (typeof name !== 'string' || !name.trim()) {
@@ -931,7 +962,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         .status(400)
         .json({ errors: [{ field: 'name', message: 'Name must be 200 characters or fewer.' }] });
     }
-    if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (typeof email !== 'string' || !EMAIL_PATTERN.test(email)) {
       return res
         .status(400)
         .json({ errors: [{ field: 'email', message: 'A valid email address is required.' }] });
@@ -986,7 +1017,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         .status(400)
         .json({ errors: [{ field: 'name', message: 'Name must be 200 characters or fewer.' }] });
     }
-    if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (typeof email !== 'string' || !EMAIL_PATTERN.test(email)) {
       return res
         .status(400)
         .json({ errors: [{ field: 'email', message: 'A valid email address is required.' }] });
@@ -1014,6 +1045,22 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
       const status = webinar.status as string | undefined;
       if (status !== 'upcoming' && status !== 'live') {
         return res.status(400).json({ error: 'Registration is not open for this webinar.' });
+      }
+
+      // Prevent duplicate registrations for the same email + webinar.
+      const duplicate = await payload.find({
+        collection: 'webinar-registrations',
+        where: {
+          and: [
+            { email: { equals: email.toLowerCase() } },
+            { webinar: { equals: webinar.id as number } },
+          ],
+        },
+        limit: 1,
+        depth: 0,
+      });
+      if (duplicate.docs.length > 0) {
+        return res.json({ message: 'You are already registered for this webinar.' });
       }
 
       // Persist first (so an email failure doesn't lose the registration), then email.

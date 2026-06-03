@@ -1,60 +1,9 @@
-import type {
-  CollectionBeforeChangeHook,
-  CollectionBeforeValidateHook,
-  CollectionAfterChangeHook,
-  Where,
-} from 'payload/types';
-import { ValidationError } from 'payload/errors';
-import { randomUUID } from 'crypto';
-
-/**
- * Assigns a `translationKey` UUID on create when one is not supplied.
- * Never overwrites an existing value — the editor copies the key onto the
- * translated counterpart so EN/AR documents stay linked.
- */
-export const ensureTranslationKey: CollectionBeforeChangeHook = ({ data, operation }) => {
-  if (operation === 'create' && !data.translationKey) {
-    return { ...data, translationKey: randomUUID() };
-  }
-  return data;
-};
-
-/**
- * Enforces `(slug, locale)` uniqueness. Payload v2 has no compound-unique
- * index, so duplicates are rejected here. Factory — bind to a collection slug.
- */
-export function uniqueSlugPerLocale(collection: string): CollectionBeforeValidateHook {
-  return async ({ data, originalDoc, req }) => {
-    const slug = data?.slug;
-    const locale = data?.locale;
-    if (!slug || !locale) return data;
-
-    const andClauses: Where[] = [{ slug: { equals: slug } }, { locale: { equals: locale } }];
-    const existingId = originalDoc?.id;
-    if (existingId) {
-      andClauses.push({ id: { not_equals: existingId } });
-    }
-    const where: Where = { and: andClauses };
-
-    const duplicates = await req.payload.find({
-      collection: collection as never,
-      where,
-      limit: 1,
-      depth: 0,
-    });
-
-    if (duplicates.totalDocs > 0) {
-      throw new ValidationError([
-        { field: 'slug', message: `A ${locale} document with this slug already exists.` },
-      ]);
-    }
-    return data;
-  };
-}
+import type { CollectionBeforeChangeHook, CollectionAfterChangeHook } from 'payload/types';
 
 /**
  * EducationContent: derives the A-Z grouping key from the glossary term's
  * first character. Powers fast alphabetical queries on /glossary.
+ * Works for both Latin (F → F) and Arabic (فوركس → ف) terms.
  */
 export const deriveAlphabeticalIndex: CollectionBeforeChangeHook = ({ data }) => {
   if (
@@ -68,19 +17,22 @@ export const deriveAlphabeticalIndex: CollectionBeforeChangeHook = ({ data }) =>
 };
 
 /**
- * LegalPages: only one published document per `pageType` + `locale` may be
+ * LegalPages: only one published document per `pageType` + locale may be
  * live. Publishing a new version demotes the previous published one to draft.
+ * Uses req.locale (set by Payload's native localization) to scope the query.
  */
 export const archivePreviousLegalVersion: CollectionAfterChangeHook = async ({ doc, req }) => {
   if (doc.status !== 'published') return doc;
 
+  const locale = (req.locale as string | undefined) ?? 'en';
+
   try {
     const previous = await req.payload.find({
       collection: 'legal-pages',
+      locale: locale as 'en' | 'ar',
       where: {
         and: [
           { pageType: { equals: doc.pageType } },
-          { locale: { equals: doc.locale } },
           { status: { equals: 'published' } },
           { id: { not_equals: doc.id } },
         ],
@@ -89,21 +41,13 @@ export const archivePreviousLegalVersion: CollectionAfterChangeHook = async ({ d
     });
 
     for (const stale of previous.docs) {
-      // Re-fetch before archiving — guards against the race where two editors
-      // publish concurrently and both see the same "previous" published doc.
-      const latest = await req.payload.findByID({
+      await req.payload.update({
         collection: 'legal-pages',
         id: stale.id,
+        locale: locale as 'en' | 'ar',
+        data: { status: 'draft' },
         depth: 0,
       });
-      if (latest.status === 'published' && latest.id !== doc.id) {
-        await req.payload.update({
-          collection: 'legal-pages',
-          id: stale.id,
-          data: { status: 'draft' },
-          depth: 0,
-        });
-      }
     }
   } catch (err) {
     req.payload.logger.error({ err, docId: doc.id }, 'Failed to archive previous legal version');

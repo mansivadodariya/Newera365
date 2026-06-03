@@ -13,6 +13,7 @@
     "type-check": "tsc --noEmit",
     "generate:types": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:types",
     "db:migrate:slug-indexes": "ts-node src/scripts/migrate-slug-indexes.ts",
+    "seed": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts ts-node --transpile-only src/scripts/seed.ts",
     "clean": "rimraf dist build .turbo"
   },
   "dependencies": {

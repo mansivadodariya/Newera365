@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
-import { localizationFields, seoFields, slugField } from './_fields';
-import { ensureTranslationKey, uniqueSlugPerLocale } from '../hooks';
+import { seoFields, slugField } from './_fields';
 
 // Powers /market-analysis (listing) and /market-analysis/[slug] (article).
 export const MarketAnalysis: CollectionConfig = {
@@ -8,15 +7,11 @@ export const MarketAnalysis: CollectionConfig = {
   admin: {
     group: 'Editorial',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'assetCategory', 'status', 'locale', 'publishedDate'],
+    defaultColumns: ['title', 'assetCategory', 'status', 'publishedDate'],
   },
   access: { read: () => true },
-  hooks: {
-    beforeValidate: [uniqueSlugPerLocale('market-analysis')],
-    beforeChange: [ensureTranslationKey],
-  },
   fields: [
-    { name: 'title', type: 'text', required: true, maxLength: 200 },
+    { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),
     {
       name: 'status',
@@ -41,9 +36,10 @@ export const MarketAnalysis: CollectionConfig = {
       name: 'analyst',
       type: 'text',
       maxLength: 100,
+      localized: true,
       admin: { description: 'Author display name.' },
     },
-    { name: 'body', type: 'richText', required: true },
+    { name: 'body', type: 'richText', required: true, localized: true },
     {
       name: 'chartEmbed',
       type: 'textarea',
@@ -55,15 +51,10 @@ export const MarketAnalysis: CollectionConfig = {
         if (value === null || value === undefined || value === '') return true;
         if (typeof value !== 'string') return 'Chart embed must be a string.';
 
-        // Allowlist approach: only a single <iframe> whose src points at
-        // tradingview.com is acceptable. A blacklist of event handlers always
-        // has gaps (ontouchstart, onanimationend, data: URIs, etc.).
         const trimmed = value.trim();
-        // Must be exactly one self-closing or paired iframe tag
         if (!/^<iframe\b[^>]*><\/iframe>$/i.test(trimmed)) {
           return 'Chart embed must be a single TradingView <iframe> tag.';
         }
-        // Extract src attribute value
         const srcMatch = trimmed.match(/\bsrc=["']([^"']+)["']/i);
         if (!srcMatch) {
           return 'Chart embed <iframe> must have a src attribute.';
@@ -80,11 +71,9 @@ export const MarketAnalysis: CollectionConfig = {
         } catch {
           return 'Chart embed src is not a valid URL.';
         }
-        // Reject event handler attributes (on* covers all standard HTML event handlers).
         if (/\bon\w+\s*=/i.test(trimmed)) {
           return 'Chart embed must not contain event handler attributes.';
         }
-        // Reject srcdoc — allows arbitrary HTML injection regardless of src.
         if (/\bsrcdoc\s*=/i.test(trimmed)) {
           return 'Chart embed must not contain a srcdoc attribute.';
         }
@@ -98,6 +87,5 @@ export const MarketAnalysis: CollectionConfig = {
       hasMany: true,
     },
     ...seoFields,
-    ...localizationFields,
   ],
 };

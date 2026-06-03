@@ -20,18 +20,13 @@ const NAV_ITEMS: NavItem[] = [
     dropdown: [
       {
         label: 'Account types',
-        sub: 'Standard, Swap-Free, Professional',
+        sub: 'Standard, Raw & VIP accounts',
         href: '/trade/accounts',
       },
-      {
-        label: 'Feature comparison',
-        sub: 'Full feature matrix table',
-        href: '/trade/accounts/comparison',
-      },
-      { label: 'Payment info', sub: 'Funding & withdrawals', href: '/trade/funding' },
+      { label: 'Payment methods', sub: 'Funding & withdrawals', href: '/trade/funding' },
       { label: 'Fee table', sub: 'Spreads & charges', href: '/trade/fees' },
-      { label: 'Promo cards', sub: 'Bonuses & offers', href: '/trade/promotions' },
-      { label: 'IB registration', sub: 'Partner & earn rebates', href: '/trade/ib' },
+      { label: 'Promotions', sub: 'Bonuses & active offers', href: '/trade/promotions' },
+      { label: 'IB & partners', sub: 'Earn rebates as a partner', href: '/trade/ib' },
     ],
   },
   {
@@ -57,7 +52,6 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Platform',
     href: '/platform/mt5',
     dropdown: [
-      { label: 'Platform overview', sub: 'All trading tools & platforms', href: '/platform/mt5' },
       { label: 'MetaTrader 5', sub: 'Professional desktop & mobile', href: '/platform/mt5' },
       { label: 'Web Trader', sub: 'Trade from any browser', href: '/platform/webtrader' },
       { label: 'Mobile App', sub: 'iOS & Android', href: '/platform/mobile' },
@@ -80,6 +74,8 @@ const NAV_ITEMS: NavItem[] = [
     href: '/research',
     dropdown: [
       { label: 'Market articles', sub: 'Desk commentary & analysis', href: '/research' },
+      { label: 'Blog', sub: 'News & company updates', href: '/blog' },
+      { label: 'Daily news', sub: 'Latest market headlines', href: '/daily-news' },
       { label: 'Economic calendar', sub: 'Key market events', href: '/tools/calendar' },
       { label: 'Analyst views', sub: 'Forecasts & signals', href: '/tools/analyst-chart' },
       { label: 'Newsletter', sub: 'The Monday briefing', href: '/newsletter' },
@@ -90,14 +86,14 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Tools',
     href: '/tools',
     dropdown: [
-      { label: 'Calculators', sub: 'Margin, pip & swap', href: '/tools' },
-      {
-        label: 'Spread comparator',
-        sub: 'Side-by-side account spreads',
-        href: '/tools/spread-comparator',
-      },
+      { label: 'Margin calculator', sub: 'Margin, pip & swap', href: '/tools' },
+      { label: 'Pivot calculator', sub: 'Classical, Camarilla, Woodie', href: '/tools/pivot' },
+      { label: 'Profit calculator', sub: 'P&L by instrument & size', href: '/tools/profit' },
+      { label: 'Fibonacci calculator', sub: 'Retracement & extension levels', href: '/tools/fibonacci' },
+      { label: 'Spread comparator', sub: 'Side-by-side account spreads', href: '/tools/spread-comparator' },
       { label: 'Live watchlist', sub: 'Real-time market prices', href: '/tools/watchlist' },
       { label: 'Economic calendar', sub: 'Key market events & releases', href: '/tools/calendar' },
+      { label: 'AI CRM', sub: 'AI-powered broker tools', href: '/tools/ai-crm' },
     ],
   },
   {
@@ -308,7 +304,7 @@ function Header({ navItems }: { navItems?: CmsNavItem[] }) {
 
           {/* Desktop nav links */}
           <nav className="hidden h-full items-center gap-7 xl:flex" aria-label="Main navigation">
-            {NAV_ITEMS.map((item) => (
+            {displayNav.map((item) => (
               <DesktopNavItem key={item.label} item={item} locale={locale} pathname={pathname} />
             ))}
           </nav>

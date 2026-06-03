@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 const GUIDES = [
@@ -84,6 +84,7 @@ const CAT_FALLBACK = 'bg-accent/10 text-accent';
 
 export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
   const locale = useLocale();
+  const t = useTranslations('guides');
 
   const useCms = cmsGuides && cmsGuides.length > 0;
   const featured = useCms
@@ -97,13 +98,12 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
       <section className="bg-background px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
-            Deep dives worth
+            {t('heroLine1')}
             <br />
-            <span className="text-accent">reading twice.</span>
+            <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
-            Long-form guides on the concepts that actually move the needle. Written by traders, for
-            traders.
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -112,7 +112,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
       {featured && (
         <section className="bg-background px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <SectionKicker className="mb-4">FEATURED</SectionKicker>
+            <SectionKicker className="mb-4">{t('featuredLabel')}</SectionKicker>
             <Link
               href={`/${locale}/guides/${featured.id}`}
               className="shadow-card-dark group block overflow-hidden rounded-[22px] bg-[#111111] p-6"
@@ -148,7 +148,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
       {/* All guides */}
       <section className="bg-background px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mt-5">ALL GUIDES</SectionKicker>
+          <SectionKicker className="mt-5">{t('allGuidesLabel')}</SectionKicker>
           <div className="flex flex-col gap-0">
             {rest.map((guide, i) => (
               <Link
@@ -192,20 +192,20 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:last-child]:text-white/50">
-            FREE RESOURCES
+            {t('ctaKicker')}
           </SectionKicker>
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            More ways to learn.
+            {t('ctaHeading')}
           </h2>
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            Glossary, free e-books, video episodes and live webinars — all in one place.
+            {t('ctaDesc')}
           </p>
           <div className="flex flex-col gap-3">
             <Link
               href={`/${locale}/education`}
               className="bg-accent hover:bg-accent/90 font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
             >
-              Education hub
+              {t('ctaEducation')}
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M3 8h10M9 4l4 4-4 4"
@@ -220,7 +220,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
               href={`/${locale}/glossary`}
               className="font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"
             >
-              Trading glossary
+              {t('ctaGlossary')}
             </Link>
           </div>
         </div>

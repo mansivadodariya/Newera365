@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { ContactPage } from '@newera365/ui';
+import { ContactPage, CtaBanner } from '@newera365/ui';
 import type { CmsContactDetails } from '@newera365/ui';
 import { getSiteSettings } from '@/lib/cms';
 import type { Metadata } from 'next';
@@ -23,5 +23,10 @@ export default async function ContactRoute({ params }: { params: { locale: strin
       }
     : undefined;
 
-  return <ContactPage contactDetails={contactDetails} />;
+  return (
+    <>
+      <ContactPage contactDetails={contactDetails} />
+      <CtaBanner />
+    </>
+  );
 }

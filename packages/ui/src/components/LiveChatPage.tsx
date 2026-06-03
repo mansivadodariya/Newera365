@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 interface Message {
   id: number;
@@ -47,6 +47,7 @@ function getTime() {
 
 export function LiveChatPage() {
   const locale = useLocale();
+  const t = useTranslations('liveChat');
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
@@ -93,7 +94,7 @@ export function LiveChatPage() {
           {/* Back button */}
           <Link
             href={`/${locale}/contact`}
-            aria-label="Back to contact"
+            aria-label={t('backBtn')}
             className="text-foreground dark:bg-surface dark:hover:bg-surface mr-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8]"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -116,7 +117,7 @@ export function LiveChatPage() {
             <p className="text-foreground font-sans text-[15px] font-semibold">Sara Chen</p>
             <p className="font-body text-muted text-[12px]">
               <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-[#22C55E]" />
-              ONLINE · AVG REPLY 90S
+              {t('statusLabel')}
             </p>
           </div>
         </div>
@@ -124,7 +125,7 @@ export function LiveChatPage() {
         {/* Action icons */}
         <div className="flex items-center gap-2">
           <button
-            aria-label="Voice call"
+            aria-label={t('voiceLabel')}
             className="text-foreground dark:bg-surface dark:hover:bg-surface flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8]"
           >
             <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
@@ -137,7 +138,7 @@ export function LiveChatPage() {
             </svg>
           </button>
           <button
-            aria-label="Video call"
+            aria-label={t('videoLabel')}
             className="text-foreground dark:bg-surface dark:hover:bg-surface flex h-9 w-9 items-center justify-center rounded-full bg-[#f4f4f5] transition-colors hover:bg-[#e8e8e8]"
           >
             <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
@@ -167,7 +168,7 @@ export function LiveChatPage() {
           {/* Date chip */}
           <div className="mb-4 flex justify-center">
             <span className="font-body rounded-full bg-[#e5e7eb] px-3 py-[3px] text-[10px] text-[#6b7280] dark:bg-[#2a2a2a] dark:text-[#9ca3af]">
-              TODAY · {INITIAL_MESSAGES[0]?.time}
+              {t('todayLabel')} · {INITIAL_MESSAGES[0]?.time}
             </span>
           </div>
 
@@ -215,7 +216,7 @@ export function LiveChatPage() {
                   className="rounded-[16px] rounded-bl-[4px] bg-[#f9f9f9] px-4 py-3 dark:bg-[#1c1c1c]"
                   style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.07)' }}
                 >
-                  <p className="font-body text-muted text-[13px]">Sara is typing...</p>
+                  <p className="font-body text-muted text-[13px]">{t('agentTyping')}</p>
                 </div>
               </div>
             )}
@@ -226,13 +227,13 @@ export function LiveChatPage() {
       {/* Quick replies */}
       <div className="dark:bg-background dark:border-border flex-shrink-0 border-t border-[#e5e7eb] bg-white px-5 py-3">
         <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
-          {QUICK_REPLIES.map((qr) => (
+          {QUICK_REPLIES.map((qr, idx) => (
             <button
               key={qr}
               onClick={() => sendMessage(qr)}
               className="font-body text-foreground hover:border-foreground dark:border-border flex-shrink-0 rounded-full border border-[#e5e7eb] px-3.5 py-2 text-[12px] transition-colors"
             >
-              {qr}
+              {idx === 0 ? t('quickReply1') : idx === 1 ? t('quickReply2') : idx === 2 ? t('quickReply3') : idx === 3 ? t('quickReply4') : t('talkHuman')}
             </button>
           ))}
         </div>
@@ -246,7 +247,7 @@ export function LiveChatPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && sendMessage(input)}
-            placeholder="Type a message..."
+            placeholder={t('inputPlaceholder')}
             className="font-body text-foreground flex-1 bg-transparent text-[14px] outline-none placeholder:text-[#9ca3af] focus:outline-none focus-visible:outline-none"
           />
           <button

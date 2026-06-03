@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
-import { MarketCategoryPage } from '@newera365/ui';
+import { MarketCategoryPage, CtaBanner } from '@newera365/ui';
 import { getInstruments } from '@/lib/cms';
 
 const VALID_CATEGORIES = ['forex', 'indices', 'commodities', 'stocks', 'etfs', 'crypto'] as const;
@@ -22,5 +22,10 @@ export default async function MarketCategoryRoute({ params }: Props) {
 
   const instruments = await getInstruments(category, 50);
 
-  return <MarketCategoryPage category={category} instruments={instruments} />;
+  return (
+    <>
+      <MarketCategoryPage category={category} instruments={instruments} />
+      <CtaBanner />
+    </>
+  );
 }

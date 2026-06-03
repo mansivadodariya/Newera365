@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { RichText } from './RichText';
 import type { SlateNode } from './RichText';
@@ -264,6 +265,7 @@ interface GlossaryPageProps {
 }
 
 export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
+  const t = useTranslations('glossary');
   const [search, setSearch] = useState('');
   const [activeLetter, setActiveLetter] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -271,8 +273,8 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
   const allTerms: GlossaryTerm[] = useMemo(() => {
     if (cmsTerms && cmsTerms.length > 0) {
       return cmsTerms.map((t) => ({
-        term: t.glossaryTerm,
-        category: t.alphabeticalIndex?.toUpperCase() ?? t.glossaryTerm[0]?.toUpperCase() ?? 'A',
+        term: t.glossaryTerm ?? '',
+        category: t.alphabeticalIndex?.toUpperCase() ?? t.glossaryTerm?.[0]?.toUpperCase() ?? 'A',
         definition: '',
         body: t.body,
       }));
@@ -300,7 +302,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
   }, [search, activeLetter, activeCategory, allTerms]);
 
   const availableLetters = useMemo(
-    () => new Set(allTerms.map((t) => t.term[0]?.toUpperCase() ?? '')),
+    () => new Set(allTerms.map((t) => t.term?.[0]?.toUpperCase() ?? '')),
     [allTerms],
   );
 
@@ -320,14 +322,14 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
       {/* Hero */}
       <section className="bg-background px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">TRADING DICTIONARY</SectionKicker>
+          <SectionKicker className="mb-4">{t('kickerLabel')}</SectionKicker>
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
-            Trading
+            {t('heroLine1')}
             <br />
-            glossary.
+            <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted mb-6 max-w-[320px] text-[14px] leading-[1.55]">
-            Every term, defined in plain English. Searchable, no jargon, no fluff.
+            {t('heroSubtitle')}
           </p>
 
           {/* Search */}
@@ -344,7 +346,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
             </svg>
             <input
               type="text"
-              placeholder="Search 400+ trading terms..."
+              placeholder={t('searchPlaceholder')}
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
@@ -386,7 +388,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                   : 'hover:text-foreground dark:bg-surface dark:text-muted bg-[#f0f0f0] text-[#6b7280]'
               }`}
             >
-              All
+              {t('filterAll')}
             </button>
             {Object.entries(CATEGORY_COLORS).map(([cat, colorClass]) => (
               <button
@@ -445,20 +447,20 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
           </SectionKicker>
           {filtered.length === 0 ? (
             <p className="font-body text-muted py-8 text-center text-[14px]">
-              No terms match your search.
+              {t('noResults')}
             </p>
           ) : (
             <div className="flex flex-col xl:grid xl:grid-cols-2 xl:gap-x-10">
               {filtered.map((term, i) => {
                 const prevTerm = i > 0 ? filtered[i - 1] : undefined;
                 const showLetter =
-                  i === 0 || term.term[0]?.toUpperCase() !== prevTerm?.term[0]?.toUpperCase();
+                  i === 0 || term.term?.[0]?.toUpperCase() !== prevTerm?.term?.[0]?.toUpperCase();
                 return (
                   <div key={term.term}>
                     {showLetter && (
                       <div className="bg-background sticky top-16 z-10 py-2">
                         <span className="text-accent font-sans text-[11px] font-semibold uppercase tracking-[0.1em]">
-                          {term.term[0]?.toUpperCase() ?? ''}
+                          {term.term?.[0]?.toUpperCase() ?? ''}
                         </span>
                       </div>
                     )}
@@ -498,19 +500,19 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:last-child]:text-white/50">
-            KEEP LEARNING
+            {t('ctaKicker')}
           </SectionKicker>
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            Turn terms into trades.
+            {t('ctaHeading')}
           </h2>
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
-            Our step-by-step guides show you how every concept applies in a live account.
+            {t('ctaDesc')}
           </p>
           <a
             href="/guides"
             className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[15px] font-medium text-white transition-colors"
           >
-            Browse guides
+            {t('ctaBtn')}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path
                 d="M3 8h10M9 4l4 4-4 4"

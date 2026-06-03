@@ -60,11 +60,10 @@ const start = async (): Promise<void> => {
     },
   });
 
-  // Apply the (slug, locale) compound unique indexes. Idempotent (CREATE ...
-  // IF NOT EXISTS) so it is safe on every boot. Defaults to ON in production;
-  // set RUN_MIGRATIONS_ON_START=false to skip. A failure here is non-fatal —
-  // the uniqueSlugPerLocale application hook still enforces uniqueness — so we
-  // log and continue rather than crash the server.
+  // Apply the slug unique indexes. Idempotent (CREATE ... IF NOT EXISTS) so
+  // it is safe on every boot. Defaults to ON in production; set
+  // RUN_MIGRATIONS_ON_START=false to skip. A failure here is non-fatal — log
+  // and continue rather than crash the server.
   const runMigrations =
     process.env.RUN_MIGRATIONS_ON_START === 'true' ||
     (process.env.RUN_MIGRATIONS_ON_START !== 'false' && process.env.NODE_ENV === 'production');

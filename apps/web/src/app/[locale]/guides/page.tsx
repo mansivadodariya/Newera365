@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { GuidesPage } from '@newera365/ui';
+import { GuidesPage , CtaBanner } from '@newera365/ui';
 import type { CmsGuide } from '@newera365/ui';
 import { getGuides } from '@/lib/cms';
 import type { CmsEducationContent } from '@/lib/cms';
@@ -16,7 +16,7 @@ function mapToGuide(item: CmsEducationContent): CmsGuide {
     slug: item.slug,
     title: item.title,
     summary: item.seoDescription,
-    featured: false,
+    featured: item.isFeatured ?? false,
   };
 }
 
@@ -24,6 +24,12 @@ export default async function GuidesRoute({ params }: { params: { locale: string
   setRequestLocale(params.locale);
   const items = await getGuides(params.locale);
   const guides = items.map(mapToGuide);
-  if (guides.length > 0) guides[0]!.featured = true;
-  return <GuidesPage guides={guides.length > 0 ? guides : undefined} />;
+  // If the CMS has no guide explicitly marked isFeatured, fall back to the first one.
+  if (guides.length > 0 && !guides.some((g) => g.featured)) guides[0]!.featured = true;
+  return (
+    <>
+      <GuidesPage guides={guides.length > 0 ? guides : undefined} />
+      <CtaBanner />
+    </>
+  );
 }
