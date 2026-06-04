@@ -8,19 +8,18 @@ export function CtaBanner() {
   const locale = useLocale();
 
   return (
-    <section className="overflow-hidden rounded-t-[32px] bg-gradient-to-l from-[#1f262e] to-black">
-      <div className="flex flex-col items-center px-5 pb-11 pt-11 text-center xl:flex-row xl:justify-between xl:px-16 xl:py-14 xl:text-left">
-        <div className="xl:max-w-[560px]">
-          <h2 className="mb-4 font-sans text-[36px] font-semibold leading-[1.05] tracking-[-0.9px] text-white xl:text-left xl:text-[44px]">
+    <section className="overflow-hidden bg-gradient-to-l from-[#1f262e] to-black">
+      <div className="flex flex-col items-center gap-[29px] px-[28px] py-[54px] text-center xl:gap-[29px] xl:px-[28px] xl:py-[54px] xl:text-left">
+        <div className="xl:gap-[29px]">
+          <h2 className="mb-4 font-sans text-[32px] font-semibold leading-[1.05] tracking-[-0.9px] text-white xl:text-left xl:text-[44px]">
             {t('ctaBannerTitle')}
           </h2>
-          <p className="font-body mb-8 text-[14px] font-normal leading-[1.55] text-white/60 xl:mb-0 xl:text-left">
+          <p className="font-body text-center text-[14px] font-normal leading-[1.55] text-white/60 xl:mb-0">
             {t('ctaBannerSubtitle')}
           </p>
         </div>
 
-        <div className="flex w-full flex-col items-center gap-4 xl:w-auto xl:flex-shrink-0 xl:flex-row xl:gap-4">
-          <div className="h-[8px] xl:hidden" />
+        <div className="flex w-full flex-col items-center gap-[29px] xl:w-auto xl:flex-shrink-0 xl:gap-[29px]">
           {/* Primary: Start Trading now — Figma style: rounded-[10px] with border */}
           <Link
             href={`/${locale}/register`}

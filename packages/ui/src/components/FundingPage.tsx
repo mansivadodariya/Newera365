@@ -292,7 +292,7 @@ function HeroContent() {
   return (
     <>
       {/* Hero — visible on all screen sizes per Figma */}
-      <section className="bg-background px-5 pb-5 pt-9 xl:px-[120px] xl:pb-8 xl:pt-[48px]">
+      <section className="bg-transparent px-5 pb-5 pt-9 xl:px-[120px] xl:pb-8 xl:pt-[48px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="font-sans text-[36px] font-semibold leading-[1.05] tracking-[-1.08px] xl:text-[48px] xl:tracking-[-1.44px]">
             <span className="text-foreground">{t('heroLine1')}&nbsp;—&nbsp;</span>
@@ -305,7 +305,7 @@ function HeroContent() {
       </section>
 
       {/* Payment Methods */}
-      <section className="bg-background px-5 pb-10">
+      <section className="bg-transparent px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('methodsKicker')}

@@ -195,9 +195,9 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
         }));
 
   return (
-    <>
+    <div className="bg-transparent">
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="bg-background px-5 pb-8 pt-9">
+      <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px] text-[#111] xl:text-[48px] dark:text-white">
             <p>{t('heroLine1')}</p>
@@ -212,7 +212,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
       </section>
 
       {/* ── Account Cards ─────────────────────────────────────────────────── */}
-      <section className="bg-background px-5 pb-10">
+      <section className="bg-transparent px-5 pb-10">
         <div className="mx-auto flex max-w-[390px] flex-col gap-[18px] md:max-w-2xl xl:max-w-[1200px] xl:flex-row xl:items-start xl:gap-6">
           {displayAccounts.map((account) => (
             <div
@@ -376,6 +376,6 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

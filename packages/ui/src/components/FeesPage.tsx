@@ -50,7 +50,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-background px-5 pb-8 pt-9">
+      <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
             <span className="text-foreground">{t('heroLine1')}</span>
@@ -64,7 +64,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       </section>
 
       {/* Spreads table */}
-      <section className="bg-background px-5 pb-10">
+      <section className="bg-transparent px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('spreadKicker')}
@@ -126,7 +126,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       </section>
 
       {/* Other Charges */}
-      <section className="bg-background px-5 pb-10">
+      <section className="bg-transparent px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('otherChargesKicker')}

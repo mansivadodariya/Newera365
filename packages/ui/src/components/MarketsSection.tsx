@@ -55,7 +55,7 @@ export function MarketsSection() {
   const locale = useLocale();
 
   return (
-    <section className="bg-background px-5 pb-9 pt-10 xl:pb-16 xl:pt-10">
+    <section className="rounded-l-[32px] bg-gradient-to-r from-[#f2f2f2] to-white px-5 pb-9 pt-10 xl:pb-16 xl:pt-10 dark:from-[#0d0f14] dark:to-[#07090d]">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <SectionKicker className="text-foreground [&>span:first-child]:bg-foreground mb-[14px]">
           {t('marketsKicker')}
@@ -69,7 +69,7 @@ export function MarketsSection() {
         </p>
 
         {/* 2×3 dark card grid — each card has a full-bleed bg image at 40% opacity */}
-        <div className="mb-[14px] grid grid-cols-2 gap-[10px] xl:grid-cols-3">
+        <div className="mb-[14px] grid grid-cols-2 gap-[10px] xl:grid-cols-6">
           {MARKETS.map((market) => (
             <div
               key={market.key}

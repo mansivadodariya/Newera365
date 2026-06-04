@@ -29,6 +29,7 @@ export { FeaturesSection } from './components/FeaturesSection';
 export { ThreeStepsSection } from './components/ThreeStepsSection';
 export { CtaBanner } from './components/CtaBanner';
 export { SmartCtaBanner } from './components/SmartCtaBanner';
+export { HomePageSkeleton } from './components/HomePageSkeleton';
 export { ArbitrageSection } from './components/ArbitrageSection';
 
 export { AccountsPage } from './components/AccountsPage';

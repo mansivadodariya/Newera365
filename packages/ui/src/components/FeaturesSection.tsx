@@ -31,7 +31,7 @@ export function FeaturesSection() {
   const t = useTranslations('home');
 
   return (
-    <section className="rounded-[32px] bg-gradient-to-l from-[#e2e2e2] to-white px-5 pb-9 pt-10 xl:pb-16 xl:pt-16 dark:from-[#1a1c22] dark:to-[#0f0f14]">
+    <section className="rounded-r-[32px] bg-gradient-to-l from-[#f2f2f2] to-white px-5 pb-9 pt-10 xl:pb-16 xl:pt-16 dark:from-[#0d0f14] dark:to-[#07090d]">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <SectionKicker className="text-muted mb-4 [&>span:first-child]:bg-[#6b7280]">
           {t('whyKicker')}

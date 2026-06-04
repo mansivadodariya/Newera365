@@ -29,7 +29,7 @@ export function StatsSection({ kpiStats, locale }: { kpiStats?: CmsKpiStat[]; lo
         ];
 
   return (
-    <section className="rounded-t-[32px] bg-[#f2f2f7] px-5 pb-9 pt-10 xl:pb-14 xl:pt-10 dark:bg-[#0f0f14]">
+    <section className="rounded-t-[32px] bg-transparent px-5 pb-9 pt-10 xl:pb-14 xl:pt-10 dark:bg-[#0f0f14]">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <SectionKicker className="text-foreground [&>span:first-child]:bg-foreground mb-5">
           {t('statsByNumbers')}
@@ -61,7 +61,7 @@ export function StatsSection({ kpiStats, locale }: { kpiStats?: CmsKpiStat[]; lo
         </div>
 
         {/* Regulated badge — plain white card */}
-        <div className="mt-6 flex items-center gap-[14px] rounded-[16px] bg-white px-5 py-[18px] dark:bg-[#1a1c22]">
+        <div className="mt-6 flex items-center gap-[14px] rounded-[16px] border border-[#DBE0E5] bg-white px-5 py-[18px] dark:bg-[#1a1c22]">
           <Image
             src="/icons/authority.png"
             alt="Authority"

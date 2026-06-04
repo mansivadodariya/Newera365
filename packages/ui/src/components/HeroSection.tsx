@@ -9,12 +9,13 @@ export function HeroSection() {
   const locale = useLocale();
 
   return (
-    <section className="bg-background rounded-b-[32px] px-5 pb-7 pt-9 xl:pb-0 xl:pt-16">
+    <section className="bg-transparent px-5 pb-7 pt-9 xl:pb-0 xl:pt-16">
       <div className="mx-auto flex max-w-[390px] flex-col gap-[18px] md:max-w-2xl xl:max-w-[1200px] xl:flex-row xl:items-start xl:gap-16">
         {/* Left col: headline + subtitle + CTAs */}
         <div className="flex flex-col gap-[18px] xl:w-[516px] xl:flex-shrink-0 xl:pb-16 xl:pt-4">
           <h1 className="text-foreground font-sans text-[44px] font-semibold leading-[1.02] tracking-[-1.54px] xl:text-[52px] xl:tracking-[-2px]">
-            {t('heroLine1')} <span className="text-accent">{t('heroPremium')}</span>{' '}
+            {t('heroLine1')}{' '}
+            <span className="dark:text-accent text-[#0d7a3e]">{t('heroPremium')}</span>{' '}
             {t('heroLine2')}
           </h1>
 
@@ -25,7 +26,7 @@ export function HeroSection() {
           <div className="flex items-center gap-[10px]">
             <Link
               href={`/${locale}/register`}
-              className="bg-accent font-body hover:bg-accent/90 inline-flex flex-none items-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium tracking-[-0.075px] text-white transition-colors"
+              className="font-body bg-accent hover:bg-accent/90 dark:bg-accent dark:hover:bg-accent/90 inline-flex flex-none items-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium tracking-[-0.075px] text-[#111] transition-colors dark:text-white"
             >
               {t('heroCTALive')}
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -40,7 +41,7 @@ export function HeroSection() {
             </Link>
             <Link
               href={`/${locale}/demo-account`}
-              className="text-foreground font-body inline-flex flex-none items-center px-[22px] py-4 text-[15px] font-medium tracking-[-0.075px] transition-opacity hover:opacity-70"
+              className="font-body dark:text-foreground inline-flex flex-none items-center px-[22px] py-4 text-[15px] font-medium tracking-[-0.075px] text-[#111] transition-opacity hover:opacity-70"
             >
               {t('heroCTADemo')}
             </Link>
@@ -48,9 +49,8 @@ export function HeroSection() {
         </div>
 
         {/* Right col / bottom on mobile: chart card */}
-        <div className="overflow-hidden rounded-[24px] bg-gradient-to-b from-[#fafaf9] to-[#f4f4f3] xl:min-w-0 xl:flex-1 dark:from-[#07090d] dark:to-[#0d1117]">
-          {/* Static trading board image (matches Figma design) */}
-          <div className="relative w-full" style={{ aspectRatio: '350/261' }}>
+        <div className="xl: overflow-hidden rounded-[24px] bg-[#111] xl:min-w-0 xl:flex-1 dark:bg-gradient-to-b dark:from-[#07090d] dark:to-[#0d1117]">
+          <div className="relative w-full" style={{ aspectRatio: '350/250' }}>
             <Image
               src="/images/hero-chart.png"
               alt="Trading chart"
@@ -61,7 +61,7 @@ export function HeroSection() {
           </div>
 
           {/* Specs row — white bg, grey mono labels, dark values */}
-          <div className="bg-background divide-border grid grid-cols-3 divide-x dark:divide-[#1a1c22]">
+          <div className="bg-background grid grid-cols-3">
             {[
               { label: t('heroSpreadLabel'), value: t('heroSpreadValue') },
               { label: t('heroLeverageLabel'), value: t('heroLeverageValue') },

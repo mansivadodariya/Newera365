@@ -14,7 +14,7 @@ export function ThreeStepsSection() {
   ];
 
   return (
-    <section className="bg-background px-5 pb-9 pt-10 xl:pb-16 xl:pt-16">
+    <section className="rounded-l-[32px] bg-gradient-to-r from-[#f2f2f2] to-white px-5 pb-9 pt-10 xl:pb-16 xl:pt-16 dark:from-[#0d0f14] dark:to-[#07090d]">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         {/* Kicker */}
         <div className="mb-[14px] flex items-center gap-[6px]">
@@ -31,17 +31,24 @@ export function ThreeStepsSection() {
         <div className="h-[12px]" />
 
         <div className="flex flex-col xl:flex-row xl:gap-[24px]">
-          {steps.map((step) => (
-            <div key={step.num} className="flex flex-1 items-start gap-4 rounded-[20px] p-[20px]">
-              <span className="text-accent w-[42px] flex-shrink-0 font-sans text-[28px] font-semibold leading-none tracking-[-0.56px]">
-                {step.num}
-              </span>
-              <div className="flex-1 pt-0.5">
-                <h3 className="text-foreground mb-[6px] font-sans text-[16px] font-semibold leading-normal">
-                  {t(step.titleKey)}
-                </h3>
-                <p className="font-body text-muted text-[13px] leading-[1.5]">{t(step.descKey)}</p>
+          {steps.map((step, i) => (
+            <div key={step.num} className="flex-1">
+              <div className="flex items-start gap-4 py-5">
+                <span className="text-accent w-[42px] flex-shrink-0 font-sans text-[28px] font-semibold leading-none tracking-[-0.56px]">
+                  {step.num}
+                </span>
+                <div className="flex-1 pt-0.5">
+                  <h3 className="text-foreground mb-[6px] font-sans text-[16px] font-semibold leading-normal">
+                    {t(step.titleKey)}
+                  </h3>
+                  <p className="font-body text-muted text-[13px] leading-[1.5]">
+                    {t(step.descKey)}
+                  </p>
+                </div>
               </div>
+              {i < steps.length - 1 && (
+                <div className="h-px bg-[#e5e7eb] xl:hidden dark:bg-[#1a1c22]" />
+              )}
             </div>
           ))}
         </div>

@@ -100,6 +100,11 @@ export default async function LocaleLayout({
               <RiskBanner enabled={riskBannerEnabled} message={riskBannerMessage} />
 
               <Header />
+              <div
+                className="fixed inset-0 -z-10 dark:hidden"
+                style={{ background: 'linear-gradient(0deg, #FFF 53.85%, #67FF59 100%)' }}
+                aria-hidden="true"
+              />
               <main>{children}</main>
               <Footer
                 footerColumns={

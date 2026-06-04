@@ -167,7 +167,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-background px-5 pb-8 pt-9">
+      <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* h1: 42px tracking-[-1.26px] per Figma */}
           <h1 className="font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
@@ -264,7 +264,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       {/* Three ways to partner */}
       <section
         id="programs"
-        className="bg-background rounded-t-[32px] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16"
+        className="rounded-t-[32px] bg-transparent px-5 pb-10 pt-10 xl:pb-16 xl:pt-16"
       >
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
