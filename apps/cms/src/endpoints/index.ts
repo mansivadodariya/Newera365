@@ -984,15 +984,60 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
     }
 
     try {
-      const data: Record<string, string> = {
-        name: name.trim().slice(0, 200),
-        email,
-        ...(company && { company: String(company).trim().slice(0, 200) }),
-        ...(website && { website: String(website).trim().slice(0, 500) }),
-        ...(country && { country: String(country).trim().slice(0, 100) }),
-        ...(message && { message: String(message).trim().slice(0, 5_000) }),
-      };
-      await sendPartnersNotification(data);
+      const safeName = name.trim().slice(0, 200);
+      const safeCompany = company ? String(company).trim().slice(0, 200) : '';
+      const safeWebsite = website ? String(website).trim().slice(0, 500) : '';
+      const safeCountry = country ? String(country).trim().slice(0, 100) : '';
+      const safeMessage = message ? String(message).trim().slice(0, 5_000) : '';
+
+      // Persist submission first — email notification is best-effort.
+      // Stored in contact-submissions with subject 'Partnership Application' so it
+      // surfaces in the admin Support inbox without needing a separate collection.
+      const rawIp = req.ip ?? req.socket.remoteAddress ?? '';
+      const ipHash = createHash('sha256')
+        .update(CONSENT_IP_SALT + rawIp)
+        .digest('hex');
+      const details = [
+        safeCompany && `Company: ${safeCompany}`,
+        safeWebsite && `Website: ${safeWebsite}`,
+        safeCountry && `Country: ${safeCountry}`,
+        safeMessage && `Message: ${safeMessage}`,
+      ]
+        .filter(Boolean)
+        .join('\n');
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await payload.create({
+        collection: 'contact-submissions',
+        data: {
+          name: safeName,
+          email,
+          subject: 'Partnership Application',
+          message: details || '(no additional details)',
+          submittedAt: new Date().toISOString(),
+          ipHash,
+          status: 'new',
+        } as any,
+        depth: 0,
+      });
+
+      // Email notification is best-effort — DB record is the source of truth.
+      try {
+        await sendPartnersNotification({
+          name: safeName,
+          email,
+          ...(safeCompany && { company: safeCompany }),
+          ...(safeWebsite && { website: safeWebsite }),
+          ...(safeCountry && { country: safeCountry }),
+          ...(safeMessage && { message: safeMessage }),
+        });
+      } catch (emailErr) {
+        payload.logger.error(
+          { requestId: req.requestId, emailErr },
+          'partners/apply: notification email failed — application saved to CMS',
+        );
+      }
+
       return res.json({
         message: 'Your application has been received. Our partnerships team will be in touch.',
       });

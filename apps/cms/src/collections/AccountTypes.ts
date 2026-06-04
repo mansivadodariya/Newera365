@@ -2,26 +2,35 @@ import type { CollectionConfig } from 'payload/types';
 import Mt5SyncStatusCell from '../components/Mt5SyncStatusCell';
 
 // Powers the /accounts comparison table, /fees-charges, and the Spread
-// Comparator widget. Language-neutral.
+// Comparator widget.
+//
+// Bilingual support: name, nameAr, features, and featuresAr carry EN and AR
+// content respectively. The frontend selects the correct set based on the
+// active locale. Using separate fields (rather than Payload's localized:true)
+// avoids a destructive drizzle schema migration on existing data.
 //
 // MT5 DATA TOGGLE (per account type)
 // ------------------------------------
 // usesMT5Data = true  → the spread and commission values displayed on the
-//   frontend are sourced live from the MT5 bridge. "Manual Spread & Commission"
-//   is hidden in the admin UI.
+//   frontend are sourced live from the MT5 bridge.
 // usesMT5Data = false → the admin fills in spreadFromNumeric and commission
 //   manually; those values are served to the frontend.
-//
-// The site-wide master switch in Site Settings → MT5 Integration overrides this
-// per-account-type toggle when set to OFF.
 export const AccountTypes: CollectionConfig = {
   slug: 'account-types',
   admin: {
     group: 'Trading Data',
     useAsTitle: 'name',
-    defaultColumns: ['name', 'minDeposit', 'spreadFrom', 'usesMT5Data', 'mt5SyncStatus', 'status'],
+    defaultColumns: [
+      'name',
+      'badge',
+      'minDeposit',
+      'spreadFrom',
+      'usesMT5Data',
+      'mt5SyncStatus',
+      'status',
+    ],
     description:
-      'Account type records power the comparison table and calculators. Toggle "Use MT5 Live Data" per account to switch between live and manual spread data.',
+      'Account type records power the comparison table and calculators. Add nameAr / featuresAr for Arabic display.',
   },
   access: { read: () => true },
   fields: [
@@ -31,13 +40,33 @@ export const AccountTypes: CollectionConfig = {
       type: 'text',
       required: true,
       maxLength: 50,
-      admin: { description: 'Account type name shown to traders, e.g. Standard, Pro, ECN.' },
+      admin: { description: 'Account name in English, e.g. Standard, Professional.' },
+    },
+    {
+      name: 'nameAr',
+      type: 'text',
+      maxLength: 50,
+      admin: { description: 'Account name in Arabic. Shown when the site locale is Arabic.' },
+    },
+    {
+      name: 'badge',
+      type: 'select',
+      options: [
+        { label: 'FREE (Demo)', value: 'free' },
+        { label: 'POPULAR (Standard)', value: 'popular' },
+        { label: 'PRO (Professional)', value: 'pro' },
+        { label: 'ISLAMIC (Swap-Free)', value: 'islamic' },
+      ],
+      admin: {
+        description:
+          'Badge displayed on the account card header. Determines subtitle and card styling.',
+      },
     },
     {
       name: 'minDeposit',
       type: 'number',
       required: true,
-      admin: { description: 'Minimum deposit in USD.' },
+      admin: { description: 'Minimum deposit in USD. Set to 0 for Demo (shown as "Virtual").' },
     },
     {
       name: 'spreadFrom',
@@ -69,54 +98,64 @@ export const AccountTypes: CollectionConfig = {
       defaultValue: true,
       admin: {
         description:
-          'ON → live spread and commission figures for this account type are fetched from the MT5 bridge. ' +
-          'OFF → the "Manual Spread & Commission" section below becomes editable and its values are displayed to traders.',
+          'ON → live spread and commission figures fetched from the MT5 bridge. ' +
+          'OFF → "Manual Spread & Commission" section below becomes editable.',
       },
     },
 
-    // ── Manual Spread & Commission (only shown when MT5 toggle is OFF) ───────
+    // ── Manual Spread & Commission ───────────────────────────────────────────
     {
       type: 'collapsible',
       label: 'Manual Spread & Commission  —  visible only when "Use MT5 Live Data" is OFF',
       admin: {
         condition: (data) => data?.usesMT5Data === false,
         initCollapsed: false,
-        description:
-          'Fill these when the MT5 bridge is disabled for this account type. They replace live MT5 figures in the Spread Comparator and fees table.',
       },
       fields: [
         {
           name: 'spreadFromNumeric',
           type: 'number',
-          admin: {
-            description:
-              'Numeric spread in pips used for sorting in the Spread Comparator widget, e.g. 0.0.',
-          },
+          admin: { description: 'Numeric spread in pips, e.g. 0.0.' },
         },
         {
           name: 'commission',
           type: 'text',
           maxLength: 50,
-          admin: {
-            description: 'Commission display string, e.g. "$0" or "$7 per lot round-turn".',
-          },
+          admin: { description: 'Commission display string, e.g. "$0" or "$1.5".' },
         },
       ],
     },
 
-    // ── Features & Presentation ─────────────────────────────────────────────
+    // ── Features (English) ───────────────────────────────────────────────────
     {
       name: 'features',
       type: 'array',
       maxRows: 10,
-      labels: { singular: 'Feature', plural: 'Features' },
-      admin: { description: 'Bullet-point feature list displayed on the comparison card.' },
+      labels: { singular: 'Feature (EN)', plural: 'Features (EN)' },
+      admin: { description: 'English feature bullet points shown on the comparison card.' },
       fields: [{ name: 'value', type: 'text', required: true, maxLength: 100 }],
     },
+
+    // ── Features (Arabic) ────────────────────────────────────────────────────
+    // Stored as newline-separated text to avoid creating a new join table,
+    // which would require an interactive Drizzle push confirmation.
+    // Frontend splits on '\n' to get the individual feature strings.
+    {
+      name: 'featuresAr',
+      type: 'textarea',
+      admin: {
+        description: 'Arabic features — one per line. Shown when locale is Arabic.',
+      },
+    },
+
+    // ── Presentation ─────────────────────────────────────────────────────────
     {
       name: 'isPopular',
       type: 'checkbox',
-      admin: { description: 'Renders the "Most Popular" badge on this account card.' },
+      admin: {
+        description:
+          'Renders the green border and "POPULAR" badge (kept for legacy; prefer setting badge = popular).',
+      },
     },
     {
       name: 'sortOrder',
@@ -132,10 +171,7 @@ export const AccountTypes: CollectionConfig = {
       options: ['active', 'inactive'],
     },
 
-    // ── MT5 Sync Status (written by the background sync job) ────────────────
-    // Account types share the same MT5 bridge connection as instruments.
-    // The sync job marks these based on overall MT5 connectivity — if the bridge
-    // is reachable and serving data, all enabled account types are marked synced.
+    // ── MT5 Sync Status ──────────────────────────────────────────────────────
     {
       type: 'collapsible',
       label: 'MT5 Sync Status',
@@ -152,10 +188,7 @@ export const AccountTypes: CollectionConfig = {
           ],
           admin: {
             readOnly: true,
-            description: 'Set automatically by the background MT5 sync job. Not editable here.',
-            components: {
-              Cell: Mt5SyncStatusCell,
-            },
+            components: { Cell: Mt5SyncStatusCell },
           },
         },
         {
@@ -163,7 +196,6 @@ export const AccountTypes: CollectionConfig = {
           type: 'date',
           admin: {
             readOnly: true,
-            description: 'Timestamp of the last MT5 connectivity check for this account type.',
             date: { displayFormat: 'dd/MM/yyyy HH:mm:ss' },
           },
         },
@@ -173,7 +205,6 @@ export const AccountTypes: CollectionConfig = {
           admin: {
             readOnly: true,
             condition: (data) => data?.mt5SyncStatus === 'failed',
-            description: 'Error detail from the most recent failed sync attempt.',
           },
         },
       ],

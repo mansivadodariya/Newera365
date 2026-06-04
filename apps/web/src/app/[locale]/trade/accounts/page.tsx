@@ -4,7 +4,7 @@ import { getAccountTypes } from '@/lib/cms';
 
 export default async function AccountsRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  const cmsAccounts = await getAccountTypes();
+  const cmsAccounts = await getAccountTypes(params.locale);
   return (
     <>
       <AccountsPage cmsAccounts={cmsAccounts} />

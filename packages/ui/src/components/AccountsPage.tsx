@@ -9,12 +9,15 @@ import { SectionKicker } from './SectionKicker';
 export interface CmsAccountType {
   id: number;
   name: string;
+  nameAr?: string | null;
+  badge?: 'free' | 'popular' | 'pro' | 'islamic' | null;
   minDeposit: number;
   spreadFrom: string;
   leverage: string;
   platforms: string[];
   commission?: string | null;
   features?: { value: string; id?: string | null }[] | null;
+  featuresAr?: string | null;
   isPopular?: boolean | null;
   sortOrder?: number | null;
   status: string;
@@ -24,59 +27,56 @@ interface AccountsPageProps {
   cmsAccounts?: CmsAccountType[];
 }
 
-// ─── Static fallback data (Figma spec) ──────────────────────────────────────
+// ─── Static fallback data (matches Figma spec) ───────────────────────────────
 
 const STATIC_ACCOUNTS = [
   {
+    id: 'demo',
+    badge: 'free' as const,
+    name: 'Demo',
+    subtitle: 'Practice risk-free',
+    headerGradient:
+      'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
+    commission: '$0',
+    spreadsFrom: '1.2',
+    minDepositDisplay: 'Virtual',
+    features: ['Full platform access', 'Real-time market data', 'No deposit required'],
+  },
+  {
     id: 'standard',
-    badge: 'POPULAR',
+    badge: 'popular' as const,
     name: 'Standard',
     subtitle: 'For active retail traders',
-    isPopular: true,
     headerGradient:
       'radial-gradient(ellipse at 50% 210%, rgba(18,107,48,1) 0%, rgba(11,66,31,1) 50%, rgba(5,26,13,1) 100%)',
     commission: '$0',
-    commissionSub: '(per lot per side)',
     spreadsFrom: '1.2',
-    spreadsSub: '(pips)',
-    minDeposit: '$50',
+    minDepositDisplay: '$50',
     features: ['All 2000+ instruments', 'Zero commission', '24/7 expert support'],
-    ctaLabel: 'Start Trading now',
-    ctaFilled: true,
-  },
-  {
-    id: 'raw',
-    badge: 'PRO',
-    name: 'Professional',
-    subtitle: 'For high-volume traders',
-    isPopular: false,
-    headerGradient:
-      'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
-    commission: '$1.5',
-    commissionSub: '(per lot per side)',
-    spreadsFrom: '0.0',
-    spreadsSub: '(pips)',
-    minDeposit: '$2,500',
-    features: ['Raw spreads from 0.0', 'Priority execution', 'Dedicated account manager'],
-    ctaLabel: 'Start Trading now',
-    ctaFilled: false,
   },
   {
     id: 'swap-free',
-    badge: 'ISLAMIC',
+    badge: 'islamic' as const,
     name: 'Swap-Free',
     subtitle: 'Sharia-compliant, no swaps',
-    isPopular: false,
     headerGradient:
       'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
     commission: '$0',
-    commissionSub: '(per lot per side)',
     spreadsFrom: '1.4',
-    spreadsSub: '(pips)',
-    minDeposit: '$50',
+    minDepositDisplay: '$50',
     features: ['No overnight swaps', 'Sharia-compliant structure', 'Full market access'],
-    ctaLabel: 'Start Trading now',
-    ctaFilled: false,
+  },
+  {
+    id: 'professional',
+    badge: 'pro' as const,
+    name: 'Professional',
+    subtitle: 'For high-volume traders',
+    headerGradient:
+      'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
+    commission: '$1.5',
+    spreadsFrom: '0.0',
+    minDepositDisplay: '$2,500',
+    features: ['Raw spreads from 0.0', 'Priority execution', 'Dedicated account manager'],
   },
 ] as const;
 
@@ -113,42 +113,84 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
   const locale = useLocale();
   const t = useTranslations('accounts');
 
-  const staticBadges = [t('badgePopular'), t('badgePro'), t('badgeIslamic')] as const;
-  const staticSubtitles = [t('subtitleStandard'), t('subtitleRaw'), t('subtitleSwapFree')] as const;
+  function getBadgeLabel(badge: string | null | undefined, isPopular?: boolean | null): string {
+    if (badge === 'free') return t('badgeFree');
+    if (badge === 'popular' || isPopular) return t('badgePopular');
+    if (badge === 'pro') return t('badgePro');
+    if (badge === 'islamic') return t('badgeIslamic');
+    return t('badgePro');
+  }
+
+  function getSubtitle(badge: string | null | undefined): string {
+    if (badge === 'free') return t('subtitleDemo');
+    if (badge === 'popular') return t('subtitleStandard');
+    if (badge === 'islamic') return t('subtitleSwapFree');
+    return t('subtitleRaw');
+  }
+
+  function getHeaderGradient(badge: string | null | undefined, isPopular?: boolean | null): string {
+    return badge === 'popular' || isPopular
+      ? 'radial-gradient(ellipse at 50% 210%, rgba(18,107,48,1) 0%, rgba(11,66,31,1) 50%, rgba(5,26,13,1) 100%)'
+      : 'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)';
+  }
 
   // Build display accounts from CMS data + static defaults
   const displayAccounts =
     cmsAccounts && cmsAccounts.length > 0
-      ? cmsAccounts.map((cms, i) => {
-          const fallback = STATIC_ACCOUNTS[i % STATIC_ACCOUNTS.length];
+      ? cmsAccounts.map((cms) => {
+          const isAr = locale === 'ar';
+          // Use Arabic name if locale is ar and nameAr is set
+          const displayName = isAr && cms.nameAr ? cms.nameAr : cms.name;
+          // featuresAr is newline-separated text; split and filter empty lines
+          const arFeatures = cms.featuresAr
+            ? cms.featuresAr
+                .split('\n')
+                .map((s) => s.trim())
+                .filter(Boolean)
+            : [];
+          const rawFeatures =
+            isAr && arFeatures.length > 0 ? arFeatures : (cms.features?.map((f) => f.value) ?? []);
+          const badgeValue = cms.badge ?? (cms.isPopular ? 'popular' : null);
           return {
             id: cms.id,
-            badge: cms.isPopular
-              ? t('badgePopular')
-              : (staticBadges[i % staticBadges.length] ?? t('badgePro')),
-            name: cms.name,
-            subtitle: staticSubtitles[i % staticSubtitles.length] ?? t('subtitleStandard'),
-            isPopular: Boolean(cms.isPopular),
-            headerGradient: cms.isPopular
-              ? 'radial-gradient(ellipse at 50% 210%, rgba(18,107,48,1) 0%, rgba(11,66,31,1) 50%, rgba(5,26,13,1) 100%)'
-              : 'radial-gradient(ellipse at 50% 210%, rgba(28,38,43,1) 0%, rgba(17,23,28,1) 50%, rgba(5,8,13,1) 100%)',
+            badge: getBadgeLabel(badgeValue, cms.isPopular),
+            name: displayName,
+            subtitle: getSubtitle(badgeValue),
+            isPopular: badgeValue === 'popular' || Boolean(cms.isPopular),
+            headerGradient: getHeaderGradient(badgeValue, cms.isPopular),
             commission: cms.commission ?? '$0',
             commissionSub: t('perLotSide'),
             spreadsFrom: cms.spreadFrom ?? '—',
             spreadsSub: t('pips'),
-            minDeposit: `$${cms.minDeposit.toLocaleString('en-US')}`,
-            features: cms.features?.map((f) => f.value) ?? fallback?.features ?? [],
+            minDeposit:
+              badgeValue === 'free'
+                ? t('virtualDeposit')
+                : `$${cms.minDeposit.toLocaleString('en-US')}`,
+            features: rawFeatures,
             ctaLabel: t('startTrading'),
-            ctaFilled: Boolean(cms.isPopular),
           };
         })
-      : STATIC_ACCOUNTS.map((a, i) => ({
-          ...a,
+      : STATIC_ACCOUNTS.map((a) => ({
           id: a.id,
-          badge: staticBadges[i] ?? a.badge,
-          subtitle: staticSubtitles[i] ?? a.subtitle,
+          badge: getBadgeLabel(a.badge),
+          name: a.name,
+          subtitle: t(
+            a.badge === 'free'
+              ? 'subtitleDemo'
+              : a.badge === 'popular'
+                ? 'subtitleStandard'
+                : a.badge === 'islamic'
+                  ? 'subtitleSwapFree'
+                  : 'subtitleRaw',
+          ),
+          isPopular: a.badge === 'popular',
+          headerGradient: a.headerGradient,
+          commission: a.commission,
           commissionSub: t('perLotSide'),
+          spreadsFrom: a.spreadsFrom,
           spreadsSub: t('pips'),
+          minDeposit: a.minDepositDisplay,
+          features: [...a.features],
           ctaLabel: t('startTrading'),
         }));
 
@@ -184,7 +226,6 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                 className="flex flex-col items-center gap-[6px] pb-[34px] pt-[26px]"
                 style={{ background: account.headerGradient }}
               >
-                {/* Badge */}
                 <span className="font-body rounded-[20px] bg-[#00b050] px-[12px] py-[5px] text-[11px] font-bold tracking-[0.6px] text-[#111]">
                   {account.badge}
                 </span>
@@ -253,7 +294,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
 
                 {/* Features */}
                 <div className="flex flex-col gap-[11px]">
-                  {(account.features as string[]).slice(0, 3).map((feat: string, i: number) => (
+                  {account.features.slice(0, 3).map((feat, i) => (
                     <div key={i} className="flex items-center gap-[10px]">
                       <span className="font-body text-[13px] font-bold text-[#00b050]">✓</span>
                       <span className="font-body text-[13px] text-[#6b7280]">{feat}</span>
@@ -261,14 +302,10 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                   ))}
                 </div>
 
-                {/* CTA */}
+                {/* CTA — all accounts use filled green per Figma */}
                 <Link
                   href={`/${locale}/register?account=${String(account.id)}`}
-                  className={`font-body flex h-[49px] w-full items-center justify-center rounded-[10px] text-[15px] font-semibold transition-opacity hover:opacity-90 ${
-                    account.ctaFilled
-                      ? 'bg-[#00b050] text-[#f0f0f0]'
-                      : 'border-[1.5px] border-[#00b050] bg-white text-[#111] dark:bg-transparent dark:text-white'
-                  }`}
+                  className="font-body flex h-[49px] w-full items-center justify-center rounded-[10px] bg-[#00b050] text-[15px] font-semibold text-[#f0f0f0] transition-opacity hover:opacity-90"
                 >
                   {account.ctaLabel}
                 </Link>
@@ -289,7 +326,6 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
       {/* ── Feature Matrix ────────────────────────────────────────────────── */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          {/* Kicker */}
           <div className="mb-3 flex items-center gap-[6px]">
             <span className="h-px w-[18px] bg-white/40" />
             <span className="font-mono text-[10px] uppercase tracking-[1.8px] text-white/60">
@@ -301,7 +337,6 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
             {t('featureMatrixHeading')}
           </h2>
 
-          {/* Table */}
           <div className="overflow-hidden rounded-[16px] bg-white/[0.06]">
             {/* Header row */}
             <div className="grid grid-cols-[1fr_65px_65px_65px] bg-white/[0.04] px-[14px] py-3">
@@ -311,7 +346,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
               {[t('stdCol'), t('rawCol'), t('vipCol')].map((h) => (
                 <div key={h} className="flex items-center justify-center">
                   <span
-                    className={`font-mono text-[9px] uppercase tracking-[1.08px] ${h === 'Raw' ? 'text-[#00b050]' : 'text-white/55'}`}
+                    className={`font-mono text-[9px] uppercase tracking-[1.08px] ${h === t('rawCol') ? 'text-[#00b050]' : 'text-white/55'}`}
                   >
                     {h}
                   </span>

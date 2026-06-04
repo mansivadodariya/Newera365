@@ -5,9 +5,10 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-type Department = 'ALL' | 'ENGINEERING' | 'RESEARCH' | 'TRADING' | 'DESIGN' | 'OPERATIONS';
+// Departments used in the static mock data
+type MockDept = 'ALL' | 'ENGINEERING' | 'RESEARCH' | 'TRADING' | 'DESIGN' | 'OPERATIONS';
 
-const DEPARTMENTS: { id: Department; label: string }[] = [
+const DEPARTMENTS: { id: MockDept; label: string }[] = [
   { id: 'ALL', label: 'All' },
   { id: 'ENGINEERING', label: 'Engineering' },
   { id: 'RESEARCH', label: 'Research' },
@@ -38,7 +39,7 @@ const VALUES = [
 const JOBS: {
   id: string;
   title: string;
-  department: Department;
+  department: MockDept;
   location: string;
   type: 'Full-time' | 'Contract' | 'Remote';
 }[] = [
@@ -125,13 +126,33 @@ interface CareersPageProps {
 export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
   const locale = useLocale();
   const t = useTranslations('careers');
-  const [dept, setDept] = useState<Department>('ALL');
+  const [dept, setDept] = useState('ALL');
 
   const useCms = cmsJobs && cmsJobs.length > 0;
 
-  const allJobDepts = useCms
-    ? (['ALL', ...new Set(cmsJobs.map((j) => j.department.toUpperCase()))] as Department[])
+  // Build department list from CMS data or fall back to static list
+  const deptIds: string[] = useCms
+    ? ['ALL', ...Array.from(new Set(cmsJobs.map((j) => j.department.toUpperCase())))]
     : DEPARTMENTS.map((d) => d.id);
+
+  // Map department id → translated label. Falls back to the raw id for any
+  // CMS department value that doesn't have a dedicated i18n key.
+  function getDeptLabel(id: string): string {
+    const map: Record<string, string> = {
+      ALL: t('filterAll'),
+      ENGINEERING: t('deptEngineering'),
+      RESEARCH: t('deptResearch'),
+      TRADING: t('deptTrading'),
+      DESIGN: t('deptDesign'),
+      OPERATIONS: t('deptOperations'),
+      MARKETING: t('deptMarketing'),
+      SALES: t('deptSales'),
+      COMPLIANCE: t('deptCompliance'),
+      SUPPORT: t('deptSupport'),
+      FINANCE: t('deptFinance'),
+    };
+    return map[id.toUpperCase()] ?? id;
+  }
 
   const filtered = useCms
     ? dept === 'ALL'
@@ -139,7 +160,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       : cmsJobs.filter((j) => j.department.toUpperCase() === dept)
     : dept === 'ALL'
       ? JOBS
-      : JOBS.filter((j) => j.department === dept);
+      : JOBS.filter((j) => j.department === (dept as MockDept));
 
   return (
     <>
@@ -212,29 +233,19 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
             {t('rolesHeading')}
           </SectionKicker>
 
-          {/* Department tabs */}
+          {/* Department tabs — built from actual data, not a hardcoded static list */}
           <div className="scrollbar-hide mb-5 flex gap-2 overflow-x-auto pb-1">
-            {DEPARTMENTS.map((d) => (
+            {deptIds.map((id) => (
               <button
-                key={d.id}
-                onClick={() => setDept(d.id)}
+                key={id}
+                onClick={() => setDept(id)}
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
-                  dept === d.id
+                  dept === id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
                     : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
                 }`}
               >
-                {d.id === 'ALL'
-                  ? t('filterAll')
-                  : d.id === 'ENGINEERING'
-                    ? t('deptEngineering')
-                    : d.id === 'RESEARCH'
-                      ? t('deptResearch')
-                      : d.id === 'TRADING'
-                        ? t('deptTrading')
-                        : d.id === 'DESIGN'
-                          ? t('deptDesign')
-                          : t('deptOperations')}
+                {getDeptLabel(id)}
               </button>
             ))}
           </div>
@@ -255,9 +266,11 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
                 </div>
                 <div className="flex flex-shrink-0 items-center gap-2">
                   <span
-                    className={`font-body rounded-full px-2.5 py-[4px] text-[10px] font-semibold ${TYPE_COLORS['type' in job ? job.type : (job as CmsJobItem).employmentType]}`}
+                    className={`font-body rounded-full px-2.5 py-[4px] text-[10px] font-semibold ${TYPE_COLORS['type' in job ? (job as (typeof JOBS)[0]).type : (job as CmsJobItem).employmentType] ?? 'bg-[#6B7280]/10 text-[#6B7280]'}`}
                   >
-                    {'type' in job ? job.type : (job as CmsJobItem).employmentType}
+                    {'type' in job
+                      ? (job as (typeof JOBS)[0]).type
+                      : (job as CmsJobItem).employmentType}
                   </span>
                   <svg
                     width="16"

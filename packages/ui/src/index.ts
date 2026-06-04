@@ -8,7 +8,6 @@ export { SectionKicker } from './components/SectionKicker';
 export { ToastProvider, useToast } from './components/ToastProvider';
 
 export { Header } from './components/Header';
-export type { CmsNavItem } from './components/Header';
 export { LanguageToggle } from './components/LanguageToggle';
 export { RiskBanner } from './components/RiskBanner';
 export { TrustStrip } from './components/TrustStrip';

@@ -69,6 +69,8 @@ export interface CmsInstrument {
 export interface CmsAccountType {
   id: number;
   name: string;
+  nameAr?: string | null;
+  badge?: 'free' | 'popular' | 'pro' | 'islamic' | null;
   minDeposit: number;
   spreadFrom: string;
   spreadFromNumeric?: number | null;
@@ -76,6 +78,7 @@ export interface CmsAccountType {
   platforms: ('mt5' | 'web-trader' | 'mobile')[];
   commission?: string | null;
   features?: { value: string; id?: string | null }[] | null;
+  featuresAr?: string | null;
   isPopular?: boolean | null;
   sortOrder?: number | null;
   status: 'active' | 'inactive';
@@ -496,12 +499,16 @@ export async function getInstruments(assetClass?: string, limit = 50): Promise<C
 // Account Types (language-neutral — no locale param)
 // ---------------------------------------------------------------------------
 
-export async function getAccountTypes(): Promise<CmsAccountType[]> {
-  const data = await fetchCollection<CmsAccountType>('account-types', {
-    'where[status][equals]': 'active',
-    sort: 'sortOrder',
-    limit: '3',
-  });
+export async function getAccountTypes(locale?: string): Promise<CmsAccountType[]> {
+  const data = await fetchCollection<CmsAccountType>(
+    'account-types',
+    {
+      'where[status][equals]': 'active',
+      sort: 'sortOrder',
+      limit: '10',
+    },
+    locale,
+  );
   return data.docs;
 }
 
@@ -534,12 +541,15 @@ export async function getSiteSettings(): Promise<CmsSiteSettings | null> {
 // Blog Posts
 // ---------------------------------------------------------------------------
 
-// Map blog category to the assetCategory shape ResearchPage expects
+// Map blog category to the assetCategory shape ResearchPage expects.
+// Blog posts are general content, so map all categories to 'forex' as the
+// default tab, rather than incorrectly placing tutorials in etfs or
+// company-updates in indices.
 const BLOG_CAT_TO_ASSET: Record<string, CmsArticle['assetCategory']> = {
   'market-news': 'forex',
-  analysis: 'commodities',
-  tutorials: 'etfs',
-  'company-updates': 'indices',
+  analysis: 'forex',
+  tutorials: 'forex',
+  'company-updates': 'forex',
 };
 
 export async function getBlogPosts(locale: string, limit = 10): Promise<CmsArticle[]> {

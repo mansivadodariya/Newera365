@@ -10,129 +10,139 @@ import { MobileMenu } from './MobileMenu';
 import { LanguageToggle } from './LanguageToggle';
 
 type DropdownItem = { label: string; sub: string; href: string };
-type NavItem = { label: string; href: string; dropdown?: DropdownItem[] };
+type NavItem = {
+  label: string;
+  href: string;
+  dropdown?: DropdownItem[];
+  activeFor?: string[];
+};
 
-const NAV_ITEMS: NavItem[] = [
-  { label: 'Home', href: '/' },
-  {
-    label: 'Trade',
-    href: '/trade/accounts',
-    dropdown: [
-      {
-        label: 'Account types',
-        sub: 'Standard, Raw & VIP accounts',
-        href: '/trade/accounts',
-      },
-      { label: 'Payment methods', sub: 'Funding & withdrawals', href: '/trade/funding' },
-      { label: 'Fee table', sub: 'Spreads & charges', href: '/trade/fees' },
-      { label: 'Promotions', sub: 'Bonuses & active offers', href: '/trade/promotions' },
-      { label: 'IB & partners', sub: 'Earn rebates as a partner', href: '/trade/ib' },
-    ],
-  },
-  {
-    label: 'Markets',
-    href: '/markets/instruments',
-    dropdown: [
-      {
-        label: 'Instruments & specs',
-        sub: 'Live MT5 instrument list',
-        href: '/markets/instruments',
-      },
-      { label: 'Forex', sub: 'Majors, minors & exotics', href: '/markets/forex' },
-      { label: 'Indices & stocks', sub: 'Global equity exposure', href: '/markets/indices' },
-      {
-        label: 'Commodities & metals',
-        sub: 'Gold, oil, silver & more',
-        href: '/markets/commodities',
-      },
-      { label: 'Crypto', sub: 'BTC, ETH and majors', href: '/markets/crypto' },
-    ],
-  },
-  {
-    label: 'Platform',
-    href: '/platform/mt5',
-    dropdown: [
-      { label: 'MetaTrader 5', sub: 'Professional desktop & mobile', href: '/platform/mt5' },
-      { label: 'Web Trader', sub: 'Trade from any browser', href: '/platform/webtrader' },
-      { label: 'Mobile App', sub: 'iOS & Android', href: '/platform/mobile' },
-      { label: 'Tools & automation', sub: 'EAs, VPS & copy trading', href: '/tools' },
-    ],
-  },
-  {
-    label: 'Education',
-    href: '/education',
-    dropdown: [
-      { label: 'Education hub', sub: 'Start your learning journey', href: '/education' },
-      { label: 'Guides', sub: 'In-depth trading guides', href: '/guides' },
-      { label: 'Glossary', sub: 'A-Z trading terms', href: '/glossary' },
-      { label: 'Ebooks', sub: 'Gated research & PDFs', href: '/ebooks' },
-      { label: 'Media', sub: 'Videos & webinars', href: '/education/media' },
-    ],
-  },
-  {
-    label: 'Research',
-    href: '/research',
-    dropdown: [
-      { label: 'Market articles', sub: 'Desk commentary & analysis', href: '/research' },
-      { label: 'Blog', sub: 'News & company updates', href: '/blog' },
-      { label: 'Daily news', sub: 'Latest market headlines', href: '/daily-news' },
-      { label: 'Economic calendar', sub: 'Key market events', href: '/tools/calendar' },
-      { label: 'Analyst views', sub: 'Forecasts & signals', href: '/tools/analyst-chart' },
-      { label: 'Newsletter', sub: 'The Monday briefing', href: '/newsletter' },
-      { label: 'Live watchlist', sub: 'Real-time prices', href: '/tools/watchlist' },
-    ],
-  },
-  {
-    label: 'Tools',
-    href: '/tools',
-    dropdown: [
-      { label: 'Margin calculator', sub: 'Margin, pip & swap', href: '/tools' },
-      { label: 'Pivot calculator', sub: 'Classical, Camarilla, Woodie', href: '/tools/pivot' },
-      { label: 'Profit calculator', sub: 'P&L by instrument & size', href: '/tools/profit' },
-      {
-        label: 'Fibonacci calculator',
-        sub: 'Retracement & extension levels',
-        href: '/tools/fibonacci',
-      },
-      {
-        label: 'Spread comparator',
-        sub: 'Side-by-side account spreads',
-        href: '/tools/spread-comparator',
-      },
-      { label: 'Live watchlist', sub: 'Real-time market prices', href: '/tools/watchlist' },
-      { label: 'Economic calendar', sub: 'Key market events & releases', href: '/tools/calendar' },
-      { label: 'AI CRM', sub: 'AI-powered broker tools', href: '/tools/ai-crm' },
-    ],
-  },
-  {
-    label: 'Company',
-    href: '/company/about',
-    dropdown: [
-      { label: 'About us', sub: 'Who we are & our mission', href: '/company/about' },
-      { label: 'Careers', sub: "We're hiring across 8 cities", href: '/company/careers' },
-      { label: 'Legal & policies', sub: 'Terms, privacy & regulation', href: '/legal' },
-      { label: 'Newsletter', sub: 'The Monday briefing, weekly', href: '/newsletter' },
-      { label: 'FAQ', sub: 'Common questions answered', href: '/faqs' },
-      { label: 'Contact', sub: 'Talk to the team directly', href: '/contact' },
-      { label: 'Live chat', sub: 'Chat with support now', href: '/live-chat' },
-    ],
-  },
-];
-
-function LocaleToggle() {
-  const locale = useLocale();
-  const pathname = usePathname();
-  const otherLocale = locale === 'en' ? 'ar' : 'en';
-  const otherPath = `/${otherLocale}${pathname.slice(locale.length + 1)}`;
-  return (
-    <Link
-      href={otherPath}
-      aria-label={`Switch to ${otherLocale === 'ar' ? 'Arabic' : 'English'}`}
-      className="text-foreground dark:bg-surface font-body flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-xl bg-[#f4f4f5] text-[12px] font-semibold transition-colors hover:opacity-80"
-    >
-      {otherLocale.toUpperCase()}
-    </Link>
-  );
+function useNavItems(t: ReturnType<typeof useTranslations<'nav'>>): NavItem[] {
+  return [
+    { label: t('home'), href: '/' },
+    {
+      label: t('trade'),
+      href: '/trade/accounts',
+      dropdown: [
+        { label: t('tradeAccountsLabel'), sub: t('tradeAccountsSub'), href: '/trade/accounts' },
+        { label: t('tradeFundingLabel'), sub: t('tradeFundingSub'), href: '/trade/funding' },
+        { label: t('tradeFeesLabel'), sub: t('tradeFeesSub'), href: '/trade/fees' },
+        { label: t('tradePromosLabel'), sub: t('tradePromosSub'), href: '/trade/promotions' },
+        { label: t('tradeIbLabel'), sub: t('tradeIbSub'), href: '/trade/ib' },
+      ],
+    },
+    {
+      label: t('markets'),
+      href: '/markets/instruments',
+      dropdown: [
+        {
+          label: t('marketsInstrumentsLabel'),
+          sub: t('marketsInstrumentsSub'),
+          href: '/markets/instruments',
+        },
+        { label: t('marketsForexLabel'), sub: t('marketsForexSub'), href: '/markets/forex' },
+        { label: t('marketsIndicesLabel'), sub: t('marketsIndicesSub'), href: '/markets/indices' },
+        {
+          label: t('marketsCommoditiesLabel'),
+          sub: t('marketsCommoditiesSub'),
+          href: '/markets/commodities',
+        },
+        { label: t('marketsCryptoLabel'), sub: t('marketsCryptoSub'), href: '/markets/crypto' },
+      ],
+    },
+    {
+      label: t('platform'),
+      href: '/platform/mt5',
+      dropdown: [
+        { label: t('platformOverviewLabel'), sub: t('platformOverviewSub'), href: '/platform/mt5' },
+        { label: t('platformMt5Label'), sub: t('platformMt5Sub'), href: '/platform/mt5' },
+        {
+          label: t('platformWebtraderLabel'),
+          sub: t('platformWebtraderSub'),
+          href: '/platform/webtrader',
+        },
+        { label: t('platformMobileLabel'), sub: t('platformMobileSub'), href: '/platform/mobile' },
+        { label: t('platformToolsLabel'), sub: t('platformToolsSub'), href: '/tools' },
+        { label: t('toolsAiCrmLabel'), sub: t('toolsAiCrmSub'), href: '/tools/ai-crm' },
+      ],
+    },
+    {
+      label: t('education'),
+      href: '/education',
+      dropdown: [
+        { label: t('eduHubLabel'), sub: t('eduHubSub'), href: '/education' },
+        { label: t('eduGuidesLabel'), sub: t('eduGuidesSub'), href: '/guides' },
+        { label: t('eduGlossaryLabel'), sub: t('eduGlossarySub'), href: '/glossary' },
+        { label: t('eduMediaLabel'), sub: t('eduMediaSub'), href: '/education/media' },
+        { label: t('eduEbooksLabel'), sub: t('eduEbooksSub'), href: '/ebooks' },
+      ],
+    },
+    {
+      label: t('research'),
+      href: '/research',
+      dropdown: [
+        { label: t('researchArticlesLabel'), sub: t('researchArticlesSub'), href: '/research' },
+        {
+          label: t('researchCalendarLabel'),
+          sub: t('researchCalendarSub'),
+          href: '/tools/calendar',
+        },
+        {
+          label: t('researchAnalystLabel'),
+          sub: t('researchAnalystSub'),
+          href: '/tools/analyst-chart',
+        },
+        {
+          label: t('researchNewsletterLabel'),
+          sub: t('researchNewsletterSub'),
+          href: '/newsletter',
+        },
+        {
+          label: t('researchWatchlistLabel'),
+          sub: t('researchWatchlistSub'),
+          href: '/tools/watchlist',
+        },
+      ],
+    },
+    {
+      label: t('tools'),
+      href: '/tools',
+      dropdown: [
+        { label: t('toolsMarginLabel'), sub: t('toolsMarginSub'), href: '/tools' },
+        { label: t('toolsPivotLabel'), sub: t('toolsPivotSub'), href: '/tools/pivot' },
+        { label: t('toolsProfitLabel'), sub: t('toolsProfitSub'), href: '/tools/profit' },
+        { label: t('toolsFibonacciLabel'), sub: t('toolsFibonacciSub'), href: '/tools/fibonacci' },
+        {
+          label: t('toolsSpreadLabel'),
+          sub: t('toolsSpreadSub'),
+          href: '/tools/spread-comparator',
+        },
+        { label: t('toolsWatchlistLabel'), sub: t('toolsWatchlistSub'), href: '/tools/watchlist' },
+        { label: t('toolsCalendarLabel'), sub: t('toolsCalendarSub'), href: '/tools/calendar' },
+      ],
+    },
+    {
+      label: t('company'),
+      href: '/company/about',
+      activeFor: ['/company', '/blog'],
+      dropdown: [
+        { label: t('companyAboutLabel'), sub: t('companyAboutSub'), href: '/company/about' },
+        { label: t('companyCareersLabel'), sub: t('companyCareersSub'), href: '/company/careers' },
+        { label: t('researchBlogLabel'), sub: t('researchBlogSub'), href: '/blog' },
+      ],
+    },
+    {
+      label: t('legalSupport'),
+      href: '/legal',
+      activeFor: ['/legal', '/faqs', '/contact', '/live-chat'],
+      dropdown: [
+        { label: t('companyLegalLabel'), sub: t('companyLegalSub'), href: '/legal' },
+        { label: t('companyFaqLabel'), sub: t('companyFaqSub'), href: '/faqs' },
+        { label: t('companyContactLabel'), sub: t('companyContactSub'), href: '/contact' },
+        { label: t('companyChatLabel'), sub: t('companyChatSub'), href: '/live-chat' },
+      ],
+    },
+  ];
 }
 
 function HamburgerIcon() {
@@ -217,8 +227,15 @@ function DesktopNavItem({
   const [open, setOpen] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const isActive =
-    item.href === '/'
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const isActive = item.activeFor
+    ? item.activeFor.some((r) => pathname.startsWith(`/${locale}${r}`))
+    : item.href === '/'
       ? pathname === `/${locale}` || pathname === `/${locale}/`
       : pathname.startsWith(`/${locale}${item.href}`);
 
@@ -239,25 +256,25 @@ function DesktopNavItem({
       <Link
         href={`/${locale}${item.href === '/' ? '' : item.href}`}
         className={`font-body text-[15px] font-medium transition-colors ${
-          isActive ? 'text-accent' : 'text-foreground group-hover:text-accent'
+          isActive ? 'text-accent' : 'text-foreground hover:text-accent'
         }`}
       >
         {item.label}
       </Link>
 
       {item.dropdown && open && (
-        <div className="absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3">
-          <div className="bg-background w-[256px] rounded-[14px] p-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+        <div className="absolute left-1/2 top-full z-50 -translate-x-1/2 pt-2">
+          <div className="bg-background border-border w-[256px] rounded-[14px] border p-2 shadow-[0px_12px_28px_-4px_rgba(0,0,0,0.12)] dark:shadow-[0px_12px_28px_-4px_rgba(0,0,0,0.5)]">
             {item.dropdown.map((d) => (
               <Link
                 key={d.href}
                 href={`/${locale}${d.href}`}
                 className="hover:bg-surface block rounded-[9px] px-3 py-[9px] transition-colors"
               >
-                <span className="font-body text-foreground block text-[14px] font-medium leading-[1.2]">
+                <span className="font-body dark:text-foreground block text-[14px] font-medium leading-[1.2] text-[#1a1a1c]">
                   {d.label}
                 </span>
-                <span className="font-body text-muted mt-[2px] block text-[12px] leading-[1.3]">
+                <span className="font-body dark:text-muted mt-[2px] block text-[12px] leading-[1.3] text-[#6b6b73]">
                   {d.sub}
                 </span>
               </Link>
@@ -269,68 +286,60 @@ function DesktopNavItem({
   );
 }
 
-export interface CmsNavItem {
-  label: string;
-  href: string;
-  id?: string | null;
-}
-
-function Header({ navItems }: { navItems?: CmsNavItem[] }) {
+function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const locale = useLocale();
   const t = useTranslations('nav');
   const pathname = usePathname();
 
-  const displayNav: NavItem[] =
-    navItems && navItems.length > 0
-      ? navItems.map((n) => ({ label: n.label, href: n.href }))
-      : NAV_ITEMS;
+  const displayNav = useNavItems(t);
 
   return (
     <>
-      <header className="border-border sticky top-0 z-40 h-[72px] w-full border-b bg-[rgba(255,255,255,0.85)] backdrop-blur-[12px] dark:border-[#1a1c22] dark:bg-[rgba(7,9,13,0.85)]">
+      <header className="border-border sticky top-0 z-40 h-[72px] w-full border-b bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:border-[#1a1c22] dark:bg-[#07090d]">
         <div className="flex h-full items-center justify-between px-5 xl:px-[80px]">
-          {/* Logo */}
-          <Link href={`/${locale}`} aria-label="NewEra365 — go to home" className="flex-shrink-0">
-            <Image
-              src="/images/logo-light.png"
-              alt="NewEra365"
-              width={133}
-              height={26}
-              className="block dark:hidden"
-              priority
-            />
-            <Image
-              src="/images/logo-dark.png"
-              alt="NewEra365"
-              width={133}
-              height={26}
-              className="hidden dark:block"
-              priority
-            />
-          </Link>
+          {/* Left: Logo + desktop nav */}
+          <div className="flex h-full items-center gap-11">
+            <Link href={`/${locale}`} aria-label="NewEra365 — go to home" className="flex-shrink-0">
+              <Image
+                src="/images/logo-light.png"
+                alt="NewEra365"
+                width={133}
+                height={26}
+                className="block dark:hidden"
+                priority
+              />
+              <Image
+                src="/images/logo-dark.png"
+                alt="NewEra365"
+                width={133}
+                height={26}
+                className="hidden dark:block"
+                priority
+              />
+            </Link>
 
-          {/* Desktop nav links */}
-          <nav className="hidden h-full items-center gap-7 xl:flex" aria-label="Main navigation">
-            {displayNav.map((item) => (
-              <DesktopNavItem key={item.label} item={item} locale={locale} pathname={pathname} />
-            ))}
-          </nav>
+            <nav className="hidden h-full items-center gap-7 xl:flex" aria-label="Main navigation">
+              {displayNav.map((item) => (
+                <DesktopNavItem key={item.href} item={item} locale={locale} pathname={pathname} />
+              ))}
+            </nav>
+          </div>
 
           {/* Desktop right CTAs */}
           <div className="hidden items-center gap-3 xl:flex">
-            <LocaleToggle />
+            <LanguageToggle />
             <ThemeToggle />
             <div className="bg-border mx-1 h-5 w-px" />
             <Link
               href={`/${locale}/login`}
-              className="font-body text-foreground ms-3 text-[15px] font-medium transition-opacity hover:opacity-70"
+              className="font-body dark:text-foreground ms-1 text-[15px] font-medium text-[#111] transition-opacity hover:opacity-70"
             >
               {t('signIn')}
             </Link>
             <Link
               href={`/${locale}/register`}
-              className="bg-accent hover:bg-accent-hover font-body flex h-[42px] items-center rounded-full px-[22px] text-[15px] font-semibold text-white transition-colors"
+              className="font-body flex h-[42px] items-center rounded-full bg-[#00b04f] px-[22px] text-[15px] font-semibold text-white transition-colors hover:bg-[#009944]"
             >
               {t('getStarted')}
             </Link>
@@ -338,7 +347,7 @@ function Header({ navItems }: { navItems?: CmsNavItem[] }) {
 
           {/* Mobile controls */}
           <div className="flex items-center gap-2 xl:hidden">
-            <LocaleToggle />
+            <LanguageToggle />
             <ThemeToggle />
             <button
               onClick={() => setMenuOpen(true)}

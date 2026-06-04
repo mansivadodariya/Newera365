@@ -142,8 +142,7 @@ export default buildConfig({
       idleTimeoutMillis: 10_000,
       connectionTimeoutMillis: 10_000,
     },
-    // Schema managed via migrations (apply-localization-schema.js for localization).
-    // push: false prevents Drizzle from running interactive schema comparison.
+    // Schema managed via migrations; push disabled to prevent interactive Drizzle prompts.
     push: false,
   }),
   collections: [

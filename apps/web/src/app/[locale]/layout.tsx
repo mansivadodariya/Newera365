@@ -5,7 +5,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server';
 import { Outfit, Inter, JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { ToastProvider, Header, Footer, RiskBanner, SmartCtaBanner } from '@newera365/ui';
-import type { CmsNavItem, CmsFooterColumn, CmsSocialLinks } from '@newera365/ui';
+import type { CmsFooterColumn, CmsSocialLinks } from '@newera365/ui';
 import { dir, LOCALES, type Locale } from '@newera365/types';
 import { routing } from '@/i18n/routing';
 import { getSiteSettings } from '@/lib/cms';
@@ -55,12 +55,6 @@ export default async function LocaleLayout({
   const messages = await getMessages();
   const s = await getSiteSettings();
 
-  const navItems: CmsNavItem[] | undefined = s
-    ? ((locale === 'ar' ? s.navAr : s.navEn)?.filter((n): n is CmsNavItem =>
-        Boolean(n.label && n.href),
-      ) ?? undefined)
-    : undefined;
-
   const footerColumns: CmsFooterColumn[] | undefined = s
     ? ((locale === 'ar' ? s.footerAr : s.footerEn) ?? undefined)
     : undefined;
@@ -105,7 +99,7 @@ export default async function LocaleLayout({
               {/* CMS-controlled dismissible risk banner — shown above header */}
               <RiskBanner enabled={riskBannerEnabled} message={riskBannerMessage} />
 
-              <Header navItems={navItems && navItems.length > 0 ? navItems : undefined} />
+              <Header />
               <main>{children}</main>
               <Footer
                 footerColumns={
