@@ -58,7 +58,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
             <span className="text-accent">{t('heroLine2')}</span>
           </h1>
           <p className="font-body text-muted text-[14px] leading-[1.55] sm:max-w-[350px]">
-            {t('heroDesc')}
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -67,7 +67,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       <section className="bg-transparent px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
-            {t('spreadKicker')}
+            {t('spreadsKicker')}
           </SectionKicker>
 
           <div className="overflow-hidden rounded-[18px] bg-black">
@@ -87,7 +87,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
             </div>
 
             {/* Data rows */}
-            {SPREADS.map((row) => (
+            {displaySpreads.map((row) => (
               <div
                 key={row.instrument}
                 className="grid grid-cols-[1fr_60px_60px_60px] px-4 py-[14px]"
@@ -129,7 +129,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       <section className="bg-transparent px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
-            {t('otherChargesKicker')}
+            {t('otherKicker')}
           </SectionKicker>
           <div className="flex flex-col gap-[10px]">
             {OTHER_CHARGES.map((charge) => (
@@ -145,7 +145,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                   </p>
                   <p className="font-body text-muted text-[12px] leading-snug">
                     {t(
-                      `charge${charge.key.charAt(0).toUpperCase() + charge.key.slice(1)}Desc` as 'chargeOpeningDesc',
+                      `charge${charge.key.charAt(0).toUpperCase() + charge.key.slice(1)}Val` as 'chargeOpeningVal',
                     )}
                   </p>
                 </div>
@@ -167,9 +167,9 @@ export function FeesPage({ spreadData }: FeesPageProps) {
             {t('transparentKicker')}
           </SectionKicker>
           <h2 className="mb-4 font-sans text-[26px] font-semibold leading-[1.1] tracking-[-0.52px] text-white">
-            {t('transparentHeading')}
+            {t('transparentLine1')}
             <br />
-            {t('transparentHeadingLine2')}
+            {t('transparentLine2')}
           </h2>
           <p className="font-body max-w-[300px] text-[13.5px] leading-[1.55] text-white/60">
             {t('transparentDesc')}

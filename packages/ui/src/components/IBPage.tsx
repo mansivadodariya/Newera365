@@ -161,8 +161,8 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
           desc: t(`step${i + 1}Desc` as 'step1Desc'),
         }));
 
-  const ctaHeading = cmsContent?.ctaHeading ?? t('ctaHeading');
-  const ctaSubtitle = cmsContent?.ctaSubtitle ?? t('ctaSubtitle');
+  const ctaHeading = cmsContent?.ctaHeading ?? t('ctaDesc');
+  const ctaSubtitle = cmsContent?.ctaSubtitle ?? t('ctaSubDesc');
 
   return (
     <>
@@ -173,7 +173,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
           <h1 className="font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
             <span className="text-foreground">{t('heroLine1')}</span>
             <br />
-            <span className="text-accent">{t('heroAccent')}</span>
+            <span className="text-accent">{t('heroLine2')}</span>
           </h1>
           <p className="font-body text-muted mb-4 mt-4 max-w-[320px] text-[14px] leading-[1.6]">
             {heroSubtitle}
@@ -200,7 +200,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
               href="#programs"
               className="text-foreground font-body flex items-center px-[22px] py-4 text-[15px] font-medium transition-opacity hover:opacity-70"
             >
-              {t('heroProgramsBtn')}
+              {t('viewProgramsBtn')}
             </a>
           </div>
 
@@ -268,10 +268,10 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       >
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            {t('programsKicker')}
+            {t('chooseKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-[10px] font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
-            {t('programsHeading')}
+            {t('chooseHeading')}
           </h2>
           <div className="mt-6 flex flex-col gap-[14px] xl:grid xl:grid-cols-3">
             {resolvedPartnerTypes.map((pt) => (
@@ -285,19 +285,19 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                     className={`font-sans text-[22px] font-semibold tracking-[-0.44px] ${pt.headColor}`}
                   >
                     {pt.id === 'ib'
-                      ? t('card1Title')
+                      ? t('ibTitle')
                       : pt.id === 'affiliate'
-                        ? t('card2Title')
-                        : t('card3Title')}
+                        ? t('affiliateTitle')
+                        : t('wlTitle')}
                   </span>
                   <span
                     className={`flex-shrink-0 rounded-full px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px] ${pt.tagClass}`}
                   >
                     {pt.id === 'ib'
-                      ? t('card1Tag')
+                      ? t('mostPopular')
                       : pt.id === 'affiliate'
-                        ? t('card2Tag')
-                        : t('card3Tag')}
+                        ? t('cpaBadge')
+                        : t('wlEnterprise')}
                   </span>
                 </div>
 
@@ -316,14 +316,14 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                       >
                         {(
                           {
-                            'UP TO': t('statUpTo'),
-                            PAYOUTS: t('statPayouts'),
-                            MINIMUM: t('statMinimum'),
-                            COOKIE: t('statCookie'),
-                            'MIN CPA': t('statMinCpa'),
-                            SETUP: t('statSetup'),
-                            'SPREAD MARK-UP': t('statSpreadMarkUp'),
-                            TECH: t('statTech'),
+                            'UP TO': t('upTo'),
+                            PAYOUTS: t('payouts'),
+                            MINIMUM: t('minimum'),
+                            COOKIE: t('cookieBadge'),
+                            'MIN CPA': t('minCpaBadge'),
+                            SETUP: t('wlSetup'),
+                            'SPREAD MARK-UP': t('wlSpread'),
+                            TECH: t('wlTech'),
                           } as Record<string, string>
                         )[s.label] ?? s.label}
                       </span>
@@ -339,7 +339,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                   href={`/${locale}/register?type=partner&program=${pt.id}`}
                   className={`font-body mt-1 flex items-center justify-center gap-2 rounded-full px-5 py-[14px] text-[14px] font-medium transition-opacity hover:opacity-80 ${pt.ctaClass}`}
                 >
-                  {t('cardApplyBtn')}
+                  {t('applyBtn')}
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                     <path
                       d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
@@ -403,7 +403,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
             href={`/${locale}/register?type=partner`}
             className="bg-accent font-body hover:bg-accent/90 mb-2 flex w-full items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
           >
-            {t('ctaBtn')}
+            {t('ctaApply')}
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path
                 d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
@@ -415,7 +415,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
             </svg>
           </Link>
           <button className="font-body flex w-full items-center justify-center py-4 text-[15px] font-medium text-white transition-opacity hover:opacity-70">
-            {t('ctaDownloadBtn')}
+            {t('ctaDeck')}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path
                 d="M8 3v8M4 9l4 4 4-4"

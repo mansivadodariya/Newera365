@@ -96,7 +96,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
   return (
     <>
       {/* Hero — 42px tracking-[-1.26px] per Figma */}
-      <section className="bg-background rounded-b-[32px] px-5 pb-7 pt-9">
+      <section className="rounded-b-[32px] bg-transparent px-5 pb-7 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
             <span className="text-foreground">{t('heroLine1')}</span>

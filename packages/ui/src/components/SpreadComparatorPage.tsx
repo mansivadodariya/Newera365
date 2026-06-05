@@ -79,28 +79,28 @@ export function SpreadComparatorPage() {
     isHighlighted: boolean;
   }[] = [
     {
-      label: t('rowIndustry'),
+      label: t('industryAvg'),
       spread: data.industry,
       commission: 0,
       color: '#6B7280',
       isHighlighted: false,
     },
     {
-      label: t('rowStandard'),
+      label: t('stdLabel'),
       spread: data.standard,
       commission: COMMISSIONS.standard,
       color: '#374151',
       isHighlighted: false,
     },
     {
-      label: t('rowRaw'),
+      label: t('rawLabel'),
       spread: data.raw,
       commission: COMMISSIONS.raw,
       color: '#00B050',
       isHighlighted: true,
     },
     {
-      label: t('rowVip'),
+      label: t('vipLabel'),
       spread: data.vip,
       commission: COMMISSIONS.vip,
       color: '#8B5CF6',
@@ -111,16 +111,16 @@ export function SpreadComparatorPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-background px-5 pb-8 pt-9">
+      <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('kicker')}
           </SectionKicker>
           <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
-            {t('heroLine1')} <span className="text-accent">{t('heroAccent')}</span>
+            {t('heroLine1')}
           </h1>
           <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
-            {t('heroDesc')}
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -151,7 +151,7 @@ export function SpreadComparatorPage() {
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="bg-surface rounded-[18px] p-5">
             <p className="font-body mb-4 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
-              {t('comparisonLabel')}
+              {t('compKicker')}
             </p>
             <div className="flex flex-col gap-4">
               {rows.map((row) => (
@@ -189,11 +189,11 @@ export function SpreadComparatorPage() {
             {/* Standard */}
             <div className="bg-surface shadow-card flex flex-col gap-3 rounded-[18px] p-4 dark:shadow-none">
               <span className="text-foreground font-sans text-[13px] font-semibold">
-                {t('rowStandard')}
+                {t('stdLabel')}
               </span>
               <div className="flex flex-col gap-1">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
-                  {t('cardSpreadLabel')}
+                  {t('colSpread')}
                 </p>
                 <p className="font-body text-foreground text-[13px] font-semibold tabular-nums">
                   {data.standard.toLocaleString('en-US')} {data.unit}
@@ -201,15 +201,15 @@ export function SpreadComparatorPage() {
               </div>
               <div className="flex flex-col gap-1">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
-                  {t('cardCommissionLabel')}
+                  {t('colCommission')}
                 </p>
                 <p className="font-body text-foreground text-[13px] font-semibold">
-                  {t('cardCommissionNone')}
+                  {t('commNone')}
                 </p>
               </div>
               <div className="dark:border-border mt-auto border-t border-[#e5e7eb] pt-3">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
-                  {t('cardCostLabel')}
+                  {t('colCostPerLot')}
                 </p>
                 <p className="font-body text-foreground text-[15px] font-semibold tabular-nums">
                   ${costPerLot.standard.toFixed(2)}
@@ -222,10 +222,12 @@ export function SpreadComparatorPage() {
               className="flex flex-col gap-3 rounded-[18px] bg-[#111111] p-4"
               style={{ boxShadow: '0 4px 24px rgba(0,176,80,0.18)' }}
             >
-              <span className="font-sans text-[13px] font-semibold text-white">{t('rowRaw')}</span>
+              <span className="font-sans text-[13px] font-semibold text-white">
+                {t('rawLabel')}
+              </span>
               <div className="flex flex-col gap-1">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
-                  {t('cardSpreadLabel')}
+                  {t('colSpread')}
                 </p>
                 <p className="font-body text-accent text-[13px] font-semibold tabular-nums">
                   {data.raw === 0 ? '0.0' : data.raw.toLocaleString('en-US')} {data.unit}
@@ -233,13 +235,13 @@ export function SpreadComparatorPage() {
               </div>
               <div className="flex flex-col gap-1">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
-                  {t('cardCommissionLabel')}
+                  {t('colCommission')}
                 </p>
                 <p className="font-body text-[13px] font-semibold text-white">$3.50/lot</p>
               </div>
               <div className="mt-auto border-t border-white/10 pt-3">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
-                  {t('cardCostLabel')}
+                  {t('colCostPerLot')}
                 </p>
                 <p className="font-body text-accent text-[15px] font-semibold tabular-nums">
                   ${costPerLot.raw.toFixed(2)}
@@ -250,11 +252,11 @@ export function SpreadComparatorPage() {
             {/* VIP */}
             <div className="bg-surface shadow-card flex flex-col gap-3 rounded-[18px] p-4 dark:shadow-none">
               <span className="text-foreground font-sans text-[13px] font-semibold">
-                {t('rowVip')}
+                {t('vipLabel')}
               </span>
               <div className="flex flex-col gap-1">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
-                  {t('cardSpreadLabel')}
+                  {t('colSpread')}
                 </p>
                 <p className="font-body text-foreground text-[13px] font-semibold tabular-nums">
                   {data.vip === 0 ? '0.0' : data.vip.toLocaleString('en-US')} {data.unit}
@@ -262,15 +264,15 @@ export function SpreadComparatorPage() {
               </div>
               <div className="flex flex-col gap-1">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
-                  {t('cardCommissionLabel')}
+                  {t('colCommission')}
                 </p>
                 <p className="font-body text-foreground text-[13px] font-semibold">
-                  {t('cardVipCommission')}
+                  {t('commFrom')}
                 </p>
               </div>
               <div className="dark:border-border mt-auto border-t border-[#e5e7eb] pt-3">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
-                  {t('cardCostLabel')}
+                  {t('colCostPerLot')}
                 </p>
                 <p className="font-body text-foreground text-[15px] font-semibold tabular-nums">
                   From ${costPerLot.vip.toFixed(2)}
@@ -289,7 +291,7 @@ export function SpreadComparatorPage() {
             style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.12)' }}
           >
             <p className="font-body mb-1 text-[10px] uppercase tracking-[0.12em] text-white/40">
-              {t('savingLabel')}
+              {t('savingKicker')}
             </p>
             <p className="mb-1 font-sans text-[46px] font-semibold tabular-nums leading-[1] text-white">
               ${annualSaving.toLocaleString('en-US', { maximumFractionDigits: 0 })}
@@ -301,7 +303,7 @@ export function SpreadComparatorPage() {
               href={`/${locale}/register?account=raw`}
               className="bg-accent font-body hover:bg-accent/90 mt-5 flex h-[48px] items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
             >
-              {t('openRawBtn')}
+              {t('savingCta')}
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M3 8h10M9 4l4 4-4 4"
@@ -321,7 +323,7 @@ export function SpreadComparatorPage() {
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="bg-surface rounded-[18px] p-5">
             <p className="font-body mb-2 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
-              {t('calcLabel')}
+              {t('calcKicker')}
             </p>
             <p className="text-foreground font-sans text-[14px] font-semibold">
               {t('calcFormula')}
@@ -338,9 +340,9 @@ export function SpreadComparatorPage() {
             {t('ctaKicker')}
           </SectionKicker>
           <h2 className="mb-3 font-sans text-[28px] font-semibold leading-[1.1] text-white">
-            {t('ctaHeading')}
+            {t('ctaLine1')}
             <br />
-            <span className="text-accent">{t('ctaHeadingAccent')}</span>
+            <span className="text-accent">{t('ctaAccent')}</span>
           </h2>
           <p className="font-body mb-8 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
           <div className="flex flex-col gap-3">
@@ -348,7 +350,7 @@ export function SpreadComparatorPage() {
               href={`/${locale}/register?account=raw`}
               className="bg-accent font-body hover:bg-accent/90 flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
             >
-              {t('ctaOpenRaw')}
+              {t('ctaRaw')}
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M3 8h10M9 4l4 4-4 4"
@@ -363,7 +365,7 @@ export function SpreadComparatorPage() {
               href={`/${locale}/trade/accounts/comparison`}
               className="font-body flex h-[52px] w-full items-center justify-center rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"
             >
-              {t('ctaCompareAccounts')}
+              {t('ctaCompare')}
             </Link>
           </div>
         </div>

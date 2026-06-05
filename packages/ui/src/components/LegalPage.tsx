@@ -344,7 +344,7 @@ export function LegalPage({ documents }: LegalPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-background px-5 pb-6 pt-9">
+      <section className="bg-transparent px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground font-sans text-[36px] font-semibold leading-[1.08] tracking-[-1.08px]">
             {t('heroLine1')}

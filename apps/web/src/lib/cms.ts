@@ -805,3 +805,34 @@ export async function getPromotions(locale?: string): Promise<CmsPromotion[]> {
   );
   return data.docs;
 }
+
+// ---------------------------------------------------------------------------
+// Media & Press
+// ---------------------------------------------------------------------------
+
+export interface CmsMediaPressItem {
+  id: number;
+  headline: string;
+  publication: string;
+  date: string;
+  url?: string | null;
+  excerpt?: string | null;
+  logo?: CmsMedia | number | null;
+  isFeatured?: boolean | null;
+  sortOrder?: number | null;
+  status: 'published' | 'draft';
+}
+
+export async function getMediaPressItems(locale: string): Promise<CmsMediaPressItem[]> {
+  const data = await fetchCollection<CmsMediaPressItem>(
+    'media-press',
+    {
+      'where[status][equals]': 'published',
+      sort: 'sortOrder',
+      depth: '1',
+      limit: '100',
+    },
+    locale,
+  );
+  return data.docs;
+}

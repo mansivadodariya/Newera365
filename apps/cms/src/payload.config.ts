@@ -26,6 +26,7 @@ import { Promotions } from './collections/Promotions';
 import { PaymentMethods } from './collections/PaymentMethods';
 import { IBContent } from './collections/IBContent';
 import { ContactSubmissions } from './collections/ContactSubmissions';
+import { MediaPress } from './collections/MediaPress';
 import { SiteSettings } from './globals/SiteSettings';
 import { emailTransport } from './email/transport';
 import Logo from './graphics/Logo';
@@ -161,6 +162,7 @@ export default buildConfig({
     Careers,
     LegalPages,
     Awards,
+    MediaPress,
     CompanyContent,
     TeamMembers,
     WebinarRegistrations,

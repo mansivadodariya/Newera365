@@ -165,12 +165,12 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-background px-5 pb-8 pt-9">
+      <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
             {t('heroLine1')}
             <br />
-            era of <span className="text-accent">{t('heroAccent')}</span>
+            <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
             {t('heroDesc')}

@@ -1,10 +1,5 @@
-import { PageHeaderSkeleton, TableSkeleton } from '@/components/ui/skeleton';
+import { TradePageSkeleton } from '@newera365/ui';
 
 export default function Loading() {
-  return (
-    <main className="space-y-8 py-16">
-      <PageHeaderSkeleton />
-      <TableSkeleton rows={5} />
-    </main>
-  );
+  return <TradePageSkeleton />;
 }

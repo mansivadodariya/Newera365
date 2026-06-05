@@ -329,7 +329,7 @@ export function TraderToolsPage() {
     infoLotSize: t('infoLotSize'),
     infoPipSize: t('infoPipSize'),
     infoPerPip: t('infoPerPip'),
-    infoRateLot: t('infoRateLot'),
+    infoRateLot: t('infoRatePerLot'),
     infoLots: t('infoLots'),
     infoDays: t('infoDays'),
   };
@@ -376,15 +376,15 @@ export function TraderToolsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-background px-5 pb-6 pt-9">
+      <section className="bg-transparent px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
             {t('heroLine1')}
             <br />
-            <span className="text-accent">{t('heroAccent')}</span>
+            <span className="text-accent">{t('heroLine2')}</span>
           </h1>
           <p className="font-body text-muted max-w-[300px] text-[14px] leading-[1.55]">
-            {t('heroDesc')}
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -590,9 +590,9 @@ export function TraderToolsPage() {
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            {t('ctaHeading')}
+            {t('ctaLine1')}
             <br />
-            {t('ctaHeadingLine2')}
+            {t('ctaLine2')}
           </h2>
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
           <Link

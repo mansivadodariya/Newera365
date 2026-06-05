@@ -320,7 +320,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-background px-5 pb-6 pt-9">
+      <section className="bg-transparent px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">{t('kickerLabel')}</SectionKicker>
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">

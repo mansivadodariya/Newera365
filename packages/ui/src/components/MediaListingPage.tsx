@@ -219,7 +219,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
   return (
     <>
       {/* Hero */}
-      <section className="bg-background px-5 pb-6 pt-9">
+      <section className="bg-transparent px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.08] tracking-[-1.2px]">
             {t('heroLine1')}

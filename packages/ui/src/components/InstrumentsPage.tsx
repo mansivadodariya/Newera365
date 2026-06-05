@@ -59,7 +59,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-background px-5 pb-7 pt-9">
+      <section className="bg-transparent px-5 pb-7 pt-9">
         <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl xl:max-w-[1200px]">
           <span>
             <h1 className="text-foreground whitespace-pre-line font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
@@ -70,7 +70,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
             </h1>
           </span>
           <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
-            {t('heroDesc')}
+            {t('heroSubtitle')}
           </p>
           {/* Search bar */}
           <div className="bg-surface flex h-[46px] items-center gap-3 rounded-[16px] px-4">
@@ -432,10 +432,10 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
       <section className="bg-background px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 font-mono text-[10px] font-medium leading-[100%] tracking-[0.18em] text-[#6B7280]">
-            {t('otherMarketsKicker')}
+            {t('otherKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.8px]">
-            {t('otherMarketsHeading')}
+            {t('otherHeading')}
           </h2>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
             {OTHER_MARKETS.map((market) => (

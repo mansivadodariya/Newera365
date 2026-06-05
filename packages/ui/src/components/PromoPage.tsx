@@ -114,7 +114,7 @@ export function PromoPage({ promos: cmsPromos }: PromoPageProps) {
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
             {t('heroLine1')}
             <br />
-            from <span className="text-accent">{t('heroAccent')}</span>
+            <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
             {t('heroSubtitle')}

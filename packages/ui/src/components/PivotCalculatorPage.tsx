@@ -270,7 +270,7 @@ export function PivotCalculatorPage() {
   return (
     <>
       {/* Hero */}
-      <section className="dark:bg-background bg-white px-5 pb-6 pt-9 xl:px-[80px] xl:py-16">
+      <section className="bg-transparent px-5 pb-6 pt-9 xl:px-[80px] xl:py-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[42px] font-semibold leading-[1.05]">
             {t('heroLine1')}

@@ -91,7 +91,7 @@ export function ResearchDetailPage({
   return (
     <>
       {/* Breadcrumb */}
-      <section className="bg-background px-5 pb-0 pt-6">
+      <section className="bg-transparent px-5 pb-0 pt-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="flex items-center gap-2">
             <Link
@@ -283,7 +283,7 @@ export function ResearchDetailPage({
         <section className="bg-background px-5 pb-6 pt-2">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <p className="text-foreground mb-3 font-sans text-[15px] font-semibold">
-              {t('relatedMarketsLabel')}
+              {t('relatedMarkets')}
             </p>
             <div className="flex flex-wrap gap-2">
               {article.relatedInstruments.map((inst) => (
@@ -310,7 +310,7 @@ export function ResearchDetailPage({
       <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="text-foreground mb-5 font-sans text-[18px] font-semibold">
-            {t('keepReadingHeading')}
+            {t('keepReading')}
           </p>
           <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
             {RELATED.map((art) => (
@@ -359,16 +359,18 @@ export function ResearchDetailPage({
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            {t('ctaHeading')}
+            {t('tradeHeading')}
             <br />
-            {t('ctaHeadingLine2')}
+            {t('tradeSubheading')}
           </h2>
-          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
+          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
+            {t('tradeDesc')}
+          </p>
           <Link
             href={`/${locale}/register`}
             className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
           >
-            {t('ctaBtn')}
+            {t('tradeBtn')}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path
                 d="M3 8h10M9 4l4 4-4 4"

@@ -98,14 +98,14 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
   return (
     <>
       {/* Top breadcrumb */}
-      <section className="bg-background px-5 pb-0 pt-6">
+      <section className="bg-transparent px-5 pb-0 pt-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="text-muted flex items-center gap-2">
             <Link
               href={`/${locale}/education`}
               className="font-body hover:text-accent text-[11px] uppercase tracking-[0.1em] transition-colors"
             >
-              {t('breadcrumbEducation')}
+              {t('backEducation')}
             </Link>
             <svg width="5" height="8" viewBox="0 0 5 8" fill="none">
               <path
@@ -120,7 +120,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
               href={`/${locale}/guides`}
               className="font-body hover:text-accent text-[11px] uppercase tracking-[0.1em] transition-colors"
             >
-              {t('breadcrumbGuides')}
+              {t('backGuides')}
             </Link>
             <svg width="5" height="8" viewBox="0 0 5 8" fill="none">
               <path
@@ -182,7 +182,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="bg-surface rounded-[18px] p-4">
               <p className="font-body text-muted mb-3 text-[9px] uppercase tracking-[0.12em]">
-                {t('tocHeading')}
+                {t('tocLabel')}
               </p>
               <div className="flex flex-col gap-0">
                 {guide.toc.map((item, i) => (

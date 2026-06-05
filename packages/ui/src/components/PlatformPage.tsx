@@ -201,18 +201,16 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-background px-5 pb-8 pt-9">
+      <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
             {t('heroLine1')}
             <br />
             {t('heroLine2')}
             <span className="text-accent"> {t('heroAccent')}</span>
-            <br />
-            {t('heroLine3')}
           </h1>
           <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
-            {t('heroDesc')}
+            {t('heroSubtitle')}
           </p>
 
           {/* Device mockup */}
@@ -297,17 +295,17 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                 <div>
                   <p className={`mb-2 font-sans text-[22px] font-semibold ${card.nameColor}`}>
                     {card.id === 'mt5'
-                      ? t('card1Name')
+                      ? t('mt5Title')
                       : card.id === 'web'
-                        ? t('card2Name')
-                        : t('card3Name')}
+                        ? t('webTitle')
+                        : t('mobileTitle')}
                   </p>
                   <p className={`font-body text-[13px] leading-[1.55] ${card.descColor}`}>
                     {card.id === 'mt5'
-                      ? t('card1Desc')
+                      ? t('mt5Desc')
                       : card.id === 'web'
-                        ? t('card2Desc')
-                        : t('card3Desc')}
+                        ? t('webDesc')
+                        : t('mobileDesc')}
                   </p>
                 </div>
 
@@ -317,10 +315,10 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                   className={`font-body flex h-[44px] items-center justify-center gap-2 rounded-full text-[13px] font-medium transition-opacity hover:opacity-80 ${card.ctaStyle}`}
                 >
                   {card.id === 'mt5'
-                    ? t('card1Cta')
+                    ? t('mt5Btn')
                     : card.id === 'web'
-                      ? t('card2Cta')
-                      : t('card3Cta')}
+                      ? t('webBtn')
+                      : t('mobileBtn')}
                   <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                     <path
                       d="M8 3v8M4 7l4 4 4-4"
@@ -381,7 +379,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
             {t('devicesKicker')}
           </SectionKicker>
           <h2 className="mb-3 font-sans text-[32px] font-semibold leading-[1.1] text-white xl:text-[40px]">
-            {t('devicesHeading')}
+            {t('devicesLine1')}
           </h2>
           <p className="font-body mb-8 max-w-[320px] text-[14px] leading-[1.55] text-white/50 xl:max-w-[460px] xl:text-[15px]">
             {t('devicesDesc')}
@@ -444,7 +442,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                 rel={downloads?.windows ? 'noopener noreferrer' : undefined}
                 className="bg-accent font-body hover:bg-accent-hover flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors xl:w-auto xl:px-7"
               >
-                {t('downloadMt5Btn')}
+                {t('downloadMT5Btn')}
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                   <path
                     d="M8 3v8M4 7l4 4 4-4"
@@ -461,7 +459,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                 href={downloads?.webTrader ?? `/${locale}/platform`}
                 className="font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40 xl:w-auto xl:px-7"
               >
-                {t('openWebtraderBtn')}
+                {t('openWebBtn')}
                 <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                   <path
                     d="M4 8h8M9 5l3 3-3 3"

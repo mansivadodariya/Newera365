@@ -105,6 +105,11 @@ export default async function LocaleLayout({
                 style={{ background: 'linear-gradient(0deg, #FFF 53.85%, #67FF59 100%)' }}
                 aria-hidden="true"
               />
+              <div
+                className="fixed inset-0 -z-10 hidden dark:block"
+                style={{ background: 'linear-gradient(0deg, #000 56.25%, #085a00 100%)' }}
+                aria-hidden="true"
+              />
               <main>{children}</main>
               <Footer
                 footerColumns={

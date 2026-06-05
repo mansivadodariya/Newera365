@@ -36,19 +36,6 @@ export default async function HomePage({ params }: { params: { locale: string } 
 
   return (
     <>
-      {/* Viewport-fixed gradient backgrounds — stay put while sections scroll over.
-          Light: lime green (#67FF59) at top → white at ~46% down.
-          Dark:  dark green (#085a00) at top → black at ~44% down. */}
-      <div
-        className="fixed inset-0 -z-10 dark:hidden"
-        style={{ background: 'linear-gradient(0deg, #FFF 53.85%, #67FF59 100%)' }}
-        aria-hidden="true"
-      />
-      <div
-        className="fixed inset-0 -z-10 hidden dark:block"
-        style={{ background: 'linear-gradient(0deg, #000 56.25%, #085a00 100%)' }}
-        aria-hidden="true"
-      />
       <TickerStrip />
       <HeroSection />
       <TrustStrip logos={trustLogos} />
