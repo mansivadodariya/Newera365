@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react';
 import { useLocale } from 'next-intl';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 /**
  * EN ↔ AR manual locale switcher.
@@ -33,8 +33,10 @@ export function LanguageToggle({ fullWidth = false }: LanguageToggleProps) {
 
     // Swap the locale segment: /en/foo → /ar/foo
     const newPath = pathname.replace(/^\/[a-z]{2}(\/|$)/, `/${next}$1`);
-    router.push(newPath);
-  }, [next, pathname, router]);
+    // Full page navigation ensures the server receives the new locale cookie
+    // and re-renders all Server Components in the correct locale.
+    window.location.href = newPath;
+  }, [next, pathname]);
 
   if (fullWidth) {
     return (
