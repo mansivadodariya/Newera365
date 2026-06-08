@@ -39,3 +39,4 @@ apps/web/next-env.d.ts
 
 .claude
 *.claude
+.vercel

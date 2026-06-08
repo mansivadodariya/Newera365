@@ -25,6 +25,18 @@ const pool = new pg.Pool({
 });
 
 const migrations = [
+  // ── promotions: status enum fix (production DB has draft/published, code uses active/inactive)
+  `DO $$ BEGIN
+     IF NOT EXISTS (SELECT 1 FROM pg_enum WHERE enumtypid = 'enum_promotions_status'::regtype AND enumlabel = 'active') THEN
+       ALTER TYPE enum_promotions_status ADD VALUE 'active';
+     END IF;
+   END $$`,
+  `DO $$ BEGIN
+     IF NOT EXISTS (SELECT 1 FROM pg_enum WHERE enumtypid = 'enum_promotions_status'::regtype AND enumlabel = 'inactive') THEN
+       ALTER TYPE enum_promotions_status ADD VALUE 'inactive';
+     END IF;
+   END $$`,
+
   // ── account_types: columns added previously ───────────────────────────────
   `ALTER TABLE account_types ADD COLUMN IF NOT EXISTS badge varchar`,
   `ALTER TABLE account_types ADD COLUMN IF NOT EXISTS name_ar varchar`,
