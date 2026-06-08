@@ -21,7 +21,6 @@ interface LanguageToggleProps {
 export function LanguageToggle({ fullWidth = false }: LanguageToggleProps) {
   const locale = useLocale();
   const pathname = usePathname(); // e.g. "/en/trade/accounts"
-  const router = useRouter();
 
   const next = locale === 'en' ? 'ar' : 'en';
   const label = locale === 'en' ? 'عربي' : 'EN';
