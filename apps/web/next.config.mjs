@@ -47,11 +47,15 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              `script-src 'self'${isDev ? " 'unsafe-eval' 'unsafe-inline'" : ''} https://s3.tradingview.com https://www.tradingview.com`,
+              // 'unsafe-inline' is required in both dev and prod: Next.js App Router embeds
+              // RSC payload and hydration bootstrapping as inline scripts — blocking them
+              // prevents React from hydrating and makes all interactive elements non-functional.
+              // 'unsafe-eval' is dev-only (webpack HMR). Tighten to a nonce strategy post-launch (NE-028).
+              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://s3.tradingview.com https://www.tradingview.com`,
               "frame-src https://www.tradingview.com https://s.tradingview.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https://media.newera365.com https://cms.newera365.com",
-              `connect-src 'self' ${process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001'}`,
+              `connect-src 'self' ${(process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001').trim()}`,
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",
