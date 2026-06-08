@@ -335,8 +335,17 @@ export function LegalPage({ documents }: LegalPageProps) {
   const t = useTranslations('legal');
   const hasCms = documents && documents.length > 0;
 
-  const cmsDocList = hasCms
-    ? documents.map((d) => ({ id: d.pageType, label: PAGE_TYPE_LABELS[d.pageType] ?? d.title }))
+  const uniqueDocs = hasCms
+    ? documents
+        .filter((d) => {
+          if (!d.title?.trim()) return false;
+          return true;
+        })
+        .filter((d, i, arr) => arr.findIndex((x) => x.pageType === d.pageType) === i)
+    : null;
+
+  const cmsDocList = uniqueDocs
+    ? uniqueDocs.map((d) => ({ id: d.pageType, label: PAGE_TYPE_LABELS[d.pageType] ?? d.title }))
     : null;
 
   const [activeDoc, setActiveDoc] = useState<DocId>('terms');
@@ -358,7 +367,7 @@ export function LegalPage({ documents }: LegalPageProps) {
       </section>
 
       {/* Document selector */}
-      <section className="bg-background px-5 pb-4">
+      <section className="px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
             {(cmsDocList ?? DOCUMENTS).map((doc) => (
@@ -389,7 +398,7 @@ export function LegalPage({ documents }: LegalPageProps) {
       </section>
 
       {/* Table of Contents */}
-      <section className="bg-background px-5 pb-4">
+      <section className="px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="bg-surface rounded-[14px] p-4">
             <p className="text-muted mb-3 font-mono text-[10px] tracking-[1.4px]">
@@ -412,7 +421,7 @@ export function LegalPage({ documents }: LegalPageProps) {
       </section>
 
       {/* Document body */}
-      <section className="bg-background px-5 pb-12">
+      <section className="px-5 pb-12">
         <div className="mx-auto flex max-w-[390px] flex-col gap-6 md:max-w-2xl xl:max-w-[1200px]">
           {DOC_CONTENT[activeDoc]}
         </div>

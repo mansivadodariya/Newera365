@@ -374,7 +374,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
       </section>
 
       {/* Category filter pills */}
-      <section className="bg-background px-5 pb-3">
+      <section className="px-5 pb-3">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-1.5 overflow-x-auto pb-1">
             <button
@@ -408,7 +408,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
       </section>
 
       {/* Alphabet filter */}
-      <section className="bg-background px-5 pb-4">
+      <section className="px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-1 overflow-x-auto">
             {ALPHABET.map((letter) => {
@@ -436,7 +436,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
       </section>
 
       {/* Terms list */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5">
             {activeCategory

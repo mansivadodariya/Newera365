@@ -7,12 +7,10 @@ import { SectionKicker } from './SectionKicker';
 export function NewsletterPage() {
   const t = useTranslations('newsletter');
   const [email, setEmail] = useState('');
-  const [agreed, setAgreed] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!agreed) return;
     setSubmitted(true);
   }
 
@@ -33,7 +31,7 @@ export function NewsletterPage() {
       </section>
 
       {/* Subscribe form */}
-      <section className="bg-background px-5 pb-8">
+      <section className="px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {submitted ? (
             <div className="bg-surface rounded-[20px] px-6 py-10 text-center">
@@ -97,7 +95,7 @@ export function NewsletterPage() {
       </section>
 
       {/* What you get */}
-      <section className="bg-background px-5 pb-8">
+      <section className="px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('whatKicker')}

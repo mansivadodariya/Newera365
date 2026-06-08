@@ -109,7 +109,7 @@ export function ResearchDetailPage({
       </section>
 
       {/* Hero */}
-      <section className="bg-background px-5 pb-6 pt-4">
+      <section className="px-5 pb-6 pt-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="mb-3 flex items-center gap-2">
             <span
@@ -131,7 +131,7 @@ export function ResearchDetailPage({
       </section>
 
       {/* Hero chart */}
-      <section className="bg-background px-5 pb-8">
+      <section className="px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="overflow-hidden rounded-[18px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111] p-5">
             <svg width="100%" height="100" viewBox="0 0 300 100" preserveAspectRatio="none">
@@ -162,7 +162,7 @@ export function ResearchDetailPage({
       </section>
 
       {/* Article body */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {hasCmsBody ? (
             <RichText content={article!.body} />
@@ -280,7 +280,7 @@ export function ResearchDetailPage({
 
       {/* Related instruments — shown when article has relatedInstruments from CMS */}
       {article?.relatedInstruments && article.relatedInstruments.length > 0 && (
-        <section className="bg-background px-5 pb-6 pt-2">
+        <section className="px-5 pb-6 pt-2">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <p className="text-foreground mb-3 font-sans text-[15px] font-semibold">
               {t('relatedMarkets')}
@@ -307,7 +307,7 @@ export function ResearchDetailPage({
       )}
 
       {/* Related articles */}
-      <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
+      <section className="bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="text-foreground mb-5 font-sans text-[18px] font-semibold">
             {t('keepReading')}

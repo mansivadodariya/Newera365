@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import type React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -120,7 +121,7 @@ function MobileMenu({ open, onClose }: MobileMenuProps) {
       aria-modal="true"
       aria-label="Navigation menu"
       aria-hidden={!open}
-      {...(!open ? { inert: true } : {})}
+      {...(!open ? ({ inert: '' } as unknown as React.HTMLAttributes<HTMLDivElement>) : {})}
       className={[
         'bg-background fixed inset-0 z-50 flex flex-col',
         'transition-transform duration-300 ease-out will-change-transform',

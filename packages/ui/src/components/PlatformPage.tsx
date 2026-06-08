@@ -262,7 +262,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       </section>
 
       {/* Terminal section */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('terminalKicker')}

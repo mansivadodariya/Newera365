@@ -89,29 +89,31 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
       </section>
 
       {/* Category nav strip */}
-      <section className="bg-background mx-auto px-5 pb-4">
-        <div
-          className="scrollbar-hide flex gap-[8px] overflow-x-auto"
-          style={{ scrollPaddingLeft: '20px' }}
-        >
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`font-body flex-shrink-0 rounded-full px-4 py-[10px] text-[13px] font-medium transition-colors ${
-                activeCategory === cat
-                  ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                  : 'text-foreground dark:bg-surface-elevated dark:hover:bg-surface bg-[#f2f2f4] hover:bg-[#e5e5e5]'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+      <section className="mx-auto bg-transparent px-5 pb-4">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div
+            className="scrollbar-hide flex gap-2 overflow-x-auto"
+            style={{ scrollPaddingLeft: '20px' }}
+          >
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`font-body flex-shrink-0 rounded-full px-4 py-[10px] text-[13px] font-medium transition-colors ${
+                  activeCategory === cat
+                    ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                    : 'text-foreground dark:bg-surface-elevated dark:hover:bg-surface bg-[#f2f2f4] hover:bg-[#e5e5e5]'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Instrument list */}
-      <section className="bg-background px-5 pb-6">
+      <section className="bg-transparent px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="mb-4 flex items-center justify-between">
             <SectionKicker className="[&>span:first-child]:bg-muted text-muted">
@@ -429,7 +431,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
       </section>
 
       {/* Other markets */}
-      <section className="bg-background px-5 pb-12 pt-10">
+      <section className="px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 font-mono text-[10px] font-medium leading-[100%] tracking-[0.18em] text-[#6B7280]">
             {t('otherKicker')}

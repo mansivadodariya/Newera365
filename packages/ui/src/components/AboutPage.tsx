@@ -166,7 +166,7 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
       </section>
 
       {/* Timeline */}
-      <section className="bg-background rounded-t-[32px] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
+      <section className="rounded-t-[32px] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('timelineKicker')}
@@ -240,7 +240,7 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
       </section>
 
       {/* Explore links */}
-      <section className="bg-background rounded-t-[32px] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
+      <section className="rounded-t-[32px] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('exploreKicker')}

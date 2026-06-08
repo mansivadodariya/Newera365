@@ -42,8 +42,12 @@ const CMS_CATEGORY_LABELS: Record<string, string> = {
 };
 
 function cmsFaqsToGroups(faqs: CmsFaqItem[]): FaqGroup[] {
+  const seen = new Set<string>();
   const grouped = new Map<string, FaqItem[]>();
   for (const faq of faqs) {
+    if (!faq.question?.trim()) continue;
+    if (seen.has(faq.question)) continue;
+    seen.add(faq.question);
     const label = CMS_CATEGORY_LABELS[faq.category] ?? faq.category;
     if (!grouped.has(label)) grouped.set(label, []);
     grouped.get(label)!.push({
@@ -287,9 +291,11 @@ export function FaqPage({ faqs }: FaqPageProps) {
 
   const popularItems = useMemo(
     () =>
-      allGroups.flatMap((g) =>
-        g.items.filter((item) => item.popular).map((item) => ({ ...item, section: g.section })),
-      ),
+      allGroups
+        .flatMap((g) =>
+          g.items.filter((item) => item.popular).map((item) => ({ ...item, section: g.section })),
+        )
+        .slice(0, 6),
     [allGroups],
   );
 
@@ -338,7 +344,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
       </section>
 
       {/* Category filter tabs — matches Figma pills */}
-      <section className="bg-background px-5 pb-4">
+      <section className="px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div
             className="scrollbar-hide -mx-5 flex gap-2 overflow-x-auto px-5 pb-1"
@@ -369,7 +375,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
 
       {/* Popular questions — shown only when no search/filter active */}
       {showPopular && (
-        <section className="bg-background px-5 pb-6">
+        <section className="px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
               {t('sectionPopular')}
@@ -415,7 +421,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
 
       {/* Search result count */}
       {search && (
-        <section className="bg-background px-5 pb-2">
+        <section className="px-5 pb-2">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="xl:mx-auto xl:max-w-[730px]">
               <p className="font-body text-muted text-[12px]">
@@ -429,7 +435,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
       )}
 
       {/* ALL FAQs section — Figma: bg-white rounded-[16px] cards, gap-[10px] */}
-      <section className="bg-background px-5 pb-6">
+      <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('sectionAll')}

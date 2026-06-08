@@ -280,7 +280,7 @@ export function LiveWatchlistPage() {
       </section>
 
       {/* Tab filter */}
-      <section className="bg-background px-5 pb-4">
+      <section className="px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
             {TABS.map((tabItem) => (
@@ -307,7 +307,7 @@ export function LiveWatchlistPage() {
       </section>
 
       {/* TradingView mini chart — matches Figma watchlist widget */}
-      <section className="bg-background px-5 pb-4">
+      <section className="px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="overflow-hidden rounded-[22px]" style={{ height: 220 }}>
             <TradingViewWidget
@@ -322,7 +322,7 @@ export function LiveWatchlistPage() {
       </section>
 
       {/* Market list — dark card */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div
             className="overflow-hidden rounded-[22px] bg-[#111111]"

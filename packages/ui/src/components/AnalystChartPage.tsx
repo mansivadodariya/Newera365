@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-type FilterTab = 'All' | 'Majors' | 'Crosses' | 'Commodities' | 'Crypto';
+type FilterTab = 'All' | 'Majors' | 'Crosses' | 'Commodities';
 type Sentiment = 'BULLISH' | 'BEARISH' | 'NEUTRAL';
 
 interface PairCall {
@@ -66,7 +66,7 @@ const CALLS: PairCall[] = [
     conf: 60,
     sentiment: 'BULLISH',
     up: true,
-    category: 'Crypto',
+    category: 'Commodities',
     sparkPoints: [25, 30, 28, 33, 31, 36, 35, 39, 38, 44],
   },
   {
@@ -89,7 +89,7 @@ const ANALYST = {
   commentary: `EUR/USD continues to grind higher as the ECB pushes back against July cut expectations. With US data softening and the dollar index breaking below the 200-day average, we see room for a move toward 1.0980 in the coming weeks. Key risk: a hot NFP print could trigger a sharp reversal back toward 1.0750.`,
 };
 
-const TABS: FilterTab[] = ['All', 'Majors', 'Crosses', 'Commodities', 'Crypto'];
+const TABS: FilterTab[] = ['All', 'Majors', 'Crosses', 'Commodities'];
 
 const TIMEFRAMES = ['1H', '4H', '1D', '1W'];
 
@@ -238,14 +238,14 @@ export function AnalystChartPage() {
       </section>
 
       {/* Featured chart card */}
-      <section className="bg-background px-5 pb-6">
+      <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <FeaturedChart pair={featured} />
         </div>
       </section>
 
       {/* Pair filter + This week's calls */}
-      <section className="bg-background px-5 pb-6">
+      <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Filter */}
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
@@ -268,9 +268,7 @@ export function AnalystChartPage() {
                     ? t('filterMajors')
                     : tabItem === 'Crosses'
                       ? t('filterCrosses')
-                      : tabItem === 'Commodities'
-                        ? t('filterCommodities')
-                        : t('filterCrypto')}
+                      : t('filterCommodities')}
               </button>
             ))}
           </div>
@@ -333,7 +331,7 @@ export function AnalystChartPage() {
       </section>
 
       {/* Analyst commentary */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('commentaryLabel')}

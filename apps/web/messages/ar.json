@@ -541,7 +541,8 @@
     "namePlaceholder": "اسمك",
     "emailPlaceholder": "بريدك@الإلكتروني.com",
     "emailPlaceholderFull": "عنوان بريدك الإلكتروني",
-    "whatsInsideKicker": "ما يحتويه الكتاب"
+    "whatsInsideKicker": "ما يحتويه الكتاب",
+    "consentCheckbox": "أوافق على تلقي النشرات الإخبارية والمحتوى التعليمي من NewEra365. يمكنك إلغاء الاشتراك في أي وقت."
   },
   "education": {
     "heroLine1": "تعلّم",
@@ -821,6 +822,7 @@
     "colSpread": "الفارق",
     "colCommission": "العمولة",
     "colCostPerLot": "التكلفة / لوت",
+    "colMinDeposit": "الحد الأدنى للإيداع",
     "commNone": "لا يوجد",
     "commFrom": "من 1.50$",
     "savingKicker": "توفير على مدار العام",
@@ -844,6 +846,9 @@
     "tabPip": "قيمة النقطة",
     "tabSwap": "المبادلة",
     "fieldCurrency": "عملة الحساب",
+    "fieldInstrument": "الأداة",
+    "fieldPositionSize": "حجم المركز",
+    "fieldLeverage": "الرافعة المالية",
     "fieldDirection": "الاتجاه",
     "dirBuy": "شراء / طويل",
     "dirSell": "بيع / قصير",

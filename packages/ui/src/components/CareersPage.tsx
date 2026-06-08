@@ -128,11 +128,12 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
   const t = useTranslations('careers');
   const [dept, setDept] = useState('ALL');
 
-  const useCms = cmsJobs && cmsJobs.length > 0;
+  const validCmsJobs = cmsJobs?.filter((j) => j.title?.trim()) ?? [];
+  const useCms = validCmsJobs.length > 0;
 
   // Build department list from CMS data or fall back to static list
   const deptIds: string[] = useCms
-    ? ['ALL', ...Array.from(new Set(cmsJobs.map((j) => j.department.toUpperCase())))]
+    ? ['ALL', ...Array.from(new Set(validCmsJobs.map((j) => j.department.toUpperCase())))]
     : DEPARTMENTS.map((d) => d.id);
 
   // Map department id → translated label. Falls back to the raw id for any
@@ -156,8 +157,8 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
 
   const filtered = useCms
     ? dept === 'ALL'
-      ? cmsJobs
-      : cmsJobs.filter((j) => j.department.toUpperCase() === dept)
+      ? validCmsJobs
+      : validCmsJobs.filter((j) => j.department.toUpperCase() === dept)
     : dept === 'ALL'
       ? JOBS
       : JOBS.filter((j) => j.department === (dept as MockDept));
@@ -179,7 +180,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       </section>
 
       {/* Stats */}
-      <section className="bg-background px-5 pb-8">
+      <section className="px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-4">
             {[
@@ -203,7 +204,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       </section>
 
       {/* Values */}
-      <section className="bg-background px-5 pb-8">
+      <section className="px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('valuesKicker')}
@@ -227,7 +228,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       </section>
 
       {/* Open roles */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('rolesHeading')}

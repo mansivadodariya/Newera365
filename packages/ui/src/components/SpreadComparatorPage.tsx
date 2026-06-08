@@ -126,7 +126,7 @@ export function SpreadComparatorPage() {
       </section>
 
       {/* Instrument selector */}
-      <section className="bg-background px-5 pb-6">
+      <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
             {INSTRUMENTS.map((ins) => (
@@ -147,7 +147,7 @@ export function SpreadComparatorPage() {
       </section>
 
       {/* Spread bars */}
-      <section className="bg-background px-5 pb-6">
+      <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="bg-surface rounded-[18px] p-5">
             <p className="font-body mb-4 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">
@@ -183,7 +183,7 @@ export function SpreadComparatorPage() {
       </section>
 
       {/* Account cards */}
-      <section className="bg-background px-5 pb-6">
+      <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="grid grid-cols-3 gap-[10px]">
             {/* Standard */}
@@ -209,10 +209,10 @@ export function SpreadComparatorPage() {
               </div>
               <div className="dark:border-border mt-auto border-t border-[#e5e7eb] pt-3">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
-                  {t('colCostPerLot')}
+                  {t('colMinDeposit')}
                 </p>
                 <p className="font-body text-foreground text-[15px] font-semibold tabular-nums">
-                  ${costPerLot.standard.toFixed(2)}
+                  $100
                 </p>
               </div>
             </div>
@@ -241,11 +241,9 @@ export function SpreadComparatorPage() {
               </div>
               <div className="mt-auto border-t border-white/10 pt-3">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
-                  {t('colCostPerLot')}
+                  {t('colMinDeposit')}
                 </p>
-                <p className="font-body text-accent text-[15px] font-semibold tabular-nums">
-                  ${costPerLot.raw.toFixed(2)}
-                </p>
+                <p className="font-body text-accent text-[15px] font-semibold tabular-nums">$500</p>
               </div>
             </div>
 
@@ -272,10 +270,10 @@ export function SpreadComparatorPage() {
               </div>
               <div className="dark:border-border mt-auto border-t border-[#e5e7eb] pt-3">
                 <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
-                  {t('colCostPerLot')}
+                  {t('colMinDeposit')}
                 </p>
                 <p className="font-body text-foreground text-[15px] font-semibold tabular-nums">
-                  From ${costPerLot.vip.toFixed(2)}
+                  $10k
                 </p>
               </div>
             </div>
@@ -284,7 +282,7 @@ export function SpreadComparatorPage() {
       </section>
 
       {/* Annual saving panel */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div
             className="rounded-[20px] bg-[#111111] px-5 py-6"
@@ -319,7 +317,7 @@ export function SpreadComparatorPage() {
       </section>
 
       {/* How we calculate */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="bg-surface rounded-[18px] p-5">
             <p className="font-body mb-2 text-[10px] uppercase tracking-[0.12em] text-[#9ca3af]">

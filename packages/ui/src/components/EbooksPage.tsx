@@ -56,6 +56,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
       : OTHER_EBOOKS;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -99,7 +100,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
       </section>
 
       {/* Ebook cover + gate form */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Cover */}
           <div className="mb-6 flex items-center justify-center overflow-hidden rounded-[22px] bg-gradient-to-br from-[#0a2614] via-[#0d1f0d] to-[#111111] px-8 py-10">
@@ -130,78 +131,6 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                 A 56-page framework for never losing more than 5% on a single trade. Used by our
                 desk every day.
               </p>
-            </div>
-
-            {/* Gate form */}
-            <div
-              className="rounded-[22px] bg-[#f9f9f9] p-5 dark:bg-[#1c1c1c]"
-              style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.06)' }}
-            >
-              <p className="text-foreground mb-1 font-sans text-[18px] font-semibold">
-                {t('gateHeading')}
-              </p>
-              <p className="font-body text-muted mb-5 text-[12px] leading-[1.55]">
-                {t('gateDesc')}
-              </p>
-
-              {success ? (
-                <div className="flex flex-col items-center gap-3 py-4 text-center">
-                  <div className="bg-accent/10 flex h-12 w-12 items-center justify-center rounded-full">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                      <path
-                        d="M4 10l4 4 8-8"
-                        stroke="#00B050"
-                        strokeWidth="1.75"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-                  <p className="text-foreground font-sans text-[16px] font-semibold">
-                    {t('successHeading')}
-                  </p>
-                  <p className="font-body text-muted text-[13px]">{t('successDesc', { email })}</p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-                  <input
-                    type="text"
-                    required
-                    placeholder={t('namePlaceholder')}
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none dark:bg-[#141414]"
-                  />
-                  <input
-                    type="email"
-                    required
-                    placeholder={t('emailPlaceholder')}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="border-border font-body text-foreground placeholder-muted focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none dark:bg-[#141414]"
-                  />
-                  {error && <p className="font-body text-[12px] text-red-500">{error}</p>}
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="bg-accent hover:bg-accent/90 font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors disabled:opacity-60"
-                  >
-                    {loading ? t('sendingLabel') : t('submitBtn')}
-                    {!loading && (
-                      <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                        <path
-                          d="M3 8h10M9 4l4 4-4 4"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    )}
-                  </button>
-                  <p className="font-body text-muted text-center text-[11px]">{t('privacyNote')}</p>
-                </form>
-              )}
             </div>
           </div>
 
@@ -248,9 +177,20 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                   className="border-border font-body text-foreground placeholder-muted focus:border-accent dark:bg-section w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none"
                 />
                 {error && <p className="font-body text-[12px] text-red-500">{error}</p>}
+                <label className="flex cursor-pointer items-start gap-2.5">
+                  <input
+                    type="checkbox"
+                    checked={agreed}
+                    onChange={(e) => setAgreed(e.target.checked)}
+                    className="accent-accent mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer rounded"
+                  />
+                  <span className="font-body text-muted text-[11px] leading-[1.5]">
+                    {t('consentCheckbox')}
+                  </span>
+                </label>
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !agreed}
                   className="bg-accent hover:bg-accent/90 font-body flex h-[50px] w-full items-center justify-center rounded-full text-[14px] font-medium text-white transition-colors disabled:opacity-60"
                 >
                   {loading ? t('sendingLabel') : t('submitBtn')}
@@ -291,7 +231,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
       </section>
 
       {/* More ebooks */}
-      <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
+      <section className="bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5">{t('moreGuidesKicker')}</SectionKicker>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">

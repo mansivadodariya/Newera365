@@ -256,7 +256,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
       </section>
 
       {/* Tabs */}
-      <section className="bg-background px-5 pb-4">
+      <section className="px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
             {TABS.map((tab) => (
@@ -278,7 +278,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
 
       {/* Featured episode */}
       {featured && (activeTab === 'ALL' || activeTab === featured.tab) && !search && (
-        <section className="bg-background px-5 pb-6">
+        <section className="px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div
               className="overflow-hidden rounded-[22px] bg-[#0d0d0d] xl:flex xl:flex-row"
@@ -290,7 +290,6 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
               {/* Thumbnail */}
               <div className="relative flex h-[180px] items-center justify-center overflow-hidden bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111] xl:h-auto xl:w-[55%] xl:flex-shrink-0 xl:rounded-none">
                 {featured.thumbnailUrl && (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={featured.thumbnailUrl}
                     alt={featured.title}
@@ -344,7 +343,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
         </section>
       )}
       {/* Episode grid */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mx-auto mb-5 mt-2">
             {t('latestEpisodes')}
@@ -363,7 +362,6 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
                   {/* Thumbnail */}
                   <div className="relative flex h-[90px] items-center justify-center overflow-hidden rounded-[11px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111]">
                     {ep.thumbnailUrl && (
-                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={ep.thumbnailUrl}
                         alt={ep.title}

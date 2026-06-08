@@ -110,7 +110,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
       </section>
 
       {/* Channels — rounded-t-[32px] bg-background per Figma */}
-      <section className="bg-background rounded-t-[32px] px-5 pb-8 pt-10 xl:pb-16">
+      <section className="rounded-t-[32px] px-5 pb-8 pt-10 xl:pb-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('channelsKicker')}
@@ -415,6 +415,10 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                 </svg>
               </div>
             ))}
+          </div>
+          <div className="mt-4 flex items-center gap-2 border-t border-white/10 pt-4">
+            <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#22C55E]" />
+            <span className="font-body text-[11px] text-white/50">Support open · 24/5</span>
           </div>
         </div>
       </section>

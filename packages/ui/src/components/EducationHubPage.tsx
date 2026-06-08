@@ -196,7 +196,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
       </section>
 
       {/* Category grid */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('browseKicker')}
@@ -235,7 +235,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
       </section>
 
       {/* Featured this week */}
-      <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
+      <section className="bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('featuredKicker')}
@@ -285,7 +285,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
       </section>
 
       {/* Pinned guides */}
-      <section className="bg-background px-5 pb-10 pt-8">
+      <section className="px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('pinnedKicker')}

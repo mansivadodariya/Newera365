@@ -542,7 +542,8 @@
     "namePlaceholder": "Your name",
     "emailPlaceholder": "you@email.com",
     "emailPlaceholderFull": "Your email address",
-    "whatsInsideKicker": "WHAT'S INSIDE"
+    "whatsInsideKicker": "WHAT'S INSIDE",
+    "consentCheckbox": "I agree to receive market briefings and educational content from NewEra365. You can unsubscribe any time."
   },
   "education": {
     "heroLine1": "Learn to",
@@ -822,6 +823,7 @@
     "colSpread": "Spread",
     "colCommission": "Commission",
     "colCostPerLot": "Cost / lot",
+    "colMinDeposit": "Min deposit",
     "commNone": "None",
     "commFrom": "From $1.50",
     "savingKicker": "YEAR-ROUND SAVING",
@@ -845,6 +847,9 @@
     "tabPip": "Pip value",
     "tabSwap": "Swap",
     "fieldCurrency": "Account Currency",
+    "fieldInstrument": "Instrument",
+    "fieldPositionSize": "Position Size",
+    "fieldLeverage": "Leverage",
     "fieldDirection": "Direction",
     "dirBuy": "Buy / Long",
     "dirSell": "Sell / Short",

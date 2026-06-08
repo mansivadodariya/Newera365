@@ -187,7 +187,15 @@ function toDisplayArticles(cmsArticles?: CmsResearchArticle[]): ArticleDisplay[]
   if (!cmsArticles?.length) {
     return ARTICLES as unknown as ArticleDisplay[];
   }
-  return cmsArticles.map((a, i) => ({
+  const seen = new Set<string>();
+  const filtered = cmsArticles.filter((a) => {
+    if (!a.title?.trim()) return false;
+    if (seen.has(a.title)) return false;
+    seen.add(a.title);
+    return true;
+  });
+  if (!filtered.length) return ARTICLES as unknown as ArticleDisplay[];
+  return filtered.map((a, i) => ({
     id: String(a.id),
     slug: a.slug,
     category: (ASSET_TO_CATEGORY[a.assetCategory] ?? 'ANALYSIS') as Exclude<Category, 'ALL'>,
@@ -248,7 +256,7 @@ export function ResearchPage({
       </section>
 
       {/* Category tabs */}
-      <section className="bg-background px-5 pb-4">
+      <section className="px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
             {CATEGORIES.map((cat) => (
@@ -270,7 +278,7 @@ export function ResearchPage({
 
       {/* Featured article */}
       {activeCategory === 'ALL' && featured && (
-        <section className="bg-background px-5 pb-6">
+        <section className="px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <Link
               href={`/${locale}/${basePath}/${featured.slug}`}
@@ -345,7 +353,7 @@ export function ResearchPage({
       )}
 
       {/* Article list — white cards matching Figma */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-3 xl:gap-6">
             {filteredList.map((article) => (
@@ -357,7 +365,6 @@ export function ResearchPage({
                 {/* Thumbnail — CMS image if available, SVG sparkline fallback */}
                 <div className="relative mb-[14px] flex h-[120px] w-full items-end overflow-hidden rounded-[12px] bg-gradient-to-br from-[#f4f4f2] to-[#e8e8e5] p-3 dark:from-[#1c1c1c] dark:to-[#111]">
                   {article.thumbnailUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={article.thumbnailUrl}
                       alt={article.title}
@@ -445,7 +452,7 @@ export function ResearchPage({
 
       {/* Research Reports downloads */}
       {cmsReports && cmsReports.length > 0 && (
-        <section className="bg-background px-5 pb-10">
+        <section className="px-5 pb-10">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="mb-5 flex items-center gap-3">
               <h2 className="text-foreground font-sans text-[22px] font-semibold leading-tight tracking-[-0.33px]">

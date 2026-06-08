@@ -275,7 +275,7 @@ export function ProfitCalculatorPage() {
       </section>
 
       {/* Calculator */}
-      <section className="dark:bg-background bg-white px-5 pb-10 xl:px-[80px]">
+      <section className="bg-white px-5 pb-10 xl:px-[80px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Mode tabs */}
           <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-[#1c1c1c]">
@@ -404,7 +404,7 @@ export function ProfitCalculatorPage() {
       </section>
 
       {/* More Calculators */}
-      <section className="dark:bg-background bg-[#f9f9f9] px-5 pb-10 pt-8 xl:px-[80px]">
+      <section className="bg-[#f9f9f9] px-5 pb-10 pt-8 xl:px-[80px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
             {t('moreKicker')}

@@ -139,7 +139,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
       </section>
 
       {/* Header */}
-      <section className="bg-background px-5 pb-6 pt-5">
+      <section className="px-5 pb-6 pt-5">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <span
             className={`font-body mb-3 inline-flex rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${guide.categoryClass}`}
@@ -178,7 +178,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
 
       {/* Table of contents */}
       {guide.toc.length > 0 && (
-        <section className="bg-background px-5 pb-6">
+        <section className="px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="bg-surface rounded-[18px] p-4">
               <p className="font-body text-muted mb-3 text-[9px] uppercase tracking-[0.12em]">
@@ -210,7 +210,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
       )}
 
       {/* Article body */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="flex flex-col gap-8">
             {guide.sections.map((section, i) => (

@@ -20,21 +20,6 @@ const FEATURES = [
     title: 'Secure sessions',
     desc: 'Bank-grade encryption on every session, with client funds held in segregated accounts.',
   },
-  {
-    id: 'charting',
-    title: 'Full charting',
-    desc: 'Detachable charts, every timeframe and the complete MT5 indicator suite.',
-  },
-  {
-    id: 'depth',
-    title: 'Depth of market',
-    desc: 'See full order-book depth and liquidity before you place a trade.',
-  },
-  {
-    id: 'markets',
-    title: '2,000+ markets',
-    desc: 'Forex, indices, shares, metals, energy and crypto — all from one login.',
-  },
 ] as const;
 
 // Static candlestick data for the chart mockup
@@ -111,7 +96,7 @@ export function WebTraderPage() {
       </section>
 
       {/* Embed mockup */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="overflow-hidden rounded-[22px] bg-[#111111]">
             {/* Toolbar */}
@@ -227,14 +212,14 @@ export function WebTraderPage() {
       </section>
 
       {/* Features */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
             {t('featuresHeading')}
             <br />
             <span className="text-accent">{t('featuresHeadingAccent')}</span>
           </h2>
-          <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3 xl:gap-4">
+          <div className="flex flex-col gap-[10px]">
             {FEATURES.map((feat) => (
               <div
                 key={feat.id}

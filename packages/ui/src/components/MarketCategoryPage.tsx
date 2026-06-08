@@ -157,7 +157,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
       </section>
 
       {/* Instrument list — watchlist widget */}
-      <section className="bg-background px-5 pb-6">
+      <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-3">
             {cmsRows
@@ -317,7 +317,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
       </section>
 
       {/* Other markets */}
-      <section className="bg-background px-5 pb-12 pt-10">
+      <section className="px-5 pb-12 pt-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">{t('otherKicker')}</SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.8px]">

@@ -110,7 +110,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
 
       {/* Featured guide */}
       {featured && (
-        <section className="bg-background px-5 pb-6">
+        <section className="px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="mb-4">{t('featuredLabel')}</SectionKicker>
             <Link
@@ -146,7 +146,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
       )}
 
       {/* All guides */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mt-5">{t('allGuidesLabel')}</SectionKicker>
           <div className="flex flex-col gap-0">

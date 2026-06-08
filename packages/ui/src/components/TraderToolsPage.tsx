@@ -390,7 +390,7 @@ export function TraderToolsPage() {
       </section>
 
       {/* Calculator */}
-      <section className="bg-background px-5 pb-10">
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Tab switcher */}
           <div className="dark:bg-surface mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1">
@@ -418,6 +418,25 @@ export function TraderToolsPage() {
                 value={currency}
                 options={['USD', 'EUR', 'GBP']}
                 onChange={setCurrency}
+              />
+              <SelectInput
+                label={t('fieldInstrument')}
+                value={instrument}
+                options={INSTRUMENTS}
+                onChange={(v) => setInstrument(v as Instrument)}
+              />
+              <NumberInput
+                label={t('fieldPositionSize')}
+                value={positionSize}
+                onChange={setPositionSize}
+                step="0.01"
+                min="0.01"
+              />
+              <SelectInput
+                label={t('fieldLeverage')}
+                value={leverage}
+                options={['10', '20', '50', '100', '200', '500']}
+                onChange={setLeverage}
               />
             </div>
             {activeTab === 'SWAP' && (
@@ -518,7 +537,7 @@ export function TraderToolsPage() {
       </section>
 
       {/* Other tools */}
-      <section className="dark:bg-background bg-surface px-5 pb-10 pt-8">
+      <section className="bg-surface px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('moreKicker')}

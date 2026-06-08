@@ -186,7 +186,7 @@ export function EconomicCalendarPage() {
       </section>
 
       {/* Filters */}
-      <section className="bg-background px-5 pb-3">
+      <section className="px-5 pb-3">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Impact filter */}
           <div className="mb-3 flex gap-2">
@@ -235,7 +235,7 @@ export function EconomicCalendarPage() {
       </section>
 
       {/* Calendar */}
-      <section className="bg-background pb-10">
+      <section className="pb-10">
         <div className="mx-auto max-w-[390px] px-5 md:max-w-2xl xl:max-w-[1200px]">
           {/* Desktop table header */}
           <div className="mb-1 hidden xl:grid xl:grid-cols-[80px_40px_80px_1fr_90px_90px_90px_60px] xl:gap-4 xl:border-b xl:border-[#e5e7eb] xl:pb-2 dark:xl:border-[#2a2a2a]">
