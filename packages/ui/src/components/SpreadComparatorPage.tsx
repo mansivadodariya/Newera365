@@ -5,34 +5,68 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-type Instrument = 'EURUSD' | 'GBPUSD' | 'XAUUSD' | 'BTCUSD';
+// ---------------------------------------------------------------------------
+// CMS instrument shape (subset)
+// ---------------------------------------------------------------------------
+export interface CmsSpreadInstrument {
+  symbol: string; // e.g. "EURUSD"
+  name: string; // e.g. "EUR/USD" — used as label
+  spreadIndustry?: number | null;
+  spreadStandard?: number | null;
+  spreadRaw?: number | null;
+  spreadVip?: number | null;
+  pipValue?: number | null;
+}
 
-const INSTRUMENTS: { id: Instrument; label: string }[] = [
-  { id: 'EURUSD', label: 'EURUSD' },
-  { id: 'GBPUSD', label: 'GBPUSD' },
-  { id: 'XAUUSD', label: 'XAUUSD' },
-  { id: 'BTCUSD', label: 'BITCOIN' },
-];
-
-const SPREAD_DATA: Record<
-  Instrument,
+// ---------------------------------------------------------------------------
+// Fallback static data — used when CMS collection is empty / not seeded yet
+// ---------------------------------------------------------------------------
+const FALLBACK_INSTRUMENTS: CmsSpreadInstrument[] = [
   {
-    industry: number;
-    standard: number;
-    raw: number;
-    vip: number;
-    pipValue: number;
-    unit: string;
-  }
-> = {
-  EURUSD: { industry: 1.9, standard: 1.0, raw: 0.0, vip: 0.0, pipValue: 10, unit: 'pip' },
-  GBPUSD: { industry: 2.1, standard: 1.2, raw: 0.1, vip: 0.0, pipValue: 10, unit: 'pip' },
-  XAUUSD: { industry: 0.5, standard: 0.35, raw: 0.15, vip: 0.1, pipValue: 1, unit: 'USD' },
-  BTCUSD: { industry: 55, standard: 30, raw: 15, vip: 10, pipValue: 1, unit: 'pt' },
-};
+    symbol: 'EURUSD',
+    name: 'EURUSD',
+    spreadIndustry: 1.9,
+    spreadStandard: 1.0,
+    spreadRaw: 0.0,
+    spreadVip: 0.0,
+    pipValue: 10,
+  },
+  {
+    symbol: 'GBPUSD',
+    name: 'GBPUSD',
+    spreadIndustry: 2.1,
+    spreadStandard: 1.2,
+    spreadRaw: 0.1,
+    spreadVip: 0.0,
+    pipValue: 10,
+  },
+  {
+    symbol: 'XAUUSD',
+    name: 'XAUUSD',
+    spreadIndustry: 0.5,
+    spreadStandard: 0.35,
+    spreadRaw: 0.15,
+    spreadVip: 0.1,
+    pipValue: 1,
+  },
+  {
+    symbol: 'BTCUSD',
+    name: 'BITCOIN',
+    spreadIndustry: 55,
+    spreadStandard: 30,
+    spreadRaw: 15,
+    spreadVip: 10,
+    pipValue: 1,
+  },
+];
 
 const COMMISSIONS = { standard: 0, raw: 3.5, vip: 1.5 };
 const LOTS_PER_MONTH = 10;
+
+interface SpreadComparatorPageProps {
+  /** Live instrument spread data from the CMS ProductsInstruments collection */
+  instruments?: CmsSpreadInstrument[];
+}
 
 function SpreadBar({ value, max, color }: { value: number; max: number; color: string }) {
   const pct = max > 0 ? Math.max(4, (value / max) * 100) : 4;
@@ -46,12 +80,34 @@ function SpreadBar({ value, max, color }: { value: number; max: number; color: s
   );
 }
 
-export function SpreadComparatorPage() {
+export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComparatorPageProps) {
   const locale = useLocale();
   const t = useTranslations('spreadComparator');
-  const [instrument, setInstrument] = useState<Instrument>('EURUSD');
 
-  const data = SPREAD_DATA[instrument];
+  // Use CMS instruments when available, fall back to static list
+  const instruments =
+    cmsInstruments && cmsInstruments.length > 0 ? cmsInstruments : FALLBACK_INSTRUMENTS;
+
+  const [instrumentSymbol, setInstrumentSymbol] = useState(instruments[0]?.symbol ?? 'EURUSD');
+
+  const selectedInstrument =
+    instruments.find((i) => i.symbol === instrumentSymbol) ?? instruments[0]!;
+
+  // Normalise CMS data into the shape the template expects
+  const data = {
+    industry: selectedInstrument.spreadIndustry ?? 1.9,
+    standard: selectedInstrument.spreadStandard ?? 1.0,
+    raw: selectedInstrument.spreadRaw ?? 0.0,
+    vip: selectedInstrument.spreadVip ?? 0.0,
+    pipValue: selectedInstrument.pipValue ?? 10,
+    // Unit label: forex uses 'pip', metals use 'USD', crypto uses 'pt'
+    unit:
+      selectedInstrument.symbol.includes('USD') && selectedInstrument.symbol.startsWith('X')
+        ? 'USD'
+        : selectedInstrument.symbol.includes('BTC') || selectedInstrument.symbol.includes('ETH')
+          ? 'pt'
+          : 'pip',
+  };
 
   const costPerLot = useMemo(
     () => ({
@@ -129,17 +185,17 @@ export function SpreadComparatorPage() {
       <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
-            {INSTRUMENTS.map((ins) => (
+            {instruments.map((ins) => (
               <button
-                key={ins.id}
-                onClick={() => setInstrument(ins.id)}
+                key={ins.symbol}
+                onClick={() => setInstrumentSymbol(ins.symbol)}
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold uppercase tracking-[0.08em] transition-colors ${
-                  instrument === ins.id
+                  instrumentSymbol === ins.symbol
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
                     : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
                 }`}
               >
-                {ins.label}
+                {ins.name}
               </button>
             ))}
           </div>

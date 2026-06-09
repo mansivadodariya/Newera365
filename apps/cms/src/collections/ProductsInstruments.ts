@@ -125,7 +125,7 @@ export const ProductsInstruments: CollectionConfig = {
         {
           name: 'contractSize',
           type: 'number',
-          admin: { description: 'Units per standard lot.' },
+          admin: { description: 'Units per standard lot. Used by the Margin Calculator.' },
         },
         {
           name: 'tradingHours',
@@ -141,8 +141,7 @@ export const ProductsInstruments: CollectionConfig = {
           name: 'pipValue',
           type: 'number',
           admin: {
-            description:
-              'Value per pip per standard lot in the quote currency. Used by the Pip Value Calculator.',
+            description: 'Value per pip per standard lot in USD. Used by the Pip Value Calculator.',
           },
         },
         {
@@ -151,6 +150,53 @@ export const ProductsInstruments: CollectionConfig = {
           admin: {
             description:
               'Minimum price increment (tick). Used by the Swap and Profit/Loss calculators.',
+          },
+        },
+        // ── Spread Comparator fields ─────────────────────────────────────────
+        {
+          name: 'spreadIndustry',
+          type: 'number',
+          admin: {
+            description:
+              'Industry-average spread (pips/points) used as the benchmark bar in the Spread Comparator.',
+          },
+        },
+        {
+          name: 'spreadStandard',
+          type: 'number',
+          admin: {
+            description: 'Standard account spread shown in the Spread Comparator.',
+          },
+        },
+        {
+          name: 'spreadRaw',
+          type: 'number',
+          admin: {
+            description: 'Raw account spread (near-zero) shown in the Spread Comparator.',
+          },
+        },
+        {
+          name: 'spreadVip',
+          type: 'number',
+          admin: {
+            description: 'VIP account spread shown in the Spread Comparator.',
+          },
+        },
+        // ── Calculator swap rates (static published rates, not live MT5 data) ─
+        {
+          name: 'swapRateLong',
+          type: 'number',
+          admin: {
+            description:
+              'Published long (buy) swap rate per lot per day in USD — shown in the Swap Calculator. Negative = cost to hold.',
+          },
+        },
+        {
+          name: 'swapRateShort',
+          type: 'number',
+          admin: {
+            description:
+              'Published short (sell) swap rate per lot per day in USD — shown in the Swap Calculator.',
           },
         },
       ],

@@ -75,7 +75,9 @@ export type { ArticleItem, CmsResearchReportItem } from './components/ResearchPa
 export { ResearchDetailPage } from './components/ResearchDetailPage';
 export type { ArticleDetailData, RelatedInstrument } from './components/ResearchDetailPage';
 export { TraderToolsPage } from './components/TraderToolsPage';
+export type { CmsCalculatorInstrument } from './components/TraderToolsPage';
 export { SpreadComparatorPage } from './components/SpreadComparatorPage';
+export type { CmsSpreadInstrument } from './components/SpreadComparatorPage';
 export { EconomicCalendarPage } from './components/EconomicCalendarPage';
 export { AnalystChartPage } from './components/AnalystChartPage';
 export { LiveWatchlistPage } from './components/LiveWatchlistPage';

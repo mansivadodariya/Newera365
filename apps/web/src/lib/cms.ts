@@ -64,6 +64,19 @@ export interface CmsInstrument {
   minTradeSize?: number | null;
   sortOrder?: number | null;
   status: 'active' | 'inactive';
+  // Specification fields (always present regardless of MT5 toggle)
+  contractSize?: number | null;
+  pipValue?: number | null;
+  tickSize?: number | null;
+  marginRequirement?: number | null;
+  // Spread comparator fields
+  spreadIndustry?: number | null;
+  spreadStandard?: number | null;
+  spreadRaw?: number | null;
+  spreadVip?: number | null;
+  // Calculator swap rates (static published rates)
+  swapRateLong?: number | null;
+  swapRateShort?: number | null;
 }
 
 export interface CmsAccountType {

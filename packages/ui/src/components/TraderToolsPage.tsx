@@ -7,35 +7,76 @@ import { SectionKicker } from './SectionKicker';
 
 type ToolTab = 'MARGIN' | 'PIP' | 'SWAP';
 
-const INSTRUMENTS = ['EUR/USD', 'GBP/USD', 'XAU/USD', 'BTC/USD', 'NAS100', 'US30'] as const;
-type Instrument = (typeof INSTRUMENTS)[number];
+// ---------------------------------------------------------------------------
+// CMS instrument shape (subset of what the route page fetches)
+// ---------------------------------------------------------------------------
+export interface CmsCalculatorInstrument {
+  symbol: string; // e.g. "EURUSD"
+  name: string; // e.g. "EUR/USD"
+  contractSize?: number | null;
+  pipValue?: number | null;
+  swapRateLong?: number | null;
+  swapRateShort?: number | null;
+}
 
-const CONTRACT_SIZES: Record<Instrument, number> = {
-  'EUR/USD': 100000,
-  'GBP/USD': 100000,
-  'XAU/USD': 100,
-  'BTC/USD': 1,
-  NAS100: 10,
-  US30: 10,
-};
+// ---------------------------------------------------------------------------
+// Fallback static data — used when CMS collection is empty
+// ---------------------------------------------------------------------------
+const FALLBACK_INSTRUMENTS: CmsCalculatorInstrument[] = [
+  {
+    symbol: 'EURUSD',
+    name: 'EUR/USD',
+    contractSize: 100000,
+    pipValue: 10,
+    swapRateLong: -0.52,
+    swapRateShort: 0.14,
+  },
+  {
+    symbol: 'GBPUSD',
+    name: 'GBP/USD',
+    contractSize: 100000,
+    pipValue: 10,
+    swapRateLong: -0.44,
+    swapRateShort: 0.08,
+  },
+  {
+    symbol: 'XAUUSD',
+    name: 'XAU/USD',
+    contractSize: 100,
+    pipValue: 1,
+    swapRateLong: -3.2,
+    swapRateShort: 1.1,
+  },
+  {
+    symbol: 'BTCUSD',
+    name: 'BTC/USD',
+    contractSize: 1,
+    pipValue: 1,
+    swapRateLong: -12.5,
+    swapRateShort: 4.2,
+  },
+  {
+    symbol: 'NAS100',
+    name: 'NAS100',
+    contractSize: 10,
+    pipValue: 1,
+    swapRateLong: -1.8,
+    swapRateShort: 0.6,
+  },
+  {
+    symbol: 'US30',
+    name: 'US30',
+    contractSize: 10,
+    pipValue: 1,
+    swapRateLong: -1.5,
+    swapRateShort: 0.5,
+  },
+];
 
-const PIP_VALUES: Record<Instrument, number> = {
-  'EUR/USD': 10,
-  'GBP/USD': 10,
-  'XAU/USD': 1,
-  'BTC/USD': 1,
-  NAS100: 1,
-  US30: 1,
-};
-
-const SWAP_RATES: Record<Instrument, { long: number; short: number }> = {
-  'EUR/USD': { long: -0.52, short: 0.14 },
-  'GBP/USD': { long: -0.44, short: 0.08 },
-  'XAU/USD': { long: -3.2, short: 1.1 },
-  'BTC/USD': { long: -12.5, short: 4.2 },
-  NAS100: { long: -1.8, short: 0.6 },
-  US30: { long: -1.5, short: 0.5 },
-};
+interface TraderToolsPageProps {
+  /** Live instrument data from the CMS ProductsInstruments collection */
+  instruments?: CmsCalculatorInstrument[];
+}
 
 function SelectInput({
   label,
@@ -136,7 +177,7 @@ function ResultCard({
   contractSize: number;
   leverage: string;
   positionSize: string;
-  instrument: Instrument;
+  instrument: string;
   swapRate: { long: number; short: number };
   direction: 'long' | 'short';
   days: string;
@@ -277,22 +318,41 @@ function FormulaBox({
   );
 }
 
-export function TraderToolsPage() {
+export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPageProps) {
   const locale = useLocale();
   const t = useTranslations('tools');
   const [activeTab, setActiveTab] = useState<ToolTab>('MARGIN');
   const [currency, setCurrency] = useState('USD');
-  const [instrument, setInstrument] = useState<Instrument>('EUR/USD');
   const [positionSize, setPositionSize] = useState('0.10');
   const [leverage, setLeverage] = useState('100');
   const [days, setDays] = useState('1');
   const [direction, setDirection] = useState<'long' | 'short'>('long');
 
+  // Use CMS instruments when available, fall back to static list
+  const instruments =
+    cmsInstruments && cmsInstruments.length > 0 ? cmsInstruments : FALLBACK_INSTRUMENTS;
+
+  const [instrumentSymbol, setInstrumentSymbol] = useState(instruments[0]?.symbol ?? 'EURUSD');
+
+  const selectedInstrument =
+    instruments.find((i) => i.symbol === instrumentSymbol) ?? instruments[0]!;
+
+  const instrumentNames = instruments.map((i) => i.name);
+
   const lots = parseFloat(positionSize) || 0;
   const lev = parseFloat(leverage) || 1;
-  const contractSize = CONTRACT_SIZES[instrument];
-  const pipValue = PIP_VALUES[instrument];
-  const swapRate = SWAP_RATES[instrument];
+  const contractSize = selectedInstrument.contractSize ?? 100000;
+  const pipValue = selectedInstrument.pipValue ?? 10;
+  const swapRate = {
+    long: selectedInstrument.swapRateLong ?? -0.52,
+    short: selectedInstrument.swapRateShort ?? 0.14,
+  };
+
+  // Helper: find instrument by display name (used in the onChange handler)
+  function handleInstrumentChange(name: string) {
+    const found = instruments.find((i) => i.name === name);
+    if (found) setInstrumentSymbol(found.symbol);
+  }
 
   const marginRequired = useCallback(() => {
     const notional = lots * contractSize;
@@ -421,9 +481,9 @@ export function TraderToolsPage() {
               />
               <SelectInput
                 label={t('fieldInstrument')}
-                value={instrument}
-                options={INSTRUMENTS}
-                onChange={(v) => setInstrument(v as Instrument)}
+                value={selectedInstrument.name}
+                options={instrumentNames}
+                onChange={handleInstrumentChange}
               />
               <NumberInput
                 label={t('fieldPositionSize')}
@@ -485,7 +545,7 @@ export function TraderToolsPage() {
                 contractSize={contractSize}
                 leverage={leverage}
                 positionSize={positionSize}
-                instrument={instrument}
+                instrument={selectedInstrument.name}
                 swapRate={swapRate}
                 direction={direction}
                 days={days}
@@ -516,7 +576,7 @@ export function TraderToolsPage() {
               contractSize={contractSize}
               leverage={leverage}
               positionSize={positionSize}
-              instrument={instrument}
+              instrument={selectedInstrument.name}
               swapRate={swapRate}
               direction={direction}
               days={days}

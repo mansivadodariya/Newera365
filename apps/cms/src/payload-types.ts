@@ -23,11 +23,14 @@ export interface Config {
     careers: Career;
     'legal-pages': LegalPage;
     awards: Award;
+    'media-press': MediaPress;
     'company-content': CompanyContent;
     'team-members': TeamMember;
     'webinar-registrations': WebinarRegistration;
     promotions: Promotion;
     'payment-methods': PaymentMethod;
+    'ib-content': IbContent;
+    'contact-submissions': ContactSubmission;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
@@ -117,8 +120,6 @@ export interface BlogPost {
   }[];
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
   updatedAt: string;
   createdAt: string;
 }
@@ -141,8 +142,6 @@ export interface MarketAnalysis {
   relatedInstruments?: (number | ProductsInstrument)[] | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
   updatedAt: string;
   createdAt: string;
 }
@@ -167,6 +166,12 @@ export interface ProductsInstrument {
   minTradeSize?: number | null;
   pipValue?: number | null;
   tickSize?: number | null;
+  spreadIndustry?: number | null;
+  spreadStandard?: number | null;
+  spreadRaw?: number | null;
+  spreadVip?: number | null;
+  swapRateLong?: number | null;
+  swapRateShort?: number | null;
   sortOrder?: number | null;
   status: 'active' | 'inactive';
   mt5SyncStatus?: ('never' | 'synced' | 'failed') | null;
@@ -195,8 +200,6 @@ export interface News {
   status: 'draft' | 'published';
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
   updatedAt: string;
   createdAt: string;
 }
@@ -216,8 +219,6 @@ export interface ResearchReport {
   isGated?: boolean | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
   updatedAt: string;
   createdAt: string;
 }
@@ -243,10 +244,9 @@ export interface EducationContent {
       }[]
     | null;
   thumbnail?: number | Media | null;
+  isFeatured?: boolean | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
   updatedAt: string;
   createdAt: string;
 }
@@ -269,8 +269,6 @@ export interface Webinar {
   thumbnail?: number | Media | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
   updatedAt: string;
   createdAt: string;
 }
@@ -281,6 +279,8 @@ export interface Webinar {
 export interface AccountType {
   id: number;
   name: string;
+  nameAr?: string | null;
+  badge?: ('free' | 'popular' | 'pro' | 'islamic') | null;
   minDeposit: number;
   spreadFrom: string;
   leverage: string;
@@ -294,6 +294,7 @@ export interface AccountType {
         id?: string | null;
       }[]
     | null;
+  featuresAr?: string | null;
   isPopular?: boolean | null;
   sortOrder?: number | null;
   status: 'active' | 'inactive';
@@ -323,8 +324,6 @@ export interface Faq {
     | 'general';
   sortOrder?: number | null;
   status: 'active' | 'inactive';
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
   updatedAt: string;
   createdAt: string;
 }
@@ -387,8 +386,6 @@ export interface Career {
   status: 'open' | 'closed';
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
   updatedAt: string;
   createdAt: string;
 }
@@ -410,8 +407,6 @@ export interface LegalPage {
   status: 'draft' | 'published';
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
   updatedAt: string;
   createdAt: string;
 }
@@ -429,8 +424,24 @@ export interface Award {
   externalUrl?: string | null;
   sortOrder?: number | null;
   status: 'published' | 'draft';
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media-press".
+ */
+export interface MediaPress {
+  id: number;
+  headline: string;
+  publication: string;
+  date: string;
+  url?: string | null;
+  excerpt?: string | null;
+  logo?: number | Media | null;
+  isFeatured?: boolean | null;
+  sortOrder?: number | null;
+  status: 'published' | 'draft';
   updatedAt: string;
   createdAt: string;
 }
@@ -454,8 +465,6 @@ export interface CompanyContent {
   logo?: number | Media | null;
   sortOrder?: number | null;
   status: 'draft' | 'published';
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
   updatedAt: string;
   createdAt: string;
 }
@@ -472,8 +481,6 @@ export interface TeamMember {
   photo?: number | Media | null;
   sortOrder?: number | null;
   status: 'active' | 'inactive';
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
   updatedAt: string;
   createdAt: string;
 }
@@ -513,8 +520,6 @@ export interface Promotion {
   status: 'active' | 'inactive';
   seoTitle?: string | null;
   seoDescription?: string | null;
-  translationKey?: string | null;
-  locale: 'en' | 'ar';
   updatedAt: string;
   createdAt: string;
 }
@@ -534,6 +539,48 @@ export interface PaymentMethod {
   notes?: string | null;
   sortOrder?: number | null;
   status: 'active' | 'inactive';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ib-content".
+ */
+export interface IbContent {
+  id: number;
+  slug: string;
+  heroSubtitle?: string | null;
+  ibDescription?: string | null;
+  affiliateDescription?: string | null;
+  whiteLabelDescription?: string | null;
+  ibRateDisplay?: string | null;
+  affiliateCpaMax?: string | null;
+  steps?:
+    | {
+        stepTitle: string;
+        stepDescription: string;
+        id?: string | null;
+      }[]
+    | null;
+  ctaHeading?: string | null;
+  ctaSubtitle?: string | null;
+  status: 'draft' | 'published';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions".
+ */
+export interface ContactSubmission {
+  id: number;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  submittedAt?: string | null;
+  status: 'new' | 'read' | 'responded';
+  ipHash?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -668,6 +715,6 @@ export interface SiteSetting {
 }
 
 declare module 'payload' {
-  // @ts-ignore TS2300 — payload 2.x declares GeneratedTypes as a type alias; augmentation conflicts on this TS version
+  // @ts-ignore — Payload v2 re-declares GeneratedTypes; suppress the duplicate-identifier error.
   export interface GeneratedTypes extends Config {}
 }
