@@ -22,56 +22,6 @@ export interface CmsCalculatorInstrument {
 // ---------------------------------------------------------------------------
 // Fallback static data — used when CMS collection is empty
 // ---------------------------------------------------------------------------
-const FALLBACK_INSTRUMENTS: CmsCalculatorInstrument[] = [
-  {
-    symbol: 'EURUSD',
-    name: 'EUR/USD',
-    contractSize: 100000,
-    pipValue: 10,
-    swapRateLong: -0.52,
-    swapRateShort: 0.14,
-  },
-  {
-    symbol: 'GBPUSD',
-    name: 'GBP/USD',
-    contractSize: 100000,
-    pipValue: 10,
-    swapRateLong: -0.44,
-    swapRateShort: 0.08,
-  },
-  {
-    symbol: 'XAUUSD',
-    name: 'XAU/USD',
-    contractSize: 100,
-    pipValue: 1,
-    swapRateLong: -3.2,
-    swapRateShort: 1.1,
-  },
-  {
-    symbol: 'BTCUSD',
-    name: 'BTC/USD',
-    contractSize: 1,
-    pipValue: 1,
-    swapRateLong: -12.5,
-    swapRateShort: 4.2,
-  },
-  {
-    symbol: 'NAS100',
-    name: 'NAS100',
-    contractSize: 10,
-    pipValue: 1,
-    swapRateLong: -1.8,
-    swapRateShort: 0.6,
-  },
-  {
-    symbol: 'US30',
-    name: 'US30',
-    contractSize: 10,
-    pipValue: 1,
-    swapRateLong: -1.5,
-    swapRateShort: 0.5,
-  },
-];
 
 interface TraderToolsPageProps {
   /** Live instrument data from the CMS ProductsInstruments collection */
@@ -328,24 +278,22 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
   const [days, setDays] = useState('1');
   const [direction, setDirection] = useState<'long' | 'short'>('long');
 
-  // Use CMS instruments when available, fall back to static list
-  const instruments =
-    cmsInstruments && cmsInstruments.length > 0 ? cmsInstruments : FALLBACK_INSTRUMENTS;
+  const instruments = cmsInstruments ?? [];
 
-  const [instrumentSymbol, setInstrumentSymbol] = useState(instruments[0]?.symbol ?? 'EURUSD');
+  const [instrumentSymbol, setInstrumentSymbol] = useState(instruments[0]?.symbol ?? '');
 
   const selectedInstrument =
-    instruments.find((i) => i.symbol === instrumentSymbol) ?? instruments[0]!;
+    instruments.find((i) => i.symbol === instrumentSymbol) ?? instruments[0];
 
   const instrumentNames = instruments.map((i) => i.name);
 
   const lots = parseFloat(positionSize) || 0;
   const lev = parseFloat(leverage) || 1;
-  const contractSize = selectedInstrument.contractSize ?? 100000;
-  const pipValue = selectedInstrument.pipValue ?? 10;
+  const contractSize = selectedInstrument?.contractSize ?? 100000;
+  const pipValue = selectedInstrument?.pipValue ?? 10;
   const swapRate = {
-    long: selectedInstrument.swapRateLong ?? -0.52,
-    short: selectedInstrument.swapRateShort ?? 0.14,
+    long: selectedInstrument?.swapRateLong ?? -0.52,
+    short: selectedInstrument?.swapRateShort ?? 0.14,
   };
 
   // Helper: find instrument by display name (used in the onChange handler)
@@ -433,6 +381,24 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
     },
   ];
 
+  if (instruments.length === 0) {
+    return (
+      <>
+        {/* Hero */}
+        <section className="bg-transparent px-5 pb-6 pt-9">
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
+              {t('heroLine1')}
+              <br />
+              <span className="text-accent">{t('heroLine2')}</span>
+            </h1>
+            <p className="font-body text-muted mt-8 text-center text-[14px]">{t('noInstruments')}</p>
+          </div>
+        </section>
+      </>
+    );
+  }
+
   return (
     <>
       {/* Hero */}
@@ -481,7 +447,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
               />
               <SelectInput
                 label={t('fieldInstrument')}
-                value={selectedInstrument.name}
+                value={selectedInstrument?.name ?? ''}
                 options={instrumentNames}
                 onChange={handleInstrumentChange}
               />
@@ -545,7 +511,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
                 contractSize={contractSize}
                 leverage={leverage}
                 positionSize={positionSize}
-                instrument={selectedInstrument.name}
+                instrument={selectedInstrument?.name ?? ''}
                 swapRate={swapRate}
                 direction={direction}
                 days={days}
@@ -576,7 +542,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
               contractSize={contractSize}
               leverage={leverage}
               positionSize={positionSize}
-              instrument={selectedInstrument.name}
+              instrument={selectedInstrument?.name ?? ''}
               swapRate={swapRate}
               direction={direction}
               days={days}

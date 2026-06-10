@@ -84,10 +84,22 @@ const CMS_CARD_GRADIENTS: Record<string, string> = {
   grey: 'from-[#6B7280]/[0.07] to-[#FAFAF9] dark:from-[#6B7280]/[0.12] dark:to-surface',
 };
 
+// Dark bold gradient for highlighted/featured promo card (matches Figma dark green card)
+const HIGHLIGHTED_GRADIENT = 'from-[#062a04] to-[#010f01]';
+const HIGHLIGHTED_TAG_STYLES: Record<string, string> = {
+  accent: 'bg-accent/80 text-white',
+  amber: 'bg-[#F59E0B]/80 text-white',
+  blue: 'bg-[#3B82F6]/80 text-white',
+  purple: 'bg-[#8B5CF6]/80 text-white',
+  red: 'bg-[#EF4444]/80 text-white',
+  grey: 'bg-white/20 text-white',
+};
+
 export interface CmsPromoItem {
   id: number;
   slug: string;
   title: string;
+  valueDisplay?: string | null;
   tag?: string | null;
   tagColor?: string | null;
   description: string;
@@ -125,62 +137,132 @@ export function PromoPage({ promos: cmsPromos }: PromoPageProps) {
       {/* Promo cards */}
       <section className="bg-transparent px-5 pb-10">
         <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl xl:max-w-[1200px]">
-          {PROMOS.map((promo) => (
-            <div
-              key={promo.id}
-              className={`shadow-card dark:shadow-card-dark flex flex-col gap-0 overflow-hidden rounded-[22px] bg-gradient-to-br ${CARD_GRADIENTS[promo.tagType]}`}
-            >
-              {/* Card top: tag row */}
-              <div className="flex items-center justify-between px-5 pt-5">
-                <span
-                  className={`font-body inline-flex h-5 items-center rounded-full px-2.5 text-[9px] font-semibold uppercase tracking-[0.12em] ${TAG_STYLES[promo.tagType]}`}
+          {useCms
+            ? cmsPromos!.map((promo) => {
+                const hl = !!promo.isHighlighted;
+                const tagStyle = hl
+                  ? (HIGHLIGHTED_TAG_STYLES[promo.tagColor ?? 'accent'] ?? HIGHLIGHTED_TAG_STYLES.accent)
+                  : (CMS_TAG_STYLES[promo.tagColor ?? 'accent'] ?? CMS_TAG_STYLES.accent);
+                const gradient = hl
+                  ? HIGHLIGHTED_GRADIENT
+                  : (CMS_CARD_GRADIENTS[promo.tagColor ?? 'accent'] ?? CMS_CARD_GRADIENTS.accent);
+                return (
+                  <div
+                    key={promo.id}
+                    className={`flex flex-col gap-0 overflow-hidden rounded-[22px] bg-gradient-to-br ${gradient} ${hl ? '' : 'shadow-card dark:shadow-card-dark'}`}
+                  >
+                    {/* Card top: tag row */}
+                    <div className="flex items-center justify-between px-5 pt-5">
+                      {promo.tag && (
+                        <span
+                          className={`font-body inline-flex h-5 items-center rounded-full px-2.5 text-[9px] font-semibold uppercase tracking-[0.12em] ${tagStyle}`}
+                        >
+                          {promo.tag}
+                        </span>
+                      )}
+                      <span className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em] ${hl ? 'bg-white/10 text-white/60' : 'bg-accent/10 text-accent'}`}>
+                        {t('activeLabel')}
+                      </span>
+                    </div>
+
+                    {/* Value + Title + desc */}
+                    <div className="px-5 pt-3">
+                      {promo.valueDisplay && (
+                        <p className="text-accent font-sans text-[36px] font-semibold leading-[100%] tracking-[-0.02em]">
+                          {promo.valueDisplay}
+                        </p>
+                      )}
+                      <p className={`font-sans font-semibold leading-tight ${hl ? 'text-white' : 'text-foreground'} ${promo.valueDisplay ? 'mt-2 text-[17px]' : 'text-[20px]'}`}>
+                        {promo.title}
+                      </p>
+                      <p className={`font-body mt-1 text-[13px] leading-[1.55] ${hl ? 'text-white/60' : 'text-muted'}`}>
+                        {promo.description}
+                      </p>
+                    </div>
+
+                    {/* Divider */}
+                    <div className={`mx-5 mt-4 border-t ${hl ? 'border-white/10' : 'border-[#e5e7eb] dark:border-border'}`} />
+
+                    {/* Footer + CTA */}
+                    <div className="flex items-center justify-between px-5 py-4">
+                      <span className={`font-mono text-[10px] leading-snug max-w-[180px] ${hl ? 'text-white/40' : 'text-muted'}`}>
+                        {promo.terms ?? ''}
+                      </span>
+                      <Link
+                        href={promo.ctaHref ?? `/${locale}/register`}
+                        className="bg-accent hover:bg-accent-hover font-body flex h-8 flex-shrink-0 items-center gap-1.5 rounded-full px-4 text-[12px] font-medium text-white transition-colors"
+                      >
+                        {promo.ctaLabel ?? t('claimBtn')}
+                        <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                          <path
+                            d="M3 8h10M9 4l4 4-4 4"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })
+            : PROMOS.map((promo) => (
+                <div
+                  key={promo.id}
+                  className={`shadow-card dark:shadow-card-dark flex flex-col gap-0 overflow-hidden rounded-[22px] bg-gradient-to-br ${CARD_GRADIENTS[promo.tagType]}`}
                 >
-                  {promo.tagType}
-                </span>
-                <span className="bg-accent/10 text-accent font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em]">
-                  {t('activeLabel')}
-                </span>
-              </div>
+                  {/* Card top: tag row */}
+                  <div className="flex items-center justify-between px-5 pt-5">
+                    <span
+                      className={`font-body inline-flex h-5 items-center rounded-full px-2.5 text-[9px] font-semibold uppercase tracking-[0.12em] ${TAG_STYLES[promo.tagType]}`}
+                    >
+                      {promo.tagType}
+                    </span>
+                    <span className="bg-accent/10 text-accent font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em]">
+                      {t('activeLabel')}
+                    </span>
+                  </div>
 
-              {/* Value */}
-              <div className="px-5 pt-3">
-                <p className="text-accent font-sans text-[36px] font-semibold leading-[100%] tracking-[-0.02em]">
-                  {promo.value}
-                </p>
-              </div>
+                  {/* Value */}
+                  <div className="px-5 pt-3">
+                    <p className="text-accent font-sans text-[36px] font-semibold leading-[100%] tracking-[-0.02em]">
+                      {promo.value}
+                    </p>
+                  </div>
 
-              {/* Title + desc */}
-              <div className="px-5 pt-2">
-                <p className="text-foreground mb-1 font-sans text-[17px] font-semibold">
-                  {promo.title}
-                </p>
-                <p className="font-body text-muted text-[13px] leading-[1.55]">{promo.desc}</p>
-              </div>
+                  {/* Title + desc */}
+                  <div className="px-5 pt-2">
+                    <p className="text-foreground mb-1 font-sans text-[17px] font-semibold">
+                      {promo.title}
+                    </p>
+                    <p className="font-body text-muted text-[13px] leading-[1.55]">{promo.desc}</p>
+                  </div>
 
-              {/* Divider */}
-              <div className="dark:border-border mx-5 mt-4 border-t border-[#e5e7eb]" />
+                  {/* Divider */}
+                  <div className="dark:border-border mx-5 mt-4 border-t border-[#e5e7eb]" />
 
-              {/* Footer + CTA */}
-              <div className="flex items-center justify-between px-5 py-4">
-                <span className="text-muted font-mono text-[11px]">{promo.footer}</span>
-                <Link
-                  href={`/${locale}/register`}
-                  className="bg-accent hover:bg-accent-hover font-body flex h-8 items-center gap-1.5 rounded-full px-4 text-[12px] font-medium text-white transition-colors"
-                >
-                  {t('claimBtn')}
-                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                    <path
-                      d="M3 8h10M9 4l4 4-4 4"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </Link>
-              </div>
-            </div>
-          ))}
+                  {/* Footer + CTA */}
+                  <div className="flex items-center justify-between px-5 py-4">
+                    <span className="text-muted font-mono text-[11px]">{promo.footer}</span>
+                    <Link
+                      href={`/${locale}/register`}
+                      className="bg-accent hover:bg-accent-hover font-body flex h-8 items-center gap-1.5 rounded-full px-4 text-[12px] font-medium text-white transition-colors"
+                    >
+                      {t('claimBtn')}
+                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                        <path
+                          d="M3 8h10M9 4l4 4-4 4"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              ))}
         </div>
       </section>
 

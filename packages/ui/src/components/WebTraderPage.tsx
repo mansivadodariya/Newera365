@@ -5,21 +5,9 @@ import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 const FEATURES = [
-  {
-    id: 'streaming',
-    title: 'Real-time data',
-    desc: 'Live market prices streamed straight to your browser — no refresh, no lag.',
-  },
-  {
-    id: 'mt5',
-    title: 'Powered by MT5',
-    desc: 'The same trade-execution engine that powers the MetaTrader 5 desktop client.',
-  },
-  {
-    id: 'encrypted',
-    title: 'Secure sessions',
-    desc: 'Bank-grade encryption on every session, with client funds held in segregated accounts.',
-  },
+  { idx: 2 },
+  { idx: 3 },
+  { idx: 4 },
 ] as const;
 
 // Static candlestick data for the chart mockup
@@ -222,7 +210,7 @@ export function WebTraderPage() {
           <div className="flex flex-col gap-[10px]">
             {FEATURES.map((feat) => (
               <div
-                key={feat.id}
+                key={feat.idx}
                 className="dark:bg-surface flex items-start gap-3 rounded-[16px] bg-[#FAFAF9] px-4 py-4"
               >
                 <div className="bg-accent mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full">
@@ -238,14 +226,10 @@ export function WebTraderPage() {
                 </div>
                 <div>
                   <p className="text-foreground mb-0.5 font-sans text-[14px] font-semibold">
-                    {t(
-                      `feat${feat.id.charAt(0).toUpperCase() + feat.id.slice(1)}Title` as 'featStreamingTitle',
-                    )}
+                    {t(`feat${feat.idx}Title` as 'feat2Title')}
                   </p>
                   <p className="font-body text-muted text-[12px] leading-relaxed">
-                    {t(
-                      `feat${feat.id.charAt(0).toUpperCase() + feat.id.slice(1)}Desc` as 'featStreamingDesc',
-                    )}
+                    {t(`feat${feat.idx}Desc` as 'feat2Desc')}
                   </p>
                 </div>
               </div>

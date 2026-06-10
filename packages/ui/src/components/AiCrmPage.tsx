@@ -11,18 +11,18 @@ export function AiCrmPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-[#07090d] px-5 pb-10 pt-9 xl:px-[80px] xl:py-20">
+      <section className="bg-gradient-to-b from-[#b2ffab]/50 to-white px-5 pb-10 pt-9 xl:px-[80px] xl:py-20 dark:bg-[#07090d] dark:bg-none">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5 [&>span:first-child]:bg-[#00B050]/20 [&>span:last-child]:text-[#00B050]">
             {t('kicker')}
           </SectionKicker>
 
-          <h1 className="mb-3 font-sans text-[40px] font-semibold leading-[1.05] text-white xl:text-[56px]">
+          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05] xl:text-[56px] dark:text-white">
             {t('heroLine1')}
             <br />
             <span className="text-[#00B050]">{t('heroLine2')}</span>
           </h1>
-          <p className="font-body mb-8 max-w-[340px] text-[14px] leading-[1.6] text-white/60 xl:max-w-[480px] xl:text-[16px]">
+          <p className="font-body text-muted mb-8 max-w-[340px] text-[14px] leading-[1.6] xl:max-w-[480px] xl:text-[16px] dark:text-white/60">
             {t('heroSubtitle')}
           </p>
 
@@ -44,7 +44,7 @@ export function AiCrmPage() {
             </Link>
             <Link
               href={`/${locale}/contact`}
-              className="font-body flex h-[48px] items-center rounded-full border border-white/20 px-6 text-[14px] font-medium text-white/80 transition-colors hover:border-white/40 hover:text-white"
+              className="font-body border-foreground/20 text-foreground/80 hover:border-foreground/40 hover:text-foreground flex h-[48px] items-center rounded-full border px-6 text-[14px] font-medium transition-colors dark:border-white/20 dark:text-white/80 dark:hover:border-white/40 dark:hover:text-white"
             >
               {t('salesBtn')}
             </Link>
@@ -90,12 +90,12 @@ export function AiCrmPage() {
       </section>
 
       {/* What it does */}
-      <section className="bg-white px-5 py-12 xl:px-[80px] xl:py-20">
+      <section className="bg-background px-5 py-12 xl:px-[80px] xl:py-20">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-6 [&>span:first-child]:bg-[#6B7280]/20 [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="[&>span:first-child]:bg-muted/20 [&>span:last-child]:text-muted mb-6">
             {t('featuresKicker')}
           </SectionKicker>
-          <h2 className="mb-10 font-sans text-[30px] font-semibold leading-[1.1] text-[#07090d] xl:text-[40px]">
+          <h2 className="text-foreground mb-10 font-sans text-[30px] font-semibold leading-[1.1] xl:text-[40px]">
             {t('featuresLine1')}
             <br />
             {t('featuresLine2')}
@@ -124,7 +124,7 @@ export function AiCrmPage() {
             ].map((item) => (
               <div
                 key={item.category}
-                className="flex flex-col gap-3 rounded-[18px] border border-[#f0f0f0] bg-[#fafafa] p-6"
+                className="border-border bg-surface flex flex-col gap-3 rounded-[18px] border p-6"
               >
                 <div className="flex items-center gap-2">
                   <span
@@ -138,8 +138,8 @@ export function AiCrmPage() {
                     {item.category}
                   </span>
                 </div>
-                <p className="font-sans text-[16px] font-semibold text-[#07090d]">{item.title}</p>
-                <p className="font-body text-[13px] leading-[1.6] text-[#6b7280]">{item.desc}</p>
+                <p className="text-foreground font-sans text-[16px] font-semibold">{item.title}</p>
+                <p className="text-muted font-body text-[13px] leading-[1.6]">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -147,12 +147,12 @@ export function AiCrmPage() {
       </section>
 
       {/* Automation */}
-      <section className="bg-white px-5 pb-14 xl:px-[80px] xl:pb-20">
+      <section className="bg-background px-5 pb-14 xl:px-[80px] xl:pb-20">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-6 [&>span:first-child]:bg-[#6B7280]/20 [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="[&>span:first-child]:bg-muted/20 [&>span:last-child]:text-muted mb-6">
             {t('autoKicker')}
           </SectionKicker>
-          <h2 className="mb-10 font-sans text-[30px] font-semibold leading-[1.1] text-[#07090d] xl:text-[40px]">
+          <h2 className="text-foreground mb-10 font-sans text-[30px] font-semibold leading-[1.1] xl:text-[40px]">
             {t('autoLine1')}
             <br />
             {t('autoLine2')}
@@ -179,13 +179,13 @@ export function AiCrmPage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="flex items-start gap-4 rounded-[16px] border border-[#f0f0f0] bg-[#fafafa] p-5"
+                className="border-border bg-surface flex items-start gap-4 rounded-[16px] border p-5"
               >
-                <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[#e5e7eb] bg-white">
+                <div className="text-foreground border-border bg-background mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border">
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                     <path
                       d="M3 8h10M9 4l4 4-4 4"
-                      stroke="#07090d"
+                      stroke="currentColor"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -193,8 +193,10 @@ export function AiCrmPage() {
                   </svg>
                 </div>
                 <div>
-                  <p className="font-sans text-[14px] font-semibold text-[#07090d]">{item.title}</p>
-                  <p className="font-body mt-1 text-[13px] leading-[1.55] text-[#6b7280]">
+                  <p className="text-foreground font-sans text-[14px] font-semibold">
+                    {item.title}
+                  </p>
+                  <p className="text-muted font-body mt-1 text-[13px] leading-[1.55]">
                     {item.desc}
                   </p>
                 </div>

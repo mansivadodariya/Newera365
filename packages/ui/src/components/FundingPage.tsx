@@ -14,9 +14,9 @@ const COVER_LOCAL = 'https://www.figma.com/api/mcp/asset/e66263cc-7536-4723-af2b
 function IconCreditCard() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-      <rect x="1.5" y="3.5" width="15" height="11" rx="2" stroke="#00B050" strokeWidth="1.4" />
-      <path d="M1.5 7.5h15" stroke="#00B050" strokeWidth="1.4" />
-      <rect x="3" y="10" width="4" height="1.5" rx="0.5" fill="#00B050" />
+      <rect x="1.5" y="3.5" width="15" height="11" rx="2" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M1.5 7.5h15" stroke="currentColor" strokeWidth="1.4" />
+      <rect x="3" y="10" width="4" height="1.5" rx="0.5" fill="currentColor" />
     </svg>
   );
 }
@@ -24,11 +24,11 @@ function IconCreditCard() {
 function IconLandmark() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-      <path d="M9 2L2 5.5h14L9 2z" stroke="#00B050" strokeWidth="1.3" strokeLinejoin="round" />
-      <rect x="3" y="6.5" width="1.5" height="6" rx="0.4" fill="#00B050" />
-      <rect x="7.25" y="6.5" width="1.5" height="6" rx="0.4" fill="#00B050" />
-      <rect x="11.5" y="6.5" width="1.5" height="6" rx="0.4" fill="#00B050" />
-      <path d="M2 13.5h14" stroke="#00B050" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M9 2L2 5.5h14L9 2z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+      <rect x="3" y="6.5" width="1.5" height="6" rx="0.4" fill="currentColor" />
+      <rect x="7.25" y="6.5" width="1.5" height="6" rx="0.4" fill="currentColor" />
+      <rect x="11.5" y="6.5" width="1.5" height="6" rx="0.4" fill="currentColor" />
+      <path d="M2 13.5h14" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
     </svg>
   );
 }
@@ -36,10 +36,10 @@ function IconLandmark() {
 function IconGlobe() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-      <circle cx="9" cy="9" r="6.5" stroke="#00B050" strokeWidth="1.4" />
-      <ellipse cx="9" cy="9" rx="3" ry="6.5" stroke="#00B050" strokeWidth="1.4" />
-      <path d="M2.5 9h13" stroke="#00B050" strokeWidth="1.4" />
-      <path d="M3 6h12M3 12h12" stroke="#00B050" strokeWidth="1.1" strokeLinecap="round" />
+      <circle cx="9" cy="9" r="6.5" stroke="currentColor" strokeWidth="1.4" />
+      <ellipse cx="9" cy="9" rx="3" ry="6.5" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M2.5 9h13" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M3 6h12M3 12h12" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
     </svg>
   );
 }
@@ -49,149 +49,44 @@ function IconBitcoin() {
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
       <path
         d="M6 3.5h5a2.5 2.5 0 010 5H6m0 0h5.5a2.5 2.5 0 010 5H6"
-        stroke="#00B050"
+        stroke="currentColor"
         strokeWidth="1.4"
         strokeLinecap="round"
       />
-      <path d="M6 3.5v11M8 2.5v12.5" stroke="#00B050" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M6 3.5v11M8 2.5v12.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
     </svg>
   );
 }
 
-const PAYMENT_METHODS = [
-  {
-    id: 'card',
-    type: 'CARD',
-    name: 'Visa / Mastercard',
-    deposit: 'Instant',
-    withdraw: '1-3 days',
-    min: '$50',
-    fee: 'Free',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <rect x="1" y="4" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M1 8h18" stroke="currentColor" strokeWidth="1.5" />
-        <rect x="4" y="11" width="4" height="2" rx="0.5" fill="currentColor" />
-      </svg>
-    ),
-  },
-  {
-    id: 'bank',
-    type: 'BANK',
-    name: 'Bank wire (SWIFT)',
-    deposit: '1-3 days',
-    withdraw: '2-5 days',
-    min: '$500',
-    fee: 'Free',
-    cover: COVER_SWIFT,
-    coverFit: 'object-cover',
-    icon: <IconLandmark />,
-  },
-  {
-    id: 'skrill',
-    type: 'E-WALLET',
-    name: 'Skrill',
-    deposit: 'Instant',
-    withdraw: 'Within 24h',
-    min: '$50',
-    fee: 'Free',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M10 2v16M2 10h16" stroke="currentColor" strokeWidth="1.5" />
-        <ellipse cx="10" cy="10" rx="4" ry="8" stroke="currentColor" strokeWidth="1.5" />
-      </svg>
-    ),
-  },
-  {
-    id: 'neteller',
-    type: 'E-WALLET',
-    name: 'Neteller',
-    deposit: 'Instant',
-    withdraw: 'Within 24h',
-    min: '$50',
-    fee: 'Free',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M10 2v16M2 10h16" stroke="currentColor" strokeWidth="1.5" />
-        <ellipse cx="10" cy="10" rx="4" ry="8" stroke="currentColor" strokeWidth="1.5" />
-      </svg>
-    ),
-  },
-  {
-    id: 'crypto',
-    type: 'CRYPTO',
-    name: 'Crypto (USDT, BTC)',
-    deposit: '< 30 min',
-    withdraw: 'Within 24h',
-    min: '$50',
-    fee: 'Network only',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path
-          d="M7 10h6M7 7h5.5c1.1 0 2 .9 2 2s-.9 2-2 2H7M7 13h5.5c1.1 0 2-.9 2-2"
-          stroke="white"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-        <path d="M9 5v10M11 5v10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
-    id: 'local',
-    type: 'REGIONAL',
-    name: 'Local bank transfer',
-    deposit: 'Same day',
-    withdraw: '1-2 days',
-    min: '$50',
-    fee: 'Free',
-    cover: COVER_LOCAL,
-    coverFit: 'object-cover',
-    icon: <IconLandmark />,
-  },
-] as const;
 
-const GREEN_VALUES = new Set(['Instant', 'Same day', 'Free']);
+// Icon map by methodType from CMS
+const METHOD_TYPE_ICONS: Record<string, React.ReactNode> = {
+  card: <IconCreditCard />,
+  bank: <IconLandmark />,
+  ewallet: <IconGlobe />,
+  crypto: <IconBitcoin />,
+  local: <IconLandmark />,
+};
 
-function StatCell({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="dark:bg-surface flex flex-[1_0_0] flex-col gap-[2px] bg-[#fafaf9] px-[12px] py-[10px]">
-      <span className="font-mono text-[9px] tracking-[1.08px] text-[#6b7280]">{label}</span>
-      <span
-        className={`font-sans text-[13px] font-semibold ${GREEN_VALUES.has(value) ? 'text-[#00b050]' : 'text-foreground'}`}
-      >
-        {value}
-      </span>
-    </div>
-  );
+// Badge label by methodType
+const METHOD_TYPE_LABELS: Record<string, string> = {
+  card: 'CARD',
+  bank: 'BANK',
+  ewallet: 'E-WALLET',
+  crypto: 'CRYPTO',
+  local: 'REGIONAL',
+};
+
+function isGreenDepositValue(v: string) {
+  const lower = v.toLowerCase();
+  return lower === 'instant' || lower === 'same day' || lower.startsWith('same-day');
 }
 
-function StatsGrid({
-  deposit,
-  withdraw,
-  min,
-  fee,
-}: {
-  deposit: string;
-  withdraw: string;
-  min: string;
-  fee: string;
-}) {
-  return (
-    <div className="flex flex-col gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)] dark:bg-[rgba(255,255,255,0.06)]">
-      <div className="flex gap-px">
-        <StatCell label="DEPOSIT" value={deposit} />
-        <StatCell label="WITHDRAW" value={withdraw} />
-      </div>
-      <div className="flex gap-px">
-        <StatCell label="MIN" value={min} />
-        <StatCell label="FEE" value={fee} />
-      </div>
-    </div>
-  );
+function isGreenFeeValue(v: string) {
+  const lower = v.toLowerCase();
+  return lower === 'free' || lower === 'none' || lower === 'لا يوجد';
 }
+
 
 const TRUST_ROWS = [
   {
@@ -201,13 +96,13 @@ const TRUST_ROWS = [
       <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true">
         <path
           d="M10 2L3 5.5V10c0 4 3 7 7 8 4-1 7-4 7-8V5.5L10 2z"
-          stroke="white"
+          stroke="currentColor"
           strokeWidth="1.5"
           strokeLinejoin="round"
         />
         <path
           d="M7 10l2 2 4-4"
-          stroke="white"
+          stroke="currentColor"
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -239,7 +134,7 @@ const TRUST_ROWS = [
         <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.5" />
         <path
           d="M10 6v4l2.5 2.5"
-          stroke="white"
+          stroke="currentColor"
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -254,7 +149,7 @@ const TRUST_ROWS = [
       <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true">
         <path
           d="M4 10l4 4 8-8"
-          stroke="white"
+          stroke="currentColor"
           strokeWidth="1.75"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -279,7 +174,7 @@ interface FundingPageProps {
   paymentMethods?: CmsPaymentMethodItem[];
 }
 
-function HeroContent() {
+function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem[] }) {
   const t = useTranslations('funding');
 
   const trustRows = [
@@ -311,9 +206,23 @@ function HeroContent() {
             {t('methodsKicker')}
           </SectionKicker>
           <div className="flex flex-col gap-[14px]">
-            {PAYMENT_METHODS.map((method) => (
+            {(!paymentMethods || paymentMethods.length === 0) && (
+              <p className="font-body text-muted py-12 text-center text-[14px]">{t('noMethods')}</p>
+            )}
+            {(paymentMethods ?? []).map((method) => ({
+                key: String(method.id),
+                icon: METHOD_TYPE_ICONS[method.methodType] ?? <IconCreditCard />,
+                typeBadge: METHOD_TYPE_LABELS[method.methodType] ?? method.methodType.toUpperCase(),
+                name: method.name,
+                deposit: method.depositTime ?? '—',
+                withdraw: method.withdrawalTime ?? '—',
+                min: method.minDeposit ?? '—',
+                fee: method.fee ?? '—',
+                depositGreen: isGreenDepositValue(method.depositTime ?? ''),
+                feeGreen: isGreenFeeValue(method.fee ?? ''),
+              })).map((method) => (
               <div
-                key={method.id}
+                key={method.key}
                 className="bg-background shadow-card flex flex-col gap-[14px] rounded-[18px] p-5 dark:shadow-none"
               >
                 {/* Card header: icon box + type pill */}
@@ -322,7 +231,7 @@ function HeroContent() {
                     {method.icon}
                   </div>
                   <span className="text-foreground dark:bg-surface-elevated dark:text-foreground rounded-full bg-[rgba(17,17,17,0.05)] px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px]">
-                    {method.type}
+                    {method.typeBadge}
                   </span>
                 </div>
 
@@ -334,14 +243,10 @@ function HeroContent() {
                 {/* Stats 2×2 grid — matches Figma rgba(17,17,17,0.08) wrapper, #fafaf9 cells */}
                 <div className="dark:bg-surface-elevated grid grid-cols-2 gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)]">
                   {[
-                    {
-                      label: t('colDeposit'),
-                      value: method.deposit,
-                      green: method.deposit === 'Instant' || method.deposit === 'Same day',
-                    },
+                    { label: t('colDeposit'), value: method.deposit, green: method.depositGreen },
                     { label: t('colWithdraw'), value: method.withdraw, green: false },
                     { label: t('colMin'), value: method.min, green: false },
-                    { label: t('colFee'), value: method.fee, green: method.fee === 'Free' },
+                    { label: t('colFee'), value: method.fee, green: method.feeGreen },
                   ].map((stat) => (
                     <div
                       key={stat.label}
@@ -397,6 +302,6 @@ function HeroContent() {
   );
 }
 
-export function FundingPage(_props: FundingPageProps) {
-  return <HeroContent />;
+export function FundingPage({ paymentMethods }: FundingPageProps) {
+  return <HeroContent paymentMethods={paymentMethods} />;
 }

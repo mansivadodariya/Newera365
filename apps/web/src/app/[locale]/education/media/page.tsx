@@ -22,6 +22,7 @@ function mapMediaItem(item: CmsEducationContent): CmsVideoItem {
     thumbnailUrl,
     videoEmbed: item.videoEmbed,
     description: item.seoDescription,
+    mediaCategory: item.mediaCategory,
   };
 }
 

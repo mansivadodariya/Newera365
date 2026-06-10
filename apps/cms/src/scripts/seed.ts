@@ -123,9 +123,14 @@ async function seedSiteSettings() {
     mt5SyncEnabled: false,
     mt5RefreshIntervalSecs: 60,
     kpiStats: [
-      { valueEn: '180k+', valueAr: '+180 ألف', labelEn: 'Active Traders', labelAr: 'متداول نشط' },
       { valueEn: '12+', valueAr: '+12', labelEn: 'Years in Markets', labelAr: 'سنة في الأسواق' },
-      { valueEn: '< 12ms', valueAr: '< 12ms', labelEn: 'Avg Execution', labelAr: 'متوسط التنفيذ' },
+      { valueEn: '180k', valueAr: '180 ألف', labelEn: 'Active Traders', labelAr: 'متداول نشط' },
+      {
+        valueEn: '< 12 ms',
+        valueAr: '< 12 ms',
+        labelEn: 'Avg Execution',
+        labelAr: 'متوسط التنفيذ',
+      },
       { valueEn: '99.99%', valueAr: '99.99%', labelEn: 'Platform Uptime', labelAr: 'وقت التشغيل' },
     ],
     downloadMt5Windows:
@@ -157,235 +162,446 @@ async function seedSiteSettings() {
       'NewEra365 is authorised and regulated by the FCA (UK), ASIC (Australia), and CySEC (Cyprus). Trading leveraged products carries significant risk. Not suitable for all investors.',
     riskDisclaimerAr:
       'نيو إيرا 365 مرخصة ومنظمة من قبل FCA وASIC وCySEC. التداول بالمنتجات ذات الرافعة المالية ينطوي على مخاطر عالية.',
+    // Footer navigation columns (must match Figma labels exactly)
+    footerEn: [
+      {
+        heading: 'Markets',
+        links: [
+          { label: 'Forex', href: '/markets/forex' },
+          { label: 'Indices', href: '/markets/indices' },
+          { label: 'Commodities', href: '/markets/commodities' },
+          { label: 'Stocks', href: '/markets/stocks' },
+          { label: 'ETFs', href: '/markets/etfs' },
+          { label: 'Crypto', href: '/markets/crypto' },
+        ],
+      },
+      {
+        heading: 'Platform',
+        links: [
+          { label: 'MetaTrader 5', href: '/platform/mt5' },
+          { label: 'Web Trader', href: '/platform/webtrader' },
+          { label: 'Mobile App', href: '/platform/mobile' },
+          { label: 'Tools', href: '/tools' },
+        ],
+      },
+      {
+        heading: 'Company',
+        links: [
+          { label: 'About', href: '/company/about' },
+          { label: 'Careers', href: '/company/careers' },
+          { label: 'Awards', href: '/company/awards' },
+          { label: 'Media', href: '/education/media' },
+        ],
+      },
+      {
+        heading: 'Support',
+        links: [
+          { label: 'Contact', href: '/contact' },
+          { label: 'FAQs', href: '/faqs' },
+          { label: 'Live Chat', href: '/live-chat' },
+          { label: 'Legal', href: '/legal' },
+        ],
+      },
+    ],
+    footerAr: [
+      {
+        heading: 'الأسواق',
+        links: [
+          { label: 'الفوركس', href: '/markets/forex' },
+          { label: 'المؤشرات', href: '/markets/indices' },
+          { label: 'السلع', href: '/markets/commodities' },
+          { label: 'الأسهم', href: '/markets/stocks' },
+          { label: 'صناديق ETF', href: '/markets/etfs' },
+          { label: 'العملات الرقمية', href: '/markets/crypto' },
+        ],
+      },
+      {
+        heading: 'المنصة',
+        links: [
+          { label: 'ميتاتريدر 5', href: '/platform/mt5' },
+          { label: 'المتداول الإلكتروني', href: '/platform/webtrader' },
+          { label: 'تطبيق الجوال', href: '/platform/mobile' },
+          { label: 'الأدوات', href: '/tools' },
+        ],
+      },
+      {
+        heading: 'الشركة',
+        links: [
+          { label: 'من نحن', href: '/company/about' },
+          { label: 'الوظائف', href: '/company/careers' },
+          { label: 'الجوائز', href: '/company/awards' },
+          { label: 'الإعلام', href: '/education/media' },
+        ],
+      },
+      {
+        heading: 'الدعم',
+        links: [
+          { label: 'اتصل بنا', href: '/contact' },
+          { label: 'الأسئلة الشائعة', href: '/faqs' },
+          { label: 'الدردشة المباشرة', href: '/live-chat' },
+          { label: 'القانونية', href: '/legal' },
+        ],
+      },
+    ],
   });
   console.log('   ✅ Site Settings updated');
 }
 
 // ─── Account Types ─────────────────────────────────────────────────────────
 
+async function deleteAllDocs(collection: string) {
+  try {
+    const res = await api('GET', `/${collection}`, undefined, { limit: '100', depth: '0' });
+    const docs = res.docs ?? [];
+    for (const doc of docs) {
+      await api('DELETE', `/${collection}/${doc.id}`).catch(() => {});
+    }
+    if (docs.length > 0) console.log(`   🗑️  Deleted ${docs.length} existing ${collection} docs`);
+  } catch {
+    // collection might be empty, ignore
+  }
+}
+
 async function seedAccountTypes() {
   console.log('💳 Account Types...');
+  await deleteAllDocs('account-types');
   const types = [
     {
-      name: 'Standard',
-      minDeposit: 100,
-      spreadFrom: 'From 1.0 pip',
+      name: 'Demo',
+      badge: 'free',
+      minDeposit: 0,
+      spreadFrom: '1.2',
       leverage: 'Up to 1:500',
       platforms: ['mt5', 'web-trader', 'mobile'],
-      commission: 'None',
+      commission: '$0',
       features: [
-        { value: 'No commission on trades' },
-        { value: 'All 6 asset classes' },
-        { value: '24/5 trading desk support' },
-        { value: 'MetaTrader 5 access' },
-        { value: 'Negative balance protection' },
+        { value: 'Full platform access' },
+        { value: 'Real-time market data' },
+        { value: 'No deposit required' },
       ],
-      isPopular: true,
+      isPopular: false,
       sortOrder: 1,
       status: 'active',
     },
     {
-      name: 'Raw',
-      minDeposit: 500,
-      spreadFrom: 'From 0.0 pip',
+      name: 'Standard',
+      badge: 'popular',
+      minDeposit: 50,
+      spreadFrom: '1.2',
       leverage: 'Up to 1:500',
       platforms: ['mt5', 'web-trader', 'mobile'],
-      commission: '$3.50 per lot per side',
+      commission: '$0',
       features: [
-        { value: 'Raw institutional spreads from 0.0 pip' },
-        { value: 'ECN/STP execution model' },
-        { value: 'All 6 asset classes' },
-        { value: 'EAs, scalping & hedging welcome' },
-        { value: 'Priority withdrawals' },
+        { value: 'All 2000+ instruments' },
+        { value: 'Zero commission' },
+        { value: '24/7 expert support' },
       ],
-      isPopular: false,
+      isPopular: true,
       sortOrder: 2,
       status: 'active',
     },
     {
-      name: 'VIP',
-      minDeposit: 10000,
-      spreadFrom: 'From 0.0 pip',
+      name: 'Swap-Free',
+      badge: 'islamic',
+      minDeposit: 50,
+      spreadFrom: '1.4',
       leverage: 'Up to 1:500',
       platforms: ['mt5', 'web-trader', 'mobile'],
-      commission: 'From $1.50 per lot',
+      commission: '$0',
       features: [
-        { value: 'Dedicated personal dealer' },
-        { value: 'Custom spread negotiation' },
-        { value: 'Same-day priority withdrawals' },
-        { value: 'Free VPS hosting' },
-        { value: 'Direct institutional pricing' },
+        { value: 'No overnight swaps' },
+        { value: 'Sharia-compliant structure' },
+        { value: 'Full market access' },
       ],
       isPopular: false,
       sortOrder: 3,
       status: 'active',
     },
+    {
+      name: 'Professional',
+      badge: 'pro',
+      minDeposit: 2500,
+      spreadFrom: '0.0',
+      leverage: 'Up to 1:500',
+      platforms: ['mt5', 'web-trader', 'mobile'],
+      commission: '$1.5',
+      features: [
+        { value: 'Raw spreads from 0.0' },
+        { value: 'Priority execution' },
+        { value: 'Dedicated account manager' },
+      ],
+      isPopular: false,
+      sortOrder: 4,
+      status: 'active',
+    },
   ];
   for (const t of types) await post('account-types', t);
-  console.log('   ✅ 3 account types created');
+  console.log('   ✅ 4 account types created');
 }
 
 // ─── Payment Methods ────────────────────────────────────────────────────────
+// Note: depositTime/withdrawalTime/minDeposit/fee are NOT localized (see PaymentMethods.ts).
+// Send all data in the initial POST; no AR patch needed for these fields.
 
 async function seedPaymentMethods() {
   console.log('💰 Payment Methods...');
+  await deleteAllDocs('payment-methods');
   const methods = [
     {
-      en: {
-        depositTime: 'Instant',
-        withdrawalTime: '1–3 business days',
-        minDeposit: '$10',
-        fee: 'None',
-      },
-      ar: {
-        depositTime: 'فوري',
-        withdrawalTime: '1–3 أيام عمل',
-        minDeposit: '$10',
-        fee: 'لا يوجد',
-      },
-      base: { name: 'Visa / Mastercard', methodType: 'card', sortOrder: 1, status: 'active' },
+      name: 'Visa / Mastercard',
+      methodType: 'card',
+      depositTime: 'Instant',
+      withdrawalTime: '1-3 days',
+      minDeposit: '$50',
+      fee: 'Free',
+      sortOrder: 1,
+      status: 'active',
     },
     {
-      en: {
-        depositTime: '1–2 business days',
-        withdrawalTime: '3–5 business days',
-        minDeposit: '$500',
-        fee: 'None',
-      },
-      ar: {
-        depositTime: '1–2 يوم عمل',
-        withdrawalTime: '3–5 أيام عمل',
-        minDeposit: '$500',
-        fee: 'لا يوجد',
-      },
-      base: { name: 'Bank Wire (SWIFT)', methodType: 'bank', sortOrder: 2, status: 'active' },
+      name: 'Bank wire (SWIFT)',
+      methodType: 'bank',
+      depositTime: '1-3 days',
+      withdrawalTime: '2-5 days',
+      minDeposit: '$500',
+      fee: 'Free',
+      sortOrder: 2,
+      status: 'active',
     },
     {
-      en: {
-        depositTime: 'Instant',
-        withdrawalTime: '1 business day',
-        minDeposit: '$10',
-        fee: 'None',
-      },
-      ar: {
-        depositTime: 'فوري',
-        withdrawalTime: 'يوم عمل واحد',
-        minDeposit: '$10',
-        fee: 'لا يوجد',
-      },
-      base: { name: 'Skrill', methodType: 'ewallet', sortOrder: 3, status: 'active' },
+      name: 'Skrill',
+      methodType: 'ewallet',
+      depositTime: 'Instant',
+      withdrawalTime: 'Within 24h',
+      minDeposit: '$50',
+      fee: 'Free',
+      sortOrder: 3,
+      status: 'active',
     },
     {
-      en: {
-        depositTime: 'Instant',
-        withdrawalTime: '1 business day',
-        minDeposit: '$10',
-        fee: 'None',
-      },
-      ar: {
-        depositTime: 'فوري',
-        withdrawalTime: 'يوم عمل واحد',
-        minDeposit: '$10',
-        fee: 'لا يوجد',
-      },
-      base: { name: 'Neteller', methodType: 'ewallet', sortOrder: 4, status: 'active' },
+      name: 'Neteller',
+      methodType: 'ewallet',
+      depositTime: 'Instant',
+      withdrawalTime: 'Within 24h',
+      minDeposit: '$50',
+      fee: 'Free',
+      sortOrder: 4,
+      status: 'active',
     },
     {
-      en: {
-        depositTime: '~10 minutes',
-        withdrawalTime: '~30 minutes',
-        minDeposit: '$50',
-        fee: 'Network fee only',
-      },
-      ar: {
-        depositTime: '~10 دقائق',
-        withdrawalTime: '~30 دقيقة',
-        minDeposit: '$50',
-        fee: 'رسوم الشبكة فقط',
-      },
-      base: { name: 'USDT (TRC20 / ERC20)', methodType: 'crypto', sortOrder: 5, status: 'active' },
+      name: 'Crypto (USDT, BTC)',
+      methodType: 'crypto',
+      depositTime: '< 30 min',
+      withdrawalTime: 'Within 24h',
+      minDeposit: '$50',
+      fee: 'Network only',
+      sortOrder: 5,
+      status: 'active',
+    },
+    {
+      name: 'Local bank transfer',
+      methodType: 'local',
+      depositTime: 'Same day',
+      withdrawalTime: '1-2 days',
+      minDeposit: '$50',
+      fee: 'Free',
+      sortOrder: 6,
+      status: 'active',
     },
   ];
   for (const m of methods) {
-    const doc = await post<{ id: number }>('payment-methods', { ...m.base, ...m.en });
-    await patch('payment-methods', doc.id, m.ar, 'ar');
+    await post('payment-methods', m);
   }
-  console.log('   ✅ 5 payment methods created (EN + AR)');
+  console.log(`   ✅ ${methods.length} payment methods created`);
 }
 
 // ─── Products / Instruments ─────────────────────────────────────────────────
 
 async function seedInstruments() {
   console.log('📊 Instruments...');
+  // Delete all existing instruments first to avoid duplicates from repeated seeding
+  await deleteAllDocs('products-instruments');
   const instruments = [
-    // Forex
+    // ── Top 6 (sortOrder 1-6) — shown on Fees page and spread comparator ─────
+    // Figma fees table: EUR/USD | 0.0 | 0.8 | 1.2
     {
       name: 'EUR/USD',
       symbol: 'EURUSD',
       assetClass: 'forex',
-      spread: 0.1,
+      spread: 0.0,
+      spreadRaw: 0.0,
+      spreadStandard: 0.8,
+      spreadVip: 1.2,
+      spreadIndustry: 1.9,
+      swapRateLong: -0.52,
+      swapRateShort: 0.14,
       leverage: '1:500',
+      contractSize: 100000,
+      pipValue: 10,
       tradingHours: 'Mon–Fri 00:00–24:00 GMT',
       minTradeSize: 0.01,
       sortOrder: 1,
     },
+    // Figma fees table: GBP/USD | 0.1 | 1.0 | 1.5
     {
       name: 'GBP/USD',
       symbol: 'GBPUSD',
       assetClass: 'forex',
-      spread: 0.2,
+      spread: 0.1,
+      spreadRaw: 0.1,
+      spreadStandard: 1.0,
+      spreadVip: 1.5,
+      spreadIndustry: 2.1,
+      swapRateLong: -0.63,
+      swapRateShort: 0.19,
       leverage: '1:500',
+      contractSize: 100000,
+      pipValue: 10,
       tradingHours: 'Mon–Fri 00:00–24:00 GMT',
       minTradeSize: 0.01,
       sortOrder: 2,
     },
+    // Figma fees table: USD/JPY | 0.1 | 0.9 | 1.3
     {
       name: 'USD/JPY',
       symbol: 'USDJPY',
       assetClass: 'forex',
-      spread: 0.2,
+      spread: 0.1,
+      spreadRaw: 0.1,
+      spreadStandard: 0.9,
+      spreadVip: 1.3,
+      spreadIndustry: 2.0,
+      swapRateLong: 0.31,
+      swapRateShort: -0.75,
       leverage: '1:500',
+      contractSize: 100000,
+      pipValue: 9.1,
       tradingHours: 'Mon–Fri 00:00–24:00 GMT',
       minTradeSize: 0.01,
       sortOrder: 3,
     },
+    // Figma fees table: XAU/USD | 1.2 | 1.6 | 2.0
+    {
+      name: 'Gold',
+      symbol: 'XAUUSD',
+      assetClass: 'commodities',
+      spread: 1.2,
+      spreadRaw: 1.2,
+      spreadStandard: 1.6,
+      spreadVip: 2.0,
+      spreadIndustry: 3.5,
+      swapRateLong: -3.15,
+      swapRateShort: 1.02,
+      leverage: '1:200',
+      contractSize: 100,
+      pipValue: 10,
+      tradingHours: 'Mon–Fri 01:00–24:00 GMT',
+      minTradeSize: 0.01,
+      sortOrder: 4,
+    },
+    // Figma fees table: US30 | 1.0 | 1.4 | 1.8
+    {
+      name: 'US 30 (Dow Jones)',
+      symbol: 'US30',
+      assetClass: 'indices',
+      spread: 1.0,
+      spreadRaw: 1.0,
+      spreadStandard: 1.4,
+      spreadVip: 1.8,
+      spreadIndustry: 3.0,
+      swapRateLong: -2.85,
+      swapRateShort: -0.52,
+      leverage: '1:100',
+      contractSize: 1,
+      pipValue: 1,
+      tradingHours: 'Mon–Fri 01:00–22:00 GMT',
+      minTradeSize: 0.1,
+      sortOrder: 5,
+    },
+    // Figma fees table: BTC/USD | 8 | 12 | 15
+    {
+      name: 'Bitcoin / USD',
+      symbol: 'BTCUSD',
+      assetClass: 'crypto',
+      spread: 8,
+      spreadRaw: 8,
+      spreadStandard: 12,
+      spreadVip: 15,
+      spreadIndustry: 25,
+      swapRateLong: -15.2,
+      swapRateShort: -5.8,
+      leverage: '1:20',
+      contractSize: 1,
+      pipValue: 1,
+      tradingHours: '24/7',
+      minTradeSize: 0.001,
+      sortOrder: 6,
+    },
+    // ── Additional instruments ────────────────────────────────────────────────
     {
       name: 'AUD/USD',
       symbol: 'AUDUSD',
       assetClass: 'forex',
       spread: 0.3,
+      spreadRaw: 0.3,
+      spreadStandard: 1.1,
+      spreadVip: 1.5,
+      spreadIndustry: 2.2,
+      swapRateLong: -0.41,
+      swapRateShort: 0.08,
       leverage: '1:500',
+      contractSize: 100000,
+      pipValue: 10,
       tradingHours: 'Mon–Fri 00:00–24:00 GMT',
       minTradeSize: 0.01,
-      sortOrder: 4,
+      sortOrder: 7,
     },
     {
       name: 'USD/CAD',
       symbol: 'USDCAD',
       assetClass: 'forex',
       spread: 0.3,
+      spreadRaw: 0.3,
+      spreadStandard: 1.1,
+      spreadVip: 1.5,
+      spreadIndustry: 2.3,
+      swapRateLong: -0.28,
+      swapRateShort: -0.15,
       leverage: '1:500',
+      contractSize: 100000,
+      pipValue: 10,
       tradingHours: 'Mon–Fri 00:00–24:00 GMT',
       minTradeSize: 0.01,
-      sortOrder: 5,
+      sortOrder: 8,
     },
-    // Commodities / Metals
     {
-      name: 'Gold',
-      symbol: 'XAUUSD',
-      assetClass: 'commodities',
-      spread: 0.25,
-      leverage: '1:200',
-      tradingHours: 'Mon–Fri 01:00–24:00 GMT',
+      name: 'EUR/GBP',
+      symbol: 'EURGBP',
+      assetClass: 'forex',
+      spread: 0.3,
+      spreadRaw: 0.3,
+      spreadStandard: 1.1,
+      spreadVip: 1.5,
+      spreadIndustry: 2.1,
+      leverage: '1:500',
+      contractSize: 100000,
+      pipValue: 10,
+      tradingHours: 'Mon–Fri 00:00–24:00 GMT',
       minTradeSize: 0.01,
-      sortOrder: 10,
+      sortOrder: 9,
     },
+    // Commodities
     {
       name: 'Silver',
       symbol: 'XAGUSD',
       assetClass: 'commodities',
       spread: 0.03,
+      spreadRaw: 0.03,
+      spreadStandard: 0.05,
+      spreadVip: 0.04,
+      spreadIndustry: 0.08,
       leverage: '1:200',
+      contractSize: 5000,
+      pipValue: 50,
       tradingHours: 'Mon–Fri 01:00–24:00 GMT',
       minTradeSize: 0.1,
       sortOrder: 11,
@@ -395,28 +611,30 @@ async function seedInstruments() {
       symbol: 'USOIL',
       assetClass: 'commodities',
       spread: 0.03,
+      spreadRaw: 0.03,
+      spreadStandard: 0.05,
+      spreadVip: 0.04,
+      spreadIndustry: 0.07,
       leverage: '1:200',
+      contractSize: 1000,
+      pipValue: 10,
       tradingHours: 'Mon–Fri 01:00–24:00 GMT',
       minTradeSize: 0.1,
       sortOrder: 12,
     },
     // Indices
     {
-      name: 'US 30 (Dow Jones)',
-      symbol: 'US30',
-      assetClass: 'indices',
-      spread: 1.5,
-      leverage: '1:100',
-      tradingHours: 'Mon–Fri 01:00–22:00 GMT',
-      minTradeSize: 0.1,
-      sortOrder: 20,
-    },
-    {
       name: 'US 500 (S&P 500)',
       symbol: 'US500',
       assetClass: 'indices',
       spread: 0.5,
+      spreadRaw: 0.5,
+      spreadStandard: 0.9,
+      spreadVip: 0.7,
+      spreadIndustry: 1.5,
       leverage: '1:100',
+      contractSize: 1,
+      pipValue: 1,
       tradingHours: 'Mon–Fri 01:00–22:00 GMT',
       minTradeSize: 0.1,
       sortOrder: 21,
@@ -426,7 +644,13 @@ async function seedInstruments() {
       symbol: 'USTEC',
       assetClass: 'indices',
       spread: 1.0,
+      spreadRaw: 1.0,
+      spreadStandard: 1.4,
+      spreadVip: 1.2,
+      spreadIndustry: 2.5,
       leverage: '1:100',
+      contractSize: 1,
+      pipValue: 1,
       tradingHours: 'Mon–Fri 01:00–22:00 GMT',
       minTradeSize: 0.1,
       sortOrder: 22,
@@ -436,28 +660,30 @@ async function seedInstruments() {
       symbol: 'GER40',
       assetClass: 'indices',
       spread: 1.0,
+      spreadRaw: 1.0,
+      spreadStandard: 1.4,
+      spreadVip: 1.2,
+      spreadIndustry: 2.8,
       leverage: '1:100',
+      contractSize: 1,
+      pipValue: 1,
       tradingHours: 'Mon–Fri 07:00–21:00 GMT',
       minTradeSize: 0.1,
       sortOrder: 23,
     },
     // Crypto
     {
-      name: 'Bitcoin / USD',
-      symbol: 'BTCUSD',
-      assetClass: 'crypto',
-      spread: 50,
-      leverage: '1:20',
-      tradingHours: '24/7',
-      minTradeSize: 0.001,
-      sortOrder: 30,
-    },
-    {
       name: 'Ethereum / USD',
       symbol: 'ETHUSD',
       assetClass: 'crypto',
       spread: 2.5,
+      spreadRaw: 2.5,
+      spreadStandard: 4.0,
+      spreadVip: 3.2,
+      spreadIndustry: 8.0,
       leverage: '1:20',
+      contractSize: 1,
+      pipValue: 1,
       tradingHours: '24/7',
       minTradeSize: 0.01,
       sortOrder: 31,
@@ -468,7 +694,13 @@ async function seedInstruments() {
       symbol: 'AAPL.US',
       assetClass: 'stocks',
       spread: 0.05,
+      spreadRaw: 0.05,
+      spreadStandard: 0.1,
+      spreadVip: 0.08,
+      spreadIndustry: 0.15,
       leverage: '1:20',
+      contractSize: 1,
+      pipValue: 1,
       tradingHours: 'Mon–Fri 14:30–21:00 GMT',
       minTradeSize: 0.1,
       sortOrder: 40,
@@ -478,7 +710,13 @@ async function seedInstruments() {
       symbol: 'MSFT.US',
       assetClass: 'stocks',
       spread: 0.05,
+      spreadRaw: 0.05,
+      spreadStandard: 0.1,
+      spreadVip: 0.08,
+      spreadIndustry: 0.15,
       leverage: '1:20',
+      contractSize: 1,
+      pipValue: 1,
       tradingHours: 'Mon–Fri 14:30–21:00 GMT',
       minTradeSize: 0.1,
       sortOrder: 41,
@@ -488,7 +726,13 @@ async function seedInstruments() {
       symbol: 'TSLA.US',
       assetClass: 'stocks',
       spread: 0.1,
+      spreadRaw: 0.1,
+      spreadStandard: 0.18,
+      spreadVip: 0.14,
+      spreadIndustry: 0.3,
       leverage: '1:20',
+      contractSize: 1,
+      pipValue: 1,
       tradingHours: 'Mon–Fri 14:30–21:00 GMT',
       minTradeSize: 0.1,
       sortOrder: 42,
@@ -499,7 +743,13 @@ async function seedInstruments() {
       symbol: 'SPY.US',
       assetClass: 'etfs',
       spread: 0.03,
+      spreadRaw: 0.03,
+      spreadStandard: 0.06,
+      spreadVip: 0.05,
+      spreadIndustry: 0.1,
       leverage: '1:20',
+      contractSize: 1,
+      pipValue: 1,
       tradingHours: 'Mon–Fri 14:30–21:00 GMT',
       minTradeSize: 0.1,
       sortOrder: 50,
@@ -509,7 +759,13 @@ async function seedInstruments() {
       symbol: 'IWRD.UK',
       assetClass: 'etfs',
       spread: 0.05,
+      spreadRaw: 0.05,
+      spreadStandard: 0.09,
+      spreadVip: 0.07,
+      spreadIndustry: 0.14,
       leverage: '1:20',
+      contractSize: 1,
+      pipValue: 1,
       tradingHours: 'Mon–Fri 08:00–16:30 GMT',
       minTradeSize: 0.1,
       sortOrder: 51,
@@ -1228,26 +1484,26 @@ async function seedAwards() {
 
 async function seedPromotions() {
   console.log('🎁 Promotions...');
+  await deleteAllDocs('promotions');
   const promos = [
     {
       en: {
-        title: 'Welcome Boost — 50% on First Deposit',
+        title: 'Welcome Boost',
         slug: 'welcome-boost-50-percent',
-        tag: 'NEW ACCOUNT',
-        description:
-          'Fund your first deposit and receive a 50% bonus credit, up to $5,000, to boost your starting balance.',
-        terms:
-          'Minimum first deposit $200. Bonus subject to 30x trading volume requirement before withdrawal. T&Cs apply.',
-        ctaLabel: 'Claim Now',
+        valueDisplay: 'Up to $5,000',
+        tag: 'NEW',
+        description: 'Match your first deposit up to $5,000. Credited within 24 hours.',
+        terms: 'Min $200 deposit · 30 day rollout',
+        ctaLabel: 'Claim',
         ctaHref: '/en/register',
       },
       ar: {
-        title: 'مكافأة الترحيب — 50% على الإيداع الأول',
-        tag: 'حساب جديد',
-        description: 'موّل إيداعك الأول واحصل على مكافأة ائتمانية بنسبة 50%، تصل إلى 5,000 دولار.',
-        terms:
-          'الحد الأدنى للإيداع الأول 200 دولار. تخضع المكافأة لمتطلبات حجم تداول 30 ضعفاً قبل السحب.',
-        ctaLabel: 'اطلب الآن',
+        title: 'مكافأة الترحيب',
+        valueDisplay: 'حتى $5,000',
+        tag: 'جديد',
+        description: 'طابق إيداعك الأول حتى $5,000. يُضاف خلال 24 ساعة.',
+        terms: 'الحد الأدنى $200 · جدول 30 يومًا',
+        ctaLabel: 'المطالبة',
         ctaHref: '/ar/register',
       },
       tagColor: 'accent',
@@ -1256,52 +1512,101 @@ async function seedPromotions() {
     },
     {
       en: {
-        title: '$5 Cash Rebate Per Lot — Raw Account',
-        slug: 'cash-rebate-5-per-lot-raw',
+        title: 'Active Trader Rebate',
+        slug: 'cash-rebate-active-trader',
+        valueDisplay: '50% rebate',
         tag: 'MONTHLY',
-        description:
-          'Earn $5 cash back on every standard lot traded on a Raw account. Paid monthly — the more you trade, the more you earn.',
-        terms: 'Applicable to Raw accounts only. Rebate calculated on completed calendar month.',
-        ctaLabel: 'Explore Raw Account',
+        description: 'Earn half your commissions back when you trade 100+ lots per month.',
+        terms: 'Standard & Raw accounts. Rebate calculated on completed calendar month.',
+        ctaLabel: 'Claim',
         ctaHref: '/en/trade/accounts',
       },
       ar: {
-        title: 'استرداد نقدي 5 دولار لكل لوط — الحساب الخام',
+        title: 'استرداد التاجر النشط',
+        valueDisplay: '50% استرداد',
         tag: 'شهري',
-        description:
-          'اكسب 5 دولارات استرداداً نقدياً على كل لوط معياري يتم تداوله في الحساب الخام. يُدفع شهرياً.',
-        terms: 'ينطبق على الحسابات الخام فقط. يُحسب الاسترداد على الشهر التقويمي المكتمل.',
-        ctaLabel: 'استكشف الحساب الخام',
+        description: 'اكسب نصف عمولاتك مرة أخرى عند تداول أكثر من 100 لوط في الشهر.',
+        terms: 'حسابات معيارية وخام. يُحسب الاسترداد على الشهر التقويمي المكتمل.',
+        ctaLabel: 'اطلب الآن',
         ctaHref: '/ar/trade/accounts',
       },
-      tagColor: 'blue',
+      tagColor: 'amber',
       isHighlighted: false,
       sortOrder: 2,
     },
     {
       en: {
-        title: 'Refer a Friend — Earn $200',
-        slug: 'refer-a-friend-200',
-        tag: 'PERMANENT',
-        description:
-          'Invite a friend to open a live account. When they fund $200+, you both receive $100 credit.',
+        title: 'Refer a Friend',
+        slug: 'refer-a-friend-500',
+        valueDisplay: '$500',
+        tag: 'EVERGREEN',
+        description: 'Earn $500 cash for every friend who funds and trades 5 lots.',
         terms:
-          'Referred client must deposit minimum $200 and complete 10 standard lots of trading.',
-        ctaLabel: 'Get Your Link',
+          'Unlimited referrals. Referred client must deposit $500+ and complete 5 standard lots. Bonus credited within 5 business days.',
+        ctaLabel: 'Claim',
         ctaHref: '/en/register',
       },
       ar: {
-        title: 'أحِل صديقاً — اربح 200 دولار',
+        title: 'أحِل صديقاً',
+        valueDisplay: '$500',
         tag: 'دائم',
-        description:
-          'ادعُ صديقاً لفتح حساب حقيقي. عند إيداع 200 دولار فأكثر، يحصل كلاكما على ائتمان 100 دولار.',
-        terms: 'يجب أن يودع العميل المُحال 200 دولار كحد أدنى وأن يُكمل 10 لوط معياري.',
+        description: 'اكسب 500 دولار نقداً عن كل صديق يودع ويتداول 5 لوط.',
+        terms:
+          'إحالات غير محدودة. يجب أن يودع العميل 500 دولار فأكثر ويكمل 5 لوط. يُضاف الائتمان خلال 5 أيام عمل.',
         ctaLabel: 'احصل على رابطك',
         ctaHref: '/ar/register',
       },
-      tagColor: 'amber',
+      tagColor: 'blue',
       isHighlighted: false,
       sortOrder: 3,
+    },
+    {
+      en: {
+        title: 'Islamic Accounts',
+        slug: 'islamic-account-zero-swap',
+        valueDisplay: '0 swap',
+        tag: 'PERMANENT',
+        description: 'Swap-free accounts that comply with Sharia. No hidden admin fees.',
+        terms: 'Available for verified accounts. Subject to eligibility verification.',
+        ctaLabel: 'Claim',
+        ctaHref: '/en/register',
+      },
+      ar: {
+        title: 'الحسابات الإسلامية',
+        valueDisplay: '0 مبادلة',
+        tag: 'دائم',
+        description: 'حسابات خالية من المبادلة تتوافق مع الشريعة الإسلامية. لا رسوم إدارية خفية.',
+        terms: 'متاح للحسابات الموثقة. يخضع للتحقق من الأهلية.',
+        ctaLabel: 'تقدّم الآن',
+        ctaHref: '/ar/register',
+      },
+      tagColor: 'purple',
+      isHighlighted: false,
+      sortOrder: 4,
+    },
+    {
+      en: {
+        title: 'EA Traders Bonus',
+        slug: 'free-vps-hosting',
+        valueDisplay: 'Free VPS',
+        tag: 'PERK',
+        description: 'VPS hosting for 50+ accounts running automated strategies.',
+        terms: 'Min balance $1,000. VPS provisioned within 48 hours of eligibility.',
+        ctaLabel: 'Claim',
+        ctaHref: '/en/trade/accounts',
+      },
+      ar: {
+        title: 'مكافأة متداولي EA',
+        valueDisplay: 'VPS مجاني',
+        tag: 'ميزة',
+        description: 'استضافة VPS للحسابات التي تشغّل 50+ من الاستراتيجيات الآلية.',
+        terms: 'الحد الأدنى للرصيد 1,000 دولار. يتم توفير VPS خلال 48 ساعة من الأهلية.',
+        ctaLabel: 'تحقق من الأهلية',
+        ctaHref: '/ar/trade/accounts',
+      },
+      tagColor: 'grey',
+      isHighlighted: false,
+      sortOrder: 5,
     },
   ];
 
@@ -1309,6 +1614,7 @@ async function seedPromotions() {
     const doc = await post<{ id: number }>('promotions', {
       title: promo.en.title,
       slug: promo.en.slug,
+      valueDisplay: promo.en.valueDisplay,
       tag: promo.en.tag,
       tagColor: promo.tagColor,
       description: promo.en.description,
@@ -1324,6 +1630,7 @@ async function seedPromotions() {
       doc.id,
       {
         title: promo.ar.title,
+        valueDisplay: promo.ar.valueDisplay,
         tag: promo.ar.tag,
         description: promo.ar.description,
         terms: promo.ar.terms,
@@ -1340,6 +1647,7 @@ async function seedPromotions() {
 
 async function seedEducation() {
   console.log('🎓 Education Content...');
+  await deleteAllDocs('education-content');
 
   // Guides
   const guides = [
@@ -1429,7 +1737,12 @@ async function seedEducation() {
   }
 
   // Glossary terms
-  const terms = [
+  const terms: {
+    en: { glossaryTerm: string; body: unknown };
+    ar: { glossaryTerm: string; body: unknown };
+    slug: string;
+    glossaryCategory: string;
+  }[] = [
     {
       en: {
         glossaryTerm: 'Pip',
@@ -1444,6 +1757,7 @@ async function seedEducation() {
         ),
       },
       slug: 'pip',
+      glossaryCategory: 'PRICING',
     },
     {
       en: {
@@ -1459,6 +1773,7 @@ async function seedEducation() {
         ),
       },
       slug: 'spread',
+      glossaryCategory: 'PRICING',
     },
     {
       en: {
@@ -1474,6 +1789,7 @@ async function seedEducation() {
         ),
       },
       slug: 'leverage',
+      glossaryCategory: 'RISK',
     },
     {
       en: {
@@ -1489,6 +1805,7 @@ async function seedEducation() {
         ),
       },
       slug: 'margin',
+      glossaryCategory: 'RISK',
     },
     {
       en: {
@@ -1504,6 +1821,7 @@ async function seedEducation() {
         ),
       },
       slug: 'stop-loss',
+      glossaryCategory: 'ORDER/EXEC',
     },
   ];
 
@@ -1514,6 +1832,7 @@ async function seedEducation() {
       contentType: 'glossary',
       glossaryTerm: term.en.glossaryTerm,
       body: term.en.body,
+      glossaryCategory: term.glossaryCategory,
       status: 'published',
     });
     await patch(
@@ -1528,7 +1847,89 @@ async function seedEducation() {
     );
   }
 
-  console.log(`   ✅ ${guides.length} guides + ${terms.length} glossary terms created (EN + AR)`);
+  // Media videos (category-based tabs: Macro / Strategy / Education / Interviews / Live)
+  const videos = [
+    {
+      en: { title: "Inside the Fed: a former trader's view" },
+      ar: { title: 'داخل الفيدرالي: رأي متداول سابق' },
+      slug: 'inside-the-fed-traders-view',
+      contentType: 'video',
+      mediaCategory: 'macro',
+      videoEmbed: 'https://www.youtube.com/watch?v=example1',
+    },
+    {
+      en: { title: 'Reading the COT report' },
+      ar: { title: 'قراءة تقرير المضاربين والتحوطيين' },
+      slug: 'reading-the-cot-report',
+      contentType: 'video',
+      mediaCategory: 'strategy',
+      videoEmbed: 'https://www.youtube.com/watch?v=example2',
+    },
+    {
+      en: { title: 'The carry trade explained' },
+      ar: { title: 'شرح تجارة الفائدة' },
+      slug: 'carry-trade-explained',
+      contentType: 'video',
+      mediaCategory: 'strategy',
+      videoEmbed: 'https://www.youtube.com/watch?v=example3',
+    },
+    {
+      en: { title: 'Position sizing without the guesswork' },
+      ar: { title: 'تحديد حجم المركز بدون تخمين' },
+      slug: 'position-sizing-without-guesswork',
+      contentType: 'video',
+      mediaCategory: 'education',
+      videoEmbed: 'https://www.youtube.com/watch?v=example4',
+    },
+    {
+      en: { title: 'Technical analysis that actually works' },
+      ar: { title: 'التحليل الفني الذي يعمل فعلاً' },
+      slug: 'technical-analysis-that-works',
+      contentType: 'video',
+      mediaCategory: 'education',
+      videoEmbed: 'https://www.youtube.com/watch?v=example5',
+    },
+    {
+      en: { title: 'Interview: a London market maker' },
+      ar: { title: 'مقابلة: صانع سوق في لندن' },
+      slug: 'interview-london-market-maker',
+      contentType: 'audio',
+      mediaCategory: 'interviews',
+      videoEmbed: null,
+    },
+    {
+      en: { title: 'Why oil moves on Tuesday' },
+      ar: { title: 'لماذا يتحرك النفط يوم الثلاثاء' },
+      slug: 'why-oil-moves-tuesday',
+      contentType: 'audio',
+      mediaCategory: 'macro',
+      videoEmbed: null,
+    },
+    {
+      en: { title: 'Live BOE rate decision' },
+      ar: { title: 'قرار سعر الفائدة لبنك إنجلترا مباشر' },
+      slug: 'live-boe-rate-decision',
+      contentType: 'video',
+      mediaCategory: 'live',
+      videoEmbed: 'https://www.youtube.com/watch?v=example6',
+    },
+  ];
+
+  for (const video of videos) {
+    const doc = await post<{ id: number }>('education-content', {
+      title: video.en.title,
+      slug: video.slug,
+      contentType: video.contentType,
+      mediaCategory: video.mediaCategory,
+      videoEmbed: video.videoEmbed,
+      status: 'published',
+    });
+    await patch('education-content', doc.id, { title: video.ar.title }, 'ar');
+  }
+
+  console.log(
+    `   ✅ ${guides.length} guides + ${terms.length} glossary terms + ${videos.length} media videos created (EN + AR)`,
+  );
 }
 
 // ─── Careers ────────────────────────────────────────────────────────────────

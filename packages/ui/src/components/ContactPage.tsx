@@ -371,16 +371,16 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                 className="flex items-center gap-[14px] rounded-[18px] bg-white/[0.04] p-5"
               >
                 {/* Icon box — bg-[rgba(0,176,80,0.12)] rounded-[14px] per Figma */}
-                <div className="bg-accent/[0.12] flex h-[44px] w-[44px] flex-shrink-0 items-center justify-center rounded-[14px]">
+                <div className="bg-accent/[0.12] text-accent flex h-[44px] w-[44px] flex-shrink-0 items-center justify-center rounded-[14px]">
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                     <path
                       d="M9 9.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
-                      stroke="#00b050"
+                      stroke="currentColor"
                       strokeWidth="1.3"
                     />
                     <path
                       d="M9 1C5.69 1 3 3.69 3 7c0 4.5 6 10 6 10s6-5.5 6-10c0-3.31-2.69-6-6-6z"
-                      stroke="#00b050"
+                      stroke="currentColor"
                       strokeWidth="1.3"
                     />
                   </svg>

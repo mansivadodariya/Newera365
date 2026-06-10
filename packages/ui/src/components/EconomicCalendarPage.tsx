@@ -251,7 +251,7 @@ export function EconomicCalendarPage() {
             ].map((h) => (
               <span
                 key={h}
-                className="font-body text-[9px] font-semibold uppercase tracking-[0.1em] text-[#9ca3af]"
+                className="font-body text-muted text-[9px] font-semibold uppercase tracking-[0.1em]"
               >
                 {h}
               </span>
@@ -263,7 +263,7 @@ export function EconomicCalendarPage() {
           ) : (
             Object.entries(grouped).map(([date, events]) => (
               <div key={date} className="mb-5">
-                <p className="font-body dark:border-border mb-2 border-b border-[#e5e7eb] pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#9ca3af]">
+                <p className="font-body dark:border-border text-muted mb-2 border-b border-[#e5e7eb] pb-2 text-[10px] font-semibold uppercase tracking-[0.1em]">
                   {date}
                 </p>
                 <div className="flex flex-col">

@@ -4,14 +4,6 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-const SPREADS = [
-  { instrument: 'EUR/USD', raw: '0.0', std: '0.8', vip: '1.2' },
-  { instrument: 'GBP/USD', raw: '0.1', std: '1.0', vip: '1.5' },
-  { instrument: 'USD/JPY', raw: '0.0', std: '0.9', vip: '1.3' },
-  { instrument: 'XAU/USD', raw: '1.2', std: '1.6', vip: '2.0' },
-  { instrument: 'US30', raw: '1.0', std: '1.4', vip: '1.8' },
-  { instrument: 'BTC/USD', raw: '8', std: '12', vip: '15' },
-] as const;
 
 const OTHER_CHARGES = [
   { key: 'opening', label: 'Account opening', value: 'Free', green: true },
@@ -26,6 +18,12 @@ export interface CmsSpreadRow {
   instrument: string;
   symbol: string;
   spread?: number | null;
+  /** Dedicated RAW spread (preferred over computed value) */
+  spreadRaw?: number | null;
+  /** Dedicated Standard spread (preferred over computed value) */
+  spreadStandard?: number | null;
+  /** Dedicated VIP spread (preferred over computed value) */
+  spreadVip?: number | null;
 }
 
 interface FeesPageProps {
@@ -37,15 +35,25 @@ export function FeesPage({ spreadData }: FeesPageProps) {
   const locale = useLocale();
   const t = useTranslations('fees');
 
-  const displaySpreads =
-    spreadData && spreadData.length > 0
-      ? spreadData.map((r) => ({
-          instrument: r.instrument,
-          raw: r.spread != null ? String(r.spread) : '—',
-          std: r.spread != null ? String((r.spread + 0.8).toFixed(1)) : '—',
-          vip: r.spread != null ? String((r.spread + 1.2).toFixed(1)) : '—',
-        }))
-      : SPREADS;
+  const displaySpreads = (spreadData ?? []).map((r) => {
+    // Use dedicated fields when available; fall back to +0.8/+1.2 formula from legacy `spread`
+    const base = r.spreadRaw ?? r.spread;
+    const rawVal = r.spreadRaw ?? r.spread;
+    const stdVal = r.spreadStandard ?? (base != null ? base + 0.8 : null);
+    const vipVal = r.spreadVip ?? (base != null ? base + 1.2 : null);
+    // Show one decimal for small values (forex/indices pips), integers for large values (crypto)
+    const fmt = (v: number | null) => {
+      if (v == null) return '—';
+      if (Number.isInteger(v) && v >= 5) return String(v);
+      return v.toFixed(1);
+    };
+    return {
+      instrument: r.instrument,
+      raw: fmt(rawVal ?? null),
+      std: fmt(stdVal),
+      vip: fmt(vipVal),
+    };
+  });
 
   return (
     <>
@@ -87,6 +95,11 @@ export function FeesPage({ spreadData }: FeesPageProps) {
             </div>
 
             {/* Data rows */}
+            {displaySpreads.length === 0 && (
+              <p className="font-body px-4 py-8 text-center text-[13px] text-white/50">
+                {t('noSpreads')}
+              </p>
+            )}
             {displaySpreads.map((row) => (
               <div
                 key={row.instrument}

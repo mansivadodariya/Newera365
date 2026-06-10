@@ -153,6 +153,7 @@ export interface CmsEducationItem {
   contentType: string;
   isGated?: boolean | null;
   thumbnailUrl?: string | null;
+  description?: string | null;
 }
 
 interface EducationHubPageProps {
@@ -171,6 +172,29 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
         return { ...cat, count: count > 0 ? `${count}` : cat.count };
       })
     : null;
+
+  // Derive featured articles and pinned guides from CMS guide content
+  const cmsGuides = cmsContent ? cmsContent.filter((c) => c.contentType === 'guide') : [];
+  const FEATURED_TAGS = [
+    { tag: 'NEW', tagClass: 'bg-accent/10 text-accent' },
+    { tag: 'POPULAR', tagClass: 'bg-[#6B7280]/10 text-[#6B7280]' },
+    { tag: 'UPDATED', tagClass: 'bg-[#3B82F6]/10 text-[#3B82F6]' },
+  ] as const;
+  const cmsFeatured =
+    cmsGuides.length > 0
+      ? cmsGuides.slice(0, 3).map((g, i) => ({
+          id: g.id,
+          tag: FEATURED_TAGS[i]?.tag ?? 'GUIDE',
+          tagClass: FEATURED_TAGS[i]?.tagClass ?? 'bg-muted/10 text-muted',
+          title: g.title,
+          desc: g.description ?? '',
+          href: `/guides/${g.slug}`,
+        }))
+      : null;
+  const cmsPinned =
+    cmsGuides.length > 3
+      ? cmsGuides.slice(3, 7).map((g) => ({ title: g.title, href: `/guides/${g.slug}` }))
+      : null;
 
   function handleSubscribe(e: React.FormEvent) {
     e.preventDefault();
@@ -241,7 +265,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
             {t('featuredKicker')}
           </SectionKicker>
           <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
-            {FEATURED.map((article) => (
+            {(cmsFeatured ?? FEATURED).map((article) => (
               <Link
                 key={article.id}
                 href={`/${locale}${article.href}`}
@@ -253,7 +277,6 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                   >
                     {article.tag}
                   </span>
-                  <span className="font-body text-muted text-[11px]">{article.readTime} read</span>
                 </div>
                 <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] transition-colors">
                   {article.title}
@@ -291,11 +314,11 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
             {t('pinnedKicker')}
           </SectionKicker>
           <div className="flex flex-col">
-            {PINNED_GUIDES.map((guide, i) => (
+            {(cmsPinned ?? PINNED_GUIDES).map((guide, i) => (
               <Link
                 key={guide.href}
                 href={`/${locale}${guide.href}`}
-                className={`group flex items-center justify-between py-4 ${i < PINNED_GUIDES.length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
+                className={`group flex items-center justify-between py-4 ${i < (cmsPinned ?? PINNED_GUIDES).length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
               >
                 <span className="text-foreground font-body group-hover:text-accent pr-4 text-[14px] font-medium transition-colors">
                   {guide.title}
@@ -335,10 +358,10 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
           </p>
           {submitted ? (
             <div className="bg-accent/20 flex items-center gap-3 rounded-[14px] px-4 py-4">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" className="text-accent flex-shrink-0">
                 <path
                   d="M4 10l4 4 8-8"
-                  stroke="#00B050"
+                  stroke="currentColor"
                   strokeWidth="1.75"
                   strokeLinecap="round"
                   strokeLinejoin="round"

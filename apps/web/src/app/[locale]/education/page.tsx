@@ -20,6 +20,7 @@ function mapItem(item: CmsEducationContent): CmsEducationItem {
     contentType: item.contentType,
     isGated: item.isGated,
     thumbnailUrl,
+    description: item.seoDescription ?? null,
   };
 }
 

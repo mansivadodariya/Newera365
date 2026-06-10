@@ -13,60 +13,29 @@ export interface MediaPressItem {
   excerpt?: string | null;
   logoUrl?: string | null;
   isFeatured?: boolean | null;
+  sortOrder?: number | null;
 }
 
 interface MediaPressPageProps {
   items?: MediaPressItem[];
 }
 
-const STATIC_ITEMS: MediaPressItem[] = [
-  {
-    id: 1,
-    headline: 'NewEra365 introduces sub-3ms execution technology',
-    publication: 'Reuters',
-    date: '2025-05-14',
-    excerpt:
-      'Broker NewEra365 has deployed a new execution infrastructure claiming sub-3 millisecond order fills for all asset classes.',
-    isFeatured: true,
-  },
-  {
-    id: 2,
-    headline: 'NewEra365 expands to the GCC market with CySEC licence upgrade',
-    publication: 'Bloomberg',
-    date: '2025-04-22',
-    excerpt:
-      'The forex and CFD broker has been granted expanded operating permissions across GCC territories.',
-  },
-  {
-    id: 3,
-    headline: '40% surge: NewEra365 reports record-breaking Q1 trading volumes',
-    publication: 'Financial Times',
-    date: '2025-04-05',
-  },
-  {
-    id: 4,
-    headline: 'NewEra365 wins Best CFD Broker award at Global Forex Summit 2025',
-    publication: 'Forex Magnates',
-    date: '2025-03-18',
-  },
-  {
-    id: 5,
-    headline: 'NewEra365 named fastest growing broker in MENA region',
-    publication: 'MENA Forex Review',
-    date: '2025-02-10',
-  },
-  {
-    id: 6,
-    headline: 'How NewEra365 is using AI to transform broker-client relationships',
-    publication: 'FinTech Magazine',
-    date: '2025-01-28',
-  },
-];
+const FEATURED_IN = ['Bloomberg', 'Reuters', 'Finance Magnates', 'FX Empire', 'Investing.com'];
 
 const BRAND_ASSETS = [
-  { key: 'assetKit', descKey: 'assetKitDesc', icon: '📦' },
-  { key: 'logoPack', descKey: 'logoPackDesc', icon: '🎨' },
-  { key: 'pressKit', descKey: 'pressKitDesc', icon: '📄' },
+  { nameKey: 'logoPack', formatKey: 'logoPackFormat', color: '#00B050' },
+  { nameKey: 'brandGuidelines', formatKey: 'brandGuidelinesFormat', color: '#3B82F6' },
+  { nameKey: 'factSheet', formatKey: 'factSheetFormat', color: '#F59E0B' },
+  { nameKey: 'headshots', formatKey: 'headshotsFormat', color: '#8B5CF6' },
+] as const;
+
+const STATS = [
+  { valueKey: 'statsMT5', labelKey: 'statsMT5Label' },
+  { valueKey: 'statsInstruments', labelKey: 'statsInstrumentsLabel' },
+  { valueKey: 'statsInsurance', labelKey: 'statsInsuranceLabel' },
+  { valueKey: 'statsSupport', labelKey: 'statsSupportLabel' },
+  { valueKey: 'statsOptions', labelKey: 'statsOptionsLabel' },
+  { valueKey: 'statsFunds', labelKey: 'statsFundsLabel' },
 ] as const;
 
 function formatDate(dateStr: string) {
@@ -81,20 +50,38 @@ function formatDate(dateStr: string) {
   }
 }
 
+function FileIcon({ color }: { color: string }) {
+  return (
+    <svg width="28" height="34" viewBox="0 0 28 34" fill="none">
+      <rect width="28" height="34" rx="5" fill={color} fillOpacity="0.12" />
+      <path
+        d="M7 8h9l5 5v13a2 2 0 01-2 2H7a2 2 0 01-2-2V10a2 2 0 012-2z"
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="M16 8v5h5" stroke={color} strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M9 18h10M9 22h7" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
   const locale = useLocale();
   const t = useTranslations('mediaPress');
 
-  const items = cmsItems && cmsItems.length > 0 ? cmsItems : STATIC_ITEMS;
-  const featuredItem = items.find((i) => i.isFeatured) ?? items[0];
-  const listItems = items.filter((i) => !i.isFeatured || i !== featuredItem);
+  const items = cmsItems ?? [];
+  const sorted = [...items].sort((a, b) => (a.sortOrder ?? 99) - (b.sortOrder ?? 99));
+  // External press coverage = not featured; newsroom press releases = featured
+  const coverageItems = sorted.filter((i) => !i.isFeatured);
+  const newsroomItems = sorted.filter((i) => i.isFeatured);
 
   return (
     <>
-      {/* Hero */}
+      {/* ── Hero ── */}
       <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+          <SectionKicker className="[&>span:first-child]:bg-accent/20 mb-4 [&>span:last-child]:text-accent">
             {t('kicker')}
           </SectionKicker>
           <h1 className="text-foreground mb-4 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
@@ -102,123 +89,125 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
             <br />
             <span className="text-accent">{t('heroAccent')}</span>
           </h1>
-          <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
+          <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
             {t('heroSubtitle')}
           </p>
         </div>
       </section>
 
-      {/* Press coverage list */}
-      <section className="bg-transparent px-5 pb-10">
+      {/* ── Press coverage list ── */}
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+          <SectionKicker className="[&>span:first-child]:bg-accent/10 mb-5 [&>span:last-child]:text-accent">
             {t('pressKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[26px] font-semibold leading-[1.1] tracking-[-0.52px]">
             {t('pressHeading')}
           </h2>
           <div className="flex flex-col">
-            {listItems.map((item, i) => (
+            {coverageItems.length === 0 && (
+              <p className="font-body text-muted py-12 text-center text-[14px]">
+                {t('noCoverage')}
+              </p>
+            )}
+            {coverageItems.map((item, i) => (
               <div
                 key={item.id}
-                className={`flex items-start gap-4 py-4 ${i < listItems.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#1a1c22]' : ''}`}
+                className={`py-5 ${i < coverageItems.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#1a1c22]' : ''}`}
               >
-                {/* Publication logo or initial */}
-                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] bg-[#f2f2f4] dark:bg-[#111]">
-                  {item.logoUrl ? (
-                    <img
-                      src={item.logoUrl}
-                      alt={item.publication}
-                      className="h-5 w-5 object-contain"
-                    />
-                  ) : (
-                    <span className="font-sans text-[11px] font-bold text-[#6B7280]">
-                      {item.publication.slice(0, 2).toUpperCase()}
-                    </span>
-                  )}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="mb-1 flex items-center gap-2">
-                    <span className="font-body text-[11px] font-medium text-[#6B7280]">
-                      {item.publication}
-                    </span>
-                    <span className="font-body text-[11px] text-[#9CA3AF]">
-                      · {formatDate(item.date)}
-                    </span>
-                  </div>
-                  {item.url ? (
+                {/* Publication label */}
+                <span className="font-body text-accent mb-2 block text-[10px] font-semibold uppercase tracking-[0.12em]">
+                  {item.publication.toUpperCase().replace(/\s+/g, '.')}
+                </span>
+                {/* Headline */}
+                {item.url ? (
+                  <Link
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block"
+                  >
+                    <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.35] transition-colors">
+                      {item.headline}
+                    </p>
+                  </Link>
+                ) : (
+                  <p className="text-foreground font-sans text-[15px] font-semibold leading-[1.35]">
+                    {item.headline}
+                  </p>
+                )}
+                {/* Excerpt */}
+                {item.excerpt && (
+                  <p className="font-body text-muted mt-1.5 text-[13px] leading-[1.5]">
+                    {item.excerpt}
+                  </p>
+                )}
+                {/* Date + read link */}
+                <div className="mt-3 flex items-center justify-between">
+                  <span className="font-body text-muted/70 text-[12px]">
+                    {formatDate(item.date)}
+                  </span>
+                  {item.url && (
                     <Link
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group"
+                      className="text-accent font-body text-[12px] font-medium transition-opacity hover:opacity-80"
                     >
-                      <p className="text-foreground group-hover:text-accent font-sans text-[14px] font-semibold leading-[1.35] transition-colors">
-                        {item.headline}
-                      </p>
+                      {t('readMore')}
                     </Link>
-                  ) : (
-                    <p className="text-foreground font-sans text-[14px] font-semibold leading-[1.35]">
-                      {item.headline}
-                    </p>
-                  )}
-                  {item.excerpt && (
-                    <p className="font-body text-muted mt-1 line-clamp-2 text-[12px] leading-[1.5]">
-                      {item.excerpt}
-                    </p>
                   )}
                 </div>
-                {item.url && (
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    className="text-muted mt-1 flex-shrink-0"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M2 12L12 2M12 2H6M12 2v6"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Brand assets download */}
+      {/* ── Featured in strip ── */}
+      <section className="border-y border-[#e5e7eb] px-5 py-6 dark:border-[#1a1c22]">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <p className="font-body text-muted/50 mb-4 text-center text-[10px] font-semibold uppercase tracking-[0.2em]">
+            — {t('featuredInLabel')} —
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+            {FEATURED_IN.map((pub) => (
+              <span key={pub} className="font-body text-muted text-[13px] font-medium">
+                {pub}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Media kit ── */}
       <section className="rounded-[32px] bg-[#f2f2f7] px-5 pb-9 pt-10 dark:bg-[#0f0f14]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 text-[#6B7280] dark:text-[#6B7280] [&>span:first-child]:bg-[#d0d0d8] dark:[&>span:first-child]:bg-[#1a1c22]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#d0d0d8] [&>span:last-child]:text-[#6B7280] dark:[&>span:first-child]:bg-[#1a1c22]">
             {t('assetsKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[24px] font-semibold leading-[1.1] tracking-[-0.48px]">
             {t('assetsHeading')}
           </h2>
-          <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
-            {BRAND_ASSETS.map(({ key, descKey, icon }) => (
+          <div className="grid grid-cols-2 gap-3">
+            {BRAND_ASSETS.map(({ nameKey, formatKey, color }) => (
               <div
-                key={key}
-                className="bg-surface dark:bg-surface flex items-center justify-between rounded-[16px] px-4 py-4"
+                key={nameKey}
+                className="bg-surface flex flex-col gap-3 rounded-[18px] p-4"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-[22px]">{icon}</span>
-                  <div>
-                    <p className="text-foreground font-sans text-[14px] font-semibold">
-                      {t(key as 'assetKit')}
-                    </p>
-                    <p className="font-body text-muted text-[12px]">
-                      {t(descKey as 'assetKitDesc')}
-                    </p>
-                  </div>
+                <FileIcon color={color} />
+                <div className="flex-1">
+                  <p className="text-foreground font-sans text-[13px] font-semibold">
+                    {t(nameKey as 'logoPack')}
+                  </p>
+                  <p className="font-body text-muted text-[11px]">
+                    {t(formatKey as 'logoPackFormat')}
+                  </p>
                 </div>
-                <button className="font-body bg-foreground/[0.08] hover:bg-foreground/[0.14] text-foreground flex-shrink-0 rounded-full px-3 py-[7px] text-[12px] font-medium transition-colors">
+                <button
+                  className="font-body text-foreground/70 dark:border-border rounded-full border border-[#d0d0d8] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] transition-colors hover:border-foreground/40"
+                  aria-label={`Download ${t(nameKey as 'logoPack')}`}
+                >
                   {t('downloadBtn')}
                 </button>
               </div>
@@ -227,80 +216,118 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
         </div>
       </section>
 
-      {/* Featured newsroom item */}
-      {featuredItem && (
-        <section className="bg-transparent px-5 pb-10 pt-10">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-              {t('latestKicker')}
-            </SectionKicker>
-            <p className="text-foreground mb-4 font-sans text-[18px] font-semibold">
-              {t('latestHeading')}
-            </p>
-            <div className="overflow-hidden rounded-[22px] bg-[#07090D]">
-              <div className="p-5">
-                <div className="mb-3 flex items-center gap-2">
-                  <span className="font-body text-[11px] font-medium text-white/50">
-                    {featuredItem.publication}
-                  </span>
-                  <span className="font-body text-[11px] text-white/30">
-                    · {formatDate(featuredItem.date)}
-                  </span>
-                </div>
-                <p className="mb-3 font-sans text-[18px] font-semibold leading-[1.3] text-white">
-                  {featuredItem.headline}
+      {/* ── By the numbers ── */}
+      <section className="px-5 py-10">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <p className="font-body text-muted/50 mb-8 text-center text-[10px] font-semibold uppercase tracking-[0.2em]">
+            — {t('statsLabel')} —
+          </p>
+          <div className="grid grid-cols-3 gap-y-6">
+            {STATS.map(({ valueKey, labelKey }) => (
+              <div key={valueKey} className="flex flex-col items-center gap-1">
+                <p className="text-foreground font-sans text-[26px] font-bold leading-none">
+                  {t(valueKey as 'statsMT5')}
                 </p>
-                {featuredItem.excerpt && (
-                  <p className="font-body mb-4 text-[13px] leading-[1.5] text-white/50">
-                    {featuredItem.excerpt}
-                  </p>
-                )}
-                {featuredItem.url && (
-                  <Link
-                    href={featuredItem.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-body text-accent flex items-center gap-1.5 text-[13px] font-medium transition-opacity hover:opacity-80"
-                  >
-                    {t('readArticle')}
-                    <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                      <path
-                        d="M2 12L12 2M12 2H6M12 2v6"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Link>
-                )}
+                <p className="font-body text-muted text-center text-[9px] font-semibold uppercase tracking-[0.1em]">
+                  {t(labelKey as 'statsMT5Label')}
+                </p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Latest from the newsroom ── */}
+      {newsroomItems.length > 0 && (
+        <section className="px-5 pb-10">
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <SectionKicker className="[&>span:first-child]:bg-accent/10 mb-5 [&>span:last-child]:text-accent">
+              {t('newsroomKicker')}
+            </SectionKicker>
+            <h2 className="text-foreground mb-6 font-sans text-[24px] font-semibold leading-[1.1] tracking-[-0.48px]">
+              {t('newsroomHeading')}
+            </h2>
+            <div className="flex flex-col">
+              {newsroomItems.map((item, i) => (
+                <div
+                  key={item.id}
+                  className={`flex items-center justify-between gap-4 py-4 ${i < newsroomItems.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#1a1c22]' : ''}`}
+                >
+                  <div className="min-w-0">
+                    <p className="font-body text-muted mb-1 text-[11px]">{formatDate(item.date)}</p>
+                    {item.url ? (
+                      <Link
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group"
+                      >
+                        <p className="text-foreground group-hover:text-accent font-sans text-[14px] font-semibold leading-[1.3] transition-colors">
+                          {item.headline}
+                        </p>
+                      </Link>
+                    ) : (
+                      <p className="text-foreground font-sans text-[14px] font-semibold leading-[1.3]">
+                        {item.headline}
+                      </p>
+                    )}
+                  </div>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    className="text-accent flex-shrink-0"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M3 8h10M9 4l4 4-4 4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              ))}
             </div>
           </div>
         </section>
       )}
 
-      {/* Media inquiries */}
-      <section className="bg-transparent px-5 pb-10">
+      {/* ── Media inquiries ── */}
+      <section className="px-5 pb-12">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="rounded-[18px] border border-[#e5e7eb] px-5 py-5 dark:border-[#1a1c22]">
-            <p className="text-foreground mb-1 font-sans text-[16px] font-semibold">
+          <div className="rounded-[22px] bg-[#f2f2f7] px-6 py-8 text-center dark:bg-[#0f0f14]">
+            <SectionKicker className="mb-4 justify-center [&>span:first-child]:bg-accent/20 [&>span:last-child]:text-accent">
+              {t('inquiriesKicker')}
+            </SectionKicker>
+            <h2 className="text-foreground mb-3 font-sans text-[22px] font-semibold">
               {t('inquiriesHeading')}
+            </h2>
+            <p className="font-body text-muted mb-5 text-[13px] leading-[1.55]">
+              {t('inquiriesDesc')}
             </p>
-            <p className="font-body text-muted mb-3 text-[13px] leading-[1.5]">
-              {t('inquiriesDesc')}{' '}
-              <a
-                href={`mailto:${t('inquiriesEmail')}`}
-                className="text-accent font-medium hover:underline"
-              >
-                {t('inquiriesEmail')}
-              </a>
+            <a
+              href={`mailto:${t('inquiriesEmail')}`}
+              className="text-accent mb-2 block font-sans text-[18px] font-semibold transition-opacity hover:opacity-80"
+            >
+              {t('inquiriesEmail')}
+            </a>
+            <a
+              href={`tel:${t('inquiriesPhone')}`}
+              className="text-foreground font-body mb-4 block text-[14px] font-medium transition-opacity hover:opacity-70"
+            >
+              {t('inquiriesPhone')}
+            </a>
+            <p className="font-body text-muted/60 text-[11px] font-semibold uppercase tracking-[0.12em]">
+              {t('inquiriesAlt')}
             </p>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
+      {/* ── CTA ── */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-11">
         <div className="mx-auto flex max-w-[390px] flex-col items-center md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="mb-3 text-center font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px] text-white">

@@ -247,7 +247,7 @@ export function ResearchPage({
           <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.08] tracking-[-1.14px]">
             {t('heroLine1')}
             <br />
-            {t('heroLine2')}
+            <span className="text-accent">{t('heroLine2')}</span>
           </h1>
           <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
             {t('heroSubtitle')}
@@ -480,7 +480,7 @@ export function ResearchPage({
                         {report.summary}
                       </p>
                     )}
-                    <p className="mt-2 font-mono text-[10px] text-[#9ca3af]">
+                    <p className="text-muted mt-2 font-mono text-[10px]">
                       {(() => {
                         try {
                           return new Date(report.publishedDate).toLocaleDateString('en-US', {
@@ -503,7 +503,7 @@ export function ResearchPage({
                       {t('reportDownload')}
                     </a>
                   ) : (
-                    <span className="flex-shrink-0 rounded-full bg-[#f2f2f4] px-4 py-2 font-sans text-[12px] text-[#9ca3af] dark:bg-[#1c1c1c]">
+                    <span className="flex-shrink-0 rounded-full bg-[#f2f2f4] px-4 py-2 font-sans text-[12px] text-muted dark:bg-[#1c1c1c] dark:text-[#9ca3af]">
                       {t('reportComingSoon')}
                     </span>
                   )}
@@ -536,10 +536,10 @@ export function ResearchPage({
             <div className="xl:flex-1">
               {subscribed ? (
                 <div className="bg-accent/20 flex items-center gap-3 rounded-[14px] px-4 py-4">
-                  <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" className="text-accent flex-shrink-0">
                     <path
                       d="M4 10l4 4 8-8"
-                      stroke="#00B050"
+                      stroke="currentColor"
                       strokeWidth="1.75"
                       strokeLinecap="round"
                       strokeLinejoin="round"

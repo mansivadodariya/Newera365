@@ -4,9 +4,12 @@ import { useState, useMemo } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-type Tab = 'ALL' | 'VIDEO' | 'AUDIO';
+// Category tabs shown when CMS items have mediaCategory set
+const CATEGORY_TABS = ['ALL', 'MACRO', 'STRATEGY', 'EDUCATION', 'INTERVIEWS', 'LIVE'] as const;
 
-const TABS: Tab[] = ['ALL', 'VIDEO', 'AUDIO'];
+// Fallback type tabs when no categories in CMS
+type TypeTab = 'ALL' | 'VIDEO' | 'AUDIO';
+const TYPE_TABS: TypeTab[] = ['ALL', 'VIDEO', 'AUDIO'];
 
 // Kept for backward-compat — no longer used by the page
 export interface CmsWebinarItem {
@@ -28,11 +31,15 @@ export interface CmsVideoItem {
   thumbnailUrl?: string | null;
   videoEmbed?: string | null;
   description?: string | null;
+  mediaCategory?: string | null;
 }
 
 interface EpisodeItem {
   id: string;
-  tab: Tab;
+  /** Type-based tab (VIDEO/AUDIO) used as fallback when no categories */
+  typeTab: TypeTab;
+  /** Category-based tab (MACRO/STRATEGY/etc.) from CMS */
+  categoryTab: string;
   tagDisplay: string;
   duration: string;
   title: string;
@@ -43,95 +50,15 @@ interface EpisodeItem {
   href?: string | null;
 }
 
-const FALLBACK_EPISODES: EpisodeItem[] = [
-  {
-    id: 'fed-trader',
-    tab: 'VIDEO',
-    tagDisplay: 'VIDEO',
-    duration: '42 min',
-    title: "Inside the Fed: a former trader's view",
-    desc: 'Ex-Goldman macro desk head on reading Fed minutes, rate expectations and what the bond market is pricing.',
-    type: 'VIDEO',
-    featured: true,
-  },
-  {
-    id: 'cot-report',
-    tab: 'VIDEO',
-    tagDisplay: 'VIDEO',
-    duration: '18 min',
-    title: 'Reading the COT report',
-    desc: 'How institutional positioning data can give retail traders a real edge.',
-    type: 'VIDEO',
-    featured: false,
-  },
-  {
-    id: 'why-moves',
-    tab: 'AUDIO',
-    tagDisplay: 'AUDIO',
-    duration: '24 min',
-    title: 'Why oil moves on Tuesday',
-    desc: 'EIA inventory data, production caps and the weekly cycle that drives crude.',
-    type: 'AUDIO',
-    featured: false,
-  },
-  {
-    id: 'carry-trade',
-    tab: 'VIDEO',
-    tagDisplay: 'VIDEO',
-    duration: '31 min',
-    title: 'The carry trade explained',
-    desc: 'Currency pairs, interest rate differentials and how to run a carry position through volatility.',
-    type: 'VIDEO',
-    featured: false,
-  },
-  {
-    id: 'boe',
-    tab: 'VIDEO',
-    tagDisplay: 'VIDEO',
-    duration: '15 min',
-    title: 'Live BOE rate decision',
-    desc: "Real-time breakdown of the Bank of England's rate decision and market reaction.",
-    type: 'VIDEO',
-    featured: false,
-  },
-  {
-    id: 'london',
-    tab: 'AUDIO',
-    tagDisplay: 'AUDIO',
-    duration: '22 min',
-    title: 'Interview: a London market maker',
-    desc: 'What actually happens on the other side of your trade — a rare look inside market making.',
-    type: 'AUDIO',
-    featured: false,
-  },
-  {
-    id: 'position',
-    tab: 'VIDEO',
-    tagDisplay: 'VIDEO',
-    duration: '19 min',
-    title: 'Position sizing without the guesswork',
-    desc: 'A practical framework for calculating lot size based on account risk, not gut feel.',
-    type: 'VIDEO',
-    featured: false,
-  },
-  {
-    id: 'tech-analysis',
-    tab: 'VIDEO',
-    tagDisplay: 'VIDEO',
-    duration: '27 min',
-    title: 'Technical analysis that actually works',
-    desc: 'Which chart setups have a statistical edge — and which ones traders just like the look of.',
-    type: 'VIDEO',
-    featured: false,
-  },
-];
 
 function videoItemToEpisode(v: CmsVideoItem, index: number): EpisodeItem {
   const type: 'VIDEO' | 'AUDIO' = v.contentType === 'audio' ? 'AUDIO' : 'VIDEO';
+  const cat = v.mediaCategory ? v.mediaCategory.toUpperCase() : type;
   return {
     id: v.slug,
-    tab: type,
-    tagDisplay: type,
+    typeTab: type,
+    categoryTab: cat,
+    tagDisplay: cat,
     duration: '',
     title: v.title,
     desc: v.description ?? '',
@@ -143,11 +70,11 @@ function videoItemToEpisode(v: CmsVideoItem, index: number): EpisodeItem {
 }
 
 function webinarToEpisode(w: CmsWebinarItem, index: number): EpisodeItem {
-  const tab: Tab = w.status === 'upcoming' || w.status === 'live' ? 'VIDEO' : 'VIDEO';
   return {
     id: w.slug,
-    tab,
-    tagDisplay: tab,
+    typeTab: 'VIDEO',
+    categoryTab: w.status === 'live' ? 'LIVE' : 'EDUCATION',
+    tagDisplay: w.status === 'live' ? 'LIVE' : 'EDUCATION',
     duration: '',
     title: w.title,
     desc: w.speakerBio ?? `Presented by ${w.speaker}`,
@@ -194,21 +121,36 @@ interface MediaListingPageProps {
 export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPageProps) {
   const locale = useLocale();
   const t = useTranslations('media');
-  const [activeTab, setActiveTab] = useState<Tab>('ALL');
+  const [activeTab, setActiveTab] = useState<string>('ALL');
   const [search, setSearch] = useState('');
 
   const episodes = useMemo<EpisodeItem[]>(() => {
     if (cmsVideos?.length) return cmsVideos.map(videoItemToEpisode);
     if (cmsWebinars?.length)
       return cmsWebinars.filter((w) => w.status !== 'cancelled').map(webinarToEpisode);
-    return FALLBACK_EPISODES;
+    return [];
   }, [cmsVideos, cmsWebinars]);
+
+  // Decide whether to show category tabs (Macro/Strategy/etc.) or type tabs (Video/Audio)
+  // Use category tabs when at least one episode has a real category set
+  const hasCategoryData = episodes.some(
+    (ep) => ep.categoryTab !== 'VIDEO' && ep.categoryTab !== 'AUDIO',
+  );
+
+  // Build tab list dynamically — only show categories that exist in the data
+  const tabs: string[] = useMemo(() => {
+    if (!hasCategoryData) return TYPE_TABS;
+    const present = new Set(episodes.map((ep) => ep.categoryTab));
+    return ['ALL', ...CATEGORY_TABS.slice(1).filter((c) => present.has(c))];
+  }, [episodes, hasCategoryData]);
 
   const featured = episodes.find((e) => e.featured);
   const rest = episodes.filter((e) => !e.featured);
 
   const filtered = rest.filter((ep) => {
-    const matchTab = activeTab === 'ALL' || ep.tab === activeTab;
+    const matchTab =
+      activeTab === 'ALL' ||
+      (hasCategoryData ? ep.categoryTab === activeTab : ep.typeTab === activeTab);
     const matchSearch =
       !search ||
       ep.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -259,7 +201,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
       <section className="px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
-            {TABS.map((tab) => (
+            {tabs.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -277,7 +219,12 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
       </section>
 
       {/* Featured episode */}
-      {featured && (activeTab === 'ALL' || activeTab === featured.tab) && !search && (
+      {featured &&
+        (activeTab === 'ALL' ||
+          (hasCategoryData
+            ? activeTab === featured.categoryTab
+            : activeTab === featured.typeTab)) &&
+        !search && (
         <section className="px-5 pb-6">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div

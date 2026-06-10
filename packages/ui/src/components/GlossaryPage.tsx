@@ -10,6 +10,7 @@ export interface CmsGlossaryTerm {
   id: number;
   glossaryTerm: string;
   alphabeticalIndex?: string | null;
+  glossaryCategory?: string | null;
   body?: SlateNode[] | null;
 }
 
@@ -32,232 +33,6 @@ const CATEGORY_COLORS: Record<string, string> = {
   GENERAL: 'bg-[#6b7280]/15 text-[#6b7280]',
 };
 
-const TERMS: GlossaryTerm[] = [
-  // A
-  {
-    term: 'Ask',
-    category: 'PRICING',
-    definition:
-      'The price at which a market maker is willing to sell a financial instrument. Always higher than the bid.',
-  },
-  {
-    term: 'At the Market',
-    category: 'ORDER/EXEC',
-    definition: 'An instruction to buy or sell immediately at the best available current price.',
-  },
-  // B
-  {
-    term: 'Base Currency',
-    category: 'FOREX',
-    definition:
-      'In a currency pair, the first currency listed. In EUR/USD, EUR is the base currency.',
-  },
-  {
-    term: 'Bid',
-    category: 'PRICING',
-    definition:
-      'The price at which a market maker is willing to buy a financial instrument. Always lower than the ask.',
-  },
-  {
-    term: 'Breakout',
-    category: 'CHART/PATTERN',
-    definition:
-      'When price moves decisively beyond a defined support or resistance level with increased volume.',
-  },
-  // C
-  {
-    term: 'Carry Trade',
-    category: 'STRATEGY',
-    definition:
-      'A trading strategy where a market borrows a low-interest currency to invest in a higher-yielding one.',
-  },
-  {
-    term: 'CFD',
-    category: 'GENERAL',
-    definition:
-      'Contract For Difference — a derivative that lets you speculate on price movements without owning the underlying asset.',
-  },
-  {
-    term: 'Consolidation',
-    category: 'CHART/PATTERN',
-    definition:
-      'A period where price trades within a tight range after a significant move, before the next directional move.',
-  },
-  // D
-  {
-    term: 'Drawdown',
-    category: 'RISK',
-    definition:
-      'The peak-to-trough decline of an account during a specific period, expressed as a percentage.',
-  },
-  // E
-  {
-    term: 'ECN',
-    category: 'ORDER/EXEC',
-    definition:
-      'Electronic Communication Network — connects traders directly to liquidity providers without a dealing desk.',
-  },
-  {
-    term: 'Equity',
-    category: 'RISK',
-    definition:
-      'The real-time value of your account — balance plus or minus unrealised profit/loss on open positions.',
-  },
-  // F
-  {
-    term: 'Free Margin',
-    category: 'RISK',
-    definition:
-      'The available margin not currently used as collateral — the amount you can use to open new positions.',
-  },
-  {
-    term: 'Fundamental Analysis',
-    category: 'ANALYSIS',
-    definition:
-      'Evaluating an asset by analysing economic factors — interest rates, GDP, inflation, employment data.',
-  },
-  // G
-  {
-    term: 'Gap',
-    category: 'CHART/PATTERN',
-    definition:
-      'A break in price action where no trading occurred between two sessions, often appearing on Monday open.',
-  },
-  // H
-  {
-    term: 'Hedging',
-    category: 'RISK',
-    definition: 'Opening positions to offset existing market exposure and reduce potential losses.',
-  },
-  // I
-  {
-    term: 'Indicator',
-    category: 'TECHNICAL',
-    definition:
-      'A mathematical calculation applied on price or volume data used in technical analysis.',
-  },
-  // L
-  {
-    term: 'Leverage',
-    category: 'RISK',
-    definition:
-      'The ratio of exposure to the actual capital used. 1:100 leverage means $1,000 controls a $100,000 position.',
-  },
-  {
-    term: 'Liquidity',
-    category: 'GENERAL',
-    definition:
-      'The ease with which an asset can be bought or sold without significantly affecting its price.',
-  },
-  {
-    term: 'Long',
-    category: 'GENERAL',
-    definition: 'A buy position — you profit when the asset rises in price.',
-  },
-  // M
-  {
-    term: 'Margin',
-    category: 'RISK',
-    definition:
-      'The deposit required to open and maintain a leveraged position. Expressed as a percentage of full trade value.',
-  },
-  {
-    term: 'Margin Call',
-    category: 'RISK',
-    definition:
-      'A broker alert when your equity falls below the required margin level, requesting you add funds or close positions.',
-  },
-  // P
-  {
-    term: 'Pip',
-    category: 'PRICING',
-    definition:
-      'The smallest price movement in a currency pair — typically the 4th decimal place (0.0001) for most pairs.',
-  },
-  {
-    term: 'Position Sizing',
-    category: 'RISK',
-    definition:
-      'Calculating the correct lot size for a trade based on account size and acceptable risk per trade.',
-  },
-  // R
-  {
-    term: 'Resistance',
-    category: 'TECHNICAL',
-    definition:
-      'A price level where selling pressure has historically prevented further upward movement.',
-  },
-  {
-    term: 'Risk/Reward Ratio',
-    category: 'RISK',
-    definition:
-      'The ratio between potential loss (risk) and potential profit (reward) on a trade. A 1:3 ratio risks 1 to gain 3.',
-  },
-  // S
-  {
-    term: 'Short',
-    category: 'GENERAL',
-    definition: 'A sell position — you profit when the asset falls in price.',
-  },
-  {
-    term: 'Spread',
-    category: 'PRICING',
-    definition:
-      'The difference between the bid and ask price — the primary cost of a trade on spread-based accounts.',
-  },
-  {
-    term: 'Stop-Loss',
-    category: 'ORDER/EXEC',
-    definition:
-      'An order to automatically close a position when it reaches a specified loss level.',
-  },
-  {
-    term: 'Support',
-    category: 'TECHNICAL',
-    definition:
-      'A price level where buying pressure has historically prevented further downward movement.',
-  },
-  {
-    term: 'Swap',
-    category: 'PRICING',
-    definition:
-      "Interest paid or earned for holding a leveraged position overnight, based on the two currencies' interest rate differential.",
-  },
-  // T
-  {
-    term: 'Take-Profit',
-    category: 'ORDER/EXEC',
-    definition:
-      'An order to automatically close a profitable position when it reaches a specified target price.',
-  },
-  {
-    term: 'Technical Analysis',
-    category: 'ANALYSIS',
-    definition:
-      'Evaluating price movements using historical chart data, patterns and statistical indicators.',
-  },
-  {
-    term: 'Trend',
-    category: 'TECHNICAL',
-    definition:
-      'The general direction in which price is moving — uptrend (higher highs), downtrend (lower lows), or sideways.',
-  },
-  // V
-  {
-    term: 'Volatility',
-    category: 'GENERAL',
-    definition:
-      'The degree to which a price moves over time. High volatility means larger price swings; low volatility means smaller ones.',
-  },
-  // W
-  {
-    term: 'Whipsaw',
-    category: 'CHART/PATTERN',
-    definition:
-      'A false breakout where price briefly moves past a key level before reversing sharply.',
-  },
-];
-
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 interface GlossaryPageProps {
@@ -274,12 +49,12 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
     if (cmsTerms && cmsTerms.length > 0) {
       return cmsTerms.map((t) => ({
         term: t.glossaryTerm ?? '',
-        category: t.alphabeticalIndex?.toUpperCase() ?? t.glossaryTerm?.[0]?.toUpperCase() ?? 'A',
+        category: t.glossaryCategory ?? 'GENERAL',
         definition: '',
         body: t.body,
       }));
     }
-    return TERMS;
+    return [];
   }, [cmsTerms]);
 
   const filtered = useMemo(() => {

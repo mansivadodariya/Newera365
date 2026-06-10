@@ -178,7 +178,7 @@ const DEVICES = [
   { label: 'iPadOS', Icon: IconTablet },
   { label: 'macOS', Icon: IconDesktop },
   { label: 'Android', Icon: IconPhone },
-  { label: 'Linux', Icon: IconDesktop },
+  { label: 'Web', Icon: IconWeb },
   { label: 'Windows', Icon: IconDesktop },
 ];
 
@@ -357,7 +357,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                 <div>
                   <p className="text-foreground mb-[4px] font-sans text-[14px] font-semibold xl:mb-1 xl:text-[18px]">
                     {t(
-                      `feat${['indicators', 'ea', 'timeframes', 'hedging'].indexOf(tool.id) + 1}Title` as 'feat1Title',
+                      `feat${['indicators', 'ea', 'timeframes', 'hedging'].indexOf(tool.id) + 1}` as 'feat1',
                     )}
                   </p>
                   <p className="font-body text-muted text-[11px] leading-snug xl:text-[13px]">
@@ -408,8 +408,8 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                           ? 'Mac · Direct download'
                           : dev.label === 'Android'
                             ? 'Google Play'
-                            : dev.label === 'Linux'
-                              ? 'Linux · Direct download'
+                            : dev.label === 'Web'
+                              ? 'Open in browser'
                               : 'Windows · Direct download'}
                   </span>
                 </div>

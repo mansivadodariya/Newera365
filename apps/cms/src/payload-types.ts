@@ -245,6 +245,20 @@ export interface EducationContent {
     | null;
   thumbnail?: number | Media | null;
   isFeatured?: boolean | null;
+  mediaCategory?: ('macro' | 'strategy' | 'education' | 'interviews' | 'live') | null;
+  glossaryCategory?:
+    | (
+        | 'PRICING'
+        | 'FOREX'
+        | 'STRATEGY'
+        | 'RISK'
+        | 'ORDER/EXEC'
+        | 'ANALYSIS'
+        | 'CHART/PATTERN'
+        | 'TECHNICAL'
+        | 'GENERAL'
+      )
+    | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
   updatedAt: string;
@@ -507,6 +521,7 @@ export interface Promotion {
   id: number;
   title: string;
   slug: string;
+  valueDisplay?: string | null;
   tag?: string | null;
   tagColor?: ('accent' | 'amber' | 'blue' | 'purple' | 'red' | 'grey') | null;
   description: string;

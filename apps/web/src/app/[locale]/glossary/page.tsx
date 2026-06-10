@@ -15,6 +15,7 @@ function mapToGlossaryTerm(item: CmsEducationContent): CmsGlossaryTerm {
     id: item.id,
     glossaryTerm: item.glossaryTerm ?? item.title,
     alphabeticalIndex: item.alphabeticalIndex,
+    glossaryCategory: item.glossaryCategory,
     body: item.body ?? null,
   };
 }

@@ -165,6 +165,8 @@ export interface CmsEducationContent {
   pdfFile?: CmsMedia | number | null;
   glossaryTerm?: string | null;
   alphabeticalIndex?: string | null;
+  glossaryCategory?: string | null;
+  mediaCategory?: string | null;
   body?: SlateNode[] | null;
   thumbnail?: CmsMedia | number | null;
   seoTitle?: string | null;
@@ -389,6 +391,7 @@ export interface CmsPromotion {
   id: number;
   slug: string;
   title: string;
+  valueDisplay?: string | null;
   tag?: string | null;
   tagColor?: string | null;
   description?: string | null;

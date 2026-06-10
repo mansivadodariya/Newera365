@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
@@ -33,6 +34,17 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 const isLocale = (value: string): value is Locale => (LOCALES as readonly string[]).includes(value);
+
+// Theme-aware favicon: dark wordmark on light browser chrome, white wordmark on
+// dark browser chrome (follows the OS/browser prefers-color-scheme).
+export const metadata: Metadata = {
+  icons: {
+    icon: [
+      { url: '/favicon-light.png', media: '(prefers-color-scheme: light)', type: 'image/png' },
+      { url: '/favicon-dark.png', media: '(prefers-color-scheme: dark)', type: 'image/png' },
+    ],
+  },
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

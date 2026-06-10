@@ -256,7 +256,7 @@ export function LiveChatPage() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && sendMessage(input)}
             placeholder={t('inputPlaceholder')}
-            className="font-body text-foreground flex-1 bg-transparent text-[14px] outline-none placeholder:text-[#9ca3af] focus:outline-none focus-visible:outline-none"
+            className="font-body text-foreground flex-1 bg-transparent text-[14px] outline-none placeholder:text-muted focus:outline-none focus-visible:outline-none"
           />
           <button
             onClick={() => sendMessage(input)}

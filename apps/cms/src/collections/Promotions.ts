@@ -22,6 +22,16 @@ export const Promotions: CollectionConfig = {
     },
     slugField('title'),
     {
+      name: 'valueDisplay',
+      type: 'text',
+      maxLength: 60,
+      localized: true,
+      admin: {
+        description:
+          'Large hero value shown on the card in accent colour, e.g. "Up to $5,000", "50% rebate", "$500". Keep it short.',
+      },
+    },
+    {
       name: 'tag',
       type: 'text',
       maxLength: 20,

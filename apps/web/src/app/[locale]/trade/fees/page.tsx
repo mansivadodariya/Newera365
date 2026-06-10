@@ -15,6 +15,9 @@ function mapToSpreadRow(instrument: CmsInstrument): CmsSpreadRow {
     instrument: instrument.name,
     symbol: instrument.symbol,
     spread: instrument.spread,
+    spreadRaw: instrument.spreadRaw,
+    spreadStandard: instrument.spreadStandard,
+    spreadVip: instrument.spreadVip,
   };
 }
 

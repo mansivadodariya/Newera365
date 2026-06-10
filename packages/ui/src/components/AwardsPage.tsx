@@ -17,58 +17,6 @@ interface AwardsPageProps {
   awards?: AwardCardItem[];
 }
 
-// Fallback data matching Figma — shown when CMS has no entries yet
-const STATIC_AWARDS: AwardCardItem[] = [
-  {
-    id: 1,
-    title: 'Best CFD Execution 2025',
-    organisation: 'Global Forex Awards',
-    year: '2025',
-    description: 'Recognised for sub-12ms execution across all asset classes.',
-    imageUrl: null,
-  },
-  {
-    id: 2,
-    title: 'Most Trusted Broker, MEA 2025',
-    organisation: 'MENA Forex Summit',
-    year: '2025',
-    description: 'Client-voted award for transparency and regulatory compliance.',
-    imageUrl: null,
-  },
-  {
-    id: 3,
-    title: 'Best MT5 Trading Platform 2024',
-    organisation: 'TradingView Awards',
-    year: '2024',
-    description: 'Awarded for seamless MT5 integration and custom indicator library.',
-    imageUrl: null,
-  },
-  {
-    id: 4,
-    title: 'Fastest Growing Broker 2024',
-    organisation: 'Forex Magnates',
-    year: '2024',
-    description: 'Highest year-on-year client growth among regulated brokers.',
-    imageUrl: null,
-  },
-  {
-    id: 5,
-    title: 'Best Customer Support 2025',
-    organisation: 'Broker Review Awards',
-    year: '2025',
-    description: 'Highest-rated support team with 91-second average first response.',
-    imageUrl: null,
-  },
-  {
-    id: 6,
-    title: 'Innovation in Trading Tech 2024',
-    organisation: 'FinTech Global',
-    year: '2024',
-    description: 'For the AI-powered CRM and smart execution infrastructure.',
-    imageUrl: null,
-  },
-];
-
 // Card background gradients — cycle through for visual variety
 const CARD_GRADIENTS = [
   'from-[#0d2a1a] to-[#0a1510]',
@@ -83,7 +31,7 @@ export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
   const locale = useLocale();
   const t = useTranslations('awards');
 
-  const items = cmsAwards && cmsAwards.length > 0 ? cmsAwards : STATIC_AWARDS;
+  const items = cmsAwards ?? [];
 
   return (
     <>
@@ -107,6 +55,11 @@ export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
       {/* Award cards */}
       <section className="bg-transparent px-5 pb-10">
         <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl xl:grid xl:max-w-[1200px] xl:grid-cols-2">
+          {items.length === 0 && (
+            <p className="font-body text-muted col-span-2 py-12 text-center text-[14px]">
+              {t('noAwards')}
+            </p>
+          )}
           {items.map((award, idx) => {
             const gradient = CARD_GRADIENTS[idx % CARD_GRADIENTS.length]!;
             return (

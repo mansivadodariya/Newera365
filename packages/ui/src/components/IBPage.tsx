@@ -79,34 +79,7 @@ const PARTNER_TYPES = [
   },
 ] as const;
 
-const STEPS = [
-  {
-    num: '01',
-    title: 'Apply online',
-    desc: 'Submit our application in 3 minutes. No paperwork, no phone calls required.',
-  },
-  {
-    num: '02',
-    title: 'Get approved',
-    desc: 'Our compliance team contacts you within 48 hours of submission.',
-  },
-  {
-    num: '03',
-    title: 'Get your toolkit',
-    desc: 'Login credentials, custom landing pages, live reporting dashboard and tracking links.',
-  },
-  {
-    num: '04',
-    title: 'Earn monthly',
-    desc: 'Commissions paid on the 5th of every month, straight to your account.',
-  },
-] as const;
-
-const TRUST_STATS = [
-  { value: '$4,820', label: 'Avg. monthly earnings' },
-  { value: '320+', label: 'Active partners' },
-  { value: '48h', label: 'Approval time' },
-] as const;
+const STEP_NUMS = ['01', '02', '03', '04'] as const;
 
 type StepItem = { num: string; title: string; desc: string };
 
@@ -148,18 +121,11 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
   ];
 
   const stepsFromCms = cmsContent?.steps;
-  const resolvedSteps: StepItem[] =
-    stepsFromCms && stepsFromCms.length >= 4
-      ? STEPS.map((s, i) => ({
-          num: s.num,
-          title: stepsFromCms[i]?.stepTitle ?? t(`step${i + 1}Title` as 'step1Title'),
-          desc: stepsFromCms[i]?.stepDescription ?? t(`step${i + 1}Desc` as 'step1Desc'),
-        }))
-      : STEPS.map((s, i) => ({
-          num: s.num,
-          title: t(`step${i + 1}Title` as 'step1Title'),
-          desc: t(`step${i + 1}Desc` as 'step1Desc'),
-        }));
+  const resolvedSteps: StepItem[] = STEP_NUMS.map((num, i) => ({
+    num,
+    title: stepsFromCms?.[i]?.stepTitle ?? t(`step${i + 1}Title` as 'step1Title'),
+    desc: stepsFromCms?.[i]?.stepDescription ?? t(`step${i + 1}Desc` as 'step1Desc'),
+  }));
 
   const ctaHeading = cmsContent?.ctaHeading ?? t('ctaDesc');
   const ctaSubtitle = cmsContent?.ctaSubtitle ?? t('ctaSubDesc');
@@ -215,11 +181,11 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                   $4,820
                 </span>
               </div>
-              <div className="bg-accent/[0.08] flex items-center gap-[6px] rounded-full px-[10px] py-[6px]">
+              <div className="bg-accent/[0.08] text-accent flex items-center gap-[6px] rounded-full px-[10px] py-[6px]">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                   <path
                     d="M2 10L10 2M10 2H5M10 2v5"
-                    stroke="#00b050"
+                    stroke="currentColor"
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -241,11 +207,8 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
               ].map((bar, i) => (
                 <div key={bar.label} className="flex flex-1 flex-col items-center gap-0">
                   <div
-                    className="w-full rounded-[4px]"
-                    style={{
-                      height: `${bar.h * 0.6}px`,
-                      backgroundColor: i === 6 ? '#00b050' : '#e5e5e3',
-                    }}
+                    className={`w-full rounded-[4px] ${i === 6 ? 'bg-accent' : 'bg-[#e5e5e3] dark:bg-[#2e3138]'}`}
+                    style={{ height: `${bar.h * 0.6}px` }}
                   />
                 </div>
               ))}

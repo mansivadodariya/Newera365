@@ -15,6 +15,7 @@ export type { TrustLogo } from './components/TrustStrip';
 export { MobileMenu } from './components/MobileMenu';
 export { TickerStrip } from './components/TickerStrip';
 export type { TickerItem } from './components/TickerStrip';
+export { TradingViewTicker } from './components/TradingViewTicker';
 export { Footer } from './components/Footer';
 export type { CmsFooterColumn, CmsSocialLinks } from './components/Footer';
 
@@ -24,6 +25,7 @@ export type { NewsSectionItem } from './components/NewsSection';
 export { HeroSection } from './components/HeroSection';
 export { StatsSection } from './components/StatsSection';
 export type { CmsKpiStat } from './components/StatsSection';
+export { CountUp } from './components/CountUp';
 export { MarketsSection } from './components/MarketsSection';
 export { FeaturesSection } from './components/FeaturesSection';
 export { ThreeStepsSection } from './components/ThreeStepsSection';

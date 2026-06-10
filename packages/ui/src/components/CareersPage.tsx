@@ -5,107 +5,13 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-// Departments used in the static mock data
-type MockDept = 'ALL' | 'ENGINEERING' | 'RESEARCH' | 'TRADING' | 'DESIGN' | 'OPERATIONS';
-
-const DEPARTMENTS: { id: MockDept; label: string }[] = [
-  { id: 'ALL', label: 'All' },
-  { id: 'ENGINEERING', label: 'Engineering' },
-  { id: 'RESEARCH', label: 'Research' },
-  { id: 'TRADING', label: 'Trading' },
-  { id: 'DESIGN', label: 'Design' },
-  { id: 'OPERATIONS', label: 'Operations' },
-];
-
-const VALUES = [
-  {
-    title: 'Move fast, ship right',
-    desc: "We ship daily, not quarterly. Speed and quality aren't trade-offs here — they're the expectation.",
-  },
-  {
-    title: 'Traders first',
-    desc: 'Every product decision starts with one question: does this make life better for the trader?',
-  },
-  {
-    title: 'Operate as owners',
-    desc: 'No hand-offs, no bureaucracy. You own the outcome end-to-end and are trusted to deliver.',
-  },
-  {
-    title: 'Respect how',
-    desc: 'High standards for the work and high standards for how we treat each other. Both matter equally.',
-  },
-];
-
-const JOBS: {
-  id: string;
-  title: string;
-  department: MockDept;
-  location: string;
-  type: 'Full-time' | 'Contract' | 'Remote';
-}[] = [
-  {
-    id: '1',
-    title: 'Senior Backend Engineer — Trading Infrastructure',
-    department: 'ENGINEERING',
-    location: 'London · Dubai',
-    type: 'Full-time',
-  },
-  {
-    id: '2',
-    title: 'Product Designer — Mobile',
-    department: 'DESIGN',
-    location: 'Remote',
-    type: 'Full-time',
-  },
-  {
-    id: '3',
-    title: 'Quantitative Analyst',
-    department: 'RESEARCH',
-    location: 'London',
-    type: 'Full-time',
-  },
-  {
-    id: '4',
-    title: 'Compliance Officer',
-    department: 'OPERATIONS',
-    location: 'Dubai',
-    type: 'Full-time',
-  },
-  {
-    id: '5',
-    title: 'Customer Success Lead',
-    department: 'OPERATIONS',
-    location: 'Singapore',
-    type: 'Full-time',
-  },
-  {
-    id: '6',
-    title: 'Content Strategist',
-    department: 'OPERATIONS',
-    location: 'Remote',
-    type: 'Contract',
-  },
-  { id: '7', title: 'FX Dealer', department: 'TRADING', location: 'London', type: 'Full-time' },
-  {
-    id: '8',
-    title: 'iOS Engineer',
-    department: 'ENGINEERING',
-    location: 'Remote',
-    type: 'Full-time',
-  },
-  {
-    id: '9',
-    title: 'Market Analyst',
-    department: 'RESEARCH',
-    location: 'Dubai',
-    type: 'Full-time',
-  },
-];
-
 const TYPE_COLORS: Record<string, string> = {
   'Full-time': 'bg-accent/10 text-accent',
+  'full-time': 'bg-accent/10 text-accent',
   Contract: 'bg-[#F59E0B]/10 text-[#F59E0B]',
+  contract: 'bg-[#F59E0B]/10 text-[#F59E0B]',
   Remote: 'bg-[#6B7280]/10 text-[#6B7280]',
+  remote: 'bg-[#6B7280]/10 text-[#6B7280]',
 };
 
 export interface CmsJobItem {
@@ -128,16 +34,15 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
   const t = useTranslations('careers');
   const [dept, setDept] = useState('ALL');
 
-  const validCmsJobs = cmsJobs?.filter((j) => j.title?.trim()) ?? [];
-  const useCms = validCmsJobs.length > 0;
+  const jobs = (cmsJobs ?? []).filter((j) => j.title?.trim());
 
-  // Build department list from CMS data or fall back to static list
-  const deptIds: string[] = useCms
-    ? ['ALL', ...Array.from(new Set(validCmsJobs.map((j) => j.department.toUpperCase())))]
-    : DEPARTMENTS.map((d) => d.id);
+  // Build department list dynamically from CMS data
+  const deptIds: string[] = [
+    'ALL',
+    ...Array.from(new Set(jobs.map((j) => j.department.toUpperCase()))),
+  ];
 
-  // Map department id → translated label. Falls back to the raw id for any
-  // CMS department value that doesn't have a dedicated i18n key.
+  // Map department id → translated label
   function getDeptLabel(id: string): string {
     const map: Record<string, string> = {
       ALL: t('filterAll'),
@@ -155,13 +60,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
     return map[id.toUpperCase()] ?? id;
   }
 
-  const filtered = useCms
-    ? dept === 'ALL'
-      ? validCmsJobs
-      : validCmsJobs.filter((j) => j.department.toUpperCase() === dept)
-    : dept === 'ALL'
-      ? JOBS
-      : JOBS.filter((j) => j.department === (dept as MockDept));
+  const filtered = dept === 'ALL' ? jobs : jobs.filter((j) => j.department.toUpperCase() === dept);
 
   return (
     <>
@@ -203,23 +102,23 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
         </div>
       </section>
 
-      {/* Values */}
+      {/* Values — content from i18n */}
       <section className="px-5 pb-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('valuesKicker')}
           </SectionKicker>
           <div className="grid grid-cols-2 gap-[10px] xl:gap-5">
-            {VALUES.map((v, i) => (
+            {([1, 2, 3, 4] as const).map((i) => (
               <div
-                key={v.title}
+                key={i}
                 className="bg-surface shadow-card flex flex-col gap-2 rounded-[18px] p-4 dark:shadow-none"
               >
                 <p className="text-foreground font-sans text-[13px] font-semibold">
-                  {t(`val${i + 1}Title` as 'val1Title')}
+                  {t(`val${i}Title` as 'val1Title')}
                 </p>
                 <p className="font-body text-muted text-[12px] leading-relaxed">
-                  {t(`val${i + 1}Desc` as 'val1Desc')}
+                  {t(`val${i}Desc` as 'val1Desc')}
                 </p>
               </div>
             ))}
@@ -234,7 +133,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
             {t('rolesHeading')}
           </SectionKicker>
 
-          {/* Department tabs — built from actual data, not a hardcoded static list */}
+          {/* Department tabs — built from actual CMS data */}
           <div className="scrollbar-hide mb-5 flex gap-2 overflow-x-auto pb-1">
             {deptIds.map((id) => (
               <button
@@ -267,18 +166,16 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
                 </div>
                 <div className="flex flex-shrink-0 items-center gap-2">
                   <span
-                    className={`font-body rounded-full px-2.5 py-[4px] text-[10px] font-semibold ${TYPE_COLORS['type' in job ? (job as (typeof JOBS)[0]).type : (job as CmsJobItem).employmentType] ?? 'bg-[#6B7280]/10 text-[#6B7280]'}`}
+                    className={`font-body rounded-full px-2.5 py-[4px] text-[10px] font-semibold ${TYPE_COLORS[job.employmentType] ?? 'bg-[#6B7280]/10 text-[#6B7280]'}`}
                   >
-                    {'type' in job
-                      ? (job as (typeof JOBS)[0]).type
-                      : (job as CmsJobItem).employmentType}
+                    {job.employmentType}
                   </span>
                   <svg
                     width="16"
                     height="16"
                     viewBox="0 0 16 16"
                     fill="none"
-                    className="group-hover:text-accent text-[#9ca3af] transition-colors"
+                    className="text-muted group-hover:text-accent transition-colors"
                   >
                     <path
                       d="M6 4l4 4-4 4"

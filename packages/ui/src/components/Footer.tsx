@@ -82,7 +82,7 @@ function Footer({
       : FOOTER_LINKS;
 
   return (
-    <footer className="bg-black px-5 pb-14 pt-12 text-white xl:px-[120px] xl:py-[64px]">
+    <footer className="bg-footer-bg px-5 pb-14 pt-12 text-white xl:px-[120px] xl:py-[64px]">
       <div className="mx-auto max-w-[390px] xl:max-w-[1200px]">
         {/* Logo */}
         <Image

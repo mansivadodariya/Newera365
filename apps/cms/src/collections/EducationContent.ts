@@ -111,6 +111,40 @@ export const EducationContent: CollectionConfig = {
         condition: (data) => data?.contentType === 'guide',
       },
     },
+    {
+      name: 'mediaCategory',
+      type: 'select',
+      options: [
+        { label: 'Macro', value: 'macro' },
+        { label: 'Strategy', value: 'strategy' },
+        { label: 'Education', value: 'education' },
+        { label: 'Interviews', value: 'interviews' },
+        { label: 'Live', value: 'live' },
+      ],
+      admin: {
+        description: 'Category filter tab shown on the Media Listing page.',
+        condition: (data) => data?.contentType === 'video' || data?.contentType === 'audio',
+      },
+    },
+    {
+      name: 'glossaryCategory',
+      type: 'select',
+      options: [
+        { label: 'Pricing', value: 'PRICING' },
+        { label: 'Forex', value: 'FOREX' },
+        { label: 'Strategy', value: 'STRATEGY' },
+        { label: 'Risk', value: 'RISK' },
+        { label: 'Order / Execution', value: 'ORDER/EXEC' },
+        { label: 'Analysis', value: 'ANALYSIS' },
+        { label: 'Chart / Pattern', value: 'CHART/PATTERN' },
+        { label: 'Technical', value: 'TECHNICAL' },
+        { label: 'General', value: 'GENERAL' },
+      ],
+      admin: {
+        description: 'Category chip shown on the Glossary page.',
+        condition: (data) => data?.contentType === 'glossary',
+      },
+    },
     ...seoFields,
   ],
 };

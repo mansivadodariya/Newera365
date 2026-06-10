@@ -143,11 +143,11 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
 
             {success ? (
               <div className="flex flex-col items-center gap-3 py-4 text-center">
-                <div className="bg-accent/10 flex h-12 w-12 items-center justify-center rounded-full">
+                <div className="bg-accent/10 text-accent flex h-12 w-12 items-center justify-center rounded-full">
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <path
                       d="M4 10l4 4 8-8"
-                      stroke="#00B050"
+                      stroke="currentColor"
                       strokeWidth="1.75"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -166,7 +166,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                   placeholder={t('namePlaceholder')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="border-border font-body text-foreground placeholder-muted focus:border-accent dark:bg-section w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none"
+                  className="border-border font-body text-foreground placeholder-muted focus:border-accent bg-background w-full rounded-[12px] border border-border px-4 py-3 text-[13px] outline-none"
                 />
                 <input
                   type="email"
@@ -174,7 +174,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                   placeholder={t('emailPlaceholderFull')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="border-border font-body text-foreground placeholder-muted focus:border-accent dark:bg-section w-full rounded-[12px] border bg-white px-4 py-3 text-[13px] outline-none"
+                  className="border-border font-body text-foreground placeholder-muted focus:border-accent bg-background w-full rounded-[12px] border border-border px-4 py-3 text-[13px] outline-none"
                 />
                 {error && <p className="font-body text-[12px] text-red-500">{error}</p>}
                 <label className="flex cursor-pointer items-start gap-2.5">

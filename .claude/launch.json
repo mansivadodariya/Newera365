@@ -7,6 +7,7 @@
       "runtimeExecutable": "npm.cmd",
       "runtimeArgs": ["run", "dev", "--workspace=@newera365/web"],
       "port": 3000,
+      "autoPort": true,
       "cwd": "D:\\NewEra365\\newera365-app"
     },
     {

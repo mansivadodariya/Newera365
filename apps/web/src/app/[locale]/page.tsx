@@ -7,7 +7,7 @@ import {
   ThreeStepsSection,
   ArbitrageSection,
   CtaBanner,
-  TickerStrip,
+  TradingViewTicker,
   TrustStrip,
 } from '@newera365/ui';
 import type { TrustLogo } from '@newera365/ui';
@@ -36,7 +36,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
 
   return (
     <>
-      <TickerStrip />
+      <TradingViewTicker />
       <HeroSection />
       <TrustStrip logos={trustLogos} />
       <StatsSection kpiStats={kpiStats} locale={params.locale} />

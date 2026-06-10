@@ -159,11 +159,11 @@
     "whySegregatedTitle": "Funds segregated",
     "whySegregatedDesc": "Client money held with tier-1 banks, separate from operating capital.",
     "whySpreads": "0.0 pip",
-    "whySpreadsTitle": "Raw spreads",
-    "whySpreadsDesc": "Institutional pricing on raw accounts — no hidden mark-ups, ever.",
+    "whySpreadsTitle": "Spreads from 0.0 pip",
+    "whySpreadsDesc": "Institutional pricing on raw accounts. No hidden mark-ups.",
     "whyClock": "24 / 7",
-    "whyClockTitle": "Always-on support",
-    "whyClockDesc": "A 24/5 trading desk plus 24/7 live chat. Real people, not bots.",
+    "whyClockTitle": "Round-the-clock",
+    "whyClockDesc": "A 24/5 trading desk plus 24/7 live chat. Real humans, not bots.",
     "marketsKicker": "Markets",
     "marketsHeading": "One account, every market.",
     "marketsSubheading": "Trade across 6 asset classes with deep liquidity and tight spreads.",
@@ -199,20 +199,20 @@
     "arbKicker": "Best arbitrage broker",
     "arbHeadingLine1": "Built for arbitrage.",
     "arbHeadingAccent": "Built for speed.",
-    "arbDesc": "NewEra365 is engineered for arbitrage and high-frequency strategies — raw pricing, deep liquidity, and execution measured in milliseconds. EAs, hedging and scalping are welcome.",
+    "arbDesc": "NewEra365 is engineered for arbitrage and high-frequency strategies — raw pricing, deep liquidity, and execution measured in milliseconds.",
     "arbStat1Value": "< 12 ms",
     "arbStat1Label": "Lightning execution",
-    "arbStat1Desc": "Co-located matching engines and direct market access keep latency tight — orders fill before opportunity moves on.",
+    "arbStat1Desc": "Co-located matching engines and direct market access.",
     "arbStat2Value": "0.0 pip",
     "arbStat2Label": "Raw spreads",
-    "arbStat2Desc": "Institutional pricing on raw accounts — no hidden mark-ups so the spread between brokers stays honest.",
+    "arbStat2Desc": "Institutional pricing — no hidden mark-ups.",
     "arbStat3Value": "YES",
     "arbStat3Label": "EAs & scalping welcome",
-    "arbStat3Desc": "Run Expert Advisors, copy trading bots and hedging without restrictions or punitive surcharges.",
+    "arbStat3Desc": "Run Expert Advisors, copy trading and hedging.",
     "arbStat4Value": "2000+",
     "arbStat4Label": "Multi-asset depth",
-    "arbStat4Desc": "Forex, indices, metals, energies and crypto from tier-1 venues — enough depth for larger arbitrage tickets.",
-    "arbStrip": "Execution in <12 ms · Raw spreads from 0.0 pip · No restrictions on arbitrage, EA or hedging strategies.",
+    "arbStat4Desc": "Forex, indices, metals, energies and crypto.",
+    "arbStrip": "Execution <12 ms · Raw 0.0 pip · No restrictions on arbitrage.",
     "arbCTA": "Explore why NewEra365 suits"
   },
   "footer": {
@@ -291,7 +291,8 @@
     "subtitleRaw": "For high-volume traders",
     "subtitleSwapFree": "Sharia-compliant, no swaps",
     "virtualDeposit": "Virtual",
-    "startTrading": "Start Trading now"
+    "exploreFeatures": "EXPLORE FEATURES",
+    "noAccounts": "No account types available."
   },
   "faq": {
     "heroHeading": "Got questions?",
@@ -347,7 +348,8 @@
     "seg3Title": "No weekend hold",
     "seg3Desc": "Withdrawals are processed 7 days a week, including holidays.",
     "seg4Title": "No re-deposit fees",
-    "seg4Desc": "Deposit and withdraw without per-transaction charges from us."
+    "seg4Desc": "Deposit and withdraw without per-transaction charges from us.",
+    "noMethods": "No payment methods available."
   },
   "careers": {
     "heroLine1": "Build the next",
@@ -500,7 +502,8 @@
     "ctaHeading": "More ways to learn.",
     "ctaDesc": "Glossary, free e-books, video episodes and live webinars — all in one place.",
     "ctaEducation": "Education hub",
-    "ctaGlossary": "Trading glossary"
+    "ctaGlossary": "Trading glossary",
+    "noGuides": "No guides available yet."
   },
   "ebooks": {
     "heroLine1": "The 5%",
@@ -628,7 +631,8 @@
     "transparentKicker": "TRANSPARENT · ALWAYS",
     "transparentLine1": "No surprise charges.",
     "transparentLine2": "Ever.",
-    "transparentDesc": "Every fee is published here. If we ever change something, we tell you 30 days ahead, in plain English."
+    "transparentDesc": "Every fee is published here. If we ever change something, we tell you 30 days ahead, in plain English.",
+    "noSpreads": "No spread data available."
   },
   "ib": {
     "heroLine1": "Partner with us.",
@@ -809,7 +813,9 @@
     "ctaHeading": "Ready to put it into practice?",
     "ctaDesc": "Apply the concepts in a risk-free demo account. No deposit required.",
     "ctaBtn": "Open demo account",
-    "moreGuides": "More guides"
+    "moreGuides": "More guides",
+    "notFoundTitle": "Guide not found",
+    "notFound": "This guide may have moved or is not yet published."
   },
   "spreadComparator": {
     "kicker": "TOOLS",
@@ -837,7 +843,8 @@
     "ctaAccent": "lower costs.",
     "ctaDesc": "Open a Raw account and keep more of every trade you make.",
     "ctaRaw": "Open Raw account",
-    "ctaCompare": "Compare all accounts"
+    "ctaCompare": "Compare all accounts",
+    "noInstruments": "No instruments available."
   },
   "tools": {
     "heroLine1": "The math.",
@@ -888,7 +895,8 @@
     "ctaLine1": "Ready to put",
     "ctaLine2": "the math to work?",
     "ctaDesc": "Open a live or demo account and trade with the same math your desk uses.",
-    "ctaBtn": "Open account"
+    "ctaBtn": "Open account",
+    "noInstruments": "No instruments available."
   },
   "analystChart": {
     "heroLine1": "Where the",
@@ -1138,33 +1146,54 @@
     "ctaAccent": "Are you?",
     "ctaSubtitle": "Open an account in minutes. No paperwork, no friction.",
     "ctaBtn": "Start Trading now",
-    "ctaDemo": "Try a free demo"
+    "ctaDemo": "Try a free demo",
+    "noAwards": "No awards to display."
   },
   "mediaPress": {
-    "kicker": "PRESS",
+    "kicker": "MEDIA & PRESS",
     "heroLine1": "NewEra365",
-    "heroAccent": "in the headlines.",
-    "heroSubtitle": "Coverage from leading financial media and industry publications around the world.",
-    "pressKicker": "IN THE NEWS",
-    "pressHeading": "Newera365 in the headlines.",
-    "assetsKicker": "BRAND ASSETS",
+    "heroAccent": "in the press.",
+    "heroSubtitle": "Coverage, media resources and company facts — everything press and partners need in one place.",
+    "pressKicker": "PRESS COVERAGE",
+    "pressHeading": "NewEra365 in the headlines.",
+    "readMore": "Read →",
+    "featuredInLabel": "FEATURED IN",
+    "assetsKicker": "MEDIA KIT",
     "assetsHeading": "Download our brand assets.",
-    "assetKit": "Asset Kit",
-    "assetKitDesc": "Full brand guidelines and assets",
-    "logoPack": "Logo Pack",
-    "logoPackDesc": "SVG and PNG formats",
-    "pressKit": "Press Kit",
-    "pressKitDesc": "Approved press imagery",
-    "downloadBtn": "Download",
-    "latestKicker": "LATEST",
-    "latestHeading": "Latest from the newsroom:",
-    "readArticle": "Read article",
+    "logoPack": "Logo pack",
+    "logoPackFormat": ".zip",
+    "brandGuidelines": "Brand guidelines",
+    "brandGuidelinesFormat": "PDF",
+    "factSheet": "Company fact sheet",
+    "factSheetFormat": "PDF",
+    "headshots": "Executive headshots",
+    "headshotsFormat": ".zip",
+    "downloadBtn": "DOWNLOAD",
+    "statsLabel": "BY THE NUMBERS",
+    "statsMT5": "MT5",
+    "statsMT5Label": "PLATFORM",
+    "statsInstruments": "2,000+",
+    "statsInstrumentsLabel": "INSTRUMENTS",
+    "statsInsurance": "$1M",
+    "statsInsuranceLabel": "CLIENT INSURANCE",
+    "statsSupport": "24/7",
+    "statsSupportLabel": "SUPPORT",
+    "statsOptions": "2",
+    "statsOptionsLabel": "CLIENT OPTIONS",
+    "statsFunds": "100%",
+    "statsFundsLabel": "SEGREGATED FUNDS",
+    "newsroomKicker": "PRESS RELEASES",
+    "newsroomHeading": "Latest from the newsroom.",
+    "inquiriesKicker": "PRESS NOW",
     "inquiriesHeading": "Media inquiries",
-    "inquiriesDesc": "For press, partnerships or media enquiries, reach us at",
+    "inquiriesDesc": "For interviews, brand assets or expert comment, reach our press desk directly.",
     "inquiriesEmail": "press@newera365.com",
+    "inquiriesPhone": "+1-867-778-3511",
+    "inquiriesAlt": "OR REQUEST A MEDIA PACK",
     "ctaHeading": "Markets are waiting.",
     "ctaAccent": "Are you?",
     "ctaSubtitle": "Open an account in minutes. No paperwork, no friction.",
-    "ctaBtn": "Start Trading now"
+    "ctaBtn": "Start Trading now",
+    "noCoverage": "No press coverage to display."
   }
 }

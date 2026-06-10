@@ -317,12 +317,10 @@ export function AnalystChartPage() {
 
                 {/* Confidence */}
                 <div className="w-[48px] flex-shrink-0 text-right">
-                  <p className="font-body text-[9px] uppercase tracking-[0.1em] text-[#9ca3af]">
+                  <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
                     {t('confLabel')}
                   </p>
-                  <p className="font-sans text-[13px] font-semibold text-[#111] dark:text-white">
-                    {p.conf}%
-                  </p>
+                  <p className="text-foreground font-sans text-[13px] font-semibold">{p.conf}%</p>
                 </div>
               </div>
             ))}

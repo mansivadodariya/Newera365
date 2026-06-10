@@ -219,39 +219,30 @@ function DesktopNavItem({
   item,
   locale,
   pathname,
+  open,
+  onOpen,
+  onScheduleClose,
+  onCloseNow,
 }: {
   item: NavItem;
   locale: string;
   pathname: string;
+  open: boolean;
+  onOpen: () => void;
+  onScheduleClose: () => void;
+  onCloseNow: () => void;
 }) {
-  const [open, setOpen] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
-
   const isActive = item.activeFor
     ? item.activeFor.some((r) => pathname.startsWith(`/${locale}${r}`))
     : item.href === '/'
       ? pathname === `/${locale}` || pathname === `/${locale}/`
       : pathname.startsWith(`/${locale}${item.href}`);
 
-  function handleMouseEnter() {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    setOpen(true);
-  }
-  function handleMouseLeave() {
-    timerRef.current = setTimeout(() => setOpen(false), 150);
-  }
-
   return (
     <div
       className="relative flex h-full items-center"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={onOpen}
+      onMouseLeave={onScheduleClose}
     >
       <Link
         href={`/${locale}${item.href === '/' ? '' : item.href}`}
@@ -264,11 +255,12 @@ function DesktopNavItem({
 
       {item.dropdown && open && (
         <div className="absolute left-1/2 top-full z-50 -translate-x-1/2 pt-2">
-          <div className="bg-background border-border w-[256px] rounded-[14px] border p-2 shadow-[0px_12px_28px_-4px_rgba(0,0,0,0.12)] dark:shadow-[0px_12px_28px_-4px_rgba(0,0,0,0.5)]">
+          <div className="bg-background border-border animate-fade-in w-[256px] rounded-[14px] border p-2 shadow-[0px_12px_28px_-4px_rgba(0,0,0,0.12)] dark:shadow-[0px_12px_28px_-4px_rgba(0,0,0,0.5)]">
             {item.dropdown.map((d) => (
               <Link
                 key={d.href}
                 href={`/${locale}${d.href}`}
+                onClick={onCloseNow}
                 className="hover:bg-surface block rounded-[9px] px-3 py-[9px] transition-colors"
               >
                 <span className="font-body dark:text-foreground block text-[14px] font-medium leading-[1.2] text-[#1a1a1c]">
@@ -288,11 +280,39 @@ function DesktopNavItem({
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  // Single shared dropdown state: hovering a new nav item instantly closes the
+  // previous dropdown, so panels can never stack while sweeping across the nav.
+  const [openNav, setOpenNav] = useState<string | null>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const locale = useLocale();
   const t = useTranslations('nav');
   const pathname = usePathname();
 
   const displayNav = useNavItems(t);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    };
+  }, []);
+
+  // Close any open dropdown on navigation.
+  useEffect(() => {
+    setOpenNav(null);
+  }, [pathname]);
+
+  function openMenu(label: string) {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    setOpenNav(label);
+  }
+  function scheduleClose() {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = setTimeout(() => setOpenNav(null), 120);
+  }
+  function closeNow() {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    setOpenNav(null);
+  }
 
   return (
     <>
@@ -321,7 +341,16 @@ function Header() {
 
             <nav className="hidden h-full items-center gap-7 xl:flex" aria-label="Main navigation">
               {displayNav.map((item) => (
-                <DesktopNavItem key={item.href} item={item} locale={locale} pathname={pathname} />
+                <DesktopNavItem
+                  key={item.label}
+                  item={item}
+                  locale={locale}
+                  pathname={pathname}
+                  open={openNav === item.label}
+                  onOpen={() => openMenu(item.label)}
+                  onScheduleClose={scheduleClose}
+                  onCloseNow={closeNow}
+                />
               ))}
             </nav>
           </div>
