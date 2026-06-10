@@ -4,11 +4,7 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-const FEATURES = [
-  { idx: 2 },
-  { idx: 3 },
-  { idx: 4 },
-] as const;
+const FEATURES = [{ idx: 2 }, { idx: 3 }, { idx: 4 }] as const;
 
 // Static candlestick data for the chart mockup
 const CANDLES = [

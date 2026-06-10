@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-
 export interface CmsGuide {
   id: number;
   slug: string;

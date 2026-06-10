@@ -60,7 +60,7 @@ export function StatsSection({ kpiStats, locale }: { kpiStats?: CmsKpiStat[]; lo
         </div>
 
         {/* Regulated badge — white card (light) / dark card (dark) */}
-        <div className="mt-6 flex items-center gap-[14px] rounded-[16px] border border-border bg-background px-5 py-[18px] dark:bg-[#15171c]">
+        <div className="border-border bg-background mt-6 flex items-center gap-[14px] rounded-[16px] border px-5 py-[18px] dark:bg-[#15171c]">
           {/* Circular emblem — light-grey circle in light theme, dark circle in dark;
               the black line-art icon is inverted to white so it stays visible. */}
           <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#f2f4f7] dark:bg-[#23262d]">

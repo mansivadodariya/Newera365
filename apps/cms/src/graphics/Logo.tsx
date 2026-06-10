@@ -9,16 +9,6 @@ const Logo: React.FC = () => (
   <>
     <img className="ne-logo ne-logo--light" src="/public/newera-logo-dark.png" alt="NEWERA" />
     <img className="ne-logo ne-logo--dark" src="/public/newera-logo.png" alt="NEWERA" />
-    <style
-      dangerouslySetInnerHTML={{
-        __html: `
-          .ne-logo { height: 120px; width: auto; display: block; }
-          .ne-logo--dark { display: none; }
-          [data-theme='dark'] .ne-logo--light { display: none; }
-          [data-theme='dark'] .ne-logo--dark { display: block; }
-        `,
-      }}
-    />
   </>
 );
 

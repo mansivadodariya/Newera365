@@ -134,44 +134,46 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          {/* h1: 42px tracking-[-1.26px] per Figma */}
-          <h1 className="font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
-            <span className="text-foreground">{t('heroLine1')}</span>
-            <br />
-            <span className="text-accent">{t('heroLine2')}</span>
-          </h1>
-          <p className="font-body text-muted mb-4 mt-4 max-w-[320px] text-[14px] leading-[1.6]">
-            {heroSubtitle}
-          </p>
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:grid xl:max-w-[1200px] xl:grid-cols-2 xl:items-center xl:gap-14">
+          <div>
+            {/* h1: 42px tracking-[-1.26px] per Figma, scaled up on desktop */}
+            <h1 className="font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px] xl:text-[56px] xl:tracking-[-1.68px]">
+              <span className="text-foreground">{t('heroLine1')}</span>
+              <br />
+              <span className="text-accent">{t('heroLine2')}</span>
+            </h1>
+            <p className="font-body text-muted mb-4 mt-4 max-w-[320px] text-[14px] leading-[1.6] xl:max-w-[480px] xl:text-[16px]">
+              {heroSubtitle}
+            </p>
 
-          {/* CTAs — matches Figma: green pill + ghost text button */}
-          <div className="mb-6 flex gap-[10px]">
-            <Link
-              href={`/${locale}/register?type=partner`}
-              className="bg-accent font-body hover:bg-accent/90 flex items-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
-            >
-              {t('heroApplyBtn')}
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path
-                  d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Link>
-            <a
-              href="#programs"
-              className="text-foreground font-body flex items-center px-[22px] py-4 text-[15px] font-medium transition-opacity hover:opacity-70"
-            >
-              {t('viewProgramsBtn')}
-            </a>
+            {/* CTAs — matches Figma: green pill + ghost text button */}
+            <div className="mb-6 flex gap-[10px]">
+              <Link
+                href={`/${locale}/register?type=partner`}
+                className="bg-accent font-body hover:bg-accent/90 flex items-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
+              >
+                {t('heroApplyBtn')}
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path
+                    d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Link>
+              <a
+                href="#programs"
+                className="text-foreground font-body flex items-center px-[22px] py-4 text-[15px] font-medium transition-opacity hover:opacity-70"
+              >
+                {t('viewProgramsBtn')}
+              </a>
+            </div>
           </div>
 
-          {/* Earnings card — gradient from #fafaf9 to #f4f4f3 per Figma */}
-          <div className="dark:from-surface dark:to-section rounded-[22px] bg-gradient-to-b from-[#fafaf9] to-[#f4f4f3] p-[22px]">
+          {/* Earnings card — soft green gradient per Figma */}
+          <div className="dark:from-surface dark:to-section rounded-[22px] bg-gradient-to-b from-[#d8f5e0] to-[#eefbf2] p-[22px]">
             <div className="flex items-start justify-between">
               <div className="flex flex-col gap-[6px]">
                 <span className="text-muted font-mono text-[10px] tracking-[1.2px]">
@@ -240,7 +242,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
             {resolvedPartnerTypes.map((pt) => (
               <div
                 key={pt.id}
-                className={`shadow-card dark:shadow-card-dark flex flex-col gap-[12px] rounded-[22px] p-[22px] ${pt.cardClass}`}
+                className={`shadow-card dark:shadow-card-dark flex flex-col gap-[12px] rounded-[22px] p-[22px] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${pt.cardClass}`}
               >
                 {/* Header */}
                 <div className="flex items-center justify-between gap-2">
@@ -328,14 +330,14 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('stepsKicker')}
           </SectionKicker>
-          <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px]">
+          <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px] xl:text-[36px]">
             {t('stepsHeading')}
           </h2>
           <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-2">
             {resolvedSteps.map((step) => (
               <div
                 key={step.num}
-                className="bg-background shadow-card flex items-start gap-4 rounded-[18px] p-[18px] dark:shadow-none"
+                className="bg-background shadow-card flex items-start gap-4 rounded-[18px] p-[18px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:shadow-none"
               >
                 {/* Step number — accent 22px per Figma */}
                 <span className="text-accent w-[38px] flex-shrink-0 font-sans text-[22px] font-semibold leading-none tracking-[-0.44px]">
@@ -356,15 +358,15 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       {/* CTA — matches Figma: centered 32px heading, green pill + ghost text */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-11 xl:pb-16 xl:pt-16">
         <div className="mx-auto flex max-w-[390px] flex-col items-center md:max-w-2xl xl:max-w-[1200px]">
-          <h2 className="mb-3 max-w-[280px] text-center font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px] text-white">
+          <h2 className="mb-3 max-w-[280px] text-center font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px] text-white xl:max-w-[640px] xl:text-[44px] xl:tracking-[-1.32px]">
             {ctaHeading}
           </h2>
-          <p className="font-body mb-[22px] max-w-[300px] text-center text-[14px] leading-[1.55] text-white/60">
+          <p className="font-body mb-[22px] max-w-[300px] text-center text-[14px] leading-[1.55] text-white/60 xl:max-w-[480px] xl:text-[16px]">
             {ctaSubtitle}
           </p>
           <Link
             href={`/${locale}/register?type=partner`}
-            className="bg-accent font-body hover:bg-accent/90 mb-2 flex w-full items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
+            className="bg-accent font-body hover:bg-accent/90 mb-2 flex w-full items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors xl:w-auto xl:px-12"
           >
             {t('ctaApply')}
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -377,7 +379,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
               />
             </svg>
           </Link>
-          <button className="font-body flex w-full items-center justify-center py-4 text-[15px] font-medium text-white transition-opacity hover:opacity-70">
+          <button className="font-body flex w-full items-center justify-center py-4 text-[15px] font-medium text-white transition-opacity hover:opacity-70 xl:w-auto xl:px-8">
             {t('ctaDeck')}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path

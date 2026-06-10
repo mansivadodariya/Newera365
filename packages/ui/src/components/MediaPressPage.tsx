@@ -81,7 +81,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
       {/* ── Hero ── */}
       <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-accent/20 mb-4 [&>span:last-child]:text-accent">
+          <SectionKicker className="[&>span:first-child]:bg-accent/20 [&>span:last-child]:text-accent mb-4">
             {t('kicker')}
           </SectionKicker>
           <h1 className="text-foreground mb-4 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
@@ -98,7 +98,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
       {/* ── Press coverage list ── */}
       <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-accent/10 mb-5 [&>span:last-child]:text-accent">
+          <SectionKicker className="[&>span:first-child]:bg-accent/10 [&>span:last-child]:text-accent mb-5">
             {t('pressKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[26px] font-semibold leading-[1.1] tracking-[-0.52px]">
@@ -183,7 +183,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
       {/* ── Media kit ── */}
       <section className="rounded-[32px] bg-[#f2f2f7] px-5 pb-9 pt-10 dark:bg-[#0f0f14]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#d0d0d8] [&>span:last-child]:text-[#6B7280] dark:[&>span:first-child]:bg-[#1a1c22]">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-[#d0d0d8] dark:[&>span:first-child]:bg-[#1a1c22] [&>span:last-child]:text-[#6B7280]">
             {t('assetsKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-6 font-sans text-[24px] font-semibold leading-[1.1] tracking-[-0.48px]">
@@ -191,10 +191,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
           </h2>
           <div className="grid grid-cols-2 gap-3">
             {BRAND_ASSETS.map(({ nameKey, formatKey, color }) => (
-              <div
-                key={nameKey}
-                className="bg-surface flex flex-col gap-3 rounded-[18px] p-4"
-              >
+              <div key={nameKey} className="bg-surface flex flex-col gap-3 rounded-[18px] p-4">
                 <FileIcon color={color} />
                 <div className="flex-1">
                   <p className="text-foreground font-sans text-[13px] font-semibold">
@@ -205,7 +202,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
                   </p>
                 </div>
                 <button
-                  className="font-body text-foreground/70 dark:border-border rounded-full border border-[#d0d0d8] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] transition-colors hover:border-foreground/40"
+                  className="font-body text-foreground/70 dark:border-border hover:border-foreground/40 rounded-full border border-[#d0d0d8] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] transition-colors"
                   aria-label={`Download ${t(nameKey as 'logoPack')}`}
                 >
                   {t('downloadBtn')}
@@ -241,7 +238,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
       {newsroomItems.length > 0 && (
         <section className="px-5 pb-10">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <SectionKicker className="[&>span:first-child]:bg-accent/10 mb-5 [&>span:last-child]:text-accent">
+            <SectionKicker className="[&>span:first-child]:bg-accent/10 [&>span:last-child]:text-accent mb-5">
               {t('newsroomKicker')}
             </SectionKicker>
             <h2 className="text-foreground mb-6 font-sans text-[24px] font-semibold leading-[1.1] tracking-[-0.48px]">
@@ -299,7 +296,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
       <section className="px-5 pb-12">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="rounded-[22px] bg-[#f2f2f7] px-6 py-8 text-center dark:bg-[#0f0f14]">
-            <SectionKicker className="mb-4 justify-center [&>span:first-child]:bg-accent/20 [&>span:last-child]:text-accent">
+            <SectionKicker className="[&>span:first-child]:bg-accent/20 [&>span:last-child]:text-accent mb-4 justify-center">
               {t('inquiriesKicker')}
             </SectionKicker>
             <h2 className="text-foreground mb-3 font-sans text-[22px] font-semibold">

@@ -21,7 +21,7 @@ export function TrustStrip({ logos }: TrustStripProps) {
   if (!logos || logos.length === 0) return null;
 
   return (
-    <section className="border-border border-b bg-background px-5 py-5">
+    <section className="border-border bg-background border-b px-5 py-5">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <p className="font-body text-muted mb-4 text-center text-[10px] uppercase tracking-[0.14em]">
           As seen in

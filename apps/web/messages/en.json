@@ -603,7 +603,12 @@
     "termsKicker": "FULL TERMS",
     "termsHeading": "Read before you claim.",
     "termsDesc": "Each promotion has unique eligibility — minimum deposit, trade volume, regional availability. Full terms are linked in every offer card and on each promo page.",
-    "termsLink": "Read all promo terms"
+    "termsLink": "Read all promo terms",
+    "endsInDays": "Ends in {days} days",
+    "endsToday": "Ends today",
+    "endsTomorrow": "Ends tomorrow",
+    "offerEnds": "Offer ends {date}",
+    "noPromos": "No active promotions right now. Check back soon."
   },
   "fees": {
     "heroLine1": "No fine print.",

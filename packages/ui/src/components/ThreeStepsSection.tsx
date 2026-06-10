@@ -14,7 +14,7 @@ export function ThreeStepsSection() {
   ];
 
   return (
-    <section className="rounded-l-[32px] bg-gradient-to-r from-[#f2f2f2] to-white px-5 pb-9 pt-10 xl:pb-16 xl:pt-16 dark:from-[#0d0f14] dark:to-[#07090d]">
+    <section className="rounded-l-[32px] bg-gradient-to-r from-[#E2E2E2] to-white px-5 pb-9 pt-10 xl:pb-16 xl:pt-16 dark:from-[#1F262E] dark:to-[#000000]">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         {/* Kicker */}
         <div className="mb-[14px] flex items-center gap-[6px]">

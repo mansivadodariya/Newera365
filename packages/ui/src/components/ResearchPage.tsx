@@ -503,7 +503,7 @@ export function ResearchPage({
                       {t('reportDownload')}
                     </a>
                   ) : (
-                    <span className="flex-shrink-0 rounded-full bg-[#f2f2f4] px-4 py-2 font-sans text-[12px] text-muted dark:bg-[#1c1c1c] dark:text-[#9ca3af]">
+                    <span className="text-muted flex-shrink-0 rounded-full bg-[#f2f2f4] px-4 py-2 font-sans text-[12px] dark:bg-[#1c1c1c] dark:text-[#9ca3af]">
                       {t('reportComingSoon')}
                     </span>
                   )}
@@ -536,7 +536,13 @@ export function ResearchPage({
             <div className="xl:flex-1">
               {subscribed ? (
                 <div className="bg-accent/20 flex items-center gap-3 rounded-[14px] px-4 py-4">
-                  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" className="text-accent flex-shrink-0">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    className="text-accent flex-shrink-0"
+                  >
                     <path
                       d="M4 10l4 4 8-8"
                       stroke="currentColor"

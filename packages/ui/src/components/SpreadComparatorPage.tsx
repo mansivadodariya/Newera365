@@ -174,7 +174,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
       <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="bg-surface rounded-[18px] p-5">
-            <p className="font-body mb-4 text-[10px] uppercase tracking-[0.12em] text-muted">
+            <p className="font-body text-muted mb-4 text-[10px] uppercase tracking-[0.12em]">
               {t('compKicker')}
             </p>
             <div className="flex flex-col gap-4">
@@ -216,7 +216,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
                 {t('stdLabel')}
               </span>
               <div className="flex flex-col gap-1">
-                <p className="font-body text-[9px] uppercase tracking-[0.1em] text-muted">
+                <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
                   {t('colSpread')}
                 </p>
                 <p className="font-body text-foreground text-[13px] font-semibold tabular-nums">
@@ -224,7 +224,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
                 </p>
               </div>
               <div className="flex flex-col gap-1">
-                <p className="font-body text-[9px] uppercase tracking-[0.1em] text-muted">
+                <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
                   {t('colCommission')}
                 </p>
                 <p className="font-body text-foreground text-[13px] font-semibold">
@@ -232,7 +232,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
                 </p>
               </div>
               <div className="dark:border-border mt-auto border-t border-[#e5e7eb] pt-3">
-                <p className="font-body text-[9px] uppercase tracking-[0.1em] text-muted">
+                <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
                   {t('colMinDeposit')}
                 </p>
                 <p className="font-body text-foreground text-[15px] font-semibold tabular-nums">
@@ -277,7 +277,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
                 {t('vipLabel')}
               </span>
               <div className="flex flex-col gap-1">
-                <p className="font-body text-[9px] uppercase tracking-[0.1em] text-muted">
+                <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
                   {t('colSpread')}
                 </p>
                 <p className="font-body text-foreground text-[13px] font-semibold tabular-nums">
@@ -285,7 +285,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
                 </p>
               </div>
               <div className="flex flex-col gap-1">
-                <p className="font-body text-[9px] uppercase tracking-[0.1em] text-muted">
+                <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
                   {t('colCommission')}
                 </p>
                 <p className="font-body text-foreground text-[13px] font-semibold">
@@ -293,7 +293,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
                 </p>
               </div>
               <div className="dark:border-border mt-auto border-t border-[#e5e7eb] pt-3">
-                <p className="font-body text-[9px] uppercase tracking-[0.1em] text-muted">
+                <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
                   {t('colMinDeposit')}
                 </p>
                 <p className="font-body text-foreground text-[15px] font-semibold tabular-nums">
@@ -344,7 +344,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
       <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="bg-surface rounded-[18px] p-5">
-            <p className="font-body mb-2 text-[10px] uppercase tracking-[0.12em] text-muted">
+            <p className="font-body text-muted mb-2 text-[10px] uppercase tracking-[0.12em]">
               {t('calcKicker')}
             </p>
             <p className="text-foreground font-sans text-[14px] font-semibold">

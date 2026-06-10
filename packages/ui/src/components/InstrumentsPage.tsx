@@ -74,9 +74,20 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
           </p>
           {/* Search bar */}
           <div className="bg-surface flex h-[46px] items-center gap-3 rounded-[16px] px-4">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className="text-muted flex-shrink-0">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 20 20"
+              fill="none"
+              className="text-muted flex-shrink-0"
+            >
               <circle cx="9" cy="9" r="6.5" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M14 14l3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              <path
+                d="M14 14l3.5 3.5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
             </svg>
             <span className="font-body flex-1 text-[14px] font-medium text-[#6B7280]">
               {t('searchPlaceholder')}

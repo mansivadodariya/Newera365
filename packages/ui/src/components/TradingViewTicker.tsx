@@ -47,8 +47,7 @@ export function TradingViewTicker() {
     container.innerHTML = '<div class="tradingview-widget-container__widget"></div>';
 
     const script = document.createElement('script');
-    script.src =
-      'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
     script.type = 'text/javascript';
     script.async = true;
     script.innerHTML = JSON.stringify({

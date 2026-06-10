@@ -9,42 +9,36 @@ const MARKETS = [
   {
     key: 'forex',
     bg: '/images/market-forex.jpg',
-    icon: '/icons/market-forex-icon.png',
     nameKey: 'marketsForex',
     countKey: 'marketsForexCount',
   },
   {
     key: 'indices',
     bg: '/images/market-indices.jpg',
-    icon: '/icons/market-indices-icon.png',
     nameKey: 'marketsIndices',
     countKey: 'marketsIndicesCount',
   },
   {
     key: 'commodities',
     bg: '/images/market-commodities.jpg',
-    icon: '/icons/market-commodities-icon.png',
     nameKey: 'marketsCommodities',
     countKey: 'marketsCommoditiesCount',
   },
   {
     key: 'stocks',
     bg: '/images/market-stocks.jpg',
-    icon: '/icons/market-stocks-icon.png',
     nameKey: 'marketsStocks',
     countKey: 'marketsStocksCount',
   },
   {
     key: 'crypto',
     bg: '/images/market-crypto.jpg',
-    icon: '/icons/market-crypto-icon.png',
     nameKey: 'marketsCrypto',
     countKey: 'marketsCryptoCount',
   },
   {
     key: 'etfs',
     bg: '/images/market-etfs.jpg',
-    icon: '/icons/market-etfs-icon.png',
     nameKey: 'marketsETFs',
     countKey: 'marketsETFsCount',
   },
@@ -55,7 +49,7 @@ export function MarketsSection() {
   const locale = useLocale();
 
   return (
-    <section className="rounded-l-[32px] bg-gradient-to-r from-[#f2f2f2] to-white px-5 pb-9 pt-10 xl:pb-16 xl:pt-10 dark:from-[#0d0f14] dark:to-[#07090d]">
+    <section className="rounded-l-[32px] bg-gradient-to-r from-[#E2E2E2] to-white px-5 pb-9 pt-10 xl:pb-16 xl:pt-10 dark:from-[#1F262E] dark:to-[#000000]">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <SectionKicker className="text-foreground [&>span:first-child]:bg-foreground mb-[14px]">
           {t('marketsKicker')}
@@ -73,7 +67,7 @@ export function MarketsSection() {
           {MARKETS.map((market) => (
             <div
               key={market.key}
-              className="relative flex h-[110px] flex-col justify-between overflow-hidden rounded-[18px] px-4 py-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)]"
+              className="relative flex h-[110px] flex-col justify-end overflow-hidden rounded-[18px] px-4 py-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)]"
             >
               {/* Dark base */}
               <div className="absolute inset-0 bg-[#111]" />
@@ -82,24 +76,14 @@ export function MarketsSection() {
                 src={market.bg}
                 alt=""
                 fill
+                sizes="(min-width: 1280px) 180px, 50vw"
                 className="pointer-events-none object-cover opacity-40"
                 aria-hidden="true"
               />
-              {/* Content */}
-              <div className="relative z-10 h-9 w-9 rounded-[10px]">
-                <Image
-                  src={market.icon}
-                  alt=""
-                  width={24}
-                  height={24}
-                  className="ml-[6px] mt-[6px]"
-                />
-              </div>
+              {/* Content — no icon per Figma; label + count anchored to the bottom */}
               <div className="relative z-10">
-                <p className="font-sans text-[16px] font-semibold text-white">
-                  {t(market.nameKey)}
-                </p>
-                <p className="font-body mt-[2px] text-[11px] text-[#8c949e]">
+                <p className="font-sans text-[16px] font-medium text-white">{t(market.nameKey)}</p>
+                <p className="font-body mt-[2px] text-[11px] text-[#FFFFFFCC] dark:text-[#FFFFFF]">
                   {t(market.countKey)}
                 </p>
               </div>

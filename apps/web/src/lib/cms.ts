@@ -399,6 +399,7 @@ export interface CmsPromotion {
   ctaLabel?: string | null;
   ctaHref?: string | null;
   isHighlighted?: boolean | null;
+  activeTo?: string | null;
   status: 'active' | 'inactive';
 }
 
@@ -819,7 +820,12 @@ export async function getPromotions(locale?: string): Promise<CmsPromotion[]> {
     },
     locale,
   );
-  return data.docs;
+  // Sort by offer-end date ascending; evergreen promos (no activeTo) sort last.
+  return [...data.docs].sort((a, b) => {
+    const ta = a.activeTo ? new Date(a.activeTo).getTime() : Infinity;
+    const tb = b.activeTo ? new Date(b.activeTo).getTime() : Infinity;
+    return ta - tb;
+  });
 }
 
 // ---------------------------------------------------------------------------

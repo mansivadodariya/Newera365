@@ -392,7 +392,9 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
               <br />
               <span className="text-accent">{t('heroLine2')}</span>
             </h1>
-            <p className="font-body text-muted mt-8 text-center text-[14px]">{t('noInstruments')}</p>
+            <p className="font-body text-muted mt-8 text-center text-[14px]">
+              {t('noInstruments')}
+            </p>
           </div>
         </section>
       </>

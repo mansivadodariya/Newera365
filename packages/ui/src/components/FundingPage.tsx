@@ -3,13 +3,26 @@
 import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-/* Desktop cover images — Figma assets (7-day expiry, replace with permanent assets before launch) */
-const COVER_VISA = 'https://www.figma.com/api/mcp/asset/b62e5aa8-4ac0-437f-bf91-4752b49ac0e1';
-const COVER_SWIFT = 'https://www.figma.com/api/mcp/asset/7906d284-4d90-4921-8911-72072bc61257';
-const COVER_SKRILL = 'https://www.figma.com/api/mcp/asset/45624c82-912d-4349-96e8-f140ad013f6c';
-const COVER_NETELLER = 'https://www.figma.com/api/mcp/asset/66a07e99-45a3-4500-8894-e3f25e60721f';
-const COVER_CRYPTO = 'https://www.figma.com/api/mcp/asset/f1b2f8cd-d7f2-424e-acea-084b791f808e';
-const COVER_LOCAL = 'https://www.figma.com/api/mcp/asset/e66263cc-7536-4723-af2b-677895dec3b8';
+// Desktop cards show a brand cover banner (matches the desktop Figma). The CMS
+// `coverImage` upload wins when set; otherwise we fall back to a bundled brand
+// default keyed by method. Mobile cards show the icon header instead (no cover).
+function defaultCover(name: string, methodType: string): string {
+  const n = name.toLowerCase();
+  if (n.includes('skrill')) return '/images/payment/skrill.png';
+  if (n.includes('neteller')) return '/images/payment/neteller.png';
+  switch (methodType) {
+    case 'card':
+      return '/images/payment/card.png';
+    case 'bank':
+      return '/images/payment/bank.png';
+    case 'crypto':
+      return '/images/payment/crypto.png';
+    case 'local':
+      return '/images/payment/local.png';
+    default:
+      return '/images/payment/card.png';
+  }
+}
 
 function IconCreditCard() {
   return (
@@ -53,11 +66,15 @@ function IconBitcoin() {
         strokeWidth="1.4"
         strokeLinecap="round"
       />
-      <path d="M6 3.5v11M8 2.5v12.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path
+        d="M6 3.5v11M8 2.5v12.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
-
 
 // Icon map by methodType from CMS
 const METHOD_TYPE_ICONS: Record<string, React.ReactNode> = {
@@ -86,7 +103,6 @@ function isGreenFeeValue(v: string) {
   const lower = v.toLowerCase();
   return lower === 'free' || lower === 'none' || lower === 'لا يوجد';
 }
-
 
 const TRUST_ROWS = [
   {
@@ -168,6 +184,7 @@ export interface CmsPaymentMethodItem {
   minDeposit?: string | null;
   fee?: string | null;
   notes?: string | null;
+  coverImage?: string | null;
 }
 
 interface FundingPageProps {
@@ -205,66 +222,80 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('methodsKicker')}
           </SectionKicker>
-          <div className="flex flex-col gap-[14px]">
+          <div className="grid grid-cols-1 gap-[14px] md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
             {(!paymentMethods || paymentMethods.length === 0) && (
-              <p className="font-body text-muted py-12 text-center text-[14px]">{t('noMethods')}</p>
+              <p className="font-body text-muted col-span-full py-12 text-center text-[14px]">
+                {t('noMethods')}
+              </p>
             )}
-            {(paymentMethods ?? []).map((method) => ({
+            {(paymentMethods ?? [])
+              .map((method) => ({
                 key: String(method.id),
                 icon: METHOD_TYPE_ICONS[method.methodType] ?? <IconCreditCard />,
                 typeBadge: METHOD_TYPE_LABELS[method.methodType] ?? method.methodType.toUpperCase(),
                 name: method.name,
+                cover: method.coverImage || defaultCover(method.name, method.methodType),
                 deposit: method.depositTime ?? '—',
                 withdraw: method.withdrawalTime ?? '—',
                 min: method.minDeposit ?? '—',
                 fee: method.fee ?? '—',
                 depositGreen: isGreenDepositValue(method.depositTime ?? ''),
                 feeGreen: isGreenFeeValue(method.fee ?? ''),
-              })).map((method) => (
-              <div
-                key={method.key}
-                className="bg-background shadow-card flex flex-col gap-[14px] rounded-[18px] p-5 dark:shadow-none"
-              >
-                {/* Card header: icon box + type pill */}
-                <div className="flex items-start justify-between">
-                  <div className="bg-accent/[0.08] text-accent flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px]">
-                    {method.icon}
-                  </div>
-                  <span className="text-foreground dark:bg-surface-elevated dark:text-foreground rounded-full bg-[rgba(17,17,17,0.05)] px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px]">
-                    {method.typeBadge}
-                  </span>
-                </div>
-
-                {/* Name — Outfit SemiBold 17px tracking-[-0.17px] */}
-                <p className="text-foreground font-sans text-[17px] font-semibold tracking-[-0.17px]">
-                  {method.name}
-                </p>
-
-                {/* Stats 2×2 grid — matches Figma rgba(17,17,17,0.08) wrapper, #fafaf9 cells */}
-                <div className="dark:bg-surface-elevated grid grid-cols-2 gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)]">
-                  {[
-                    { label: t('colDeposit'), value: method.deposit, green: method.depositGreen },
-                    { label: t('colWithdraw'), value: method.withdraw, green: false },
-                    { label: t('colMin'), value: method.min, green: false },
-                    { label: t('colFee'), value: method.fee, green: method.feeGreen },
-                  ].map((stat) => (
-                    <div
-                      key={stat.label}
-                      className="dark:bg-surface flex flex-col gap-[2px] bg-[#fafaf9] px-3 py-[10px]"
-                    >
-                      <span className="text-muted font-mono text-[9px] tracking-[1.08px]">
-                        {stat.label}
-                      </span>
-                      <span
-                        className={`font-sans text-[13px] font-semibold ${stat.green ? 'text-accent' : 'text-foreground'}`}
-                      >
-                        {stat.value}
-                      </span>
+              }))
+              .map((method) => (
+                <div
+                  key={method.key}
+                  className="bg-background shadow-card flex flex-col gap-[14px] rounded-[18px] p-5 dark:shadow-none"
+                >
+                  {/* Mobile header: icon box + type pill (hidden on desktop, replaced by cover) */}
+                  <div className="flex items-start justify-between md:hidden">
+                    <div className="bg-accent/[0.08] text-accent flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px]">
+                      {method.icon}
                     </div>
-                  ))}
+                    <span className="text-foreground dark:bg-surface-elevated dark:text-foreground rounded-full bg-[rgba(17,17,17,0.05)] px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px]">
+                      {method.typeBadge}
+                    </span>
+                  </div>
+
+                  {/* Desktop cover banner (matches desktop Figma) */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={method.cover}
+                    alt=""
+                    aria-hidden="true"
+                    className="hidden h-[110px] w-full rounded-[12px] object-cover md:block"
+                  />
+
+                  {/* Name — Outfit SemiBold 17px tracking-[-0.17px] */}
+                  <p className="text-foreground font-sans text-[17px] font-semibold tracking-[-0.17px]">
+                    {method.name}
+                  </p>
+
+                  {/* Stats 2×2 grid — matches Figma rgba(17,17,17,0.08) wrapper, #fafaf9 cells */}
+                  <div className="dark:bg-surface-elevated grid grid-cols-2 gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)]">
+                    {[
+                      { label: t('colDeposit'), value: method.deposit, green: method.depositGreen },
+                      { label: t('colWithdraw'), value: method.withdraw, green: false },
+                      { label: t('colMin'), value: method.min, green: false },
+                      { label: t('colFee'), value: method.fee, green: method.feeGreen },
+                    ].map((stat) => (
+                      <div
+                        key={stat.label}
+                        className="dark:bg-surface flex flex-col gap-[2px] bg-[#fafaf9] px-3 py-[10px]"
+                      >
+                        <span className="text-muted font-mono text-[9px] tracking-[1.08px]">
+                          {stat.label}
+                        </span>
+                        <span
+                          className={`font-sans text-[13px] font-semibold ${stat.green ? 'text-accent' : 'text-foreground'}`}
+                        >
+                          {stat.value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </section>

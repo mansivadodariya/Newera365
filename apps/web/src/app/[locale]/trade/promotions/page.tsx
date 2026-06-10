@@ -23,6 +23,7 @@ function mapPromo(p: CmsPromotion): CmsPromoItem {
     ctaLabel: p.ctaLabel,
     ctaHref: p.ctaHref,
     isHighlighted: p.isHighlighted,
+    activeTo: p.activeTo,
   };
 }
 

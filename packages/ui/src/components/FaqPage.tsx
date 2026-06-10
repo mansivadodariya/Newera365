@@ -64,7 +64,6 @@ function extractPlainText(node: SlateNode): string {
   return node.children?.map(extractPlainText).join('') ?? '';
 }
 
-
 function AccordionItem({
   question,
   answer,
@@ -135,10 +134,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
-  const allGroups = useMemo(
-    () => (faqs && faqs.length > 0 ? cmsFaqsToGroups(faqs) : []),
-    [faqs],
-  );
+  const allGroups = useMemo(() => (faqs && faqs.length > 0 ? cmsFaqsToGroups(faqs) : []), [faqs]);
 
   const cmsFaqMap = useMemo(() => {
     if (!faqs) return null;

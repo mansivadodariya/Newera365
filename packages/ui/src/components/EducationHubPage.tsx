@@ -358,7 +358,13 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
           </p>
           {submitted ? (
             <div className="bg-accent/20 flex items-center gap-3 rounded-[14px] px-4 py-4">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" className="text-accent flex-shrink-0">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 20 20"
+                fill="none"
+                className="text-accent flex-shrink-0"
+              >
                 <path
                   d="M4 10l4 4 8-8"
                   stroke="currentColor"

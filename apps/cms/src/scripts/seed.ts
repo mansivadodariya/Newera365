@@ -1509,6 +1509,7 @@ async function seedPromotions() {
       tagColor: 'accent',
       isHighlighted: true,
       sortOrder: 1,
+      activeTo: '2026-06-19',
     },
     {
       en: {
@@ -1533,6 +1534,7 @@ async function seedPromotions() {
       tagColor: 'amber',
       isHighlighted: false,
       sortOrder: 2,
+      activeTo: '2026-07-15',
     },
     {
       en: {
@@ -1559,6 +1561,7 @@ async function seedPromotions() {
       tagColor: 'blue',
       isHighlighted: false,
       sortOrder: 3,
+      activeTo: '2026-07-31',
     },
     {
       en: {
@@ -1583,6 +1586,7 @@ async function seedPromotions() {
       tagColor: 'purple',
       isHighlighted: false,
       sortOrder: 4,
+      activeTo: '2026-08-12',
     },
     {
       en: {
@@ -1607,6 +1611,7 @@ async function seedPromotions() {
       tagColor: 'grey',
       isHighlighted: false,
       sortOrder: 5,
+      activeTo: '2026-08-31',
     },
   ];
 
@@ -1623,6 +1628,7 @@ async function seedPromotions() {
       ctaHref: promo.en.ctaHref,
       isHighlighted: promo.isHighlighted,
       sortOrder: promo.sortOrder,
+      activeTo: promo.activeTo,
       status: 'active',
     });
     await patch(

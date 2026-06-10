@@ -369,7 +369,7 @@ export function PivotCalculatorPage() {
       </section>
 
       {/* More Calculators */}
-      <section className="bg-[#f9f9f9] px-5 pb-10 pt-8 dark:bg-background xl:px-[80px]">
+      <section className="dark:bg-background bg-[#f9f9f9] px-5 pb-10 pt-8 xl:px-[80px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
             {t('moreKicker')}

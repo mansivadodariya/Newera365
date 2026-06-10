@@ -122,6 +122,7 @@ export default buildConfig({
     meta: {
       titleSuffix: '— NEWERA',
     },
+    css: path.resolve(__dirname, 'admin.scss'),
     components: {
       graphics: {
         Logo,

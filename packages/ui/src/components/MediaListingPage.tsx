@@ -50,7 +50,6 @@ interface EpisodeItem {
   href?: string | null;
 }
 
-
 function videoItemToEpisode(v: CmsVideoItem, index: number): EpisodeItem {
   const type: 'VIDEO' | 'AUDIO' = v.contentType === 'audio' ? 'AUDIO' : 'VIDEO';
   const cat = v.mediaCategory ? v.mediaCategory.toUpperCase() : type;
@@ -225,70 +224,72 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
             ? activeTab === featured.categoryTab
             : activeTab === featured.typeTab)) &&
         !search && (
-        <section className="px-5 pb-6">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <div
-              className="overflow-hidden rounded-[22px] bg-[#0d0d0d] xl:flex xl:flex-row"
-              onClick={() =>
-                featured.href && window.open(featured.href, '_blank', 'noopener,noreferrer')
-              }
-              style={{ cursor: featured.href ? 'pointer' : 'default' }}
-            >
-              {/* Thumbnail */}
-              <div className="relative flex h-[180px] items-center justify-center overflow-hidden bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111] xl:h-auto xl:w-[55%] xl:flex-shrink-0 xl:rounded-none">
-                {featured.thumbnailUrl && (
-                  <img
-                    src={featured.thumbnailUrl}
-                    alt={featured.title}
-                    className="absolute inset-0 h-full w-full object-cover opacity-70"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                {/* NEW EPISODE badge */}
-                <div className="bg-accent absolute left-3 top-3 rounded-full px-2.5 py-[3px]">
-                  <span className="font-body text-[9px] font-semibold uppercase tracking-[0.1em] text-white">
-                    {t('newEpisodeBadge')}
-                  </span>
+          <section className="px-5 pb-6">
+            <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+              <div
+                className="overflow-hidden rounded-[22px] bg-[#0d0d0d] xl:flex xl:flex-row"
+                onClick={() =>
+                  featured.href && window.open(featured.href, '_blank', 'noopener,noreferrer')
+                }
+                style={{ cursor: featured.href ? 'pointer' : 'default' }}
+              >
+                {/* Thumbnail */}
+                <div className="relative flex h-[180px] items-center justify-center overflow-hidden bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111] xl:h-auto xl:w-[55%] xl:flex-shrink-0 xl:rounded-none">
+                  {featured.thumbnailUrl && (
+                    <img
+                      src={featured.thumbnailUrl}
+                      alt={featured.title}
+                      className="absolute inset-0 h-full w-full object-cover opacity-70"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  {/* NEW EPISODE badge */}
+                  <div className="bg-accent absolute left-3 top-3 rounded-full px-2.5 py-[3px]">
+                    <span className="font-body text-[9px] font-semibold uppercase tracking-[0.1em] text-white">
+                      {t('newEpisodeBadge')}
+                    </span>
+                  </div>
+                  {/* Duration */}
+                  <div className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1">
+                    <span className="font-body text-[10px] text-white/80">{featured.duration}</span>
+                  </div>
+                  {/* Play button */}
+                  <div className="bg-accent absolute bottom-4 left-4 flex h-10 w-10 items-center justify-center rounded-full shadow-lg xl:h-14 xl:w-14">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      className="xl:scale-125"
+                    >
+                      <path d="M4 3l10 5-10 5V3z" fill="white" />
+                    </svg>
+                  </div>
                 </div>
-                {/* Duration */}
-                <div className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1">
-                  <span className="font-body text-[10px] text-white/80">{featured.duration}</span>
+                {/* Meta */}
+                <div className="p-5 xl:flex xl:flex-1 xl:flex-col xl:justify-center xl:p-8">
+                  <div className="mb-2 flex items-center gap-2">
+                    <span
+                      className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${TAG_COLORS[featured.tagDisplay]}`}
+                    >
+                      {featured.tagDisplay}
+                    </span>
+                    <span className="font-body text-[11px] text-white/40">{featured.type}</span>
+                    <span className="font-body text-[11px] text-white/30">
+                      {t('releasedToday')}
+                    </span>
+                  </div>
+                  <p className="mb-2 font-sans text-[17px] font-semibold leading-[1.3] text-white xl:text-[26px]">
+                    {featured.title}
+                  </p>
+                  <p className="font-body text-[12px] leading-[1.55] text-white/60 xl:text-[14px]">
+                    {featured.desc}
+                  </p>
                 </div>
-                {/* Play button */}
-                <div className="bg-accent absolute bottom-4 left-4 flex h-10 w-10 items-center justify-center rounded-full shadow-lg xl:h-14 xl:w-14">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    className="xl:scale-125"
-                  >
-                    <path d="M4 3l10 5-10 5V3z" fill="white" />
-                  </svg>
-                </div>
-              </div>
-              {/* Meta */}
-              <div className="p-5 xl:flex xl:flex-1 xl:flex-col xl:justify-center xl:p-8">
-                <div className="mb-2 flex items-center gap-2">
-                  <span
-                    className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${TAG_COLORS[featured.tagDisplay]}`}
-                  >
-                    {featured.tagDisplay}
-                  </span>
-                  <span className="font-body text-[11px] text-white/40">{featured.type}</span>
-                  <span className="font-body text-[11px] text-white/30">{t('releasedToday')}</span>
-                </div>
-                <p className="mb-2 font-sans text-[17px] font-semibold leading-[1.3] text-white xl:text-[26px]">
-                  {featured.title}
-                </p>
-                <p className="font-body text-[12px] leading-[1.55] text-white/60 xl:text-[14px]">
-                  {featured.desc}
-                </p>
               </div>
             </div>
-          </div>
-        </section>
-      )}
+          </section>
+        )}
       {/* Episode grid */}
       <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">

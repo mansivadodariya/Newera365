@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-
 const OTHER_CHARGES = [
   { key: 'opening', label: 'Account opening', value: 'Free', green: true },
   { key: 'deposits', label: 'Deposits', value: 'Free', green: true },
@@ -60,12 +59,12 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="mb-4 font-sans text-[40px] font-semibold leading-[1.1]">
+          <h1 className="mb-4 font-sans text-[40px] font-semibold leading-[1.1] tracking-[-1.2px] xl:text-[56px] xl:tracking-[-1.68px]">
             <span className="text-foreground">{t('heroLine1')}</span>
             <br />
             <span className="text-accent">{t('heroLine2')}</span>
           </h1>
-          <p className="font-body text-muted text-[14px] leading-[1.55] sm:max-w-[350px]">
+          <p className="font-body text-muted text-[14px] leading-[1.55] sm:max-w-[350px] xl:max-w-[560px] xl:text-[16px]">
             {t('heroSubtitle')}
           </p>
         </div>
@@ -174,17 +173,17 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       </section>
 
       {/* Closing dark band */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-16 pt-14 xl:px-[80px]">
+      <section className="rounded-t-[32px] bg-black px-5 pb-16 pt-14 xl:px-[120px] xl:pb-20 xl:pt-20">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/60 [&>span:last-child]:text-white/60">
             {t('transparentKicker')}
           </SectionKicker>
-          <h2 className="mb-4 font-sans text-[26px] font-semibold leading-[1.1] tracking-[-0.52px] text-white">
+          <h2 className="mb-4 font-sans text-[26px] font-semibold leading-[1.1] tracking-[-0.52px] text-white xl:text-[40px] xl:tracking-[-0.8px]">
             {t('transparentLine1')}
             <br />
             {t('transparentLine2')}
           </h2>
-          <p className="font-body max-w-[300px] text-[13.5px] leading-[1.55] text-white/60">
+          <p className="font-body max-w-[300px] text-[13.5px] leading-[1.55] text-white/60 xl:max-w-[620px] xl:text-[16px]">
             {t('transparentDesc')}
           </p>
         </div>

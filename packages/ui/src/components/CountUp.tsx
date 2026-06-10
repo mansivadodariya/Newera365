@@ -23,10 +23,12 @@ export function CountUp({ value, duration = 1400 }: { value: string; duration?: 
       return;
     }
 
-    const target = parseFloat(match[1]);
-    const decimals = match[1].includes('.') ? match[1].split('.')[1].length : 0;
-    const prefix = value.slice(0, match.index);
-    const suffix = value.slice((match.index ?? 0) + match[1].length);
+    const numStr = match[1] ?? match[0];
+    const target = parseFloat(numStr);
+    const decimalPart = numStr.split('.')[1];
+    const decimals = decimalPart ? decimalPart.length : 0;
+    const prefix = value.slice(0, match.index ?? 0);
+    const suffix = value.slice((match.index ?? 0) + numStr.length);
     let frame = 0;
     let started = false;
 
