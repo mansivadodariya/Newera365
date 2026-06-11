@@ -1,5 +1,5 @@
-import { TradePageSkeleton } from '@newera365/ui';
+import { PromoPageSkeleton } from '@newera365/ui';
 
 export default function Loading() {
-  return <TradePageSkeleton />;
+  return <PromoPageSkeleton />;
 }

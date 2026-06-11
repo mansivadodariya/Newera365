@@ -66,7 +66,7 @@ export function HomePageSkeleton() {
           <div className="mb-3 h-3 w-20 animate-pulse rounded bg-[#cce8d8] dark:bg-[#1a1c22]" />
           <Pulse className="mb-2 h-9 w-2/3" />
           <Pulse className="mb-4 h-4 w-3/4" />
-          <div className="mb-[14px] grid grid-cols-2 gap-[10px] xl:grid-cols-3">
+          <div className="mb-[14px] grid grid-cols-2 gap-[10px] xl:grid-cols-6">
             {Array.from({ length: 6 }).map((_, i) => (
               <DarkPulse key={i} className="h-[110px] rounded-[18px]" />
             ))}

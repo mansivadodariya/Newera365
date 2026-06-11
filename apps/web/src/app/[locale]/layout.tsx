@@ -10,6 +10,7 @@ import type { CmsFooterColumn, CmsSocialLinks } from '@newera365/ui';
 import { dir, LOCALES, type Locale } from '@newera365/types';
 import { routing } from '@/i18n/routing';
 import { getSiteSettings } from '@/lib/cms';
+import { PageFade } from '@/components/PageFade';
 import '../globals.css';
 
 const outfit = Outfit({
@@ -122,7 +123,7 @@ export default async function LocaleLayout({
                 style={{ background: 'linear-gradient(0deg, #000 56.25%, #085a00 100%)' }}
                 aria-hidden="true"
               />
-              <main>{children}</main>
+              <PageFade>{children}</PageFade>
               <Footer
                 footerColumns={
                   footerColumns && footerColumns.length > 0 ? footerColumns : undefined

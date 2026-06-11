@@ -119,6 +119,10 @@ export {
 
 // Per-page skeletons
 export { TradePageSkeleton } from './components/TradePageSkeleton';
+export { FundingPageSkeleton } from './components/FundingPageSkeleton';
+export { PromoPageSkeleton } from './components/PromoPageSkeleton';
+export { FeesPageSkeleton } from './components/FeesPageSkeleton';
+export { IBPageSkeleton } from './components/IBPageSkeleton';
 export { MarketPageSkeleton } from './components/MarketPageSkeleton';
 export { PlatformPageSkeleton } from './components/PlatformPageSkeleton';
 export { EducationHubSkeleton } from './components/EducationHubSkeleton';
