@@ -4,25 +4,14 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-// tagColor (from CMS) → badge colour. Style maps, not content.
-const CMS_TAG_STYLES: Record<string, string> = {
-  accent: 'bg-accent text-white',
-  amber: 'bg-[#F59E0B] text-white',
-  blue: 'bg-[#3B82F6] text-white',
-  purple: 'bg-[#8B5CF6] text-white',
-  red: 'bg-[#EF4444] text-white',
-  grey: 'bg-[#6B7280] text-white',
-};
-
-// Resting card gradient by tagColor — light/tinted, matching the static design.
-// The bold dark-green gradient is applied on hover only (group-hover below).
-const CMS_CARD_GRADIENTS: Record<string, string> = {
-  accent: 'from-accent/[0.07] to-[#FAFAF9] dark:from-accent/[0.12] dark:to-surface',
-  amber: 'from-[#F59E0B]/[0.07] to-[#FAFAF9] dark:from-[#F59E0B]/[0.12] dark:to-surface',
-  blue: 'from-[#3B82F6]/[0.07] to-[#FAFAF9] dark:from-[#3B82F6]/[0.12] dark:to-surface',
-  purple: 'from-[#8B5CF6]/[0.07] to-[#FAFAF9] dark:from-[#8B5CF6]/[0.12] dark:to-surface',
-  red: 'from-[#EF4444]/[0.07] to-[#FAFAF9] dark:from-[#EF4444]/[0.12] dark:to-surface',
-  grey: 'from-[#6B7280]/[0.07] to-[#FAFAF9] dark:from-[#6B7280]/[0.12] dark:to-surface',
+// CMS tagColor → badge background colour (light variant, used on resting light card).
+const TAG_BG_LIGHT: Record<string, string> = {
+  accent: 'bg-accent/[0.12] text-accent',
+  amber: 'bg-[#F59E0B]/[0.15] text-[#B45309]',
+  blue: 'bg-[#3B82F6]/[0.15] text-[#1D4ED8]',
+  purple: 'bg-[#8B5CF6]/[0.18] text-[#6D28D9]',
+  red: 'bg-[#EF4444]/[0.15] text-[#B91C1C]',
+  grey: 'bg-[#6B7280]/[0.15] text-[#374151]',
 };
 
 export interface CmsPromoItem {
@@ -63,6 +52,172 @@ function useOfferEndsLabel() {
   };
 }
 
+function ArrowRight({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        d="M3 8h10M9 4l4 4-4 4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function PromoCard({
+  promo,
+  endsLabel,
+  claimLabelFallback,
+  activeLabel,
+  locale,
+}: {
+  promo: CmsPromoItem;
+  endsLabel: string | null;
+  claimLabelFallback: string;
+  activeLabel: string;
+  locale: string;
+}) {
+  const highlighted = !!promo.isHighlighted;
+  const tagLight = TAG_BG_LIGHT[promo.tagColor ?? 'accent'] ?? TAG_BG_LIGHT.accent;
+
+  // Highlighted cards are dark by default (matching Figma — green-tinted black
+  // gradient with a soft glow at the top-right). Regular cards are light and
+  // transition to the same dark gradient on hover, per the user spec.
+  //
+  // The `data-card` selectors below let us style every child differently in
+  // each state without re-listing every variant in Tailwind.
+  const cardClass = highlighted
+    ? // Always dark
+      'data-[state=dark] [&]:bg-[radial-gradient(120%_120%_at_85%_-10%,rgba(0,176,80,0.32)_0%,rgba(0,176,80,0.06)_28%,#0b1410_55%,#020806_100%)]'
+    : // Light by default, dark on hover
+      'bg-[#fafaf9] dark:bg-[#101418] hover:bg-[radial-gradient(120%_120%_at_85%_-10%,rgba(0,176,80,0.32)_0%,rgba(0,176,80,0.06)_28%,#0b1410_55%,#020806_100%)]';
+
+  // Common "is currently showing the dark surface" expressed via group state.
+  // We use a CSS variable to drive child colours so a single hover toggles all.
+  return (
+    <div
+      data-highlighted={highlighted ? 'true' : 'false'}
+      className={[
+        'group relative isolate flex flex-col overflow-hidden rounded-[22px] p-5 transition-[background] duration-300',
+        'shadow-card dark:shadow-card-dark',
+        cardClass,
+      ].join(' ')}
+    >
+      {/* Offer-ends badge */}
+      {endsLabel && (
+        <div
+          className={[
+            'mb-3 inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1',
+            highlighted ? 'bg-accent/[0.18]' : 'bg-accent/[0.12] group-hover:bg-accent/[0.18]',
+          ].join(' ')}
+        >
+          <span className="bg-accent h-1.5 w-1.5 flex-shrink-0 rounded-full" />
+          <span
+            className={[
+              'font-body text-[11px] font-medium tracking-[0.01em]',
+              highlighted ? 'text-accent' : 'text-accent',
+            ].join(' ')}
+          >
+            {endsLabel}
+          </span>
+        </div>
+      )}
+
+      {/* Tag + ACTIVE row */}
+      <div className="mb-4 flex items-center justify-between">
+        {promo.tag ? (
+          <span
+            className={[
+              'font-body inline-flex h-[23px] items-center rounded-full px-2.5 text-[11px] font-semibold uppercase tracking-[0.08em]',
+              highlighted
+                ? 'bg-accent/[0.18] text-accent'
+                : `${tagLight} group-hover:bg-accent/[0.18] group-hover:text-accent`,
+            ].join(' ')}
+          >
+            {promo.tag}
+          </span>
+        ) : (
+          <span />
+        )}
+        <span
+          className={[
+            'font-mono text-[10px] tracking-[0.12em]',
+            highlighted ? 'text-white/45' : 'text-muted group-hover:text-white/45',
+            'transition-colors duration-300',
+          ].join(' ')}
+        >
+          {activeLabel}
+        </span>
+      </div>
+
+      {/* Value */}
+      {promo.valueDisplay && (
+        <p className="text-accent font-sans text-[36px] font-semibold leading-[1] tracking-[-0.02em]">
+          {promo.valueDisplay}
+        </p>
+      )}
+
+      {/* Title */}
+      <p
+        className={[
+          'font-sans font-semibold leading-tight transition-colors duration-300',
+          promo.valueDisplay ? 'mt-2 text-[17px]' : 'text-[20px]',
+          highlighted ? 'text-white' : 'text-foreground group-hover:text-white',
+        ].join(' ')}
+      >
+        {promo.title}
+      </p>
+
+      {/* Description */}
+      <p
+        className={[
+          'font-body mt-2 text-[13px] leading-[1.5] transition-colors duration-300',
+          highlighted ? 'text-white/60' : 'text-muted group-hover:text-white/60',
+        ].join(' ')}
+      >
+        {promo.description}
+      </p>
+
+      {/* Spacer pushes footer to the bottom for uniform card heights */}
+      <div className="flex-1" />
+
+      {/* Footer + CTA */}
+      <div className="mt-5 flex items-center justify-between gap-3">
+        <span
+          className={[
+            'max-w-[55%] font-mono text-[10px] leading-snug transition-colors duration-300',
+            highlighted ? 'text-white/45' : 'text-muted/80 group-hover:text-white/45',
+          ].join(' ')}
+        >
+          {promo.terms ?? ''}
+        </span>
+        <Link
+          href={promo.ctaHref ?? `/${locale}/register`}
+          className={[
+            'font-body inline-flex h-9 flex-shrink-0 items-center gap-1.5 rounded-full px-4 text-[13px] font-semibold transition-colors duration-300',
+            // Highlighted: always green. Regular: black resting, green on hover.
+            highlighted
+              ? 'bg-accent hover:bg-accent-hover text-white'
+              : 'bg-foreground text-background group-hover:bg-accent group-hover:text-white',
+          ].join(' ')}
+        >
+          {promo.ctaLabel ?? claimLabelFallback}
+          <ArrowRight />
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export function PromoPage({ promos }: PromoPageProps) {
   const locale = useLocale();
   const t = useTranslations('promos');
@@ -92,89 +247,16 @@ export function PromoPage({ promos }: PromoPageProps) {
             <p className="font-body text-muted py-12 text-center text-[14px]">{t('noPromos')}</p>
           ) : (
             <div className="grid grid-cols-1 gap-[14px] md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
-              {items.map((promo) => {
-                const tagStyle =
-                  CMS_TAG_STYLES[promo.tagColor ?? 'accent'] ?? CMS_TAG_STYLES.accent;
-                const gradient =
-                  CMS_CARD_GRADIENTS[promo.tagColor ?? 'accent'] ?? CMS_CARD_GRADIENTS.accent;
-                const endsLabel = offerEndsLabel(promo.activeTo);
-                return (
-                  <div
-                    key={promo.id}
-                    className={`shadow-card dark:shadow-card-dark group flex flex-col overflow-hidden rounded-[22px] bg-gradient-to-br transition-colors duration-300 ${gradient} hover:from-[#062a04] hover:to-[#010f01]`}
-                  >
-                    {/* Offer-ends badge */}
-                    {endsLabel && (
-                      <div className="flex items-center gap-2 px-5 pt-5">
-                        <span className="bg-accent h-1.5 w-1.5 flex-shrink-0 rounded-full" />
-                        <span className="font-body text-muted text-[11px] transition-colors duration-300 group-hover:text-white/70">
-                          {endsLabel}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Tag row */}
-                    <div
-                      className={`flex items-center justify-between px-5 ${endsLabel ? 'pt-3' : 'pt-5'}`}
-                    >
-                      {promo.tag ? (
-                        <span
-                          className={`font-body inline-flex h-5 items-center rounded-full px-2.5 text-[9px] font-semibold uppercase tracking-[0.12em] ${tagStyle}`}
-                        >
-                          {promo.tag}
-                        </span>
-                      ) : (
-                        <span />
-                      )}
-                      <span className="bg-accent/10 text-accent font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.12em] transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white/70">
-                        {t('activeLabel')}
-                      </span>
-                    </div>
-
-                    {/* Value + Title + desc */}
-                    <div className="px-5 pt-3">
-                      {promo.valueDisplay && (
-                        <p className="text-accent font-sans text-[36px] font-semibold leading-[100%] tracking-[-0.02em]">
-                          {promo.valueDisplay}
-                        </p>
-                      )}
-                      <p
-                        className={`font-sans font-semibold leading-tight transition-colors duration-300 group-hover:text-white ${promo.valueDisplay ? 'text-foreground mt-2 text-[17px]' : 'text-foreground text-[20px]'}`}
-                      >
-                        {promo.title}
-                      </p>
-                      <p className="font-body text-muted mt-1 text-[13px] leading-[1.55] transition-colors duration-300 group-hover:text-white/70">
-                        {promo.description}
-                      </p>
-                    </div>
-
-                    {/* Divider */}
-                    <div className="dark:border-border mx-5 mt-4 border-t border-[#e5e7eb] transition-colors duration-300 group-hover:border-white/15" />
-
-                    {/* Footer + CTA */}
-                    <div className="mt-auto flex items-center justify-between px-5 py-4">
-                      <span className="text-muted max-w-[180px] font-mono text-[10px] leading-snug transition-colors duration-300 group-hover:text-white/50">
-                        {promo.terms ?? ''}
-                      </span>
-                      <Link
-                        href={promo.ctaHref ?? `/${locale}/register`}
-                        className="bg-accent hover:bg-accent-hover font-body flex h-8 flex-shrink-0 items-center gap-1.5 rounded-full px-4 text-[12px] font-medium text-white transition-colors"
-                      >
-                        {promo.ctaLabel ?? t('claimBtn')}
-                        <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                          <path
-                            d="M3 8h10M9 4l4 4-4 4"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </Link>
-                    </div>
-                  </div>
-                );
-              })}
+              {items.map((promo) => (
+                <PromoCard
+                  key={promo.id}
+                  promo={promo}
+                  endsLabel={offerEndsLabel(promo.activeTo)}
+                  claimLabelFallback={t('claimBtn')}
+                  activeLabel={t('activeLabel')}
+                  locale={locale}
+                />
+              ))}
             </div>
           )}
         </div>
@@ -197,15 +279,7 @@ export function PromoPage({ promos }: PromoPageProps) {
             className="font-body bg-accent flex h-[50px] w-full items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors xl:w-auto xl:px-10"
           >
             {t('termsLink')}
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <ArrowRight />
           </Link>
         </div>
       </section>
