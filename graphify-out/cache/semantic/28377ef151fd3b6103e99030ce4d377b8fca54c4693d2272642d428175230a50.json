@@ -1,0 +1,184 @@
+{
+  "nodes": [
+    {
+      "id": "security_known_vulns",
+      "label": "Security \u2014 Known npm Vulnerabilities",
+      "file_type": "document",
+      "source_file": "SECURITY.md",
+      "source_location": "line 1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "security_payload_v2_vulns",
+      "label": "Payload v2 Unfixable Vulnerabilities",
+      "file_type": "rationale",
+      "source_file": "SECURITY.md",
+      "source_location": "line 19",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "security_cloudflare_waf_mitigations",
+      "label": "Cloudflare WAF Runtime Mitigations",
+      "file_type": "concept",
+      "source_file": "SECURITY.md",
+      "source_location": "line 44",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "security_slug_unique_index",
+      "label": "Slug/Locale Compound Unique Index Migration",
+      "file_type": "concept",
+      "source_file": "SECURITY.md",
+      "source_location": "line 54",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "security_media_ephemeral",
+      "label": "Media Storage Ephemeral on Railway (Operational Caveat)",
+      "file_type": "rationale",
+      "source_file": "SECURITY.md",
+      "source_location": "line 75",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "security_r2_storage_plan",
+      "label": "Cloudflare R2 Storage Plan (NE-027)",
+      "file_type": "concept",
+      "source_file": "SECURITY.md",
+      "source_location": "line 83",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "security_db_pool_limit",
+      "label": "Postgres Pool Capped at max:5 (Neon Limits)",
+      "file_type": "rationale",
+      "source_file": "SECURITY.md",
+      "source_location": "line 93",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "security_known_vulns",
+      "target": "security_payload_v2_vulns",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY.md",
+      "source_location": "line 19",
+      "weight": 1.0
+    },
+    {
+      "source": "security_known_vulns",
+      "target": "security_cloudflare_waf_mitigations",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY.md",
+      "source_location": "line 44",
+      "weight": 1.0
+    },
+    {
+      "source": "security_known_vulns",
+      "target": "security_slug_unique_index",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY.md",
+      "source_location": "line 54",
+      "weight": 1.0
+    },
+    {
+      "source": "security_known_vulns",
+      "target": "security_media_ephemeral",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY.md",
+      "source_location": "line 75",
+      "weight": 1.0
+    },
+    {
+      "source": "security_known_vulns",
+      "target": "security_r2_storage_plan",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY.md",
+      "source_location": "line 83",
+      "weight": 1.0
+    },
+    {
+      "source": "security_known_vulns",
+      "target": "security_db_pool_limit",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY.md",
+      "source_location": "line 93",
+      "weight": 1.0
+    },
+    {
+      "source": "security_payload_v2_vulns",
+      "target": "claude_apps_cms",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY.md",
+      "source_location": "line 19",
+      "weight": 1.0
+    },
+    {
+      "source": "security_slug_unique_index",
+      "target": "guide_neon_postgres",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY.md",
+      "source_location": "line 54",
+      "weight": 1.0
+    },
+    {
+      "source": "security_r2_storage_plan",
+      "target": "security_media_ephemeral",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SECURITY.md",
+      "source_location": "line 83",
+      "weight": 1.0
+    },
+    {
+      "source": "security_slug_unique_index",
+      "target": "claude_collection_hooks",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "SECURITY.md",
+      "source_location": "line 54",
+      "weight": 0.75
+    }
+  ],
+  "hyperedges": []
+}

@@ -210,7 +210,7 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
             <span className="text-foreground">{t('heroLine1')}&nbsp;—&nbsp;</span>
             <span className="text-[#00b050]">{t('heroAccent')}</span>
           </h1>
-          <p className="font-body text-muted mt-4 max-w-[500px] text-[14px] leading-[1.55]">
+          <p className="font-body mt-4 max-w-[500px] text-[14px] leading-[1.55] text-[#6B7280] dark:text-[#B8BFCC]">
             {t('heroSubtitle')}
           </p>
         </div>
@@ -219,12 +219,12 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
       {/* Payment Methods */}
       <section className="bg-transparent px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+          <SectionKicker className="[&>span:first-child]:bg-muted mb-5 text-[#6B7280] dark:text-[#B8BFCC]">
             {t('methodsKicker')}
           </SectionKicker>
           <div className="grid grid-cols-1 gap-[14px] md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
             {(!paymentMethods || paymentMethods.length === 0) && (
-              <p className="font-body text-muted col-span-full py-12 text-center text-[14px]">
+              <p className="font-body col-span-full py-12 text-center text-[14px] text-[#6B7280] dark:text-[#B8BFCC]">
                 {t('noMethods')}
               </p>
             )}
@@ -263,7 +263,7 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
                     src={method.cover}
                     alt=""
                     aria-hidden="true"
-                    className="hidden h-[110px] w-full rounded-[12px] object-cover md:block"
+                    className="hidden h-[110px] self-stretch rounded-[20px] bg-cover bg-center bg-no-repeat md:block"
                   />
 
                   {/* Name — Outfit SemiBold 17px tracking-[-0.17px] */}
@@ -301,7 +301,7 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
       </section>
 
       {/* Trust section */}
-      <section className="rounded-t-[32px] bg-black px-5 py-10 xl:px-[120px] xl:py-14">
+      <section className="rounded-t-[32px] bg-gradient-to-r from-[#000000] to-[#1F262E] px-5 py-10 xl:px-[120px] xl:py-14">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-3 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/60">
             {t('safetyKicker')}

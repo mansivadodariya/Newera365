@@ -1,0 +1,39 @@
+{
+  "nodes": [
+    {
+      "id": "icons_market_crypto_icon_image",
+      "label": "Market Crypto Icon (Bitcoin Symbol)",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/market-crypto-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icons_market_crypto_icon_bitcoin",
+      "label": "Bitcoin",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/market-crypto-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icons_market_crypto_icon_category",
+      "label": "Crypto Market Category",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/market-crypto-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

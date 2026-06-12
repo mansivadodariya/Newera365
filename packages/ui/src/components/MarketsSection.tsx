@@ -58,36 +58,39 @@ export function MarketsSection() {
         <h2 className="text-foreground mb-3 font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px] xl:text-[36px]">
           {t('marketsHeading')}
         </h2>
-        <p className="font-body text-muted mb-[14px] text-[14px] leading-[1.55]">
+        <p className="font-body mb-[14px] text-[14px] leading-[1.55] text-[#363636] dark:text-[#FFFFFF]">
           {t('marketsSubheading')}
         </p>
 
         {/* 2×3 dark card grid — each card has a full-bleed bg image at 40% opacity */}
         <div className="mb-[14px] grid grid-cols-2 gap-[10px] xl:grid-cols-6">
           {MARKETS.map((market) => (
-            <div
+            <Link
               key={market.key}
-              className="relative flex h-[110px] flex-col justify-end overflow-hidden rounded-[18px] px-4 py-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)]"
+              href={`/${locale}/markets/${market.key}`}
+              className="hover:border-accent/30 group relative flex h-[110px] flex-col justify-end overflow-hidden rounded-[18px] border border-transparent px-4 py-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_12px_32px_rgba(0,0,0,0.28)]"
             >
               {/* Dark base */}
               <div className="absolute inset-0 bg-[#111]" />
-              {/* Background photo at 40% opacity */}
+              {/* Background photo — dims on hover */}
               <Image
                 src={market.bg}
                 alt=""
                 fill
                 sizes="(min-width: 1280px) 180px, 50vw"
-                className="pointer-events-none object-cover opacity-40"
+                className="pointer-events-none object-cover opacity-40 transition-opacity duration-300 group-hover:opacity-20"
                 aria-hidden="true"
               />
               {/* Content — no icon per Figma; label + count anchored to the bottom */}
               <div className="relative z-10">
-                <p className="font-sans text-[16px] font-medium text-white">{t(market.nameKey)}</p>
-                <p className="font-body mt-[2px] text-[11px] text-[#FFFFFFCC] dark:text-[#FFFFFF]">
+                <p className="group-hover:text-accent font-sans text-[16px] font-medium text-white transition-colors duration-300">
+                  {t(market.nameKey)}
+                </p>
+                <p className="font-body mt-[2px] text-[11px] text-[#FFFFFFCC] transition-colors duration-300 group-hover:text-white dark:text-[#FFFFFF]">
                   {t(market.countKey)}
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 

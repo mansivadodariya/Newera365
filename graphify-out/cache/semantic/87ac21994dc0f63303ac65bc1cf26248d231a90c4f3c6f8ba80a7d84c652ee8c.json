@@ -1,0 +1,50 @@
+{
+  "nodes": [
+    {
+      "id": "images_market_stocks_image",
+      "label": "market-stocks.jpg",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-stocks.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "images_market_stocks_candlestick_chart",
+      "label": "Candlestick Chart Visual",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-stocks.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "images_market_stocks_dollar_symbol",
+      "label": "Dollar Sign Symbol",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-stocks.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "images_market_stocks_stocks_market_hero",
+      "label": "Stocks Market Hero Graphic",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-stocks.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

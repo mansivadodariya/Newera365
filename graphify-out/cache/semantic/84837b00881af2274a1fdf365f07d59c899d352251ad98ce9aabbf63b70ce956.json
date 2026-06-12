@@ -1,0 +1,50 @@
+{
+  "nodes": [
+    {
+      "id": "icons_feature_spreads_svg",
+      "label": "feature-spreads.svg (SVG Icon)",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/feature-spreads.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icons_feature_spreads_diagonal_line",
+      "label": "Diagonal Line Path",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/feature-spreads.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icons_feature_spreads_circle_top_left",
+      "label": "Top-Left Circle (6.5,6.5)",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/feature-spreads.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "icons_feature_spreads_circle_bottom_right",
+      "label": "Bottom-Right Circle (17.5,17.5)",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/feature-spreads.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

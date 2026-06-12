@@ -51,8 +51,11 @@ const nextConfig = {
               // RSC payload and hydration bootstrapping as inline scripts — blocking them
               // prevents React from hydrating and makes all interactive elements non-functional.
               // 'unsafe-eval' is dev-only (webpack HMR). Tighten to a nonce strategy post-launch (NE-028).
-              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://s3.tradingview.com https://www.tradingview.com`,
-              "frame-src https://www.tradingview.com https://s.tradingview.com",
+              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://s3.tradingview.com https://s.tradingview.com https://www.tradingview.com`,
+              // TradingView embed widgets render their chart inside an iframe served from
+              // www.tradingview-widget.com (NOT tradingview.com) — it must be in frame-src or
+              // every chart silently fails to mount. See TradingViewWidget.tsx.
+              'frame-src https://www.tradingview.com https://s.tradingview.com https://www.tradingview-widget.com',
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https://media.newera365.com https://cms.newera365.com",
               `connect-src 'self' ${(process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001').trim()}`,

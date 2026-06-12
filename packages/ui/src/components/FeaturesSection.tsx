@@ -108,16 +108,18 @@ export function FeaturesSection() {
           {FEATURES.map(({ Icon, titleKey, descKey }) => (
             <div
               key={titleKey}
-              className="bg-background flex items-start gap-4 rounded-[20px] p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:shadow-[0px_4px_16px_0px_rgba(0,0,0,0.3)]"
+              className="hover:border-accent/20 dark:hover:border-accent/15 group flex items-start gap-4 rounded-[20px] border border-transparent bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(0,176,80,0.1)] dark:bg-[#111316] dark:shadow-[0px_4px_16px_0px_rgba(0,0,0,0.3)]"
             >
-              <div className="text-foreground flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)]">
+              <div className="group-hover:bg-accent/10 group-hover:text-accent flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] text-[#6b7280] transition-colors duration-200 dark:text-white/60">
                 <Icon />
               </div>
               <div className="flex-1 pt-0.5">
-                <h3 className="text-foreground mb-[6px] font-sans text-[16px] font-semibold leading-normal">
+                <h3 className="mb-[6px] font-sans text-[16px] font-semibold leading-normal text-[#111] dark:text-white">
                   {t(titleKey)}
                 </h3>
-                <p className="font-body text-muted text-[13px] leading-[1.5]">{t(descKey)}</p>
+                <p className="font-body text-[13px] leading-[1.5] text-[#6B7280] dark:text-[#B8BFCC]">
+                  {t(descKey)}
+                </p>
               </div>
             </div>
           ))}

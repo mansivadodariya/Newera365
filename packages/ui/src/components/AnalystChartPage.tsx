@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { TradingViewWidget } from './TradingViewWidget';
 
-type FilterTab = 'All' | 'Majors' | 'Crosses' | 'Commodities';
+type FilterTab = 'All' | 'Majors' | 'Crosses' | 'Commodities' | 'Crypto';
 type Sentiment = 'BULLISH' | 'BEARISH' | 'NEUTRAL';
 
 interface PairCall {
   symbol: string;
+  tv: string; // TradingView symbol, e.g. OANDA:EURUSD
   price: string;
   target: string;
   conf: number;
@@ -18,9 +20,14 @@ interface PairCall {
   sparkPoints: number[];
 }
 
+// Timeframe label → TradingView advanced-chart interval and visible range.
+const TF_INTERVAL: Record<string, string> = { '1H': '60', '4H': '240', '1D': 'D', '1W': 'W' };
+const TF_RANGE: Record<string, string> = { '1H': '1D', '4H': '5D', '1D': '3M', '1W': '12M' };
+
 const CALLS: PairCall[] = [
   {
     symbol: 'EUR/USD',
+    tv: 'OANDA:EURUSD',
     price: '1.0842',
     target: '+ 1.0980',
     conf: 80,
@@ -31,6 +38,7 @@ const CALLS: PairCall[] = [
   },
   {
     symbol: 'USD/JPY',
+    tv: 'OANDA:USDJPY',
     price: '157.34',
     target: '± 35.20',
     conf: 65,
@@ -41,6 +49,7 @@ const CALLS: PairCall[] = [
   },
   {
     symbol: 'GBP/USD',
+    tv: 'OANDA:GBPUSD',
     price: '1.2718',
     target: '+ 1.3710',
     conf: 50,
@@ -51,6 +60,7 @@ const CALLS: PairCall[] = [
   },
   {
     symbol: 'XAU/USD',
+    tv: 'OANDA:XAUUSD',
     price: '2,318.40',
     target: '+ 1,360.00',
     conf: 72,
@@ -61,6 +71,7 @@ const CALLS: PairCall[] = [
   },
   {
     symbol: 'BTC/USD',
+    tv: 'BITSTAMP:BTCUSD',
     price: '67,250',
     target: '+ 72,000',
     conf: 60,
@@ -71,6 +82,7 @@ const CALLS: PairCall[] = [
   },
   {
     symbol: 'GBP/JPY',
+    tv: 'OANDA:GBPJPY',
     price: '198.12',
     target: '± 2.10',
     conf: 45,
@@ -89,7 +101,7 @@ const ANALYST = {
   commentary: `EUR/USD continues to grind higher as the ECB pushes back against July cut expectations. With US data softening and the dollar index breaking below the 200-day average, we see room for a move toward 1.0980 in the coming weeks. Key risk: a hot NFP print could trigger a sharp reversal back toward 1.0750.`,
 };
 
-const TABS: FilterTab[] = ['All', 'Majors', 'Crosses', 'Commodities'];
+const TABS: FilterTab[] = ['All', 'Majors', 'Crosses', 'Commodities', 'Crypto'];
 
 const TIMEFRAMES = ['1H', '4H', '1D', '1W'];
 
@@ -123,20 +135,6 @@ function Sparkline({ points, up }: { points: number[]; up: boolean }) {
 
 function FeaturedChart({ pair }: { pair: PairCall }) {
   const [tf, setTf] = useState('1D');
-  const w = 320;
-  const h = 100;
-  const points = pair.sparkPoints;
-  const max = Math.max(...points);
-  const min = Math.min(...points);
-  const range = max - min || 1;
-  const coords = points
-    .map((v, i) => {
-      const x = (i / (points.length - 1)) * w;
-      const y = h - ((v - min) / range) * (h - 16) - 8;
-      return `${x},${y}`;
-    })
-    .join(' ');
-  const areaCoords = `0,${h} ${coords} ${w},${h}`;
 
   return (
     <div
@@ -146,7 +144,7 @@ function FeaturedChart({ pair }: { pair: PairCall }) {
       {/* Header row */}
       <div className="flex items-center justify-between px-5 pt-4">
         <p className="font-body text-[11px] uppercase tracking-[0.1em] text-white/50">
-          {pair.symbol} <span className="text-white/30">·</span> D1
+          {pair.symbol} <span className="text-white/30">·</span> {tf}
         </p>
         <div className="flex gap-1">
           {TIMEFRAMES.map((t) => (
@@ -163,40 +161,31 @@ function FeaturedChart({ pair }: { pair: PairCall }) {
         </div>
       </div>
 
-      {/* Price */}
-      <div className="px-5 pb-3 pt-2">
-        <span className="font-sans text-[32px] font-semibold text-white">{pair.price}</span>
-        <span className="ml-2 font-sans text-[14px] font-medium text-[#00B050]">+1.27%</span>
-      </div>
-
-      {/* Chart */}
-      <div className="relative px-0">
-        <svg
-          width="100%"
-          viewBox={`0 0 ${w} ${h}`}
-          preserveAspectRatio="none"
-          className="block h-[100px]"
-        >
-          <defs>
-            <linearGradient id="featuredChartGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#00B050" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="#00B050" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          <polygon points={areaCoords} fill="url(#featuredChartGrad)" />
-          <polyline
-            points={coords}
-            fill="none"
-            stroke="#00B050"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+      {/* Live TradingView chart — re-keyed on symbol/interval so it remounts cleanly */}
+      <div className="mt-3 px-3">
+        <div style={{ height: 280 }}>
+          <TradingViewWidget
+            key={`${pair.tv}-${tf}`}
+            type="advanced-chart"
+            symbol={pair.tv}
+            theme="dark"
+            width="100%"
+            height="100%"
+            config={{
+              interval: TF_INTERVAL[tf] ?? 'D',
+              range: TF_RANGE[tf] ?? '3M',
+              hide_top_toolbar: false,
+              hide_legend: false,
+              allow_symbol_change: false,
+              backgroundColor: 'rgba(17,17,17,1)',
+              gridColor: 'rgba(255,255,255,0.04)',
+            }}
           />
-        </svg>
+        </div>
       </div>
 
       {/* Target */}
-      <div className="flex justify-end px-5 pb-4 pt-1">
+      <div className="flex justify-end px-5 pb-4 pt-3">
         <span className="font-body text-[10px] uppercase tracking-[0.1em] text-white/40">
           TARGET {pair.target.replace('+ ', '')}
         </span>
@@ -215,9 +204,8 @@ export function AnalystChartPage() {
   const t = useTranslations('analystChart');
   const [tab, setTab] = useState<FilterTab>('All');
   const analyst = ANALYST;
-  const featured = CALLS[0]!;
-
   const filtered = tab === 'All' ? CALLS : CALLS.filter((c) => c.category === tab);
+  const featured = filtered[0] ?? CALLS[0]!;
 
   return (
     <>
@@ -268,7 +256,9 @@ export function AnalystChartPage() {
                     ? t('filterMajors')
                     : tabItem === 'Crosses'
                       ? t('filterCrosses')
-                      : t('filterCommodities')}
+                      : tabItem === 'Commodities'
+                        ? t('filterCommodities')
+                        : 'Crypto'}
               </button>
             ))}
           </div>
@@ -277,50 +267,32 @@ export function AnalystChartPage() {
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
             {t('callsKicker')}
           </SectionKicker>
-          <div className="flex flex-col gap-[10px]">
-            {filtered.map((p) => (
+          <div className="flex flex-col gap-3">
+            {filtered.map((pair) => (
               <div
-                key={p.symbol}
-                className="bg-surface shadow-card flex items-center gap-3 rounded-[16px] px-4 py-3 dark:shadow-none"
+                key={pair.symbol}
+                className="flex items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-3 dark:bg-[#16181d]"
               >
-                {/* Symbol + sparkline */}
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
+                  <Sparkline points={pair.sparkPoints} up={pair.up} />
+                  <div>
+                    <p className="text-foreground font-sans text-[13px] font-semibold">
+                      {pair.symbol}
+                    </p>
                     <span
-                      className={`font-body rounded-full px-2 py-[2px] text-[9px] font-semibold uppercase tracking-[0.06em] ${SENTIMENT_STYLES[p.sentiment]}`}
+                      className={`font-body rounded-full px-2 py-[2px] text-[10px] font-semibold ${SENTIMENT_STYLES[pair.sentiment]}`}
                     >
-                      {p.sentiment === 'BULLISH' ? '▲' : p.sentiment === 'BEARISH' ? '▼' : '●'}{' '}
-                      {p.sentiment}
+                      {pair.sentiment}
                     </span>
                   </div>
-                  <p className="text-foreground mt-[3px] font-sans text-[15px] font-semibold">
-                    {p.symbol}
-                  </p>
                 </div>
-
-                {/* Sparkline */}
-                <div className="flex-shrink-0">
-                  <Sparkline points={p.sparkPoints} up={p.up} />
-                </div>
-
-                {/* Price + target */}
-                <div className="flex-shrink-0 text-right">
-                  <p className="text-foreground font-sans text-[14px] font-semibold tabular-nums">
-                    {p.price}
+                <div className="text-right">
+                  <p className="text-foreground font-mono text-[13px] font-semibold">
+                    {pair.price}
                   </p>
-                  <p
-                    className={`font-body text-[11px] tabular-nums ${p.up ? 'text-accent' : 'text-[#EF4444]'}`}
-                  >
-                    {p.target}
+                  <p className="font-body text-[11px] text-[#6B7280]">
+                    Target {pair.target} · {pair.conf}%
                   </p>
-                </div>
-
-                {/* Confidence */}
-                <div className="w-[48px] flex-shrink-0 text-right">
-                  <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
-                    {t('confLabel')}
-                  </p>
-                  <p className="text-foreground font-sans text-[13px] font-semibold">{p.conf}%</p>
                 </div>
               </div>
             ))}

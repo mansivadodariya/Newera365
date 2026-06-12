@@ -1,0 +1,30 @@
+{
+  "nodes": [
+    {
+      "id": "images_hero_chart_image",
+      "label": "Hero Chart Image",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/hero-chart.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Black and white close-up photograph of a financial trading chart displayed on a screen. Shows candlestick price bars with a moving average line overlay, grid lines in the background, and shallow depth of field creating a dramatic bokeh effect on the edges. Used as a hero/background image on the website to establish a forex/CFD trading atmosphere.",
+      "purpose": "Hero background image for the NewEra365 forex broker website, conveying financial markets and trading activity",
+      "visual_content": {
+        "chart_type": "candlestick with moving average overlay",
+        "color_scheme": "monochrome black and white",
+        "mood": "professional, high-contrast, dramatic",
+        "subject": "financial price chart on trading screen",
+        "data_source": null,
+        "metric": null,
+        "trend_insight": "Price movement with volatility visible; general downward movement on right side of frame"
+      },
+      "confidence_score": 0.95,
+      "confidence_basis": "INFERRED"
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

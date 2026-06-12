@@ -125,9 +125,9 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                 <Link
                   key={ch.id}
                   href={`/${locale}${ch.action}`}
-                  className="bg-surface shadow-card flex items-center gap-[14px] rounded-[18px] px-[18px] py-[18px] dark:shadow-none"
+                  className="flex items-center gap-[14px] rounded-[18px] bg-[#fafaf9] px-[18px] py-[18px] shadow-[0_2px_8px_rgba(0,0,0,0.05)] dark:bg-[#1a1c22] dark:shadow-none"
                 >
-                  <div className="text-foreground dark:bg-surface-elevated flex h-[44px] w-[44px] flex-shrink-0 items-center justify-center rounded-[14px] bg-[#f2f2f4]">
+                  <div className="flex h-[44px] w-[44px] flex-shrink-0 items-center justify-center rounded-[14px] bg-[#f2f2f4] text-[#111] dark:bg-[#22252e] dark:text-white">
                     {ch.icon}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -146,9 +146,9 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                 <a
                   key={ch.id}
                   href={ch.action}
-                  className="bg-surface shadow-card flex items-center gap-[14px] rounded-[18px] px-[18px] py-[18px] dark:shadow-none"
+                  className="flex items-center gap-[14px] rounded-[18px] bg-[#fafaf9] px-[18px] py-[18px] shadow-[0_2px_8px_rgba(0,0,0,0.05)] dark:bg-[#1a1c22] dark:shadow-none"
                 >
-                  <div className="text-foreground dark:bg-surface-elevated flex h-[44px] w-[44px] flex-shrink-0 items-center justify-center rounded-[14px] bg-[#f2f2f4]">
+                  <div className="flex h-[44px] w-[44px] flex-shrink-0 items-center justify-center rounded-[14px] bg-[#f2f2f4] text-[#111] dark:bg-[#22252e] dark:text-white">
                     {ch.icon}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -245,7 +245,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder={t('fieldNamePlaceholder')}
-                  className="font-body text-foreground bg-surface placeholder:text-muted w-full rounded-[14px] px-4 py-[14px] text-[14px] outline-none"
+                  className="font-body w-full rounded-[14px] bg-[#fafaf9] px-4 py-[14px] text-[14px] text-[#111] placeholder-[#9ca3af] outline-none dark:bg-[#1a1c22] dark:text-white dark:placeholder-white/30"
                 />
               </div>
 
@@ -263,7 +263,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t('fieldEmailPlaceholder')}
-                  className="font-body text-foreground bg-surface placeholder:text-muted w-full rounded-[14px] px-4 py-[14px] text-[14px] outline-none"
+                  className="font-body w-full rounded-[14px] bg-[#fafaf9] px-4 py-[14px] text-[14px] text-[#111] placeholder-[#9ca3af] outline-none dark:bg-[#1a1c22] dark:text-white dark:placeholder-white/30"
                 />
               </div>
 
@@ -281,7 +281,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                       className={`font-body rounded-full px-[14px] py-[8px] text-[12px] font-medium transition-colors ${
                         topic === topicVal
                           ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                          : 'text-foreground dark:bg-surface-elevated bg-[#f2f2f4]'
+                          : 'bg-[#f2f2f4] text-[#111] dark:bg-[#1a1c22] dark:text-white/70'
                       }`}
                     >
                       {topicVal === 'General'
@@ -312,7 +312,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder={t('fieldMessagePlaceholder')}
-                  className="font-body text-foreground bg-surface placeholder:text-muted w-full resize-none rounded-[14px] px-4 py-[14px] text-[14px] outline-none"
+                  className="font-body w-full resize-none rounded-[14px] bg-[#fafaf9] px-4 py-[14px] text-[14px] text-[#111] placeholder-[#9ca3af] outline-none dark:bg-[#1a1c22] dark:text-white dark:placeholder-white/30"
                 />
               </div>
 

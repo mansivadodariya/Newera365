@@ -14,7 +14,7 @@ export function Pulse({ className, style }: { className: string; style?: React.C
 
 // Dark card pulse — for sections with dark backgrounds
 export function DarkPulse({ className }: { className: string }) {
-  return <div className={`animate-pulse rounded-md bg-[#1a1a1a] dark:bg-[#111] ${className}`} />;
+  return <div className={`animate-pulse rounded-md bg-white/10 ${className}`} />;
 }
 
 // Kicker + 2 heading lines + subtitle + 1-2 CTA buttons

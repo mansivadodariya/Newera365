@@ -20,17 +20,6 @@ const PARTNER_TYPES = [
   {
     id: 'ib',
     tag: 'MOST POPULAR',
-    tagClass: 'bg-[rgba(242,242,244,0.08)] text-white',
-    title: 'Introducing Broker',
-    desc: 'Earn up to $8 per lot traded by your referrals. Tiered structure with monthly bonus.',
-    cardClass: 'bg-[#111111]',
-    headColor: 'text-white',
-    descColor: 'text-white/60',
-    statLabelColor: 'text-white/45',
-    statValueColor: 'text-white',
-    statRowBg: 'bg-[#111111]',
-    statGridBg: 'bg-[rgba(255,255,255,0.1)]',
-    ctaClass: 'bg-accent text-white',
     stats: [
       { label: 'UP TO', value: '$8/lot' },
       { label: 'PAYOUTS', value: 'Monthly' },
@@ -40,17 +29,6 @@ const PARTNER_TYPES = [
   {
     id: 'affiliate',
     tag: 'CPA',
-    tagClass: 'bg-accent/10 text-accent',
-    title: 'Affiliate',
-    desc: 'Fixed cost-per-acquisition payouts up to $1,200 per qualified trader. Built for digital marketers.',
-    cardClass: 'bg-surface dark:bg-surface',
-    headColor: 'text-foreground',
-    descColor: 'text-muted',
-    statLabelColor: 'text-muted',
-    statValueColor: 'text-foreground',
-    statRowBg: 'bg-background',
-    statGridBg: 'bg-[rgba(17,17,17,0.08)] dark:bg-[rgba(255,255,255,0.06)]',
-    ctaClass: 'bg-foreground text-background',
     stats: [
       { label: 'UP TO', value: '$1,200' },
       { label: 'COOKIE', value: '90 days' },
@@ -60,17 +38,6 @@ const PARTNER_TYPES = [
   {
     id: 'white-label',
     tag: 'ENTERPRISE',
-    tagClass: 'bg-accent/10 text-accent',
-    title: 'White Label',
-    desc: 'Launch your own brokerage on our infrastructure. Full MT5 stack, KYC, treasury, support.',
-    cardClass: 'bg-surface dark:bg-surface',
-    headColor: 'text-foreground',
-    descColor: 'text-muted',
-    statLabelColor: 'text-muted',
-    statValueColor: 'text-foreground',
-    statRowBg: 'bg-background',
-    statGridBg: 'bg-[rgba(17,17,17,0.08)] dark:bg-[rgba(255,255,255,0.06)]',
-    ctaClass: 'bg-foreground text-background',
     stats: [
       { label: 'SETUP', value: '< 30 days' },
       { label: 'SPREAD MARK-UP', value: 'Custom' },
@@ -92,31 +59,36 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
   const resolvedPartnerTypes = [
     {
       ...PARTNER_TYPES[0],
-      desc: cmsContent?.ibDescription ?? PARTNER_TYPES[0].desc,
+      desc:
+        cmsContent?.ibDescription ??
+        'Earn up to $8 per lot traded by your referrals. Tiered structure with monthly bonus.',
       stats: [
-        {
-          label: PARTNER_TYPES[0].stats[0].label,
-          value: cmsContent?.ibRateDisplay ?? PARTNER_TYPES[0].stats[0].value,
-        },
-        PARTNER_TYPES[0].stats[1],
-        PARTNER_TYPES[0].stats[2],
+        { label: 'UP TO', value: cmsContent?.ibRateDisplay ?? '$8/lot' },
+        { label: 'PAYOUTS', value: 'Monthly' },
+        { label: 'MINIMUM', value: 'None' },
       ],
     },
     {
       ...PARTNER_TYPES[1],
-      desc: cmsContent?.affiliateDescription ?? PARTNER_TYPES[1].desc,
+      desc:
+        cmsContent?.affiliateDescription ??
+        'Fixed cost-per-acquisition payouts up to $1,200 per qualified trader. Built for digital marketers.',
       stats: [
-        {
-          label: PARTNER_TYPES[1].stats[0].label,
-          value: cmsContent?.affiliateCpaMax ?? PARTNER_TYPES[1].stats[0].value,
-        },
-        PARTNER_TYPES[1].stats[1],
-        PARTNER_TYPES[1].stats[2],
+        { label: 'UP TO', value: cmsContent?.affiliateCpaMax ?? '$1,200' },
+        { label: 'COOKIE', value: '90 days' },
+        { label: 'MIN CPA', value: '$50' },
       ],
     },
     {
       ...PARTNER_TYPES[2],
-      desc: cmsContent?.whiteLabelDescription ?? PARTNER_TYPES[2].desc,
+      desc:
+        cmsContent?.whiteLabelDescription ??
+        'Launch your own brokerage on our infrastructure. Full MT5 stack, KYC, treasury, support.',
+      stats: [
+        { label: 'SETUP', value: '< 30 days' },
+        { label: 'SPREAD MARK-UP', value: 'Custom' },
+        { label: 'TECH', value: 'Turnkey' },
+      ],
     },
   ];
 
@@ -142,7 +114,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
               <br />
               <span className="text-accent">{t('heroLine2')}</span>
             </h1>
-            <p className="font-body text-muted mb-4 mt-4 max-w-[320px] text-[14px] leading-[1.6] xl:max-w-[480px] xl:text-[16px]">
+            <p className="font-body mb-4 mt-4 max-w-[320px] text-[14px] leading-[1.6] text-[#6B7280] xl:max-w-[480px] xl:text-[16px] dark:text-[#B8BFCC]">
               {heroSubtitle}
             </p>
 
@@ -229,10 +201,10 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       {/* Three ways to partner */}
       <section
         id="programs"
-        className="rounded-t-[32px] bg-transparent px-5 pb-10 pt-10 xl:pb-16 xl:pt-16"
+        className="rounded-t-[32px] bg-[#FFFFFF] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16 dark:bg-[#07090D]"
       >
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+          <SectionKicker className="[&>span:first-child]:bg-muted mb-4 text-[#6B7280] dark:text-[#B8BFCC]">
             {t('chooseKicker')}
           </SectionKicker>
           <h2 className="text-foreground mb-[10px] font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
@@ -242,22 +214,28 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
             {resolvedPartnerTypes.map((pt) => (
               <div
                 key={pt.id}
-                className={`shadow-card dark:shadow-card-dark flex flex-col gap-[12px] rounded-[22px] p-[22px] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${pt.cardClass}`}
+                className="hover:border-accent/20 dark:hover:border-accent/25 group relative flex flex-col gap-[12px] overflow-hidden rounded-[22px] border border-transparent bg-[#f2f2f2] p-[22px] transition-all duration-300 hover:-translate-y-1 hover:bg-[#07090D] hover:shadow-[0_20px_48px_rgba(0,176,80,0.15)] dark:border-white/[0.06] dark:bg-[#1a1c22] dark:hover:bg-[#07090D]"
               >
+                {/* Green glow — fades in on hover */}
+                <span
+                  className="pointer-events-none absolute -top-[60px] left-[10%] h-[200px] w-[200px] rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-80"
+                  style={{
+                    background:
+                      'radial-gradient(circle, rgba(0,176,80,0.45) 0%, rgba(0,176,80,0.12) 44%, transparent 70%)',
+                  }}
+                  aria-hidden="true"
+                />
+
                 {/* Header */}
                 <div className="flex items-center justify-between gap-2">
-                  <span
-                    className={`font-sans text-[22px] font-semibold tracking-[-0.44px] ${pt.headColor}`}
-                  >
+                  <span className="font-sans text-[22px] font-semibold tracking-[-0.44px] text-[#111] transition-colors duration-300 group-hover:text-white dark:text-white">
                     {pt.id === 'ib'
                       ? t('ibTitle')
                       : pt.id === 'affiliate'
                         ? t('affiliateTitle')
                         : t('wlTitle')}
                   </span>
-                  <span
-                    className={`flex-shrink-0 rounded-full px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px] ${pt.tagClass}`}
-                  >
+                  <span className="bg-accent/10 text-accent group-hover:bg-accent/[0.18] flex-shrink-0 rounded-full px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px] transition-colors duration-300">
                     {pt.id === 'ib'
                       ? t('mostPopular')
                       : pt.id === 'affiliate'
@@ -267,18 +245,18 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                 </div>
 
                 {/* Desc */}
-                <p className={`font-body text-[13px] leading-[1.55] ${pt.descColor}`}>{pt.desc}</p>
+                <p className="font-body text-[13px] leading-[1.55] text-[#6b7280] transition-colors duration-300 group-hover:text-white/60 dark:text-white/60">
+                  {pt.desc}
+                </p>
 
                 {/* Stats */}
-                <div className={`flex gap-px overflow-hidden rounded-[12px] ${pt.statGridBg}`}>
+                <div className="flex gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)] transition-colors duration-300 group-hover:bg-[rgba(255,255,255,0.08)] dark:bg-[rgba(255,255,255,0.06)]">
                   {pt.stats.map((s) => (
                     <div
                       key={s.label}
-                      className={`flex flex-1 flex-col gap-[2px] px-[10px] py-[12px] ${pt.statRowBg}`}
+                      className="flex flex-1 flex-col gap-[2px] bg-[#f2f2f2] px-[10px] py-[12px] transition-colors duration-300 group-hover:bg-[#07090D] dark:bg-[#1a1c22] dark:group-hover:bg-[#07090D]"
                     >
-                      <span
-                        className={`font-mono text-[9px] tracking-[1.08px] ${pt.statLabelColor}`}
-                      >
+                      <span className="font-mono text-[9px] tracking-[1.08px] text-[#9ca3af] transition-colors duration-300 group-hover:text-white/45 dark:text-white/40">
                         {(
                           {
                             'UP TO': t('upTo'),
@@ -292,7 +270,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                           } as Record<string, string>
                         )[s.label] ?? s.label}
                       </span>
-                      <span className={`font-sans text-[14px] font-semibold ${pt.statValueColor}`}>
+                      <span className="font-sans text-[14px] font-semibold text-[#111] transition-colors duration-300 group-hover:text-white dark:text-white">
                         {s.value}
                       </span>
                     </div>
@@ -302,7 +280,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                 {/* CTA */}
                 <Link
                   href={`/${locale}/register?type=partner&program=${pt.id}`}
-                  className={`font-body mt-1 flex items-center justify-center gap-2 rounded-full px-5 py-[14px] text-[14px] font-medium transition-opacity hover:opacity-80 ${pt.ctaClass}`}
+                  className="font-body group-hover:bg-accent relative mt-1 flex items-center justify-center gap-2 rounded-full bg-[#111] px-5 py-[14px] text-[14px] font-medium text-white transition-all duration-200 hover:opacity-100 group-hover:shadow-[0_6px_20px_rgba(0,176,80,0.4)] dark:bg-white/10"
                 >
                   {t('applyBtn')}
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">

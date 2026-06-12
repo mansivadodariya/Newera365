@@ -1,0 +1,90 @@
+{
+  "nodes": [
+    {
+      "id": "images_market_crypto_image",
+      "label": "Market Crypto Hero Image",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-crypto.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "3D rendered promotional image showing five cryptocurrency coin tokens arranged in a row against a dark background: Solana (black), Ethereum (teal/blue), Bitcoin (orange, center/largest), Binance Coin (yellow), and Tether (green). The coins have reflective surfaces beneath them. Used as a hero/category image for the crypto markets section of the NewEra365 forex/CFD broker website.",
+      "confidence_score": 1.0,
+      "confidence_type": "EXTRACTED"
+    },
+    {
+      "id": "images_market_crypto_bitcoin",
+      "label": "Bitcoin (BTC) Coin Token",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-crypto.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Orange 3D coin with Bitcoin 'B' symbol, center and largest coin in the image.",
+      "confidence_score": 1.0,
+      "confidence_type": "EXTRACTED"
+    },
+    {
+      "id": "images_market_crypto_ethereum",
+      "label": "Ethereum (ETH) Coin Token",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-crypto.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Teal/blue 3D coin with Ethereum diamond logo.",
+      "confidence_score": 1.0,
+      "confidence_type": "EXTRACTED"
+    },
+    {
+      "id": "images_market_crypto_solana",
+      "label": "Solana (SOL) Coin Token",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-crypto.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Black 3D coin with Solana horizontal lines logo, leftmost coin.",
+      "confidence_score": 1.0,
+      "confidence_type": "EXTRACTED"
+    },
+    {
+      "id": "images_market_crypto_bnb",
+      "label": "Binance Coin (BNB) Token",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-crypto.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Yellow 3D coin with Binance diamond/rhombus logo.",
+      "confidence_score": 1.0,
+      "confidence_type": "EXTRACTED"
+    },
+    {
+      "id": "images_market_crypto_tether",
+      "label": "Tether (USDT) Coin Token",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-crypto.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Green 3D coin with Tether 'T' logo, rightmost coin.",
+      "confidence_score": 1.0,
+      "confidence_type": "EXTRACTED"
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

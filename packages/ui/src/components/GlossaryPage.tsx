@@ -1,7 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { RichText } from './RichText';
 import type { SlateNode } from './RichText';
@@ -40,6 +41,7 @@ interface GlossaryPageProps {
 }
 
 export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
+  const locale = useLocale();
   const t = useTranslations('glossary');
   const [search, setSearch] = useState('');
   const [activeLetter, setActiveLetter] = useState<string | null>(null);
@@ -127,7 +129,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                 setSearch(e.target.value);
                 setActiveLetter(null);
               }}
-              className="border-border font-body text-foreground placeholder-muted focus:border-accent bg-surface w-full rounded-[14px] px-4 py-[14px] text-[14px] outline-none"
+              className="font-body focus:ring-accent/50 w-full rounded-[14px] bg-[#fafaf9] px-4 py-[14px] text-[14px] text-[#111] placeholder-[#9ca3af] outline-none focus:ring-1 dark:bg-[#1a1c22] dark:text-white dark:placeholder-white/30"
             />
             {search && (
               <button
@@ -160,7 +162,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
               className={`font-body flex-shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
                 !activeCategory
                   ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                  : 'hover:text-foreground dark:bg-surface dark:text-muted bg-[#f0f0f0] text-[#6b7280]'
+                  : 'bg-[#f0f0f0] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e] dark:hover:text-white/80'
               }`}
             >
               {t('filterAll')}
@@ -223,48 +225,82 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
           {filtered.length === 0 ? (
             <p className="font-body text-muted py-8 text-center text-[14px]">{t('noResults')}</p>
           ) : (
-            <div className="flex flex-col xl:grid xl:grid-cols-2 xl:gap-x-10">
-              {filtered.map((term, i) => {
-                const prevTerm = i > 0 ? filtered[i - 1] : undefined;
-                const showLetter =
-                  i === 0 || term.term?.[0]?.toUpperCase() !== prevTerm?.term?.[0]?.toUpperCase();
-                return (
-                  <div key={term.term}>
-                    {showLetter && (
-                      <div className="bg-background sticky top-16 z-10 py-2">
-                        <span className="text-accent font-sans text-[11px] font-semibold uppercase tracking-[0.1em]">
-                          {term.term?.[0]?.toUpperCase() ?? ''}
-                        </span>
-                      </div>
-                    )}
-                    <div
-                      className={`py-4 ${i < filtered.length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
-                    >
-                      <div className="mb-1.5 flex items-center justify-between gap-2">
-                        <span className="text-foreground font-sans text-[15px] font-semibold">
-                          {term.term}
-                        </span>
-                        <span
-                          className={`font-body rounded-full px-2 py-[2px] text-[8px] font-semibold uppercase tracking-[0.1em] ${CATEGORY_COLORS[term.category] ?? 'bg-gray-100 text-gray-600'}`}
-                        >
-                          {term.category}
-                        </span>
-                      </div>
-                      {term.body && term.body.length > 0 ? (
-                        <RichText
-                          content={term.body}
-                          className="font-body text-muted text-[13px] leading-[1.6]"
-                        />
-                      ) : (
-                        <p className="font-body text-muted text-[13px] leading-[1.6]">
-                          {term.definition}
-                        </p>
+            <>
+              {/* Mobile: flat divider list */}
+              <div className="flex flex-col xl:hidden">
+                {filtered.map((term, i) => {
+                  const prevTerm = i > 0 ? filtered[i - 1] : undefined;
+                  const showLetter =
+                    i === 0 || term.term?.[0]?.toUpperCase() !== prevTerm?.term?.[0]?.toUpperCase();
+                  return (
+                    <div key={`m-${term.term}`}>
+                      {showLetter && (
+                        <div className="bg-background sticky top-16 z-10 py-2">
+                          <span className="text-accent font-sans text-[11px] font-semibold uppercase tracking-[0.1em]">
+                            {term.term?.[0]?.toUpperCase() ?? ''}
+                          </span>
+                        </div>
                       )}
+                      <div
+                        className={`py-4 ${i < filtered.length - 1 ? 'border-b border-[#e5e7eb] dark:border-white/[0.07]' : ''}`}
+                      >
+                        <div className="mb-1.5 flex items-center justify-between gap-2">
+                          <span className="text-foreground font-sans text-[15px] font-semibold">
+                            {term.term}
+                          </span>
+                          <span
+                            className={`font-body rounded-full px-2 py-[2px] text-[8px] font-semibold uppercase tracking-[0.1em] ${CATEGORY_COLORS[term.category] ?? 'bg-gray-100 text-gray-600'}`}
+                          >
+                            {term.category}
+                          </span>
+                        </div>
+                        {term.body && term.body.length > 0 ? (
+                          <RichText
+                            content={term.body}
+                            className="font-body text-muted text-[13px] leading-[1.6]"
+                          />
+                        ) : (
+                          <p className="font-body text-muted text-[13px] leading-[1.6]">
+                            {term.definition}
+                          </p>
+                        )}
+                      </div>
                     </div>
+                  );
+                })}
+              </div>
+
+              {/* Desktop: 3-column card grid */}
+              <div className="hidden xl:grid xl:grid-cols-3 xl:gap-[14px]">
+                {filtered.map((term) => (
+                  <div
+                    key={`d-${term.term}`}
+                    className="hover:border-accent/25 dark:hover:border-accent/20 group flex flex-col gap-2 rounded-[18px] border border-[#e9e9e6] bg-[#f7f7f5] p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:border-white/[0.06] dark:bg-[#16181d] dark:hover:bg-[#1c1f28]"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="text-foreground font-sans text-[15px] font-semibold leading-[1.2]">
+                        {term.term}
+                      </span>
+                      <span
+                        className={`font-body mt-0.5 flex-shrink-0 rounded-full px-2 py-[2px] text-[8px] font-semibold uppercase tracking-[0.1em] ${CATEGORY_COLORS[term.category] ?? 'bg-gray-100 text-gray-600'}`}
+                      >
+                        {term.category}
+                      </span>
+                    </div>
+                    {term.body && term.body.length > 0 ? (
+                      <RichText
+                        content={term.body}
+                        className="font-body text-muted text-[12px] leading-[1.65]"
+                      />
+                    ) : (
+                      <p className="font-body text-muted text-[12px] leading-[1.65]">
+                        {term.definition}
+                      </p>
+                    )}
                   </div>
-                );
-              })}
-            </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </section>
@@ -279,8 +315,8 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
             {t('ctaHeading')}
           </h2>
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
-          <a
-            href="/guides"
+          <Link
+            href={`/${locale}/guides`}
             className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[15px] font-medium text-white transition-colors"
           >
             {t('ctaBtn')}
@@ -293,7 +329,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                 strokeLinejoin="round"
               />
             </svg>
-          </a>
+          </Link>
         </div>
       </section>
     </>

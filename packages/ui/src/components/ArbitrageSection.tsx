@@ -37,7 +37,9 @@ export function ArbitrageSection() {
         <div className="h-[10px]" />
 
         {/* Description */}
-        <p className="font-body text-muted text-[14px] leading-[22px]">{t('arbDesc')}</p>
+        <p className="font-body text-[14px] leading-[22px] text-[#6B7280] dark:text-[#B8BFCC]">
+          {t('arbDesc')}
+        </p>
 
         <div className="h-[20px]" />
 
@@ -52,7 +54,9 @@ export function ArbitrageSection() {
                 <p className="text-foreground font-body text-[15px] font-semibold leading-tight">
                   {t(card.labelKey)}
                 </p>
-                <p className="font-body text-muted text-[13px] leading-[19px]">{t(card.descKey)}</p>
+                <p className="font-body text-[13px] leading-[19px] text-[#6B7280] dark:text-[#B8BFCC]">
+                  {t(card.descKey)}
+                </p>
               </div>
               {i < CARDS.length - 1 && (
                 <div className="h-px bg-[#d9dbe0] xl:hidden dark:bg-[#2a2a2a]" />

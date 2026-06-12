@@ -180,9 +180,11 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
                 {/* Connector */}
                 <div className="flex flex-col items-center">
                   <div
-                    className={`mt-1 h-[22px] w-[22px] flex-shrink-0 rounded-full border-2 ${i === MILESTONES.length - 1 ? 'border-accent bg-accent' : 'border-border bg-background'}`}
+                    className={`mt-1 h-[22px] w-[22px] flex-shrink-0 rounded-full border-2 ${i === MILESTONES.length - 1 ? 'border-accent bg-accent' : 'border-[#e5e7eb] bg-white dark:border-white/[0.12] dark:bg-[#111316]'}`}
                   />
-                  {i < MILESTONES.length - 1 && <div className="bg-border mt-1 w-px flex-1" />}
+                  {i < MILESTONES.length - 1 && (
+                    <div className="mt-1 w-px flex-1 bg-[#e5e7eb] dark:bg-white/[0.07]" />
+                  )}
                 </div>
                 {/* Content */}
                 <div className="flex-1">
@@ -216,7 +218,7 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
             {TEAM.map((member, i) => (
               <div
                 key={`team-${i}-${member.name}`}
-                className="bg-background shadow-card flex h-[145px] flex-col gap-[14px] rounded-[18px] p-[18px] dark:shadow-none"
+                className="flex h-[145px] flex-col gap-[14px] rounded-[18px] bg-white p-[18px] shadow-[0_2px_8px_rgba(0,0,0,0.06)] dark:bg-[#1a1c22] dark:shadow-none"
               >
                 {/* Avatar — dark gradient per Figma */}
                 <div
@@ -253,9 +255,9 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
               <Link
                 key={link.label}
                 href={`/${locale}${link.href}`}
-                className="bg-surface shadow-card dark:hover:bg-surface-elevated group flex items-center gap-[14px] rounded-[18px] px-[18px] py-[18px] transition-colors hover:bg-[#f0f0ee] dark:shadow-none"
+                className="group flex items-center gap-[14px] rounded-[18px] bg-[#fafaf9] px-[18px] py-[18px] shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#f0f0ee] hover:shadow-[0_6px_20px_rgba(0,176,80,0.08)] dark:bg-[#1a1c22] dark:shadow-none dark:hover:bg-[#22252e]"
               >
-                <div className="text-foreground dark:bg-surface-elevated flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[12px] bg-[#f2f2f4]">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[12px] bg-[#f2f2f4] text-[#111] dark:bg-[#22252e] dark:text-white">
                   {link.icon}
                 </div>
                 <div className="min-w-0 flex-1">

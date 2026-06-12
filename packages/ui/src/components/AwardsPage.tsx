@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 export interface AwardCardItem {
@@ -27,11 +28,26 @@ const CARD_GRADIENTS = [
   'from-[#0a1a1a] to-[#060f0f]',
 ];
 
+const YEAR_FILTERS = ['ALL', '2026', '2025', '2024', '2023'] as const;
+const CAT_FILTERS = ['ALL', 'Execution', 'Service', 'Innovation'] as const;
+type YearFilter = (typeof YEAR_FILTERS)[number];
+type CatFilter = (typeof CAT_FILTERS)[number];
+
 export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
   const locale = useLocale();
   const t = useTranslations('awards');
+  const [yearFilter, setYearFilter] = useState<YearFilter>('ALL');
+  const [catFilter, setCatFilter] = useState<CatFilter>('ALL');
 
-  const items = cmsAwards ?? [];
+  const allItems = cmsAwards ?? [];
+  const items = allItems.filter((a) => {
+    const yearOk = yearFilter === 'ALL' || a.year === yearFilter;
+    const catOk =
+      catFilter === 'ALL' ||
+      (a.description ?? '').toLowerCase().includes(catFilter.toLowerCase()) ||
+      (a.title ?? '').toLowerCase().includes(catFilter.toLowerCase());
+    return yearOk && catOk;
+  });
 
   return (
     <>
@@ -52,6 +68,44 @@ export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
         </div>
       </section>
 
+      {/* Filter tabs */}
+      <section className="bg-transparent px-5 pb-6">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          {/* Year filter */}
+          <div className="mb-3 flex flex-wrap gap-2">
+            {YEAR_FILTERS.map((y) => (
+              <button
+                key={y}
+                onClick={() => setYearFilter(y)}
+                className={`font-body flex-shrink-0 rounded-full px-3 py-[7px] text-[12px] font-medium transition-colors ${
+                  yearFilter === y
+                    ? 'bg-[#111] text-white dark:bg-white dark:text-[#111]'
+                    : 'bg-[#f2f2f4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e]'
+                }`}
+              >
+                {y === 'ALL' ? t('filterAll') : y}
+              </button>
+            ))}
+          </div>
+          {/* Category filter */}
+          <div className="flex flex-wrap gap-2">
+            {CAT_FILTERS.map((c) => (
+              <button
+                key={c}
+                onClick={() => setCatFilter(c)}
+                className={`font-body flex-shrink-0 rounded-full px-3 py-[7px] text-[12px] font-medium transition-colors ${
+                  catFilter === c
+                    ? 'bg-accent text-white'
+                    : 'bg-accent/10 text-accent hover:bg-accent/15'
+                }`}
+              >
+                {c === 'ALL' ? 'All Categories' : c}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Award cards */}
       <section className="bg-transparent px-5 pb-10">
         <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl xl:grid xl:max-w-[1200px] xl:grid-cols-2">
@@ -65,7 +119,7 @@ export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
             return (
               <div
                 key={award.id}
-                className={`flex flex-col overflow-hidden rounded-[22px] bg-gradient-to-br ${gradient} shadow-card dark:shadow-none`}
+                className={`group flex flex-col overflow-hidden rounded-[22px] bg-gradient-to-br ${gradient} shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,176,80,0.15)] dark:shadow-none`}
               >
                 {/* Image / illustration area */}
                 {award.imageUrl ? (
@@ -133,7 +187,7 @@ export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
                       href={award.externalUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-body mt-4 flex items-center gap-1.5 text-[12px] text-white/40 transition-colors hover:text-white/70"
+                      className="font-body hover:text-accent mt-4 flex items-center gap-1.5 text-[12px] text-white/50 transition-colors"
                     >
                       View announcement
                       <svg

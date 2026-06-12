@@ -126,7 +126,7 @@ const FEATURED = [
     title: 'Risk management essentials',
     desc: 'Four frameworks that protect every account from outsized drawdowns.',
     readTime: '8 min',
-    href: '/guides/risk-management',
+    href: '/guides/risk-management-essentials',
   },
   {
     id: 'candle',
@@ -135,15 +135,8 @@ const FEATURED = [
     title: 'Reading a candlestick chart',
     desc: 'From opening price to daily wick — everything you need to parse a chart.',
     readTime: '5 min',
-    href: '/guides/candlestick-chart',
+    href: '/guides/reading-candlestick-charts',
   },
-] as const;
-
-const PINNED_GUIDES = [
-  { title: 'What is leverage, and how does it work?', href: '/guides/leverage-and-margin' },
-  { title: 'How to size a position correctly', href: '/guides/position-sizing' },
-  { title: 'The difference between a stop-loss and stop-out', href: '/guides/stop-loss' },
-  { title: "Beginner's guide to reading economic data", href: '/guides/economic-data' },
 ] as const;
 
 export interface CmsEducationItem {
@@ -173,8 +166,9 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
       })
     : null;
 
-  // Derive featured articles and pinned guides from CMS guide content
-  const cmsGuides = cmsContent ? cmsContent.filter((c) => c.contentType === 'guide') : [];
+  const cmsGuides = cmsContent
+    ? cmsContent.filter((c) => c.contentType === 'guide' && /^[a-z0-9-]+$/.test(c.slug))
+    : [];
   const FEATURED_TAGS = [
     { tag: 'NEW', tagClass: 'bg-accent/10 text-accent' },
     { tag: 'POPULAR', tagClass: 'bg-[#6B7280]/10 text-[#6B7280]' },
@@ -191,10 +185,6 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
           href: `/guides/${g.slug}`,
         }))
       : null;
-  const cmsPinned =
-    cmsGuides.length > 3
-      ? cmsGuides.slice(3, 7).map((g) => ({ title: g.title, href: `/guides/${g.slug}` }))
-      : null;
 
   function handleSubscribe(e: React.FormEvent) {
     e.preventDefault();
@@ -205,17 +195,19 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
-            {t('heroLine1')}
-            <br />
-            {t('heroLine2')}
-            <br />
-            <span className="text-accent">{t('heroAccent')}</span>
-          </h1>
-          <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
-            {t('heroDesc')}
-          </p>
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:max-w-[1200px] xl:items-end xl:justify-between">
+          <div>
+            <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px] xl:text-[56px] xl:tracking-[-1.68px]">
+              {t('heroLine1')}
+              <br />
+              {t('heroLine2')}
+              <br />
+              <span className="text-accent">{t('heroAccent')}</span>
+            </h1>
+            <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55] xl:max-w-[400px] xl:text-[15px]">
+              {t('heroDesc')}
+            </p>
+          </div>
         </div>
       </section>
 
@@ -225,28 +217,28 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('browseKicker')}
           </SectionKicker>
-          <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-3">
+          <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-3 xl:gap-[14px]">
             {(cmsCounts ?? CATEGORIES).map((cat) => (
               <Link
                 key={cat.id}
                 href={`/${locale}${cat.href}`}
-                className="bg-surface dark:hover:bg-surface-elevated group flex flex-col gap-3 rounded-[18px] p-4 transition-colors hover:bg-[#f0f0ee]"
+                className="hover:border-accent/25 dark:hover:border-accent/20 group flex flex-col gap-3 rounded-[18px] border border-[#e9e9e6] bg-[#f7f7f5] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] xl:p-5 dark:border-white/[0.06] dark:bg-[#16181d] dark:hover:bg-[#1c1f28]"
               >
                 <div className="flex items-start justify-between">
-                  <div className="text-accent bg-accent/10 flex h-9 w-9 items-center justify-center rounded-[11px]">
+                  <div className="bg-accent/10 text-accent group-hover:bg-accent/15 flex h-10 w-10 items-center justify-center rounded-[12px] transition-colors">
                     {CATEGORY_ICONS[cat.id]}
                   </div>
-                  <span className="font-body text-accent bg-accent/10 rounded-full px-2 py-[3px] text-[8px] font-semibold uppercase tracking-[0.1em]">
+                  <span className="font-body bg-accent/10 text-accent rounded-full px-2 py-[3px] text-[8px] font-semibold uppercase tracking-[0.1em]">
                     {cat.count}
                   </span>
                 </div>
                 <div>
-                  <p className="text-foreground mb-1 font-sans text-[14px] font-semibold">
+                  <p className="mb-1 font-sans text-[14px] font-semibold text-[#111] xl:text-[15px] dark:text-white">
                     {t(
                       `type${cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}Title` as 'typeGuidesTitle',
                     )}
                   </p>
-                  <p className="font-body text-muted text-[11px] leading-[1.5]">
+                  <p className="font-body text-[11px] leading-[1.5] text-[#6b7280] xl:text-[12px] dark:text-white/50">
                     {t(
                       `type${cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}Desc` as 'typeGuidesDesc',
                     )}
@@ -259,76 +251,53 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
       </section>
 
       {/* Featured this week */}
-      <section className="bg-surface px-5 pb-10 pt-8">
+      <section className="bg-transparent px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('featuredKicker')}
           </SectionKicker>
-          <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
-            {(cmsFeatured ?? FEATURED).map((article) => (
+          <div className="flex flex-col divide-y divide-[#e9e9e6] dark:divide-white/[0.06]">
+            {(cmsFeatured ?? FEATURED).map((article, idx) => (
               <Link
                 key={article.id}
                 href={`/${locale}${article.href}`}
-                className="group flex flex-col gap-2 py-5 first:pt-0 last:pb-0 xl:px-6 xl:py-0 xl:first:pl-0 xl:last:pr-0"
+                className="group flex items-center gap-4 py-5 first:pt-0 last:pb-0 xl:py-6"
               >
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${article.tagClass}`}
-                  >
-                    {article.tag}
+                {/* Numbered or colored indicator */}
+                <div className="hidden h-[64px] w-[64px] flex-shrink-0 overflow-hidden rounded-[12px] bg-gradient-to-br from-[#0d2b1a] to-[#111] xl:flex xl:items-center xl:justify-center">
+                  <span className="text-accent/60 font-mono text-[22px] font-bold">
+                    {String(idx + 1).padStart(2, '0')}
                   </span>
                 </div>
-                <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] transition-colors">
-                  {article.title}
-                </p>
-                <div className="flex items-end justify-between gap-4">
-                  <p className="font-body text-muted flex-1 text-[12px] leading-[1.55]">
+
+                {/* Content */}
+                <div className="flex flex-1 flex-col gap-1.5">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${article.tagClass}`}
+                    >
+                      {article.tag}
+                    </span>
+                    {'readTime' in article && (
+                      <span className="font-mono text-[9px] text-[#9ca3af]">
+                        · {(article as (typeof FEATURED)[0]).readTime} read
+                      </span>
+                    )}
+                  </div>
+                  <p className="group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] text-[#111] transition-colors xl:text-[16px] dark:text-white">
+                    {article.title}
+                  </p>
+                  <p className="font-body line-clamp-2 text-[12px] leading-[1.55] text-[#6b7280] xl:text-[13px] dark:text-white/50">
                     {article.desc}
                   </p>
-                  <svg
-                    width="7"
-                    height="12"
-                    viewBox="0 0 7 12"
-                    fill="none"
-                    className="text-muted group-hover:text-accent mb-0.5 flex-shrink-0 transition-colors"
-                  >
-                    <path
-                      d="M1 1L6 6L1 11"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
                 </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Pinned guides */}
-      <section className="px-5 pb-10 pt-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
-            {t('pinnedKicker')}
-          </SectionKicker>
-          <div className="flex flex-col">
-            {(cmsPinned ?? PINNED_GUIDES).map((guide, i) => (
-              <Link
-                key={guide.href}
-                href={`/${locale}${guide.href}`}
-                className={`group flex items-center justify-between py-4 ${i < (cmsPinned ?? PINNED_GUIDES).length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
-              >
-                <span className="text-foreground font-body group-hover:text-accent pr-4 text-[14px] font-medium transition-colors">
-                  {guide.title}
-                </span>
                 <svg
                   width="7"
                   height="12"
                   viewBox="0 0 7 12"
                   fill="none"
-                  className="text-muted group-hover:text-accent flex-shrink-0 transition-colors"
+                  className="group-hover:text-accent mb-0.5 flex-shrink-0 text-[#9ca3af] transition-colors dark:text-white/30"
                 >
                   <path
                     d="M1 1L6 6L1 11"

@@ -145,7 +145,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
             <p className="text-accent">{t('heroAccent')}</p>
           </div>
           <div className="h-[16px]" />
-          <p className="font-body max-w-[320px] text-[14px] leading-[1.55] text-[#6b7280]">
+          <p className="font-body max-w-[320px] text-[14px] leading-[1.55] text-[#6B7280] xl:max-w-[720px] dark:text-[#B8BFCC]">
             {t('heroSubtitle')}
           </p>
         </div>

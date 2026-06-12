@@ -1,0 +1,38 @@
+{
+  "nodes": [
+    {
+      "id": "public_logo_light_brand_logo",
+      "label": "NewEra Logo (Light Theme)",
+      "file_type": "image",
+      "source_file": "apps/web/public/logo-light.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "node_type": "ASSET",
+      "description": "The NewEra365 brand logo for use on light backgrounds. Displays 'NEWERA' in bold black uppercase lettering with a stylized green-and-black candlestick chart icon integrated into the letter 'N', representing the forex/CFD trading brand identity. White/transparent background. Used as the site header logo in light-mode or on white/light-colored surfaces.",
+      "confidence_score": 1.0,
+      "confidence_type": "EXTRACTED",
+      "tags": ["logo", "brand", "light-theme", "forex", "trading", "candlestick", "header"]
+    },
+    {
+      "id": "public_logo_light_candlestick_icon",
+      "label": "Candlestick Chart Icon (Logo Emblem)",
+      "file_type": "image",
+      "source_file": "apps/web/public/logo-light.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "node_type": "VISUAL_ELEMENT",
+      "description": "Small candlestick chart graphic embedded within the 'N' of the NEWERA wordmark. Contains green and black/dark candles, symbolising financial markets and trading. This is the brand's logomark/emblem component.",
+      "confidence_score": 0.95,
+      "confidence_type": "INFERRED",
+      "tags": ["icon", "emblem", "candlestick", "trading", "brand"]
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

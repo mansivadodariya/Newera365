@@ -25,6 +25,7 @@ const MARKETS: Record<
   Tab,
   {
     symbol: string;
+    tvSymbol: string;
     name: string;
     price: string;
     change: string;
@@ -37,6 +38,7 @@ const MARKETS: Record<
   INDICES: [
     {
       symbol: 'SPXUSD',
+      tvSymbol: 'CAPITALCOM:US500',
       name: 'S&P 500',
       price: '5,301.4',
       change: '-12.50',
@@ -47,6 +49,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'NSXUSD',
+      tvSymbol: 'NASDAQ:NDX',
       name: 'Nasdaq 100',
       price: '18,742.3',
       change: '+126.4',
@@ -57,6 +60,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'DJI',
+      tvSymbol: 'CAPITALCOM:US30',
       name: 'Dow 30',
       price: '39,148.1',
       change: '-46.90',
@@ -67,6 +71,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'NKY',
+      tvSymbol: 'TVC:NI225',
       name: 'Nikkei 225',
       price: '38,484.14',
       change: '+324.20',
@@ -77,6 +82,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'DEU40',
+      tvSymbol: 'CAPITALCOM:DE40',
       name: 'DAX Index',
       price: '18,464.0',
       change: '+138.4',
@@ -87,6 +93,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'UKGBP',
+      tvSymbol: 'CAPITALCOM:UK100',
       name: 'FTSE 100',
       price: '8,246.3',
       change: '+21.40',
@@ -99,6 +106,7 @@ const MARKETS: Record<
   FUTURES: [
     {
       symbol: 'CL1!',
+      tvSymbol: 'NYMEX:CL1!',
       name: 'WTI Crude',
       price: '79.42',
       change: '-0.58',
@@ -109,6 +117,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'NG1!',
+      tvSymbol: 'NYMEX:NG1!',
       name: 'Natural Gas',
       price: '2.18',
       change: '+0.04',
@@ -119,6 +128,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'GC1!',
+      tvSymbol: 'COMEX:GC1!',
       name: 'Gold Futures',
       price: '2,463.10',
       change: '+10.30',
@@ -129,6 +139,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'SI1!',
+      tvSymbol: 'COMEX:SI1!',
       name: 'Silver Futures',
       price: '28.82',
       change: '+0.34',
@@ -139,6 +150,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'HG1!',
+      tvSymbol: 'COMEX:HG1!',
       name: 'Copper',
       price: '4.61',
       change: '-0.03',
@@ -151,6 +163,7 @@ const MARKETS: Record<
   BONDS: [
     {
       symbol: 'US10Y',
+      tvSymbol: 'TVC:US10Y',
       name: 'US 10-Year',
       price: '4.474',
       change: '-0.012',
@@ -161,6 +174,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'US2Y',
+      tvSymbol: 'TVC:US02Y',
       name: 'US 2-Year',
       price: '4.912',
       change: '-0.008',
@@ -171,6 +185,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'UK10Y',
+      tvSymbol: 'TVC:GB10Y',
       name: 'UK Gilt 10Y',
       price: '4.186',
       change: '+0.006',
@@ -181,6 +196,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'DE10Y',
+      tvSymbol: 'TVC:DE10Y',
       name: 'Bund 10Y',
       price: '2.614',
       change: '+0.010',
@@ -191,6 +207,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'JP10Y',
+      tvSymbol: 'TVC:JP10Y',
       name: 'JGB 10Y',
       price: '1.062',
       change: '-0.004',
@@ -203,6 +220,7 @@ const MARKETS: Record<
   FOREX: [
     {
       symbol: 'EURUSD',
+      tvSymbol: 'OANDA:EURUSD',
       name: 'Euro / USD',
       price: '1.0842',
       change: '+0.0034',
@@ -213,6 +231,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'GBPUSD',
+      tvSymbol: 'OANDA:GBPUSD',
       name: 'Cable',
       price: '1.2691',
       change: '+0.0021',
@@ -223,6 +242,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'USDJPY',
+      tvSymbol: 'OANDA:USDJPY',
       name: 'Dollar Yen',
       price: '156.84',
       change: '-0.32',
@@ -233,6 +253,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'XAUUSD',
+      tvSymbol: 'OANDA:XAUUSD',
       name: 'Gold / USD',
       price: '2,206.48',
       change: '+8.20',
@@ -243,6 +264,7 @@ const MARKETS: Record<
     },
     {
       symbol: 'GBPJPY',
+      tvSymbol: 'OANDA:GBPJPY',
       name: 'Cable Yen',
       price: '198.12',
       change: '-0.48',
@@ -254,11 +276,20 @@ const MARKETS: Record<
   ],
 };
 
+type Period = '1D' | '1M' | '3M' | '1Y' | '5Y' | 'ALL';
+const PERIODS: Period[] = ['1D', '1M', '3M', '1Y', '5Y', 'ALL'];
+const PERIOD_TO_RANGE: Record<Period, string> = {
+  '1D': '1D',
+  '1M': '1M',
+  '3M': '3M',
+  '1Y': '12M',
+  '5Y': '60M',
+  ALL: 'ALL',
+};
+
 export function LiveWatchlistPage() {
   const t = useTranslations('watchlist');
   const [tab, setTab] = useState<Tab>('INDICES');
-  const markets = MARKETS[tab];
-  const chartSymbol = TAB_SYMBOLS[tab];
 
   return (
     <>
@@ -279,94 +310,70 @@ export function LiveWatchlistPage() {
         </div>
       </section>
 
-      {/* Tab filter */}
-      <section className="px-5 pb-4">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
-            {TABS.map((tabItem) => (
-              <button
-                key={tabItem.id}
-                onClick={() => setTab(tabItem.id)}
-                className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
-                  tab === tabItem.id
-                    ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
-                }`}
-              >
-                {tabItem.id === 'INDICES'
-                  ? t('tabIndices')
-                  : tabItem.id === 'FUTURES'
-                    ? t('tabFutures')
-                    : tabItem.id === 'BONDS'
-                      ? t('tabBonds')
-                      : t('tabForex')}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TradingView mini chart — matches Figma watchlist widget */}
-      <section className="px-5 pb-4">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="overflow-hidden rounded-[22px]" style={{ height: 220 }}>
-            <TradingViewWidget
-              key={chartSymbol}
-              type="mini-chart"
-              symbol={chartSymbol}
-              theme="dark"
-              config={{ chartOnly: false, width: '100%', height: 220, locale: 'en' }}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Market list — dark card */}
+      {/* Unified dark watchlist widget */}
       <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div
-            className="overflow-hidden rounded-[22px] bg-[#111111]"
-            style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.10)' }}
-          >
-            {/* Table header */}
-            <div className="grid grid-cols-[auto_1fr_auto_auto] gap-3 border-b border-white/[0.06] px-4 py-3">
-              <span className="w-8" />
-              <span className="font-body text-[10px] uppercase tracking-[0.1em] text-white/30">
-                {t('colSymbol')}
-              </span>
-              <span className="font-body text-right text-[10px] uppercase tracking-[0.1em] text-white/30">
-                {t('colPrice')}
-              </span>
-              <span className="font-body w-16 text-right text-[10px] uppercase tracking-[0.1em] text-white/30">
-                {t('colChange')}
-              </span>
-            </div>
-            {/* Rows */}
-            <div className="flex flex-col divide-y divide-white/[0.06]">
-              {markets.map((m) => (
-                <div
-                  key={m.symbol}
-                  className="grid grid-cols-[auto_1fr_auto_auto] items-center gap-3 px-4 py-[12px]"
+          <div className="overflow-hidden rounded-[22px] bg-[#0d1117] xl:rounded-[28px]">
+            {/* Tabs */}
+            <div className="scrollbar-hide flex gap-1 overflow-x-auto border-b border-white/[0.06] px-4 pt-3">
+              {TABS.map((tabItem) => (
+                <button
+                  key={tabItem.id}
+                  onClick={() => setTab(tabItem.id)}
+                  className={`flex-shrink-0 rounded-t-[8px] px-4 py-[10px] text-[13px] font-medium transition-colors ${
+                    tab === tabItem.id
+                      ? 'border-accent border-b-2 font-semibold text-white'
+                      : 'text-[#6b7280] hover:text-[#adb5c2]'
+                  }`}
                 >
-                  {/* Colored badge icon */}
-                  <div
-                    className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[8px] text-white"
-                    style={{ backgroundColor: m.badgeColor }}
-                  >
-                    <span className="font-sans text-[9px] font-bold leading-none">{m.badge}</span>
-                  </div>
-                  <div>
-                    <p className="font-sans text-[13px] font-semibold text-white">{m.symbol}</p>
-                    <p className="font-body text-[11px] text-white/40">{m.name}</p>
-                  </div>
-                  <p className="font-body text-[13px] tabular-nums text-white">{m.price}</p>
-                  <p
-                    className={`font-body w-16 text-right text-[12px] font-semibold tabular-nums ${m.up ? 'text-accent' : 'text-[#EF4444]'}`}
-                  >
-                    {m.pct}
-                  </p>
-                </div>
+                  {tabItem.id === 'INDICES'
+                    ? t('tabIndices')
+                    : tabItem.id === 'FUTURES'
+                      ? t('tabFutures')
+                      : tabItem.id === 'BONDS'
+                        ? t('tabBonds')
+                        : t('tabForex')}
+                </button>
               ))}
+            </div>
+
+            {/* Live market rows + inline chart via TradingView market-overview */}
+            <TradingViewWidget
+              key={tab}
+              type="market-overview"
+              theme="dark"
+              width="100%"
+              height={580}
+              config={{
+                colorTheme: 'dark',
+                dateRange: '12M',
+                showChart: true,
+                locale: 'en',
+                largeChartUrl: '',
+                isTransparent: true,
+                showSymbolLogo: true,
+                showFloatingTooltip: false,
+                plotLineColorGrowing: '#1AD966',
+                plotLineColorFalling: '#EF4444',
+                gridLineColor: 'rgba(255,255,255,0.04)',
+                scaleFontColor: 'rgba(255,255,255,0.3)',
+                belowLineFillColorGrowing: 'rgba(26,217,102,0.05)',
+                belowLineFillColorFalling: 'rgba(239,68,68,0.05)',
+                symbolActiveColor: 'rgba(26,217,102,0.08)',
+                tabs: [
+                  {
+                    title: TABS.find((t) => t.id === tab)?.label ?? tab,
+                    symbols: MARKETS[tab].map((m) => ({ s: m.tvSymbol, d: m.name })),
+                  },
+                ],
+              }}
+            />
+
+            {/* TV attribution */}
+            <div className="flex items-center justify-end gap-1.5 border-t border-white/[0.04] px-4 py-2">
+              <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#374151]">
+                Powered by TradingView
+              </span>
             </div>
           </div>
           <p className="font-body text-muted mt-3 text-[11px]">{t('disclaimer')}</p>

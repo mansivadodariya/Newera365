@@ -1,0 +1,459 @@
+{
+  "nodes": [
+    {
+      "id": "claude_project_newera365",
+      "label": "NewEra365 Project (CSL-NE365-2026-Q2)",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 7",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_apps_web",
+      "label": "apps/web \u2014 Next.js 14 Frontend",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 47",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_apps_cms",
+      "label": "apps/cms \u2014 Payload CMS v2 + Express",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 51",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_apps_mt5_service",
+      "label": "apps/mt5-service \u2014 Mock MT5 Bridge",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 74",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_packages_types",
+      "label": "packages/types \u2014 Shared TypeScript Types",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 78",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_packages_ui",
+      "label": "packages/ui \u2014 Shared React Components",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 82",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_packages_config",
+      "label": "packages/config \u2014 Shared ESLint + Tailwind Presets",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 86",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_turborepo_monorepo",
+      "label": "Turborepo Monorepo Pattern",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 45",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_next_intl_i18n",
+      "label": "next-intl v3 Internationalization",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 49",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_payload_localization",
+      "label": "Payload Native Localization (en/ar)",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 92",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_mt5_fallback_pattern",
+      "label": "MT5 Fallback Pattern (cms-fallback source)",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 94",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_rate_limit_postgres",
+      "label": "Rate Limiting via Postgres (rate_limit_hits table)",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 70",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_totp_2fa",
+      "label": "TOTP 2FA for Admin Users",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 72",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_cms_collections",
+      "label": "17 CMS Collections",
+      "file_type": "concept",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 53",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_custom_endpoints",
+      "label": "Custom REST Endpoints (endpoints/index.ts)",
+      "file_type": "concept",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 55",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_site_settings_global",
+      "label": "SiteSettings Global (Payload)",
+      "file_type": "concept",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 53",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_rtl_arabic_support",
+      "label": "Arabic RTL First-class Locale Support",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 100",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_collection_hooks",
+      "label": "Collection Hooks (deriveAlphabeticalIndex, archivePreviousLegalVersion)",
+      "file_type": "concept",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 92",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "claude_project_newera365",
+      "target": "claude_apps_web",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 47",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_project_newera365",
+      "target": "claude_apps_cms",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 51",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_project_newera365",
+      "target": "claude_apps_mt5_service",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 74",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_project_newera365",
+      "target": "claude_packages_types",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 78",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_project_newera365",
+      "target": "claude_packages_ui",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 82",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_project_newera365",
+      "target": "claude_packages_config",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 86",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_project_newera365",
+      "target": "claude_turborepo_monorepo",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 45",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_apps_web",
+      "target": "claude_next_intl_i18n",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 49",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_apps_web",
+      "target": "claude_packages_ui",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 84",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_apps_cms",
+      "target": "claude_cms_collections",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 53",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_apps_cms",
+      "target": "claude_custom_endpoints",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 55",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_apps_cms",
+      "target": "claude_rate_limit_postgres",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 70",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_apps_cms",
+      "target": "claude_totp_2fa",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 72",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_apps_cms",
+      "target": "claude_site_settings_global",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 53",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_apps_cms",
+      "target": "claude_payload_localization",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 92",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_apps_cms",
+      "target": "claude_collection_hooks",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 92",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_apps_mt5_service",
+      "target": "claude_mt5_fallback_pattern",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 76",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_mt5_fallback_pattern",
+      "target": "claude_packages_types",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 94",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_rtl_arabic_support",
+      "target": "claude_packages_types",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 100",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_project_newera365",
+      "target": "workflows_ci_pipeline",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 117",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_apps_web",
+      "target": "claude_rtl_arabic_support",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 100",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "monorepo_turborepo_workspaces_ci",
+      "label": "Turborepo Monorepo with Three Apps, Shared Packages, and CI Pipeline",
+      "nodes": [
+        "claude_turborepo_monorepo",
+        "claude_apps_web",
+        "claude_apps_cms",
+        "claude_apps_mt5_service",
+        "workflows_ci_pipeline"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md"
+    },
+    {
+      "id": "mt5_fallback_cms_types",
+      "label": "MT5 Fallback: MT5 Service, CMS Endpoint, and Shared Types form the live-vs-static data pattern",
+      "nodes": [
+        "claude_apps_mt5_service",
+        "cms_api_endpoint_mt5_instruments",
+        "claude_mt5_fallback_pattern",
+        "claude_packages_types"
+      ],
+      "relation": "implement",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md"
+    },
+    {
+      "id": "cms_localization_rtl_intl",
+      "label": "Bilingual EN/AR Stack: Payload locale, next-intl, and RTL packages work together",
+      "nodes": [
+        "claude_payload_localization",
+        "claude_next_intl_i18n",
+        "claude_rtl_arabic_support",
+        "claude_packages_types"
+      ],
+      "relation": "implement",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "CLAUDE.md"
+    }
+  ]
+}

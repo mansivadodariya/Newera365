@@ -1,0 +1,33 @@
+{
+  "nodes": [
+    {
+      "id": "icons_performance_icon",
+      "label": "Performance Icon",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/performance.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Black outline icon combining a speedometer/gauge with a rising line chart (data points connected by lines with an upward arrow). Represents trading performance, execution speed, or growth metrics. Used as a UI icon in the web app public assets.",
+      "confidence_score": 1.0,
+      "confidence_type": "EXTRACTED",
+      "tags": [
+        "icon",
+        "performance",
+        "speedometer",
+        "gauge",
+        "line-chart",
+        "trading",
+        "ui-asset",
+        "black-and-white",
+        "outline-style"
+      ],
+      "dimensions": "512x512 approx",
+      "color_scheme": "monochrome black on white"
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

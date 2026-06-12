@@ -137,11 +137,10 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            {t('kicker')}
-          </SectionKicker>
           <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
             {t('heroLine1')}
+            <br />
+            {t('heroLine2')} <span className="text-accent">{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
             {t('heroSubtitle')}
@@ -152,15 +151,18 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
       {/* Instrument selector */}
       <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
+            {t('kicker')}
+          </SectionKicker>
+          <div className="scrollbar-hide flex flex-wrap gap-2">
             {instruments.map((ins) => (
               <button
                 key={ins.symbol}
                 onClick={() => setInstrumentSymbol(ins.symbol)}
-                className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold uppercase tracking-[0.08em] transition-colors ${
+                className={`font-body flex-shrink-0 rounded-full px-3 py-[7px] text-[12px] font-medium transition-colors ${
                   instrumentSymbol === ins.symbol
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
+                    : 'bg-[#f2f2f4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e] dark:hover:text-white/80'
                 }`}
               >
                 {ins.name}
@@ -170,135 +172,181 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
         </div>
       </section>
 
-      {/* Spread bars */}
+      {/* Spread bars — SPREAD · PIP */}
       <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="bg-surface rounded-[18px] p-5">
-            <p className="font-body text-muted mb-4 text-[10px] uppercase tracking-[0.12em]">
-              {t('compKicker')}
-            </p>
-            <div className="flex flex-col gap-4">
-              {rows.map((row) => (
-                <div key={row.label} className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={`font-body text-[12px] font-medium ${
-                        row.isHighlighted ? 'text-accent' : 'dark:text-muted text-[#6b7280]'
-                      }`}
-                    >
-                      {row.label}
-                    </span>
-                    <span
-                      className={`font-body text-[12px] font-semibold tabular-nums ${
-                        row.isHighlighted ? 'text-accent' : 'text-foreground'
-                      }`}
-                    >
-                      {row.spread === 0
-                        ? `$${row.commission.toFixed(2)}/lot`
-                        : `${row.spread.toLocaleString('en-US')} ${data.unit}`}
-                    </span>
-                  </div>
-                  <SpreadBar value={row.spread || 0.15} max={maxSpread} color={row.color} />
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
+            SPREAD · PIP
+          </SectionKicker>
+          <div className="dark:bg-surface rounded-[20px] bg-[#fafaf9] p-[18px]">
+            <div className="flex flex-col gap-[6px]">
+              {/* RAW */}
+              <div className="flex items-center gap-[10px]">
+                <span className="w-[40px] flex-shrink-0 font-mono text-[10px] tracking-[1px] text-[#6b7280]">
+                  RAW
+                </span>
+                <div className="relative flex h-[8px] flex-1 overflow-hidden rounded-full bg-[#f4f4f3] dark:bg-white/10">
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full bg-[#00b050] transition-all duration-500"
+                    style={{
+                      width: `${data.raw === 0 ? 4 : Math.max(4, (data.raw / maxSpread) * 100)}%`,
+                    }}
+                  />
                 </div>
-              ))}
+                <span className="w-[30px] flex-shrink-0 text-right font-mono text-[11px] font-medium text-[#111] dark:text-white">
+                  {data.raw === 0 ? '0.0' : data.raw.toLocaleString('en-US')}
+                </span>
+              </div>
+              {/* STD */}
+              <div className="flex items-center gap-[10px]">
+                <span className="w-[40px] flex-shrink-0 font-mono text-[10px] tracking-[1px] text-[#6b7280]">
+                  STD
+                </span>
+                <div className="relative flex h-[8px] flex-1 overflow-hidden rounded-full bg-[#f4f4f3] dark:bg-white/10">
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full bg-[#111] transition-all duration-500 dark:bg-white"
+                    style={{ width: `${Math.max(4, (data.standard / maxSpread) * 100)}%` }}
+                  />
+                </div>
+                <span className="w-[30px] flex-shrink-0 text-right font-mono text-[11px] font-medium text-[#111] dark:text-white">
+                  {data.standard.toLocaleString('en-US')}
+                </span>
+              </div>
+              {/* VIP */}
+              <div className="flex items-center gap-[10px]">
+                <span className="w-[40px] flex-shrink-0 font-mono text-[10px] tracking-[1px] text-[#6b7280]">
+                  VIP
+                </span>
+                <div className="relative flex h-[8px] flex-1 overflow-hidden rounded-full bg-[#f4f4f3] dark:bg-white/10">
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full bg-[#1f8a5b] transition-all duration-500"
+                    style={{
+                      width: `${data.vip === 0 ? 4 : Math.max(4, (data.vip / maxSpread) * 100)}%`,
+                    }}
+                  />
+                </div>
+                <span className="w-[30px] flex-shrink-0 text-right font-mono text-[11px] font-medium text-[#111] dark:text-white">
+                  {data.vip === 0 ? '0.0' : data.vip.toLocaleString('en-US')}
+                </span>
+              </div>
+              {/* COMP */}
+              <div className="flex items-center gap-[10px]">
+                <span className="w-[40px] flex-shrink-0 font-mono text-[10px] tracking-[1px] text-[#6b7280]">
+                  COMP
+                </span>
+                <div className="relative flex h-[8px] flex-1 overflow-hidden rounded-full bg-[#f4f4f3] dark:bg-white/10">
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full bg-[#9ca3af] transition-all duration-500"
+                    style={{ width: `${Math.max(4, (data.industry / maxSpread) * 100)}%` }}
+                  />
+                </div>
+                <span className="w-[30px] flex-shrink-0 text-right font-mono text-[11px] font-medium text-[#111] dark:text-white">
+                  {data.industry.toLocaleString('en-US')}
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Account cards */}
+      {/* Account cards — stacked full-width */}
       <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="grid grid-cols-3 gap-[10px]">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
+            {t('compKicker')}
+          </SectionKicker>
+          <div className="flex flex-col gap-3">
             {/* Standard */}
-            <div className="bg-surface shadow-card flex flex-col gap-3 rounded-[18px] p-4 dark:shadow-none">
-              <span className="text-foreground font-sans text-[13px] font-semibold">
+            <div className="rounded-[20px] border border-[#e5e7eb] bg-white p-[22px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(0,0,0,0.08)] dark:border-white/[0.07] dark:bg-[#1a1c22] dark:hover:border-white/10">
+              <p className="text-foreground mb-4 font-sans text-[20px] font-semibold tracking-[-0.4px]">
                 {t('stdLabel')}
-              </span>
-              <div className="flex flex-col gap-1">
-                <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
-                  {t('colSpread')}
-                </p>
-                <p className="font-body text-foreground text-[13px] font-semibold tabular-nums">
-                  {data.standard.toLocaleString('en-US')} {data.unit}
-                </p>
-              </div>
-              <div className="flex flex-col gap-1">
-                <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
-                  {t('colCommission')}
-                </p>
-                <p className="font-body text-foreground text-[13px] font-semibold">
-                  {t('commNone')}
-                </p>
-              </div>
-              <div className="dark:border-border mt-auto border-t border-[#e5e7eb] pt-3">
-                <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
-                  {t('colMinDeposit')}
-                </p>
-                <p className="font-body text-foreground text-[15px] font-semibold tabular-nums">
-                  $100
-                </p>
+              </p>
+              <div className="flex flex-col gap-px overflow-hidden rounded-[20px] bg-[rgba(17,17,17,0.08)] dark:bg-white/[0.06]">
+                {[
+                  {
+                    label: `${t('colSpread')} (${selectedInstrument.name})`,
+                    value: `${data.standard.toLocaleString('en-US')} ${data.unit}`,
+                  },
+                  { label: t('colCommission'), value: t('commNone') },
+                  { label: t('colMinDeposit'), value: '$100' },
+                ].map((row) => (
+                  <div
+                    key={row.label}
+                    className="flex items-center justify-between bg-[#f7f7f5] px-[14px] py-[12px] dark:bg-[#111316]"
+                  >
+                    <span className="font-body text-[13px] text-[#6b7280] dark:text-white/60">
+                      {row.label}
+                    </span>
+                    <span className="font-sans text-[13px] font-semibold text-[#111] dark:text-white">
+                      {row.value}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
 
             {/* Raw — highlighted */}
             <div
-              className="flex flex-col gap-3 rounded-[18px] bg-[#111111] p-4"
+              className="relative overflow-hidden rounded-[20px] bg-[#111] p-[22px]"
               style={{ boxShadow: '0 4px 24px rgba(0,176,80,0.18)' }}
             >
-              <span className="font-sans text-[13px] font-semibold text-white">
-                {t('rawLabel')}
-              </span>
-              <div className="flex flex-col gap-1">
-                <p className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
-                  {t('colSpread')}
+              <div className="pointer-events-none absolute right-[-20px] top-[-50px] h-[180px] w-[180px] rounded-full bg-[#00b050]/[0.12] blur-[60px]" />
+              <div className="relative mb-4 flex items-center justify-between">
+                <p className="font-sans text-[20px] font-semibold tracking-[-0.4px] text-white">
+                  {t('rawLabel')}
                 </p>
-                <p className="font-body text-accent text-[13px] font-semibold tabular-nums">
-                  {data.raw === 0 ? '0.0' : data.raw.toLocaleString('en-US')} {data.unit}
-                </p>
+                <span className="text-accent rounded-full bg-[rgba(0,176,80,0.15)] px-[10px] py-[5px] font-mono text-[10px] tracking-[1.2px]">
+                  BEST VALUE
+                </span>
               </div>
-              <div className="flex flex-col gap-1">
-                <p className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
-                  {t('colCommission')}
-                </p>
-                <p className="font-body text-[13px] font-semibold text-white">$3.50/lot</p>
-              </div>
-              <div className="mt-auto border-t border-white/10 pt-3">
-                <p className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
-                  {t('colMinDeposit')}
-                </p>
-                <p className="font-body text-accent text-[15px] font-semibold tabular-nums">$500</p>
+              <div className="relative flex flex-col gap-px overflow-hidden rounded-[20px] bg-white/10">
+                {[
+                  {
+                    label: `${t('colSpread')} (${selectedInstrument.name})`,
+                    value: `${data.raw === 0 ? '0.0' : data.raw.toLocaleString('en-US')} ${data.unit}`,
+                  },
+                  { label: t('colCommission'), value: '$3.50/lot' },
+                  { label: t('colMinDeposit'), value: '$500' },
+                ].map((row) => (
+                  <div
+                    key={row.label}
+                    className="flex items-center justify-between bg-[#111] px-[14px] py-[12px]"
+                  >
+                    <span className="font-body text-[13px] text-white/60">{row.label}</span>
+                    <span className="font-sans text-[13px] font-semibold text-white">
+                      {row.value}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
 
             {/* VIP */}
-            <div className="bg-surface shadow-card flex flex-col gap-3 rounded-[18px] p-4 dark:shadow-none">
-              <span className="text-foreground font-sans text-[13px] font-semibold">
+            <div className="rounded-[20px] border border-[#e5e7eb] bg-white p-[22px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(0,0,0,0.08)] dark:border-white/[0.07] dark:bg-[#1a1c22] dark:hover:border-white/10">
+              <p className="text-foreground mb-4 font-sans text-[20px] font-semibold tracking-[-0.4px]">
                 {t('vipLabel')}
-              </span>
-              <div className="flex flex-col gap-1">
-                <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
-                  {t('colSpread')}
-                </p>
-                <p className="font-body text-foreground text-[13px] font-semibold tabular-nums">
-                  {data.vip === 0 ? '0.0' : data.vip.toLocaleString('en-US')} {data.unit}
-                </p>
-              </div>
-              <div className="flex flex-col gap-1">
-                <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
-                  {t('colCommission')}
-                </p>
-                <p className="font-body text-foreground text-[13px] font-semibold">
-                  {t('commFrom')}
-                </p>
-              </div>
-              <div className="dark:border-border mt-auto border-t border-[#e5e7eb] pt-3">
-                <p className="font-body text-muted text-[9px] uppercase tracking-[0.1em]">
-                  {t('colMinDeposit')}
-                </p>
-                <p className="font-body text-foreground text-[15px] font-semibold tabular-nums">
-                  $10k
-                </p>
+              </p>
+              <div className="flex flex-col gap-px overflow-hidden rounded-[20px] bg-[rgba(17,17,17,0.08)] dark:bg-white/[0.06]">
+                {[
+                  {
+                    label: `${t('colSpread')} (${selectedInstrument.name})`,
+                    value: `${data.vip === 0 ? '0.0' : data.vip.toLocaleString('en-US')} ${data.unit}`,
+                  },
+                  { label: t('colCommission'), value: t('commFrom') },
+                  { label: t('colMinDeposit'), value: '$10k' },
+                ].map((row) => (
+                  <div
+                    key={row.label}
+                    className="flex items-center justify-between bg-[#f7f7f5] px-[14px] py-[12px] dark:bg-[#111316]"
+                  >
+                    <span className="font-body text-[13px] text-[#6b7280] dark:text-white/60">
+                      {row.label}
+                    </span>
+                    <span className="font-sans text-[13px] font-semibold text-[#111] dark:text-white">
+                      {row.value}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -308,22 +356,19 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
       {/* Annual saving panel */}
       <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div
-            className="rounded-[20px] bg-[#111111] px-5 py-6"
-            style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.12)' }}
-          >
-            <p className="font-body mb-1 text-[10px] uppercase tracking-[0.12em] text-white/40">
+          <div className="rounded-[20px] bg-[#111111] px-5 py-6">
+            <SectionKicker className="mb-3 [&>span:first-child]:bg-white/20 [&>span:last-child]:text-white/50">
               {t('savingKicker')}
-            </p>
-            <p className="mb-1 font-sans text-[46px] font-semibold tabular-nums leading-[1] text-white">
+            </SectionKicker>
+            <p className="text-accent mb-1 font-sans text-[48px] font-semibold tabular-nums leading-[1]">
               ${annualSaving.toLocaleString('en-US', { maximumFractionDigits: 0 })}
             </p>
-            <p className="font-body text-[12px] leading-snug text-white/50">
+            <p className="font-body mt-1 text-[13px] leading-[1.55] text-white/60">
               {t('savingDesc', { lots: LOTS_PER_MONTH })}
             </p>
             <Link
               href={`/${locale}/register?account=raw`}
-              className="bg-accent font-body hover:bg-accent/90 mt-5 flex h-[48px] items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
+              className="bg-accent hover:bg-accent/90 font-body mt-[22px] flex h-[50px] w-full items-center justify-center gap-2 rounded-[10px] text-[15px] font-medium text-white transition-colors"
             >
               {t('savingCta')}
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
@@ -335,59 +380,6 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
                   strokeLinejoin="round"
                 />
               </svg>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* How we calculate */}
-      <section className="px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="bg-surface rounded-[18px] p-5">
-            <p className="font-body text-muted mb-2 text-[10px] uppercase tracking-[0.12em]">
-              {t('calcKicker')}
-            </p>
-            <p className="text-foreground font-sans text-[14px] font-semibold">
-              {t('calcFormula')}
-            </p>
-            <p className="font-body text-muted mt-2 text-[12px] leading-relaxed">{t('calcDesc')}</p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
-            {t('ctaKicker')}
-          </SectionKicker>
-          <h2 className="mb-3 font-sans text-[28px] font-semibold leading-[1.1] text-white">
-            {t('ctaLine1')}
-            <br />
-            <span className="text-accent">{t('ctaAccent')}</span>
-          </h2>
-          <p className="font-body mb-8 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
-          <div className="flex flex-col gap-3">
-            <Link
-              href={`/${locale}/register?account=raw`}
-              className="bg-accent font-body hover:bg-accent/90 flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
-            >
-              {t('ctaRaw')}
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M3 8h10M9 4l4 4-4 4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Link>
-            <Link
-              href={`/${locale}/trade/accounts/comparison`}
-              className="font-body flex h-[52px] w-full items-center justify-center rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"
-            >
-              {t('ctaCompare')}
             </Link>
           </div>
         </div>

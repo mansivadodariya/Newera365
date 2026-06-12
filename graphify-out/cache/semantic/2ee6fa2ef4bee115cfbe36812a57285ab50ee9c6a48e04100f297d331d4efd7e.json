@@ -1,0 +1,21 @@
+{
+  "nodes": [
+    {
+      "id": "icons_market_forex_icon_icon",
+      "label": "Market Forex Icon",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/market-forex-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Black solid icon depicting two currency coins (dollar and euro) with circular exchange arrows, representing forex/currency trading. Used as a market category icon for the Forex section of the NewEra365 broker website.",
+      "tags": ["forex", "currency", "exchange", "dollar", "euro", "market-icon", "ui-icon"],
+      "confidence_score": 1.0,
+      "confidence_type": "EXTRACTED"
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

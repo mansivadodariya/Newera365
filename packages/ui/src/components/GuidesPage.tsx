@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { STATIC_GUIDES } from './staticGuides';
 
 export interface CmsGuide {
   id: number;
@@ -21,7 +22,19 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
   const locale = useLocale();
   const t = useTranslations('guides');
 
-  const guides = cmsGuides ?? [];
+  // Fall back to static guides so the listing (and its article links) work even
+  // with no CMS data — see staticGuides.ts.
+  const guides: CmsGuide[] =
+    cmsGuides && cmsGuides.length > 0
+      ? cmsGuides
+      : STATIC_GUIDES.map((g) => ({
+          id: g.id,
+          slug: g.slug,
+          title: g.title,
+          summary: g.summary,
+          author: g.author,
+          featured: g.featured,
+        }));
   const featured = guides.find((g) => g.featured) ?? guides[0] ?? null;
   const rest = guides.filter((g) => g !== featured);
 
@@ -47,7 +60,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="mb-4">{t('featuredLabel')}</SectionKicker>
             <Link
-              href={`/${locale}/guides/${featured.id}`}
+              href={`/${locale}/guides/${featured.slug}`}
               className="shadow-card-dark group block overflow-hidden rounded-[22px] bg-[#111111] p-6"
             >
               <h2 className="group-hover:text-accent mb-3 font-sans text-[24px] font-semibold leading-[1.1] text-white transition-colors">
@@ -82,8 +95,8 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
             {rest.map((guide, i) => (
               <Link
                 key={guide.id}
-                href={`/${locale}/guides/${guide.id}`}
-                className={`group flex flex-col gap-2 py-5 ${i < rest.length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
+                href={`/${locale}/guides/${guide.slug}`}
+                className={`group flex flex-col gap-2 py-5 ${i < rest.length - 1 ? 'border-b border-[#e5e7eb] dark:border-white/[0.07]' : ''}`}
               >
                 <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] transition-colors">
                   {guide.title}
@@ -93,7 +106,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
                 </p>
                 {guide.author && (
                   <div className="flex items-center gap-2">
-                    <div className="border-border flex h-5 w-5 items-center justify-center rounded-full border">
+                    <div className="flex h-5 w-5 items-center justify-center rounded-full border border-[#e5e7eb] dark:border-white/20">
                       <span className="text-muted font-sans text-[8px] font-semibold">
                         {guide.author[0]}
                       </span>

@@ -138,9 +138,9 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       </section>
 
       {/* Other Charges */}
-      <section className="bg-transparent px-5 pb-10">
+      <section className="rounded-t-[32px] bg-[#FFFFFF] px-5 pb-10 pt-[29px] dark:bg-black">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+          <SectionKicker className="[&>span:first-child]:bg-muted mb-5 text-[#6B7280] dark:text-[#B8BFCC]">
             {t('otherKicker')}
           </SectionKicker>
           <div className="flex flex-col gap-[10px]">
@@ -155,7 +155,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                       `charge${charge.key.charAt(0).toUpperCase() + charge.key.slice(1)}` as 'chargeOpening',
                     )}
                   </p>
-                  <p className="font-body text-muted text-[12px] leading-snug">
+                  <p className="font-body text-[12px] leading-snug text-[#6B7280] dark:text-[#B8BFCC]">
                     {t(
                       `charge${charge.key.charAt(0).toUpperCase() + charge.key.slice(1)}Val` as 'chargeOpeningVal',
                     )}

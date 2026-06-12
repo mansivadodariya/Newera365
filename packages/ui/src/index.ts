@@ -8,6 +8,8 @@ export { SectionKicker } from './components/SectionKicker';
 export { ToastProvider, useToast } from './components/ToastProvider';
 
 export { Header } from './components/Header';
+export { AuthModal } from './components/AuthModal';
+export type { AuthModalType } from './components/AuthModal';
 export { LanguageToggle } from './components/LanguageToggle';
 export { RiskBanner } from './components/RiskBanner';
 export { TrustStrip } from './components/TrustStrip';
@@ -71,6 +73,8 @@ export { GuidesPage } from './components/GuidesPage';
 export type { CmsGuide } from './components/GuidesPage';
 export { GuideDetailPage } from './components/GuideDetailPage';
 export type { GuideDetailProps, CmsGuideDetail } from './components/GuideDetailPage';
+export { STATIC_GUIDES, getStaticGuide } from './components/staticGuides';
+export type { StaticGuide } from './components/staticGuides';
 
 export { ResearchPage } from './components/ResearchPage';
 export type { ArticleItem, CmsResearchReportItem } from './components/ResearchPage';

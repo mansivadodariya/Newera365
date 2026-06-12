@@ -1,0 +1,39 @@
+{
+  "nodes": [
+    {
+      "id": "images_market_forex_image",
+      "label": "Market Forex Hero Image",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-forex.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "images_market_forex_candlestick_chart",
+      "label": "Candlestick Chart Visualization",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-forex.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "images_market_forex_trading_theme",
+      "label": "Forex Trading Dark Theme Background",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-forex.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

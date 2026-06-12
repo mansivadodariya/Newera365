@@ -1,0 +1,72 @@
+{
+  "nodes": [
+    {
+      "id": "images_market_indices_image",
+      "label": "Market Indices Stock Ticker Image",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-indices.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "images_market_indices_dow_jones",
+      "label": "Dow Jones Index",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-indices.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "images_market_indices_sp500",
+      "label": "S&P 500 Index",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-indices.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "images_market_indices_nasdaq",
+      "label": "NASDAQ Index",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-indices.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "images_market_indices_nyse_composite",
+      "label": "NYSE Composite Index",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-indices.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "images_market_indices_dow_composite",
+      "label": "Dow Composite Index",
+      "file_type": "image",
+      "source_file": "apps/web/public/images/market-indices.jpg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

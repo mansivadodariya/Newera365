@@ -1,0 +1,38 @@
+{
+  "nodes": [
+    {
+      "id": "public_favicon_light_image",
+      "label": "Favicon Light (NewEra Logo - Light Theme)",
+      "file_type": "image",
+      "source_file": "apps/web/public/favicon-light.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Light-theme favicon for NewEra365 web app. Displays the 'NEWERA' wordmark in bold black text on a white background. The letter 'N' incorporates a green candlestick chart graphic element \u2014 a small green bullish candlestick replacing or overlaying the vertical stroke \u2014 reinforcing the forex/CFD trading brand identity. Used as the browser tab icon for the light color scheme.",
+      "entity_type": "brand_asset",
+      "confidence_score": 1.0,
+      "confidence_basis": "EXTRACTED",
+      "tags": ["favicon", "logo", "brand", "light-theme", "forex", "trading", "candlestick"]
+    },
+    {
+      "id": "public_newera_brand_logo",
+      "label": "NewEra365 Brand Logo",
+      "file_type": "concept",
+      "source_file": "apps/web/public/favicon-light.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "The NewEra365 brand logo concept: 'NEWERA' wordmark with a green candlestick icon embedded in the letter N, symbolizing forex/CFD trading. Appears in both light and dark favicon variants.",
+      "entity_type": "brand_identity",
+      "confidence_score": 0.95,
+      "confidence_basis": "INFERRED",
+      "tags": ["brand", "logo", "identity", "newera365"]
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

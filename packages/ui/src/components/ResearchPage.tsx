@@ -223,6 +223,7 @@ export function ResearchPage({
   const locale = useLocale();
   const t = useTranslations('research');
   const [activeCategory, setActiveCategory] = useState<Category>('ALL');
+  const [search, setSearch] = useState('');
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -231,13 +232,19 @@ export function ResearchPage({
   const featured = articles.find((a) => a.featured) ?? articles[0];
   const list = articles.filter((a) => !a.featured);
 
-  const filteredList = useMemo(
-    () =>
+  const filteredList = useMemo(() => {
+    let result =
       activeCategory === 'ALL'
         ? list
-        : list.filter((a) => a.category.toUpperCase() === activeCategory),
-    [activeCategory, list],
-  );
+        : list.filter((a) => a.category.toUpperCase() === activeCategory);
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      result = result.filter(
+        (a) => a.title.toLowerCase().includes(q) || a.summary.toLowerCase().includes(q),
+      );
+    }
+    return result;
+  }, [activeCategory, search, list]);
 
   return (
     <>
@@ -255,6 +262,31 @@ export function ResearchPage({
         </div>
       </section>
 
+      {/* Search bar */}
+      <section className="px-5 pb-4">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="dark:bg-surface flex items-center gap-2.5 rounded-[12px] bg-[#f2f2f4] px-3.5">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 16 16"
+              fill="none"
+              className="text-muted flex-shrink-0"
+            >
+              <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
+              <path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+            <input
+              type="search"
+              placeholder={t('searchPlaceholder')}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="font-body text-foreground placeholder:text-muted w-full bg-transparent py-3 text-[13px] outline-none"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Category tabs */}
       <section className="px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
@@ -263,10 +295,10 @@ export function ResearchPage({
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`font-body flex-shrink-0 rounded-full px-[14px] py-[8px] text-[13px] font-medium transition-colors ${
+                className={`font-body flex-shrink-0 rounded-full px-[14px] py-[8px] text-[13px] font-medium transition-all ${
                   activeCategory === cat
                     ? 'bg-[#111] text-white dark:bg-white dark:text-[#111]'
-                    : 'bg-[#f2f2f4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22]'
+                    : 'bg-[#f2f2f4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e] dark:hover:text-white/80'
                 }`}
               >
                 {cat === 'ALL' ? t('filterAll') : cat.charAt(0) + cat.slice(1).toLowerCase()}
@@ -352,18 +384,18 @@ export function ResearchPage({
         </section>
       )}
 
-      {/* Article list — white cards matching Figma */}
+      {/* Article list */}
       <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-3 xl:gap-6">
-            {filteredList.map((article) => (
+          {/* Mobile: horizontal row list */}
+          <div className="flex flex-col xl:hidden">
+            {filteredList.map((article, i) => (
               <Link
                 key={article.id}
                 href={`/${locale}/${basePath}/${article.slug}`}
-                className="group flex flex-col overflow-hidden rounded-[18px] bg-white p-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0px_8px_24px_rgba(0,0,0,0.1)] dark:bg-[#1a1c22]"
+                className={`group flex items-start gap-3 py-4 transition-all duration-200 ${i < filteredList.length - 1 ? 'border-b border-[#ebebea] dark:border-white/[0.07]' : ''}`}
               >
-                {/* Thumbnail — CMS image if available, SVG sparkline fallback */}
-                <div className="relative mb-[14px] flex h-[120px] w-full items-end overflow-hidden rounded-[12px] bg-gradient-to-br from-[#f4f4f2] to-[#e8e8e5] p-3 dark:from-[#1c1c1c] dark:to-[#111]">
+                <div className="relative h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[10px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111]">
                   {article.thumbnailUrl ? (
                     <img
                       src={article.thumbnailUrl}
@@ -371,51 +403,106 @@ export function ResearchPage({
                       className="absolute inset-0 h-full w-full object-cover"
                     />
                   ) : (
-                    <Sparkline data={article.sparkline} positive />
+                    <div className="flex h-full items-end p-1.5">
+                      <Sparkline data={article.sparkline} positive />
+                    </div>
                   )}
                 </div>
-
-                {/* Meta: category + readTime */}
-                <div className="mb-[14px] flex items-center gap-[8px]">
-                  <span className="rounded-full bg-[rgba(0,176,80,0.1)] px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px] text-[#00b050]">
-                    {article.category}
-                  </span>
-                  <span className="font-mono text-[10px] text-[#6b7280]">
-                    {article.readTime} read
-                  </span>
-                </div>
-
-                {/* Title */}
-                <p className="text-foreground group-hover:text-accent mb-[14px] font-sans text-[17px] font-semibold leading-[1.22] tracking-[-0.255px] transition-colors">
-                  {article.title}
-                </p>
-
-                {article.summary && (
-                  <p className="font-body mb-[14px] text-[13px] leading-[1.5] text-[#6b7280]">
-                    {article.summary}
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1.5 flex items-center gap-1.5">
+                    <span
+                      className={`font-body rounded-full px-2 py-[2px] text-[9px] font-semibold uppercase tracking-[0.1em] ${CAT_COLORS[article.category.toUpperCase()] ?? 'bg-accent/10 text-accent'}`}
+                    >
+                      {article.category}
+                    </span>
+                    <span className="font-mono text-[9px] text-[#9ca3af]">
+                      · {article.readTime} read
+                    </span>
+                  </div>
+                  <p className="group-hover:text-accent mb-1 font-sans text-[14px] font-semibold leading-[1.25] tracking-[-0.21px] text-[#111] transition-colors dark:text-white">
+                    {article.title}
                   </p>
-                )}
+                  <span className="font-mono text-[10px] text-[#9ca3af]">{article.date}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
 
-                {/* Footer: date + arrow */}
-                <div className="mt-auto h-px bg-[rgba(17,17,17,0.08)] dark:bg-white/[0.08]" />
-                <div className="mt-[14px] flex items-center justify-between">
-                  <span className="font-mono text-[10px] text-[#6b7280]">{article.date}</span>
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    className="text-muted group-hover:text-accent transition-colors"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M2 12L12 2M12 2H7M12 2v5"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+          {/* Desktop: vertical card grid */}
+          <div className="hidden xl:grid xl:grid-cols-3 xl:gap-[14px]">
+            {filteredList.map((article) => (
+              <Link
+                key={article.id}
+                href={`/${locale}/${basePath}/${article.slug}`}
+                className="shadow-card-dark group flex flex-col overflow-hidden rounded-[18px] bg-[#111111] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+              >
+                {/* Thumbnail */}
+                <div className="relative h-[140px] overflow-hidden bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111]">
+                  {article.thumbnailUrl ? (
+                    <img
+                      src={article.thumbnailUrl}
+                      alt={article.title}
+                      className="absolute inset-0 h-full w-full object-cover opacity-70 transition-transform duration-300 group-hover:scale-[1.03]"
                     />
-                  </svg>
+                  ) : (
+                    <div className="absolute inset-0 flex items-end p-3">
+                      <svg width="100%" height="44" viewBox="0 0 200 44" preserveAspectRatio="none">
+                        <polyline
+                          points={article.sparkline
+                            .map((v, i) => {
+                              const max = Math.max(...(article.sparkline as unknown as number[]));
+                              const min = Math.min(...(article.sparkline as unknown as number[]));
+                              const range = max - min || 1;
+                              return `${(i / (article.sparkline.length - 1)) * 200},${44 - ((v - min) / range) * 38}`;
+                            })
+                            .join(' ')}
+                          fill="none"
+                          stroke="#00B050"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                  <div className="absolute left-3 top-3">
+                    <span
+                      className={`font-body rounded-full px-2.5 py-[3px] text-[8px] font-semibold uppercase tracking-[0.1em] ${CAT_COLORS[article.category.toUpperCase()] ?? 'bg-accent/10 text-accent'}`}
+                    >
+                      {article.category}
+                    </span>
+                  </div>
+                </div>
+                {/* Content */}
+                <div className="flex flex-1 flex-col p-4">
+                  <p className="group-hover:text-accent mb-2 flex-1 font-sans text-[14px] font-semibold leading-[1.3] text-white transition-colors">
+                    {article.title}
+                  </p>
+                  {article.summary && (
+                    <p className="font-body mb-3 line-clamp-2 text-[12px] leading-[1.55] text-white/50">
+                      {article.summary}
+                    </p>
+                  )}
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[10px] text-white/30">
+                      {article.date} · {article.readTime} read
+                    </span>
+                    <svg
+                      width="11"
+                      height="11"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      className="group-hover:text-accent text-white/30 transition-colors"
+                    >
+                      <path
+                        d="M2 12L12 2M12 2H7M12 2v5"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
                 </div>
               </Link>
             ))}

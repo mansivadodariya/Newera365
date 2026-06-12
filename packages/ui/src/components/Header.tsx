@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { MobileMenu } from './MobileMenu';
 import { LanguageToggle } from './LanguageToggle';
+import { AuthModal, type AuthModalType } from './AuthModal';
 
 type DropdownItem = { label: string; sub: string; href: string };
 type NavItem = {
@@ -31,37 +32,17 @@ function useNavItems(t: ReturnType<typeof useTranslations<'nav'>>): NavItem[] {
         { label: t('tradeIbLabel'), sub: t('tradeIbSub'), href: '/trade/ib' },
       ],
     },
-    {
-      label: t('markets'),
-      href: '/markets/instruments',
-      dropdown: [
-        {
-          label: t('marketsInstrumentsLabel'),
-          sub: t('marketsInstrumentsSub'),
-          href: '/markets/instruments',
-        },
-        { label: t('marketsForexLabel'), sub: t('marketsForexSub'), href: '/markets/forex' },
-        { label: t('marketsIndicesLabel'), sub: t('marketsIndicesSub'), href: '/markets/indices' },
-        {
-          label: t('marketsCommoditiesLabel'),
-          sub: t('marketsCommoditiesSub'),
-          href: '/markets/commodities',
-        },
-        { label: t('marketsCryptoLabel'), sub: t('marketsCryptoSub'), href: '/markets/crypto' },
-      ],
-    },
+    { label: t('markets'), href: '/markets/instruments' },
     {
       label: t('platform'),
       href: '/platform/mt5',
       dropdown: [
         { label: t('platformOverviewLabel'), sub: t('platformOverviewSub'), href: '/platform/mt5' },
-        { label: t('platformMt5Label'), sub: t('platformMt5Sub'), href: '/platform/mt5' },
         {
           label: t('platformWebtraderLabel'),
           sub: t('platformWebtraderSub'),
           href: '/platform/webtrader',
         },
-        { label: t('platformMobileLabel'), sub: t('platformMobileSub'), href: '/platform/mobile' },
         { label: t('platformToolsLabel'), sub: t('platformToolsSub'), href: '/tools' },
         { label: t('toolsAiCrmLabel'), sub: t('toolsAiCrmSub'), href: '/tools/ai-crm' },
       ],
@@ -128,6 +109,8 @@ function useNavItems(t: ReturnType<typeof useTranslations<'nav'>>): NavItem[] {
       dropdown: [
         { label: t('companyAboutLabel'), sub: t('companyAboutSub'), href: '/company/about' },
         { label: t('companyCareersLabel'), sub: t('companyCareersSub'), href: '/company/careers' },
+        { label: t('companyAwardsLabel'), sub: t('companyAwardsSub'), href: '/company/awards' },
+        { label: t('companyMediaLabel'), sub: t('companyMediaSub'), href: '/company/media-press' },
         { label: t('researchBlogLabel'), sub: t('researchBlogSub'), href: '/blog' },
       ],
     },
@@ -283,6 +266,7 @@ function Header() {
   // Single shared dropdown state: hovering a new nav item instantly closes the
   // previous dropdown, so panels can never stack while sweeping across the nav.
   const [openNav, setOpenNav] = useState<string | null>(null);
+  const [authModal, setAuthModal] = useState<AuthModalType>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const locale = useLocale();
   const t = useTranslations('nav');
@@ -317,7 +301,7 @@ function Header() {
   return (
     <>
       <header className="border-border sticky top-0 z-40 h-[72px] w-full border-b bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.06)] dark:border-[#1a1c22] dark:bg-[#07090d]">
-        <div className="flex h-full items-center justify-between px-5 xl:px-[80px]">
+        <div className="flex h-full items-center justify-between px-5 xl:justify-center xl:px-[80px]">
           {/* Left: Logo + desktop nav */}
           <div className="flex h-full items-center gap-11">
             <Link href={`/${locale}`} aria-label="NewEra365 — go to home" className="flex-shrink-0">
@@ -357,27 +341,27 @@ function Header() {
 
           {/* Desktop right CTAs */}
           <div className="hidden items-center gap-3 xl:flex">
-            <LanguageToggle />
-            <ThemeToggle />
-            <div className="bg-border mx-1 h-5 w-px" />
-            <Link
-              href={`/${locale}/login`}
+            {/* <LanguageToggle />
+            <ThemeToggle /> */}
+            <div className="bg-border ml-3 h-5 w-px" />
+            <button
+              onClick={() => setAuthModal('demo')}
               className="font-body dark:text-foreground ms-1 text-[15px] font-medium text-[#111] transition-opacity hover:opacity-70"
             >
-              {t('signIn')}
-            </Link>
-            <Link
-              href={`/${locale}/register`}
+              {t('tryDemo')}
+            </button>
+            <button
+              onClick={() => setAuthModal('register')}
               className="font-body flex h-[42px] items-center rounded-full bg-[#00b04f] px-[22px] text-[15px] font-semibold text-white transition-colors hover:bg-[#009944]"
             >
               {t('getStarted')}
-            </Link>
+            </button>
           </div>
 
           {/* Mobile controls */}
           <div className="flex items-center gap-2 xl:hidden">
-            <LanguageToggle />
-            <ThemeToggle />
+            {/* <LanguageToggle />
+            <ThemeToggle /> */}
             <button
               onClick={() => setMenuOpen(true)}
               aria-label="Open navigation menu"
@@ -401,6 +385,8 @@ function Header() {
       )}
 
       <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+
+      <AuthModal type={authModal} onClose={() => setAuthModal(null)} />
     </>
   );
 }

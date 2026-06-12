@@ -41,7 +41,7 @@ export function ThreeStepsSection() {
                   <h3 className="text-foreground mb-[6px] font-sans text-[16px] font-semibold leading-normal">
                     {t(step.titleKey)}
                   </h3>
-                  <p className="font-body text-muted text-[13px] leading-[1.5]">
+                  <p className="font-body text-[13px] leading-[1.5] text-[#6B7280] dark:text-[#B8BFCC]">
                     {t(step.descKey)}
                   </p>
                 </div>

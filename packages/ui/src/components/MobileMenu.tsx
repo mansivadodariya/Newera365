@@ -71,6 +71,8 @@ function useNavGroups(t: ReturnType<typeof useTranslations<'nav'>>): NavGroup[] 
       items: [
         { label: t('companyAboutLabel'), href: '/company/about' },
         { label: t('companyCareersLabel'), href: '/company/careers' },
+        { label: t('companyAwardsLabel'), href: '/company/awards' },
+        { label: t('companyMediaLabel'), href: '/company/media-press' },
         { label: t('researchBlogLabel'), href: '/blog' },
       ],
     },
@@ -150,8 +152,8 @@ function MobileMenu({ open, onClose }: MobileMenuProps) {
         </Link>
 
         <div className="flex items-center gap-2">
-          <LanguageToggle />
-          {mounted && (
+          {/* <LanguageToggle /> */}
+          {/* {mounted && (
             <button
               onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
               aria-label={resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
@@ -186,7 +188,7 @@ function MobileMenu({ open, onClose }: MobileMenuProps) {
                 </svg>
               )}
             </button>
-          )}
+          )} */}
           <button
             onClick={onClose}
             aria-label="Close menu"

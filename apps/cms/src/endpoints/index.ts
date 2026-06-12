@@ -525,7 +525,6 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
               consentTimestamp: now,
               consentIpHash,
               doubleOptInConfirmed: false,
-              doubleOptInTimestamp: null,
             },
             depth: 0,
           });
@@ -621,8 +620,8 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
           doubleOptInTimestamp: new Date().toISOString(),
           // null (not undefined) is required to actually clear the field in Payload v2.
           // undefined is silently ignored and leaves the token in the DB indefinitely.
-          confirmToken: null,
-          confirmTokenExpiry: null,
+          confirmToken: null as unknown as string,
+          confirmTokenExpiry: null as unknown as string,
         },
         depth: 0,
       });

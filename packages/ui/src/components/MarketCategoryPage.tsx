@@ -1,9 +1,42 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { TradingViewWidget } from './TradingViewWidget';
 import type { InstrumentItem } from './InstrumentsPage';
+
+// Default TradingView symbol per category (used for the chart hero and as a
+// fallback when a row symbol can't be confidently mapped to a TV symbol).
+const CATEGORY_TV_SYMBOL: Record<string, string> = {
+  forex: 'OANDA:EURUSD',
+  indices: 'OANDA:SPX500USD',
+  commodities: 'OANDA:XAUUSD',
+  stocks: 'NASDAQ:AAPL',
+  etfs: 'AMEX:SPY',
+  crypto: 'BITSTAMP:BTCUSD',
+};
+
+// Best-effort row → TradingView symbol mapping, mirroring InstrumentsPage's
+// OANDA-prefixed approach. Indices static codes (SPX500/NAS100…) aren't valid TV
+// symbols, so those fall back to the category default chart.
+function rowToTvSymbol(category: string, symbol: string): string {
+  const s = symbol.replace('/', '').toUpperCase();
+  switch (category) {
+    case 'forex':
+    case 'commodities':
+      return `OANDA:${s}`;
+    case 'stocks':
+      return `NASDAQ:${s}`;
+    case 'etfs':
+      return `AMEX:${s}`;
+    case 'crypto':
+      return `BITSTAMP:${s}`;
+    default:
+      return CATEGORY_TV_SYMBOL[category] ?? 'OANDA:EURUSD';
+  }
+}
 
 const CATEGORY_META: Record<
   string,
@@ -103,6 +136,17 @@ const CATEGORY_META: Record<
   },
 };
 
+type ChartPeriod = '1D' | '1W' | '1M' | '3M' | '6M' | '1Y';
+const CHART_PERIODS: ChartPeriod[] = ['1D', '1W', '1M', '3M', '6M', '1Y'];
+const CHART_PERIOD_RANGE: Record<ChartPeriod, string> = {
+  '1D': '1D',
+  '1W': '5D',
+  '1M': '1M',
+  '3M': '3M',
+  '6M': '6M',
+  '1Y': '12M',
+};
+
 const SPEC_ROWS = [
   { key: 'minSpread', value: 'from 0.0 pip' },
   { key: 'maxLeverage', value: '1:500' },
@@ -124,6 +168,16 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
   const meta = CATEGORY_META[validKey]!;
 
   const cmsRows = instruments && instruments.length > 0 ? instruments : null;
+
+  const [selectedIdx, setSelectedIdx] = useState(0);
+  const [chartPeriod, setChartPeriod] = useState<ChartPeriod>('1M');
+  // Chart symbol follows the selected row; falls back to the category default.
+  const selectedSymbol = cmsRows
+    ? cmsRows[selectedIdx]?.symbol
+    : meta.staticRows[selectedIdx]?.symbol;
+  const chartSymbol = selectedSymbol
+    ? rowToTvSymbol(category, selectedSymbol)
+    : (CATEGORY_TV_SYMBOL[category] ?? 'OANDA:EURUSD');
 
   return (
     <>
@@ -165,6 +219,49 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
               : `${meta.label.toUpperCase()} · LIVE WATCHLIST`}
           </SectionKicker>
 
+          {/* TradingView chart — symbol follows the selected row below */}
+          <div className="mb-3 overflow-hidden rounded-[20px] bg-[#07090D] xl:rounded-[24px]">
+            {/* Period selector */}
+            <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-2.5">
+              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-white/30">
+                {chartSymbol.split(':')[1] ?? chartSymbol}
+              </span>
+              <div className="flex gap-[2px]">
+                {CHART_PERIODS.map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => setChartPeriod(p)}
+                    className={`rounded-[6px] px-[9px] py-[5px] font-mono text-[11px] transition-colors ${
+                      chartPeriod === p
+                        ? 'bg-[#1f2937] font-semibold text-white'
+                        : 'text-[#6b7280] hover:text-white'
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="h-[340px] xl:h-[420px]">
+              <TradingViewWidget
+                key={`${chartSymbol}-${chartPeriod}`}
+                type="advanced-chart"
+                symbol={chartSymbol}
+                theme="dark"
+                width="100%"
+                height="100%"
+                config={{
+                  style: '1',
+                  range: CHART_PERIOD_RANGE[chartPeriod],
+                  hide_top_toolbar: false,
+                  save_image: false,
+                  hide_volume: true,
+                  allow_symbol_change: false,
+                }}
+              />
+            </div>
+          </div>
+
           {/* Dark watchlist container */}
           <div className="overflow-hidden rounded-[20px] bg-[#111111] xl:rounded-[24px]">
             {/* Column header */}
@@ -183,13 +280,17 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
             {/* Rows */}
             {cmsRows
               ? cmsRows.map((item, i) => (
-                  <div
+                  <button
+                    type="button"
                     key={item.id}
-                    className={`grid grid-cols-[1fr_64px_64px] items-center px-4 py-[11px] xl:grid-cols-[1fr_120px_120px] xl:px-6 xl:py-[14px] ${i < cmsRows.length - 1 ? 'border-b border-white/[0.06]' : ''}`}
+                    onClick={() => setSelectedIdx(i)}
+                    className={`grid w-full grid-cols-[1fr_64px_64px] items-center px-4 py-[11px] text-left transition-colors xl:grid-cols-[1fr_120px_120px] xl:px-6 xl:py-[14px] ${i < cmsRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-[#161d27]' : 'hover:bg-white/[0.03]'}`}
                   >
                     {/* Left: indicator dot + symbol + name */}
                     <div className="flex min-w-0 items-center gap-3">
-                      <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#26A69A]" />
+                      <span
+                        className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${selectedIdx === i ? 'bg-accent' : 'bg-[#26A69A]'}`}
+                      />
                       <div className="min-w-0">
                         <p className="font-sans text-[13px] font-semibold leading-none text-white">
                           {item.symbol}
@@ -209,17 +310,19 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
                         —
                       </span>
                     </div>
-                  </div>
+                  </button>
                 ))
               : meta.staticRows.map((row, i) => (
-                  <div
+                  <button
+                    type="button"
                     key={row.symbol}
-                    className={`grid grid-cols-[1fr_64px_64px] items-center px-4 py-[11px] xl:grid-cols-[1fr_120px_120px] xl:px-6 xl:py-[14px] ${i < meta.staticRows.length - 1 ? 'border-b border-white/[0.06]' : ''}`}
+                    onClick={() => setSelectedIdx(i)}
+                    className={`grid w-full grid-cols-[1fr_64px_64px] items-center px-4 py-[11px] text-left transition-colors xl:grid-cols-[1fr_120px_120px] xl:px-6 xl:py-[14px] ${i < meta.staticRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-[#161d27]' : 'hover:bg-white/[0.03]'}`}
                   >
                     {/* Left: indicator dot + symbol + name */}
                     <div className="flex min-w-0 items-center gap-3">
                       <span
-                        className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${row.up ? 'bg-[#26A69A]' : 'bg-[#EE5250]'}`}
+                        className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${selectedIdx === i ? 'bg-accent' : row.up ? 'bg-[#26A69A]' : 'bg-[#EE5250]'}`}
                       />
                       <div className="min-w-0">
                         <p className="font-sans text-[13px] font-semibold leading-none text-white">
@@ -246,7 +349,7 @@ export function MarketCategoryPage({ category, instruments }: MarketCategoryPage
                         {row.change}
                       </span>
                     </div>
-                  </div>
+                  </button>
                 ))}
           </div>
 

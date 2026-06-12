@@ -135,7 +135,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
           </div>
 
           {/* Gate form */}
-          <div className="bg-surface shadow-card dark:shadow-card-dark rounded-[20px] p-5">
+          <div className="rounded-[20px] bg-[#fafaf9] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:bg-[#1a1c22] dark:shadow-none">
             <p className="text-foreground mb-1 font-sans text-[18px] font-semibold">
               {t('gateHeading')}
             </p>
@@ -166,7 +166,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                   placeholder={t('namePlaceholder')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="border-border font-body text-foreground placeholder-muted focus:border-accent bg-background border-border w-full rounded-[12px] border px-4 py-3 text-[13px] outline-none"
+                  className="font-body focus:border-accent dark:focus:border-accent w-full rounded-[12px] border border-[#e5e7eb] bg-[#fafaf9] px-4 py-3 text-[13px] text-[#111] placeholder-[#9ca3af] outline-none dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
                 />
                 <input
                   type="email"
@@ -174,7 +174,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                   placeholder={t('emailPlaceholderFull')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="border-border font-body text-foreground placeholder-muted focus:border-accent bg-background border-border w-full rounded-[12px] border px-4 py-3 text-[13px] outline-none"
+                  className="font-body focus:border-accent dark:focus:border-accent w-full rounded-[12px] border border-[#e5e7eb] bg-[#fafaf9] px-4 py-3 text-[13px] text-[#111] placeholder-[#9ca3af] outline-none dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
                 />
                 {error && <p className="font-body text-[12px] text-red-500">{error}</p>}
                 <label className="flex cursor-pointer items-start gap-2.5">

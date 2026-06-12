@@ -18,6 +18,21 @@ export interface CmsFaqItem {
   sortOrder?: number | null;
 }
 
+const CAT_TAG_STYLE: Record<string, string> = {
+  Platform: 'bg-[#3B82F6]/10 text-[#3B82F6]',
+  Platforms: 'bg-[#3B82F6]/10 text-[#3B82F6]',
+  Security: 'bg-[#EF4444]/10 text-[#EF4444]',
+  Regulation: 'bg-[#EF4444]/10 text-[#EF4444]',
+  Funding: 'bg-[#F59E0B]/10 text-[#F59E0B]',
+  Deposits: 'bg-[#F59E0B]/10 text-[#F59E0B]',
+  Withdrawals: 'bg-[#F59E0B]/10 text-[#F59E0B]',
+  Trading: 'bg-[#8B5CF6]/10 text-[#8B5CF6]',
+  Accounts: 'bg-accent/10 text-accent',
+  Account: 'bg-accent/10 text-accent',
+  General: 'bg-[#6B7280]/10 text-[#6B7280]',
+};
+const DEFAULT_CAT_TAG = 'bg-accent/10 text-accent';
+
 const CATEGORY_STYLES: Record<string, { dot: string; activePill: string }> = {
   Platform: { dot: 'bg-[#3B82F6]', activePill: 'bg-[#3B82F6] text-white' },
   Security: { dot: 'bg-accent', activePill: 'bg-accent text-white' },
@@ -83,21 +98,23 @@ function AccordionItem({
 }) {
   const isOpen = openIdx === id;
   return (
-    <div className="bg-background dark:bg-surface rounded-[16px]">
+    <div className="rounded-[16px] bg-[#fafaf9] dark:bg-[#1a1c22]">
       <button
         onClick={() => setOpenIdx(isOpen ? null : id)}
         className="flex w-full items-center justify-between gap-[14px] px-5 py-[18px] text-left"
         aria-expanded={isOpen}
       >
-        {/* Category tag — mono tracking-[1.2px] per Figma */}
-        <span className="bg-accent/10 text-accent flex-shrink-0 rounded-full px-[10px] py-[5px] font-mono text-[10px] tracking-[1.2px]">
+        {/* Category tag — color matches category per Figma */}
+        <span
+          className={`flex-shrink-0 rounded-full px-[10px] py-[5px] font-mono text-[10px] tracking-[1.2px] ${CAT_TAG_STYLE[section] ?? DEFAULT_CAT_TAG}`}
+        >
           {section.toUpperCase()}
         </span>
         <span className="text-foreground flex-1 font-sans text-[15px] font-semibold leading-normal tracking-[-0.15px]">
           {question}
         </span>
-        {/* Plus/X toggle button — bg-[#fafaf9] rounded-[99px] p-[8px] */}
-        <div className="bg-surface dark:bg-surface-elevated flex-shrink-0 rounded-full p-[8px]">
+        {/* Plus/X toggle button */}
+        <div className="flex-shrink-0 rounded-full bg-[#f2f2f4] p-[8px] dark:bg-[#22252e]">
           <svg
             width="13"
             height="13"
@@ -190,7 +207,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
           </p>
 
           {/* Search bar — bg-[#fafaf9] rounded-[16px] per Figma */}
-          <div className="bg-surface dark:bg-surface flex items-center gap-[10px] rounded-[16px] px-4 py-[14px]">
+          <div className="flex items-center gap-[10px] rounded-[16px] bg-[#fafaf9] px-4 py-[14px] dark:bg-[#1a1c22]">
             <svg
               className="text-muted flex-shrink-0"
               width="14"
@@ -211,7 +228,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
               }}
               className="font-body text-foreground placeholder:text-muted flex-1 bg-transparent text-[14px] outline-none"
             />
-            <div className="dark:bg-surface-elevated rounded-[6px] bg-[#f2f2f4] px-[7px] py-[3px]">
+            <div className="rounded-[6px] bg-[#f2f2f4] px-[7px] py-[3px] dark:bg-[#22252e]">
               <span className="text-muted font-mono text-[10px]">⌘ K</span>
             </div>
           </div>
@@ -237,7 +254,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
                   className={`font-body flex-shrink-0 rounded-full px-3 py-[7px] text-[12px] font-medium transition-colors ${
                     isActive
                       ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                      : 'text-muted dark:bg-surface-elevated dark:hover:bg-surface bg-[#f2f2f4] hover:bg-[#e5e5e5]'
+                      : 'bg-[#f2f2f4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e]'
                   }`}
                 >
                   {cat}
@@ -262,9 +279,11 @@ export function FaqPage({ faqs }: FaqPageProps) {
                 return (
                   <div
                     key={idx}
-                    className="dark:bg-surface flex items-center gap-[10px] rounded-[14px] bg-[#fafaf9] px-4 py-[14px]"
+                    className="flex items-center gap-[10px] rounded-[14px] bg-[#fafaf9] px-4 py-[14px] dark:bg-[#1a1c22]"
                   >
-                    <span className="flex-shrink-0 rounded-full bg-[rgba(0,176,80,0.1)] px-[10px] py-[5px] font-mono text-[9px] tracking-[1.2px] text-[#00b050]">
+                    <span
+                      className={`flex-shrink-0 rounded-full px-[10px] py-[5px] font-mono text-[9px] tracking-[1.2px] ${CAT_TAG_STYLE[item.section] ?? DEFAULT_CAT_TAG}`}
+                    >
                       {item.section.toUpperCase()}
                     </span>
                     <span className="font-body text-foreground flex-1 text-[13.5px] font-medium leading-snug">

@@ -158,7 +158,7 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
               def: 'means the funds required as a deposit to open and maintain a leveraged position.',
             },
           ].map((item) => (
-            <div key={item.term} className="bg-surface rounded-[12px] p-4">
+            <div key={item.term} className="rounded-[12px] bg-[#fafaf9] p-4 dark:bg-[#1a1c22]">
               <span className="font-body text-foreground text-[13px] font-semibold">
                 {item.term}
               </span>
@@ -316,7 +316,7 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
             },
             { type: 'Marketing', desc: 'Used to deliver relevant advertising. Can be opted out.' },
           ].map((c) => (
-            <div key={c.type} className="bg-surface rounded-[12px] p-4">
+            <div key={c.type} className="rounded-[12px] bg-[#fafaf9] p-4 dark:bg-[#1a1c22]">
               <p className="font-body text-foreground text-[13px] font-semibold">{c.type}</p>
               <p className="font-body text-muted mt-0.5 text-[12px]">{c.desc}</p>
             </div>
@@ -377,7 +377,7 @@ export function LegalPage({ documents }: LegalPageProps) {
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-medium transition-colors ${
                   activeDoc === doc.id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'text-muted dark:bg-surface-elevated dark:hover:bg-surface-elevated bg-[#F2F2F4] hover:bg-[#e5e5e5]'
+                    : 'bg-[#F2F2F4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e]'
                 }`}
               >
                 {doc.id === 'terms'
@@ -400,7 +400,7 @@ export function LegalPage({ documents }: LegalPageProps) {
       {/* Table of Contents */}
       <section className="px-5 pb-4">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="bg-surface rounded-[14px] p-4">
+          <div className="rounded-[14px] bg-[#fafaf9] p-4 dark:bg-[#1a1c22]">
             <p className="text-muted mb-3 font-mono text-[10px] tracking-[1.4px]">
               {t('tocHeading')}
             </p>

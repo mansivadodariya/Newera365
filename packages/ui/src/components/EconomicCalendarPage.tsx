@@ -172,64 +172,67 @@ export function EconomicCalendarPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-transparent px-5 pb-8 pt-9">
+      <section className="bg-transparent px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
+          <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.06] tracking-[-1.14px]">
             {t('heroLine1')}
             <br />
-            <span className="text-accent">{t('heroAccent')}</span>
+            {t('heroAccent')}
           </h1>
-          <p className="font-body text-muted max-w-[300px] text-[14px] leading-[1.55]">
+          <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
             {t('heroSubtitle')}
           </p>
         </div>
       </section>
 
-      {/* Filters */}
-      <section className="px-5 pb-3">
+      {/* Filters — card */}
+      <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          {/* Impact filter */}
-          <div className="mb-3 flex gap-2">
-            {IMPACTS.map((imp) => (
-              <button
-                key={imp.id}
-                onClick={() => setImpact(imp.id)}
-                className={`font-body flex items-center gap-1.5 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
-                  impact === imp.id
-                    ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
-                }`}
-              >
-                {imp.id !== 'ALL' && (
-                  <span className={`h-1.5 w-1.5 rounded-full ${IMPACT_DOT[imp.id]}`} />
-                )}
-                {imp.id === 'ALL'
-                  ? t('filterAll')
-                  : imp.id === 'HIGH'
-                    ? t('filterHigh')
-                    : imp.id === 'MEDIUM'
-                      ? t('filterMedium')
-                      : t('filterLow')}
-              </button>
-            ))}
-          </div>
-
-          {/* Currency filter */}
-          <div className="scrollbar-hide flex gap-2 overflow-x-auto pb-1">
-            {CURRENCIES.map((cur) => (
-              <button
-                key={cur}
-                onClick={() => setCurrency(cur)}
-                className={`font-body flex flex-shrink-0 items-center gap-1.5 rounded-full px-3 py-[6px] text-[11px] font-semibold uppercase tracking-[0.06em] transition-colors ${
-                  currency === cur
-                    ? 'bg-accent/10 text-accent'
-                    : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
-                }`}
-              >
-                {cur !== 'ALL' && <span>{CURRENCY_FLAG[cur]}</span>}
-                {cur}
-              </button>
-            ))}
+          <div className="flex flex-col gap-[14px] rounded-[20px] bg-[#fafaf9] p-4 dark:bg-[#16181d]">
+            {/* Importance */}
+            <div className="flex flex-col gap-2">
+              <p className="font-mono text-[9px] tracking-[1.35px] text-[#6b7280]">IMPORTANCE</p>
+              <div className="flex flex-wrap gap-2">
+                {IMPACTS.map((imp) => (
+                  <button
+                    key={imp.id}
+                    onClick={() => setImpact(imp.id)}
+                    className={`font-body flex-shrink-0 rounded-full px-3 py-[7px] text-[12px] font-medium transition-colors ${
+                      impact === imp.id
+                        ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                        : 'bg-[#f2f2f4] text-[#6b7280] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e] dark:hover:text-white/80'
+                    }`}
+                  >
+                    {imp.id === 'ALL'
+                      ? t('filterAll')
+                      : imp.id === 'HIGH'
+                        ? t('filterHigh')
+                        : imp.id === 'MEDIUM'
+                          ? t('filterMedium')
+                          : t('filterLow')}
+                  </button>
+                ))}
+              </div>
+            </div>
+            {/* Currency */}
+            <div className="flex flex-col gap-2">
+              <p className="font-mono text-[9px] tracking-[1.35px] text-[#6b7280]">CURRENCY</p>
+              <div className="flex flex-wrap gap-2">
+                {CURRENCIES.map((cur) => (
+                  <button
+                    key={cur}
+                    onClick={() => setCurrency(cur)}
+                    className={`font-body flex-shrink-0 rounded-full px-3 py-[7px] text-[12px] font-medium transition-colors ${
+                      currency === cur
+                        ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                        : 'bg-[#f2f2f4] text-[#6b7280] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e] dark:hover:text-white/80'
+                    }`}
+                  >
+                    {cur}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -261,73 +264,76 @@ export function EconomicCalendarPage() {
           {Object.keys(grouped).length === 0 ? (
             <p className="font-body text-muted py-12 text-center text-[14px]">{t('noEvents')}</p>
           ) : (
-            Object.entries(grouped).map(([date, events]) => (
-              <div key={date} className="mb-5">
-                <p className="font-body dark:border-border text-muted mb-2 border-b border-[#e5e7eb] pb-2 text-[10px] font-semibold uppercase tracking-[0.1em]">
-                  {date}
-                </p>
-                <div className="flex flex-col">
+            Object.entries(grouped).map(([date, events], gi) => (
+              <div key={date} className="mb-4">
+                {/* Date kicker + LIVE indicator */}
+                <div className="mb-3 flex items-center justify-between">
+                  <SectionKicker className="[&>span:first-child]:bg-muted text-muted">
+                    {date.toUpperCase()}
+                  </SectionKicker>
+                  {gi === 0 && (
+                    <div className="flex items-center gap-[6px]">
+                      <span className="bg-accent h-[6px] w-[6px] rounded-full" />
+                      <span className="text-accent font-mono text-[10px] tracking-[1px]">LIVE</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Events */}
+                <div className="rounded-[20px] border border-[#f0f0ee] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:border-white/[0.06] dark:bg-[#1a1c22] dark:shadow-none">
                   {events.map((ev, i) => (
                     <div
                       key={ev.id}
-                      className={`py-3 ${
-                        i < events.length - 1
-                          ? 'border-b border-[#f3f4f6] dark:border-[#1c1c1c]'
-                          : ''
-                      }`}
+                      className={`flex flex-col gap-2 p-[14px] ${i < events.length - 1 ? 'border-b border-[#f0f0ee] dark:border-white/[0.07]' : ''}`}
                     >
-                      {/* Mobile layout */}
-                      <div className="grid grid-cols-[48px_1fr_auto] items-center gap-3 xl:hidden">
-                        <span className="font-body text-muted text-[11px]">{ev.time}</span>
-                        <div className="flex items-center gap-2">
+                      {/* Top row: time | flag+currency | event | dots */}
+                      <div className="flex items-center gap-[10px]">
+                        <span className="w-[44px] flex-shrink-0 font-mono text-[12px] font-medium text-[#111] dark:text-white">
+                          {ev.time}
+                        </span>
+                        <div className="flex flex-shrink-0 items-center gap-[5px]">
                           <span className="text-[14px]">{CURRENCY_FLAG[ev.currency]}</span>
-                          <span className="font-body text-foreground text-[13px]">{ev.event}</span>
+                          <span className="font-mono text-[11px] text-[#6b7280]">
+                            {ev.currency}
+                          </span>
                         </div>
-                        <div className="flex gap-[3px]">
+                        <span className="font-body min-w-0 flex-1 text-[13px] font-medium text-[#111] dark:text-white">
+                          {ev.event}
+                        </span>
+                        {/* Impact dots */}
+                        <div className="flex flex-shrink-0 gap-[3px]">
                           {(['HIGH', 'MEDIUM', 'LOW'] as const).map((level) => (
                             <span
                               key={level}
-                              className={`h-2 w-2 rounded-full ${
+                              className={`h-[6px] w-[6px] rounded-full ${
                                 ev.impact === 'HIGH'
                                   ? IMPACT_DOT[level]
                                   : ev.impact === 'MEDIUM' && level !== 'HIGH'
                                     ? IMPACT_DOT[level]
                                     : ev.impact === 'LOW' && level === 'LOW'
                                       ? IMPACT_DOT[level]
-                                      : 'bg-[#e5e7eb] dark:bg-[#2a2a2a]'
+                                      : 'bg-[#e5e7eb] dark:bg-white/10'
                               }`}
                             />
                           ))}
                         </div>
                       </div>
-
-                      {/* Desktop layout */}
-                      <div className="hidden xl:grid xl:grid-cols-[80px_40px_80px_1fr_90px_90px_90px_60px] xl:items-center xl:gap-4">
-                        <span className="font-body text-muted text-[12px]">{ev.time}</span>
-                        <span className="text-[16px]">{CURRENCY_FLAG[ev.currency]}</span>
-                        <span className="font-body text-[12px] font-medium text-[#6b7280]">
-                          {ev.currency}
-                        </span>
-                        <span className="font-body text-foreground text-[13px]">{ev.event}</span>
-                        <span className="font-body text-muted text-[12px] tabular-nums">—</span>
-                        <span className="font-body text-muted text-[12px] tabular-nums">—</span>
-                        <span className="font-body text-muted text-[12px] tabular-nums">—</span>
-                        <div className="flex gap-[3px]">
-                          {(['HIGH', 'MEDIUM', 'LOW'] as const).map((level) => (
-                            <span
-                              key={level}
-                              className={`h-2 w-2 rounded-full ${
-                                ev.impact === 'HIGH'
-                                  ? IMPACT_DOT[level]
-                                  : ev.impact === 'MEDIUM' && level !== 'HIGH'
-                                    ? IMPACT_DOT[level]
-                                    : ev.impact === 'LOW' && level === 'LOW'
-                                      ? IMPACT_DOT[level]
-                                      : 'dark:bg-surface-elevated bg-[#e5e7eb]'
-                              }`}
-                            />
-                          ))}
-                        </div>
+                      {/* Bottom row: PREV / FCST / ACT */}
+                      <div className="flex items-center justify-between">
+                        {[
+                          { label: 'PREV', value: '—' },
+                          { label: 'FCST', value: '—' },
+                          { label: 'ACT', value: '—' },
+                        ].map(({ label, value }) => (
+                          <div key={label} className="flex items-center gap-[6px]">
+                            <span className="font-mono text-[9px] tracking-[1.08px] text-[#6b7280]">
+                              {label}
+                            </span>
+                            <span className="font-mono text-[11px] text-[#111] dark:text-white">
+                              {value}
+                            </span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ))}

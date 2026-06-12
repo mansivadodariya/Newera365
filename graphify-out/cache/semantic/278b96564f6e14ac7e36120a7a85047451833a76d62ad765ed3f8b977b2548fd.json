@@ -1,0 +1,48 @@
+{
+  "nodes": [
+    {
+      "id": "icons_feature_execution_svg",
+      "label": "Feature Execution SVG Icon",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/feature-execution.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "SVG icon depicting a rabbit/speed symbol on a rounded square background (44x44 viewBox). Used as a feature icon for 'execution' quality (fast trade execution). Contains a rabbit-shaped vector path with CSS variable stroke/fill for theming.",
+      "confidence_score": 0.95,
+      "confidence_type": "INFERRED"
+    },
+    {
+      "id": "icons_feature_execution_icon_box",
+      "label": "Icon Box (Rounded Rectangle Background)",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/feature-execution.svg",
+      "source_location": "g#icon-box > rect",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "44x44 rounded rect (rx=14) with fill var(--fill-0, #A6A6A6) at 8% opacity, forming the icon background.",
+      "confidence_score": 1.0,
+      "confidence_type": "EXTRACTED"
+    },
+    {
+      "id": "icons_feature_execution_rabbit_icon",
+      "label": "Rabbit/Speed Icon Paths",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/feature-execution.svg",
+      "source_location": "g#rabbit 1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Vector paths forming a rabbit silhouette, symbolising fast/speed execution. Stroke uses CSS variable --stroke-0 (default black), stroke-width 2, with round linecap and linejoin.",
+      "confidence_score": 0.95,
+      "confidence_type": "INFERRED"
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

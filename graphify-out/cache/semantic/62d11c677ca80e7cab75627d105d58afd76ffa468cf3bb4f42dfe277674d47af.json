@@ -1,0 +1,46 @@
+{
+  "nodes": [
+    {
+      "id": "icons_market_commodities_icon",
+      "label": "Market Commodities Icon",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/market-commodities.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Black-and-white line icon depicting a liquid drop (representing oil or raw materials) alongside a stack of coins with a dollar sign, symbolizing commodities trading markets.",
+      "confidence_score": 1.0,
+      "confidence_type": "EXTRACTED",
+      "tags": [
+        "icon",
+        "market",
+        "commodities",
+        "oil",
+        "coins",
+        "trading",
+        "forex",
+        "CFD",
+        "navigation"
+      ]
+    },
+    {
+      "id": "icons_market_commodities_visual_concept",
+      "label": "Commodities Market Visual Concept",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/market-commodities.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Conceptual representation combining an oil/liquid drop with stacked dollar coins \u2014 standard iconographic shorthand for commodities markets (energy + precious metals/currency).",
+      "confidence_score": 0.95,
+      "confidence_type": "INFERRED",
+      "tags": ["commodities", "energy", "oil", "precious-metals", "market-category"]
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

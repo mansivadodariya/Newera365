@@ -1655,70 +1655,126 @@ async function seedEducation() {
   console.log('🎓 Education Content...');
   await deleteAllDocs('education-content');
 
-  // Guides
+  // Guides — slugs must match staticGuides.ts so CMS docs are found by the same
+  // slugs that the education hub featured cards link to.
   const guides = [
     {
       en: {
-        title: 'Introduction to Forex Trading',
-        slug: 'introduction-to-forex-trading',
+        title: 'The 2026 macro outlook',
+        slug: 'macro-outlook-2026',
         body: bodyBlocks(
-          'Forex (foreign exchange) is the largest financial market in the world, with over $7 trillion traded daily. In this guide, you will learn the fundamentals of forex trading — how currency pairs work, how to read quotes, and how to place your first trade.',
-          'THE FOREX MARKET: Currency pairs are quoted as the price of one currency in terms of another. EUR/USD at 1.0850 means it costs $1.0850 to buy €1.',
-          'HOW TO GET STARTED: Open a demo account, practice reading charts, learn to manage risk, and only move to live trading once you are consistently profitable on the demo.',
+          'The year ahead hinges on one question: do central banks cut, hold, or hike? Each path reshapes currency, index and commodity markets in different ways. Here is how to read the signals.',
+          'THE RATE-CUT SCENARIO: If inflation continues to soften, the Fed and ECB likely begin easing. A weaker dollar tends to lift gold, emerging-market currencies and risk assets — but the move is rarely linear, and positioning matters more than direction.',
+          'THE HIGHER-FOR-LONGER SCENARIO: Sticky services inflation could keep policy restrictive well into the year. In that world, the dollar stays bid, growth-sensitive indices wobble, and carry trades in high-yield currencies regain appeal.',
+          'WHAT IT MEANS FOR YOUR BOOK: Size positions for the scenario you can survive, not just the one you expect. Define invalidation levels before you enter, and let macro shape your bias rather than your stop placement.',
         ),
       },
       ar: {
-        title: 'مقدمة في تداول الفوركس',
+        title: 'التوقعات الكلية لعام 2026',
         body: bodyBlocks(
-          'الفوركس (تبادل العملات الأجنبية) هو أكبر سوق مالي في العالم، حيث يتم تداول ما يزيد على 7 تريليون دولار يومياً.',
-          'كيف تعمل أزواج العملات: يُقتبس زوج EUR/USD عند 1.0850 مما يعني أن 1 يورو يساوي 1.0850 دولار.',
-          'كيف تبدأ: افتح حساباً تجريبياً، وتدرّب على قراءة الرسوم البيانية، وتعلّم إدارة المخاطر.',
+          'يتوقف العام القادم على سؤال واحد: هل تخفض البنوك المركزية أسعار الفائدة أم تثبتها أم ترفعها؟ كل مسار يعيد تشكيل أسواق العملات والمؤشرات والسلع.',
+          'سيناريو خفض الفائدة: إذا استمر التضخم في التراجع، يبدأ الفيدرالي والبنك المركزي الأوروبي في التيسير. يميل الدولار الأضعف إلى رفع الذهب والعملات الناشئة والأصول الخطرة.',
+          'سيناريو الإبقاء على مستويات مرتفعة: قد يُبقي تضخم الخدمات المتشدد السياسة النقدية تقييدية طوال العام. في هذا السيناريو، يظل الدولار قويًا وتتعثر المؤشرات الحساسة للنمو.',
+          'ما يعنيه ذلك لمحفظتك: حدّد حجم المراكز للسيناريو الذي يمكنك تحمّله، وليس فقط السيناريو الذي تتوقعه.',
         ),
       },
       seoDescription:
-        'Learn forex trading from scratch with our beginner guide to currency pairs, quotes and how to place your first trade.',
+        'Rising inflation or rate cuts? We break down what every 2026 macro scenario means for your trading positions.',
+      isFeatured: true,
     },
     {
       en: {
-        title: 'MetaTrader 5 Complete Guide',
-        slug: 'metatrader-5-complete-guide',
+        title: 'Risk management essentials',
+        slug: 'risk-management-essentials',
         body: bodyBlocks(
-          'MetaTrader 5 (MT5) is the industry-standard trading platform used by millions of traders worldwide. This guide covers everything from installation to advanced order types.',
-          'INSTALLING MT5: Download MT5 from the NewEra365 client portal or directly from MetaQuotes. Enter your account credentials to log in.',
-          'PLACING ORDERS: Click "New Order" or press F9. Enter the symbol, volume, stop loss and take profit. Choose between market order (instant fill) or limit/stop orders.',
+          'Most accounts are not lost on bad trades — they are lost on bad sizing. These four frameworks keep a losing streak survivable.',
+          'FIXED-FRACTIONAL SIZING: Risk a constant percentage of equity per trade — commonly 1%. As the account grows, position size grows with it; as it shrinks, exposure falls automatically, smoothing the equity curve.',
+          'DEFINING YOUR STOP FIRST: Decide where the trade is wrong before you decide how big it is. Your stop distance and your risk budget together determine size — never the other way around.',
+          'CORRELATION AWARENESS: Three correlated longs are one big position wearing a disguise. Treat correlated exposure as a single risk unit so a single news event cannot hit every position at once.',
+          'THE DAILY LOSS LIMIT: Set a maximum daily loss — typically 2–3% of equity. Hit it and stop. This single rule prevents most blow-up scenarios.',
         ),
       },
       ar: {
-        title: 'الدليل الكامل لـ MetaTrader 5',
+        title: 'أساسيات إدارة المخاطر',
         body: bodyBlocks(
-          'MetaTrader 5 هي منصة التداول المعيارية في الصناعة التي يستخدمها الملايين حول العالم. يشمل هذا الدليل كل شيء من التثبيت إلى أنواع الأوامر المتقدمة.',
-          'تثبيت MT5: نزّل MT5 من بوابة عميل نيو إيرا 365 مباشرة. أدخل بيانات حسابك لتسجيل الدخول.',
-          'تنفيذ الأوامر: انقر على "أمر جديد" أو اضغط F9. أدخل الرمز والحجم ووقف الخسارة وجني الأرباح.',
+          'معظم الحسابات لا تُخسر بسبب صفقات سيئة — بل بسبب التحجيم السيئ. هذه الأطر الأربعة تجعل سلسلة الخسائر قابلة للتحمل.',
+          'التحجيم بنسبة ثابتة: خاطر بنسبة مئوية ثابتة من حقوق الملكية لكل صفقة — عادةً 1%. مع نمو الحساب، يزداد حجم المركز معه.',
+          'تحديد وقف الخسارة أولاً: قرر أين تكون الصفقة خاطئة قبل أن تقرر حجمها. مسافة وقف الخسارة وميزانية المخاطرة معًا تحددان الحجم.',
+          'الوعي بالارتباط: ثلاثة مراكز شراء مترابطة هي مركز كبير واحد في زي مقنّع. تعامل مع التعرض المترابط كوحدة مخاطرة واحدة.',
+          'حد الخسارة اليومية: ضع حدًا أقصى لخسارتك اليومية — عادةً 2-3% من حقوق الملكية. عند الوصول إليه، توقف.',
         ),
       },
       seoDescription:
-        'The complete guide to MetaTrader 5 — installation, placing orders, using EAs, and advanced chart analysis.',
+        'Four frameworks that protect every trading account from outsized drawdowns: sizing, stop placement, correlation, and daily limits.',
     },
     {
       en: {
-        title: 'Risk Management for Traders',
-        slug: 'risk-management-for-traders',
+        title: 'Reading a candlestick chart',
+        slug: 'reading-candlestick-charts',
         body: bodyBlocks(
-          'Proper risk management separates successful traders from those who blow their accounts. This guide covers position sizing, stop-loss placement, and risk-to-reward ratios.',
-          'THE 1–2% RULE: Never risk more than 1–2% of your trading capital on a single trade. This ensures you can survive a run of losses without depleting your account.',
-          'STOP-LOSS PLACEMENT: Always place a stop loss when entering a trade. Use technical levels (support/resistance, recent swing highs/lows) rather than arbitrary pip values.',
+          'A candlestick compresses four numbers — open, high, low and close — into one shape. Learn to read the shape and you read the balance between buyers and sellers.',
+          'ANATOMY OF A CANDLE: The body spans the open and close; the wicks mark the high and low. A long upper wick says buyers pushed price up but could not hold it — sellers stepped in.',
+          'COMMON SINGLE-CANDLE SIGNALS: Dojis show indecision, hammers hint at rejection of lower prices, and engulfing candles flag a shift in control. None are signals on their own — context and location are everything.',
+          'READING IN CONTEXT: A hammer at a major support level after a sustained downtrend carries weight. The same candle in the middle of a range is noise. Always ask what the candle is telling you about where price was rejected.',
         ),
       },
       ar: {
-        title: 'إدارة المخاطر للمتداولين',
+        title: 'قراءة مخطط الشموع اليابانية',
         body: bodyBlocks(
-          'إدارة المخاطر الصحيحة تميّز المتداولين الناجحين عن غيرهم. يشمل هذا الدليل تحديد حجم المركز ووضع وقف الخسارة ونسب المخاطرة/المكافأة.',
-          'قاعدة 1-2%: لا تخاطر بأكثر من 1-2% من رأس مالك في صفقة واحدة. هذا يضمن بقاءك خلال سلسلة خسائر دون استنزاف حسابك.',
-          'وضع وقف الخسارة: ضع دائماً وقف خسارة عند الدخول في صفقة. استخدم المستويات التقنية بدلاً من قيم نقاط عشوائية.',
+          'تضغط الشمعة اليابانية أربعة أرقام — الافتتاح والارتفاع والانخفاض والإغلاق — في شكل واحد. تعلّم قراءة الشكل وستقرأ التوازن بين المشترين والبائعين.',
+          'تشريح الشمعة: الجسم يمتد بين الافتتاح والإغلاق؛ الظلال تحدد الارتفاع والانخفاض. الظل العلوي الطويل يعني أن المشترين دفعوا السعر لأعلى لكنهم لم يستطيعوا الحفاظ عليه.',
+          'إشارات الشمعة المفردة الشائعة: الدوجي يُظهر التردد، المطرقة تلمّح إلى رفض الأسعار المنخفضة، والشموع الابتلاعية تشير إلى تحول في السيطرة.',
+          'القراءة في السياق: مطرقة عند مستوى دعم رئيسي بعد اتجاه هبوطي مستدام لها ثقلها. نفس الشمعة في منتصف نطاق تذبذب هي مجرد ضوضاء.',
         ),
       },
       seoDescription:
-        'Master risk management in trading. Learn position sizing, stop-loss strategies, and risk-to-reward ratios.',
+        'From opening price to daily wick — everything you need to parse a candlestick chart and read buyer/seller pressure.',
+    },
+    {
+      en: {
+        title: 'Leverage and margin explained',
+        slug: 'leverage-and-margin-explained',
+        body: bodyBlocks(
+          'Leverage lets a small deposit control a large position. It is the single most misunderstood tool in trading — powerful, and unforgiving when misused.',
+          'HOW LEVERAGE WORKS: At 1:100 leverage, $1,000 of margin controls $100,000 of notional exposure. A 1% move is a 100% move on your margin — in either direction.',
+          'MARGIN AND THE STOP-OUT: Used margin is locked while a position is open; free margin absorbs adverse moves. When equity falls below the maintenance level, positions are closed automatically to protect the account.',
+          'USING LEVERAGE RESPONSIBLY: High leverage does not mean you must use it. Most professional traders use far less than the maximum available. Choose leverage that keeps your meaningful stop loss from triggering a margin call.',
+        ),
+      },
+      ar: {
+        title: 'شرح الرافعة المالية والهامش',
+        body: bodyBlocks(
+          'تتيح الرافعة المالية للوديعة الصغيرة التحكم في مركز كبير. هي الأداة الأكثر سوء فهماً في التداول — قوية، ولا تسامح في سوء استخدامها.',
+          'كيف تعمل الرافعة: بنسبة 1:100، يتحكم 1,000 دولار من الهامش في 100,000 دولار من التعرض الاسمي. حركة 1% تعادل 100% على هامشك — في أي اتجاه.',
+          'الهامش والإغلاق الإجباري: الهامش المستخدم مقيّد أثناء فتح المركز؛ الهامش الحر يستوعب التحركات السلبية. عندما يقل حقوق الملكية عن مستوى الصيانة، تُغلق المراكز تلقائياً.',
+          'استخدام الرافعة بمسؤولية: الرافعة العالية لا تعني أنه يجب عليك استخدامها. اختر رافعة تبقي وقف الخسارة الخاص بك من تفعيل نداء الهامش.',
+        ),
+      },
+      seoDescription:
+        'How leverage amplifies both sides of the trade — and how margin keeps you in it. A plain-English explainer.',
+    },
+    {
+      en: {
+        title: 'Building a trading plan',
+        slug: 'building-a-trading-plan',
+        body: bodyBlocks(
+          'A trading plan is the difference between a process and a series of impulses. It does not need to be complex — it needs to be written down and followed.',
+          'YOUR EDGE, STATED PLAINLY: Write the exact conditions under which you take a trade. If you cannot describe your setup in two sentences, you do not yet have one.',
+          'RULES FOR ENTRY, EXIT AND REVIEW: Define entry triggers, profit targets, stop placement and the maximum you will risk per day. Then schedule a weekly review — the plan only compounds if you study your own results.',
+          'KEEPING A TRADE JOURNAL: Log every trade: what you saw, what you did, and what actually happened. Patterns in your losses are usually patterns in your process, not just your market reading.',
+        ),
+      },
+      ar: {
+        title: 'بناء خطة تداول',
+        body: bodyBlocks(
+          'خطة التداول هي الفرق بين العملية المنهجية وسلسلة من الدوافع. لا تحتاج إلى أن تكون معقدة — تحتاج إلى أن تكون مكتوبة ومتبعة.',
+          'ميزتك التنافسية بوضوح: اكتب الشروط الدقيقة التي بموجبها تدخل في صفقة. إذا لم تستطع وصف إعدادك في جملتين، فلا تملكه بعد.',
+          'قواعد الدخول والخروج والمراجعة: حدد محفزات الدخول وأهداف الأرباح ووضع وقف الخسارة والحد الأقصى الذي ستخاطر به يومياً. ثم جدول مراجعة أسبوعية.',
+          'الاحتفاظ بمجلة تداول: سجّل كل صفقة: ما رأيته، وما فعلته، وما حدث فعلاً. الأنماط في خسائرك هي عادةً أنماط في عمليتك.',
+        ),
+      },
+      seoDescription:
+        'Turn scattered trading ideas into a repeatable, reviewable process with this step-by-step plan template.',
     },
   ];
 
@@ -1729,6 +1785,7 @@ async function seedEducation() {
       contentType: 'guide',
       body: guide.en.body,
       seoDescription: guide.seoDescription,
+      isFeatured: (guide as { isFeatured?: boolean }).isFeatured ?? false,
       status: 'published',
     });
     await patch(

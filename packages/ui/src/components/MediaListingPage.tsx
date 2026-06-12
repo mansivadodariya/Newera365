@@ -207,7 +207,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-medium transition-colors ${
                   activeTab === tab
                     ? 'bg-accent text-white'
-                    : 'border-border text-muted hover:border-foreground dark:bg-surface-elevated dark:hover:bg-surface-elevated bg-[#F2F2F4] hover:bg-[#e5e5e5]'
+                    : 'bg-[#F2F2F4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e]'
                 }`}
               >
                 {tab === 'ALL' ? t('filterAll') : tab.charAt(0) + tab.slice(1).toLowerCase()}
@@ -303,7 +303,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
               {filtered.map((ep) => (
                 <div
                   key={ep.id}
-                  className="bg-surface shadow-card flex flex-col gap-3 overflow-hidden rounded-[18px] p-4 dark:shadow-none"
+                  className="dark:hover:border-accent/20 flex cursor-pointer flex-col gap-3 overflow-hidden rounded-[18px] bg-[#fafaf9] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,176,80,0.08)] dark:bg-[#1a1c22] dark:shadow-none"
                   onClick={() => ep.href && window.open(ep.href, '_blank', 'noopener,noreferrer')}
                   style={{ cursor: ep.href ? 'pointer' : 'default' }}
                 >

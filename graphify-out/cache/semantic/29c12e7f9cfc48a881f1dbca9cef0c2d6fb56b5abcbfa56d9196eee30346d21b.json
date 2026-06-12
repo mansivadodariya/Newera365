@@ -1,0 +1,88 @@
+{
+  "nodes": [
+    {
+      "id": "readme_monorepo_overview",
+      "label": "NewEra365 README Overview",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "line 1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "readme_monorepo_overview",
+      "target": "claude_project_newera365",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 1",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_monorepo_overview",
+      "target": "claude_apps_web",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 9",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_monorepo_overview",
+      "target": "claude_apps_cms",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 10",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_monorepo_overview",
+      "target": "claude_apps_mt5_service",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 11",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_monorepo_overview",
+      "target": "claude_packages_ui",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 12",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_monorepo_overview",
+      "target": "claude_packages_types",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 13",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_monorepo_overview",
+      "target": "claude_packages_config",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 14",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

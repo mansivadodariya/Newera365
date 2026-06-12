@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { RichText, extractHeadings } from './RichText';
 import type { SlateNode } from './RichText';
+import { getStaticGuide } from './staticGuides';
 
 export interface CmsGuideDetail {
   title: string;
@@ -18,15 +19,25 @@ export type GuideDetailProps = {
   guide?: CmsGuideDetail | null;
 };
 
-export function GuideDetailPage({ slug: _slug, guide: cmsGuide }: GuideDetailProps) {
+export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
   const locale = useLocale();
   const t = useTranslations('guideDetail');
   const [activeSection, setActiveSection] = useState(0);
 
-  const hasCmsGuide = Boolean(cmsGuide && cmsGuide.body && cmsGuide.body.length > 0);
-  const cmsHeadings = hasCmsGuide ? extractHeadings(cmsGuide!.body) : [];
-  const displayTitle = hasCmsGuide ? cmsGuide!.title : t('notFoundTitle');
-  const displayAuthor = cmsGuide?.author ?? null;
+  // Prefer real CMS content; otherwise fall back to static guide content by slug
+  // so the page renders meaningfully even with no CMS data (see staticGuides.ts).
+  const staticGuide = getStaticGuide(slug);
+  const guide: CmsGuideDetail | null =
+    cmsGuide && cmsGuide.body && cmsGuide.body.length > 0
+      ? cmsGuide
+      : staticGuide
+        ? { title: staticGuide.title, body: staticGuide.body, author: staticGuide.author }
+        : null;
+
+  const hasCmsGuide = Boolean(guide && guide.body && guide.body.length > 0);
+  const cmsHeadings = hasCmsGuide ? extractHeadings(guide!.body) : [];
+  const displayTitle = hasCmsGuide ? guide!.title : t('notFoundTitle');
+  const displayAuthor = guide?.author ?? null;
 
   return (
     <>
@@ -153,7 +164,7 @@ export function GuideDetailPage({ slug: _slug, guide: cmsGuide }: GuideDetailPro
       {hasCmsGuide && (
         <section className="px-5 pb-10">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <RichText content={cmsGuide!.body} />
+            <RichText content={guide!.body} />
           </div>
         </section>
       )}

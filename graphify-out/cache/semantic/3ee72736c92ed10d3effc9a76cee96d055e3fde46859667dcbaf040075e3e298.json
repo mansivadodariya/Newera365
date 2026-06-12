@@ -1,0 +1,25 @@
+{
+  "nodes": [
+    {
+      "id": "public_logo_dark_image",
+      "label": "NewEra Logo (Dark Theme)",
+      "file_type": "image",
+      "source_file": "apps/web/public/logo-dark.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Dark-background variant of the NewEra365 brand logo. White bold sans-serif wordmark 'NEWERA' on a near-black background. The letter 'N' incorporates a green candlestick chart icon (two candlesticks, one green-filled), reinforcing the forex/trading brand identity. Used in the web frontend for dark mode or dark-background contexts.",
+      "entity_type": "brand_asset",
+      "theme_variant": "dark",
+      "brand": "NewEra365",
+      "text_content": "NEWERA",
+      "color_scheme": { "background": "#0d0d0d", "text": "#ffffff", "accent": "#22c55e" },
+      "confidence_score": 1.0,
+      "extraction_method": "EXTRACTED"
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

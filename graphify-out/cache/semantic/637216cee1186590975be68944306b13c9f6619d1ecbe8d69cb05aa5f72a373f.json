@@ -1,0 +1,21 @@
+{
+  "nodes": [
+    {
+      "id": "icons_market_crypto_icon",
+      "label": "Market Crypto Icon (Bitcoin)",
+      "file_type": "image",
+      "source_file": "apps/web/public/icons/market-crypto.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "description": "Black circular icon featuring the Bitcoin 'B' symbol in white. Used as the market category icon for cryptocurrency instruments in the NewEra365 trading platform UI.",
+      "tags": ["icon", "crypto", "bitcoin", "market-category", "public-asset"],
+      "confidence_score": 1.0,
+      "confidence_type": "EXTRACTED"
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

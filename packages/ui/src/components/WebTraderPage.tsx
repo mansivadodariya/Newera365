@@ -1,73 +1,47 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { TradingViewWidget } from './TradingViewWidget';
 
-const FEATURES = [{ idx: 2 }, { idx: 3 }, { idx: 4 }] as const;
+type Timeframe = 'M5' | 'M15' | 'H1' | 'D1';
+const TIMEFRAMES: Timeframe[] = ['M5', 'M15', 'H1', 'D1'];
 
-// Static candlestick data for the chart mockup
-const CANDLES = [
-  { h: 62, l: 18, o: 24, c: 58 },
-  { h: 70, l: 30, o: 55, c: 35 },
-  { h: 55, l: 10, o: 40, c: 15 },
-  { h: 48, l: 20, o: 22, c: 44 },
-  { h: 75, l: 38, o: 40, c: 72 },
-  { h: 80, l: 50, o: 74, c: 55 },
-  { h: 65, l: 30, o: 52, c: 38 },
-  { h: 58, l: 22, o: 25, c: 55 },
-  { h: 72, l: 44, o: 46, c: 70 },
-  { h: 85, l: 60, o: 62, c: 82 },
-  { h: 90, l: 68, o: 84, c: 72 },
-  { h: 78, l: 48, o: 70, c: 52 },
-  { h: 68, l: 38, o: 40, c: 65 },
-  { h: 74, l: 50, o: 52, c: 70 },
-  { h: 82, l: 58, o: 72, c: 60 },
-  { h: 70, l: 42, o: 58, c: 48 },
-  { h: 62, l: 30, o: 45, c: 35 },
-  { h: 55, l: 25, o: 28, c: 52 },
-  { h: 72, l: 48, o: 50, c: 68 },
-  { h: 80, l: 58, o: 70, c: 62 },
-];
+const FEATURES = [
+  { idx: 2, icon: 'stream' },
+  { idx: 3, icon: 'mt5' },
+  { idx: 4, icon: 'lock' },
+] as const;
 
-function CandlestickChart() {
-  const W = 280;
-  const H = 100;
-  const cw = 10;
-  const gap = 4;
-  const step = cw + gap;
-
+function CheckCircle() {
   return (
-    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
-      {CANDLES.map((c, i) => {
-        const x = i * step + cw / 2;
-        const up = c.c >= c.o;
-        const color = up ? '#26A69A' : '#EE5250';
-        const bodyTop = H - Math.max(c.o, c.c);
-        const bodyH = Math.abs(c.c - c.o) || 2;
-        return (
-          <g key={i}>
-            {/* Wick */}
-            <line x1={x} y1={H - c.h} x2={x} y2={H - c.l} stroke={color} strokeWidth="1" />
-            {/* Body */}
-            <rect x={x - cw / 2} y={bodyTop} width={cw} height={bodyH} fill={color} rx="1" />
-          </g>
-        );
-      })}
-    </svg>
+    <span className="bg-accent flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full">
+      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+        <path
+          d="M2 6l3 3 5-5"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
   );
 }
 
 export function WebTraderPage() {
   const locale = useLocale();
   const t = useTranslations('webtrader');
+  const [tf, setTf] = useState<Timeframe>('H1');
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-transparent px-5 pb-6 pt-9">
+      {/* ── Hero ──────────────────────────────────────────────────── */}
+      <section className="px-5 pb-6 pt-9">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:last-child]:font-body mb-2 [&>span:first-child]:hidden [&>span:last-child]:text-[11px] [&>span:last-child]:font-semibold [&>span:last-child]:leading-[100%] [&>span:last-child]:tracking-[0.08em] [&>span:last-child]:text-[#1AD966]">
+          <SectionKicker className="[&>span:last-child]:font-body mb-2 [&>span:first-child]:hidden [&>span:last-child]:text-[11px] [&>span:last-child]:font-semibold [&>span:last-child]:uppercase [&>span:last-child]:leading-[100%] [&>span:last-child]:tracking-[0.08em] [&>span:last-child]:text-[#1AD966]">
             {t('kicker')}
           </SectionKicker>
           <h1 className="text-foreground mb-3 font-sans text-[44px] font-semibold leading-[1.05] tracking-[-1.54px]">
@@ -79,147 +53,138 @@ export function WebTraderPage() {
         </div>
       </section>
 
-      {/* Embed mockup */}
-      <section className="px-5 pb-10">
+      {/* ── Trading Terminal Panel ─────────────────────────────────── */}
+      <section className="px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="overflow-hidden rounded-[22px] bg-[#111111]">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+          <div className="overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#111111]">
+            {/* Ticker bar */}
+            <div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-3">
               <div className="flex items-center gap-2">
-                <span className="font-body text-[13px] font-semibold text-white">EURUSD</span>
-                <span className="font-body text-[11px] text-white/50">+0.14%</span>
+                <span className="h-2 w-2 rounded-full bg-[#1AD966]" />
+                <span className="font-sans text-[13px] font-semibold text-white">EUR / USD</span>
+                <span className="font-body text-[10px] text-white/40">Live</span>
               </div>
-              <div className="flex gap-1">
-                {['M5', 'M15', 'H1', 'D1'].map((tf) => (
-                  <span
-                    key={tf}
-                    className={`font-body rounded px-2 py-[3px] text-[10px] font-medium ${tf === 'H1' ? 'bg-white/10 text-white' : 'text-white/40'}`}
+              <div className="flex gap-[2px]">
+                {TIMEFRAMES.map((t_) => (
+                  <button
+                    key={t_}
+                    onClick={() => setTf(t_)}
+                    className={`rounded-[6px] px-2 py-1 font-mono text-[10px] font-semibold transition-colors ${
+                      tf === t_ ? 'bg-[#1AD966] text-[#111]' : 'text-white/50 hover:text-white/80'
+                    }`}
                   >
-                    {tf}
-                  </span>
+                    {t_}
+                  </button>
                 ))}
               </div>
             </div>
 
-            {/* Chart area */}
-            <div className="relative px-4 py-4">
-              {/* Y-axis labels */}
-              <div
-                className="absolute right-4 top-4 flex flex-col justify-between py-1 text-right"
-                style={{ height: 100 }}
-              >
-                <span className="font-body text-[9px] text-white/30">1.0890</span>
-                <span className="font-body text-[9px] text-white/30">1.0856</span>
-                <span className="font-body text-[9px] text-white/30">1.0820</span>
-              </div>
-              <CandlestickChart />
+            {/* Chart — hide_top_toolbar:false shows live price in TradingView's native header */}
+            <div style={{ height: 320 }}>
+              <TradingViewWidget
+                type="advanced-chart"
+                symbol="OANDA:EURUSD"
+                theme="dark"
+                width="100%"
+                height="100%"
+                config={{
+                  hide_top_toolbar: false,
+                  hide_side_toolbar: true,
+                  save_image: false,
+                  allow_symbol_change: false,
+                  interval: tf === 'M5' ? '5' : tf === 'M15' ? '15' : tf === 'H1' ? '60' : 'D',
+                  toolbar_bg: '#111111',
+                }}
+              />
             </div>
 
-            {/* Trade panel */}
-            <div className="border-t border-white/10 px-4 pb-4 pt-3">
-              <div className="mb-3 grid grid-cols-2 gap-2">
-                <div className="rounded-[10px] bg-[#26A69A]/20 px-3 py-2 text-center">
-                  <p className="font-body mb-0.5 text-[9px] uppercase tracking-[0.1em] text-[#26A69A]">
-                    {t('buyLabel')}
-                  </p>
-                  <p className="font-sans text-[18px] font-semibold text-white">1.08562</p>
-                  <p className="font-body text-[9px] text-white/40">{t('askLabel')}</p>
-                </div>
-                <div className="rounded-[10px] bg-[#EE5250]/20 px-3 py-2 text-center">
-                  <p className="font-body mb-0.5 text-[9px] uppercase tracking-[0.1em] text-[#EE5250]">
-                    {t('sellLabel')}
-                  </p>
-                  <p className="font-sans text-[18px] font-semibold text-white">1.08549</p>
-                  <p className="font-body text-[9px] text-white/40">{t('bidLabel')}</p>
-                </div>
+            {/* Live symbol info + Volume */}
+            <div className="border-t border-white/[0.08]">
+              <div style={{ height: 120 }}>
+                <TradingViewWidget
+                  type="symbol-info"
+                  symbol="OANDA:EURUSD"
+                  theme="dark"
+                  width="100%"
+                  height="100%"
+                  config={{ isTransparent: true }}
+                />
               </div>
-              <div className="flex items-center justify-between rounded-[10px] bg-white/5 px-3 py-2">
-                <span className="font-body text-[11px] text-white/50">{t('volumeLabel')}</span>
-                <div className="flex items-center gap-3">
-                  <button className="font-body flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-[14px] text-white/60 hover:bg-white/20">
-                    –
-                  </button>
-                  <span className="font-body text-[13px] font-medium text-white">0.10</span>
-                  <button className="font-body flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-[14px] text-white/60 hover:bg-white/20">
-                    +
-                  </button>
-                </div>
-              </div>
-              <p className="font-body mt-3 text-center text-[9px] uppercase tracking-[0.1em] text-white/20">
+            </div>
+
+            {/* Footer */}
+            <div className="border-t border-white/[0.06] px-4 py-2">
+              <p className="text-center font-mono text-[9px] uppercase tracking-[0.12em] text-white/25">
                 {t('poweredBy')}
               </p>
-            </div>
-          </div>
-
-          {/* Fallback banner */}
-          <div className="mt-3 flex gap-3 rounded-[16px] bg-[#FAFAF9] p-4 dark:bg-[#1c1500]">
-            <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[10px] bg-[#F59E0B]/15">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M8 2L1 14h14L8 2z"
-                  stroke="#F59E0B"
-                  strokeWidth="1.5"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M8 6v4M8 11.5v.5"
-                  stroke="#F59E0B"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-            <div className="min-w-0">
-              <p className="text-foreground mb-1 font-sans text-[13px] font-semibold">
-                {t('fallbackHeading')}
-              </p>
-              <p className="font-body text-muted mb-3 text-[11px] leading-relaxed">
-                {t('fallbackDesc')}
-              </p>
-              <div className="flex gap-2">
-                <Link
-                  href={`/${locale}/platform/metatrader-5`}
-                  className="font-body flex h-7 items-center rounded-full bg-[#111111] px-3 text-[11px] font-medium text-white dark:bg-white dark:text-[#111111]"
-                >
-                  {t('fallbackDesktopBtn')}
-                </Link>
-                <Link
-                  href={`/${locale}/platform/mobile`}
-                  className="font-body text-foreground dark:border-border flex h-7 items-center rounded-full border border-[#e5e7eb] px-3 text-[11px] font-medium"
-                >
-                  {t('fallbackMobileBtn')}
-                </Link>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features */}
+      {/* ── Fallback Card ─────────────────────────────────────────── */}
+      <section className="px-5 pb-8">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="rounded-[18px] border border-[#F97316]/20 bg-[#FFF7ED] p-5 dark:border-[#F97316]/15 dark:bg-[#1a130a]">
+            <div className="mb-3 flex items-center gap-2">
+              <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#F97316]/15">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M8 6v3M8 11v.5"
+                    stroke="#F97316"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M6.8 2.5L1.5 12a1.4 1.4 0 001.2 2h10.6a1.4 1.4 0 001.2-2L9.2 2.5a1.4 1.4 0 00-2.4 0z"
+                    stroke="#F97316"
+                    strokeWidth="1.3"
+                  />
+                </svg>
+              </span>
+              <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[#F97316]">
+                FALLBACK STATE
+              </span>
+            </div>
+            <p className="mb-1 font-sans text-[15px] font-semibold text-[#111] dark:text-white">
+              {t('fallbackHeading')}
+            </p>
+            <p className="font-body mb-4 text-[12px] leading-[1.55] text-[#6b7280] dark:text-white/60">
+              {t('fallbackDesc')}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href={`/${locale}/platform/mt5`}
+                className="inline-flex items-center gap-1.5 rounded-[10px] bg-[#111] px-4 py-2.5 text-[12px] font-medium text-white transition-colors hover:bg-[#222] dark:bg-white/10 dark:hover:bg-white/20"
+              >
+                {t('fallbackDesktopBtn')}
+              </Link>
+              <Link
+                href={`/${locale}/platform/mobile`}
+                className="hover:text-accent dark:hover:text-accent inline-flex items-center gap-1.5 rounded-[10px] px-4 py-2.5 text-[12px] font-medium text-[#111] transition-colors dark:text-white/70"
+              >
+                {t('fallbackMobileBtn')}
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Features ──────────────────────────────────────────────── */}
       <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
-            {t('featuresHeading')}
+            {t('feat1Title')}
             <br />
-            <span className="text-accent">{t('featuresHeadingAccent')}</span>
+            <span className="text-accent">{t('feat1Sub')}</span>
           </h2>
           <div className="flex flex-col gap-[10px]">
             {FEATURES.map((feat) => (
               <div
                 key={feat.idx}
-                className="dark:bg-surface flex items-start gap-3 rounded-[16px] bg-[#FAFAF9] px-4 py-4"
+                className="flex items-start gap-3 rounded-[16px] bg-[#FAFAF9] px-4 py-4 dark:bg-[#16181d]"
               >
-                <div className="bg-accent mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full">
-                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                    <path
-                      d="M2 6l3 3 5-5"
-                      stroke="white"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
+                <CheckCircle />
                 <div>
                   <p className="text-foreground mb-0.5 font-sans text-[14px] font-semibold">
                     {t(`feat${feat.idx}Title` as 'feat2Title')}
@@ -234,23 +199,12 @@ export function WebTraderPage() {
         </div>
       </section>
 
-      {/* Launch CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
+      {/* ── Launch CTA ────────────────────────────────────────────── */}
+      <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/50">
-            {t('ctaKicker')}
-          </SectionKicker>
-          <h2 className="mb-4 font-sans text-[32px] font-semibold leading-[1.1] text-white">
-            {t('ctaLine1')}
-            <br />
-            {t('ctaLine2')}
-          </h2>
-          <p className="font-body mb-8 max-w-[290px] text-[14px] leading-relaxed text-white/60">
-            {t('ctaDesc')}
-          </p>
           <Link
             href={`/${locale}/register`}
-            className="bg-accent hover:bg-accent-hover font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
+            className="bg-accent flex h-[52px] w-full items-center justify-center gap-2 rounded-full font-sans text-[15px] font-semibold text-white shadow-[0_8px_24px_rgba(0,176,80,0.35)] transition-all duration-200 hover:bg-[#00c85a] hover:shadow-[0_12px_32px_rgba(0,176,80,0.45)] active:scale-[0.98]"
           >
             {t('ctaBtn')}
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">

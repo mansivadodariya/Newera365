@@ -76,7 +76,9 @@ export function StatsSection({ kpiStats, locale }: { kpiStats?: CmsKpiStat[]; lo
             <p className="font-body text-[13px] font-medium leading-tight text-[#111] dark:text-white">
               {t('statsRegBadgeTitle')}
             </p>
-            <p className="font-body mt-0.5 text-[11px] text-[#6b7280]">{t('statsRegBadgeDesc')}</p>
+            <p className="font-body mt-0.5 text-[11px] text-[#6b7280] dark:text-[#B8BFCC]">
+              {t('statsRegBadgeDesc')}
+            </p>
           </div>
           <span className="font-body flex-shrink-0 text-[16px] text-black dark:text-white">›</span>
         </div>

@@ -1,0 +1,70 @@
+{
+  "nodes": [
+    {
+      "id": "public_newera_logo_dark_image",
+      "label": "NewEra Logo Dark PNG",
+      "file_type": "image",
+      "source_file": "apps/cms/public/newera-logo-dark.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "concept_newera365_brand",
+      "label": "NewEra365 Brand Identity",
+      "file_type": "concept",
+      "source_file": "apps/cms/public/newera-logo-dark.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "concept_forex_trading_iconography",
+      "label": "Forex/Trading Candlestick Iconography",
+      "file_type": "concept",
+      "source_file": "apps/cms/public/newera-logo-dark.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_newera_logo_dark_image",
+      "target": "concept_newera365_brand",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/cms/public/newera-logo-dark.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_newera_logo_dark_image",
+      "target": "concept_forex_trading_iconography",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "apps/cms/public/newera-logo-dark.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "concept_newera365_brand",
+      "target": "concept_forex_trading_iconography",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "apps/cms/public/newera-logo-dark.png",
+      "source_location": null,
+      "weight": 0.9
+    }
+  ],
+  "hyperedges": []
+}

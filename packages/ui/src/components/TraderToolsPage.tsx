@@ -41,21 +41,23 @@ function SelectInput({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">{label}</label>
-      <div className="border-border dark:bg-surface relative overflow-hidden rounded-[12px] border bg-white">
+      <label className="font-body text-[11px] uppercase tracking-[0.1em] text-[#6b7280] dark:text-white/40">
+        {label}
+      </label>
+      <div className="focus-within:border-accent relative overflow-hidden rounded-[12px] border border-[#e5e7eb] bg-white transition-colors dark:border-white/10 dark:bg-[#1a1c22]">
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="font-body text-foreground w-full appearance-none bg-transparent px-4 py-3 text-[14px] outline-none"
+          className="font-body w-full appearance-none bg-transparent px-4 py-3 text-[14px] text-[#111] outline-none dark:text-white"
         >
           {options.map((o) => (
-            <option key={o} value={o}>
+            <option key={o} value={o} className="bg-white dark:bg-[#1a1c22]">
               {o}
             </option>
           ))}
         </select>
         <svg
-          className="text-muted pointer-events-none absolute right-4 top-1/2 -translate-y-1/2"
+          className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#6b7280] dark:text-white/40"
           width="12"
           height="12"
           viewBox="0 0 12 12"
@@ -89,14 +91,16 @@ function NumberInput({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">{label}</label>
+      <label className="font-body text-[11px] uppercase tracking-[0.1em] text-[#6b7280] dark:text-white/40">
+        {label}
+      </label>
       <input
         type="number"
         value={value}
         min={min}
         step={step}
         onChange={(e) => onChange(e.target.value)}
-        className="border-border font-body text-foreground focus:border-accent dark:bg-surface w-full rounded-[12px] border bg-white px-4 py-3 text-[14px] outline-none"
+        className="font-body focus:border-accent w-full rounded-[12px] border border-[#e5e7eb] bg-white px-4 py-3 text-[14px] text-[#111] outline-none transition-colors dark:border-white/10 dark:bg-[#1a1c22] dark:text-white"
       />
     </div>
   );
@@ -421,15 +425,15 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
       <section className="px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Tab switcher */}
-          <div className="dark:bg-surface mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1">
+          <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-[#1a1c22]">
             {TABS.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`font-body flex-1 rounded-[11px] py-2.5 text-[13px] font-medium transition-colors ${
+                className={`font-body flex-1 rounded-[11px] py-2.5 text-[13px] font-medium transition-all ${
                   activeTab === tab.id
-                    ? 'text-foreground dark:bg-surface-elevated bg-white shadow-sm dark:text-white'
-                    : 'text-muted hover:text-foreground'
+                    ? 'bg-white text-[#111] shadow-sm dark:bg-[#2a2d36] dark:text-white'
+                    : 'text-[#6b7280] hover:text-[#111] dark:text-white/40 dark:hover:text-white/80'
                 }`}
               >
                 {tab.label}
@@ -470,7 +474,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
             {activeTab === 'SWAP' && (
               <>
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">
+                  <label className="font-body text-[11px] uppercase tracking-[0.1em] text-[#6b7280] dark:text-white/40">
                     {t('fieldDirection')}
                   </label>
                   <div className="grid grid-cols-2 gap-2">
@@ -501,7 +505,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
               </>
             )}
 
-            {/* Result card + formula — right column on xl, hidden below */}
+            {/* Result card + formula — right column on xl */}
             <div className="hidden xl:flex xl:w-[400px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
               <ResultCard
                 activeTab={activeTab}
@@ -531,6 +535,25 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
               />
             </div>
           </div>
+
+          {/* Calculate button — mobile/tablet only (desktop uses right column) */}
+          <button
+            className="bg-accent font-body mt-5 flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white shadow-[0_6px_20px_rgba(0,176,80,0.3)] transition-all hover:bg-[#00c85a] hover:shadow-[0_8px_28px_rgba(0,176,80,0.45)] active:scale-[0.99] xl:hidden"
+            onClick={() => {
+              /* auto-calculates live */
+            }}
+          >
+            {t('calculateBtn')}
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M3 8h10M9 4l4 4-4 4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
 
           {/* Result + formula — mobile/tablet only */}
           <div className="mt-5 flex flex-col gap-4 xl:hidden">
@@ -565,32 +588,34 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
       </section>
 
       {/* Other tools */}
-      <section className="bg-surface px-5 pb-10 pt-8">
+      <section className="bg-transparent px-5 pb-10 pt-8">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
             {t('moreKicker')}
           </SectionKicker>
+          <h2 className="text-foreground mb-5 font-sans text-[24px] font-semibold leading-[1.15] tracking-[-0.48px]">
+            {t('moreHeading')}
+          </h2>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3 xl:gap-5">
             {CALC_TOOLS.map((calc) => (
               <div
                 key={calc.id}
-                className="flex flex-col gap-3 rounded-[16px] bg-white p-5 dark:bg-[#1c1c1c]"
-                style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}
+                className="hover:border-accent/30 dark:hover:border-accent/25 group flex flex-col gap-3 rounded-[16px] border border-[#e5e7eb] bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,176,80,0.1)] dark:border-white/[0.07] dark:bg-[#1a1c22]"
               >
-                <span className="font-body inline-flex w-fit rounded-full bg-[#f3f4f6] px-2.5 py-[3px] text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6b7280] dark:bg-[#2a2a2a] dark:text-[#9ca3af]">
+                <span className="font-body bg-accent/10 text-accent inline-flex w-fit rounded-full px-2.5 py-[3px] text-[10px] font-semibold uppercase tracking-[0.08em]">
                   {calc.tag}
                 </span>
                 <div>
-                  <p className="text-foreground font-sans text-[14px] font-semibold">
+                  <p className="font-sans text-[14px] font-semibold text-[#111] dark:text-white">
                     {calc.label}
                   </p>
-                  <p className="font-body text-muted mt-1 text-[12px] leading-[1.55]">
+                  <p className="font-body mt-1 text-[12px] leading-[1.55] text-[#6b7280] dark:text-white/50">
                     {calc.desc}
                   </p>
                 </div>
                 <Link
                   href={calc.href}
-                  className="text-accent font-body mt-auto text-[13px] font-semibold hover:underline"
+                  className="font-body text-accent mt-auto text-[13px] font-semibold hover:underline"
                 >
                   {t('openCalcBtn')}
                 </Link>
@@ -604,20 +629,22 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
               <Link
                 key={tool.id}
                 href={tool.href}
-                className="dark:bg-surface group flex items-center justify-between rounded-[16px] bg-white p-4"
+                className="hover:border-accent/30 dark:hover:border-accent/25 group flex items-center justify-between rounded-[16px] border border-[#e5e7eb] bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(0,176,80,0.08)] xl:flex-1 dark:border-white/[0.07] dark:bg-[#1a1c22]"
               >
                 <div>
-                  <p className="text-foreground font-sans text-[14px] font-semibold">
+                  <p className="font-sans text-[14px] font-semibold text-[#111] dark:text-white">
                     {tool.label}
                   </p>
-                  <p className="font-body text-muted mt-0.5 text-[12px]">{tool.desc}</p>
+                  <p className="font-body mt-0.5 text-[12px] text-[#6b7280] dark:text-white/50">
+                    {tool.desc}
+                  </p>
                 </div>
                 <svg
                   width="7"
                   height="12"
                   viewBox="0 0 7 12"
                   fill="none"
-                  className="text-muted group-hover:text-accent flex-shrink-0 transition-colors"
+                  className="group-hover:text-accent flex-shrink-0 text-[#6b7280] transition-colors dark:text-white/30"
                 >
                   <path
                     d="M1 1L6 6L1 11"
