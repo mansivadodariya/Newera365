@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
-import { seoFields, slugField } from './_fields';
+import { publicReadWhere, seoFields, slugField } from './_fields';
 
 // Powers /market-analysis (listing) and /market-analysis/[slug] (article).
 export const MarketAnalysis: CollectionConfig = {
@@ -9,7 +9,7 @@ export const MarketAnalysis: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'assetCategory', 'status', 'publishedDate'],
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'published' } }) },
   fields: [
     { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),
@@ -33,11 +33,29 @@ export const MarketAnalysis: CollectionConfig = {
       options: ['forex', 'commodities', 'indices', 'stocks', 'etfs', 'crypto'],
     },
     {
+      name: 'editorialCategory',
+      type: 'select',
+      options: ['macro', 'strategy', 'analysis', 'education'],
+      admin: {
+        description:
+          'Overrides the asset-based Research page filter. Set to "education" for how-to articles that don\'t belong to a specific asset class.',
+      },
+    },
+    {
       name: 'analyst',
       type: 'text',
       maxLength: 100,
       localized: true,
       admin: { description: 'Author display name.' },
+    },
+    {
+      name: 'featuredImage',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description:
+          'Hero image — shown on the /research listing card and the article detail page.',
+      },
     },
     { name: 'body', type: 'richText', required: true, localized: true },
     {

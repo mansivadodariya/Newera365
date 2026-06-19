@@ -20,6 +20,8 @@ export interface ArticleDetailData {
   authorRole?: string | null;
   date?: string | null;
   readTime?: string | null;
+  image?: string | null;
+  imageAlt?: string | null;
   body?: SlateNode[] | null;
   chartEmbed?: string | null;
   relatedInstruments?: RelatedInstrument[] | null;
@@ -35,7 +37,7 @@ const CAT_COLORS: Record<string, string> = {
   'COMPANY-UPDATES': 'bg-[#3B82F6]/15 text-[#3B82F6]',
 };
 
-const RELATED = [
+const RELATED_EN = [
   {
     slug: 'gold-1400-momentum-or-top',
     category: 'ANALYSIS',
@@ -57,7 +59,31 @@ const RELATED = [
     title: 'The volatility trap: three setups professional traders avoid',
     readTime: '8 min',
   },
-] as const;
+];
+
+const RELATED_AR = [
+  {
+    slug: 'gold-1400-momentum-or-top',
+    category: 'تحليل',
+    catColor: 'bg-[#8B5CF6]/15 text-[#8B5CF6]',
+    title: 'الذهب عند 2400 دولار — زخم أم قمة؟ قراءة تقرير التزامات المتداولين',
+    readTime: '5 دقائق',
+  },
+  {
+    slug: 'ecb-rate-decision-what-traders-missed',
+    category: 'كلي',
+    catColor: 'bg-[#F59E0B]/15 text-[#F59E0B]',
+    title: 'قرار المركزي الأوروبي وما أخطأ السوق في تسعيره',
+    readTime: '7 دقائق',
+  },
+  {
+    slug: 'volatility-trap-three-setups',
+    category: 'استراتيجية',
+    catColor: 'bg-[#3B82F6]/15 text-[#3B82F6]',
+    title: 'فخ التقلب: ثلاثة أنماط يتجنبها المتداولون المحترفون',
+    readTime: '8 دقائق',
+  },
+];
 
 interface ResearchDetailPageProps {
   slug?: string;
@@ -73,20 +99,31 @@ export function ResearchDetailPage({
   const locale = useLocale();
   const t = useTranslations('researchDetail');
 
-  const title = article?.title ?? 'How the new era of central bank policy is reshaping FX.';
-  const category = article?.category?.toUpperCase() ?? 'MACRO';
+  const isAr = locale === 'ar';
+  const RELATED = isAr ? RELATED_AR : RELATED_EN;
+
+  const hasCmsBody = Boolean(article?.body && article.body.length > 0);
+
+  const title =
+    article?.title ??
+    (isAr
+      ? 'كيف تُعيد السياسة المصرفية المركزية الجديدة تشكيل أسواق الفوركس.'
+      : 'How the new era of central bank policy is reshaping FX.');
+  const category = (article?.category ?? 'MACRO').toUpperCase();
   const catColor = CAT_COLORS[category] ?? 'bg-accent/10 text-accent';
-  const author = article?.author ?? 'Anya Morozova';
-  const authorRole = article?.authorRole ?? 'Macro Desk';
+  const author = article?.author ?? (isAr ? 'أنيا موروزوفا' : 'Anya Morozova');
+  const authorRole = article?.authorRole ?? (isAr ? 'مكتب الاقتصاد الكلي' : 'Macro Desk');
+  const dateLocale = isAr ? 'ar-AE' : 'en-US';
   const date = article?.date
-    ? new Date(article.date).toLocaleDateString('en-US', {
+    ? new Date(article.date).toLocaleDateString(dateLocale, {
         month: 'short',
         day: 'numeric',
         year: 'numeric',
       })
-    : 'May 26, 2025';
-  const readTime = article?.readTime ?? '6 min';
-  const hasCmsBody = article?.body && article.body.length > 0;
+    : isAr
+      ? '26 مايو 2025'
+      : 'May 26, 2025';
+  const readTime = article?.readTime ?? (isAr ? '6 دقائق' : '6 min');
 
   return (
     <>
@@ -118,11 +155,12 @@ export function ResearchDetailPage({
               {category}
             </span>
             <span className="font-body text-muted text-[11px]">
-              {date} · {readTime} read
+              {date} · {readTime}
+              {isAr ? '' : ' read'}
             </span>
           </div>
           <h1 className="text-foreground mb-3 font-sans text-[28px] font-semibold leading-[1.15] tracking-[-0.56px]">
-            How the new era of central bank policy is reshaping FX.
+            {title}
           </h1>
           <p className="font-body text-muted text-[13px]">
             By <span className="text-foreground font-medium">{author}</span> · {authorRole}
@@ -130,36 +168,51 @@ export function ResearchDetailPage({
         </div>
       </section>
 
-      {/* Hero chart */}
-      <section className="px-5 pb-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="overflow-hidden rounded-[18px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111] p-5">
-            <svg width="100%" height="100" viewBox="0 0 300 100" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="articleGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#00B050" stopOpacity="0.4" />
-                  <stop offset="100%" stopColor="#00B050" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              <polygon
-                points="0,80 40,70 80,75 120,55 160,60 200,35 240,40 280,20 300,15 300,100 0,100"
-                fill="url(#articleGrad)"
+      {/* Hero image (CMS featured image) — falls back to the chart graphic below */}
+      {article?.image ? (
+        <section className="px-5 pb-8">
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <div className="aspect-[16/9] overflow-hidden rounded-[18px] md:aspect-[2/1]">
+              <img
+                src={article.image}
+                alt={article.imageAlt ?? title}
+                className="h-full w-full object-cover"
               />
-              <polyline
-                points="0,80 40,70 80,75 120,55 160,60 200,35 240,40 280,20 300,15"
-                fill="none"
-                stroke="#00B050"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <p className="font-body mt-2 text-[9px] uppercase tracking-[0.1em] text-white/40">
-              EUR/USD · 6 month chart
-            </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : (
+        /* Hero chart */
+        <section className="px-5 pb-8">
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <div className="overflow-hidden rounded-[18px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111] p-5">
+              <svg width="100%" height="100" viewBox="0 0 300 100" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="articleGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#00B050" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#00B050" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <polygon
+                  points="0,80 40,70 80,75 120,55 160,60 200,35 240,40 280,20 300,15 300,100 0,100"
+                  fill="url(#articleGrad)"
+                />
+                <polyline
+                  points="0,80 40,70 80,75 120,55 160,60 200,35 240,40 280,20 300,15"
+                  fill="none"
+                  stroke="#00B050"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <p className="font-body mt-2 text-[9px] uppercase tracking-[0.1em] text-white/40">
+                EUR/USD · 6 month chart
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Article body */}
       <section className="px-5 pb-10">
@@ -168,39 +221,64 @@ export function ResearchDetailPage({
             <RichText content={article!.body} />
           ) : (
             <div className="prose-custom flex flex-col gap-5">
-              <p className="font-body text-foreground text-[15px] leading-[1.7]">
-                The post-pandemic playbook is being rewritten in real time. Here&apos;s how central
-                banks are diverging, and what it means for the major currency pairs over the next
-                nine months.
-              </p>
-
-              <h2 className="text-foreground font-sans text-[20px] font-semibold leading-[1.2]">
-                A three-speed central bank story.
-              </h2>
-
-              {/* Pull quote */}
-              <div className="border-accent border-l-2 pl-4">
-                <p className="font-body text-foreground/80 text-[15px] italic leading-[1.6]">
-                  &ldquo;By the time the Fed cuts, the trade is already priced in. The edge is in
-                  positioning data — not the dot plot.&rdquo;
-                </p>
-              </div>
-
-              <h2 className="text-foreground font-sans text-[20px] font-semibold leading-[1.2]">
-                What is priced, what is not.
-              </h2>
-
-              <p className="font-body text-foreground text-[15px] leading-[1.7]">
-                Raw futures data confirms cuts from the market two times in the next nine months for
-                EUR. One next near the end of the day. That goes EURUSD to 1.0820 at one market —
-                and historically it takes the EURUSD more time to recover policy expectations shift
-                endlessly.
-              </p>
+              {isAr ? (
+                <>
+                  <p className="font-body text-foreground text-[15px] leading-[1.7]">
+                    يُعاد كتابة دليل ما بعد الجائحة في الوقت الفعلي. إليك كيف تتباين البنوك المركزية
+                    وما يعنيه ذلك لأزواج العملات الرئيسية خلال التسعة أشهر القادمة.
+                  </p>
+                  <h2 className="text-foreground font-sans text-[20px] font-semibold leading-[1.2]">
+                    قصة البنوك المركزية ذات السرعات الثلاث.
+                  </h2>
+                  <div className="border-accent border-s-2 ps-4">
+                    <p className="font-body text-foreground/80 text-[15px] italic leading-[1.6]">
+                      &ldquo;بحلول الوقت الذي تبدأ فيه الفيدرالي بخفض الفائدة، يكون السعر قد انعكس
+                      بالفعل. الميزة في بيانات المراكز — وليس في التوقعات.&rdquo;
+                    </p>
+                  </div>
+                  <h2 className="text-foreground font-sans text-[20px] font-semibold leading-[1.2]">
+                    ما تم تسعيره وما لم يُسعَّر بعد.
+                  </h2>
+                  <p className="font-body text-foreground text-[15px] leading-[1.7]">
+                    تؤكد بيانات العقود الآجلة الخام توقعات بخفضين للفائدة خلال التسعة أشهر القادمة
+                    في منطقة اليورو، مما يدفع اليورو/دولار نحو 1.0820 — وتاريخياً يستغرق الزوج وقتاً
+                    أطول للتعافي عند تحول توقعات السياسة النقدية.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="font-body text-foreground text-[15px] leading-[1.7]">
+                    The post-pandemic playbook is being rewritten in real time. Here&apos;s how
+                    central banks are diverging, and what it means for the major currency pairs over
+                    the next nine months.
+                  </p>
+                  <h2 className="text-foreground font-sans text-[20px] font-semibold leading-[1.2]">
+                    A three-speed central bank story.
+                  </h2>
+                  <div className="border-accent border-s-2 ps-4">
+                    <p className="font-body text-foreground/80 text-[15px] italic leading-[1.6]">
+                      &ldquo;By the time the Fed cuts, the trade is already priced in. The edge is
+                      in positioning data — not the dot plot.&rdquo;
+                    </p>
+                  </div>
+                  <h2 className="text-foreground font-sans text-[20px] font-semibold leading-[1.2]">
+                    What is priced, what is not.
+                  </h2>
+                  <p className="font-body text-foreground text-[15px] leading-[1.7]">
+                    Raw futures data confirms cuts from the market two times in the next nine months
+                    for EUR. One next near the end of the day. That goes EURUSD to 1.0820 at one
+                    market — and historically it takes the EURUSD more time to recover policy
+                    expectations shift endlessly.
+                  </p>
+                </>
+              )}
 
               {/* Mini bar chart */}
               <div className="overflow-hidden rounded-[14px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
                 <p className="font-body text-muted mb-3 text-[10px] uppercase tracking-[0.1em]">
-                  Rate expectations · next 9 months
+                  {isAr
+                    ? 'توقعات أسعار الفائدة · 9 أشهر القادمة'
+                    : 'Rate expectations · next 9 months'}
                 </p>
                 <div className="flex h-[60px] items-end gap-2">
                   {[
@@ -222,14 +300,13 @@ export function ResearchDetailPage({
               </div>
 
               <h2 className="text-foreground font-sans text-[20px] font-semibold leading-[1.2]">
-                Trading the divergence.
+                {isAr ? 'التداول على التباين.' : 'Trading the divergence.'}
               </h2>
 
               <p className="font-body text-foreground text-[15px] leading-[1.7]">
-                The cleanest expression for now is EUR/JPY. The ECB easing bias meets BoJ tightening
-                on this pair, and one news item near the top of every EUR/JPY easing trigger. That
-                goes EURUSD at 1.08 easing bias — and historically it takes the EURUSD move toward
-                policy expectations shift.
+                {isAr
+                  ? 'أوضح تعبير عن ذلك الآن هو زوج اليورو/ين. يلتقي التحيز نحو التيسير من المركزي الأوروبي مع تشديد بنك اليابان في هذا الزوج — وتاريخياً يستغرق اليورو/ين وقتاً أطول للتكيف مع تحولات توقعات السياسة النقدية.'
+                  : 'The cleanest expression for now is EUR/JPY. The ECB easing bias meets BoJ tightening on this pair, and one news item near the top of every EUR/JPY easing trigger. That goes EURUSD at 1.08 easing bias — and historically it takes the EURUSD move toward policy expectations shift.'}
               </p>
 
               {/* Risk warning */}
@@ -317,7 +394,7 @@ export function ResearchDetailPage({
               <Link
                 key={art.slug}
                 href={`/${locale}/${basePath}/${art.slug}`}
-                className="group flex items-center justify-between gap-4 py-4 xl:flex-col xl:items-start xl:gap-3 xl:px-6 xl:py-0 xl:first:pl-0 xl:last:pr-0"
+                className="group flex items-center justify-between gap-4 py-4 xl:flex-col xl:items-start xl:gap-3 xl:py-0"
               >
                 {/* Desktop: dark thumbnail */}
                 <div className="hidden xl:block xl:h-[140px] xl:w-full xl:overflow-hidden xl:rounded-[12px] xl:bg-gradient-to-br xl:from-[#0d2b1a] xl:via-[#0a1f12] xl:to-[#111111]" />
@@ -328,7 +405,10 @@ export function ResearchDetailPage({
                     >
                       {art.category}
                     </span>
-                    <span className="font-body text-muted text-[11px]">{art.readTime} read</span>
+                    <span className="font-body text-muted text-[11px]">
+                      {art.readTime}
+                      {isAr ? '' : ' read'}
+                    </span>
                   </div>
                   <p className="text-foreground group-hover:text-accent font-sans text-[13px] font-semibold leading-[1.35] transition-colors xl:text-[14px]">
                     {art.title}
@@ -366,21 +446,6 @@ export function ResearchDetailPage({
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
             {t('tradeDesc')}
           </p>
-          <Link
-            href={`/${locale}/register`}
-            className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
-          >
-            {t('tradeBtn')}
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
         </div>
       </section>
     </>

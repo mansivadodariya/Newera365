@@ -1,17 +1,34 @@
-import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { ResearchDetailPage } from '@newera365/ui';
 import type { ArticleDetailData } from '@newera365/ui';
-import { getBlogPostBySlug } from '@/lib/cms';
+import { LOCALES } from '@newera365/types';
+import { getBlogPostBySlug, getBlogPosts, slugToTitle } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 interface Props {
   params: { locale: string; slug: string };
 }
 
+// Pre-render published posts at build time (slugs are locale-neutral). Unknown
+// slugs still render on demand via the static fallback in ResearchDetailPage.
+export async function generateStaticParams() {
+  const posts = await getBlogPosts('en', 100);
+  return LOCALES.flatMap((locale) => posts.map((p) => ({ locale, slug: p.slug })));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getBlogPostBySlug(params.slug, params.locale);
-  if (!post) return {};
+  if (!post) {
+    // No CMS doc: the page still renders generic fallback content, so give it a
+    // slug-derived title instead of the bare site default.
+    const isAr = params.locale === 'ar';
+    return {
+      title: `${slugToTitle(params.slug)} | ${isAr ? 'نيو إيرا 365' : 'NewEra365'}`,
+      description: isAr
+        ? 'رؤى وتحليلات وتحديثات من فريق NewEra365.'
+        : 'Insights, analysis, and updates from the NewEra365 team.',
+    };
+  }
   return {
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.excerpt || '',
@@ -22,15 +39,25 @@ export default async function BlogDetailRoute({ params }: Props) {
   setRequestLocale(params.locale);
 
   const post = await getBlogPostBySlug(params.slug, params.locale);
-  if (!post) notFound();
 
-  const article: ArticleDetailData = {
-    title: post.title,
-    category: post.category,
-    author: post.author,
-    date: post.publishedDate,
-    body: post.body,
-  };
+  // No notFound(): when the CMS has no matching document, ResearchDetailPage
+  // renders generic fallback article content so the link resolves to a real
+  // page instead of 404-ing.
+  const featuredImage = post?.featuredImage;
+  const imageUrl =
+    featuredImage && typeof featuredImage !== 'number' ? (featuredImage.url ?? null) : null;
+
+  const article: ArticleDetailData | null = post
+    ? {
+        title: post.title,
+        category: post.category,
+        author: post.author,
+        date: post.publishedDate,
+        image: imageUrl,
+        imageAlt: post.title,
+        body: post.body,
+      }
+    : null;
 
   return <ResearchDetailPage slug={params.slug} article={article} basePath="blog" />;
 }

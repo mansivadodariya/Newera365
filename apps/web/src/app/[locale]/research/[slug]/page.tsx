@@ -1,17 +1,33 @@
-import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { ResearchDetailPage } from '@newera365/ui';
 import type { ArticleDetailData, RelatedInstrument } from '@newera365/ui';
-import { getMarketAnalysisBySlug } from '@/lib/cms';
+import { LOCALES } from '@newera365/types';
+import { getMarketAnalysisBySlug, getResearchArticles, slugToTitle } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 interface Props {
   params: { locale: string; slug: string };
 }
 
+// Pre-render published market-analysis articles at build (slugs locale-neutral).
+export async function generateStaticParams() {
+  const articles = await getResearchArticles('en', 100);
+  return LOCALES.flatMap((locale) => articles.map((a) => ({ locale, slug: a.slug })));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = await getMarketAnalysisBySlug(params.slug, params.locale);
-  if (!article) return {};
+  if (!article) {
+    // No CMS doc: the page still renders generic fallback content, so give it a
+    // slug-derived title instead of the bare site default.
+    const isAr = params.locale === 'ar';
+    return {
+      title: `${slugToTitle(params.slug)} | ${isAr ? 'نيو إيرا 365' : 'NewEra365'}`,
+      description: isAr
+        ? 'تحليلات وأبحاث الأسواق من مكتب NewEra365.'
+        : 'Market analysis and research from the NewEra365 desk.',
+    };
+  }
   return {
     title: article.seoTitle || article.title,
     description: article.seoDescription || '',
@@ -22,9 +38,11 @@ export default async function ResearchDetailRoute({ params }: Props) {
   setRequestLocale(params.locale);
 
   const analysis = await getMarketAnalysisBySlug(params.slug, params.locale);
-  if (!analysis) notFound();
 
-  const relatedInstruments: RelatedInstrument[] | undefined = analysis.relatedInstruments
+  // No notFound(): when the CMS has no matching document, ResearchDetailPage
+  // renders generic fallback article content so the link resolves to a real
+  // page instead of 404-ing.
+  const relatedInstruments: RelatedInstrument[] | undefined = analysis?.relatedInstruments
     ?.filter((i) => i && typeof i === 'object')
     .map((i) => ({
       id: i.id,
@@ -34,15 +52,23 @@ export default async function ResearchDetailRoute({ params }: Props) {
       spread: i.spread,
     }));
 
-  const article: ArticleDetailData = {
-    title: analysis.title,
-    category: analysis.assetCategory,
-    author: analysis.analyst,
-    date: analysis.publishedDate,
-    body: analysis.body,
-    chartEmbed: analysis.chartEmbed,
-    relatedInstruments,
-  };
+  const featuredImage = analysis?.featuredImage;
+  const imageUrl =
+    featuredImage && typeof featuredImage !== 'number' ? (featuredImage.url ?? null) : null;
+
+  const article: ArticleDetailData | null = analysis
+    ? {
+        title: analysis.title,
+        category: analysis.assetCategory,
+        author: analysis.analyst,
+        date: analysis.publishedDate,
+        image: imageUrl,
+        imageAlt: analysis.title,
+        body: analysis.body,
+        chartEmbed: analysis.chartEmbed,
+        relatedInstruments,
+      }
+    : null;
 
   return <ResearchDetailPage slug={params.slug} article={article} basePath="research" />;
 }

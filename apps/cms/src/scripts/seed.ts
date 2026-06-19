@@ -15,6 +15,9 @@
 
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
+import os from 'os';
+import sharp from 'sharp';
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const CMS = process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3001';
@@ -24,17 +27,58 @@ let token = '';
 
 // ─── helpers ───────────────────────────────────────────────────────────────
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// Neon (serverless Postgres) intermittently drops connections during a long
+// seed — surfacing as `fetch failed` / ECONNRESET / connection-timeout, or a
+// 502/503/504 from Payload while the DB reconnects. Retry these transient
+// failures with backoff so one blip doesn't abort the whole run and leave
+// collections half-seeded. Real 4xx/validation errors are NOT retried.
+const TRANSIENT =
+  /fetch failed|ECONNRESET|ETIMEDOUT|EPIPE|socket hang up|network|connection.*(closed|terminated|timeout)|other side closed/i;
+
+async function fetchWithRetry(url: string, init: RequestInit, label: string): Promise<Response> {
+  // 8 attempts × 2s-incrementing backoff ≈ a 70s window — long enough to ride
+  // out a full CMS process restart (Payload exits when Neon drops the
+  // connection; an external supervisor brings it back within ~30s).
+  const MAX = 8;
+  for (let attempt = 1; ; attempt++) {
+    let res: Response;
+    try {
+      res = await fetch(url, init);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (attempt < MAX && TRANSIENT.test(msg)) {
+        console.log(`   ⏳ ${label}: transient error (${msg}); retry ${attempt}/${MAX - 1}…`);
+        await sleep(attempt * 2000);
+        continue;
+      }
+      throw err;
+    }
+    if ((res.status === 502 || res.status === 503 || res.status === 504) && attempt < MAX) {
+      console.log(`   ⏳ ${label}: ${res.status}; retry ${attempt}/${MAX - 1}…`);
+      await sleep(attempt * 2000);
+      continue;
+    }
+    return res;
+  }
+}
+
 async function api(method: string, path: string, body?: unknown, params?: Record<string, string>) {
   const url = new URL(`${CMS}/api${path}`);
   if (params) Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-  const res = await fetch(url.toString(), {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `JWT ${token}` } : {}),
+  const res = await fetchWithRetry(
+    url.toString(),
+    {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `JWT ${token}` } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
     },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+    `${method} ${path}`,
+  );
   if (!res.ok) {
     const txt = await res.text().catch(() => '');
     throw new Error(`${method} ${path} → ${res.status}: ${txt.slice(0, 200)}`);
@@ -87,6 +131,150 @@ async function postGlobal(slug: string, data: unknown) {
   return api('POST', `/globals/${slug}`, data);
 }
 
+// ─── Media uploads ───────────────────────────────────────────────────────────
+// Real assets keyed by seed `key` live in apps/cms/seed-assets/ (e.g.
+// team-james-hartley.jpg, pay-skrill.png, blog-<slug>.jpg). seedImage() uploads
+// the real file when one exists for the key; otherwise it falls back to a
+// self-contained, brand-styled placeholder generated with sharp. Either way the
+// id is cached so the same asset is reused across documents instead of
+// re-uploading. To swap in more real assets, just drop `<key>.{jpg,png,webp}`
+// into seed-assets/ — call sites stay unchanged.
+
+const SEED_TMP = path.join(os.tmpdir(), 'newera-seed-assets');
+const ASSETS_DIR = path.resolve(__dirname, '../../seed-assets');
+const ASSET_EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
+const mediaCache = new Map<string, number>();
+
+// Return the path to a real asset file matching this seed key, or null.
+function findRealAsset(key: string): string | null {
+  for (const ext of ASSET_EXTS) {
+    const p = path.join(ASSETS_DIR, `${key}${ext}`);
+    if (fs.existsSync(p)) return p;
+  }
+  return null;
+}
+
+// POST a binary to /api/media as multipart/form-data. Returns the new media id.
+// Content-Type is intentionally NOT set — fetch derives the multipart boundary.
+async function uploadMedia(filePath: string, alt: string): Promise<number> {
+  const buf = fs.readFileSync(filePath);
+  const filename = path.basename(filePath);
+  const ext = path.extname(filePath).toLowerCase();
+  const mime =
+    ext === '.pdf'
+      ? 'application/pdf'
+      : ext === '.png'
+        ? 'image/png'
+        : ext === '.jpg' || ext === '.jpeg'
+          ? 'image/jpeg'
+          : ext === '.webp'
+            ? 'image/webp'
+            : 'application/octet-stream';
+  const form = new FormData();
+  form.append('file', new Blob([buf], { type: mime }), filename);
+  form.append('alt', alt);
+  const res = await fetchWithRetry(
+    `${CMS}/api/media`,
+    {
+      method: 'POST',
+      headers: token ? { Authorization: `JWT ${token}` } : {},
+      body: form,
+    },
+    `POST /media (${filename})`,
+  );
+  if (!res.ok) {
+    const txt = await res.text().catch(() => '');
+    throw new Error(`POST /media (${filename}) → ${res.status}: ${txt.slice(0, 200)}`);
+  }
+  const json = await res.json();
+  return (json.doc ?? json).id as number;
+}
+
+// Generate a brand-styled PNG cover/logo with sharp from an inline SVG.
+async function makeImage(
+  file: string,
+  label: string,
+  opts: { bg?: string; w?: number; h?: number } = {},
+): Promise<void> {
+  const { bg = '#0B3D2E', w = 800, h = 1000 } = opts;
+  // Slice BEFORE escaping — slicing after would risk cutting an &amp; entity in
+  // half and producing invalid XML that sharp's SVG parser rejects.
+  const safe = label
+    .slice(0, 42)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
+    <rect width="100%" height="100%" fill="${bg}"/>
+    <rect x="0" y="0" width="100%" height="10" fill="#C9A227"/>
+    <text x="50%" y="46%" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" fill="#ffffff" text-anchor="middle">NewEra365</text>
+    <text x="50%" y="53%" font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#cfe3d8" text-anchor="middle">${safe}</text>
+  </svg>`;
+  await sharp(Buffer.from(svg)).png().toFile(file);
+}
+
+// Build a minimal, structurally-valid single-page PDF with an accurate xref table.
+function makePdf(file: string, title: string): void {
+  const safeTitle = title.replace(/[()\\]/g, '').slice(0, 80);
+  const objs = [
+    '<</Type/Catalog/Pages 2 0 R>>',
+    '<</Type/Pages/Kids[3 0 R]/Count 1>>',
+    '<</Type/Page/Parent 2 0 R/MediaBox[0 0 612 792]/Resources<</Font<</F1 4 0 R>>>>/Contents 5 0 R>>',
+    '<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>',
+  ];
+  const stream = `BT /F1 24 Tf 72 720 Td (${safeTitle}) Tj ET`;
+  objs.push(`<</Length ${stream.length}>>\nstream\n${stream}\nendstream`);
+
+  let pdf = '%PDF-1.4\n';
+  const offsets: number[] = [];
+  objs.forEach((body, i) => {
+    offsets.push(Buffer.byteLength(pdf, 'latin1'));
+    pdf += `${i + 1} 0 obj\n${body}\nendobj\n`;
+  });
+  const xrefStart = Buffer.byteLength(pdf, 'latin1');
+  pdf += `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n`;
+  offsets.forEach((o) => {
+    pdf += `${String(o).padStart(10, '0')} 00000 n \n`;
+  });
+  pdf += `trailer\n<</Size ${objs.length + 1}/Root 1 0 R>>\nstartxref\n${xrefStart}\n%%EOF`;
+  fs.writeFileSync(file, pdf, 'latin1');
+}
+
+// Cached image upload — generate + upload once per key, reuse the id thereafter.
+async function seedImage(
+  key: string,
+  label: string,
+  opts: { bg?: string; w?: number; h?: number; alt?: string } = {},
+): Promise<number> {
+  const cached = mediaCache.get(key);
+  if (cached) return cached;
+  // Prefer a real asset file shipped in seed-assets/ over the generated placeholder.
+  const real = findRealAsset(key);
+  if (real) {
+    const id = await uploadMedia(real, opts.alt ?? label);
+    mediaCache.set(key, id);
+    return id;
+  }
+  fs.mkdirSync(SEED_TMP, { recursive: true });
+  const file = path.join(SEED_TMP, `${key}.png`);
+  await makeImage(file, label, opts);
+  const id = await uploadMedia(file, opts.alt ?? label);
+  mediaCache.set(key, id);
+  return id;
+}
+
+// Cached PDF upload — generate + upload once per key, reuse the id thereafter.
+async function seedPdf(key: string, title: string): Promise<number> {
+  const cached = mediaCache.get(key);
+  if (cached) return cached;
+  fs.mkdirSync(SEED_TMP, { recursive: true });
+  const file = path.join(SEED_TMP, `${key}.pdf`);
+  makePdf(file, title);
+  const id = await uploadMedia(file, title);
+  mediaCache.set(key, id);
+  return id;
+}
+
 // Aliases so call sites don't need renaming
 const post = createDoc;
 const patch = patchDoc;
@@ -101,6 +289,18 @@ function paragraph(text: string) {
 
 function bodyBlocks(...paragraphs: string[]) {
   return paragraphs.flatMap((p) => paragraph(p));
+}
+
+// Legal docs need real h2 headings so the on-page Table of Contents has anchors
+// to link to. A lead paragraph followed by { heading, body } sections.
+function legalBody(intro: string, sections: { heading: string; body: string }[]) {
+  return [
+    ...paragraph(intro),
+    ...sections.flatMap((s) => [
+      { type: 'h2', children: [{ text: s.heading }] },
+      ...paragraph(s.body),
+    ]),
+  ];
 }
 
 // ─── login ─────────────────────────────────────────────────────────────────
@@ -119,6 +319,9 @@ async function login() {
 
 async function seedSiteSettings() {
   console.log('⚙️  Site Settings...');
+  // socialProofLogos intentionally left EMPTY — the Figma home design has no
+  // "As seen in" strip. TrustStrip renders nothing when this is empty. The CMS
+  // field remains so real press logos can be added later if design adds the row.
   await postGlobal('site-settings', {
     mt5SyncEnabled: false,
     mt5RefreshIntervalSecs: 60,
@@ -133,6 +336,7 @@ async function seedSiteSettings() {
       },
       { valueEn: '99.99%', valueAr: '99.99%', labelEn: 'Platform Uptime', labelAr: 'وقت التشغيل' },
     ],
+    socialProofLogos: [],
     downloadMt5Windows:
       'https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe',
     downloadMt5Mac:
@@ -142,7 +346,7 @@ async function seedSiteSettings() {
     downloadWebTrader: 'https://trade.newera365.com',
     contactEmail: 'support@newera365.com',
     contactEmailCompliance: 'compliance@newera365.com',
-    contactPhone: '+971 4 000 0000',
+    contactPhone: '+1 867-778-3511',
     contactAddressEn:
       'Level 14, Boulevard Plaza Tower 1, Sheikh Mohammed Bin Rashid Boulevard, Dubai, UAE',
     contactAddressAr: 'الطابق 14، برج بلازا بوليفارد 1، شارع الشيخ محمد بن راشد، دبي، الإمارات',
@@ -162,6 +366,15 @@ async function seedSiteSettings() {
       'NewEra365 is authorised and regulated by the FCA (UK), ASIC (Australia), and CySEC (Cyprus). Trading leveraged products carries significant risk. Not suitable for all investors.',
     riskDisclaimerAr:
       'نيو إيرا 365 مرخصة ومنظمة من قبل FCA وASIC وCySEC. التداول بالمنتجات ذات الرافعة المالية ينطوي على مخاطر عالية.',
+    // Analyst Chart — Featured Analyst
+    analystInitials: 'DR',
+    analystName: 'Diego Romero',
+    analystTitle: 'Senior FX Analyst',
+    analystUpdated: '20 May, 09:14 UTC',
+    analystCommentaryEn:
+      'EUR/USD continues to grind higher as the ECB pushes back against July cut expectations. With US data softening and the dollar index breaking below the 200-day average, we see room for a move toward 1.0980 in the coming weeks. Key risk: a hot NFP print could trigger a sharp reversal back toward 1.0750.',
+    analystCommentaryAr:
+      'يواصل اليورو/دولار ارتفاعه في ظل تراجع توقعات خفض الفائدة في يوليو. مع تباطؤ البيانات الأمريكية وكسر مؤشر الدولار المتوسط المتحرك لـ200 يوم، نرى مجالاً للصعود نحو 1.0980. المخاطر: بيانات التوظيف القوية قد تعكس الاتجاه نحو 1.0750.',
     // Footer navigation columns (must match Figma labels exactly)
     footerEn: [
       {
@@ -251,12 +464,19 @@ async function seedSiteSettings() {
 
 async function deleteAllDocs(collection: string) {
   try {
-    const res = await api('GET', `/${collection}`, undefined, { limit: '100', depth: '0' });
-    const docs = res.docs ?? [];
-    for (const doc of docs) {
-      await api('DELETE', `/${collection}/${doc.id}`).catch(() => {});
+    let total = 0;
+    // Paginate: a collection (notably media after backfill) can exceed one page.
+    for (;;) {
+      const res = await api('GET', `/${collection}`, undefined, { limit: '100', depth: '0' });
+      const docs = res.docs ?? [];
+      if (docs.length === 0) break;
+      for (const doc of docs) {
+        await api('DELETE', `/${collection}/${doc.id}`).catch(() => {});
+      }
+      total += docs.length;
+      if (docs.length < 100) break;
     }
-    if (docs.length > 0) console.log(`   🗑️  Deleted ${docs.length} existing ${collection} docs`);
+    if (total > 0) console.log(`   🗑️  Deleted ${total} existing ${collection} docs`);
   } catch {
     // collection might be empty, ignore
   }
@@ -335,8 +555,20 @@ async function seedAccountTypes() {
       status: 'active',
     },
   ];
-  for (const t of types) await post('account-types', t);
-  console.log('   ✅ 4 account types created');
+  const arContent = [
+    { nameAr: 'تجريبي', featuresAr: 'وصول كامل للمنصة\nبيانات السوق الفعلية\nلا يلزم إيداع' },
+    { nameAr: 'قياسي', featuresAr: 'جميع الأدوات الـ 2000+\nصفر عمولة\nدعم خبراء 24/7' },
+    {
+      nameAr: 'إسلامي',
+      featuresAr: 'بدون فوائد بيعية\nبنية متوافقة مع الشريعة الإسلامية\nوصول كامل للسوق',
+    },
+    { nameAr: 'احترافي', featuresAr: 'فروق خام من 0.0\nتنفيذ ذو أولوية\nمدير حساب مخصص' },
+  ];
+  for (let i = 0; i < types.length; i++) {
+    const doc = await post<{ id: number }>('account-types', types[i]);
+    await patch('account-types', doc.id, arContent[i], 'en');
+  }
+  console.log('   ✅ 4 account types created (EN + AR)');
 }
 
 // ─── Payment Methods ────────────────────────────────────────────────────────
@@ -408,10 +640,29 @@ async function seedPaymentMethods() {
       status: 'active',
     },
   ];
+  const arNames: Record<string, string> = {
+    'Visa / Mastercard': 'فيزا / ماستركارد',
+    'Bank wire (SWIFT)': 'تحويل بنكي (SWIFT)',
+    Skrill: 'سكريل',
+    Neteller: 'نيتيلر',
+    'Crypto (USDT, BTC)': 'عملات رقمية (USDT, BTC)',
+    'Local bank transfer': 'تحويل بنكي محلي',
+  };
   for (const m of methods) {
-    await post('payment-methods', m);
+    const logoId = await seedImage(
+      `pay-${m.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')}`,
+      m.name,
+      { bg: '#0E2A20', w: 480, h: 300, alt: `${m.name} logo` },
+    );
+    const doc = await post<{ id: number }>('payment-methods', { ...m, logo: logoId });
+    if (arNames[m.name]) {
+      await patch('payment-methods', doc.id, { nameAr: arNames[m.name] }, 'en');
+    }
   }
-  console.log(`   ✅ ${methods.length} payment methods created`);
+  console.log(`   ✅ ${methods.length} payment methods created (EN + AR names)`);
 }
 
 // ─── Products / Instruments ─────────────────────────────────────────────────
@@ -420,6 +671,31 @@ async function seedInstruments() {
   console.log('📊 Instruments...');
   // Delete all existing instruments first to avoid duplicates from repeated seeding
   await deleteAllDocs('products-instruments');
+  // Exact TradingView chart symbols (EXCHANGE:SYMBOL) keyed by instrument `symbol`.
+  // Every value is verified against TradingView's symbol search so the Markets-page
+  // charts resolve correctly instead of showing "symbol doesn't exist".
+  const TV_SYMBOLS: Record<string, string> = {
+    EURUSD: 'OANDA:EURUSD',
+    GBPUSD: 'OANDA:GBPUSD',
+    USDJPY: 'OANDA:USDJPY',
+    AUDUSD: 'OANDA:AUDUSD',
+    USDCAD: 'OANDA:USDCAD',
+    EURGBP: 'OANDA:EURGBP',
+    XAUUSD: 'OANDA:XAUUSD',
+    XAGUSD: 'OANDA:XAGUSD',
+    USOIL: 'TVC:USOIL',
+    US30: 'OANDA:US30USD',
+    US500: 'OANDA:SPX500USD',
+    USTEC: 'OANDA:NAS100USD',
+    GER40: 'OANDA:DE30EUR',
+    BTCUSD: 'BITSTAMP:BTCUSD',
+    ETHUSD: 'BITSTAMP:ETHUSD',
+    'AAPL.US': 'NASDAQ:AAPL',
+    'MSFT.US': 'NASDAQ:MSFT',
+    'TSLA.US': 'NASDAQ:TSLA',
+    'SPY.US': 'AMEX:SPY',
+    'IWRD.UK': 'LSE:IWRD',
+  };
   const instruments = [
     // ── Top 6 (sortOrder 1-6) — shown on Fees page and spread comparator ─────
     // Figma fees table: EUR/USD | 0.0 | 0.8 | 1.2
@@ -772,7 +1048,12 @@ async function seedInstruments() {
     },
   ];
   for (const inst of instruments)
-    await post('products-instruments', { ...inst, status: 'active', usesMT5Data: false });
+    await post('products-instruments', {
+      ...inst,
+      tvSymbol: TV_SYMBOLS[inst.symbol],
+      status: 'active',
+      usesMT5Data: false,
+    });
   console.log(`   ✅ ${instruments.length} instruments created`);
 }
 
@@ -780,6 +1061,7 @@ async function seedInstruments() {
 
 async function seedFaqs() {
   console.log('❓ FAQs...');
+  await deleteAllDocs('faqs');
   const faqs = [
     {
       en: {
@@ -959,6 +1241,7 @@ async function seedFaqs() {
 
 async function seedBlogPosts() {
   console.log('📝 Blog Posts...');
+  await deleteAllDocs('blog-posts');
   const posts = [
     {
       en: {
@@ -1040,13 +1323,243 @@ async function seedBlogPosts() {
       category: 'tutorials',
       publishedDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
     },
+    {
+      en: {
+        title: 'GBP/USD Technical Outlook: BoE Rate Decision in Focus',
+        slug: 'gbpusd-technical-outlook-boe-rate-decision',
+        excerpt:
+          'Cable holds above 1.2700 as traders position ahead of the Bank of England monetary policy decision.',
+        body: bodyBlocks(
+          'GBP/USD is consolidating in a tight range between 1.2690 and 1.2790 as market participants await the Bank of England rate decision on Thursday.',
+          'Technical picture: The pair is trading above the 200-day moving average but below the key 1.2800 resistance. A sustained break above would target 1.2870 and then the 2024 high near 1.2970.',
+          'Fundamentals: UK CPI has been stickier than expected, which could push the BoE to maintain a hawkish tone even if it keeps rates on hold. Watch for the vote split — a 6-3 hold would be more hawkish than a 7-2.',
+        ),
+        author: 'James Thornton',
+      },
+      ar: {
+        title: 'التوقعات الفنية لـ GBP/USD: قرار بنك إنجلترا في دائرة الضوء',
+        excerpt:
+          'يتماسك الجنيه الإسترليني فوق 1.2700 مع تحديد المتداولين مراكزهم قبل قرار بنك إنجلترا.',
+        body: bodyBlocks(
+          'يتحرك GBP/USD في نطاق ضيق بين 1.2690 و1.2790 في انتظار قرار بنك إنجلترا بشأن الفائدة يوم الخميس.',
+          'الصورة الفنية: يتداول الزوج فوق المتوسط المتحرك لـ 200 يوم ولكن دون مقاومة 1.2800 الرئيسية.',
+          'الأساسيات: ظل مؤشر CPI البريطاني أعلى من المتوقع، مما قد يدفع بنك إنجلترا إلى الحفاظ على نبرة متشددة.',
+        ),
+        author: 'جيمس ثورنتون',
+      },
+      category: 'market-news',
+      publishedDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      en: {
+        title: 'Oil at $85: OPEC+ Cuts Hold — But for How Long?',
+        slug: 'oil-opec-cuts-85-dollar-level',
+        excerpt:
+          'Crude oil is holding above $85/bbl as OPEC+ production cuts support prices, but demand concerns from China cloud the outlook.',
+        body: bodyBlocks(
+          'Brent crude has settled into a range between $82 and $87 per barrel following confirmation that OPEC+ will maintain its 1.66 million barrel per day production cut through the end of the year.',
+          "China demand remains the key downside risk. PMI readings have surprised to the downside for three consecutive months, raising questions about whether the world's largest oil importer is experiencing a structural slowdown or a cyclical soft patch.",
+          'From a trading perspective, the $80 level represents a key demand zone supported by OPEC+ rhetoric. On the upside, supply concerns related to the Middle East could push toward $90.',
+        ),
+        author: 'Sarah Mitchell',
+      },
+      ar: {
+        title: 'النفط عند 85 دولاراً: خفض أوبك+ يتماسك — لكن حتى متى؟',
+        excerpt:
+          'يتماسك النفط الخام فوق 85 دولاراً للبرميل مع دعم خفض أوبك+ للأسعار، لكن مخاوف الطلب الصيني تُغيّم الآفاق.',
+        body: bodyBlocks(
+          'استقر خام برنت في نطاق بين 82 و87 دولاراً للبرميل عقب تأكيد أوبك+ الحفاظ على خفض الإنتاج البالغ 1.66 مليون برميل يومياً.',
+          'يبقى طلب الصين المخاطرة الأكبر على الجانب السلبي. أثارت قراءات مؤشر PMI المتتالية الأدنى من المتوقع تساؤلات حول التباطؤ الاقتصادي.',
+          'فنياً، يمثل مستوى 80 دولاراً منطقة طلب رئيسية. على الجانب الصعودي، قد تدفع مخاوف الإمدادات نحو 90 دولاراً.',
+        ),
+        author: 'سارة ميتشل',
+      },
+      category: 'analysis',
+      publishedDate: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      en: {
+        title: 'US Dollar Index Tests 105 — Key Macro Drivers This Week',
+        slug: 'usd-index-105-macro-drivers',
+        excerpt:
+          'DXY pushes toward 105 as stronger US data reshapes rate expectations. Here are the macro events that could shift the trend.',
+        body: bodyBlocks(
+          'The US Dollar Index (DXY) climbed to 104.80 before pulling back slightly, with the dollar strengthening against most G10 currencies. The move is driven by repricing of Federal Reserve rate expectations — markets now price just one cut in 2026, down from three at the start of the quarter.',
+          "Key data this week: Tuesday's CPI print is the most important near-term catalyst. A reading above 3.3% would validate further dollar strength and likely push EUR/USD below 1.0750.",
+          'Trading the dollar: The DXY has historically struggled to sustain above 105 without explicit hawkish Fed guidance. Watch for profit-taking if the level is reached without a data catalyst.',
+        ),
+        author: 'NewEra365 Research Desk',
+      },
+      ar: {
+        title: 'مؤشر الدولار الأمريكي يختبر 105 — المحركات الكلية الرئيسية هذا الأسبوع',
+        excerpt:
+          'يصعد مؤشر DXY نحو 105 مع إعادة تشكيل البيانات الأمريكية الأقوى لتوقعات أسعار الفائدة.',
+        body: bodyBlocks(
+          'ارتفع مؤشر الدولار الأمريكي (DXY) إلى 104.80 قبل أن يتراجع قليلاً، مع تقوي الدولار أمام معظم عملات مجموعة العشرة.',
+          'البيانات الرئيسية هذا الأسبوع: يُعدّ مؤشر CPI يوم الثلاثاء المحفز الأهم على المدى القريب. قراءة أعلى من 3.3% ستدعم قوة الدولار.',
+          'تداول الدولار: عانى مؤشر DXY تاريخياً من الحفاظ على مستويات فوق 105 دون توجيه صريح من الاحتياطي الفيدرالي.',
+        ),
+        author: 'مكتب أبحاث نيو إيرا 365',
+      },
+      category: 'market-news',
+      publishedDate: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      en: {
+        title: 'Bitcoin Breaks $70,000: Institutional Demand or Retail FOMO?',
+        slug: 'bitcoin-breaks-70000-institutional-demand',
+        excerpt:
+          'BTC/USD surges through $70,000 for the first time since November 2021. We break down what is driving the move.',
+        body: bodyBlocks(
+          'Bitcoin has broken above the psychologically important $70,000 level, driven by record inflows into spot Bitcoin ETFs and renewed institutional demand ahead of the halving event.',
+          'Supply dynamics: The halving — expected in April — will cut the daily supply of new Bitcoin from 900 to 450 coins. Historically, halvings have preceded significant price appreciation, though usually with a 6–12 month lag.',
+          "Risk considerations for CFD traders: Bitcoin's daily swings can exceed 5-10% during breakout phases. Position sizing is critical — the same leverage that works on EUR/USD can wipe an account in hours on BTC/USD.",
+        ),
+        author: 'Sarah Mitchell',
+      },
+      ar: {
+        title: 'بيتكوين يخترق 70,000 دولار: طلب مؤسسي أم FOMO التجزئة؟',
+        excerpt: 'يتجاوز BTC/USD مستوى 70,000 دولار النفسي للمرة الأولى منذ نوفمبر 2021.',
+        body: bodyBlocks(
+          'اخترق البيتكوين مستوى 70,000 دولار النفسي المهم، مدفوعاً بتدفقات قياسية إلى صناديق Bitcoin ETF الفورية وتجدد الطلب المؤسسي.',
+          'ديناميكيات العرض: سيخفض الحدث المرتقب الإمداد اليومي من البيتكوين الجديد من 900 إلى 450 عملة.',
+          'اعتبارات المخاطرة: قد تتجاوز تقلبات البيتكوين اليومية 5-10٪ خلال مراحل الاختراق. تحديد حجم المركز أمر بالغ الأهمية.',
+        ),
+        author: 'سارة ميتشل',
+      },
+      category: 'analysis',
+      publishedDate: new Date(Date.now() - 13 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      en: {
+        title: 'S&P 500 All-Time Highs: What the Rally Means for Forex',
+        slug: 'sp500-all-time-highs-forex-implications',
+        excerpt:
+          'US equities at record highs have historically correlated with dollar strength, JPY weakness and commodity-currency gains.',
+        body: bodyBlocks(
+          'The S&P 500 broke to fresh all-time highs this week, continuing a rally that has added over 25% since October 2023. For forex traders, equity strength carries distinct implications.',
+          'Risk-on dynamics: Sustained equity gains typically weaken the Japanese yen (a safe haven), support AUD and NZD (commodity currencies) and pressure USD/CHF higher.',
+          'The divergence to watch: If equities are rising on rate-cut hopes while the dollar is also strong, something has to give. Historically, one of these correlations breaks — and identifying which is the key trade.',
+        ),
+        author: 'NewEra365 Research Desk',
+      },
+      ar: {
+        title: 'S&P 500 عند مستويات قياسية: ماذا يعني الارتفاع للفوركس؟',
+        excerpt: 'الأسهم الأمريكية عند مستويات قياسية مرتبطة تاريخياً بقوة الدولار وضعف الين.',
+        body: bodyBlocks(
+          'اخترق مؤشر S&P 500 مستويات قياسية جديدة هذا الأسبوع، مستمراً في ارتفاع أضاف أكثر من 25٪ منذ أكتوبر 2023.',
+          'ديناميكيات المخاطرة: يُضعف الأداء القوي للأسهم عادةً الين الياباني ويدعم الدولار الأسترالي والنيوزيلندي.',
+          'التباين الذي يجب مراقبته: إذا ارتفعت الأسهم على آمال خفض الفائدة بينما الدولار قوي أيضاً، فأحد هذين الارتباطين سينكسر.',
+        ),
+        author: 'مكتب أبحاث نيو إيرا 365',
+      },
+      category: 'analysis',
+      publishedDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      en: {
+        title: 'AUD/USD: RBA Decision Preview and What AUD Traders Need to Know',
+        slug: 'audusd-rba-decision-preview',
+        excerpt:
+          'The Reserve Bank of Australia meets next Tuesday. Here is the full preview for AUD/USD traders.',
+        body: bodyBlocks(
+          "AUD/USD is trading near 0.6580 ahead of next Tuesday's Reserve Bank of Australia policy decision. The market is pricing a hold, but the statement language will drive the pair.",
+          'What to watch in the statement: Any shift in the RBA\'s inflation language — from "some time" to "near-term" — would be interpreted as a dovish signal and push AUD/USD toward 0.6500.',
+          'China as the wildcard: Australian exports depend heavily on Chinese demand. A deterioration in Chinese PMI data alongside a dovish RBA statement would be a double negative for AUD/USD.',
+        ),
+        author: 'James Thornton',
+      },
+      ar: {
+        title: 'AUD/USD: معاينة قرار بنك الاحتياطي الأسترالي وما يحتاج متداولو AUD معرفته',
+        excerpt:
+          'يجتمع بنك الاحتياطي الأسترالي الثلاثاء القادم. إليك المعاينة الكاملة لمتداولي AUD/USD.',
+        body: bodyBlocks(
+          'يتداول AUD/USD قرب 0.6580 قبيل قرار بنك الاحتياطي الأسترالي الثلاثاء القادم.',
+          'ما يجب مراقبته في البيان: أي تحول في لغة بنك الاحتياطي الأسترالي بشأن التضخم سيُفسَّر كإشارة متيسرة.',
+          'الصين كعامل مفاجأة: تعتمد الصادرات الأسترالية بشكل كبير على الطلب الصيني.',
+        ),
+        author: 'جيمس ثورنتون',
+      },
+      category: 'market-news',
+      publishedDate: new Date(Date.now() - 17 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      en: {
+        title: 'USD/JPY at 155: Is Japan Ready to Intervene Again?',
+        slug: 'usdjpy-155-japan-intervention-risk',
+        excerpt:
+          'USD/JPY is back near the 155 level that triggered Bank of Japan intervention in 2023. Here is what traders need to watch.',
+        body: bodyBlocks(
+          'USD/JPY has crept back toward 155 — the level that prompted coordinated Bank of Japan intervention in late 2023. Whether authorities intervene again depends on the speed of the move as much as the level itself.',
+          'BoJ intervention mechanics: Japan does not typically announce intervention. Dealers watching the spot market identify it by sudden sharp yen-buying orders that have no apparent domestic or overseas catalyst.',
+          'Trading around the risk: Many experienced yen traders avoid large short-yen positions above 150, using options instead to express the view while capping downside from a sudden intervention-driven reversal.',
+        ),
+        author: 'Sarah Mitchell',
+      },
+      ar: {
+        title: 'USD/JPY عند 155: هل اليابان مستعدة للتدخل مرة أخرى؟',
+        excerpt: 'USD/JPY يعود قرب مستوى 155 الذي أشعل تدخل بنك اليابان عام 2023.',
+        body: bodyBlocks(
+          'اقترب USD/JPY مجدداً من 155 — المستوى الذي دفع بنك اليابان للتدخل في أواخر عام 2023.',
+          'آليات تدخل بنك اليابان: لا تعلن اليابان عادةً عن التدخل. يكتشفه المتعاملون من خلال أوامر شراء حادة ومفاجئة للين.',
+          'التداول حول المخاطرة: يتجنب كثير من متداولي الين المخضرمين المراكز الكبيرة لبيع الين فوق 150.',
+        ),
+        author: 'سارة ميتشل',
+      },
+      category: 'analysis',
+      publishedDate: new Date(Date.now() - 19 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      en: {
+        title: 'The Monday Briefing: Macro Themes Driving Markets This Week',
+        slug: 'monday-briefing-macro-themes-june-2026',
+        excerpt:
+          'Five macro themes shaping forex, commodity and index markets heading into the new trading week.',
+        body: bodyBlocks(
+          "THEME 1 — FED REPRICING: Friday's strong payrolls print has markets scaling back rate-cut expectations. The September FOMC is now roughly 50/50 between hold and cut.",
+          'THEME 2 — CHINA RECOVERY DOUBTS: Weekend PMI data from China missed expectations for the fourth consecutive month. Watch AUD/USD, commodity currencies and copper as the barometer.',
+          'THEME 3 — OIL GEOPOLITICS: Escalating tensions in the Middle East have kept a risk premium in crude oil. If the situation stabilises, a $3–5 pullback is realistic.',
+          "THEME 4 — DOLLAR FLOWS: Month-end rebalancing added noise to last week's dollar move. The underlying trend is still dollar-positive pending a sustained inflation rollover.",
+          'THEME 5 — UK ELECTIONS: Political uncertainty is creating volatility in GBP pairs. Traders are treating this as a binary event and positioning accordingly — reduced exposure, wider stops.',
+        ),
+        author: 'NewEra365 Research Desk',
+      },
+      ar: {
+        title: 'إحاطة يوم الاثنين: الموضوعات الكلية التي تقود الأسواق هذا الأسبوع',
+        excerpt:
+          'خمسة موضوعات كلية تشكّل أسواق الفوركس والسلع والمؤشرات في بداية أسبوع التداول الجديد.',
+        body: bodyBlocks(
+          'الموضوع الأول — إعادة تسعير الفيدرالي: دفع تقرير الرواتب القوي الأسواق إلى تقليص توقعات خفض الفائدة.',
+          'الموضوع الثاني — شكوك التعافي الصيني: أخفقت بيانات مؤشر PMI الصيني للشهر الرابع على التوالي.',
+          'الموضوع الثالث — الجيوسياسية النفطية: أبقت التوترات المتصاعدة في الشرق الأوسط على علاوة مخاطرة في خام النفط.',
+          'الموضوع الرابع — تدفقات الدولار: لا يزال الاتجاه الأساسي إيجابياً للدولار.',
+          'الموضوع الخامس — الانتخابات البريطانية: يخلق عدم اليقين السياسي تقلبات في أزواج الجنيه الإسترليني.',
+        ),
+        author: 'مكتب أبحاث نيو إيرا 365',
+      },
+      category: 'market-news',
+      publishedDate: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString(),
+    },
   ];
 
+  const blogBg: Record<string, string> = {
+    'market-news': '#0B3D2E',
+    analysis: '#10261C',
+    tutorials: '#13312A',
+    'company-updates': '#0E2A20',
+  };
   for (const blogPost of posts) {
+    const coverId = await seedImage(`blog-${blogPost.en.slug}`, blogPost.en.title, {
+      bg: blogBg[blogPost.category] ?? '#0B3D2E',
+      w: 1200,
+      h: 675,
+      alt: blogPost.en.title,
+    });
     const doc = await createDoc<{ id: number }>('blog-posts', {
       ...blogPost.en,
       category: blogPost.category,
       publishedDate: blogPost.publishedDate,
+      featuredImage: coverId,
       status: 'published',
     });
     await patch(
@@ -1068,27 +1581,29 @@ async function seedBlogPosts() {
 
 async function seedMarketAnalysis() {
   console.log('📈 Market Analysis...');
+  await deleteAllDocs('market-analysis');
   const analyses = [
     {
       en: {
-        title: 'EUR/USD: Bearish Bias Below 1.0900 — Key Levels for the Week',
-        slug: 'eurusd-bearish-below-1-0900-weekly-levels',
+        title: "Why the Dollar's Next Move Starts in Frankfurt, Not Washington",
+        slug: 'dollar-move-starts-frankfurt',
         analyst: 'Marcus Webb',
+        summary:
+          "ECB policy divergence is widening the EUR/USD range. Here's the headline number that actually matters.",
         body: bodyBlocks(
-          'EUR/USD remains under selling pressure while trading below the 1.0900 resistance. The DXY has rebounded from recent lows on the back of resilient US economic data, keeping pressure on the pair.',
-          'Technically, the pair is forming a descending channel on the 4-hour chart. A break below 1.0780 opens the door to 1.0710 — the November 2023 low. On the upside, bulls need a clean close above 1.0920 to negate the bearish structure.',
-          'Outlook: Bearish below 1.0900. Tactical shorts on rallies to resistance.',
+          "ECB policy divergence is widening the EUR/USD range. The market's obsession with Fed rhetoric is masking the real driver of dollar strength: the pace of ECB rate cuts relative to the Fed hold.",
+          'A deeper-than-expected ECB cut cycle would compress the yield differential sharply, pushing EUR/USD toward the 1.05 handle. The key data point to watch is not NFP — it is the EZ flash CPI print on the last Friday of each month.',
+          'Outlook: Dollar strength is more likely to originate from Frankfurt dovishness than Washington hawkishness. Position accordingly with a EUR/USD range of 1.0600–1.0950 for Q3.',
         ),
-        chartEmbed:
-          '<iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol=FX:EURUSD&interval=240&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&theme=light&style=1&timezone=Etc%2FUTC" style="width:100%;height:400px;"></iframe>',
       },
       ar: {
-        title: 'EUR/USD: ميل هبوطي دون 1.0900 — مستويات رئيسية للأسبوع',
+        title: 'لماذا تبدأ الحركة القادمة للدولار من فرانكفورت لا واشنطن؟',
         analyst: 'ماركوس ويب',
+        summary: 'يتسع نطاق EUR/USD مع تباين السياسات النقدية. إليك الرقم الذي يهم فعلاً.',
         body: bodyBlocks(
-          'يظل زوج EUR/USD تحت ضغط البيع أثناء التداول دون مقاومة 1.0900. ارتد مؤشر DXY من أدنى مستوياته الأخيرة على خلفية البيانات الاقتصادية الأمريكية المرنة.',
-          'فنياً، يشكّل الزوج قناة هابطة على الرسم البياني 4 ساعات. كسر 1.0780 يفتح الطريق نحو 1.0710.',
-          'التوقعات: هبوطية دون 1.0900. صفقات بيع تكتيكية عند الارتدادات نحو المقاومة.',
+          'يُوسّع تباين سياسة البنك المركزي الأوروبي نطاق EUR/USD. انهماك السوق في تصريحات الفيدرالي يُخفي المحرك الحقيقي لقوة الدولار: وتيرة خفض الفائدة الأوروبية مقارنةً بتثبيت الفيدرالي.',
+          'قد يضغط دورة خفض أعمق من المتوقع من البنك المركزي الأوروبي على فارق العائد بشكل حاد، ليدفع EUR/USD نحو مستوى 1.05.',
+          'التوقعات: من المرجح أن تنبع قوة الدولار من تساهل فرانكفورت أكثر من صرامة واشنطن.',
         ),
       },
       assetCategory: 'forex',
@@ -1096,34 +1611,150 @@ async function seedMarketAnalysis() {
     },
     {
       en: {
-        title: 'Gold Analysis: $2,400 Target in Play as Inflation Bets Shift',
-        slug: 'gold-analysis-2400-target-inflation',
+        title: 'The Volatility Trap: Three Setups Professional Traders Avoid',
+        slug: 'volatility-trap-three-setups',
         analyst: 'Priya Sharma',
+        summary: 'High ATR is not the same as edge. Most retail traders confuse the two.',
         body: bodyBlocks(
-          'Gold is consolidating near all-time highs as markets reassess the inflation trajectory. A softer-than-expected CPI print could be the catalyst for a push toward the $2,400 psychological target.',
-          'On the 4-hour chart, XAUUSD has built a strong base between $2,290 and $2,320. The 20 EMA is providing dynamic support and the MACD remains in bullish territory.',
-          'Strategy: Buy dips to $2,290–2,300 with a target at $2,380, stop at $2,260.',
+          'High Average True Range is not the same as tradeable edge. During earnings seasons and macro event weeks, ATR spikes, but bid-ask spreads widen, fills deteriorate, and stop-outs become almost inevitable.',
+          'The three setups professionals avoid during high-ATR environments: (1) breakout entries on the first candle close above resistance, (2) mean-reversion fades into a trend driven by fundamentals, (3) any position sized at normal risk when overnight gap risk is elevated.',
+          'Edge comes from consistency and repeatability, not volatility. Reduce size, wait for spreads to normalise, and let amateurs pay the premium for excitement.',
         ),
       },
       ar: {
-        title: 'تحليل الذهب: هدف 2,400 دولار في المتناول مع تحول توقعات التضخم',
+        title: 'فخ التقلب: ثلاثة إعدادات يتجنبها المتداولون المحترفون',
         analyst: 'بريا شارما',
+        summary: 'ارتفاع ATR لا يعني ميزة تداول. معظم المتداولين يخلطون بين الاثنين.',
+        body: bodyBlocks(
+          'متوسط النطاق الحقيقي المرتفع لا يعني ميزة قابلة للتداول. خلال مواسم الأرباح والأحداث الكلية، يقفز ATR لكن فروق الأسعار تتسع والتنفيذ يتدهور.',
+          'الإعدادات الثلاثة التي يتجنبها المحترفون: (1) دخول الاختراق على أول شمعة، (2) تداول ضد الاتجاه المدفوع بالأساسيات، (3) أي مركز بحجم طبيعي مع مخاطر فجوات ليلية عالية.',
+          'الميزة تأتي من الاتساق وليس من التقلب. قلّل الحجم وانتظر تطبيع الفروق.',
+        ),
+      },
+      assetCategory: 'etfs',
+      publishedDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      en: {
+        title: 'Gold at $2,400 — Momentum or Top? Reading the COT Report',
+        slug: 'gold-1400-momentum-or-top',
+        analyst: 'Daniel Osei',
+        summary:
+          'Positioning data shows institutional longs at 18-month highs but the futures curve is flattening fast.',
+        body: bodyBlocks(
+          'Gold is consolidating near all-time highs as markets reassess the inflation trajectory. A softer-than-expected CPI print could be the catalyst for a push toward the $2,400 psychological target.',
+          "The Commitment of Traders report shows managed money net longs at 18-month highs. That's a bullish signal — until it isn't. At extremes, positioning itself becomes the headwind as late longs run out of buyers.",
+          'On the 4-hour chart, XAUUSD has built a strong base between $2,290 and $2,320. Strategy: Buy dips to $2,290–2,300 with a target at $2,380, stop at $2,260.',
+        ),
+      },
+      ar: {
+        title: 'الذهب عند 2,400 دولار — زخم أم قمة؟ قراءة تقرير COT',
+        analyst: 'دانيال أوسي',
+        summary:
+          'بيانات التموضع تُظهر صفقات شراء مؤسسية عند أعلى مستوياتها في 18 شهراً لكن منحنى العقود الآجلة يتسطح بسرعة.',
         body: bodyBlocks(
           'يتحكم الذهب في مكاسبه قرب أعلى مستوياته التاريخية مع إعادة الأسواق تقييم مسار التضخم.',
-          'على الرسم البياني 4 ساعات، بنى XAUUSD قاعدة قوية بين 2,290 و2,320 دولاراً.',
+          'يُظهر تقرير COT صافي صفقات الشراء للأموال المُدارة عند أعلى مستوياتها في 18 شهراً. هذا مؤشر صعودي — حتى يتحول إلى عائق عند التطرف.',
           'الاستراتيجية: شراء عند التراجع نحو 2,290-2,300 دولار بهدف 2,380، وإيقاف خسارة عند 2,260.',
         ),
       },
       assetCategory: 'commodities',
-      publishedDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+      publishedDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      editorialCategory: 'education',
+      en: {
+        title: "A Trader's Guide to Understanding Slippage",
+        slug: 'traders-guide-understanding-slippage',
+        analyst: 'Sofia Reyes',
+        summary: 'Why your fill price differs from your order price, and how to minimise the gap.',
+        body: bodyBlocks(
+          'Slippage is the difference between the price you expected when you placed an order and the price at which it was actually executed. It occurs in all markets but is most pronounced during periods of high volatility or low liquidity.',
+          'Positive slippage — getting a better fill than requested — is possible but rarer. Negative slippage is the norm during news events, market opens, and thin overnight sessions. Understanding the mechanics helps you choose the right order type and time of execution.',
+          "How to minimise slippage: use limit orders instead of market orders where possible, avoid trading during major news releases unless you have a defined edge, and review your broker's execution statistics before sizing up.",
+        ),
+      },
+      ar: {
+        title: 'دليل المتداول لفهم الانزلاق السعري',
+        analyst: 'صوفيا رييس',
+        summary: 'لماذا يختلف سعر تنفيذ أمرك عن السعر المتوقع، وكيف تُقلّل الفجوة.',
+        body: bodyBlocks(
+          'الانزلاق السعري هو الفرق بين السعر المتوقع عند وضع الأمر والسعر الذي نُفّذ به فعلياً. يحدث في جميع الأسواق لكنه أكثر وضوحاً في فترات التقلب العالي أو السيولة المنخفضة.',
+          'الانزلاق الإيجابي — الحصول على تنفيذ أفضل من المطلوب — ممكن لكنه أقل شيوعاً. الانزلاق السلبي هو القاعدة خلال أحداث الأخبار وافتتاح الجلسات.',
+          'كيف تُقلّل الانزلاق: استخدم أوامر محددة بدلاً من أوامر السوق، وتجنّب التداول خلال النشرات الكبرى.',
+        ),
+      },
+      assetCategory: 'forex',
+      publishedDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      editorialCategory: 'education',
+      en: {
+        title: 'How Free Pip & Swap Calculators on Mobile Can Mislead You',
+        slug: 'pip-swap-calculators-on-mobile',
+        analyst: 'Sofia Reyes',
+        summary:
+          'Built-in calculator apps bake in assumptions your broker does not use. Check the math.',
+        body: bodyBlocks(
+          'Free pip and swap calculators in app stores use standardised assumptions: 100,000-unit lots, fixed pip values, and overnight rates sourced from generic benchmarks. Your broker uses different lot sizes, variable spreads, and rollover rates tied to interbank rates.',
+          "The error compounds when you trade exotic pairs or instruments with non-standard tick sizes. A CFD on an index has a completely different pip value calculation than a forex pair, and most free apps don't account for this.",
+          "Always use your broker's own calculator — or build your own in a spreadsheet using your account currency, the exact lot size, and the specific overnight swap rate from your platform's specification page.",
+        ),
+      },
+      ar: {
+        title: 'كيف يمكن لحاسبات النقاط والمبادلة المجانية على الجوال أن تُضلّلك',
+        analyst: 'صوفيا رييس',
+        summary: 'تطبيقات الحاسبة المدمجة تبني افتراضات لا يستخدمها وسيطك. تحقق من الحسابات.',
+        body: bodyBlocks(
+          'تستخدم حاسبات النقاط والمبادلة المجانية افتراضات موحدة: عقود 100,000 وحدة، قيم نقاط ثابتة، ومعدلات إيتاء من معايير عامة. وسيطك يستخدم أحجام عقود مختلفة وفروق متغيرة.',
+          'يتضاعف الخطأ عند تداول الأزواج الغريبة أو الأدوات ذات أحجام النقاط غير القياسية.',
+          'استخدم دائماً حاسبة وسيطك الخاصة أو ابنِ جدول بيانات بعملة حسابك وحجم العقد الدقيق ومعدل المبادلة من صفحة مواصفات المنصة.',
+        ),
+      },
+      assetCategory: 'forex',
+      publishedDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      en: {
+        title: 'The ECB Rate Decision and What the Market Priced Wrong',
+        slug: 'ecb-rate-decision-what-traders-missed',
+        analyst: 'Marcus Webb',
+        summary:
+          'EUR/JPY had the largest single-session move of Q2. Here is a breakdown from the desk.',
+        body: bodyBlocks(
+          "The ECB's June decision was fully priced by markets — or so they thought. The surprise was not the cut itself but the accompanying statement, which removed the phrase 'data-dependent future cuts', signalling a slower path ahead.",
+          'EUR/JPY had the largest single-session move of Q2: a 180-pip reversal from session highs. Traders who were positioned for a dovish follow-through were caught offside.',
+          'Lesson from the desk: price the press conference, not just the decision. Rate-sensitive pairs move on guidance, not rate changes that were already discounted weeks earlier.',
+        ),
+      },
+      ar: {
+        title: 'قرار الفائدة الأوروبي وما أخطأ السوق في تسعيره',
+        analyst: 'ماركوس ويب',
+        summary: 'سجّل EUR/JPY أكبر حركة في جلسة واحدة خلال الربع الثاني. إليك تحليل المكتب.',
+        body: bodyBlocks(
+          'قرار البنك المركزي الأوروبي في يونيو كان مُسعَّراً بالكامل من قبل الأسواق — هكذا ظنّوا. المفاجأة لم تكن التخفيض بل البيان المصاحب الذي أزال عبارة "خفوضات مستقبلية تعتمد على البيانات".',
+          'سجّل EUR/JPY أكبر حركة في جلسة واحدة للربع الثاني: انعكاس بـ 180 نقطة من أعلى الجلسة.',
+          'الدرس من المكتب: سعّر مؤتمر الصحافة لا القرار فحسب. الأزواج الحساسة للفائدة تتحرك بناءً على التوجيهات لا التغييرات المُخصومة مسبقاً.',
+        ),
+      },
+      assetCategory: 'forex',
+      publishedDate: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
     },
   ];
 
   for (const analysis of analyses) {
+    const coverId = await seedImage(`analysis-${analysis.en.slug}`, analysis.en.title, {
+      bg: '#0d2b1a',
+      w: 1200,
+      h: 800,
+      alt: analysis.en.title,
+    });
     const doc = await post<{ id: number }>('market-analysis', {
       ...analysis.en,
       assetCategory: analysis.assetCategory,
+      ...(analysis.editorialCategory ? { editorialCategory: analysis.editorialCategory } : {}),
       publishedDate: analysis.publishedDate,
+      featuredImage: coverId,
       status: 'published',
     });
     await patch(
@@ -1132,6 +1763,7 @@ async function seedMarketAnalysis() {
       {
         title: analysis.ar.title,
         analyst: analysis.ar.analyst,
+        summary: analysis.ar.summary,
         body: analysis.ar.body,
       },
       'ar',
@@ -1144,6 +1776,7 @@ async function seedMarketAnalysis() {
 
 async function seedNews() {
   console.log('📰 News...');
+  await deleteAllDocs('news');
   const newsItems = [
     {
       en: {
@@ -1215,30 +1848,65 @@ async function seedNews() {
 
 async function seedLegalPages() {
   console.log('⚖️  Legal Pages...');
+  await deleteAllDocs('legal-pages');
   const pages = [
     {
       pageType: 'terms',
       en: {
         title: 'Terms and Conditions',
         slug: 'terms-and-conditions',
-        body: bodyBlocks(
+        body: legalBody(
           'These Terms and Conditions govern your use of the NewEra365 trading platform and services. By opening an account, you agree to be bound by these terms.',
-          '1. ELIGIBILITY: You must be at least 18 years old and legally permitted to trade financial instruments in your jurisdiction.',
-          '2. ACCOUNT USAGE: You are responsible for maintaining the confidentiality of your login credentials and all activities under your account.',
-          '3. RISK WARNING: Trading leveraged products carries significant risk. You may lose more than your initial deposit.',
-          '4. INTELLECTUAL PROPERTY: All content, data, and software provided by NewEra365 is proprietary and protected by intellectual property laws.',
-          '5. GOVERNING LAW: These terms are governed by the laws of England and Wales.',
+          [
+            {
+              heading: 'Eligibility',
+              body: 'You must be at least 18 years old and legally permitted to trade financial instruments in your jurisdiction.',
+            },
+            {
+              heading: 'Account Usage',
+              body: 'You are responsible for maintaining the confidentiality of your login credentials and all activities carried out under your account.',
+            },
+            {
+              heading: 'Risk Warning',
+              body: 'Trading leveraged products carries significant risk. You may lose more than your initial deposit.',
+            },
+            {
+              heading: 'Intellectual Property',
+              body: 'All content, data, and software provided by NewEra365 is proprietary and protected by intellectual property laws.',
+            },
+            {
+              heading: 'Governing Law',
+              body: 'These Terms are governed by and construed in accordance with the laws of England and Wales.',
+            },
+          ],
         ),
       },
       ar: {
         title: 'الشروط والأحكام',
-        body: bodyBlocks(
+        body: legalBody(
           'تحكم هذه الشروط والأحكام استخدامك لمنصة وخدمات نيو إيرا 365 للتداول. بفتح حساب، توافق على الالتزام بهذه الشروط.',
-          '1. الأهلية: يجب أن تكون في سن 18 عاماً على الأقل ومسموحاً لك قانونياً بتداول الأدوات المالية في ولايتك القضائية.',
-          '2. استخدام الحساب: أنت مسؤول عن الحفاظ على سرية بيانات تسجيل الدخول الخاصة بك.',
-          '3. تحذير المخاطر: تداول المنتجات ذات الرافعة المالية ينطوي على مخاطر عالية. قد تخسر أكثر من وديعتك الأولية.',
-          '4. الملكية الفكرية: جميع المحتوى والبيانات والبرامج مملوكة لنيو إيرا 365 ومحمية بقوانين الملكية الفكرية.',
-          '5. القانون الحاكم: تخضع هذه الشروط لقوانين إنجلترا وويلز.',
+          [
+            {
+              heading: 'الأهلية',
+              body: 'يجب أن تكون في سن 18 عاماً على الأقل ومسموحاً لك قانونياً بتداول الأدوات المالية في ولايتك القضائية.',
+            },
+            {
+              heading: 'استخدام الحساب',
+              body: 'أنت مسؤول عن الحفاظ على سرية بيانات تسجيل الدخول الخاصة بك وجميع الأنشطة التي تتم على حسابك.',
+            },
+            {
+              heading: 'تحذير المخاطر',
+              body: 'تداول المنتجات ذات الرافعة المالية ينطوي على مخاطر عالية. قد تخسر أكثر من وديعتك الأولية.',
+            },
+            {
+              heading: 'الملكية الفكرية',
+              body: 'جميع المحتوى والبيانات والبرامج المقدمة من نيو إيرا 365 مملوكة ومحمية بقوانين الملكية الفكرية.',
+            },
+            {
+              heading: 'القانون الحاكم',
+              body: 'تخضع هذه الشروط لقوانين إنجلترا وويلز وتُفسَّر وفقاً لها.',
+            },
+          ],
         ),
       },
       effectiveDate: '2026-01-01',
@@ -1249,22 +1917,50 @@ async function seedLegalPages() {
       en: {
         title: 'Privacy Policy',
         slug: 'privacy-policy',
-        body: bodyBlocks(
+        body: legalBody(
           'NewEra365 is committed to protecting your personal data. This Privacy Policy explains how we collect, use, and protect your information.',
-          'DATA WE COLLECT: Name, email, phone, trading activity, device information, and IP addresses.',
-          'HOW WE USE DATA: To provide trading services, comply with regulatory requirements, and improve our products.',
-          'DATA SHARING: We do not sell your data. We share data with regulatory authorities as required by law and with licensed third-party service providers.',
-          'YOUR RIGHTS: You have the right to access, correct, or delete your data. Contact privacy@newera365.com.',
+          [
+            {
+              heading: 'Data We Collect',
+              body: 'We collect your name, email, phone number, trading activity, device information, and IP addresses.',
+            },
+            {
+              heading: 'How We Use Data',
+              body: 'We use your data to provide trading services, comply with regulatory requirements, and improve our products.',
+            },
+            {
+              heading: 'Data Sharing',
+              body: 'We do not sell your data. We share data with regulatory authorities as required by law and with licensed third-party service providers.',
+            },
+            {
+              heading: 'Your Rights',
+              body: 'You have the right to access, correct, or delete your data. To exercise these rights, contact privacy@newera365.com.',
+            },
+          ],
         ),
       },
       ar: {
         title: 'سياسة الخصوصية',
-        body: bodyBlocks(
+        body: legalBody(
           'تلتزم نيو إيرا 365 بحماية بياناتك الشخصية. تشرح هذه السياسة كيفية جمع معلوماتك واستخدامها وحمايتها.',
-          'البيانات التي نجمعها: الاسم، البريد الإلكتروني، الهاتف، نشاط التداول، معلومات الجهاز وعناوين IP.',
-          'كيف نستخدم البيانات: لتقديم خدمات التداول، والامتثال للمتطلبات التنظيمية، وتحسين منتجاتنا.',
-          'مشاركة البيانات: لا نبيع بياناتك. نشارك البيانات مع السلطات التنظيمية وفقاً للقانون.',
-          'حقوقك: لديك الحق في الوصول إلى بياناتك أو تصحيحها أو حذفها. تواصل مع privacy@newera365.com.',
+          [
+            {
+              heading: 'البيانات التي نجمعها',
+              body: 'نجمع اسمك، بريدك الإلكتروني، رقم هاتفك، نشاط التداول، معلومات الجهاز، وعناوين IP.',
+            },
+            {
+              heading: 'كيف نستخدم البيانات',
+              body: 'نستخدم بياناتك لتقديم خدمات التداول، والامتثال للمتطلبات التنظيمية، وتحسين منتجاتنا.',
+            },
+            {
+              heading: 'مشاركة البيانات',
+              body: 'لا نبيع بياناتك. نشارك البيانات مع السلطات التنظيمية وفقاً للقانون ومع مزودي الخدمات المرخصين.',
+            },
+            {
+              heading: 'حقوقك',
+              body: 'لديك الحق في الوصول إلى بياناتك أو تصحيحها أو حذفها. لممارسة هذه الحقوق، تواصل مع privacy@newera365.com.',
+            },
+          ],
         ),
       },
       effectiveDate: '2026-01-01',
@@ -1275,21 +1971,150 @@ async function seedLegalPages() {
       en: {
         title: 'Risk Disclosure',
         slug: 'risk-disclosure',
-        body: bodyBlocks(
+        body: legalBody(
           'IMPORTANT RISK WARNING: Trading in Contracts for Difference (CFDs) and other leveraged instruments carries a high level of risk to your capital.',
-          'CFDs are complex instruments. 74% of retail investor accounts lose money when trading CFDs with this provider.',
-          'You should consider whether you understand how CFDs work and whether you can afford to take the high risk of losing your money.',
-          'Past performance is not indicative of future results. Never trade with money you cannot afford to lose.',
-          'Seek independent financial advice if you are unsure about the suitability of these products.',
+          [
+            {
+              heading: 'Nature of CFDs',
+              body: 'CFDs are complex instruments. 74% of retail investor accounts lose money when trading CFDs with this provider.',
+            },
+            {
+              heading: 'Assessing Suitability',
+              body: 'You should consider whether you understand how CFDs work and whether you can afford to take the high risk of losing your money.',
+            },
+            {
+              heading: 'Past Performance',
+              body: 'Past performance is not indicative of future results. Never trade with money you cannot afford to lose.',
+            },
+            {
+              heading: 'Independent Advice',
+              body: 'Seek independent financial advice if you are unsure about the suitability of these products for your circumstances.',
+            },
+          ],
         ),
       },
       ar: {
         title: 'إفصاح المخاطر',
-        body: bodyBlocks(
+        body: legalBody(
           'تحذير مهم من المخاطر: التداول في عقود الفروقات والأدوات ذات الرافعة المالية ينطوي على مخاطر عالية لرأس مالك.',
-          'عقود الفروقات أدوات معقدة. 74% من حسابات المستثمرين الأفراد تخسر أموالها عند التداول مع هذا المزود.',
-          'يجب أن تفكر فيما إذا كنت تفهم كيف تعمل عقود الفروقات وما إذا كنت تستطيع تحمّل خطر خسارة أموالك.',
-          'الأداء السابق ليس مؤشراً على النتائج المستقبلية. لا تتداول أبداً بأموال لا تستطيع تحمّل خسارتها.',
+          [
+            {
+              heading: 'طبيعة عقود الفروقات',
+              body: 'عقود الفروقات أدوات معقدة. 74% من حسابات المستثمرين الأفراد تخسر أموالها عند التداول مع هذا المزود.',
+            },
+            {
+              heading: 'تقييم الملاءمة',
+              body: 'يجب أن تفكر فيما إذا كنت تفهم كيف تعمل عقود الفروقات وما إذا كنت تستطيع تحمّل خطر خسارة أموالك.',
+            },
+            {
+              heading: 'الأداء السابق',
+              body: 'الأداء السابق ليس مؤشراً على النتائج المستقبلية. لا تتداول أبداً بأموال لا تستطيع تحمّل خسارتها.',
+            },
+            {
+              heading: 'المشورة المستقلة',
+              body: 'اطلب مشورة مالية مستقلة إذا كنت غير متأكد من ملاءمة هذه المنتجات لظروفك.',
+            },
+          ],
+        ),
+      },
+      effectiveDate: '2026-01-01',
+      version: 'v1.0',
+    },
+    {
+      pageType: 'aml-policy',
+      en: {
+        title: 'AML Policy',
+        slug: 'aml-policy',
+        body: legalBody(
+          'NewEra365 maintains a comprehensive Anti-Money Laundering (AML) programme to detect and prevent financial crime across all client accounts and transactions.',
+          [
+            {
+              heading: 'Policy Scope',
+              body: 'This policy applies to all clients and transactions processed through NewEra365 Ltd. We are committed to the highest standards of anti-money laundering and counter-terrorist financing compliance.',
+            },
+            {
+              heading: 'Customer Due Diligence',
+              body: 'All clients undergo Know-Your-Customer (KYC) verification before account activation. Enhanced due diligence is applied to higher-risk profiles, including Politically Exposed Persons (PEPs).',
+            },
+            {
+              heading: 'Transaction Monitoring',
+              body: 'We monitor account activity on an ongoing basis to identify unusual or suspicious patterns that may indicate money laundering.',
+            },
+            {
+              heading: 'Reporting',
+              body: 'Suspicious activity is reported to the relevant financial intelligence unit in line with our regulatory obligations.',
+            },
+          ],
+        ),
+      },
+      ar: {
+        title: 'سياسة مكافحة غسل الأموال',
+        body: legalBody(
+          'تحتفظ نيو إيرا 365 ببرنامج شامل لمكافحة غسل الأموال للكشف عن الجرائم المالية ومنعها عبر جميع حسابات العملاء والمعاملات.',
+          [
+            {
+              heading: 'نطاق السياسة',
+              body: 'تنطبق هذه السياسة على جميع العملاء والمعاملات التي تتم معالجتها عبر نيو إيرا 365. نلتزم بأعلى معايير مكافحة غسل الأموال وتمويل الإرهاب.',
+            },
+            {
+              heading: 'العناية الواجبة بالعميل',
+              body: 'يخضع جميع العملاء للتحقق من الهوية (اعرف عميلك) قبل تفعيل الحساب. تُطبَّق عناية واجبة معززة على الملفات عالية المخاطر بما في ذلك الأشخاص المعرّضون سياسياً.',
+            },
+            {
+              heading: 'مراقبة المعاملات',
+              body: 'نراقب نشاط الحساب بشكل مستمر لتحديد الأنماط غير العادية أو المشبوهة التي قد تشير إلى غسل الأموال.',
+            },
+            {
+              heading: 'الإبلاغ',
+              body: 'يتم الإبلاغ عن النشاط المشبوه إلى وحدة الاستخبارات المالية المعنية وفقاً لالتزاماتنا التنظيمية.',
+            },
+          ],
+        ),
+      },
+      effectiveDate: '2026-01-01',
+      version: 'v1.0',
+    },
+    {
+      pageType: 'cookie-policy',
+      en: {
+        title: 'Cookie Policy',
+        slug: 'cookie-policy',
+        body: legalBody(
+          'This Cookie Policy explains how NewEra365 uses cookies and similar technologies when you visit our website.',
+          [
+            {
+              heading: 'What Are Cookies',
+              body: 'Cookies are small text files placed on your device that help us remember your preferences, analyse site usage, and enable core features.',
+            },
+            {
+              heading: 'Types We Use',
+              body: 'We use essential cookies for core functionality, analytics cookies to understand how the site is used, and marketing cookies to deliver relevant advertising.',
+            },
+            {
+              heading: 'Managing Cookies',
+              body: 'You can manage or disable non-essential cookies at any time through your browser settings or our cookie preferences panel.',
+            },
+          ],
+        ),
+      },
+      ar: {
+        title: 'سياسة ملفات تعريف الارتباط',
+        body: legalBody(
+          'تشرح سياسة ملفات تعريف الارتباط هذه كيفية استخدام نيو إيرا 365 لملفات تعريف الارتباط والتقنيات المشابهة عند زيارتك لموقعنا.',
+          [
+            {
+              heading: 'ما هي ملفات تعريف الارتباط',
+              body: 'ملفات تعريف الارتباط هي ملفات نصية صغيرة تُحفظ على جهازك تساعدنا على تذكّر تفضيلاتك وتحليل استخدام الموقع وتمكين الميزات الأساسية.',
+            },
+            {
+              heading: 'الأنواع التي نستخدمها',
+              body: 'نستخدم ملفات أساسية للوظائف الجوهرية، وملفات تحليلية لفهم كيفية استخدام الموقع، وملفات تسويقية لتقديم إعلانات ذات صلة.',
+            },
+            {
+              heading: 'إدارة ملفات تعريف الارتباط',
+              body: 'يمكنك إدارة ملفات تعريف الارتباط غير الأساسية أو تعطيلها في أي وقت من خلال إعدادات متصفحك أو لوحة تفضيلات ملفات تعريف الارتباط لدينا.',
+            },
+          ],
         ),
       },
       effectiveDate: '2026-01-01',
@@ -1324,6 +2149,7 @@ async function seedLegalPages() {
 
 async function seedTeamMembers() {
   console.log('👥 Team Members...');
+  await deleteAllDocs('team-members');
   const members = [
     {
       en: {
@@ -1384,11 +2210,18 @@ async function seedTeamMembers() {
   ];
 
   for (const member of members) {
+    const photoId = await seedImage(`team-${member.en.slug}`, member.en.role, {
+      bg: '#0B3D2E',
+      w: 600,
+      h: 600,
+      alt: `${member.en.name} — ${member.en.role}`,
+    });
     const doc = await post<{ id: number }>('team-members', {
       name: member.en.name,
       slug: member.en.slug,
       role: member.en.role,
       bio: member.en.bio,
+      photo: photoId,
       sortOrder: member.sortOrder,
       status: 'active',
     });
@@ -1410,6 +2243,7 @@ async function seedTeamMembers() {
 
 async function seedAwards() {
   console.log('🏆 Awards...');
+  await deleteAllDocs('awards');
   const awards = [
     {
       en: {
@@ -1459,11 +2293,18 @@ async function seedAwards() {
   ];
 
   for (const award of awards) {
+    const logoId = await seedImage(`award-${award.en.slug}`, award.en.title, {
+      bg: '#10261C',
+      w: 600,
+      h: 400,
+      alt: award.en.title,
+    });
     const doc = await post<{ id: number }>('awards', {
       title: award.en.title,
       slug: award.en.slug,
       description: award.en.description,
       date: award.date,
+      logo: logoId,
       sortOrder: award.sortOrder,
       status: 'published',
     });
@@ -1776,6 +2617,144 @@ async function seedEducation() {
       seoDescription:
         'Turn scattered trading ideas into a repeatable, reviewable process with this step-by-step plan template.',
     },
+    {
+      en: {
+        title: 'Understanding technical indicators',
+        slug: 'understanding-technical-indicators',
+        body: bodyBlocks(
+          'Technical indicators distill price and volume data into a single line or histogram. They do not predict the future — they describe the recent past in a way that helps you form a bias.',
+          'TREND INDICATORS: Moving averages (SMA, EMA) smooth out noise to show the underlying direction. The 200-day SMA is the most widely watched — institutions use it as a long-term filter.',
+          'MOMENTUM INDICATORS: RSI measures the speed of price moves on a scale of 0–100. Above 70 suggests overbought conditions; below 30, oversold. Neither is a trade signal on its own.',
+          'VOLUME INDICATORS: OBV and the Volume Profile show where most activity happened. A breakout with high volume is more convincing than one on thin participation.',
+        ),
+      },
+      ar: {
+        title: 'فهم المؤشرات الفنية',
+        body: bodyBlocks(
+          'تقطّر المؤشرات الفنية بيانات السعر والحجم إلى خط واحد أو مخطط. هي لا تتنبأ بالمستقبل — بل تصف الماضي القريب.',
+          'مؤشرات الاتجاه: تعمل المتوسطات المتحركة على تمهيد الضوضاء لإظهار الاتجاه الأساسي.',
+          'مؤشرات الزخم: يقيس RSI سرعة تحركات الأسعار على مقياس 0-100.',
+          'مؤشرات الحجم: تظهر مستويات النشاط الأعلى — الاختراق مع حجم مرتفع أكثر إقناعاً.',
+        ),
+      },
+      seoDescription:
+        'Moving averages, RSI, MACD, volume — how each indicator works and when to use it in your trading.',
+    },
+    {
+      en: {
+        title: 'Introduction to fundamental analysis',
+        slug: 'introduction-to-fundamental-analysis',
+        body: bodyBlocks(
+          "Fundamental analysis is the art of identifying what drives an asset's fair value and whether the current price reflects it. In forex, fundamentals are primarily macroeconomic.",
+          'INTEREST RATE DIFFERENTIALS: Money flows toward higher yields. A country raising rates while others hold tends to see its currency strengthen, as global capital reallocates.',
+          'ECONOMIC GROWTH: GDP, employment and PMI data shape expectations for central bank policy. Strong growth raises the probability of rate hikes; weakness raises the probability of cuts.',
+          'USING FUNDAMENTALS WITH TECHNICALS: Fundamentals answer "which direction" — technicals answer "when" and "where". Combining both gives you a higher-probability framework.',
+        ),
+      },
+      ar: {
+        title: 'مقدمة في التحليل الأساسي',
+        body: bodyBlocks(
+          'التحليل الأساسي هو فن تحديد ما يدفع القيمة العادلة للأصل وما إذا كان السعر الحالي يعكسها.',
+          'فروق أسعار الفائدة: تتدفق الأموال نحو العائدات الأعلى. الدولة التي ترفع الفائدة ترى عادةً تعزز عملتها.',
+          'النمو الاقتصادي: تشكّل بيانات الناتج المحلي والتوظيف ومؤشر PMI توقعات سياسة البنك المركزي.',
+          'الجمع بين الأساسيات والفنيات: الأساسيات تجيب على "أي اتجاه" — الفنيات تجيب على "متى" و"أين".',
+        ),
+      },
+      seoDescription:
+        'Interest rates, GDP, employment data — how fundamentals drive currency, commodity and index prices.',
+    },
+    {
+      en: {
+        title: 'Support and resistance: finding the levels that matter',
+        slug: 'support-and-resistance-levels-guide',
+        body: bodyBlocks(
+          'Support and resistance are price levels where buying or selling pressure has historically been strong enough to reverse or stall a move. They are the backbone of most technical trading systems.',
+          'HOW LEVELS FORM: A level forms when price reverses sharply from a point multiple times. Each test strengthens the level — and also depletes the resting orders sitting there.',
+          'WHEN LEVELS BREAK: A confirmed break occurs on a close beyond the level, ideally with above-average volume. The old resistance becomes new support (and vice versa). False breaks are common near psychological round numbers.',
+          'MULTI-TIMEFRAME CONFIRMATION: A level visible on the daily chart is far more significant than one on the 15-minute chart. Check higher timeframes first — trade what the daily sees.',
+        ),
+      },
+      ar: {
+        title: 'الدعم والمقاومة: إيجاد المستويات المهمة',
+        body: bodyBlocks(
+          'مستويات الدعم والمقاومة هي مستويات أسعار حيث كان ضغط الشراء أو البيع قوياً بما يكفي لعكس أو إيقاف حركة.',
+          'كيف تتشكل المستويات: يتشكل المستوى عندما ينعكس السعر بشكل حاد من نقطة ما عدة مرات.',
+          'عند كسر المستويات: يحدث الكسر المؤكد عند الإغلاق خارج المستوى. تصبح المقاومة القديمة دعماً جديداً.',
+          'تأكيد الإطار الزمني المتعدد: المستوى المرئي على الرسم البياني اليومي أكثر أهمية بكثير من المستوى على الرسم 15 دقيقة.',
+        ),
+      },
+      seoDescription:
+        'How to identify, draw and trade the support and resistance levels that professional traders watch.',
+    },
+    {
+      en: {
+        title: 'Introduction to price action trading',
+        slug: 'introduction-to-price-action-trading',
+        body: bodyBlocks(
+          'Price action trading strips away all indicators and makes decisions based purely on how price behaves — the patterns it forms, the levels it reacts to, and the speed and momentum of its moves.',
+          'THE CORE PRINCIPLE: Every buy and sell order in the market is visible in price. No indicator can show you anything that price itself does not already contain — indicators simply reorganise that information.',
+          'KEY PRICE ACTION PATTERNS: Inside bars (consolidation), pin bars (rejection), and engulfing candles (momentum shift) are the most reliable setups. All are defined by context, not just shape.',
+          "ENTRY AND MANAGEMENT: Price action traders typically wait for the pattern to complete, enter on a break of the pattern's high or low, and place the stop on the opposite side of the pattern.",
+        ),
+      },
+      ar: {
+        title: 'مقدمة في تداول حركة السعر',
+        body: bodyBlocks(
+          'يتجرد تداول حركة السعر من جميع المؤشرات ويتخذ القرارات بناءً على سلوك السعر نفسه.',
+          'المبدأ الأساسي: كل أمر شراء وبيع في السوق مرئي في السعر. لا يمكن لأي مؤشر أن يظهر لك شيئاً لا يحتوي عليه السعر نفسه.',
+          'أنماط حركة السعر الرئيسية: الأشرطة الداخلية والأشرطة المدببة والشموع الابتلاعية هي الإعدادات الأكثر موثوقية.',
+          'الدخول والإدارة: ينتظر متداولو حركة السعر عادةً اكتمال النمط ويدخلون عند كسر النمط.',
+        ),
+      },
+      seoDescription:
+        'Read the market without indicators — how professional traders use raw price patterns to time entries.',
+    },
+    {
+      en: {
+        title: 'How to read and trade the economic calendar',
+        slug: 'how-to-read-trade-economic-calendar',
+        body: bodyBlocks(
+          "The economic calendar is a trader's essential tool — a scheduled list of data releases and central bank events that are likely to move the markets you trade.",
+          'IMPACT RATINGS: Calendar services rate events as high, medium or low impact. Focus on high-impact events: central bank decisions, CPI, NFP, GDP, and retail sales.',
+          'CONSENSUS VS ACTUAL: Markets move on the DEVIATION from consensus, not the absolute number. A jobs print of 200k is bullish if consensus was 150k — and bearish if consensus was 250k.',
+          'BEFORE AND AFTER THE NUMBER: Positioning begins before the release as traders speculate. The "buy the rumour, sell the news" pattern is common — be careful holding into the print if the market has already moved.',
+        ),
+      },
+      ar: {
+        title: 'كيفية قراءة التقويم الاقتصادي والتداول بناءً عليه',
+        body: bodyBlocks(
+          'التقويم الاقتصادي هو الأداة الأساسية للمتداول — قائمة مجدولة بإصدارات البيانات وأحداث البنك المركزي التي من المرجح أن تحرك الأسواق.',
+          'تقييمات التأثير: تصنّف خدمات التقويم الأحداث كعالية أو متوسطة أو منخفضة التأثير.',
+          'التوقعات مقابل الفعلي: تتحرك الأسواق بناءً على الانحراف عن التوقعات، وليس الرقم المطلق.',
+          'قبل وبعد الرقم: يبدأ تحديد المراكز قبل الإصدار. نمط "اشترِ الإشاعة، بِع الخبر" شائع.',
+        ),
+      },
+      seoDescription:
+        'How to read impact ratings, forecast vs actual, and position yourself around high-impact data releases.',
+    },
+    {
+      en: {
+        title: 'Lot sizes and position sizing: a complete guide',
+        slug: 'lot-sizes-position-sizing-complete-guide',
+        body: bodyBlocks(
+          'Position sizing is the single most important skill a trader can develop — more important than entry timing, indicator choice or even market selection.',
+          'LOT SIZES EXPLAINED: A standard lot in forex is 100,000 units of the base currency. A mini lot is 10,000 units; a micro lot is 1,000 units. For a 1-pip move on EUR/USD, a standard lot gains or loses $10.',
+          'THE 1% RULE: Never risk more than 1% of your account on any single trade. With a $10,000 account, your maximum risk per trade is $100. Your stop distance and this risk budget together determine your lot size.',
+          'SCALING IN AND OUT: More advanced traders scale into positions — adding to a winner — and scale out of winners, closing partial positions at interim targets. This is position management, not gambling.',
+        ),
+      },
+      ar: {
+        title: 'أحجام اللوت وتحديد حجم المركز: دليل شامل',
+        body: bodyBlocks(
+          'تحديد حجم المركز هو أهم مهارة يمكن للمتداول تطويرها.',
+          'شرح أحجام اللوت: اللوت القياسي في الفوركس هو 100,000 وحدة من العملة الأساسية.',
+          'قاعدة 1٪: لا تخاطر بأكثر من 1٪ من حسابك في أي صفقة واحدة.',
+          'الدخول والخروج التدريجي: يدخل المتداولون الأكثر خبرة إلى المراكز تدريجياً ويخرجون منها تدريجياً.',
+        ),
+      },
+      seoDescription:
+        'Standard, mini and micro lots explained — and how to calculate the right position size for any trade.',
+    },
   ];
 
   for (const guide of guides) {
@@ -1979,12 +2958,19 @@ async function seedEducation() {
   ];
 
   for (const video of videos) {
+    const thumbId = await seedImage(`edu-${video.slug}`, video.en.title, {
+      bg: '#0B3D2E',
+      w: 1280,
+      h: 720,
+      alt: video.en.title,
+    });
     const doc = await post<{ id: number }>('education-content', {
       title: video.en.title,
       slug: video.slug,
       contentType: video.contentType,
       mediaCategory: video.mediaCategory,
       videoEmbed: video.videoEmbed,
+      thumbnail: thumbId,
       status: 'published',
     });
     await patch('education-content', doc.id, { title: video.ar.title }, 'ar');
@@ -1999,6 +2985,7 @@ async function seedEducation() {
 
 async function seedCareers() {
   console.log('💼 Careers...');
+  await deleteAllDocs('careers');
   const jobs = [
     {
       en: {
@@ -2075,6 +3062,126 @@ async function seedCareers() {
       employmentType: 'full-time',
       sortOrder: 3,
     },
+    {
+      en: {
+        title: 'FX Market Analyst',
+        slug: 'fx-market-analyst',
+        summary:
+          'Produce daily and weekly market commentary, trade setups and research reports for NewEra365 clients.',
+        body: bodyBlocks(
+          'You will write market analysis across forex, indices and commodities — published daily on the NewEra365 research hub.',
+          'REQUIREMENTS: 3+ years trading or analyzing FX markets. Strong technical analysis skills (Elliott Wave, Fibonacci, price action). Proven writing ability — samples required.',
+        ),
+      },
+      ar: {
+        title: 'محلل أسواق FX',
+        summary: 'إنتاج تعليقات سوقية يومية وأسبوعية وتقارير بحثية لعملاء نيو إيرا 365.',
+        body: bodyBlocks(
+          'ستكتب تحليلات السوق عبر الفوركس والمؤشرات والسلع — تُنشر يومياً على مركز بحوث نيو إيرا 365.',
+          'المتطلبات: 3 سنوات أو أكثر في تداول أو تحليل أسواق الفوركس. مهارات قوية في التحليل الفني.',
+        ),
+      },
+      department: 'research',
+      location: 'Remote / Dubai',
+      employmentType: 'full-time',
+      sortOrder: 4,
+    },
+    {
+      en: {
+        title: 'Compliance Officer — MENA',
+        slug: 'compliance-officer-mena',
+        summary:
+          'Ensure NewEra365 operations comply with FSRA regulations and international AML/KYC standards.',
+        body: bodyBlocks(
+          "You will be responsible for regulatory compliance across all MENA jurisdictions, maintaining the firm's FSRA licence, and managing AML/KYC policy and training.",
+          'REQUIREMENTS: 4+ years compliance experience at an FCA, FSRA or DFSA regulated firm. Strong knowledge of AML/KYC regulations. Law or finance degree preferred.',
+        ),
+      },
+      ar: {
+        title: 'مسؤول الامتثال — منطقة الشرق الأوسط وشمال أفريقيا',
+        summary: 'ضمان امتثال عمليات نيو إيرا 365 للوائح FSRA ومعايير AML/KYC الدولية.',
+        body: bodyBlocks(
+          'ستكون مسؤولاً عن الامتثال التنظيمي في جميع ولايات الشرق الأوسط وشمال أفريقيا.',
+          'المتطلبات: 4 سنوات أو أكثر من خبرة الامتثال في شركة منظمة من FCA أو FSRA أو DFSA.',
+        ),
+      },
+      department: 'compliance',
+      location: 'Abu Dhabi, UAE',
+      employmentType: 'full-time',
+      sortOrder: 5,
+    },
+    {
+      en: {
+        title: 'Performance Marketing Manager',
+        slug: 'performance-marketing-manager',
+        summary:
+          "Own paid acquisition across Google, Meta, and programmatic channels to grow NewEra365's client base.",
+        body: bodyBlocks(
+          'You will manage a significant monthly performance marketing budget, running campaigns across paid search, paid social and programmatic display targeting retail traders in the MENA region.',
+          'REQUIREMENTS: 4+ years performance marketing experience with budgets of $500k+ per month. Strong analytical skills, proficiency in Google Ads, Meta Ads, and attribution tools.',
+        ),
+      },
+      ar: {
+        title: 'مدير التسويق الأدائي',
+        summary:
+          'إدارة الاستحواذ المدفوع عبر Google وMeta والقنوات البرامجية لتنمية قاعدة عملاء نيو إيرا 365.',
+        body: bodyBlocks(
+          'ستدير ميزانية تسويقية شهرية كبيرة، وتشغيل حملات عبر البحث المدفوع والتواصل الاجتماعي المدفوع.',
+          'المتطلبات: 4 سنوات أو أكثر من خبرة التسويق الأدائي بميزانيات تزيد عن 500 ألف دولار شهرياً.',
+        ),
+      },
+      department: 'marketing',
+      location: 'Dubai, UAE',
+      employmentType: 'full-time',
+      sortOrder: 6,
+    },
+    {
+      en: {
+        title: 'Senior Product Designer',
+        slug: 'senior-product-designer',
+        summary: "Lead the design of NewEra365's web and mobile trading experience.",
+        body: bodyBlocks(
+          'You will own the design process end-to-end — from user research to final component specs — across our web platform, mobile apps, and client-facing tools.',
+          'REQUIREMENTS: 5+ years product design experience. Proficiency in Figma. Experience designing for complex, data-rich products. Portfolio of shipped work required.',
+        ),
+      },
+      ar: {
+        title: 'مصمم منتجات أول',
+        summary: 'قيادة تصميم تجربة التداول على الويب والجوال لنيو إيرا 365.',
+        body: bodyBlocks(
+          'ستمتلك عملية التصميم من البداية إلى النهاية — من أبحاث المستخدم إلى مواصفات المكونات النهائية.',
+          'المتطلبات: 5 سنوات أو أكثر من خبرة تصميم المنتجات. إجادة Figma. خبرة في تصميم منتجات غنية بالبيانات.',
+        ),
+      },
+      department: 'design',
+      location: 'Remote',
+      employmentType: 'full-time',
+      sortOrder: 7,
+    },
+    {
+      en: {
+        title: 'Introducing Broker Partnership Manager',
+        slug: 'ib-partnership-manager',
+        summary:
+          "Build and manage NewEra365's global network of introducing brokers and affiliate partners.",
+        body: bodyBlocks(
+          'You will recruit, onboard and grow a portfolio of IB partners — individuals and small businesses who refer clients to NewEra365 in exchange for commission rebates.',
+          'REQUIREMENTS: 3+ years in FX/CFD broker partnerships. Existing network of IB relationships. Strong commercial negotiation skills. Experience with IB portal management.',
+        ),
+      },
+      ar: {
+        title: 'مدير شراكات الوسطاء المعرِّفين',
+        summary: 'بناء وإدارة شبكة نيو إيرا 365 العالمية من الوسطاء المعرِّفين والشركاء التابعين.',
+        body: bodyBlocks(
+          'ستقوم باستقطاب وتأهيل وتنمية محفظة من شركاء IB.',
+          'المتطلبات: 3 سنوات أو أكثر في شراكات وسطاء الفوركس/CFD. شبكة علاقات IB قائمة.',
+        ),
+      },
+      department: 'sales',
+      location: 'Dubai, UAE',
+      employmentType: 'full-time',
+      sortOrder: 8,
+    },
   ];
 
   for (const job of jobs) {
@@ -2109,6 +3216,7 @@ async function seedCareers() {
 
 async function seedWebinars() {
   console.log('🎙️  Webinars...');
+  await deleteAllDocs('webinars');
   const now = new Date();
   const webinars = [
     {
@@ -2183,9 +3291,87 @@ async function seedWebinars() {
       status: 'completed',
       replayUrl: 'https://www.youtube.com/watch?v=placeholder-risk',
     },
+    {
+      en: {
+        title: 'Technical Analysis Foundations: Support, Resistance & Trend Lines',
+        slug: 'technical-analysis-foundations-support-resistance',
+        speaker: 'Marcus Webb',
+        speakerBio:
+          'This session covers the building blocks every technical trader needs — how to identify key levels, draw trend lines correctly, and use them to time entries and exits.',
+      },
+      ar: {
+        title: 'أسس التحليل الفني: الدعم والمقاومة وخطوط الاتجاه',
+        speakerBio:
+          'تغطي هذه الجلسة اللبنات الأساسية التي يحتاجها كل متداول فني — كيفية تحديد المستويات الرئيسية ورسم خطوط الاتجاه بشكل صحيح.',
+      },
+      scheduledAt: new Date(now.getTime() + 21 * 24 * 60 * 60 * 1000).toISOString(),
+      timezone: 'UTC+4 (Dubai)',
+      status: 'upcoming',
+      zoomRegistrationLink: 'https://zoom.us/webinar/register/placeholder-ta',
+    },
+    {
+      en: {
+        title: 'How to Trade Economic Calendar Events: CPI, GDP & NFP',
+        slug: 'trading-economic-calendar-cpi-gdp-nfp',
+        speaker: 'Claire Deschamps',
+        speakerBio:
+          'Learn how to prepare for, react to, and recover from high-impact economic data releases. Covers pre-release positioning, stop placement, and post-release follow-through.',
+      },
+      ar: {
+        title: 'كيفية تداول أحداث التقويم الاقتصادي: CPI وGDP وNFP',
+        speakerBio:
+          'تعلّم كيفية الاستعداد للإصدارات الاقتصادية عالية التأثير والتفاعل معها والتعافي منها.',
+      },
+      scheduledAt: new Date(now.getTime() - 21 * 24 * 60 * 60 * 1000).toISOString(),
+      timezone: 'UTC+4 (Dubai)',
+      status: 'completed',
+      replayUrl: 'https://www.youtube.com/watch?v=placeholder-calendar',
+    },
+    {
+      en: {
+        title: 'Introduction to CFD Trading: Contracts, Costs & Calculations',
+        slug: 'introduction-to-cfd-trading-contracts-costs',
+        speaker: 'Priya Sharma',
+        speakerBio:
+          "A complete beginner's guide to how CFDs work, how costs are calculated (spread, swap, commission), and how to place your first trade on MT5.",
+      },
+      ar: {
+        title: 'مقدمة في تداول العقود مقابل الفروقات: العقود والتكاليف والحسابات',
+        speakerBio:
+          'دليل المبتدئين الكامل حول كيفية عمل CFDs وكيفية حساب التكاليف وكيفية تنفيذ أول صفقة على MT5.',
+      },
+      scheduledAt: new Date(now.getTime() + 28 * 24 * 60 * 60 * 1000).toISOString(),
+      timezone: 'UTC+4 (Dubai)',
+      status: 'upcoming',
+      zoomRegistrationLink: 'https://zoom.us/webinar/register/placeholder-cfd',
+    },
+    {
+      en: {
+        title: 'Trading Psychology: Overcoming Fear, Greed and Revenge Trading',
+        slug: 'trading-psychology-fear-greed-revenge-trading',
+        speaker: 'James Thornton',
+        speakerBio:
+          'Why most traders are their own worst enemy — and practical techniques to trade with discipline, manage losses without spiralling, and build consistency over time.',
+      },
+      ar: {
+        title: 'سيكولوجية التداول: التغلب على الخوف والطمع والتداول الانتقامي',
+        speakerBio:
+          'لماذا يكون معظم المتداولين عدوهم الأكبر — وتقنيات عملية للتداول بانضباط وإدارة الخسائر وبناء الاتساق.',
+      },
+      scheduledAt: new Date(now.getTime() - 28 * 24 * 60 * 60 * 1000).toISOString(),
+      timezone: 'UTC+4 (Dubai)',
+      status: 'completed',
+      replayUrl: 'https://www.youtube.com/watch?v=placeholder-psychology',
+    },
   ];
 
   for (const w of webinars) {
+    const thumbId = await seedImage(`webinar-${w.en.slug}`, w.en.title, {
+      bg: '#10261C',
+      w: 1280,
+      h: 720,
+      alt: w.en.title,
+    });
     const doc = await post<{ id: number }>('webinars', {
       title: w.en.title,
       slug: w.en.slug,
@@ -2194,6 +3380,7 @@ async function seedWebinars() {
       scheduledAt: w.scheduledAt,
       timezone: w.timezone,
       status: w.status,
+      thumbnail: thumbId,
       ...(w.zoomRegistrationLink ? { zoomRegistrationLink: w.zoomRegistrationLink } : {}),
       ...(w.replayUrl ? { replayUrl: w.replayUrl } : {}),
     });
@@ -2224,8 +3411,18 @@ async function seedIBContent() {
       'Fixed cost-per-acquisition payouts up to $1,200 per qualified trader. Built for digital marketers.',
     whiteLabelDescription:
       'Launch your own brokerage on our infrastructure. Full MT5 stack, KYC, treasury, support.',
+    ibTag: 'MOST POPULAR',
     ibRateDisplay: '$8/lot',
+    ibPayoutsFrequency: 'Monthly',
+    ibMinimum: 'None',
+    affiliateTag: 'CPA',
     affiliateCpaMax: '$1,200',
+    affiliateCookieDays: '90 days',
+    affiliateMinCpa: '$50',
+    wlTag: 'ENTERPRISE',
+    wlSetupTime: '< 30 days',
+    wlSpreadMarkup: 'Custom',
+    wlTechStack: 'Turnkey',
     steps: [
       {
         stepTitle: 'Apply online',
@@ -2288,12 +3485,323 @@ async function seedIBContent() {
   console.log('   ✅ IB content created (EN + AR)');
 }
 
+// ─── Research Reports (gated PDF downloads — /research) ──────────────────────
+
+async function seedResearchReports() {
+  console.log('📄 Research Reports...');
+  await deleteAllDocs('research-reports');
+  const reports = [
+    {
+      en: {
+        title: 'Q3 2026 Global Macro Outlook',
+        slug: 'q3-2026-global-macro-outlook',
+        summary:
+          'Our 28-page deep dive into central bank trajectories, the dollar cycle, and the asset classes positioned to outperform through Q3 2026.',
+      },
+      ar: {
+        title: 'النظرة الكلية العالمية للربع الثالث 2026',
+        summary:
+          'تحليل معمّق من 28 صفحة لمسارات البنوك المركزية، ودورة الدولار، وفئات الأصول المهيأة للتفوق خلال الربع الثالث من 2026.',
+      },
+      date: '2026-06-01',
+      isGated: true,
+      bg: '#0B3D2E',
+    },
+    {
+      en: {
+        title: 'MENA FX Quarterly: Dollar Dominance & Oil Crosscurrents',
+        slug: 'mena-fx-quarterly-2026',
+        summary:
+          'A regional currency report covering AED, SAR, EGP and the trade-weighted dollar, with positioning ideas for MENA-based traders.',
+      },
+      ar: {
+        title: 'فوركس الشرق الأوسط الفصلي: هيمنة الدولار وتيارات النفط',
+        summary:
+          'تقرير عملات إقليمي يغطي الدرهم والريال والجنيه والدولار المرجح تجارياً، مع أفكار تموضع للمتداولين في المنطقة.',
+      },
+      date: '2026-05-12',
+      isGated: true,
+      bg: '#10261C',
+    },
+    {
+      en: {
+        title: 'Gold in 2026: Safe-Haven Demand vs Real Yields',
+        slug: 'gold-2026-safe-haven-real-yields',
+        summary:
+          'How structural central-bank buying, real-yield dynamics and ETF flows are reshaping the gold thesis for the year ahead.',
+      },
+      ar: {
+        title: 'الذهب في 2026: الطلب على الملاذ الآمن مقابل العوائد الحقيقية',
+        summary:
+          'كيف يعيد الشراء الهيكلي للبنوك المركزية وديناميكيات العوائد الحقيقية وتدفقات الصناديق تشكيل أطروحة الذهب للعام المقبل.',
+      },
+      date: '2026-04-08',
+      isGated: false,
+      bg: '#1A1206',
+    },
+  ];
+
+  for (const r of reports) {
+    const coverId = await seedImage(`report-cover-${r.en.slug}`, r.en.title, {
+      bg: r.bg,
+      w: 800,
+      h: 1000,
+      alt: `${r.en.title} — report cover`,
+    });
+    const pdfId = await seedPdf(`report-pdf-${r.en.slug}`, r.en.title);
+    const doc = await post<{ id: number }>('research-reports', {
+      title: r.en.title,
+      slug: r.en.slug,
+      status: 'published',
+      publishedDate: r.date,
+      summary: r.en.summary,
+      reportFile: pdfId,
+      thumbnail: coverId,
+      isGated: r.isGated,
+    });
+    await patch('research-reports', doc.id, { title: r.ar.title, summary: r.ar.summary }, 'ar');
+  }
+  console.log(`   ✅ ${reports.length} research reports created (EN + AR, with PDF + cover)`);
+}
+
+// ─── Media & Press (press coverage — /company/media-press) ───────────────────
+
+async function seedAnalystCalls() {
+  console.log('📈 Analyst Calls...');
+  const calls = [
+    {
+      symbol: 'EUR/USD',
+      tvSymbol: 'OANDA:EURUSD',
+      currentPrice: '1.0842',
+      targetPrice: '+ 1.0980',
+      confidence: 80,
+      sentiment: 'BULLISH',
+      category: 'Majors',
+      sparkPoints: '[28,30,29,33,31,35,34,37,36,40]',
+      sortOrder: 1,
+      status: 'active',
+    },
+    {
+      symbol: 'USD/JPY',
+      tvSymbol: 'OANDA:USDJPY',
+      currentPrice: '157.34',
+      targetPrice: '± 35.20',
+      confidence: 65,
+      sentiment: 'BEARISH',
+      category: 'Majors',
+      sparkPoints: '[40,38,39,37,36,35,33,32,30,28]',
+      sortOrder: 2,
+      status: 'active',
+    },
+    {
+      symbol: 'GBP/USD',
+      tvSymbol: 'OANDA:GBPUSD',
+      currentPrice: '1.2718',
+      targetPrice: '+ 1.3710',
+      confidence: 50,
+      sentiment: 'NEUTRAL',
+      category: 'Majors',
+      sparkPoints: '[30,31,30,32,31,33,32,33,32,34]',
+      sortOrder: 3,
+      status: 'active',
+    },
+    {
+      symbol: 'XAU/USD',
+      tvSymbol: 'OANDA:XAUUSD',
+      currentPrice: '2,318.40',
+      targetPrice: '+ 2,360.00',
+      confidence: 72,
+      sentiment: 'BULLISH',
+      category: 'Commodities',
+      sparkPoints: '[26,29,27,32,30,35,34,38,37,42]',
+      sortOrder: 4,
+      status: 'active',
+    },
+    {
+      symbol: 'BTC/USD',
+      tvSymbol: 'BITSTAMP:BTCUSD',
+      currentPrice: '67,250',
+      targetPrice: '+ 72,000',
+      confidence: 60,
+      sentiment: 'BULLISH',
+      category: 'Crypto',
+      sparkPoints: '[25,30,28,33,31,36,35,39,38,44]',
+      sortOrder: 5,
+      status: 'active',
+    },
+    {
+      symbol: 'GBP/JPY',
+      tvSymbol: 'OANDA:GBPJPY',
+      currentPrice: '198.12',
+      targetPrice: '± 2.10',
+      confidence: 45,
+      sentiment: 'NEUTRAL',
+      category: 'Crosses',
+      sparkPoints: '[34,33,35,32,34,31,33,30,32,31]',
+      sortOrder: 6,
+      status: 'active',
+    },
+  ];
+  for (const call of calls) {
+    await createDoc('analyst-calls', call);
+  }
+  console.log(`   ✅ ${calls.length} analyst calls seeded`);
+}
+
+async function seedMediaPress() {
+  console.log('📰 Media & Press...');
+  await deleteAllDocs('media-press');
+  const items = [
+    {
+      en: {
+        headline: 'NewEra365 launches raw-spread accounts for MENA retail traders',
+        excerpt:
+          'The broker expands its product line with institutional-grade pricing aimed at the region’s fast-growing retail base.',
+      },
+      ar: {
+        headline: 'NewEra365 تطلق حسابات السبريد الخام لمتداولي التجزئة في الشرق الأوسط',
+        excerpt:
+          'الوسيط يوسّع خط منتجاته بتسعير بمستوى مؤسسي يستهدف قاعدة التجزئة سريعة النمو في المنطقة.',
+      },
+      publication: 'Bloomberg',
+      date: '2026-05-28',
+      url: 'https://www.bloomberg.com/',
+      isFeatured: true,
+      sortOrder: 1,
+    },
+    {
+      en: {
+        headline: 'Interview: How NewEra365 is approaching MT5 connectivity and execution',
+        excerpt:
+          'A sit-down with the trading desk on latency, liquidity routing, and what transparent execution means for clients.',
+      },
+      ar: {
+        headline: 'مقابلة: كيف تتعامل NewEra365 مع اتصال MT5 والتنفيذ',
+        excerpt:
+          'جلسة مع مكتب التداول حول زمن الاستجابة وتوجيه السيولة ومعنى التنفيذ الشفاف للعملاء.',
+      },
+      publication: 'Reuters',
+      date: '2026-04-19',
+      url: 'https://www.reuters.com/',
+      isFeatured: true,
+      sortOrder: 2,
+    },
+    {
+      en: {
+        headline: 'NewEra365 named among the fastest-growing brokers in the Gulf',
+        excerpt:
+          'Independent analysis highlights the firm’s client growth, regulatory posture and education-first approach.',
+      },
+      ar: {
+        headline: 'NewEra365 تُصنَّف بين أسرع الوسطاء نمواً في الخليج',
+        excerpt:
+          'تحليل مستقل يسلّط الضوء على نمو العملاء والموقف التنظيمي ونهج التعليم أولاً لدى الشركة.',
+      },
+      publication: 'Forbes Middle East',
+      date: '2026-03-02',
+      url: 'https://www.forbesmiddleeast.com/',
+      isFeatured: false,
+      sortOrder: 3,
+    },
+    {
+      en: {
+        headline: 'Opinion: Why transparent fee structures matter for retail FX',
+        excerpt:
+          'A guest column from the NewEra365 research team on the long-term value of clear, all-in pricing.',
+      },
+      ar: {
+        headline: 'رأي: لماذا تهمّ هياكل الرسوم الشفافة لتداول الفوركس بالتجزئة',
+        excerpt: 'مقال ضيف من فريق أبحاث NewEra365 حول القيمة طويلة الأجل للتسعير الواضح والشامل.',
+      },
+      publication: 'The National',
+      date: '2026-02-14',
+      url: 'https://www.thenationalnews.com/',
+      isFeatured: false,
+      sortOrder: 4,
+    },
+  ];
+
+  for (const item of items) {
+    const logoId = await seedImage(
+      `press-logo-${item.publication.toLowerCase().replace(/\s+/g, '-')}`,
+      item.publication,
+      {
+        bg: '#0E2A20',
+        w: 480,
+        h: 260,
+        alt: `${item.publication} logo`,
+      },
+    );
+    const doc = await post<{ id: number }>('media-press', {
+      headline: item.en.headline,
+      publication: item.publication,
+      date: item.date,
+      url: item.url,
+      excerpt: item.en.excerpt,
+      logo: logoId,
+      isFeatured: item.isFeatured,
+      sortOrder: item.sortOrder,
+      status: 'published',
+    });
+    await patch(
+      'media-press',
+      doc.id,
+      { headline: item.ar.headline, excerpt: item.ar.excerpt },
+      'ar',
+    );
+  }
+  console.log(`   ✅ ${items.length} media-press items created (EN + AR, with logos)`);
+}
+
 // ─── main ───────────────────────────────────────────────────────────────────
+
+// Optional single-collection targets so a re-run can refresh just one collection
+// (e.g. `npm run seed -- legal`) without wiping and recreating everything.
+const SEED_TARGETS: Record<string, () => Promise<void>> = {
+  'site-settings': seedSiteSettings,
+  'account-types': seedAccountTypes,
+  'payment-methods': seedPaymentMethods,
+  instruments: seedInstruments,
+  faqs: seedFaqs,
+  blog: seedBlogPosts,
+  'market-analysis': seedMarketAnalysis,
+  news: seedNews,
+  legal: seedLegalPages,
+  team: seedTeamMembers,
+  awards: seedAwards,
+  promotions: seedPromotions,
+  education: seedEducation,
+  careers: seedCareers,
+  webinars: seedWebinars,
+  ib: seedIBContent,
+  research: seedResearchReports,
+  'analyst-calls': seedAnalystCalls,
+  'media-press': seedMediaPress,
+};
 
 async function main() {
   console.log('\n🌱 NewEra365 Demo Data Seed\n');
+  const only = process.argv[2];
   try {
     await login();
+    if (only) {
+      const seeder = SEED_TARGETS[only];
+      if (!seeder) {
+        console.error(
+          `❌ Unknown seed target "${only}". Valid targets: ${Object.keys(SEED_TARGETS).join(', ')}`,
+        );
+        process.exit(1);
+      }
+      console.log(`🎯 Seeding only: ${only}\n`);
+      await seeder();
+      console.log('\n✅ Seed complete!\n');
+      return;
+    }
+    // Wipe media first so re-runs reuse a clean slate instead of leaving
+    // orphaned uploads behind. Every collection that references media is
+    // seeded after this point, so nothing is left dangling.
+    console.log('🧹 Resetting media library...');
+    await deleteAllDocs('media');
     await seedSiteSettings();
     await seedAccountTypes();
     await seedPaymentMethods();
@@ -2310,6 +3818,9 @@ async function main() {
     await seedCareers();
     await seedWebinars();
     await seedIBContent();
+    await seedResearchReports();
+    await seedAnalystCalls();
+    await seedMediaPress();
     console.log('\n✅ Seed complete!\n');
   } catch (err) {
     console.error('\n❌ Seed failed:', err);

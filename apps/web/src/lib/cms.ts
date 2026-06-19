@@ -57,6 +57,7 @@ export interface CmsInstrument {
   name: string;
   symbol: string;
   mt5Symbol?: string | null;
+  tvSymbol?: string | null;
   assetClass: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
   spread?: number | null;
   leverage?: string | null;
@@ -119,7 +120,9 @@ export interface CmsMarketAnalysis {
   status: 'draft' | 'published';
   publishedDate: string;
   assetCategory: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
+  editorialCategory?: 'macro' | 'strategy' | 'analysis' | 'education' | null;
   analyst?: string | null;
+  featuredImage?: CmsMedia | number | null;
   body: SlateNode[];
   chartEmbed?: string | null;
   relatedInstruments?: CmsInstrument[] | null;
@@ -251,6 +254,15 @@ export interface CmsAward {
   status: 'draft' | 'published';
 }
 
+export interface CmsMilestone {
+  id: number;
+  year: string;
+  label: string;
+  description?: string | null;
+  sortOrder?: number | null;
+  status: 'draft' | 'published';
+}
+
 export interface CmsWebinar {
   id: number;
   title: string;
@@ -273,6 +285,7 @@ export interface CmsArticle {
   slug: string;
   title: string;
   assetCategory: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
+  editorialCategory?: 'macro' | 'strategy' | 'analysis' | 'education' | null;
   analyst?: string | null;
   publishedDate: string;
   status: 'draft' | 'published';
@@ -327,8 +340,6 @@ export interface CmsSiteSettings {
   riskBannerEnabled?: boolean | null;
   riskBannerEn?: string | null;
   riskBannerAr?: string | null;
-  navEn?: { label: string; href: string; id?: string | null }[] | null;
-  navAr?: { label: string; href: string; id?: string | null }[] | null;
   footerEn?:
     | {
         heading?: string | null;
@@ -345,6 +356,12 @@ export interface CmsSiteSettings {
     | null;
   riskDisclaimerEn?: string | null;
   riskDisclaimerAr?: string | null;
+  analystInitials?: string | null;
+  analystName?: string | null;
+  analystTitle?: string | null;
+  analystUpdated?: string | null;
+  analystCommentaryEn?: string | null;
+  analystCommentaryAr?: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -354,12 +371,16 @@ export interface CmsSiteSettings {
 export interface CmsPaymentMethod {
   id: number;
   name: string;
+  nameAr?: string | null;
   methodType: 'card' | 'bank' | 'ewallet' | 'crypto' | 'local';
   depositTime?: string | null;
   withdrawalTime?: string | null;
   minDeposit?: string | null;
   fee?: string | null;
   notes?: string | null;
+  // Banner-style brand image (480×300) shown on the desktop card. Optional —
+  // the funding page falls back to a bundled static cover when unset.
+  logo?: CmsMedia | number | null;
   status: 'active' | 'inactive';
   sortOrder?: number | null;
 }
@@ -399,6 +420,8 @@ export interface CmsPromotion {
   ctaLabel?: string | null;
   ctaHref?: string | null;
   isHighlighted?: boolean | null;
+  sortOrder?: number | null;
+  activeFrom?: string | null;
   activeTo?: string | null;
   status: 'active' | 'inactive';
 }
@@ -425,9 +448,14 @@ export async function fetchCollection<T>(
 ): Promise<PaginatedResponse<T>> {
   const allParams = locale ? { ...params, locale } : params;
   const qs = new URLSearchParams(allParams).toString();
-  const url = `${CMS_URL}/api/${slug}${qs ? `?${qs}` : ''}`;
+  // Encode the collection segment for defence-in-depth (callers pass literals today).
+  const url = `${CMS_URL}/api/${encodeURIComponent(slug)}${qs ? `?${qs}` : ''}`;
   try {
-    const res = await fetch(url, { next: { revalidate: 60 } } as RequestInit);
+    // 8s timeout so a hung CMS (Neon cold start / outage) can't stall SSR forever (NE WR-8).
+    const res = await fetch(url, {
+      next: { revalidate: 60 },
+      signal: AbortSignal.timeout(8_000),
+    } as RequestInit);
     if (!res.ok) throw new Error(`${res.status}`);
     return res.json();
   } catch (error) {
@@ -449,7 +477,10 @@ export async function fetchCollection<T>(
 async function fetchGlobal<T>(slug: string): Promise<T | null> {
   const url = `${CMS_URL}/api/globals/${slug}`;
   try {
-    const res = await fetch(url, { next: { revalidate: 300 } });
+    const res = await fetch(url, {
+      next: { revalidate: 300 },
+      signal: AbortSignal.timeout(8_000),
+    });
     if (!res.ok) throw new Error(`${res.status}`);
     return res.json();
   } catch (error) {
@@ -480,6 +511,18 @@ async function fetchBySlug<T>(
   return data.docs[0] ?? null;
 }
 
+// Humanize a slug into a Title Case string. Used as a metadata fallback on
+// detail routes: when the CMS has no matching document the page still renders
+// generic fallback content, so a slug-derived <title> is more useful for SEO
+// and sharing than the bare site default. e.g. "ecb-rate-decision" → "Ecb Rate Decision".
+export function slugToTitle(slug: string): string {
+  return slug
+    .split('-')
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
 // ---------------------------------------------------------------------------
 // News
 // ---------------------------------------------------------------------------
@@ -498,17 +541,21 @@ export async function getLatestNews(locale: string, limit = 4): Promise<CmsNews[
 }
 
 // ---------------------------------------------------------------------------
-// Products / Instruments (language-neutral — no locale param)
+// Products / Instruments
 // ---------------------------------------------------------------------------
 
-export async function getInstruments(assetClass?: string, limit = 50): Promise<CmsInstrument[]> {
+export async function getInstruments(
+  assetClass?: string,
+  limit = 50,
+  locale?: string,
+): Promise<CmsInstrument[]> {
   const params: Record<string, string> = {
     'where[status][equals]': 'active',
     sort: 'sortOrder',
     limit: String(limit),
   };
   if (assetClass) params['where[assetClass][equals]'] = assetClass;
-  const data = await fetchCollection<CmsInstrument>('products-instruments', params);
+  const data = await fetchCollection<CmsInstrument>('products-instruments', params, locale);
   return data.docs;
 }
 
@@ -534,16 +581,32 @@ export async function getAccountTypes(locale?: string): Promise<CmsAccountType[]
 // ---------------------------------------------------------------------------
 
 export async function getResearchArticles(locale: string, limit = 10): Promise<CmsArticle[]> {
-  const data = await fetchCollection<CmsArticle>(
+  const data = await fetchCollection<CmsMarketAnalysis>(
     'market-analysis',
     {
       'where[status][equals]': 'published',
       sort: '-publishedDate',
+      depth: '1',
       limit: String(limit),
     },
     locale,
   );
-  return data.docs;
+  return data.docs.map((a) => {
+    const img = a.featuredImage;
+    const thumbnailUrl = img && typeof img !== 'number' ? ((img as CmsMedia).url ?? null) : null;
+    return {
+      id: a.id,
+      slug: a.slug,
+      title: a.title,
+      assetCategory: a.assetCategory,
+      editorialCategory: a.editorialCategory ?? null,
+      analyst: a.analyst ?? null,
+      publishedDate: a.publishedDate,
+      status: a.status,
+      thumbnailUrl,
+      summary: null,
+    };
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -636,6 +699,19 @@ export async function getAwards(locale: string): Promise<CmsAward[]> {
       'where[status][equals]': 'published',
       sort: 'sortOrder',
       limit: '20',
+    },
+    locale,
+  );
+  return data.docs;
+}
+
+export async function getMilestones(locale: string): Promise<CmsMilestone[]> {
+  const data = await fetchCollection<CmsMilestone>(
+    'company-milestones',
+    {
+      'where[status][equals]': 'published',
+      sort: 'sortOrder',
+      limit: '50',
     },
     locale,
   );
@@ -739,6 +815,9 @@ export async function getPaymentMethods(locale?: string): Promise<CmsPaymentMeth
     {
       'where[status][equals]': 'active',
       sort: 'sortOrder',
+      // depth 1 so the `logo` upload resolves to a media object with `.url`
+      // (the funding page maps it onto the desktop cover banner).
+      depth: '1',
       limit: '50',
     },
     locale,
@@ -843,6 +922,33 @@ export interface CmsMediaPressItem {
   isFeatured?: boolean | null;
   sortOrder?: number | null;
   status: 'published' | 'draft';
+}
+
+// ---------------------------------------------------------------------------
+// Analyst Calls
+// ---------------------------------------------------------------------------
+
+export interface CmsAnalystCall {
+  id: number;
+  symbol: string;
+  tvSymbol: string;
+  currentPrice: string;
+  targetPrice: string;
+  confidence: number;
+  sentiment: 'BULLISH' | 'BEARISH' | 'NEUTRAL';
+  category: 'Majors' | 'Crosses' | 'Commodities' | 'Crypto';
+  sparkPoints?: string | null;
+  sortOrder?: number | null;
+  status: 'active' | 'inactive';
+}
+
+export async function getAnalystCalls(): Promise<CmsAnalystCall[]> {
+  const data = await fetchCollection<CmsAnalystCall>('analyst-calls', {
+    'where[status][equals]': 'active',
+    sort: 'sortOrder',
+    limit: '20',
+  });
+  return data.docs;
 }
 
 export async function getMediaPressItems(locale: string): Promise<CmsMediaPressItem[]> {

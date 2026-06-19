@@ -10,15 +10,32 @@
  * Run: ts-node --transpile-only src/scripts/migrate-missing-columns.ts
  */
 
+import path from 'path';
+import dotenv from 'dotenv';
 import { Client } from 'pg';
 
 // Build the direct (non-pooler) connection URL from the pooler URL
 // Pooler: ep-round-bar-apsu8d1v-pooler.c-7.us-east-1.aws.neon.tech
 // Direct: ep-round-bar-apsu8d1v.us-east-1.aws.neon.tech
 function getDirectConnectionString(): string {
+  // Prefer an explicit direct endpoint when provided.
+  const explicit = process.env.DATABASE_URL_DIRECT;
+  if (explicit) return explicit;
+
   const poolerUrl = process.env.DATABASE_URL ?? '';
   // Strip only '-pooler' from the host — keep .c-7. (Neon region prefix)
   const direct = poolerUrl.replace(/-pooler\./, '.');
+  if (direct === poolerUrl) {
+    // The '-pooler' marker was absent → this is a silent no-op. Correct only if
+    // DATABASE_URL is already a direct endpoint; warn so a pooled URL in a different
+    // format isn't used for DDL against PgBouncer (NE code-review WR-15). Set
+    // DATABASE_URL_DIRECT to be explicit.
+    // eslint-disable-next-line no-console
+    console.warn(
+      '[migrate] DATABASE_URL has no "-pooler" host segment — using it as-is for DDL. ' +
+        'If it is a pooled endpoint, set DATABASE_URL_DIRECT to the direct Neon endpoint.',
+    );
+  }
   return direct;
 }
 
@@ -44,7 +61,21 @@ const migrations: Array<{ description: string; sql: string }> = [
     description: 'payment_methods.notes',
     sql: `ALTER TABLE payment_methods ADD COLUMN IF NOT EXISTS notes text;`,
   },
+  // ── PaymentMethods: depositTime/withdrawalTime/fee are localized again, so the
+  //    drizzle adapter writes locale rows into payment_methods_locales keyed by
+  //    _parent_id. A stale legacy `_payment_method_id` column on that table is
+  //    NOT NULL but never populated by the adapter, so every localized write 500s
+  //    (`null value in column "_payment_method_id" violates not-null constraint`).
+  //    Drop the constraint so the vestigial column no longer blocks inserts. ──
+  {
+    description: 'payment_methods_locales._payment_method_id DROP NOT NULL',
+    sql: `ALTER TABLE payment_methods_locales ALTER COLUMN _payment_method_id DROP NOT NULL;`,
+  },
   // ── ProductsInstruments: spread comparator + calculator fields ──
+  {
+    description: 'products_instruments.tv_symbol',
+    sql: `ALTER TABLE products_instruments ADD COLUMN IF NOT EXISTS tv_symbol varchar(50);`,
+  },
   {
     description: 'products_instruments.spread_industry',
     sql: `ALTER TABLE products_instruments ADD COLUMN IF NOT EXISTS spread_industry numeric;`,
@@ -104,10 +135,133 @@ const migrations: Array<{ description: string; sql: string }> = [
     description: 'education_content."pdfFileId"',
     sql: `ALTER TABLE education_content ADD COLUMN IF NOT EXISTS "pdfFileId" integer REFERENCES media(id);`,
   },
+  // ── MarketAnalysis: editorialCategory override field ──
+  {
+    description: 'market_analysis."editorialCategory"',
+    sql: `ALTER TABLE market_analysis ADD COLUMN IF NOT EXISTS "editorialCategory" varchar(50);`,
+  },
+  // ── MarketAnalysis: featuredImage upload. Payload v2's postgres adapter stores
+  //    upload/relationship targets in <table>_rels (path + <target>_id), not as a
+  //    main-table column. market_analysis_rels already exists (for relatedInstruments)
+  //    but lacks media_id, so writing featuredImage 500s until this is added. ──
+  {
+    description: 'market_analysis_rels.media_id',
+    sql: `ALTER TABLE market_analysis_rels ADD COLUMN IF NOT EXISTS media_id integer REFERENCES media(id);`,
+  },
+  // ── SiteSettings: analyst profile fields (snake_case — drizzle adapter naming for globals) ──
+  {
+    description: 'site_settings.analyst_initials',
+    sql: `ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS analyst_initials varchar(5);`,
+  },
+  {
+    description: 'site_settings.analyst_name',
+    sql: `ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS analyst_name varchar(80);`,
+  },
+  {
+    description: 'site_settings.analyst_title',
+    sql: `ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS analyst_title varchar(100);`,
+  },
+  {
+    description: 'site_settings.analyst_updated',
+    sql: `ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS analyst_updated varchar(50);`,
+  },
+  {
+    description: 'site_settings.analyst_commentary_en',
+    sql: `ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS analyst_commentary_en text;`,
+  },
+  {
+    description: 'site_settings.analyst_commentary_ar',
+    sql: `ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS analyst_commentary_ar text;`,
+  },
+  // ── IBContent: non-localized stat/badge fields (snake_case — drizzle adapter
+  //    queries e.g. ib_content.ib_tag). Added to the collection after the initial
+  //    migration, so the columns must be backfilled or every ib-content read 500s. ──
+  {
+    description: 'ib_content.ib_tag',
+    sql: `ALTER TABLE ib_content ADD COLUMN IF NOT EXISTS ib_tag varchar(40);`,
+  },
+  {
+    description: 'ib_content.ib_rate_display',
+    sql: `ALTER TABLE ib_content ADD COLUMN IF NOT EXISTS ib_rate_display varchar(20);`,
+  },
+  {
+    description: 'ib_content.ib_payouts_frequency',
+    sql: `ALTER TABLE ib_content ADD COLUMN IF NOT EXISTS ib_payouts_frequency varchar(20);`,
+  },
+  {
+    description: 'ib_content.ib_minimum',
+    sql: `ALTER TABLE ib_content ADD COLUMN IF NOT EXISTS ib_minimum varchar(20);`,
+  },
+  {
+    description: 'ib_content.affiliate_tag',
+    sql: `ALTER TABLE ib_content ADD COLUMN IF NOT EXISTS affiliate_tag varchar(40);`,
+  },
+  {
+    description: 'ib_content.affiliate_cpa_max',
+    sql: `ALTER TABLE ib_content ADD COLUMN IF NOT EXISTS affiliate_cpa_max varchar(20);`,
+  },
+  {
+    description: 'ib_content.affiliate_cookie_days',
+    sql: `ALTER TABLE ib_content ADD COLUMN IF NOT EXISTS affiliate_cookie_days varchar(20);`,
+  },
+  {
+    description: 'ib_content.affiliate_min_cpa',
+    sql: `ALTER TABLE ib_content ADD COLUMN IF NOT EXISTS affiliate_min_cpa varchar(20);`,
+  },
+  {
+    description: 'ib_content.wl_tag',
+    sql: `ALTER TABLE ib_content ADD COLUMN IF NOT EXISTS wl_tag varchar(40);`,
+  },
+  {
+    description: 'ib_content.wl_setup_time',
+    sql: `ALTER TABLE ib_content ADD COLUMN IF NOT EXISTS wl_setup_time varchar(20);`,
+  },
+  {
+    description: 'ib_content.wl_spread_markup',
+    sql: `ALTER TABLE ib_content ADD COLUMN IF NOT EXISTS wl_spread_markup varchar(20);`,
+  },
+  {
+    description: 'ib_content.wl_tech_stack',
+    sql: `ALTER TABLE ib_content ADD COLUMN IF NOT EXISTS wl_tech_stack varchar(20);`,
+  },
+  // ── IBContent: word-label stats RE-LOCALIZED (localized:true) → columns moved
+  //    to ib_content_locales. Without these the adapter 500s every ib-content read. ──
+  {
+    description: 'ib_content_locales.ib_tag',
+    sql: `ALTER TABLE ib_content_locales ADD COLUMN IF NOT EXISTS ib_tag varchar;`,
+  },
+  {
+    description: 'ib_content_locales.ib_payouts_frequency',
+    sql: `ALTER TABLE ib_content_locales ADD COLUMN IF NOT EXISTS ib_payouts_frequency varchar;`,
+  },
+  {
+    description: 'ib_content_locales.ib_minimum',
+    sql: `ALTER TABLE ib_content_locales ADD COLUMN IF NOT EXISTS ib_minimum varchar;`,
+  },
+  {
+    description: 'ib_content_locales.affiliate_cookie_days',
+    sql: `ALTER TABLE ib_content_locales ADD COLUMN IF NOT EXISTS affiliate_cookie_days varchar;`,
+  },
+  {
+    description: 'ib_content_locales.wl_tag',
+    sql: `ALTER TABLE ib_content_locales ADD COLUMN IF NOT EXISTS wl_tag varchar;`,
+  },
+  {
+    description: 'ib_content_locales.wl_setup_time',
+    sql: `ALTER TABLE ib_content_locales ADD COLUMN IF NOT EXISTS wl_setup_time varchar;`,
+  },
+  {
+    description: 'ib_content_locales.wl_spread_markup',
+    sql: `ALTER TABLE ib_content_locales ADD COLUMN IF NOT EXISTS wl_spread_markup varchar;`,
+  },
+  {
+    description: 'ib_content_locales.wl_tech_stack',
+    sql: `ALTER TABLE ib_content_locales ADD COLUMN IF NOT EXISTS wl_tech_stack varchar;`,
+  },
 ];
 
 async function run() {
-  require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
+  dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
   const connectionString = getDirectConnectionString();
   console.log('🔗 Connecting to Neon (direct endpoint)...');
