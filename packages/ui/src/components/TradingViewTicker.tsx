@@ -28,16 +28,14 @@ import { useLocale } from 'next-intl';
  * apps/web/next.config.mjs.
  */
 
-// Trimmed to 5 instruments (was 8) so the tape reads calmer / more premium —
+// Trimmed to 3 instruments (was 5/8) so the tape reads calmer / more premium —
 // the TradingView embed exposes no scroll-speed knob, so fewer symbols is the
-// lever for the client's "ticker is too fast / distracting" note. One per asset
-// class: major FX, metal, second major, index, crypto.
+// lever for the client's "ticker is too fast / distracting" note (feedback #7).
+// One per asset class: major FX, metal, index.
 const SYMBOLS = [
   { proName: 'FX:EURUSD', title: 'EUR/USD' },
   { proName: 'TVC:GOLD', title: 'Gold' },
-  { proName: 'FX:GBPUSD', title: 'GBP/USD' },
   { proName: 'FOREXCOM:SPXUSD', title: 'S&P 500' },
-  { proName: 'BITSTAMP:BTCUSD', title: 'Bitcoin' },
 ];
 
 export function TradingViewTicker() {

@@ -621,7 +621,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
   // GET /api/newsletter/confirm?token=...&redirect=...
   // Linked from the confirmation email. On success redirects to the frontend
   // success page (or returns JSON if redirect is absent / invalid).
-  app.get('/api/newsletter/confirm', async (req: ReqWithId, res: Response) => {
+  app.get('/api/newsletter/confirm', newsletterLimiter, async (req: ReqWithId, res: Response) => {
     const token = typeof req.query.token === 'string' ? req.query.token : undefined;
     const rawRedirect = typeof req.query.redirect === 'string' ? req.query.redirect : undefined;
 
@@ -638,7 +638,8 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
       });
 
       const doc = result.docs[0] as Record<string, unknown> | undefined;
-      if (!doc) {
+      // Re-verify the token in constant time after the indexed lookup (defense-in-depth).
+      if (!doc || !safeTokenCompare(token, (doc.confirmToken as string | undefined) ?? '')) {
         return res.status(400).json({ error: 'Invalid or expired confirmation link.' });
       }
 
@@ -734,7 +735,12 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         });
 
         const doc = result.docs[0] as Record<string, unknown> | undefined;
-        if (!doc) {
+        // On the token path, re-verify in constant time after the indexed lookup.
+        if (
+          !doc ||
+          (isTokenRequest &&
+            !safeTokenCompare(token as string, (doc.unsubscribeToken as string | undefined) ?? ''))
+        ) {
           // Don't reveal whether the token/email exists.
           return res.json({ message: 'Unsubscribed.' });
         }
@@ -776,7 +782,8 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         });
 
         const doc = result.docs[0] as Record<string, unknown> | undefined;
-        if (doc) {
+        // Constant-time re-verify after the indexed lookup before mutating.
+        if (doc && safeTokenCompare(token, (doc.unsubscribeToken as string | undefined) ?? '')) {
           await payload.update({
             collection: 'newsletter-subscribers',
             id: doc.id as string | number,
@@ -1158,6 +1165,10 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         .update(CONSENT_IP_SALT + rawIp)
         .digest('hex');
 
+      // ponytail: duplicate guard is the find() check above only. A DB-level
+      // unique (email, webinar) isn't possible — Payload v2 keeps the webinar
+      // relationship in webinar_registrations_rels, not as a column here — so the
+      // tiny find()->create() TOCTOU window is accepted (low-severity dup signup).
       await payload.create({
         collection: 'webinar-registrations',
         data: {

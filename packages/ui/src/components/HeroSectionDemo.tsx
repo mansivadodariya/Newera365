@@ -152,7 +152,7 @@ export function HeroSectionDemo() {
             >
               {specs.map((spec) => (
                 <span
-                  key={spec.label}
+                  key={spec.value}
                   className="border-border flex items-center gap-1.5 rounded-full border bg-black/[0.03] px-3 py-1.5 dark:bg-white/[0.05]"
                 >
                   <span className="text-muted font-mono text-[9px] uppercase tracking-[0.1em]">

@@ -59,12 +59,15 @@ export default async function HomePage({ params }: { params: { locale: string } 
       <TradingViewTicker />
       <HeroSectionDemo />
       <TrustStripDemo logos={trustLogos} />
+      {/* USPs surfaced right after the trust strip (feedback #3 — most visitors
+          don't scroll past the third section, so the "why us" reasons need to
+          appear before the journey/stats). */}
+      <FeaturesSection />
       <StatsSectionDemo kpiStats={kpiStats} locale={params.locale} />
       {/* Account journey surfaced high (feedback #4 — "how do I become a client?"
           was hidden far down the page). */}
       <ThreeStepsSectionDemo />
       <MarketsSectionDemo />
-      <FeaturesSection />
       <TestimonialsSection
         headline={socialProofHeadline}
         ratingValue={siteSettings?.ratingValue ?? null}

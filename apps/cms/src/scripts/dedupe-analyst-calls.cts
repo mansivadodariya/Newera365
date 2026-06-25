@@ -22,6 +22,9 @@
  *           dry-run:    DRY_RUN=1 node src/scripts/dedupe-analyst-calls.cts
  */
 
+/* eslint-disable @typescript-eslint/no-require-imports -- this is a `.cts` CommonJS
+   file run via `node`'s native TS type-stripping (ts-node is broken on Node 24 in
+   this repo), so require() is the correct and only valid import form here. */
 const path = require('path');
 const dotenv = require('dotenv');
 const { Client } = require('pg');
@@ -52,16 +55,18 @@ async function run() {
   try {
     await client.query('BEGIN');
 
-    const before = await client.query<{ symbol: string; copies: string }>(
+    const before = await client.query(
       `SELECT symbol, COUNT(*)::text AS copies
          FROM analyst_calls
         GROUP BY symbol
         ORDER BY symbol;`,
     );
+    // pg's `require`-imported Client.query() has no generic overload, so type the rows here.
+    const beforeRows = before.rows as Array<{ symbol: string; copies: string }>;
     console.log('📊 Rows per symbol (before):');
-    for (const r of before.rows) console.log(`   ${r.symbol.padEnd(10)} ${r.copies}`);
-    const totalBefore = before.rows.reduce((n, r) => n + Number(r.copies), 0);
-    const dupes = before.rows.reduce((n, r) => n + (Number(r.copies) - 1), 0);
+    for (const r of beforeRows) console.log(`   ${r.symbol.padEnd(10)} ${r.copies}`);
+    const totalBefore = beforeRows.reduce((n: number, r) => n + Number(r.copies), 0);
+    const dupes = beforeRows.reduce((n: number, r) => n + (Number(r.copies) - 1), 0);
     console.log(`   → ${totalBefore} rows total, ${dupes} duplicate(s) to remove\n`);
 
     // Keep the lowest id per symbol; delete every higher-id copy.
@@ -73,8 +78,9 @@ async function run() {
     );
     console.log(`🗑️  Deleted ${del.rowCount} duplicate row(s)`);
 
-    const after = await client.query<{ n: string }>(`SELECT COUNT(*)::text AS n FROM analyst_calls;`);
-    console.log(`📊 Rows total (after): ${after.rows[0]?.n}\n`);
+    const after = await client.query(`SELECT COUNT(*)::text AS n FROM analyst_calls;`);
+    const afterCount = (after.rows[0] as { n: string } | undefined)?.n;
+    console.log(`📊 Rows total (after): ${afterCount}\n`);
 
     if (dryRun) {
       await client.query('ROLLBACK');

@@ -23,7 +23,6 @@
     "@newera365/types": "*",
     "@payloadcms/bundler-webpack": "1.0.9",
     "@payloadcms/db-postgres": "^0.8.4",
-    "@payloadcms/plugin-cloud-storage": "^1.1.3",
     "@payloadcms/richtext-slate": "^1.5.1",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",

@@ -248,7 +248,7 @@ export function HeroChartCard() {
       {/* Brighter border + a card surface kept lighter than the near-black page
           bg (#07090d) so the panel reads as a distinct device and doesn't blend
           into the background in dark mode (client feedback #2/#8). */}
-      <div className="relative overflow-hidden rounded-[24px] border border-white/[0.12] bg-[#0c0e12] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.7)] ring-1 ring-white/[0.04] dark:bg-gradient-to-b dark:from-[#11151b] dark:to-[#0a0d12]">
+      <div className="relative overflow-hidden rounded-[24px] border border-white/[0.22] bg-[#0c0e12] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.7)] ring-1 ring-white/[0.04] dark:bg-gradient-to-b dark:from-[#11151b] dark:to-[#0a0d12]">
         {/* Top bar: featured symbol + live badge */}
         <div className="flex items-center justify-between px-5 pt-5">
           <div className="flex items-center gap-2.5">
