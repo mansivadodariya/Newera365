@@ -1,0 +1,239 @@
+{
+  "nodes": [
+    {
+      "id": "d_newera365_newera365_app_code_review_02_cms_data_collections_md",
+      "label": "02-cms-data-collections.md",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_area_2_cms_collections_migrations_code_review",
+      "label": "Area 2 \u2014 CMS Collections & Migrations: Code Review",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L51"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_summary",
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L53"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_critical_issues",
+      "label": "Critical Issues",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L87"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_cr_01_public_read_on_content_collections_returns_unpublished_draft_documents",
+      "label": "CR-01: Public read on content collections returns unpublished / draft documents",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L89"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_cr_02_gated_pdf_email_wall_is_fully_bypassable_via_the_public_media_researchreports_educationcontent_api",
+      "label": "CR-02: Gated-PDF email wall is fully bypassable via the public Media / ResearchReports / EducationContent API",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L138"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_warnings",
+      "label": "Warnings",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L183"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_wr_01_predictable_default_admin_credentials_committed_as_fallback_admin_newera365_com_admin123",
+      "label": "WR-01: Predictable default admin credentials committed as fallback (`admin@newera365.com` / `Admin123!`)",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L185"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_wr_02_migration_004_rename_column_is_not_idempotent_re_run_errors_breaking_the_safe_to_re_run_contract",
+      "label": "WR-02: Migration 004 `RENAME COLUMN` is not idempotent \u2014 re-run errors, breaking the \"safe to re-run\" contract",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L221"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_wr_03_archivepreviouslegalversion_scopes_by_locale_but_status_is_non_localized_demotion_is_incoherent_can_demote_the_wrong_document",
+      "label": "WR-03: `archivePreviousLegalVersion` scopes by locale but `status` is non-localized \u2014 demotion is incoherent / can demote the wrong document",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L258"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_wr_04_fragile_direct_endpoint_derivation_in_ddl_scripts_can_silently_target_the_wrong_pooler_host",
+      "label": "WR-04: Fragile direct-endpoint derivation in DDL scripts can silently target the wrong (pooler) host",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L293"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_info",
+      "label": "Info",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L329"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_in_01_apply_schema_mjs_swallows_real_ddl_failures_and_exits_0",
+      "label": "IN-01: `apply-schema.mjs` swallows real DDL failures and exits 0",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L331"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_in_02_webinars_exposes_zoom_registration_link_webinar_id_via_public_read",
+      "label": "IN-02: Webinars exposes Zoom registration link + webinar ID via public read",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L345"
+    },
+    {
+      "id": "code_review_02_cms_data_collections_in_03_slugfield_derives_slug_from_raw_user_text_without_max_length_collision_ceiling",
+      "label": "IN-03: `slugField` derives slug from raw user text without max-length / collision ceiling",
+      "file_type": "document",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L355"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_newera365_newera365_app_code_review_02_cms_data_collections_md",
+      "target": "code_review_02_cms_data_collections_area_2_cms_collections_migrations_code_review",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_02_cms_data_collections_area_2_cms_collections_migrations_code_review",
+      "target": "code_review_02_cms_data_collections_summary",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_02_cms_data_collections_area_2_cms_collections_migrations_code_review",
+      "target": "code_review_02_cms_data_collections_critical_issues",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L87",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_02_cms_data_collections_critical_issues",
+      "target": "code_review_02_cms_data_collections_cr_01_public_read_on_content_collections_returns_unpublished_draft_documents",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L89",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_02_cms_data_collections_critical_issues",
+      "target": "code_review_02_cms_data_collections_cr_02_gated_pdf_email_wall_is_fully_bypassable_via_the_public_media_researchreports_educationcontent_api",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L138",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_02_cms_data_collections_area_2_cms_collections_migrations_code_review",
+      "target": "code_review_02_cms_data_collections_warnings",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L183",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_02_cms_data_collections_warnings",
+      "target": "code_review_02_cms_data_collections_wr_01_predictable_default_admin_credentials_committed_as_fallback_admin_newera365_com_admin123",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L185",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_02_cms_data_collections_warnings",
+      "target": "code_review_02_cms_data_collections_wr_02_migration_004_rename_column_is_not_idempotent_re_run_errors_breaking_the_safe_to_re_run_contract",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L221",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_02_cms_data_collections_warnings",
+      "target": "code_review_02_cms_data_collections_wr_03_archivepreviouslegalversion_scopes_by_locale_but_status_is_non_localized_demotion_is_incoherent_can_demote_the_wrong_document",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L258",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_02_cms_data_collections_warnings",
+      "target": "code_review_02_cms_data_collections_wr_04_fragile_direct_endpoint_derivation_in_ddl_scripts_can_silently_target_the_wrong_pooler_host",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L293",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_02_cms_data_collections_area_2_cms_collections_migrations_code_review",
+      "target": "code_review_02_cms_data_collections_info",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L329",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_02_cms_data_collections_info",
+      "target": "code_review_02_cms_data_collections_in_01_apply_schema_mjs_swallows_real_ddl_failures_and_exits_0",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L331",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_02_cms_data_collections_info",
+      "target": "code_review_02_cms_data_collections_in_02_webinars_exposes_zoom_registration_link_webinar_id_via_public_read",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L345",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_02_cms_data_collections_info",
+      "target": "code_review_02_cms_data_collections_in_03_slugfield_derives_slug_from_raw_user_text_without_max_length_collision_ceiling",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/02-cms-data-collections.md",
+      "source_location": "L355",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

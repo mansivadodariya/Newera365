@@ -10,7 +10,9 @@ type WidgetType =
   | 'screener'
   | 'economic-calendar'
   | 'symbol-info'
-  | 'ticker-tape';
+  | 'ticker-tape'
+  | 'forex-cross-rates'
+  | 'market-quotes';
 
 interface TradingViewWidgetProps {
   type: WidgetType;
@@ -40,36 +42,46 @@ const WIDGET_URLS: Record<WidgetType, string> = {
   'economic-calendar': 'https://s3.tradingview.com/external-embedding/embed-widget-events.js',
   'symbol-info': 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js',
   'ticker-tape': 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js',
+  'forex-cross-rates':
+    'https://s3.tradingview.com/external-embedding/embed-widget-forex-cross-rates.js',
+  'market-quotes': 'https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js',
 };
 
 function buildConfig(type: WidgetType, props: TradingViewWidgetProps): Record<string, unknown> {
   const { symbol = 'OANDA:EURUSD', theme = 'dark', config = {} } = props;
 
-  const baseConfig: Record<string, unknown> =
-    type === 'advanced-chart'
-      ? {
-          autosize: true,
-          symbol,
-          interval: 'D',
-          timezone: 'Etc/UTC',
-          theme,
-          style: '1',
-          locale: 'en',
-          enable_publishing: false,
-          hide_top_toolbar: false,
-          save_image: false,
-        }
-      : {
-          symbol,
-          width: '100%',
-          height: '100%',
-          locale: 'en',
-          colorTheme: theme,
-          isTransparent: true,
-          autosize: true,
-        };
+  if (type === 'advanced-chart') {
+    return {
+      autosize: true,
+      symbol,
+      interval: 'D',
+      timezone: 'Etc/UTC',
+      theme,
+      style: '1',
+      locale: 'en',
+      enable_publishing: false,
+      hide_top_toolbar: false,
+      save_image: false,
+      ...config,
+    };
+  }
 
-  return { ...baseConfig, ...config };
+  // market-overview uses a tabs[] config — don't inject symbol/autosize which
+  // conflict with the tabs-based rendering.
+  if (type === 'market-overview') {
+    return { locale: 'en', colorTheme: theme, ...config };
+  }
+
+  return {
+    symbol,
+    width: '100%',
+    height: '100%',
+    locale: 'en',
+    colorTheme: theme,
+    isTransparent: true,
+    autosize: true,
+    ...config,
+  };
 }
 
 export function TradingViewWidget({
@@ -162,6 +174,14 @@ export function TradingViewWidget({
           </span>
         </div>
       )}
+
+      {/* Click mask — sits above the iframe so pointer events never reach
+          TradingView. Centralised here so EVERY embed (advanced-chart,
+          market-quotes, forex-cross-rates, screener, economic-calendar…) is
+          read-only by default; consumers no longer add their own overlay. The
+          outer div above is `relative`, so this covers exactly the widget and
+          leaves surrounding UI (period selectors, watchlist rows) interactive. */}
+      <div className="absolute inset-0 z-10 cursor-default" aria-hidden="true" />
     </div>
   );
 }

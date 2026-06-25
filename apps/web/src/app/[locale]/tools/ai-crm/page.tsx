@@ -1,12 +1,5 @@
-import { setRequestLocale } from 'next-intl/server';
-import { AiCrmPage, CtaBanner } from '@newera365/ui';
+import { permanentRedirect } from 'next/navigation';
 
-export default function AiCrmRoute({ params }: { params: { locale: string } }) {
-  setRequestLocale(params.locale);
-  return (
-    <>
-      <AiCrmPage />
-      <CtaBanner />
-    </>
-  );
+export default function AiCrmToolsRedirect({ params }: { params: { locale: string } }) {
+  permanentRedirect(`/${params.locale}/ai-crm`);
 }

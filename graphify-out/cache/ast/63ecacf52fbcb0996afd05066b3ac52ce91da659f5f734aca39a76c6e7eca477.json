@@ -1,0 +1,223 @@
+{
+  "nodes": [
+    {
+      "id": "d_newera365_newera365_app_code_review_review_md",
+      "label": "REVIEW.md",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "code_review_review_newera365_full_codebase_review",
+      "label": "NewEra365 \u2014 Full Codebase Review",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L20"
+    },
+    {
+      "id": "code_review_review_headline",
+      "label": "Headline",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L32"
+    },
+    {
+      "id": "code_review_review_critical_3_fix_before_launch",
+      "label": "CRITICAL (3) \u2014 fix before launch",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L46"
+    },
+    {
+      "id": "code_review_review_cr_1_unpublished_draft_embargoed_content_readable_via_public_rest_api",
+      "label": "CR-1 \u00b7 Unpublished / draft / embargoed content readable via public REST API",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L48"
+    },
+    {
+      "id": "code_review_review_cr_2_gated_pdf_lead_capture_wall_is_fully_bypassable",
+      "label": "CR-2 \u00b7 \"Gated\" PDF / lead-capture wall is fully bypassable",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L60"
+    },
+    {
+      "id": "code_review_review_cr_3_admin_panel_open_to_unlimited_password_brute_force",
+      "label": "CR-3 \u00b7 Admin panel open to unlimited password brute-force",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L70"
+    },
+    {
+      "id": "code_review_review_warning_16_real_bugs_hardening_gaps",
+      "label": "WARNING (16) \u2014 real bugs / hardening gaps",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L82"
+    },
+    {
+      "id": "code_review_review_security_abuse",
+      "label": "Security & abuse",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L84"
+    },
+    {
+      "id": "code_review_review_reliability_correctness",
+      "label": "Reliability & correctness",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L114"
+    },
+    {
+      "id": "code_review_review_config_build",
+      "label": "Config & build",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L130"
+    },
+    {
+      "id": "code_review_review_info_18_quality_minor_hardening",
+      "label": "INFO (18) \u2014 quality / minor hardening",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L153"
+    },
+    {
+      "id": "code_review_review_verified_clean_negative_results_worth_knowing",
+      "label": "Verified clean (negative results worth knowing)",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L178"
+    },
+    {
+      "id": "code_review_review_suggested_fix_order",
+      "label": "Suggested fix order",
+      "file_type": "document",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L194"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_newera365_newera365_app_code_review_review_md",
+      "target": "code_review_review_newera365_full_codebase_review",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_review_newera365_full_codebase_review",
+      "target": "code_review_review_headline",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_review_newera365_full_codebase_review",
+      "target": "code_review_review_critical_3_fix_before_launch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_review_critical_3_fix_before_launch",
+      "target": "code_review_review_cr_1_unpublished_draft_embargoed_content_readable_via_public_rest_api",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L48",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_review_critical_3_fix_before_launch",
+      "target": "code_review_review_cr_2_gated_pdf_lead_capture_wall_is_fully_bypassable",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L60",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_review_critical_3_fix_before_launch",
+      "target": "code_review_review_cr_3_admin_panel_open_to_unlimited_password_brute_force",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L70",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_review_newera365_full_codebase_review",
+      "target": "code_review_review_warning_16_real_bugs_hardening_gaps",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L82",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_review_warning_16_real_bugs_hardening_gaps",
+      "target": "code_review_review_security_abuse",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L84",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_review_warning_16_real_bugs_hardening_gaps",
+      "target": "code_review_review_reliability_correctness",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L114",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_review_warning_16_real_bugs_hardening_gaps",
+      "target": "code_review_review_config_build",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L130",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_review_newera365_full_codebase_review",
+      "target": "code_review_review_info_18_quality_minor_hardening",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L153",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_review_newera365_full_codebase_review",
+      "target": "code_review_review_verified_clean_negative_results_worth_knowing",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L178",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_review_newera365_full_codebase_review",
+      "target": "code_review_review_suggested_fix_order",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/REVIEW.md",
+      "source_location": "L194",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

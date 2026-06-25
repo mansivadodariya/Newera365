@@ -1,8 +1,6 @@
 'use client';
 
-import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { SectionKicker } from './SectionKicker';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -35,16 +33,43 @@ const DARK_HEADER_GRADIENT =
 const GREEN_HEADER_GRADIENT =
   'radial-gradient(ellipse at 50% 210%, rgba(18,107,48,1) 0%, rgba(11,66,31,1) 50%, rgba(8,46,22,1) 75%, rgba(5,26,13,1) 100%)';
 
-const MATRIX_ROWS = [
-  { feature: 'MetaTrader 5', std: true, raw: true, vip: true },
-  { feature: 'Web & Mobile', std: true, raw: true, vip: true },
-  { feature: 'Expert Advisors', std: true, raw: true, vip: true },
-  { feature: 'Hedging', std: true, raw: true, vip: true },
-  { feature: 'Dedicated dealer', std: false, raw: false, vip: true },
-  { feature: 'Priority withdrawals', std: false, raw: true, vip: true },
-  { feature: 'Free VPS hosting', std: false, raw: true, vip: true },
-  { feature: 'Custom spreads', std: false, raw: false, vip: true },
-] as const;
+const AR_FEATURE_VALUES: Record<string, string> = {
+  'Full platform access': 'وصول كامل للمنصة',
+  'Real-time market data': 'بيانات السوق الفعلية',
+  'No deposit required': 'لا يلزم إيداع',
+  'All 2000+ instruments': 'جميع الأدوات الـ 2000+',
+  'Zero commission': 'صفر عمولة',
+  '24/7 expert support': 'دعم خبراء 24/7',
+  'No overnight swaps': 'بدون فوائد بيعية',
+  'Sharia-compliant structure': 'بنية متوافقة مع الشريعة الإسلامية',
+  'Full market access': 'وصول كامل للسوق',
+  'Raw spreads from 0.0': 'فروق خام من 0.0',
+  'Priority execution': 'تنفيذ ذو أولوية',
+  'Dedicated account manager': 'مدير حساب مخصص',
+};
+
+const MATRIX_ROW_DATA = [
+  { id: 'mt5', featureKey: 'featureMT5' as const, std: true, raw: true, vip: true },
+  { id: 'web', featureKey: 'featureWebMobile' as const, std: true, raw: true, vip: true },
+  { id: 'ea', featureKey: 'featureEA' as const, std: true, raw: true, vip: true },
+  { id: 'hedging', featureKey: 'featureHedging' as const, std: true, raw: true, vip: true },
+  {
+    id: 'dealer',
+    featureKey: 'featureDedicatedDealer' as const,
+    std: false,
+    raw: false,
+    vip: true,
+  },
+  {
+    id: 'priority',
+    featureKey: 'featurePriorityWithdrawals' as const,
+    std: false,
+    raw: true,
+    vip: true,
+  },
+  { id: 'vps', featureKey: 'featureFreeVPS' as const, std: false, raw: true, vip: true },
+  { id: 'spreads', featureKey: 'featureCustomSpreads' as const, std: false, raw: false, vip: true },
+];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -74,6 +99,7 @@ function Check() {
 export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
   const locale = useLocale();
   const t = useTranslations('accounts');
+  const matrixRows = MATRIX_ROW_DATA.map((r) => ({ ...r, feature: t(r.featureKey) }));
 
   function getBadgeLabel(badge: string | null | undefined, isPopular?: boolean | null): string {
     if (badge === 'free') return t('badgeFree');
@@ -105,9 +131,22 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
     return match ? (match[0].startsWith('$') ? match[0] : `$${match[0]}`) : value;
   }
 
+  const BADGE_NAMES = {
+    free: 'nameDemo',
+    popular: 'nameStandard',
+    islamic: 'nameIslamic',
+    pro: 'nameProfessional',
+  } as const;
+
   const displayAccounts = (cmsAccounts ?? []).map((cms) => {
     const isAr = locale === 'ar';
-    const displayName = isAr && cms.nameAr ? cms.nameAr : cms.name;
+    const badgeValue = cms.badge ?? (cms.isPopular ? 'popular' : null);
+    const i18nNameKey = badgeValue
+      ? BADGE_NAMES[badgeValue as keyof typeof BADGE_NAMES]
+      : undefined;
+    const displayName = isAr
+      ? cms.nameAr || (i18nNameKey ? t(i18nNameKey) : null) || cms.name
+      : cms.name;
     const arFeatures = cms.featuresAr
       ? cms.featuresAr
           .split('\n')
@@ -115,8 +154,11 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
           .filter(Boolean)
       : [];
     const rawFeatures =
-      isAr && arFeatures.length > 0 ? arFeatures : (cms.features?.map((f) => f.value) ?? []);
-    const badgeValue = cms.badge ?? (cms.isPopular ? 'popular' : null);
+      isAr && arFeatures.length > 0
+        ? arFeatures
+        : isAr
+          ? (cms.features?.map((f) => AR_FEATURE_VALUES[f.value] ?? f.value) ?? [])
+          : (cms.features?.map((f) => f.value) ?? []);
     return {
       id: cms.id,
       badge: getBadgeLabel(badgeValue, cms.isPopular),
@@ -138,7 +180,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
     <div className="bg-transparent">
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="text-foreground font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px] xl:text-[48px]">
             <p>{t('heroLine1')}</p>
             <p>{t('heroLine2')}</p>
@@ -153,7 +195,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
 
       {/* ── Account Cards ─────────────────────────────────────────────────── */}
       <section className="bg-transparent px-5 pb-10">
-        <div className="mx-auto flex max-w-[390px] flex-col gap-[18px] md:max-w-2xl xl:max-w-[1200px] xl:flex-row xl:items-stretch xl:gap-6">
+        <div className="motion-safe:animate-rise-in mx-auto flex max-w-[390px] flex-col gap-[18px] md:max-w-2xl xl:max-w-[1200px] xl:flex-row xl:items-stretch xl:gap-6">
           {displayAccounts.length === 0 && (
             <p className="font-body text-muted w-full py-12 text-center text-[14px]">
               {t('noAccounts')}
@@ -255,21 +297,13 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                   ))}
                 </div>
 
-                {/* CTA — all accounts use filled green per Figma */}
-                <Link
-                  href={`/${locale}/register?account=${String(account.id)}`}
-                  className="font-body flex h-[49px] w-full items-center justify-center rounded-[10px] bg-[#00b050] text-[15px] font-semibold text-white transition-opacity hover:opacity-90"
-                >
-                  {account.ctaLabel}
-                </Link>
-
-                {/* Bottom link — demo card explores features, others link to demo */}
-                <Link
-                  href={account.isDemo ? `#feature-matrix` : `/${locale}/demo-account`}
+                {/* Bottom link — scrolls to the feature matrix (signup handled by CRM) */}
+                <a
+                  href="#feature-matrix"
                   className="font-body text-center text-[12px] font-bold tracking-[0.6px] text-[#00b050] transition-opacity hover:opacity-75"
                 >
                   {account.isDemo ? t('exploreFeatures') : t('tryFreeDemo')}
-                </Link>
+                </a>
               </div>
             </div>
           ))}
@@ -290,7 +324,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
             {t('featureMatrixHeading')}
           </h2>
 
-          <div className="overflow-hidden rounded-[16px] bg-white/[0.06]">
+          <div className="motion-safe:animate-rise-in overflow-hidden rounded-[16px] bg-white/[0.06]">
             {/* Header row */}
             <div className="grid grid-cols-[1fr_65px_65px_65px] bg-white/[0.04] px-[14px] py-3">
               <span className="font-mono text-[9px] uppercase tracking-[1.08px] text-white/55">
@@ -307,11 +341,11 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
               ))}
             </div>
 
-            {MATRIX_ROWS.map((row, i) => (
+            {matrixRows.map((row, i) => (
               <div
-                key={row.feature}
+                key={row.id}
                 className={`grid grid-cols-[1fr_65px_65px_65px] px-[14px] py-[11px] ${
-                  i < MATRIX_ROWS.length - 1 ? 'border-b border-white/[0.06]' : ''
+                  i < matrixRows.length - 1 ? 'border-b border-white/[0.06]' : ''
                 }`}
               >
                 <span className="font-body text-[12px] text-white/85">{row.feature}</span>

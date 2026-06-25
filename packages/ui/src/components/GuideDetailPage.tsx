@@ -6,7 +6,6 @@ import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { RichText, extractHeadings } from './RichText';
 import type { SlateNode } from './RichText';
-import { getStaticGuide } from './staticGuides';
 
 export interface CmsGuideDetail {
   title: string;
@@ -19,20 +18,13 @@ export type GuideDetailProps = {
   guide?: CmsGuideDetail | null;
 };
 
-export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
+export function GuideDetailPage({ slug: _slug, guide: cmsGuide }: GuideDetailProps) {
   const locale = useLocale();
   const t = useTranslations('guideDetail');
   const [activeSection, setActiveSection] = useState(0);
 
-  // Prefer real CMS content; otherwise fall back to static guide content by slug
-  // so the page renders meaningfully even with no CMS data (see staticGuides.ts).
-  const staticGuide = getStaticGuide(slug);
   const guide: CmsGuideDetail | null =
-    cmsGuide && cmsGuide.body && cmsGuide.body.length > 0
-      ? cmsGuide
-      : staticGuide
-        ? { title: staticGuide.title, body: staticGuide.body, author: staticGuide.author }
-        : null;
+    cmsGuide && cmsGuide.body && cmsGuide.body.length > 0 ? cmsGuide : null;
 
   const hasCmsGuide = Boolean(guide && guide.body && guide.body.length > 0);
   const cmsHeadings = hasCmsGuide ? extractHeadings(guide!.body) : [];
@@ -43,7 +35,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
     <>
       {/* Top breadcrumb */}
       <section className="bg-transparent px-5 pb-0 pt-6">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="text-muted flex items-center gap-2">
             <Link
               href={`/${locale}/education`}
@@ -51,7 +43,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
             >
               {t('backEducation')}
             </Link>
-            <svg width="5" height="8" viewBox="0 0 5 8" fill="none">
+            <svg width="5" height="8" viewBox="0 0 5 8" fill="none" className="rtl:-scale-x-100">
               <path
                 d="M1 1l3 3-3 3"
                 stroke="currentColor"
@@ -66,7 +58,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
             >
               {t('backGuides')}
             </Link>
-            <svg width="5" height="8" viewBox="0 0 5 8" fill="none">
+            <svg width="5" height="8" viewBox="0 0 5 8" fill="none" className="rtl:-scale-x-100">
               <path
                 d="M1 1l3 3-3 3"
                 stroke="currentColor"
@@ -84,7 +76,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
 
       {/* Header */}
       <section className="px-5 pb-6 pt-5">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[30px] font-semibold leading-[1.1] tracking-[-0.6px]">
             {displayTitle}
           </h1>
@@ -106,13 +98,19 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
       {/* Guide not found state */}
       {!hasCmsGuide && (
         <section className="px-5 pb-12">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <p className="font-body text-muted py-8 text-center text-[14px]">{t('notFound')}</p>
             <Link
               href={`/${locale}/guides`}
               className="font-body text-accent flex items-center justify-center gap-2 text-[13px] font-medium"
             >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                className="rtl:-scale-x-100"
+              >
                 <path
                   d="M11.5 7h-9M5 3.5L1.5 7l3.5 3.5"
                   stroke="currentColor"
@@ -130,7 +128,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
       {/* Table of contents — built from CMS headings */}
       {hasCmsGuide && cmsHeadings.length > 0 && (
         <section className="px-5 pb-6">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="bg-surface rounded-[18px] p-4">
               <p className="font-body text-muted mb-3 text-[9px] uppercase tracking-[0.12em]">
                 {t('tocLabel')}
@@ -140,7 +138,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
                   <button
                     key={item.id}
                     onClick={() => setActiveSection(i)}
-                    className={`flex items-center gap-2 py-[9px] text-left ${i < cmsHeadings.length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
+                    className={`flex items-center gap-2 py-[9px] text-start ${i < cmsHeadings.length - 1 ? 'dark:border-border border-b border-[#e5e7eb]' : ''}`}
                   >
                     <span
                       className={`font-body text-[10px] font-semibold ${activeSection === i ? 'text-accent' : 'text-muted'}`}
@@ -163,7 +161,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
       {/* Article body — rendered from CMS Slate content */}
       {hasCmsGuide && (
         <section className="px-5 pb-10">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <RichText content={guide!.body} />
           </div>
         </section>
@@ -171,7 +169,7 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
 
       {/* CTA */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:last-child]:text-white/50">
             {t('ctaKicker')}
           </SectionKicker>
@@ -179,12 +177,6 @@ export function GuideDetailPage({ slug, guide: cmsGuide }: GuideDetailProps) {
             {t('ctaHeading')}
           </h2>
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
-          <Link
-            href={`/${locale}/demo-account`}
-            className="bg-accent hover:bg-accent/90 font-body mb-3 flex h-[52px] w-full items-center justify-center rounded-full text-[15px] font-medium text-white transition-colors"
-          >
-            {t('ctaBtn')}
-          </Link>
           <Link
             href={`/${locale}/guides`}
             className="font-body flex h-[52px] w-full items-center justify-center rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"

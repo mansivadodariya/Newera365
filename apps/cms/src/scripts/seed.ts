@@ -18,6 +18,7 @@ import path from 'path';
 import fs from 'fs';
 import os from 'os';
 import sharp from 'sharp';
+import { NEWS_BODIES, toSlate } from './news-bodies';
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const CMS = process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3001';
@@ -393,7 +394,6 @@ async function seedSiteSettings() {
         links: [
           { label: 'MetaTrader 5', href: '/platform/mt5' },
           { label: 'Web Trader', href: '/platform/webtrader' },
-          { label: 'Mobile App', href: '/platform/mobile' },
           { label: 'Tools', href: '/tools' },
         ],
       },
@@ -433,7 +433,6 @@ async function seedSiteSettings() {
         links: [
           { label: 'ميتاتريدر 5', href: '/platform/mt5' },
           { label: 'المتداول الإلكتروني', href: '/platform/webtrader' },
-          { label: 'تطبيق الجوال', href: '/platform/mobile' },
           { label: 'الأدوات', href: '/tools' },
         ],
       },
@@ -1831,15 +1830,22 @@ async function seedNews() {
   ];
 
   for (const item of newsItems) {
+    const bodies = NEWS_BODIES[item.en.slug];
     const doc = await post<{ id: number }>('news', {
       headline: item.en.headline,
       slug: item.en.slug,
       source: item.en.source,
       category: item.en.category,
+      ...(bodies ? { body: toSlate(bodies.en) } : {}),
       publishedDate: item.publishedDate,
       status: 'published',
     });
-    await patchDoc('news', doc.id, { headline: item.ar.headline }, 'ar');
+    await patchDoc(
+      'news',
+      doc.id,
+      { headline: item.ar.headline, ...(bodies ? { body: toSlate(bodies.ar) } : {}) },
+      'ar',
+    );
   }
   console.log(`   ✅ ${newsItems.length} news items created (EN + AR)`);
 }
@@ -3568,6 +3574,14 @@ async function seedResearchReports() {
 
 async function seedAnalystCalls() {
   console.log('📈 Analyst Calls...');
+  // Idempotent: analyst-calls has no unique field, so createDoc (a plain POST)
+  // would insert a fresh duplicate set on every re-run — the cause of the
+  // Analyst Chart page rendering each pair multiple times. Skip if already seeded.
+  const existing = await api('GET', '/analyst-calls', undefined, { limit: '1' });
+  if ((existing?.totalDocs ?? 0) > 0) {
+    console.log(`   ⏭️  ${existing.totalDocs} analyst calls already exist — skipping`);
+    return;
+  }
   const calls = [
     {
       symbol: 'EUR/USD',

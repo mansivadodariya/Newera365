@@ -54,11 +54,17 @@ export function FeesPage({ spreadData }: FeesPageProps) {
     };
   });
 
+  const translateValue = (v: string) => {
+    if (v === 'Free') return t('valueFree');
+    if (v === 'Per-instrument') return t('valuePerInstrument');
+    return v;
+  };
+
   return (
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="mb-4 font-sans text-[40px] font-semibold leading-[1.1] tracking-[-1.2px] xl:text-[56px] xl:tracking-[-1.68px]">
             <span className="text-foreground">{t('heroLine1')}</span>
             <br />
@@ -72,7 +78,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
 
       {/* Spreads table */}
       <section className="bg-transparent px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('spreadsKicker')}
           </SectionKicker>
@@ -86,7 +92,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
               {[t('colRaw'), t('colStd'), t('colVip')].map((h) => (
                 <span
                   key={h}
-                  className="text-muted text-right font-mono text-[9px] tracking-[1.08px]"
+                  className="text-muted text-end font-mono text-[9px] tracking-[1.08px]"
                 >
                   {h}
                 </span>
@@ -107,24 +113,31 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                 <span className="font-body text-[13px] font-medium text-white">
                   {row.instrument}
                 </span>
-                <span className="text-accent text-right font-mono text-[13px] font-medium">
+                <span className="text-accent text-end font-mono text-[13px] font-medium">
                   {row.raw}
                 </span>
-                <span className="text-right font-mono text-[13px] text-white">{row.std}</span>
-                <span className="text-right font-mono text-[13px] text-white">{row.vip}</span>
+                <span className="text-end font-mono text-[13px] text-white">{row.std}</span>
+                <span className="text-end font-mono text-[13px] text-white">{row.vip}</span>
               </div>
             ))}
           </div>
 
           {/* View all link */}
           <Link
-            href={`/${locale}/markets/instruments`}
+            href={`/${locale}/markets/forex`}
             className="bg-surface dark:hover:bg-surface-elevated mt-3 flex items-center justify-center gap-2 rounded-[14px] px-4 py-[14px] transition-colors hover:bg-[#f0f0ee]"
           >
             <span className="font-body text-foreground text-[13px] font-medium">
               {t('viewAll')}
             </span>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              aria-hidden="true"
+              className="rtl:-scale-x-100"
+            >
               <path
                 d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
                 stroke="currentColor"
@@ -139,7 +152,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
 
       {/* Other Charges */}
       <section className="rounded-t-[32px] bg-[#FFFFFF] px-5 pb-10 pt-[29px] dark:bg-black">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted mb-5 text-[#6B7280] dark:text-[#B8BFCC]">
             {t('otherKicker')}
           </SectionKicker>
@@ -147,7 +160,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
             {OTHER_CHARGES.map((charge) => (
               <div
                 key={charge.label}
-                className="bg-surface dark:bg-surface flex h-[68px] items-center justify-between rounded-[14px] px-4 py-4"
+                className="bg-surface dark:bg-surface hover-lift flex h-[68px] items-center justify-between rounded-[14px] px-4 py-4"
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-foreground mb-[3px] font-sans text-[14px] font-semibold">
@@ -164,7 +177,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                 <span
                   className={`flex-shrink-0 font-sans text-[16px] font-semibold ${charge.green ? 'text-accent' : 'text-foreground'}`}
                 >
-                  {charge.value}
+                  {translateValue(charge.value)}
                 </span>
               </div>
             ))}
@@ -174,7 +187,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
 
       {/* Closing dark band */}
       <section className="rounded-t-[32px] bg-black px-5 pb-16 pt-14 xl:px-[120px] xl:pb-20 xl:pt-20">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/60 [&>span:last-child]:text-white/60">
             {t('transparentKicker')}
           </SectionKicker>

@@ -6,7 +6,7 @@ import type { CmsCareer } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Careers | NewEra365',
+  title: 'Careers',
   description: 'Join the team building the next generation of trading technology.',
 };
 

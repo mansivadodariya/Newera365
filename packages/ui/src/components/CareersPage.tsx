@@ -1,9 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { Pagination } from './Pagination';
+
+const CAREERS_PER_PAGE = 6;
 
 const TYPE_COLORS: Record<string, string> = {
   'Full-time': 'bg-accent/10 text-accent',
@@ -33,8 +36,19 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
   const locale = useLocale();
   const t = useTranslations('careers');
   const [dept, setDept] = useState('ALL');
+  const [page, setPage] = useState(1);
+  const listRef = useRef<HTMLDivElement>(null);
 
   const jobs = (cmsJobs ?? []).filter((j) => j.title?.trim());
+
+  const TYPE_I18N: Record<string, string> = {
+    'full-time': t('typeFullTime'),
+    'part-time': t('typePartTime'),
+    contract: t('typeContract'),
+    freelance: t('typeFreelance'),
+    internship: t('typeInternship'),
+  };
+  const translateType = (v: string) => TYPE_I18N[v.toLowerCase()] ?? v;
 
   // Build department list dynamically from CMS data
   const deptIds: string[] = [
@@ -61,12 +75,19 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
   }
 
   const filtered = dept === 'ALL' ? jobs : jobs.filter((j) => j.department.toUpperCase() === dept);
+  const totalPages = Math.ceil(filtered.length / CAREERS_PER_PAGE);
+  const pagedFiltered = filtered.slice((page - 1) * CAREERS_PER_PAGE, page * CAREERS_PER_PAGE);
+
+  function handleDeptChange(id: string) {
+    setDept(id);
+    setPage(1);
+  }
 
   return (
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
             {t('heroLine1')}
             <br />
@@ -80,7 +101,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
 
       {/* Stats */}
       <section className="px-5 pb-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-4">
             {[
               { value: '120+', label: t('statTeam') },
@@ -90,7 +111,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="bg-surface shadow-card rounded-[18px] p-5 dark:shadow-none"
+                className="bg-surface shadow-card hover-lift rounded-[18px] p-5 dark:shadow-none"
               >
                 <p className="text-foreground font-sans text-[28px] font-semibold leading-[1]">
                   {stat.value}
@@ -104,7 +125,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
 
       {/* Values — content from i18n */}
       <section className="px-5 pb-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('valuesKicker')}
           </SectionKicker>
@@ -112,7 +133,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
             {([1, 2, 3, 4] as const).map((i) => (
               <div
                 key={i}
-                className="bg-surface shadow-card flex flex-col gap-2 rounded-[18px] p-4 dark:shadow-none"
+                className="bg-surface shadow-card hover-lift flex flex-col gap-2 rounded-[18px] p-4 dark:shadow-none"
               >
                 <p className="text-foreground font-sans text-[13px] font-semibold">
                   {t(`val${i}Title` as 'val1Title')}
@@ -128,7 +149,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
 
       {/* Open roles */}
       <section className="px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('rolesHeading')}
           </SectionKicker>
@@ -138,7 +159,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
             {deptIds.map((id) => (
               <button
                 key={id}
-                onClick={() => setDept(id)}
+                onClick={() => handleDeptChange(id)}
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
                   dept === id
                     ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
@@ -151,54 +172,42 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
           </div>
 
           {/* Job list */}
-          <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
-            {filtered.map((job) => (
-              <Link
+          <div ref={listRef} className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
+            {pagedFiltered.map((job) => (
+              <div
                 key={job.id}
-                href={`/${locale}/company/careers/${job.id}`}
-                className="group flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0"
+                className="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0"
               >
                 <div className="flex flex-col gap-1">
-                  <p className="text-foreground group-hover:text-accent font-sans text-[14px] font-semibold transition-colors">
-                    {job.title}
-                  </p>
+                  <p className="text-foreground font-sans text-[14px] font-semibold">{job.title}</p>
                   <p className="font-body text-muted text-[12px]">{job.location}</p>
                 </div>
                 <div className="flex flex-shrink-0 items-center gap-2">
                   <span
                     className={`font-body rounded-full px-2.5 py-[4px] text-[10px] font-semibold ${TYPE_COLORS[job.employmentType] ?? 'bg-[#6B7280]/10 text-[#6B7280]'}`}
                   >
-                    {job.employmentType}
+                    {translateType(job.employmentType)}
                   </span>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    className="text-muted group-hover:text-accent transition-colors"
-                  >
-                    <path
-                      d="M6 4l4 4-4 4"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
 
           {filtered.length === 0 && (
             <p className="font-body text-muted py-8 text-center text-[14px]">{t('noRoles')}</p>
           )}
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            listRef={listRef}
+          />
         </div>
       </section>
 
       {/* Don't see your role CTA */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="xl:flex xl:flex-row xl:items-center xl:gap-10">
             {/* Left: text */}
             <div className="xl:flex-1">
@@ -222,7 +231,13 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
                 className="bg-accent font-body hover:bg-accent/90 flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors xl:w-auto xl:px-8"
               >
                 {t('openAppCta')}
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  className="rtl:-scale-x-100"
+                >
                   <path
                     d="M3 8h10M9 4l4 4-4 4"
                     stroke="currentColor"
@@ -235,7 +250,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
             </div>
 
             {/* Right: review note */}
-            <div className="mt-4 xl:mt-0 xl:flex-shrink-0 xl:text-right">
+            <div className="mt-4 xl:mt-0 xl:flex-shrink-0 xl:text-end">
               <p className="font-body text-[12px] text-white/40 xl:max-w-[180px]">
                 {t('openAppNote')}
               </p>

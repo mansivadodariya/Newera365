@@ -170,6 +170,118 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
 
+    // ── Homepage Testimonials & Social Proof ─────────────────────────────────
+    // Client testimonials + headline social-proof stats shown on the homepage
+    // (client feedback #5). EN/AR suffix per house style — native localization
+    // is intentionally not used (see file header).
+    {
+      type: 'collapsible',
+      label: 'Homepage Testimonials & Social Proof',
+      admin: {
+        initCollapsed: true,
+        description:
+          'Trader testimonials and headline trust stats for the homepage social-proof section. ' +
+          'Leave the testimonials empty to hide the section entirely.',
+      },
+      fields: [
+        {
+          name: 'socialProofHeadlineEn',
+          type: 'text',
+          label: 'Social Proof Headline — EN',
+          maxLength: 80,
+          admin: {
+            description: 'e.g. "Trusted by 25,000+ traders worldwide". Leave blank to hide.',
+          },
+        },
+        {
+          name: 'socialProofHeadlineAr',
+          type: 'text',
+          label: 'Social Proof Headline — AR',
+          maxLength: 80,
+          admin: { description: 'Arabic version of the social-proof headline.' },
+        },
+        {
+          name: 'ratingValue',
+          type: 'text',
+          label: 'Rating Value',
+          maxLength: 10,
+          admin: {
+            description: 'e.g. "4.8" — shown as "4.8 / 5". Leave blank to hide the rating band.',
+          },
+        },
+        {
+          name: 'ratingCountEn',
+          type: 'text',
+          label: 'Rating Caption — EN',
+          maxLength: 60,
+          admin: { description: 'e.g. "based on 2,400+ verified reviews".' },
+        },
+        {
+          name: 'ratingCountAr',
+          type: 'text',
+          label: 'Rating Caption — AR',
+          maxLength: 60,
+          admin: { description: 'Arabic version of the rating caption.' },
+        },
+        {
+          name: 'testimonials',
+          type: 'array',
+          maxRows: 9,
+          labels: { singular: 'Testimonial', plural: 'Testimonials' },
+          admin: { description: 'Trader quotes. Drag to reorder; first ones show first.' },
+          fields: [
+            {
+              name: 'quoteEn',
+              type: 'textarea',
+              required: true,
+              admin: { description: 'Testimonial quote — EN.' },
+            },
+            {
+              name: 'quoteAr',
+              type: 'textarea',
+              required: true,
+              admin: { description: 'Testimonial quote — AR.' },
+            },
+            {
+              name: 'authorName',
+              type: 'text',
+              required: true,
+              maxLength: 80,
+              admin: { description: 'Author name, e.g. "Omar A.".' },
+            },
+            {
+              name: 'authorRoleEn',
+              type: 'text',
+              maxLength: 80,
+              admin: { description: 'Role / location — EN, e.g. "Day trader · Dubai".' },
+            },
+            {
+              name: 'authorRoleAr',
+              type: 'text',
+              maxLength: 80,
+              admin: { description: 'Role / location — AR.' },
+            },
+            {
+              name: 'rating',
+              type: 'number',
+              min: 1,
+              max: 5,
+              defaultValue: 5,
+              admin: { description: 'Star rating 1–5 (defaults to 5).' },
+            },
+            {
+              name: 'avatarUrl',
+              type: 'text',
+              maxLength: 500,
+              admin: {
+                description: 'Optional author photo URL (square). Leave blank to show initials.',
+              },
+            },
+          ],
+        },
+      ],
+    },
+
     // ── Platform Download Links ──────────────────────────────────────────────
     // URLs for all MT5 platform variants and the web trader.
     // The frontend reads these so there are zero hardcoded download links.
@@ -380,33 +492,6 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
 
-    // ── Navigation ───────────────────────────────────────────────────────────
-    {
-      type: 'collapsible',
-      label: 'Header Navigation',
-      admin: { initCollapsed: true },
-      fields: [
-        {
-          name: 'navEn',
-          type: 'array',
-          label: 'Header Navigation — EN',
-          fields: [
-            { name: 'label', type: 'text', required: true },
-            { name: 'href', type: 'text', required: true },
-          ],
-        },
-        {
-          name: 'navAr',
-          type: 'array',
-          label: 'Header Navigation — AR',
-          fields: [
-            { name: 'label', type: 'text', required: true },
-            { name: 'href', type: 'text', required: true },
-          ],
-        },
-      ],
-    },
-
     // ── Footer ───────────────────────────────────────────────────────────────
     {
       type: 'collapsible',
@@ -444,6 +529,115 @@ export const SiteSettings: GlobalConfig = {
               ],
             },
           ],
+        },
+      ],
+    },
+
+    // ── Footer — Company & Regulation ────────────────────────────────────────
+    // Regulatory disclosure, company registration / licence details, and the
+    // live-chat shortcut shown in the footer (client feedback #6). Risk
+    // disclaimer + contact details live in their own sections above.
+    {
+      type: 'collapsible',
+      label: 'Footer — Company & Regulation',
+      admin: {
+        initCollapsed: true,
+        description:
+          'Regulatory + company registration copy and the live-chat link for the footer. ' +
+          'Each block hides itself when left blank.',
+      },
+      fields: [
+        {
+          name: 'regulatoryDisclosureEn',
+          type: 'textarea',
+          label: 'Regulatory Disclosure — EN',
+          admin: {
+            description: 'Regulator names, licence numbers, and oversight statement — English.',
+          },
+        },
+        {
+          name: 'regulatoryDisclosureAr',
+          type: 'textarea',
+          label: 'Regulatory Disclosure — AR',
+          admin: { description: 'Regulatory disclosure — Arabic.' },
+        },
+        {
+          name: 'companyRegistrationEn',
+          type: 'textarea',
+          label: 'Company Registration — EN',
+          admin: {
+            description:
+              'Registered entity name, company number, and registered address — English.',
+          },
+        },
+        {
+          name: 'companyRegistrationAr',
+          type: 'textarea',
+          label: 'Company Registration — AR',
+          admin: { description: 'Company registration details — Arabic.' },
+        },
+        {
+          name: 'liveChatUrl',
+          type: 'text',
+          label: 'Live Chat URL',
+          maxLength: 500,
+          admin: {
+            description: 'Link target for the footer "Live chat" shortcut. Leave blank to hide.',
+          },
+        },
+      ],
+    },
+
+    // ── Analyst Chart — Featured Analyst ─────────────────────────────────────
+    {
+      type: 'collapsible',
+      label: 'Analyst Chart — Featured Analyst',
+      admin: {
+        initCollapsed: true,
+        description:
+          'Analyst profile and commentary shown on the /research/analyst-chart page. ' +
+          'Commentary is bilingual — fill both EN and AR fields.',
+      },
+      fields: [
+        {
+          name: 'analystInitials',
+          type: 'text',
+          label: 'Initials',
+          maxLength: 5,
+          admin: { description: 'Two-letter initials displayed in the avatar circle, e.g. DR.' },
+        },
+        {
+          name: 'analystName',
+          type: 'text',
+          label: 'Full Name',
+          maxLength: 80,
+          admin: { description: 'Full name shown below the avatar.' },
+        },
+        {
+          name: 'analystTitle',
+          type: 'text',
+          label: 'Job Title',
+          maxLength: 100,
+          admin: { description: 'e.g. Senior FX Analyst.' },
+        },
+        {
+          name: 'analystUpdated',
+          type: 'text',
+          label: 'Last Updated',
+          maxLength: 50,
+          admin: { description: 'Timestamp string, e.g. 20 May, 09:14 UTC.' },
+        },
+        {
+          name: 'analystCommentaryEn',
+          type: 'textarea',
+          label: 'Commentary — EN',
+          admin: { description: 'Analyst market commentary — English.' },
+        },
+        {
+          name: 'analystCommentaryAr',
+          type: 'textarea',
+          label: 'Commentary — AR',
+          admin: { description: 'Analyst market commentary — Arabic.' },
         },
       ],
     },

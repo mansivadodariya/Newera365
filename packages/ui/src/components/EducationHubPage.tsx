@@ -159,12 +159,27 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const cmsCounts = cmsContent
-    ? CATEGORIES.map((cat) => {
-        const count = cmsContent.filter((c) => c.contentType === cat.id).length;
-        return { ...cat, count: count > 0 ? `${count}` : cat.count };
-      })
-    : null;
+  // Live CMS count when available, else a localized fallback (the static
+  // `cat.count` is English — "4x GUIDES" etc. — so it must not render raw in AR).
+  const cats = CATEGORIES.map((cat) => {
+    const count = cmsContent ? cmsContent.filter((c) => c.contentType === cat.id).length : 0;
+    return {
+      ...cat,
+      count:
+        count > 0
+          ? `${count}`
+          : t(`count${cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}` as 'countGuides'),
+    };
+  });
+
+  // Localize the featured-article tag (NEW / POPULAR / UPDATED / GUIDE) for AR.
+  const tagLabel = (tag: string): string =>
+    ({
+      NEW: t('tagNew'),
+      POPULAR: t('tagPopular'),
+      UPDATED: t('tagUpdated'),
+      GUIDE: t('tagGuide'),
+    })[tag] ?? tag;
 
   const cmsGuides = cmsContent
     ? cmsContent.filter((c) => c.contentType === 'guide' && /^[a-z0-9-]+$/.test(c.slug))
@@ -213,12 +228,12 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
 
       {/* Category grid */}
       <section className="px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('browseKicker')}
           </SectionKicker>
           <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-3 xl:gap-[14px]">
-            {(cmsCounts ?? CATEGORIES).map((cat) => (
+            {cats.map((cat) => (
               <Link
                 key={cat.id}
                 href={`/${locale}${cat.href}`}
@@ -252,7 +267,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
 
       {/* Featured this week */}
       <section className="bg-transparent px-5 pb-10 pt-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('featuredKicker')}
           </SectionKicker>
@@ -276,7 +291,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                     <span
                       className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${article.tagClass}`}
                     >
-                      {article.tag}
+                      {tagLabel(article.tag)}
                     </span>
                     {'readTime' in article && (
                       <span className="font-mono text-[9px] text-[#9ca3af]">
@@ -315,7 +330,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
 
       {/* Newsletter CTA */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
             {t('inboxKicker')}
           </SectionKicker>

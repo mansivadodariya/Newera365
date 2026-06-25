@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
-import { seoFields, slugField } from './_fields';
+import { publicReadWhere, seoFields, slugField } from './_fields';
 
 // Powers /research — gated PDF download section. PDFs served via R2 signed URL.
 export const ResearchReports: CollectionConfig = {
@@ -9,7 +9,7 @@ export const ResearchReports: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'status', 'isGated', 'publishedDate'],
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'published' } }) },
   fields: [
     { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),

@@ -44,7 +44,7 @@ async function patch(col, id, data, locale) {
   try {
     const res = await api('PATCH', '/' + col + '/' + id, data, { locale });
     return res.doc ?? res;
-  } catch (e) {
+  } catch {
     return {};
   }
 }

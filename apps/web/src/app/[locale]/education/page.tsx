@@ -6,7 +6,7 @@ import type { CmsEducationContent, CmsMedia } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Education Hub | NewEra365',
+  title: 'Education Hub',
   description: 'Guides, glossary, ebooks, webinars, videos and audio — all in one place.',
 };
 

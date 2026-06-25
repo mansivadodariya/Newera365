@@ -1,5 +1,9 @@
 import type { CollectionConfig } from 'payload/types';
-import { publicReadWhere, seoFields, slugField } from './_fields';
+import { allowAnyCategory, publicReadWhere, seoFields, slugField } from './_fields';
+import CategorySelect from '../components/CategorySelect';
+
+const ASSET_CATEGORIES = ['forex', 'commodities', 'indices', 'stocks', 'etfs', 'crypto'];
+const EDITORIAL_CATEGORIES = ['macro', 'strategy', 'analysis', 'education'];
 
 // Powers /market-analysis (listing) and /market-analysis/[slug] (article).
 export const MarketAnalysis: CollectionConfig = {
@@ -30,15 +34,19 @@ export const MarketAnalysis: CollectionConfig = {
       name: 'assetCategory',
       type: 'select',
       required: true,
-      options: ['forex', 'commodities', 'indices', 'stocks', 'etfs', 'crypto'],
+      options: ASSET_CATEGORIES,
+      validate: allowAnyCategory(true),
+      admin: { components: { Field: CategorySelect(ASSET_CATEGORIES) } },
     },
     {
       name: 'editorialCategory',
       type: 'select',
-      options: ['macro', 'strategy', 'analysis', 'education'],
+      options: EDITORIAL_CATEGORIES,
+      validate: allowAnyCategory(false),
       admin: {
         description:
           'Overrides the asset-based Research page filter. Set to "education" for how-to articles that don\'t belong to a specific asset class.',
+        components: { Field: CategorySelect(EDITORIAL_CATEGORIES) },
       },
     },
     {

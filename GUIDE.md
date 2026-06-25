@@ -232,18 +232,19 @@ newera365-app/
 
 ## 6. CMS Collections at a Glance
 
-| Group          | Collections                                      |
-| -------------- | ------------------------------------------------ |
-| Administration | Users, Media                                     |
-| Editorial      | BlogPosts, MarketAnalysis, News, ResearchReports |
-| Education      | EducationContent, Webinars                       |
-| Trading Data   | ProductsInstruments, AccountTypes                |
-| Support        | FAQs                                             |
-| Marketing      | NewsletterSubscribers                            |
-| Company        | Careers, CompanyContent, TeamMembers             |
-| Compliance     | LegalPages                                       |
+| Group          | Collections                                                    |
+| -------------- | -------------------------------------------------------------- |
+| Administration | Users, Media                                                   |
+| Editorial      | BlogPosts, MarketAnalysis, News, ResearchReports, AnalystCalls |
+| Education      | EducationContent, Webinars, WebinarRegistrations               |
+| Trading Data   | ProductsInstruments, AccountTypes                              |
+| Trading        | PaymentMethods, Promotions, IBContent                          |
+| Support        | FAQs, ContactSubmissions                                       |
+| Marketing      | NewsletterSubscribers                                          |
+| Company        | Careers, TeamMembers, Awards, MediaPress                       |
+| Compliance     | LegalPages                                                     |
 
-**Localization model:** every locale-aware collection stores one document per locale (`en` / `ar`). A `translationKey` UUID links the English and Arabic counterparts. `(slug, locale)` uniqueness is enforced via a collection hook.
+**Localization model:** native Payload localization is used (`locales: ['en', 'ar']`, `defaultLocale: 'en'`, `fallback: true`). Each document holds all locales; locale-aware fields carry `localized: true`. Slug fields are non-localized and globally unique (one document per slug across all locales). The frontend selects a locale with `?locale=en` / `?locale=ar` on Payload's REST API.
 
 ---
 

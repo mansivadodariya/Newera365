@@ -2,35 +2,8 @@
 
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
+import { JourneyTimeline } from './JourneyTimelineClient';
 import { SectionKicker } from './SectionKicker';
-
-const MILESTONES = [
-  {
-    year: '2014',
-    label: 'Founded',
-    desc: 'Started with a single broker license and a focus on institutional-grade retail trading.',
-  },
-  {
-    year: '2016',
-    label: 'First license',
-    desc: 'Granted FCA authorisation — regulated where it matters to clients in Singapore, EU and the UK.',
-  },
-  {
-    year: '2019',
-    label: '100k traders',
-    desc: 'Crossed six figures of active accounts during a period of rapid expansion across 6 countries.',
-  },
-  {
-    year: '2022',
-    label: 'Global expansion',
-    desc: 'Expanded to ASIC and CySEC jurisdictions. Offices opened in Dubai and Singapore.',
-  },
-  {
-    year: '2024',
-    label: 'New era',
-    desc: 'Released the NewEra365 platform — built from the ground up with every tool a trader needs.',
-  },
-] as const;
 
 const TEAM = [
   { initials: 'AM', name: 'Alex M.', title: 'Head of Trading' },
@@ -114,22 +87,64 @@ export interface CmsAwardItem {
   externalUrl?: string | null;
 }
 
-interface AboutPageProps {
-  team?: CmsTeamMemberItem[];
-  awards?: CmsAwardItem[];
+export interface CmsMilestoneItem {
+  year: string;
+  label: string;
+  description?: string | null;
 }
 
-export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
+interface AboutPageProps {
+  team?: CmsTeamMemberItem[];
+  milestones?: CmsMilestoneItem[];
+}
+
+export function AboutPage({ team: cmsTeam, milestones: cmsMilestones }: AboutPageProps) {
   const locale = useLocale();
   const t = useTranslations('about');
 
-  const displayTeam = cmsTeam && cmsTeam.length > 0 ? cmsTeam : null;
+  // Prefer CMS-managed, localized milestones; fall back to the i18n copy so the
+  // timeline still renders if the collection is empty or the CMS is unreachable.
+  const milestones =
+    cmsMilestones && cmsMilestones.length > 0
+      ? cmsMilestones.map((m) => ({ year: m.year, label: m.label, desc: m.description ?? '' }))
+      : [
+          { year: '2014', label: t('milestone2014Label'), desc: t('milestone2014Desc') },
+          { year: '2016', label: t('milestone2016Label'), desc: t('milestone2016Desc') },
+          { year: '2019', label: t('milestone2019Label'), desc: t('milestone2019Desc') },
+          { year: '2022', label: t('milestone2022Label'), desc: t('milestone2022Desc') },
+          { year: '2024', label: t('milestone2024Label'), desc: t('milestone2024Desc') },
+        ];
+
+  // Use CMS team members when available; fall back to the static design roster.
+  // Normalise both shapes to { initials, name, title, photoUrl } so the grid
+  // renders identically regardless of source.
+  const displayTeam =
+    cmsTeam && cmsTeam.length > 0
+      ? cmsTeam.map((m) => ({
+          name: m.name,
+          title: m.role,
+          initials: (m.name ?? '')
+            .split(/\s+/)
+            .map((w) => w[0])
+            .slice(0, 2)
+            .join('')
+            .toUpperCase(),
+          photoUrl: m.photoUrl ?? null,
+          photoAlt: m.photoAlt ?? m.name,
+        }))
+      : TEAM.map((m) => ({
+          name: m.name,
+          title: m.title,
+          initials: m.initials,
+          photoUrl: null as string | null,
+          photoAlt: m.name,
+        }));
 
   return (
     <>
       {/* Hero — 42px tracking-[-1.26px] per Figma */}
       <section className="rounded-b-[32px] bg-transparent px-5 pb-7 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
             <span className="text-foreground">{t('heroLine1')}</span>
             <br />
@@ -143,7 +158,7 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
 
       {/* Mission section — bg-[#111] per Figma, Outfit Medium 24px quote */}
       <section className="rounded-t-[32px] bg-[#111111] px-5 pb-11 pt-11">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 text-white [&>span:first-child]:bg-white">
             {t('missionKicker')}
           </SectionKicker>
@@ -156,7 +171,7 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
               <p className="font-sans text-[18px] font-semibold text-white">Alex M.</p>
               <p className="font-body text-[12px] text-white/55">{t('ceoTitle')}</p>
             </div>
-            <div className="text-right">
+            <div className="text-end">
               <p className="font-mono text-[9px] tracking-[1.35px] text-white/40">
                 {t('founderLetterLabel')}
               </p>
@@ -165,49 +180,19 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
         </div>
       </section>
 
-      {/* Timeline */}
-      <section className="rounded-t-[32px] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            {t('timelineKicker')}
-          </SectionKicker>
-          <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
-            {t('timelineHeading')}
-          </h2>
-          <div className="flex flex-col">
-            {MILESTONES.map((m, i) => (
-              <div key={m.year} className="flex gap-[18px] pb-[22px]">
-                {/* Connector */}
-                <div className="flex flex-col items-center">
-                  <div
-                    className={`mt-1 h-[22px] w-[22px] flex-shrink-0 rounded-full border-2 ${i === MILESTONES.length - 1 ? 'border-accent bg-accent' : 'border-[#e5e7eb] bg-white dark:border-white/[0.12] dark:bg-[#111316]'}`}
-                  />
-                  {i < MILESTONES.length - 1 && (
-                    <div className="mt-1 w-px flex-1 bg-[#e5e7eb] dark:bg-white/[0.07]" />
-                  )}
-                </div>
-                {/* Content */}
-                <div className="flex-1">
-                  <span className="text-accent font-mono text-[11px] font-bold tracking-[1.32px]">
-                    {m.year}
-                  </span>
-                  <p className="text-foreground font-sans text-[17px] font-semibold leading-normal">
-                    {m.label}
-                  </p>
-                  <p className="font-body text-muted mt-1 text-[13px] leading-[1.55]">{m.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Timeline — scroll-coupled rail fill + lighting nodes (matches landing's three-step stepper) */}
+      <JourneyTimeline
+        kicker={t('timelineKicker')}
+        heading={t('timelineHeading')}
+        milestones={milestones}
+      />
 
       {/* Team — gradient section, white cards per Figma */}
       <section
         className="rounded-[32px] px-5 pb-9 pt-10 xl:pb-16 xl:pt-16"
         style={{ background: 'var(--gradient-features)' }}
       >
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('teamKicker')}
           </SectionKicker>
@@ -215,19 +200,28 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
             {t('teamHeading')}
           </h2>
           <div className="grid grid-cols-2 gap-[10px]">
-            {TEAM.map((member, i) => (
+            {displayTeam.map((member, i) => (
               <div
                 key={`team-${i}-${member.name}`}
                 className="flex h-[145px] flex-col gap-[14px] rounded-[18px] bg-white p-[18px] shadow-[0_2px_8px_rgba(0,0,0,0.06)] dark:bg-[#1a1c22] dark:shadow-none"
               >
-                {/* Avatar — dark gradient per Figma */}
+                {/* Avatar — CMS photo when present, else initials on the Figma gradient */}
                 <div
-                  className="flex h-[56px] w-[56px] flex-shrink-0 items-center justify-center rounded-[16px]"
+                  className="flex h-[56px] w-[56px] flex-shrink-0 items-center justify-center overflow-hidden rounded-[16px]"
                   style={{ background: 'linear-gradient(135deg, #111111 0%, #333333 71.43%)' }}
                 >
-                  <span className="font-sans text-[16px] font-semibold tracking-[-0.16px] text-white">
-                    {member.initials}
-                  </span>
+                  {member.photoUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={member.photoUrl}
+                      alt={member.photoAlt}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span className="font-sans text-[16px] font-semibold tracking-[-0.16px] text-white">
+                      {member.initials}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <p className="text-foreground font-sans text-[15px] font-semibold">
@@ -243,7 +237,7 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
 
       {/* Explore links */}
       <section className="rounded-t-[32px] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('exploreKicker')}
           </SectionKicker>
@@ -284,38 +278,6 @@ export function AboutPage({ team: cmsTeam, awards: _awards }: AboutPageProps) {
               </Link>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
-            {t('ctaKicker')}
-          </SectionKicker>
-          <h2 className="mb-3 font-sans text-[28px] font-semibold leading-[1.1] text-white">
-            {t('ctaLine1')}
-            <br />
-            <span className="text-accent">{t('ctaLine2')}</span>
-          </h2>
-          <p className="font-body mb-8 text-[13px] leading-relaxed text-white/60">
-            {t('ctaLine3')}
-          </p>
-          <Link
-            href={`/${locale}/register`}
-            className="bg-accent font-body hover:bg-accent/90 flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors xl:w-auto xl:px-8"
-          >
-            {t('ctaBtn')}
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
         </div>
       </section>
     </>

@@ -23,14 +23,15 @@ export interface Config {
     careers: Career;
     'legal-pages': LegalPage;
     awards: Award;
+    'company-milestones': CompanyMilestone;
     'media-press': MediaPress;
-    'company-content': CompanyContent;
     'team-members': TeamMember;
     'webinar-registrations': WebinarRegistration;
     promotions: Promotion;
     'payment-methods': PaymentMethod;
     'ib-content': IbContent;
     'contact-submissions': ContactSubmission;
+    'analyst-calls': AnalystCall;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
@@ -45,9 +46,6 @@ export interface Config {
 export interface User {
   id: number;
   name: string;
-  totpEnabled?: boolean | null;
-  totpSecret?: string | null;
-  totpTempSecret?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -134,7 +132,9 @@ export interface MarketAnalysis {
   status: 'draft' | 'published';
   publishedDate: string;
   assetCategory: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
+  editorialCategory?: ('macro' | 'strategy' | 'analysis' | 'education') | null;
   analyst?: string | null;
+  featuredImage?: number | Media | null;
   body: {
     [k: string]: unknown;
   }[];
@@ -154,6 +154,7 @@ export interface ProductsInstrument {
   name: string;
   symbol: string;
   mt5Symbol?: string | null;
+  tvSymbol?: string | null;
   assetClass: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
   usesMT5Data?: boolean | null;
   spread?: number | null;
@@ -294,7 +295,7 @@ export interface AccountType {
   id: number;
   name: string;
   nameAr?: string | null;
-  badge?: ('free' | 'popular' | 'pro' | 'islamic') | null;
+  badge?: string | null;
   minDeposit: number;
   spreadFrom: string;
   leverage: string;
@@ -328,14 +329,7 @@ export interface Faq {
   answer: {
     [k: string]: unknown;
   }[];
-  category:
-    | 'trading'
-    | 'accounts'
-    | 'deposits'
-    | 'withdrawals'
-    | 'platforms'
-    | 'regulation'
-    | 'general';
+  category: string;
   sortOrder?: number | null;
   status: 'active' | 'inactive';
   updatedAt: string;
@@ -379,17 +373,9 @@ export interface Career {
   id: number;
   title: string;
   slug: string;
-  department:
-    | 'engineering'
-    | 'design'
-    | 'marketing'
-    | 'sales'
-    | 'operations'
-    | 'compliance'
-    | 'support'
-    | 'finance';
+  department: string;
   location: string;
-  employmentType: 'full-time' | 'part-time' | 'contract' | 'freelance' | 'internship';
+  employmentType: string;
   summary?: string | null;
   body: {
     [k: string]: unknown;
@@ -434,8 +420,23 @@ export interface Award {
   slug: string;
   date: string;
   description?: string | null;
+  awardCategory?: string | null;
   logo?: number | Media | null;
   externalUrl?: string | null;
+  sortOrder?: number | null;
+  status: 'published' | 'draft';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "company-milestones".
+ */
+export interface CompanyMilestone {
+  id: number;
+  year: string;
+  label: string;
+  description?: string | null;
   sortOrder?: number | null;
   status: 'published' | 'draft';
   updatedAt: string;
@@ -456,29 +457,6 @@ export interface MediaPress {
   isFeatured?: boolean | null;
   sortOrder?: number | null;
   status: 'published' | 'draft';
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "company-content".
- */
-export interface CompanyContent {
-  id: number;
-  title: string;
-  slug: string;
-  section: 'awards' | 'press';
-  date: string;
-  description?: string | null;
-  body?:
-    | {
-        [k: string]: unknown;
-      }[]
-    | null;
-  externalUrl?: string | null;
-  logo?: number | Media | null;
-  sortOrder?: number | null;
-  status: 'draft' | 'published';
   updatedAt: string;
   createdAt: string;
 }
@@ -545,6 +523,7 @@ export interface Promotion {
 export interface PaymentMethod {
   id: number;
   name: string;
+  nameAr?: string | null;
   methodType: 'card' | 'bank' | 'ewallet' | 'crypto' | 'local';
   logo?: number | Media | null;
   depositTime?: string | null;
@@ -568,8 +547,18 @@ export interface IbContent {
   ibDescription?: string | null;
   affiliateDescription?: string | null;
   whiteLabelDescription?: string | null;
+  ibTag?: string | null;
   ibRateDisplay?: string | null;
+  ibPayoutsFrequency?: string | null;
+  ibMinimum?: string | null;
+  affiliateTag?: string | null;
   affiliateCpaMax?: string | null;
+  affiliateCookieDays?: string | null;
+  affiliateMinCpa?: string | null;
+  wlTag?: string | null;
+  wlSetupTime?: string | null;
+  wlSpreadMarkup?: string | null;
+  wlTechStack?: string | null;
   steps?:
     | {
         stepTitle: string;
@@ -596,6 +585,25 @@ export interface ContactSubmission {
   submittedAt?: string | null;
   status: 'new' | 'read' | 'responded';
   ipHash?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "analyst-calls".
+ */
+export interface AnalystCall {
+  id: number;
+  symbol: string;
+  tvSymbol: string;
+  currentPrice: string;
+  targetPrice: string;
+  confidence: number;
+  sentiment: 'BULLISH' | 'BEARISH' | 'NEUTRAL';
+  category: 'Majors' | 'Crosses' | 'Commodities' | 'Crypto';
+  sparkPoints?: string | null;
+  sortOrder?: number | null;
+  status: 'active' | 'inactive';
   updatedAt: string;
   createdAt: string;
 }
@@ -683,20 +691,6 @@ export interface SiteSetting {
   riskBannerEnabled?: boolean | null;
   riskBannerEn?: string | null;
   riskBannerAr?: string | null;
-  navEn?:
-    | {
-        label: string;
-        href: string;
-        id?: string | null;
-      }[]
-    | null;
-  navAr?:
-    | {
-        label: string;
-        href: string;
-        id?: string | null;
-      }[]
-    | null;
   footerEn?:
     | {
         heading?: string | null;
@@ -723,6 +717,12 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  analystInitials?: string | null;
+  analystName?: string | null;
+  analystTitle?: string | null;
+  analystUpdated?: string | null;
+  analystCommentaryEn?: string | null;
+  analystCommentaryAr?: string | null;
   riskDisclaimerEn?: string | null;
   riskDisclaimerAr?: string | null;
   updatedAt?: string | null;

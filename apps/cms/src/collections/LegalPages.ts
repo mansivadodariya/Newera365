@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
-import { seoFields, slugField } from './_fields';
+import { publicReadWhere, seoFields, slugField } from './_fields';
 import { archivePreviousLegalVersion } from '../hooks';
 
 // Powers /terms, /privacy-policy, /risk-disclosure, /aml-policy, /cookie-policy.
@@ -12,7 +12,7 @@ export const LegalPages: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'pageType', 'status', 'effectiveDate'],
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'published' } }) },
   hooks: {
     afterChange: [archivePreviousLegalVersion],
   },

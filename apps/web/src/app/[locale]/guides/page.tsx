@@ -6,7 +6,7 @@ import type { CmsEducationContent } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Trading Guides | NewEra365',
+  title: 'Trading Guides',
   description: 'Long-form trading guides on leverage, risk management, chart reading, and macro.',
 };
 

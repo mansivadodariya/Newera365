@@ -1,15 +1,21 @@
-# Graph Report - . (2026-06-11)
+# Graph Report - newera365-app (2026-06-22)
 
 ## Corpus Check
 
-- 340 files · ~171,907 words
+- 358 files · ~796,968 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 
-- 1521 nodes · 2148 edges · 189 communities (114 shown, 75 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 33 edges (avg confidence: 0.82)
-- Token cost: 23,323 input · 9,296 output
+- 2049 nodes · 3049 edges · 228 communities (160 shown, 68 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 46 edges (avg confidence: 0.81)
+- Token cost: 0 input · 0 output
+
+## Graph Freshness
+
+- Built from commit: `880f1921`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 
@@ -80,8 +86,8 @@
 - [[_COMMUNITY_Root Package Scripts|Root Package Scripts]]
 - [[_COMMUNITY_Schema Migration Script|Schema Migration Script]]
 - [[_COMMUNITY_CMS Public Assets & Forex|CMS Public Assets & Forex]]
-- [[_COMMUNITY_Contact Page|Contact Page]]
-- [[_COMMUNITY_Economic Calendar Page|Economic Calendar Page]]
+- [[_COMMUNITY_Community 68|Community 68]]
+- [[_COMMUNITY_Community 69|Community 69]]
 - [[_COMMUNITY_FAQ Route & Page|FAQ Route & Page]]
 - [[_COMMUNITY_Media Press Seed Script|Media Press Seed Script]]
 - [[_COMMUNITY_Types TypeScript Config|Types TypeScript Config]]
@@ -90,7 +96,7 @@
 - [[_COMMUNITY_Blog & Research Loading|Blog & Research Loading]]
 - [[_COMMUNITY_Features Section|Features Section]]
 - [[_COMMUNITY_Glossary Page|Glossary Page]]
-- [[_COMMUNITY_Research & CMS Data Utils|Research & CMS Data Utils]]
+- [[_COMMUNITY_Community 78|Community 78]]
 - [[_COMMUNITY_Ticker Strip Component|Ticker Strip Component]]
 - [[_COMMUNITY_Security & Vulnerability Docs|Security & Vulnerability Docs]]
 - [[_COMMUNITY_MT5 Asset Classes & Types|MT5 Asset Classes & Types]]
@@ -99,7 +105,7 @@
 - [[_COMMUNITY_Market Category Page|Market Category Page]]
 - [[_COMMUNITY_Glossary Route & Page|Glossary Route & Page]]
 - [[_COMMUNITY_Home Page Skeleton|Home Page Skeleton]]
-- [[_COMMUNITY_News Section Component|News Section Component]]
+- [[_COMMUNITY_Community 87|Community 87]]
 - [[_COMMUNITY_Crypto Market Images|Crypto Market Images]]
 - [[_COMMUNITY_Market Indices Images|Market Indices Images]]
 - [[_COMMUNITY_Crypto Payment Icons|Crypto Payment Icons]]
@@ -110,7 +116,6 @@
 - [[_COMMUNITY_Live Watchlist Page|Live Watchlist Page]]
 - [[_COMMUNITY_Web Trader Page|Web Trader Page]]
 - [[_COMMUNITY_Forex Currency Icons|Forex Currency Icons]]
-- [[_COMMUNITY_Shared Types Index|Shared Types Index]]
 - [[_COMMUNITY_ETF Market Icon Elements|ETF Market Icon Elements]]
 - [[_COMMUNITY_ETF Market Image|ETF Market Image]]
 - [[_COMMUNITY_Stocks Market Image|Stocks Market Image]]
@@ -119,11 +124,10 @@
 - [[_COMMUNITY_Account Types Seed Data|Account Types Seed Data]]
 - [[_COMMUNITY_Accounts Loading State|Accounts Loading State]]
 - [[_COMMUNITY_AI CRM Loading State|AI CRM Loading State]]
-- [[_COMMUNITY_Platform Loading State|Platform Loading State]]
-- [[_COMMUNITY_Fees Loading State|Fees Loading State]]
+- [[_COMMUNITY_Community 107|Community 107]]
+- [[_COMMUNITY_Community 108|Community 108]]
 - [[_COMMUNITY_Funding Loading State|Funding Loading State]]
 - [[_COMMUNITY_IB Loading State|IB Loading State]]
-- [[_COMMUNITY_Promo Loading State|Promo Loading State]]
 - [[_COMMUNITY_Execution SVG Icon|Execution SVG Icon]]
 - [[_COMMUNITY_Crypto Category Icon|Crypto Category Icon]]
 - [[_COMMUNITY_Indices Market Icon|Indices Market Icon]]
@@ -135,8 +139,9 @@
 - [[_COMMUNITY_Normalize Schema Script|Normalize Schema Script]]
 - [[_COMMUNITY_Account Copy Update Script|Account Copy Update Script]]
 - [[_COMMUNITY_Turborepo Build Config|Turborepo Build Config]]
-- [[_COMMUNITY_Turborepo Test Config|Turborepo Test Config]]
+- [[_COMMUNITY_Community 123|Community 123]]
 - [[_COMMUNITY_Next.js Config|Next.js Config]]
+- [[_COMMUNITY_TOTP Mock (Admin Bundle)|TOTP Mock (Admin Bundle)]]
 - [[_COMMUNITY_CMS ESLint Config|CMS ESLint Config]]
 - [[_COMMUNITY_Email Transport Mock|Email Transport Mock]]
 - [[_COMMUNITY_Segregated Funds Icon|Segregated Funds Icon]]
@@ -150,10 +155,10 @@
 - [[_COMMUNITY_Favicon & Brand Logo|Favicon & Brand Logo]]
 - [[_COMMUNITY_Logo Light Public Asset|Logo Light Public Asset]]
 - [[_COMMUNITY_Tailwind Config|Tailwind Config]]
-- [[_COMMUNITY_TOTP Mock Enforce|TOTP Mock Enforce]]
+- [[_COMMUNITY_Community 143|Community 143]]
 - [[_COMMUNITY_TOTP Mock Disable|TOTP Mock Disable]]
 - [[_COMMUNITY_TOTP Mock Setup|TOTP Mock Setup]]
-- [[_COMMUNITY_TOTP Mock Verify|TOTP Mock Verify]]
+- [[_COMMUNITY_Community 146|Community 146]]
 - [[_COMMUNITY_CMS Collections Guide|CMS Collections Guide]]
 - [[_COMMUNITY_Authority Icon|Authority Icon]]
 - [[_COMMUNITY_Commodities Icon|Commodities Icon]]
@@ -188,19 +193,54 @@
 - [[_COMMUNITY_Skrill Logo|Skrill Logo]]
 - [[_COMMUNITY_Favicon Dark Image|Favicon Dark Image]]
 - [[_COMMUNITY_Logo Dark Public Asset|Logo Dark Public Asset]]
+- [[_COMMUNITY_Community 193|Community 193]]
+- [[_COMMUNITY_Community 194|Community 194]]
+- [[_COMMUNITY_Community 195|Community 195]]
+- [[_COMMUNITY_Community 196|Community 196]]
+- [[_COMMUNITY_Community 197|Community 197]]
+- [[_COMMUNITY_Community 198|Community 198]]
+- [[_COMMUNITY_Community 199|Community 199]]
+- [[_COMMUNITY_Community 200|Community 200]]
+- [[_COMMUNITY_Community 201|Community 201]]
+- [[_COMMUNITY_Community 202|Community 202]]
+- [[_COMMUNITY_Community 203|Community 203]]
+- [[_COMMUNITY_Community 204|Community 204]]
+- [[_COMMUNITY_Community 205|Community 205]]
+- [[_COMMUNITY_Community 206|Community 206]]
+- [[_COMMUNITY_Community 207|Community 207]]
+- [[_COMMUNITY_Community 208|Community 208]]
+- [[_COMMUNITY_Community 209|Community 209]]
+- [[_COMMUNITY_Community 210|Community 210]]
+- [[_COMMUNITY_Community 211|Community 211]]
+- [[_COMMUNITY_Community 212|Community 212]]
+- [[_COMMUNITY_Community 213|Community 213]]
+- [[_COMMUNITY_Community 214|Community 214]]
+- [[_COMMUNITY_Community 215|Community 215]]
+- [[_COMMUNITY_Community 216|Community 216]]
+- [[_COMMUNITY_Community 217|Community 217]]
+- [[_COMMUNITY_Community 218|Community 218]]
+- [[_COMMUNITY_Community 219|Community 219]]
+- [[_COMMUNITY_Community 220|Community 220]]
+- [[_COMMUNITY_Community 221|Community 221]]
+- [[_COMMUNITY_Community 222|Community 222]]
+- [[_COMMUNITY_Community 223|Community 223]]
+- [[_COMMUNITY_Community 224|Community 224]]
+- [[_COMMUNITY_Community 225|Community 225]]
+- [[_COMMUNITY_Community 227|Community 227]]
+- [[_COMMUNITY_Community 228|Community 228]]
 
 ## God Nodes (most connected - your core abstractions)
 
-1. `SectionKicker()` - 39 edges
-2. `CtaBanner()` - 35 edges
-3. `CMS API Reference Document` - 30 edges
-4. `main()` - 18 edges
-5. `Pulse()` - 15 edges
-6. `CtaBannerSkeleton()` - 15 edges
-7. `compilerOptions` - 15 edges
-8. `slugField()` - 13 edges
-9. `patch()` - 13 edges
-10. `scripts` - 12 edges
+1. `SectionKicker()` - 44 edges
+2. `CtaBanner()` - 36 edges
+3. `Pulse()` - 30 edges
+4. `CMS API Reference Document` - 30 edges
+5. `CtaBannerSkeleton()` - 28 edges
+6. `main()` - 22 edges
+7. `publicReadWhere()` - 20 edges
+8. `HeroSkeleton()` - 20 edges
+9. `deleteAllDocs()` - 19 edges
+10. `patch()` - 17 edges
 
 ## Surprising Connections (you probably didn't know these)
 
@@ -225,42 +265,42 @@
 - **MT5 Fallback: MT5 Service, CMS Endpoint, and Shared Types form the live-vs-static data pattern** — claude_apps_mt5_service, cms_api_endpoint_mt5_instruments, claude_mt5_fallback_pattern, claude_packages_types [EXTRACTED 1.00]
 - **Bilingual EN/AR Stack: Payload locale, next-intl, and RTL packages work together** — claude_payload_localization, claude_next_intl_i18n, claude_rtl_arabic_support, claude_packages_types [INFERRED 0.85]
 
-## Communities (189 total, 75 thin omitted)
+## Communities (228 total, 68 thin omitted)
 
 ### Community 0 - "CMS Collections & Data Models"
 
-Cohesion: 0.05
-Nodes (34): AccountTypes, Awards, BlogPosts, Careers, CompanyContent, ContactSubmissions, EducationContent, FAQs (+26 more)
+Cohesion: 0.15
+Nodes (7): ContactSubmissions, Media, NewsletterSubscribers, WebinarRegistrations, emailTransport, SiteSettings, allowedOrigins
 
 ### Community 1 - "Auth & TOTP 2FA"
 
-Cohesion: 0.05
-Nodes (44): AuthedUser, enforceTotpOnLogin(), readSecrets(), totpDisableHandler(), totpSetupHandler(), totpVerifyHandler(), CacheEntry, cacheGet() (+36 more)
+Cohesion: 0.22
+Nodes (10): CacheEntry, cacheGet(), cacheSet(), store, fetchMt5Instruments(), markAccountTypes(), markInstruments(), runSync() (+2 more)
 
 ### Community 2 - "CMS App & Dependencies"
 
 Cohesion: 0.05
-Nodes (43): dependencies, cross-env, dotenv, express, express-rate-limit, @newera365/types, nodemailer, otplib (+35 more)
+Nodes (43): dependencies, cross-env, dotenv, express, express-rate-limit, @newera365/types, nodemailer, payload (+35 more)
 
 ### Community 3 - "UI Component Library"
 
-Cohesion: 0.08
-Nodes (29): ArbitrageSection(), CARDS, Button, ButtonProps, ButtonSize, ButtonVariant, sizeClasses, variantClasses (+21 more)
+Cohesion: 0.16
+Nodes (17): ArbitrageSection(), CtaBannerDemo(), FeaturesSection(), HeroSectionDemo(), MarketsSectionDemo(), StatsSectionDemo(), ThreeStepsSectionDemo(), SYMBOLS (+9 more)
 
 ### Community 4 - "Data Seeding Scripts"
 
-Cohesion: 0.14
-Nodes (34): api(), bodyBlocks(), createDoc(), deleteAllDocs(), api(), bodyBlocks(), deleteAll(), dotenv (+26 more)
+Cohesion: 0.11
+Nodes (52): api(), ASSET_EXTS, ASSETS_DIR, bodyBlocks(), createDoc(), deleteAllDocs(), api(), bodyBlocks() (+44 more)
 
 ### Community 5 - "Web App & Dependencies"
 
-Cohesion: 0.06
-Nodes (35): dependencies, framer-motion, @newera365/types, @newera365/ui, next, next-intl, next-themes, react (+27 more)
+Cohesion: 0.05
+Nodes (37): dependencies, @newera365/types, @newera365/ui, next, next-intl, next-themes, react, react-dom (+29 more)
 
 ### Community 6 - "Payload Generated Types"
 
 Cohesion: 0.07
-Nodes (28): AccountType, Award, BlogPost, Career, CompanyContent, Config, ContactSubmission, EducationContent (+20 more)
+Nodes (29): AccountType, AnalystCall, Award, BlogPost, Career, CompanyMilestone, Config, ContactSubmission (+21 more)
 
 ### Community 7 - "MT5 Service"
 
@@ -270,7 +310,7 @@ Nodes (27): dependencies, cors, dotenv, express, @newera365/types, description, 
 ### Community 8 - "Company Pages"
 
 Cohesion: 0.10
-Nodes (22): AboutRoute(), mapAward(), mapTeamMember(), metadata, resolveUrl(), AwardsRoute(), metadata, AboutPage() (+14 more)
+Nodes (21): AboutRoute(), mapTeamMember(), metadata, resolveUrl(), AwardsRoute(), metadata, AboutPage(), AboutPageProps (+13 more)
 
 ### Community 9 - "CMS REST API Reference"
 
@@ -279,18 +319,18 @@ Nodes (26): CMS Collection: account-types, CMS Collection: awards, CMS Collectio
 
 ### Community 10 - "Loading Skeleton Components"
 
-Cohesion: 0.26
-Nodes (9): ArticleListSkeleton(), CardGridSkeleton(), CtaBannerSkeleton(), DarkPulse(), FormSkeleton(), HeroSkeleton(), Pulse(), StatsGridSkeleton() (+1 more)
+Cohesion: 0.20
+Nodes (7): CtaBannerSkeleton(), DarkCtaSkeleton(), FormSkeleton(), HeroSkeleton(), Pulse(), TableSkeleton(), TabRowSkeleton()
 
 ### Community 11 - "UI Package"
 
-Cohesion: 0.09
-Nodes (22): devDependencies, eslint, @newera365/config, @newera365/types, @types/react, @types/react-dom, typescript, main (+14 more)
+Cohesion: 0.07
+Nodes (26): dependencies, framer-motion, gsap, three, devDependencies, eslint, @newera365/config, @newera365/types (+18 more)
 
 ### Community 12 - "Platform Pages"
 
-Cohesion: 0.10
-Nodes (9): Props, CmsPlatformDownloads, DEVICES, PLATFORM_CARDS, PlatformPage(), PlatformPageProps, TOOLS, PlatformSlug (+1 more)
+Cohesion: 0.05
+Nodes (24): Props, Button, ButtonProps, ButtonSize, ButtonVariant, sizeClasses, variantClasses, CmsPlatformDownloads (+16 more)
 
 ### Community 13 - "Funding & Payment Page"
 
@@ -299,18 +339,23 @@ Nodes (10): CmsPaymentMethodItem, FundingPage(), FundingPageProps, METHOD_TYPE_I
 
 ### Community 14 - "IB & Contact Pages"
 
-Cohesion: 0.12
-Nodes (17): IBPage(), ContactRoute(), metadata, IBRoute(), BLOG_CAT_TO_ASSET, CmsAccountType, CmsBlogPost, CmsIBContent (+9 more)
+Cohesion: 0.09
+Nodes (22): IBPage(), WebinarsPage(), metadata, NEWS_CAT_TO_ASSET, IBRoute(), CmsAccountType, CmsAnalystCall, CmsArticle (+14 more)
 
 ### Community 15 - "Accounts & Calendar Pages"
 
-Cohesion: 0.13
-Nodes (8): AccountsRoute(), AccountsPage(), CtaBanner(), EconomicCalendarPage(), FibonacciCalculatorPage(), LiveWatchlistPage(), NO_CTA_SUFFIXES, getAccountTypes()
+Cohesion: 0.10
+Nodes (12): AccountsRoute(), Category, CATEGORY_META, Props, VALID_CATEGORIES, AccountsPage(), CtaBanner(), EconomicCalendarPage() (+4 more)
+
+### Community 16 - "Page Loading States"
+
+Cohesion: 0.12
+Nodes (3): CalendarSkeleton(), ToolsPageSkeleton(), WatchlistSkeleton()
 
 ### Community 17 - "Blog & Research Detail"
 
-Cohesion: 0.17
-Nodes (14): generateMetadata(), Props, generateMetadata(), Props, ArticleDetailData, CAT_COLORS, RELATED, RelatedInstrument (+6 more)
+Cohesion: 0.10
+Nodes (28): generateMetadata(), Props, generateMetadata(), Props, generateMetadata(), generateStaticParams(), Props, MarketCategoryRoute() (+20 more)
 
 ### Community 18 - "TypeScript Base Config"
 
@@ -319,13 +364,13 @@ Nodes (16): compilerOptions, declaration, esModuleInterop, forceConsistentCasing
 
 ### Community 19 - "Header Navigation"
 
-Cohesion: 0.17
-Nodes (10): DropdownItem, Header(), NavItem, useNavItems(), LanguageToggle(), LanguageToggleProps, MobileMenu(), MobileMenuProps (+2 more)
+Cohesion: 0.22
+Nodes (6): DropdownItem, NavItem, MobileMenu(), MobileMenuProps, NavGroup, useNavGroups()
 
 ### Community 20 - "Pivot Calculator"
 
-Cohesion: 0.17
-Nodes (10): calcCamarilla(), calcClassical(), calcFibonacci(), calcWoodie(), computePivots(), fmt(), PivotCalculatorPage(), PivotLevels (+2 more)
+Cohesion: 0.05
+Nodes (26): CalcSelect(), CalcSelectProps, EXTENSION_RATIOS, FibDirection, FibLevel, FibonacciCalculatorPage(), RETRACEMENT_RATIOS, calcCamarilla() (+18 more)
 
 ### Community 21 - "Shared Types Package"
 
@@ -339,8 +384,8 @@ Nodes (14): compilerOptions, isolatedModules, jsx, lib, module, moduleResolution
 
 ### Community 23 - "Footer & Layout"
 
-Cohesion: 0.17
-Nodes (11): CmsFooterColumn, CmsSocialLinks, Footer(), PageFade(), SmartCtaBanner(), inter, isLocale(), jetbrainsMono (+3 more)
+Cohesion: 0.12
+Nodes (14): Analytics(), CookieConsent(), CmsFooterColumn, CmsSocialLinks, Footer(), PAYMENT_METHODS, PageFade(), SmartCtaBanner() (+6 more)
 
 ### Community 24 - "Media & Press Page"
 
@@ -359,38 +404,38 @@ Nodes (14): compilerOptions, allowJs, incremental, jsx, lib, noEmit, paths, plug
 
 ### Community 27 - "Analyst Chart Page"
 
-Cohesion: 0.14
-Nodes (9): ANALYST, AnalystChartPage(), CALLS, FilterTab, PairCall, Sentiment, SENTIMENT_STYLES, TABS (+1 more)
+Cohesion: 0.11
+Nodes (16): AnalystChartRoute(), ANALYST, AnalystChartPage(), AnalystChartPageProps, CALLS, CmsAnalystCallItem, CmsAnalystProfile, FilterTab (+8 more)
 
 ### Community 28 - "Profit Calculator"
 
-Cohesion: 0.14
-Nodes (7): CONTRACT_SIZES, Instrument, INSTRUMENTS, PIP_SIZES, ProfitCalculatorPage(), ProfitResult, TabMode
+Cohesion: 0.09
+Nodes (20): `apps/cms` — Payload CMS v2 + Express, `apps/mt5-service` — Mock MT5 bridge, `apps/web` — Next.js 14 frontend, Architecture, Commands, Company, Completed Frontend Pages, Conventions & gotchas (+12 more)
 
 ### Community 29 - "Promotions Page"
 
-Cohesion: 0.18
-Nodes (9): CmsPromoItem, PromoPage(), PromoPageProps, TAG_BG_LIGHT, useOfferEndsLabel(), CmsPromotion, getPromotions(), metadata (+1 more)
+Cohesion: 0.16
+Nodes (8): CmsPromoItem, PromoPage(), PromoPageProps, useOfferEndsLabel(), CmsPromotion, getPromotions(), metadata, PromotionsRoute()
 
 ### Community 30 - "Research & Blog Listing"
 
-Cohesion: 0.14
-Nodes (10): ArticleDisplay, ArticleItem, ARTICLES, ASSET_TO_CATEGORY, CAT_COLORS, CATEGORIES, Category, CmsResearchArticle (+2 more)
+Cohesion: 0.17
+Nodes (10): DropdownItem, HeaderDemo(), NavItem, useNavItems(), LanguageToggle(), LanguageToggleProps, MobileMenuDemo(), MobileMenuDemoProps (+2 more)
 
 ### Community 31 - "Root Package Config"
 
-Cohesion: 0.14
-Nodes (13): description, engines, node, npm, lint-staged, \*.{ts,tsx,js,jsx,json,md}, name, overrides (+5 more)
+Cohesion: 0.17
+Nodes (11): description, engines, node, npm, lint-staged, \*.{ts,tsx,js,jsx,json,md}, name, packageManager (+3 more)
 
 ### Community 32 - "MT5 Service Entry"
 
-Cohesion: 0.24
-Nodes (9): app, port, requireInternalToken(), safeTokenCompare(), server, getInstrument(), getInstruments(), roundLike() (+1 more)
+Cohesion: 0.22
+Nodes (10): app, MT5_CORS_ORIGINS, port, requireInternalToken(), safeTokenCompare(), server, getInstrument(), getInstruments() (+2 more)
 
 ### Community 33 - "Guides & Market Category"
 
-Cohesion: 0.20
-Nodes (10): generateMetadata(), Props, MarketCategoryRoute(), CmsGuideDetail, GuideDetailPage(), fetchBySlug(), getGuideBySlug(), NotFound() (+2 more)
+Cohesion: 0.15
+Nodes (13): BASE, entry(), sitemap(), STATIC_PATHS, generateStaticParams(), generateStaticParams(), BlogRoute(), CmsGuide (+5 more)
 
 ### Community 34 - "Architecture Concepts"
 
@@ -399,33 +444,33 @@ Nodes (12): apps/mt5-service — Mock MT5 Bridge, apps/web — Next.js 14 Fronte
 
 ### Community 35 - "Account Comparison Page"
 
-Cohesion: 0.20
-Nodes (6): AccountsPageProps, CmsAccountType, MATRIX_ROWS, NewsletterPage(), SectionKicker(), SectionKickerProps
+Cohesion: 0.33
+Nodes (4): AccountsPageProps, AR_FEATURE_VALUES, CmsAccountType, MATRIX_ROW_DATA
 
 ### Community 36 - "Education Hub"
 
 Cohesion: 0.18
-Nodes (9): CATEGORIES, CATEGORY_ICONS, CmsEducationItem, EducationHubPage(), EducationHubPageProps, FEATURED, PINNED_GUIDES, metadata (+1 more)
+Nodes (8): ArticleDisplay, ArticleItem, CAT_COLORS, catColor(), CmsResearchArticle, ResearchPage(), ResearchPageProps, SPARKLINES
 
 ### Community 37 - "Instruments Listing"
 
-Cohesion: 0.20
-Nodes (10): ASSET_CLASS_MAP, CATEGORIES, Category, InstrumentItem, InstrumentsPageProps, OTHER_MARKETS, SPEC_ROWS, CATEGORY_META (+2 more)
+Cohesion: 0.16
+Nodes (9): ChartProvider, ChartWidget(), Mt5, TradingView, MARKET_OVERVIEW_CONFIG, TradingViewWidget(), TradingViewWidgetProps, WIDGET_URLS (+1 more)
 
 ### Community 38 - "Spread Comparator"
 
-Cohesion: 0.21
-Nodes (8): InstrumentsPage(), CmsSpreadInstrument, COMMISSIONS, SpreadComparatorPage(), SpreadComparatorPageProps, InstrumentsRoute(), getInstruments(), SpreadComparatorRoute()
+Cohesion: 0.10
+Nodes (17): CmsSpreadRow, FeesPage(), FeesPageProps, OTHER_CHARGES, ProfitCalculatorPage(), CmsSpreadInstrument, COMMISSIONS, SpreadComparatorPage() (+9 more)
 
 ### Community 39 - "Media Listing & Webinars"
 
-Cohesion: 0.17
-Nodes (7): CATEGORY_TABS, CmsWebinarItem, EpisodeItem, MediaListingPageProps, TAG_COLORS, TYPE_TABS, TypeTab
+Cohesion: 0.14
+Nodes (9): GuidesPageProps, CmsWebinarItem, EpisodeItem, MediaListingPageProps, TAG_COLORS, TYPE_TABS, TypeTab, Pagination() (+1 more)
 
 ### Community 40 - "Husky & Dev Tooling"
 
-Cohesion: 0.17
-Nodes (10): husky.sh script, devDependencies, husky, lint-staged, prettier, prettier-plugin-tailwindcss, turbo, typescript (+2 more)
+Cohesion: 0.25
+Nodes (7): husky.sh script, devDependencies, husky, lint-staged, prettier, prettier-plugin-tailwindcss, typescript
 
 ### Community 41 - "MT5 TypeScript Config"
 
@@ -439,43 +484,53 @@ Nodes (10): ar, arFlat, arKeys, en, enFlat, enKeys, errors, fs (+2 more)
 
 ### Community 43 - "Blog & News Pages"
 
-Cohesion: 0.20
-Nodes (8): BlogRoute(), ResearchPage(), metadata, NEWS_CAT_TO_ASSET, CmsArticle, CmsNews, fetchCollection(), getBlogPosts()
+Cohesion: 0.10
+Nodes (20): 1. Clone & Install, 2. Environment Variables, 3. First-Time CMS Setup, 4. Run Commands, 5. Project Structure, 6. CMS Collections at a Glance, 7. CI / Git Workflow, 8. Key Gotchas (+12 more)
 
 ### Community 44 - "Careers Page"
 
-Cohesion: 0.22
-Nodes (8): CareersRoute(), metadata, CareersPage(), CareersPageProps, CmsJobItem, TYPE_COLORS, CmsCareer, getCareers()
+Cohesion: 0.17
+Nodes (11): ASSET_CLASS_MAP, CATEGORIES, Category, CATEGORY_TV_SYMBOL, CHART_PERIOD_RANGE, CHART_PERIODS, ChartPeriod, InstrumentsPage() (+3 more)
 
 ### Community 45 - "CMS Architecture Docs"
 
 Cohesion: 0.20
 Nodes (11): apps/cms — Payload CMS v2 + Express, 17 CMS Collections, Collection Hooks (deriveAlphabeticalIndex, archivePreviousLegalVersion), Custom REST Endpoints (endpoints/index.ts), Payload Native Localization (en/ar), Rate Limiting via Postgres (rate_limit_hits table), SiteSettings Global (Payload), TOTP 2FA for Admin Users (+3 more)
 
+### Community 46 - "Education Loading States"
+
+Cohesion: 0.11
+Nodes (6): EbooksSkeleton(), EducationHubSkeleton(), GlossarySkeleton(), GuidesSkeleton(), MediaListingSkeleton(), CardGridSkeleton()
+
 ### Community 47 - "Legal Page"
 
-Cohesion: 0.18
-Nodes (7): DOC_CONTENT, DocId, DOCUMENTS, LegalPageProps, PAGE_TYPE_LABELS, SectionProps, TOC
+Cohesion: 0.15
+Nodes (10): DOC_ALIAS, DOC_CONTENT, DocId, DOCUMENTS, formatLegalDate(), LegalPage(), LegalPageProps, PAGE_TYPE_LABELS (+2 more)
+
+### Community 48 - "Support Loading States"
+
+Cohesion: 0.12
+Nodes (5): ContactPageSkeleton(), LegalPageSkeleton(), LiveChatPageSkeleton(), NewsletterPageSkeleton(), SupportPageSkeleton()
 
 ### Community 49 - "Trader Tools Calculator"
 
-Cohesion: 0.20
-Nodes (5): CmsCalculatorInstrument, ToolTab, TraderToolsPage(), TraderToolsPageProps, TraderToolsRoute()
+Cohesion: 0.08
+Nodes (23): 0. Third-party stack (client-provided), 1. Critical findings — read before planning the sprint, 2. Ticket status — NE-041 → NE-051, 3. Environment variable matrix (production values), 4. Launch runbook (NE-051), 6. Cloudflare frontend deployment (Option A — decided), 7. Pre-production gap review (2026-06-18) — beyond the tickets, `apps/cms` (Railway) (+15 more)
 
 ### Community 50 - "Ebooks & Gated Content"
 
-Cohesion: 0.22
-Nodes (7): BENEFITS, CmsEbookItem, EbooksPage(), EbooksPageProps, OTHER_EBOOKS, metadata, CmsMedia
+Cohesion: 0.09
+Nodes (21): AudioRoute(), metadata, CmsEbookItem, EbooksPage(), EbooksPageProps, CATEGORIES, CATEGORY_ICONS, CmsEducationItem (+13 more)
 
 ### Community 51 - "FAQ Page"
 
-Cohesion: 0.20
-Nodes (6): CATEGORY_STYLES, CMS_CATEGORY_LABELS, CmsFaqItem, FaqGroup, FaqItem, FaqPageProps
+Cohesion: 0.12
+Nodes (14): CAT_I18N, CAT_TAG_STYLE, CATEGORY_STYLES, CMS_CATEGORY_LABELS, CmsFaqItem, FaqGroup, FaqItem, FaqPage() (+6 more)
 
 ### Community 52 - "Fees Page"
 
-Cohesion: 0.22
-Nodes (7): CmsSpreadRow, FeesPage(), FeesPageProps, OTHER_CHARGES, FeesRoute(), metadata, CmsInstrument
+Cohesion: 0.17
+Nodes (7): CARDS, AR_STAT_VALUES, IBCmsContent, PARTNER_TYPES, STEP_NUMS, StepItem, SectionKickerProps
 
 ### Community 53 - "GUIDE & Env Vars Docs"
 
@@ -484,48 +539,38 @@ Nodes (10): db-reset.mjs — Dev Database Wipe Script, CMS Environment Variables
 
 ### Community 54 - "i18n Routing & Requests"
 
-Cohesion: 0.27
-Nodes (7): { Link, redirect, usePathname, useRouter, getPathname }, routing, Locale, LOCALES, config, intlMiddleware, middleware()
+Cohesion: 0.15
+Nodes (12): DELIVERABLE, GROUND RULES, Master Prompt — CMS Pages & Integration Audit (NewEra365), ROLE, STEP 1 — Build the collection ↔ fetcher ↔ page matrix, STEP 2 — Field-completeness audit (per collection), STEP 3 — Localization correctness, STEP 4 — Fallback & failure modes (+4 more)
 
 ### Community 55 - "Turborepo Pipeline Config"
 
 Cohesion: 0.20
-Nodes (10): cache, cache, persistent, dependsOn, tasks, clean, dev, lint (+2 more)
+Nodes (10): cache, dependsOn, tasks, clean, lint, test, type-check, dependsOn (+2 more)
 
 ### Community 57 - "Fibonacci Calculator"
 
-Cohesion: 0.22
-Nodes (4): EXTENSION_RATIOS, FibDirection, FibLevel, RETRACEMENT_RATIOS
+Cohesion: 0.18
+Nodes (10): Database connection pool, Fixed in this codebase, Known Vulnerabilities (npm audit), Media storage is ephemeral, Operational caveats (not yet hardened), Runtime mitigations in place (Cloudflare WAF, already planned), Security Notes — NewEra365 Monorepo, Slug / locale compound uniqueness (DB migration) (+2 more)
 
 ### Community 58 - "Guide Detail Page"
 
-Cohesion: 0.33
-Nodes (7): GuideDetailProps, extractHeadings(), extractText(), renderLeaf(), renderNode(), RichText(), RichTextProps
+Cohesion: 0.24
+Nodes (11): CmsGuideDetail, GuideDetailProps, extractHeadings(), extractText(), renderLeaf(), renderNode(), RichText(), RichTextProps (+3 more)
 
 ### Community 59 - "Guides Listing"
 
-Cohesion: 0.28
-Nodes (6): CmsGuide, GuidesPage(), GuidesPageProps, GuidesRoute(), metadata, getGuides()
+Cohesion: 0.39
+Nodes (8): ACCOUNT_AR_FEATURES, ACCOUNT_AR_NAMES, login(), main(), patchAccountTypes(), patchPaymentMethods(), PAYMENT_AR_NAMES, request()
 
 ### Community 60 - "Legal Page Components"
 
-Cohesion: 0.25
-Nodes (7): CmsLegalDocument, LegalPage(), LegalRoute(), metadata, Props, CmsLegalPage, getLegalPages()
-
-### Community 61 - "Live Chat Page"
-
-Cohesion: 0.22
-Nodes (5): AGENT_REPLIES, INITIAL_MESSAGES, LiveChatPage(), Message, QUICK_REPLIES
+Cohesion: 0.29
+Nodes (6): CmsLegalDocument, LegalRoute(), metadata, Props, CmsLegalPage, getLegalPages()
 
 ### Community 62 - "Media Video Listing"
 
-Cohesion: 0.25
-Nodes (7): CmsVideoItem, MediaListingPage(), EbooksRoute(), EducationRoute(), getEducationContent(), MediaRoute(), metadata
-
-### Community 63 - "Toast Notification Provider"
-
-Cohesion: 0.22
-Nodes (7): Toast, ToastContext, ToastContextValue, ToastProvider(), ToastType, typeStyles, useToast()
+Cohesion: 0.21
+Nodes (7): AuthModal(), AuthModalProps, AuthModalType, HeroChartCard(), STATUS_BADGE, WebinarItem, WebinarsPageProps
 
 ### Community 64 - "Root Package Scripts"
 
@@ -542,20 +587,20 @@ Nodes (7): DATABASE_URL, dbUrlMatch, \_\_dirname, envContent, envPath, migration
 Cohesion: 0.32
 Nodes (8): CMS Public Directory, Forex/CFD Trading, Forex/Trading Candlestick Iconography, NewEra365 Brand Identity, NewEra Brand Identity, Candlestick Chart Icon (Logo Mark), NewEra Logo Dark PNG, NewEra Logo (JPEG)
 
-### Community 68 - "Contact Page"
+### Community 68 - "Community 68"
 
-Cohesion: 0.25
-Nodes (7): Channel, CHANNELS, CmsContactDetails, ContactPage(), ContactPageProps, Topic, TOPICS
+Cohesion: 0.11
+Nodes (17): ✅ AUDIT COMPLETE — loop concluded (iter 5), Audit surface, COMPLETE JUNK INVENTORY (user deleting in admin UI), F1 — Blog/analysis "random date" — FIXED (iteration 1) ✅, F2 — CMS→frontend parity (wiring level) — CLEAN (iteration 2) ✅, F3 — Build-time CMS fetch failure → silent empty pages — NOT A BUG (iter 3) ℹ️, F4 — Live site audit — MOSTLY HEALTHY (iter 4) ✅, F5 — Junk test blog posts on PRODUCTION — NEEDS APPROVAL to fix (iter 5) ⚠️ (+9 more)
 
-### Community 69 - "Economic Calendar Page"
+### Community 69 - "Community 69"
 
-Cohesion: 0.25
-Nodes (7): CURRENCIES, Currency, CURRENCY_FLAG, EVENTS, Impact, IMPACT_DOT, IMPACTS
+Cohesion: 0.18
+Nodes (10): InstrumentItem, ALL_MARKETS, CATEGORY_META, CATEGORY_TV_SYMBOL, CHART_PERIOD_RANGE, CHART_PERIODS, ChartPeriod, INDICES_MARKET_QUOTES_CONFIG (+2 more)
 
 ### Community 70 - "FAQ Route & Page"
 
-Cohesion: 0.29
-Nodes (6): FaqPage(), FaqsRoute(), metadata, Props, CmsFaq, getFaqs()
+Cohesion: 0.16
+Nodes (14): AwardsPageProps, CARD_GRADIENTS, FALLBACK_CATS, YEAR_FILTERS, YearFilter, cmsFaqsToGroups(), distinctCategories(), humanize() (+6 more)
 
 ### Community 71 - "Media Press Seed Script"
 
@@ -572,20 +617,25 @@ Nodes (7): compilerOptions, lib, noEmit, outDir, rootDir, extends, include
 Cohesion: 0.25
 Nodes (7): compilerOptions, declaration, declarationMap, module, moduleResolution, noEmit, extends
 
+### Community 76 - "Features Section"
+
+Cohesion: 0.19
+Nodes (9): CompanyMilestones, FAQ_CATEGORIES, FAQs, localizationFields, publicReadWhere(), slugify(), IBContent, MediaPress (+1 more)
+
 ### Community 77 - "Glossary Page"
 
-Cohesion: 0.33
-Nodes (6): ALPHABET, CATEGORY_COLORS, CmsGlossaryTerm, GlossaryPageProps, GlossaryTerm, SlateNode
+Cohesion: 0.08
+Nodes (23): 2.1 `apps/cms/src/email/transport.ts` — **rewrite**, 2.2 `apps/cms/src/email/resend.ts` → rename to `apps/cms/src/email/mailer.ts`, 2.3 `apps/cms/src/endpoints/index.ts` — drop audience sync + fix import, 2.4 `apps/cms/src/payload.config.ts`, 2.5 `apps/cms/src/email/transport.mock.ts` — **no change**, 2.6 `apps/cms/package.json`, 2.7 Docs, Add (+15 more)
 
-### Community 78 - "Research & CMS Data Utils"
+### Community 78 - "Community 78"
 
-Cohesion: 0.38
-Nodes (5): CmsResearchReportItem, CmsResearchReport, getResearchArticles(), getResearchReports(), ResearchRoute()
+Cohesion: 0.18
+Nodes (9): seoFields, slugField(), News, NEWS_CATEGORIES, PROMO_TAGS, Promotions, ResearchReports, TeamMembers (+1 more)
 
 ### Community 79 - "Ticker Strip Component"
 
-Cohesion: 0.29
-Nodes (4): DEFAULT_TICKERS, TickerItem, TickerStrip(), TickerStripProps
+Cohesion: 0.10
+Nodes (13): AwardsPageSkeleton(), MARKETS, MarketItem, MarketsSectionGrid(), PlatformPageSkeleton(), RiskBanner(), RiskBannerProps, StatsGridSkeleton() (+5 more)
 
 ### Community 80 - "Security & Vulnerability Docs"
 
@@ -594,8 +644,8 @@ Nodes (7): Cloudflare WAF Runtime Mitigations, Postgres Pool Capped at max:5 (Ne
 
 ### Community 81 - "MT5 Asset Classes & Types"
 
-Cohesion: 0.29
-Nodes (5): ASSET_CLASSES, AssetClass, InstrumentSpec, MT5DataSource, MT5Response
+Cohesion: 0.40
+Nodes (4): Getting started, Monorepo layout, NewEra365, Scripts
 
 ### Community 82 - "UI TypeScript Config"
 
@@ -604,18 +654,13 @@ Nodes (6): compilerOptions, jsx, lib, noEmit, extends, include
 
 ### Community 84 - "Market Category Page"
 
-Cohesion: 0.33
-Nodes (4): Category, Props, VALID_CATEGORIES, MarketCategoryPage()
+Cohesion: 0.21
+Nodes (7): AWARD_CATEGORIES, Awards, Inner, CategoryOption, CategorySelectField(), CategorySelectFieldProps, labelText()
 
-### Community 85 - "Glossary Route & Page"
+### Community 87 - "Community 87"
 
-Cohesion: 0.40
-Nodes (4): GlossaryPage(), GlossaryRoute(), metadata, getGlossaryTerms()
-
-### Community 87 - "News Section Component"
-
-Cohesion: 0.33
-Nodes (4): CATEGORY_COLORS, NewsSection(), NewsSectionItem, NewsSectionProps
+Cohesion: 0.22
+Nodes (8): CareersRoute(), metadata, CareersPage(), CareersPageProps, CmsJobItem, TYPE_COLORS, CmsCareer, getCareers()
 
 ### Community 88 - "Crypto Market Images"
 
@@ -642,30 +687,20 @@ Nodes (5): buildCommand, framework, headers, installCommand, outputDirectory
 Cohesion: 0.33
 Nodes (5): buildCommand, framework, headers, installCommand, outputDirectory
 
-### Community 94 - "IB Page"
-
-Cohesion: 0.40
-Nodes (4): IBCmsContent, PARTNER_TYPES, STEP_NUMS, StepItem
-
 ### Community 95 - "Live Watchlist Page"
 
-Cohesion: 0.40
-Nodes (4): MARKETS, Tab, TAB_SYMBOLS, TABS
+Cohesion: 0.22
+Nodes (7): Toast, ToastContext, ToastContextValue, ToastProvider(), ToastType, typeStyles, useToast()
 
 ### Community 96 - "Web Trader Page"
 
-Cohesion: 0.40
-Nodes (3): CANDLES, FEATURES, WebTraderPage()
+Cohesion: 0.50
+Nodes (4): api(), main(), stepsAr, stepsEn
 
 ### Community 97 - "Forex Currency Icons"
 
 Cohesion: 0.40
 Nodes (5): US Dollar Currency Symbol, Euro Currency Symbol, British Pound Currency Symbol, Japanese Yen Currency Symbol, Forex Icon
-
-### Community 98 - "Shared Types Index"
-
-Cohesion: 0.50
-Nodes (3): dir(), isRtl(), RTL_LOCALES
 
 ### Community 99 - "ETF Market Icon Elements"
 
@@ -686,6 +721,26 @@ Nodes (3): Candlestick Chart Visual, Dollar Sign Symbol, Stocks Market Hero Grap
 
 Cohesion: 0.67
 Nodes (3): getDirectConnectionString(), migrations, run()
+
+### Community 105 - "Accounts Loading State"
+
+Cohesion: 0.17
+Nodes (3): AboutPageSkeleton(), MediaPressPageSkeleton(), TradePageSkeleton()
+
+### Community 106 - "AI CRM Loading State"
+
+Cohesion: 0.15
+Nodes (4): AiCrmSkeleton(), FeesPageSkeleton(), PromoPageSkeleton(), DarkPulse()
+
+### Community 107 - "Community 107"
+
+Cohesion: 0.18
+Nodes (8): ANALYST_CATEGORIES, AnalystCalls, BLOG_CATEGORIES, BlogPosts, allowAnyCategory(), ASSET_CATEGORIES, EDITORIAL_CATEGORIES, MarketAnalysis
+
+### Community 108 - "Community 108"
+
+Cohesion: 0.24
+Nodes (7): CountUp(), RevealDemo(), SectionKicker(), CmsKpiStat, Geo, Step, ThreeStepsClient()
 
 ### Community 112 - "Execution SVG Icon"
 
@@ -722,10 +777,200 @@ Nodes (3): Candlestick Chart Visualization, Market Forex Hero Image, Forex Tradi
 Cohesion: 0.67
 Nodes (3): dependsOn, outputs, build
 
-### Community 123 - "Turborepo Test Config"
+### Community 123 - "Community 123"
+
+Cohesion: 0.50
+Nodes (3): Header(), useNavItems(), RouteChrome()
+
+### Community 124 - "Next.js Config"
+
+Cohesion: 0.50
+Nodes (3): cmsUrl, nextConfig, withNextIntl
+
+### Community 125 - "TOTP Mock (Admin Bundle)"
+
+Cohesion: 0.33
+Nodes (8): Ebook, ebooks, ensureEbook(), makeCover(), makePdf(), run(), TMP, uploadMedia()
+
+### Community 144 - "TOTP Mock Disable"
+
+Cohesion: 0.32
+Nodes (5): analyses, ensureAnalysis(), ensureNews(), news, run()
+
+### Community 145 - "TOTP Mock Setup"
+
+Cohesion: 0.29
+Nodes (3): AnalystChartSkeleton(), ArticleListSkeleton(), WebinarsSkeleton()
+
+### Community 193 - "Community 193"
+
+Cohesion: 0.33
+Nodes (5): CmsGlossaryTerm, GlossaryPage(), GlossaryRoute(), metadata, getGlossaryTerms()
+
+### Community 194 - "Community 194"
 
 Cohesion: 0.67
-Nodes (3): test, dependsOn, outputs
+Nodes (3): getDirectConnectionString(), run(), statements
+
+### Community 195 - "Community 195"
+
+Cohesion: 0.36
+Nodes (5): { Link, redirect, usePathname, useRouter, getPathname }, routing, config, intlMiddleware, middleware()
+
+### Community 196 - "Community 196"
+
+Cohesion: 0.12
+Nodes (12): buildGeo(), CHIPS, Dir, GEO, LineGeo, OPEN, PERIOD_CHANGE, points() (+4 more)
+
+### Community 197 - "Community 197"
+
+Cohesion: 0.20
+Nodes (9): Channel, CHANNELS, CmsContactDetails, ContactPage(), ContactPageProps, Topic, TOPICS, ContactRoute() (+1 more)
+
+### Community 198 - "Community 198"
+
+Cohesion: 0.29
+Nodes (5): ASSET_CLASSES, AssetClass, InstrumentSpec, MT5DataSource, MT5Response
+
+### Community 199 - "Community 199"
+
+Cohesion: 0.24
+Nodes (7): EducationContent, GLOSSARY_CATEGORIES, MEDIA_CATEGORIES, gatedUploadRead(), LegalPages, archivePreviousLegalVersion(), deriveAlphabeticalIndex()
+
+### Community 200 - "Community 200"
+
+Cohesion: 0.22
+Nodes (5): AccountTypes, ProductsInstruments, BADGE, Props, SyncStatus
+
+### Community 201 - "Community 201"
+
+Cohesion: 0.12
+Nodes (16): AREA 1 — CMS API & Security Core Review, [CRITICAL] Admin login lockout (brute-force protection) is disabled by overriding `auth` without `maxLoginAttempts`, [INFO] `/api/newsletter/confirm` welcome/sync side effects run on every confirm hit, and `confirmToken` lookup is not constant-time, [INFO] Contact/partners store `email` exactly as received (validated by regex) — acceptable, but no normalization, [INFO] `escapeHtml` does not encode for HTML-attribute/URL contexts; relies on callers escaping URLs into `href`, [INFO] `MT5_FETCH_TIMEOUT_MS` etc. parsed via `Number(...)` with no NaN guard, [INFO] Postgres rate-limit store: `init()` overwrites `windowMs`, and there is no expired-row cleanup (table grows unbounded), [INFO] `safeTokenCompare` is correct but length-comparison still short-circuits on mismatched length (+8 more)
+
+### Community 203 - "Community 203"
+
+Cohesion: 0.13
+Nodes (14): Area 2 — CMS Collections & Migrations: Code Review, CR-01: Public read on content collections returns unpublished / draft documents, CR-02: Gated-PDF email wall is fully bypassable via the public Media / ResearchReports / EducationContent API, Critical Issues, IN-01: `apply-schema.mjs` swallows real DDL failures and exits 0, IN-02: Webinars exposes Zoom registration link + webinar ID via public read, IN-03: `slugField` derives slug from raw user text without max-length / collision ceiling, Info (+6 more)
+
+### Community 204 - "Community 204"
+
+Cohesion: 0.14
+Nodes (13): Area 3: Web Frontend (Next.js) — Security & Bug Review, Info, [INFO] CMS responses are cast to `T` with no shape validation, [INFO] `fetchCollection` path segment is interpolated unescaped (no current exploit), [INFO] Inconsistent `generateStaticParams` locale handling across dynamic routes, [INFO] `slugToTitle` is locale-blind (English-style Title Case applied to AR routes), [INFO] vercel.json files ship deprecated `X-XSS-Protection` and duplicate weaker headers, Summary (+5 more)
+
+### Community 205 - "Community 205"
+
+Cohesion: 0.14
+Nodes (13): Config & build, CR-1 · Unpublished / draft / embargoed content readable via public REST API, CR-2 · "Gated" PDF / lead-capture wall is fully bypassable, CR-3 · Admin panel open to unlimited password brute-force, CRITICAL (3) — fix before launch, Headline, INFO (18) — quality / minor hardening, NewEra365 — Full Codebase Review (+5 more)
+
+### Community 206 - "Community 206"
+
+Cohesion: 0.14
+Nodes (8): CONTACT_RATE_LIMIT, MAX_PAYLOAD_RESULTS, MT5_ALLOWED_HOSTS, MT5_FETCH_TIMEOUT_MS, NEWSLETTER_RATE_LIMIT, RATE_LIMIT_WINDOW_MS, ReqWithId, WEBINAR_RATE_LIMIT
+
+### Community 207 - "Community 207"
+
+Cohesion: 0.15
+Nodes (12): Area 4 — Shared UI (packages/ui) & MT5 Service, Info, [INFO] AuthModal lacks focus trapping / initial focus for an `aria-modal` dialog, [INFO] `NEXT_LOCALE` cookie set without `Secure` flag, [INFO] RichText heading IDs can collide, producing duplicate DOM `id`s, [INFO] TradingView embed config is built from props without an explicit symbol allowlist, Summary, [WARNING] All four public forms fall back to `http://localhost:3001` when `NEXT_PUBLIC_CMS_URL` is unset — silent prod failure (+4 more)
+
+### Community 208 - "Community 208"
+
+Cohesion: 0.25
+Nodes (5): COMMODITY, ETF, Instrument, INSTRUMENTS, STOCK
+
+### Community 209 - "Community 209"
+
+Cohesion: 0.26
+Nodes (9): runSlugIndexMigration(), registerCustomEndpoints(), startMt5SyncJob(), main(), app, port, r2Host, start() (+1 more)
+
+### Community 210 - "Community 210"
+
+Cohesion: 0.31
+Nodes (10): Users, escapeHtml(), sendContactNotification(), sendEbookDelivery(), sendNewsletterConfirmation(), sendNewsletterWelcome(), sendPartnersNotification(), sendWebinarRegistrationConfirmation() (+2 more)
+
+### Community 211 - "Community 211"
+
+Cohesion: 0.33
+Nodes (5): dir(), isRtl(), Locale, LOCALES, RTL_LOCALES
+
+### Community 212 - "Community 212"
+
+Cohesion: 0.33
+Nodes (4): CATEGORY_COLORS, NewsSection(), NewsSectionItem, NewsSectionProps
+
+### Community 213 - "Community 213"
+
+Cohesion: 0.36
+Nodes (3): createRateLimitStoreFactory(), getPool(), PostgresRateLimitStore
+
+### Community 214 - "Community 214"
+
+Cohesion: 0.40
+Nodes (4): CmsResearchReportItem, CmsResearchReport, getResearchReports(), ResearchRoute()
+
+### Community 215 - "Community 215"
+
+Cohesion: 0.40
+Nodes (3): Geo, JourneyTimeline(), Milestone
+
+### Community 216 - "Community 216"
+
+Cohesion: 0.50
+Nodes (3): Careers, DEPARTMENTS, EMPLOYMENT_TYPES
+
+### Community 217 - "Community 217"
+
+Cohesion: 0.33
+Nodes (5): MailAttachment, PORT, main(), readMessageEnvelope(), REAL
+
+### Community 218 - "Community 218"
+
+Cohesion: 0.40
+Nodes (4): Audit-Fix Report — NewEra365, Deferred — need infra, schema, or a product decision (17), Fixed (20), Next steps
+
+### Community 219 - "Community 219"
+
+Cohesion: 0.50
+Nodes (4): getDirectConnectionString(), Milestone, MILESTONES, run()
+
+### Community 220 - "Community 220"
+
+Cohesion: 0.67
+Nodes (3): getDirectConnectionString(), migrations, run()
+
+### Community 221 - "Community 221"
+
+Cohesion: 0.50
+Nodes (3): turbo, globalDependencies, $schema
+
+### Community 222 - "Community 222"
+
+Cohesion: 0.67
+Nodes (3): getDirectConnectionString(), run(), TV_SYMBOLS
+
+### Community 223 - "Community 223"
+
+Cohesion: 0.67
+Nodes (3): getDirectConnectionString(), run(), statements
+
+### Community 224 - "Community 224"
+
+Cohesion: 0.67
+Nodes (3): getDirectConnectionString(), run(), statements
+
+### Community 225 - "Community 225"
+
+Cohesion: 0.67
+Nodes (3): getDirectConnectionString(), run(), statements
+
+### Community 227 - "Community 227"
+
+Cohesion: 0.67
+Nodes (3): overrides, drizzle-kit, qs
+
+### Community 228 - "Community 228"
+
+Cohesion: 0.67
+Nodes (3): cache, persistent, dev
 
 ## Ambiguous Edges - Review These
 
@@ -734,9 +979,9 @@ Nodes (3): test, dependsOn, outputs
 
 ## Knowledge Gaps
 
-- **658 isolated node(s):** `husky.sh script`, `base`, `name`, `version`, `private` (+653 more)
+- **911 isolated node(s):** `husky.sh script`, `base`, `name`, `version`, `private` (+906 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **75 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **68 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 
@@ -744,15 +989,15 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **What is the exact relationship between `Hero Chart Static Image` and `Hero Chart Static Image`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `CtaBanner()` connect `Accounts & Calendar Pages` to `UI Component Library`, `Company Pages`, `Platform Pages`, `Funding & Payment Page`, `IB & Contact Pages`, `Pivot Calculator`, `Media & Press Page`, `Analyst Chart Page`, `Profit Calculator`, `Promotions Page`, `Education Hub`, `Spread Comparator`, `Blog & News Pages`, `Careers Page`, `Trader Tools Calculator`, `Ebooks & Gated Content`, `Fees Page`, `Guides Listing`, `Legal Page Components`, `Media Video Listing`, `FAQ Route & Page`, `Research & CMS Data Utils`, `Market Category Page`, `Glossary Route & Page`?**
-  _High betweenness centrality (0.028) - this node is a cross-community bridge._
-- **Why does `CompanyPageSkeleton()` connect `About & Awards Loading` to `Loading Skeleton Components`, `UI Component Library`?**
+- **Why does `CtaBanner()` connect `Accounts & Calendar Pages` to `UI Component Library`, `Company Pages`, `Platform Pages`, `Funding & Payment Page`, `IB & Contact Pages`, `Pivot Calculator`, `Media & Press Page`, `Analyst Chart Page`, `Promotions Page`, `Guides & Market Category`, `Spread Comparator`, `Ebooks & Gated Content`, `FAQ Page`, `Legal Page Components`, `Media Video Listing`, `Community 193`, `Community 197`, `Ticker Strip Component`, `Community 214`, `Community 87`?**
+  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+- **Why does `SectionKicker()` connect `Community 108` to `Company Pages`, `Platform Pages`, `Funding & Payment Page`, `Community 143`, `Pivot Calculator`, `Media & Press Page`, `Analyst Chart Page`, `Promotions Page`, `Account Comparison Page`, `Education Hub`, `Instruments Listing`, `Spread Comparator`, `Media Listing & Webinars`, `Careers Page`, `Ebooks & Gated Content`, `FAQ Page`, `Fees Page`, `Guide Detail Page`, `Media Video Listing`, `Community 197`, `FAQ Route & Page`, `Community 69`, `Community 202`, `Ticker Strip Component`, `AI CRM Page`, `Community 212`, `Community 87`, `Community 215`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **Why does `ArticleDetailSkeleton()` connect `Slug Detail Loading States` to `Loading Skeleton Components`, `UI Component Library`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+- **Why does `CareersPageSkeleton()` connect `About & Awards Loading` to `Loading Skeleton Components`, `Ticker Strip Component`?**
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **What connects `husky.sh script`, `base`, `name` to the rest of the system?**
-  _664 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `CMS Collections & Data Models` be split into smaller, more focused modules?**
-  _Cohesion score 0.054987212276214836 - nodes in this community are weakly interconnected._
-- **Should `Auth & TOTP 2FA` be split into smaller, more focused modules?**
-  _Cohesion score 0.052464947987336044 - nodes in this community are weakly interconnected._
+  _917 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `CMS App & Dependencies` be split into smaller, more focused modules?**
+  _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
+- **Should `Data Seeding Scripts` be split into smaller, more focused modules?**
+  _Cohesion score 0.10552061495457722 - nodes in this community are weakly interconnected._

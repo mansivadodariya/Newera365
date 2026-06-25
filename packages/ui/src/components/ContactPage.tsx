@@ -34,7 +34,7 @@ const CHANNELS: Channel[] = [
   {
     id: 'call',
     label: 'Call',
-    value: '+1 800 555 0136',
+    value: '+1 867-778-3511',
     meta: '24 / 5',
     icon: (
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
@@ -46,7 +46,7 @@ const CHANNELS: Channel[] = [
         />
       </svg>
     ),
-    action: 'tel:+18005550136',
+    action: 'tel:+18677783511',
   },
   {
     id: 'chat',
@@ -79,7 +79,7 @@ interface ContactPageProps {
   contactDetails?: CmsContactDetails;
 }
 
-export function ContactPage({ contactDetails }: ContactPageProps) {
+export function ContactPage({ contactDetails: _contactDetails }: ContactPageProps) {
   const locale = useLocale();
   const t = useTranslations('contact');
   const [name, setName] = useState('');
@@ -87,17 +87,40 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
   const [topic, setTopic] = useState<Topic>('General');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_CMS_URL ?? 'http://localhost:3001'}/api/contact`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, subject: topic, message }),
+        },
+      );
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError((data as { error?: string }).error ?? 'Something went wrong. Please try again.');
+      }
+    } catch {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <>
       {/* Hero — 42px tracking-[-1.26px] per Figma */}
       <section className="rounded-b-[32px] bg-transparent px-5 pb-7 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
             <span className="text-foreground">{t('heroLine1')}</span>
             <br />
@@ -111,7 +134,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
 
       {/* Channels — rounded-t-[32px] bg-background per Figma */}
       <section className="rounded-t-[32px] px-5 pb-8 pt-10 xl:pb-16">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('channelsKicker')}
           </SectionKicker>
@@ -200,7 +223,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
         className="rounded-[32px] px-5 pb-9 pt-10"
         style={{ background: 'var(--gradient-features)' }}
       >
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('formKicker')}
           </SectionKicker>
@@ -316,12 +339,21 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
                 />
               </div>
 
+              {error && <p className="font-body text-[12px] text-red-500">{error}</p>}
               <button
                 type="submit"
-                className="bg-accent font-body hover:bg-accent/90 flex items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
+                disabled={loading}
+                className="bg-accent font-body hover:bg-accent/90 flex items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors disabled:opacity-60"
               >
                 {t('submitBtn')}
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  aria-hidden="true"
+                  className="rtl:-scale-x-100"
+                >
                   <path
                     d="M1 7h9.5M7 3.5l3.5 3.5L7 10.5"
                     stroke="currentColor"
@@ -339,7 +371,7 @@ export function ContactPage({ contactDetails }: ContactPageProps) {
 
       {/* Offices — bg-black with logo top, cards bg-[rgba(255,255,255,0.04)] per Figma */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-11">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-3 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/60">
             {t('officesKicker')}
           </SectionKicker>

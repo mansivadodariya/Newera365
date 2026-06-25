@@ -4,9 +4,18 @@ import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import type { CmsCalculatorInstrument } from './TraderToolsPage';
+import { CalcSelect } from './CalcSelect';
 
-const INSTRUMENTS = ['EUR/USD', 'GBP/USD', 'XAU/USD', 'BTC/USD', 'NAS100', 'US30'] as const;
-type Instrument = (typeof INSTRUMENTS)[number];
+const INSTRUMENTS_FALLBACK = [
+  'EUR/USD',
+  'GBP/USD',
+  'XAU/USD',
+  'BTC/USD',
+  'NAS100',
+  'US30',
+] as const;
+type Instrument = (typeof INSTRUMENTS_FALLBACK)[number];
 type TabMode = 'Profit' | 'Loss' | 'R/R';
 
 const CONTRACT_SIZES: Record<Instrument, number> = {
@@ -26,52 +35,6 @@ const PIP_SIZES: Record<Instrument, number> = {
   NAS100: 1,
   US30: 1,
 };
-
-function SelectInput({
-  label,
-  value,
-  options,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  options: readonly string[];
-  onChange: (v: string) => void;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">{label}</label>
-      <div className="border-border relative overflow-hidden rounded-[12px] border bg-white dark:bg-[#1c1c1c]">
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="font-body text-foreground w-full appearance-none bg-transparent px-4 py-3 text-[14px] outline-none"
-        >
-          {options.map((o) => (
-            <option key={o} value={o}>
-              {o}
-            </option>
-          ))}
-        </select>
-        <svg
-          className="text-muted pointer-events-none absolute right-4 top-1/2 -translate-y-1/2"
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-        >
-          <path
-            d="M2 4l4 4 4-4"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
-    </div>
-  );
-}
 
 function NumberInput({
   label,
@@ -149,13 +112,13 @@ function ResultCard({
           {mode === 'R/R' ? (
             <>
               {Math.abs(result.profit).toFixed(2)}
-              <span className="ml-1 text-[22px] font-normal text-white/60">R</span>
+              <span className="ms-1 text-[22px] font-normal text-white/60">R</span>
             </>
           ) : (
             <>
               {result.profit >= 0 ? '+' : '-'}
               {Math.abs(result.profit).toFixed(2)}
-              <span className="ml-1 text-[22px] font-normal text-white/60">{currency}</span>
+              <span className="ms-1 text-[22px] font-normal text-white/60">{currency}</span>
             </>
           )}
         </p>
@@ -205,13 +168,22 @@ function FormulaBox({
   );
 }
 
-export function ProfitCalculatorPage() {
+interface ProfitCalculatorPageProps {
+  instruments?: CmsCalculatorInstrument[];
+}
+
+export function ProfitCalculatorPage({
+  instruments: cmsInstruments,
+}: ProfitCalculatorPageProps = {}) {
   const locale = useLocale();
   const t = useTranslations('profit');
 
+  const activeInstruments = cmsInstruments?.map((i) => i.symbol) ?? [...INSTRUMENTS_FALLBACK];
+  const defaultInstrument = activeInstruments[0] ?? 'EUR/USD';
+
   const [mode, setMode] = useState<TabMode>('Profit');
   const [currency] = useState('USD');
-  const [instrument, setInstrument] = useState<Instrument>('EUR/USD');
+  const [instrument, setInstrument] = useState<string>(defaultInstrument);
   const [tradeType, setTradeType] = useState<'Buy' | 'Sell'>('Buy');
   const [openPrice, setOpenPrice] = useState('1.0840');
   const [closePrice, setClosePrice] = useState('1.0925');
@@ -219,14 +191,18 @@ export function ProfitCalculatorPage() {
 
   const computeResult = useCallback(
     (
-      inst: Instrument,
+      inst: string,
       open: number,
       close: number,
       lotsVal: number,
       type: 'Buy' | 'Sell',
     ): ProfitResult => {
-      const contractSize = CONTRACT_SIZES[inst];
-      const pipSize = PIP_SIZES[inst];
+      const cmsInst = cmsInstruments?.find((i) => i.symbol === inst);
+      const contractSize = cmsInst?.contractSize ?? CONTRACT_SIZES[inst as Instrument] ?? 100000;
+      const pipSize =
+        cmsInst?.pipValue && cmsInst.contractSize
+          ? cmsInst.pipValue / cmsInst.contractSize
+          : (PIP_SIZES[inst as Instrument] ?? 0.0001);
       const pipValue = contractSize * pipSize * lotsVal;
       const priceDiff = type === 'Buy' ? close - open : open - close;
       const pips = priceDiff / pipSize;
@@ -234,11 +210,11 @@ export function ProfitCalculatorPage() {
       const notional = open * contractSize * lotsVal;
       return { profit, notional, pips, pipValue };
     },
-    [],
+    [cmsInstruments],
   );
 
   const [result, setResult] = useState<ProfitResult>(() =>
-    computeResult('EUR/USD', 1.084, 1.0925, 0.5, 'Buy'),
+    computeResult(defaultInstrument, 1.084, 1.0925, 0.5, 'Buy'),
   );
 
   const handleCalculate = useCallback(() => {
@@ -250,13 +226,13 @@ export function ProfitCalculatorPage() {
   }, [instrument, openPrice, closePrice, lots, tradeType, computeResult]);
 
   const handleReset = useCallback(() => {
-    setInstrument('EUR/USD');
+    setInstrument(defaultInstrument);
     setTradeType('Buy');
     setOpenPrice('1.0840');
     setClosePrice('1.0925');
     setLots('0.50');
-    setResult(computeResult('EUR/USD', 1.084, 1.0925, 0.5, 'Buy'));
-  }, [computeResult]);
+    setResult(computeResult(defaultInstrument, 1.084, 1.0925, 0.5, 'Buy'));
+  }, [computeResult, defaultInstrument]);
 
   return (
     <>
@@ -295,20 +271,20 @@ export function ProfitCalculatorPage() {
           </div>
 
           <div className="xl:flex xl:gap-8">
-            <div className="flex flex-col gap-4 xl:grid xl:flex-1 xl:grid-cols-2 xl:gap-4">
-              <SelectInput
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:flex-1">
+              <CalcSelect
                 label={t('fieldCurrency')}
                 value={currency}
                 options={['USD']}
                 onChange={() => {}}
               />
-              <SelectInput
+              <CalcSelect
                 label={t('fieldInstrument')}
                 value={instrument}
-                options={INSTRUMENTS}
-                onChange={(v) => setInstrument(v as Instrument)}
+                options={activeInstruments}
+                onChange={(v) => setInstrument(v)}
               />
-              <SelectInput
+              <CalcSelect
                 label={t('fieldType')}
                 value={tradeType}
                 options={['Buy', 'Sell']}
@@ -335,13 +311,19 @@ export function ProfitCalculatorPage() {
               />
 
               {/* Buttons */}
-              <div className="flex items-center gap-3 xl:col-span-2">
+              <div className="col-span-full flex items-center gap-3">
                 <button
                   onClick={handleCalculate}
                   className="font-body flex h-[48px] flex-1 items-center justify-center gap-2 rounded-full bg-[#00B050] text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90 xl:flex-none xl:px-8"
                 >
                   {t('calcBtn')}
-                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    className="rtl:-scale-x-100"
+                  >
                     <path
                       d="M3 8h10M9 4l4 4-4 4"
                       stroke="currentColor"
@@ -412,19 +394,19 @@ export function ProfitCalculatorPage() {
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3 xl:gap-5">
             {[
               {
-                tag: 'Pre-trade',
+                tag: t('tagPreTrade'),
                 label: t('marginTitle'),
                 desc: t('marginDesc'),
                 href: `/${locale}/tools`,
               },
               {
-                tag: 'Technical',
+                tag: t('tagTechnical'),
                 label: t('pivotTitle'),
                 desc: t('pivotDesc'),
                 href: `/${locale}/tools/pivot`,
               },
               {
-                tag: 'Technical',
+                tag: t('tagTechnical'),
                 label: t('fibTitle'),
                 desc: t('fibDesc'),
                 href: `/${locale}/tools/fibonacci`,

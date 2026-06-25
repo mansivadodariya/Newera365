@@ -36,7 +36,17 @@
 
 html {
   scroll-behavior: smooth;
+  /* Offset in-page anchor jumps so targets clear the 72px sticky header */
+  scroll-padding-top: 88px;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* TradingView ticker — force the iframe's own background to the dark ticker
+   token so the widget never flashes the browser-default white background while
+   its dark-theme CSS loads (client-reported "ticker renders white in dark mode
+   sometimes"). The widget is pinned to colorTheme:'dark' + isTransparent. */
+.tradingview-widget-container iframe {
+  background-color: #030406 !important;
 }
 
 body {
@@ -81,4 +91,64 @@ html::-webkit-scrollbar {
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* ── Shared interaction utilities (site-wide interactivity pass) ───────────
+   Reusable hover/press affordances applied across cards, links, and tappable
+   surfaces. All movement is gated behind `prefers-reduced-motion: no-preference`
+   so reduced-motion users still get the shadow/colour feedback without any
+   transform. Opt-in per element (added to existing className strings). */
+
+/* Card hover-lift — elevate + deepen shadow on hover. */
+.hover-lift {
+  transition:
+    box-shadow 0.2s ease-out,
+    border-color 0.2s ease-out;
+}
+.hover-lift:hover {
+  box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.1);
+}
+.dark .hover-lift:hover {
+  box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.5);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hover-lift {
+    transition:
+      transform 0.2s ease-out,
+      box-shadow 0.2s ease-out,
+      border-color 0.2s ease-out;
+  }
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+}
+
+/* Press feedback — subtle scale-down on active for tappable cards/links. */
+@media (prefers-reduced-motion: no-preference) {
+  .tap-scale {
+    transition: transform 0.15s ease-out;
+  }
+  .tap-scale:active {
+    transform: scale(0.985);
+  }
+}
+
+/* Animated underline for inline text links. */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.25s ease-out;
+}
+.link-underline:hover {
+  background-size: 100% 1px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .link-underline {
+    transition: none;
+  }
+  .link-underline:hover {
+    text-decoration: underline;
+  }
 }

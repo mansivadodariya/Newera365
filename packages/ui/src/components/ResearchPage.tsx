@@ -1,9 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { Pagination } from './Pagination';
+import { norm, humanize, distinctCategories } from './filterUtils';
+
+const RESEARCH_PER_PAGE = 6;
 
 export interface ArticleItem {
   id: string;
@@ -17,19 +21,20 @@ export interface ArticleItem {
   sparkline?: readonly number[];
 }
 
-type Category = 'ALL' | 'MACRO' | 'STRATEGY' | 'EDUCATION' | 'ANALYSIS';
-
-const CATEGORIES: Category[] = ['ALL', 'MACRO', 'STRATEGY', 'ANALYSIS', 'EDUCATION'];
-
 interface CmsResearchArticle {
   id: number;
   slug: string;
   title: string;
   assetCategory: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
+  editorialCategory?: 'macro' | 'strategy' | 'analysis' | 'education' | null;
+  /** Raw CMS category — filter tabs are derived from this, case-insensitively. */
+  category?: string | null;
   analyst?: string | null;
   publishedDate: string;
   thumbnailUrl?: string | null;
   summary?: string | null;
+  /** When set, the card links to this external URL instead of an internal detail page. */
+  externalUrl?: string | null;
 }
 
 export interface CmsResearchReportItem {
@@ -40,16 +45,8 @@ export interface CmsResearchReportItem {
   publishedDate: string;
   isGated?: boolean | null;
   reportUrl: string | null;
+  thumbnailUrl?: string | null;
 }
-
-const ASSET_TO_CATEGORY: Record<string, Exclude<Category, 'ALL'>> = {
-  forex: 'MACRO',
-  commodities: 'ANALYSIS',
-  indices: 'MACRO',
-  stocks: 'ANALYSIS',
-  etfs: 'STRATEGY',
-  crypto: 'ANALYSIS',
-};
 
 const SPARKLINES = [
   [40, 45, 38, 52, 48, 60, 55, 68, 62, 72],
@@ -59,92 +56,30 @@ const SPARKLINES = [
 ] as const;
 
 function formatArticleDate(dateStr: string): string {
-  try {
-    return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  } catch {
-    return '';
-  }
+  if (!dateStr) return '';
+  const parsed = new Date(dateStr);
+  if (Number.isNaN(parsed.getTime())) return '';
+  return parsed.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
 const CAT_COLORS: Record<string, string> = {
-  MACRO: 'bg-[#F59E0B]/15 text-[#F59E0B]',
-  STRATEGY: 'bg-[#3B82F6]/15 text-[#3B82F6]',
-  ANALYSIS: 'bg-[#8B5CF6]/15 text-[#8B5CF6]',
-  EDUCATION: 'bg-accent/10 text-accent',
+  macro: 'bg-[#F59E0B]/15 text-[#F59E0B]',
+  strategy: 'bg-[#3B82F6]/15 text-[#3B82F6]',
+  analysis: 'bg-[#8B5CF6]/15 text-[#8B5CF6]',
+  education: 'bg-accent/10 text-accent',
+  forex: 'bg-[#F59E0B]/15 text-[#F59E0B]',
+  commodities: 'bg-[#8B5CF6]/15 text-[#8B5CF6]',
+  indices: 'bg-[#3B82F6]/15 text-[#3B82F6]',
+  stocks: 'bg-[#8B5CF6]/15 text-[#8B5CF6]',
+  etfs: 'bg-[#3B82F6]/15 text-[#3B82F6]',
+  crypto: 'bg-[#06B6D4]/15 text-[#06B6D4]',
+  'market-news': 'bg-[#F59E0B]/15 text-[#F59E0B]',
+  tutorials: 'bg-[#3B82F6]/15 text-[#3B82F6]',
+  'company-updates': 'bg-accent/10 text-accent',
+  company: 'bg-accent/10 text-accent',
+  regulation: 'bg-[#EF4444]/15 text-[#EF4444]',
 };
-
-const ARTICLES = [
-  {
-    id: 'dollar-frankfurt',
-    slug: 'dollar-move-starts-frankfurt',
-    category: 'MACRO' as Category,
-    title: "Why the dollar's next move starts in Frankfurt, not Washington",
-    summary:
-      "ECB policy divergence is widening the EUR/USD range. Here's the headline number that actually matters.",
-    date: 'May 26',
-    readTime: '6 min',
-    featured: true,
-    sparkline: [40, 45, 38, 52, 48, 60, 55, 68, 62, 72],
-  },
-  {
-    id: 'volatility-trap',
-    slug: 'volatility-trap-three-setups',
-    category: 'STRATEGY' as Category,
-    title: 'The volatility trap: three setups professional traders avoid',
-    summary: 'High ATR is not the same as edge. Most retail traders confuse the two.',
-    date: 'May 23',
-    readTime: '8 min',
-    featured: false,
-    sparkline: [60, 55, 70, 45, 65, 40, 58, 35, 50, 42],
-  },
-  {
-    id: 'gold-momentum',
-    slug: 'gold-1400-momentum-or-top',
-    category: 'ANALYSIS' as Category,
-    title: 'Gold at $2,400 — momentum or top? Reading the COT report',
-    summary:
-      'Positioning data shows institutional longs at 18-month highs but the futures curve is flattening fast.',
-    date: 'May 21',
-    readTime: '5 min',
-    featured: false,
-    sparkline: [30, 38, 45, 55, 62, 58, 70, 75, 68, 80],
-  },
-  {
-    id: 'slippage-guide',
-    slug: 'traders-guide-understanding-slippage',
-    category: 'EDUCATION' as Category,
-    title: "A trader's guide to understanding slippage",
-    summary: 'Why your fill price differs from your order price, and how to minimise the gap.',
-    date: 'May 19',
-    readTime: '4 min',
-    featured: false,
-    sparkline: [50, 52, 48, 55, 53, 56, 54, 58, 55, 60],
-  },
-  {
-    id: 'pip-swap-calculators',
-    slug: 'pip-swap-calculators-on-mobile',
-    category: 'EDUCATION' as Category,
-    title: 'How free pip & swap calculators on mobile can mislead you',
-    summary:
-      'Built-in calculator apps bake in assumptions your broker does not use. Check the math.',
-    date: 'May 16',
-    readTime: '3 min',
-    featured: false,
-    sparkline: [65, 60, 70, 65, 72, 68, 75, 70, 78, 74],
-  },
-  {
-    id: 'ecb-rate',
-    slug: 'ecb-rate-decision-what-traders-missed',
-    category: 'MACRO' as Category,
-    title: 'The ECB rate decision and what the market priced wrong',
-    summary:
-      'EUR/JPY had the largest single-session move of Q2. Here is a breakdown from the desk.',
-    date: 'May 14',
-    readTime: '7 min',
-    featured: false,
-    sparkline: [45, 50, 55, 52, 60, 65, 58, 70, 66, 72],
-  },
-] as const;
+const catColor = (cat: string): string => CAT_COLORS[norm(cat)] ?? 'bg-accent/10 text-accent';
 
 function Sparkline({ data, positive = true }: { data: readonly number[]; positive?: boolean }) {
   const max = Math.max(...data);
@@ -173,7 +108,7 @@ function Sparkline({ data, positive = true }: { data: readonly number[]; positiv
 type ArticleDisplay = {
   id: string;
   slug: string;
-  category: Exclude<Category, 'ALL'>;
+  category: string;
   title: string;
   summary: string;
   date: string;
@@ -181,12 +116,11 @@ type ArticleDisplay = {
   featured: boolean;
   sparkline: readonly number[];
   thumbnailUrl?: string | null;
+  externalUrl?: string | null;
 };
 
 function toDisplayArticles(cmsArticles?: CmsResearchArticle[]): ArticleDisplay[] {
-  if (!cmsArticles?.length) {
-    return ARTICLES as unknown as ArticleDisplay[];
-  }
+  if (!cmsArticles?.length) return [];
   const seen = new Set<string>();
   const filtered = cmsArticles.filter((a) => {
     if (!a.title?.trim()) return false;
@@ -194,11 +128,11 @@ function toDisplayArticles(cmsArticles?: CmsResearchArticle[]): ArticleDisplay[]
     seen.add(a.title);
     return true;
   });
-  if (!filtered.length) return ARTICLES as unknown as ArticleDisplay[];
+  if (!filtered.length) return [];
   return filtered.map((a, i) => ({
     id: String(a.id),
     slug: a.slug,
-    category: (ASSET_TO_CATEGORY[a.assetCategory] ?? 'ANALYSIS') as Exclude<Category, 'ALL'>,
+    category: (a.category ?? a.editorialCategory ?? a.assetCategory ?? '').trim(),
     title: a.title,
     summary: a.summary ?? '',
     date: formatArticleDate(a.publishedDate),
@@ -206,6 +140,7 @@ function toDisplayArticles(cmsArticles?: CmsResearchArticle[]): ArticleDisplay[]
     featured: i === 0,
     sparkline: SPARKLINES[i % SPARKLINES.length] as readonly number[],
     thumbnailUrl: a.thumbnailUrl ?? null,
+    externalUrl: a.externalUrl ?? null,
   }));
 }
 
@@ -213,30 +148,87 @@ interface ResearchPageProps {
   cmsArticles?: CmsResearchArticle[];
   cmsReports?: CmsResearchReportItem[];
   basePath?: string;
+  /** Optional hero copy override (e.g. /daily-news supplies its own localized strings). */
+  hero?: { line1: string; line2: string; subtitle: string };
 }
 
 export function ResearchPage({
   cmsArticles,
   cmsReports,
   basePath = 'research',
+  hero,
 }: ResearchPageProps) {
   const locale = useLocale();
   const t = useTranslations('research');
-  const [activeCategory, setActiveCategory] = useState<Category>('ALL');
+
+  // Hero copy defaults to the research namespace, but callers (e.g. /daily-news)
+  // can supply their own localized strings.
+  const heroLine1 = hero?.line1 ?? t('heroLine1');
+  const heroLine2 = hero?.line2 ?? t('heroLine2');
+  const heroSubtitle = hero?.subtitle ?? t('heroSubtitle');
+
+  // A card links to its external source when one is provided (news items are
+  // often pointers to the original story); otherwise to the internal detail page.
+  const hrefFor = (a: { slug: string; externalUrl?: string | null }) =>
+    a.externalUrl ? a.externalUrl : `/${locale}/${basePath}/${a.slug}`;
+  const extProps = (a: { externalUrl?: string | null }) =>
+    a.externalUrl ? { target: '_blank' as const, rel: 'noopener noreferrer' as const } : {};
+
+  const CAT_I18N_KEYS: Record<string, string> = {
+    macro: 'catMacro',
+    strategy: 'catStrategy',
+    analysis: 'catAnalysis',
+    education: 'catEducation',
+    'market-news': 'catMarketNews',
+    tutorials: 'catTutorials',
+    'company-updates': 'catCompanyUpdates',
+    forex: 'catForex',
+    commodities: 'catCommodities',
+    indices: 'catIndices',
+    crypto: 'catCrypto',
+    stocks: 'catStocks',
+    etfs: 'catEtfs',
+    company: 'catCompany',
+    regulation: 'catRegulation',
+  };
+  function translateResearchCat(cat: string) {
+    if (cat === 'ALL') return t('filterAll');
+    const key = CAT_I18N_KEYS[norm(cat)];
+    return key ? t(key as Parameters<typeof t>[0]) : humanize(cat);
+  }
+
+  const [activeCategory, setActiveCategory] = useState<string>('ALL');
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const listRef = useRef<HTMLDivElement>(null);
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [subLoading, setSubLoading] = useState(false);
+  const [subError, setSubError] = useState('');
 
   const articles = useMemo(() => toDisplayArticles(cmsArticles), [cmsArticles]);
 
+  // Tabs reflect the real CMS categories present (case-insensitive), never a
+  // hardcoded list — so /blog, /research and /daily-news each show their own.
+  const categories = useMemo(
+    () => ['ALL', ...distinctCategories(articles, (a) => a.category)],
+    [articles],
+  );
+
   const featured = articles.find((a) => a.featured) ?? articles[0];
   const list = articles.filter((a) => !a.featured);
+  // The featured article is only surfaced as the hero in the default (no filter,
+  // no search) view. Once a category tab or search is active we hide the hero and
+  // match across ALL articles — otherwise the newest item would be silently
+  // dropped from its own category's results, making the filter look broken.
+  const isFiltering = activeCategory !== 'ALL' || search.trim() !== '';
 
   const filteredList = useMemo(() => {
+    const base = isFiltering ? articles : list;
     let result =
       activeCategory === 'ALL'
-        ? list
-        : list.filter((a) => a.category.toUpperCase() === activeCategory);
+        ? base
+        : base.filter((a) => norm(a.category) === norm(activeCategory));
     if (search.trim()) {
       const q = search.toLowerCase();
       result = result.filter(
@@ -244,27 +236,39 @@ export function ResearchPage({
       );
     }
     return result;
-  }, [activeCategory, search, list]);
+  }, [activeCategory, search, list, articles, isFiltering]);
+
+  const totalPages = Math.ceil(filteredList.length / RESEARCH_PER_PAGE);
+  const pagedList = filteredList.slice((page - 1) * RESEARCH_PER_PAGE, page * RESEARCH_PER_PAGE);
+
+  function handleCategoryChange(cat: string) {
+    setActiveCategory(cat);
+    setPage(1);
+  }
+  function handleSearchChange(val: string) {
+    setSearch(val);
+    setPage(1);
+  }
 
   return (
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-6 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.08] tracking-[-1.14px]">
-            {t('heroLine1')}
+            {heroLine1}
             <br />
-            <span className="text-accent">{t('heroLine2')}</span>
+            <span className="text-accent">{heroLine2}</span>
           </h1>
           <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
-            {t('heroSubtitle')}
+            {heroSubtitle}
           </p>
         </div>
       </section>
 
       {/* Search bar */}
       <section className="px-5 pb-4">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="dark:bg-surface flex items-center gap-2.5 rounded-[12px] bg-[#f2f2f4] px-3.5">
             <svg
               width="14"
@@ -280,7 +284,7 @@ export function ResearchPage({
               type="search"
               placeholder={t('searchPlaceholder')}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="font-body text-foreground placeholder:text-muted w-full bg-transparent py-3 text-[13px] outline-none"
             />
           </div>
@@ -289,31 +293,32 @@ export function ResearchPage({
 
       {/* Category tabs */}
       <section className="px-5 pb-4">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
-            {CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat)}
+                onClick={() => handleCategoryChange(cat)}
                 className={`font-body flex-shrink-0 rounded-full px-[14px] py-[8px] text-[13px] font-medium transition-all ${
                   activeCategory === cat
                     ? 'bg-[#111] text-white dark:bg-white dark:text-[#111]'
                     : 'bg-[#f2f2f4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e] dark:hover:text-white/80'
                 }`}
               >
-                {cat === 'ALL' ? t('filterAll') : cat.charAt(0) + cat.slice(1).toLowerCase()}
+                {translateResearchCat(cat)}
               </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Featured article */}
-      {activeCategory === 'ALL' && featured && (
+      {/* Featured article — only in the default view (no category filter, no search) */}
+      {!isFiltering && featured && (
         <section className="px-5 pb-6">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <Link
-              href={`/${locale}/${basePath}/${featured.slug}`}
+              href={hrefFor(featured)}
+              {...extProps(featured)}
               className="shadow-card-dark group flex flex-col overflow-hidden rounded-[22px] bg-[#111111]"
             >
               {/* Thumbnail */}
@@ -343,11 +348,11 @@ export function ResearchPage({
                     </svg>
                   </div>
                 </div>
-                <div className="absolute left-4 top-4">
+                <div className="absolute start-4 top-4">
                   <span
-                    className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${CAT_COLORS[featured.category.toUpperCase()] ?? 'bg-accent/10 text-accent'}`}
+                    className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${catColor(featured.category)}`}
                   >
-                    {featured.category}
+                    {translateResearchCat(featured.category)}
                   </span>
                 </div>
               </div>
@@ -363,11 +368,18 @@ export function ResearchPage({
                 )}
                 <div className="flex items-center justify-between">
                   <span className="font-body text-[11px] text-white/40">
-                    {featured.date} · {featured.readTime} read
+                    {featured.date} ·{' '}
+                    {t('readTimeLabel', { minutes: parseInt(featured.readTime, 10) || 5 })}
                   </span>
                   <span className="font-body text-accent flex items-center gap-1.5 text-[12px] font-medium">
                     {t('readArticle')}
-                    <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
+                    <svg
+                      width="11"
+                      height="11"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      className="rtl:-scale-x-100"
+                    >
                       <path
                         d="M3 8h10M9 4l4 4-4 4"
                         stroke="currentColor"
@@ -386,14 +398,18 @@ export function ResearchPage({
 
       {/* Article list */}
       <section className="px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div
+          ref={listRef}
+          className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]"
+        >
           {/* Mobile: horizontal row list */}
           <div className="flex flex-col xl:hidden">
-            {filteredList.map((article, i) => (
+            {pagedList.map((article, i) => (
               <Link
                 key={article.id}
-                href={`/${locale}/${basePath}/${article.slug}`}
-                className={`group flex items-start gap-3 py-4 transition-all duration-200 ${i < filteredList.length - 1 ? 'border-b border-[#ebebea] dark:border-white/[0.07]' : ''}`}
+                href={hrefFor(article)}
+                {...extProps(article)}
+                className={`group flex items-start gap-3 py-4 transition-all duration-200 ${i < pagedList.length - 1 ? 'border-b border-[#ebebea] dark:border-white/[0.07]' : ''}`}
               >
                 <div className="relative h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[10px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111]">
                   {article.thumbnailUrl ? (
@@ -411,12 +427,12 @@ export function ResearchPage({
                 <div className="min-w-0 flex-1">
                   <div className="mb-1.5 flex items-center gap-1.5">
                     <span
-                      className={`font-body rounded-full px-2 py-[2px] text-[9px] font-semibold uppercase tracking-[0.1em] ${CAT_COLORS[article.category.toUpperCase()] ?? 'bg-accent/10 text-accent'}`}
+                      className={`font-body rounded-full px-2 py-[2px] text-[9px] font-semibold uppercase tracking-[0.1em] ${catColor(article.category)}`}
                     >
-                      {article.category}
+                      {translateResearchCat(article.category)}
                     </span>
                     <span className="font-mono text-[9px] text-[#9ca3af]">
-                      · {article.readTime} read
+                      · {t('readTimeLabel', { minutes: parseInt(article.readTime, 10) || 5 })}
                     </span>
                   </div>
                   <p className="group-hover:text-accent mb-1 font-sans text-[14px] font-semibold leading-[1.25] tracking-[-0.21px] text-[#111] transition-colors dark:text-white">
@@ -430,10 +446,11 @@ export function ResearchPage({
 
           {/* Desktop: vertical card grid */}
           <div className="hidden xl:grid xl:grid-cols-3 xl:gap-[14px]">
-            {filteredList.map((article) => (
+            {pagedList.map((article) => (
               <Link
                 key={article.id}
-                href={`/${locale}/${basePath}/${article.slug}`}
+                href={hrefFor(article)}
+                {...extProps(article)}
                 className="shadow-card-dark group flex flex-col overflow-hidden rounded-[18px] bg-[#111111] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
               >
                 {/* Thumbnail */}
@@ -465,11 +482,11 @@ export function ResearchPage({
                       </svg>
                     </div>
                   )}
-                  <div className="absolute left-3 top-3">
+                  <div className="absolute start-3 top-3">
                     <span
-                      className={`font-body rounded-full px-2.5 py-[3px] text-[8px] font-semibold uppercase tracking-[0.1em] ${CAT_COLORS[article.category.toUpperCase()] ?? 'bg-accent/10 text-accent'}`}
+                      className={`font-body rounded-full px-2.5 py-[3px] text-[8px] font-semibold uppercase tracking-[0.1em] ${catColor(article.category)}`}
                     >
-                      {article.category}
+                      {translateResearchCat(article.category)}
                     </span>
                   </div>
                 </div>
@@ -485,7 +502,8 @@ export function ResearchPage({
                   )}
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-[10px] text-white/30">
-                      {article.date} · {article.readTime} read
+                      {article.date} ·{' '}
+                      {t('readTimeLabel', { minutes: parseInt(article.readTime, 10) || 5 })}
                     </span>
                     <svg
                       width="11"
@@ -512,35 +530,19 @@ export function ResearchPage({
             <p className="font-body text-muted py-10 text-center text-[14px]">{t('noArticles')}</p>
           )}
 
-          {/* Load more — bg-[#fafaf9] rounded pill matching Figma */}
-          <div className="mt-6 flex items-center justify-center gap-[8px] rounded-[14px] bg-[#fafaf9] px-[14px] py-[14px] dark:bg-[#1a1c22]">
-            <button className="font-body text-foreground text-[13px] font-medium">
-              {t('loadMore')}
-            </button>
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              fill="none"
-              className="text-[#6b7280]"
-              aria-hidden="true"
-            >
-              <path
-                d="M7 2.5v9M3 8l4 4 4-4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            listRef={listRef}
+          />
         </div>
       </section>
 
       {/* Research Reports downloads */}
       {cmsReports && cmsReports.length > 0 && (
         <section className="px-5 pb-10">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="mb-5 flex items-center gap-3">
               <h2 className="text-foreground font-sans text-[22px] font-semibold leading-tight tracking-[-0.33px]">
                 {t('reportsHeading')}
@@ -553,6 +555,13 @@ export function ResearchPage({
                   key={report.id}
                   className="flex items-start justify-between gap-4 rounded-[16px] bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:bg-[#1a1c22]"
                 >
+                  {report.thumbnailUrl && (
+                    <img
+                      src={report.thumbnailUrl}
+                      alt={report.title}
+                      className="h-16 w-16 flex-shrink-0 rounded-[10px] object-cover"
+                    />
+                  )}
                   <div className="min-w-0 flex-1">
                     {report.isGated && (
                       <span className="mb-2 inline-block rounded-full bg-[#F59E0B]/15 px-2.5 py-[3px] font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-[#F59E0B]">
@@ -603,7 +612,7 @@ export function ResearchPage({
 
       {/* Newsletter */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="xl:flex xl:items-center xl:gap-16">
             {/* Left: heading */}
             <div className="xl:flex-1">
@@ -642,26 +651,52 @@ export function ResearchPage({
                 </div>
               ) : (
                 <form
-                  onSubmit={(e) => {
+                  onSubmit={async (e) => {
                     e.preventDefault();
-                    if (email) setSubscribed(true);
+                    if (!email || subLoading) return;
+                    setSubLoading(true);
+                    setSubError('');
+                    try {
+                      const res = await fetch(
+                        `${process.env.NEXT_PUBLIC_CMS_URL ?? 'http://localhost:3001'}/api/newsletter/subscribe`,
+                        {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ email, locale }),
+                        },
+                      );
+                      if (res.ok) {
+                        setSubscribed(true);
+                      } else {
+                        const data = (await res.json().catch(() => ({}))) as { error?: string };
+                        setSubError(data.error ?? t('briefingError'));
+                      }
+                    } catch {
+                      setSubError(t('briefingError'));
+                    } finally {
+                      setSubLoading(false);
+                    }
                   }}
-                  className="flex gap-2"
+                  className="flex flex-col gap-2"
                 >
-                  <input
-                    type="email"
-                    required
-                    placeholder={t('briefingPlaceholder')}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="font-body focus:border-accent flex-1 rounded-full border border-white/20 bg-white/[0.07] px-4 py-3 text-[13px] text-white placeholder-white/40 outline-none"
-                  />
-                  <button
-                    type="submit"
-                    className="bg-accent hover:bg-accent/90 font-body flex-shrink-0 rounded-full px-5 py-3 text-[13px] font-medium text-white transition-colors"
-                  >
-                    {t('briefingSubscribe')}
-                  </button>
+                  <div className="flex gap-2">
+                    <input
+                      type="email"
+                      required
+                      placeholder={t('briefingPlaceholder')}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="font-body focus:border-accent flex-1 rounded-full border border-white/20 bg-white/[0.07] px-4 py-3 text-[13px] text-white placeholder-white/40 outline-none"
+                    />
+                    <button
+                      type="submit"
+                      disabled={subLoading}
+                      className="bg-accent hover:bg-accent/90 font-body flex-shrink-0 rounded-full px-5 py-3 text-[13px] font-medium text-white transition-colors disabled:opacity-60"
+                    >
+                      {subLoading ? t('briefingSubmitting') : t('briefingSubscribe')}
+                    </button>
+                  </div>
+                  {subError && <p className="font-body text-[12px] text-red-400">{subError}</p>}
                 </form>
               )}
             </div>

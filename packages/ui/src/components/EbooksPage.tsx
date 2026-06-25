@@ -1,37 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
-
-const BENEFITS = [
-  'Step-by-step framework used by our trading desk',
-  'Downloadable worksheet with exact parameters',
-  'Risk math worked out in plain numbers',
-  'Common mistakes and how to avoid them',
-  'Bonus checklist PDF for daily use',
-] as const;
-
-const OTHER_EBOOKS = [
-  {
-    id: 'position',
-    title: 'The Position Sizing Blueprint',
-    desc: 'A complete guide to calculating lot sizes, risk per trade and account allocation.',
-    pages: '12 pages',
-  },
-  {
-    id: 'psychology',
-    title: 'Trading Psychology: The Inner Game',
-    desc: 'How to eliminate emotional decision-making from your trading process.',
-    pages: '18 pages',
-  },
-  {
-    id: 'technical',
-    title: 'Technical Analysis Foundations',
-    desc: 'Every chart pattern, indicator and setup that has a proven statistical edge.',
-    pages: '24 pages',
-  },
-] as const;
 
 export interface CmsEbookItem {
   id: number;
@@ -48,12 +19,18 @@ interface EbooksPageProps {
 
 export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
   const t = useTranslations('ebooks');
+  const locale = useLocale();
+  const fallbackEbooks = [
+    { id: 'position', title: t('guide1Title'), desc: t('guide1Desc'), pages: '' },
+    { id: 'psychology', title: t('guide2Title'), desc: t('guide2Desc'), pages: '' },
+    { id: 'technical', title: t('guide3Title'), desc: t('guide3Desc'), pages: '' },
+  ];
   const displayEbooks =
     cmsEbooks && cmsEbooks.length > 0
       ? cmsEbooks
           .slice(1)
           .map((e) => ({ id: String(e.id), title: e.title, desc: e.summary ?? '', pages: '' }))
-      : OTHER_EBOOKS;
+      : fallbackEbooks;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [agreed, setAgreed] = useState(false);
@@ -63,13 +40,21 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const contentId = cmsEbooks?.[0]?.id;
+    if (!contentId) {
+      setError('Content not available. Please try again later.');
+      return;
+    }
     setLoading(true);
     setError('');
+    const cmsBase = process.env.NEXT_PUBLIC_CMS_URL ?? 'http://localhost:3001';
     try {
-      const res = await fetch('/api/education/gate', {
+      // The gate captures the email and emails the PDF to the requester; on
+      // success we just confirm it's on the way (see successHeading copy).
+      const res = await fetch(`${cmsBase}/api/education/gate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, contentId: '5-percent-rule' }),
+        body: JSON.stringify({ email, contentId: String(contentId), locale }),
       });
       if (res.ok) {
         setSuccess(true);
@@ -87,7 +72,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
             {t('heroLine1')}
             <br />
@@ -101,7 +86,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
 
       {/* Ebook cover + gate form */}
       <section className="px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Cover */}
           <div className="mb-6 flex items-center justify-center overflow-hidden rounded-[22px] bg-gradient-to-br from-[#0a2614] via-[#0d1f0d] to-[#111111] px-8 py-10">
             <div className="w-full max-w-[200px] rounded-[16px] bg-[#1a1a1a] p-6 shadow-2xl">
@@ -120,16 +105,15 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                 </svg>
               </div>
               <p className="font-body mb-1 text-[9px] uppercase tracking-[0.14em] text-white/40">
-                NEWERA365 · FREE GUIDE
+                {t('heroKicker')}
               </p>
               <p className="font-sans text-[22px] font-semibold leading-[1.1] text-white">
-                The 5%
+                {t('heroLine1')}
                 <br />
-                <span className="text-accent">Rule.</span>
+                <span className="text-accent">{t('heroAccent')}</span>
               </p>
               <p className="font-body text-muted max-w-[320px] text-[15px] leading-[1.55]">
-                A 56-page framework for never losing more than 5% on a single trade. Used by our
-                desk every day.
+                {t('heroDesc')}
               </p>
             </div>
           </div>
@@ -157,6 +141,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                 <p className="text-foreground font-sans text-[16px] font-semibold">
                   {t('successHeading')}
                 </p>
+                <p className="font-body text-muted text-[12px] leading-[1.5]">{t('successMsg')}</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -204,8 +189,8 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                 {t('whatsInsideKicker')}
               </SectionKicker>
               <div className="flex flex-col gap-[10px]">
-                {BENEFITS.map((b) => (
-                  <div key={b} className="flex items-start gap-2.5">
+                {([1, 2, 3, 4, 5] as const).map((i) => (
+                  <div key={i} className="flex items-start gap-2.5">
                     <svg
                       className="text-accent mt-0.5 flex-shrink-0"
                       width="14"
@@ -221,7 +206,9 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    <span className="font-body text-muted text-[13px] leading-[1.5]">{b}</span>
+                    <span className="font-body text-muted text-[13px] leading-[1.5]">
+                      {t(`feature${i}` as 'feature1')}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -232,13 +219,13 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
 
       {/* More ebooks */}
       <section className="bg-surface px-5 pb-10 pt-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5">{t('moreGuidesKicker')}</SectionKicker>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
             {displayEbooks.map((book) => (
               <div
                 key={book.id}
-                className="bg-background shadow-card dark:shadow-card-dark flex items-center gap-4 rounded-[18px] p-4"
+                className="bg-background shadow-card dark:shadow-card-dark hover-lift flex items-center gap-4 rounded-[18px] p-4"
               >
                 <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] dark:bg-[rgba(255,255,255,0.06)]">
                   <svg
@@ -282,7 +269,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
 
       {/* CTA */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:last-child]:text-white/50">
             {t('ctaKicker')}
           </SectionKicker>
@@ -290,12 +277,6 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
             {t('ctaHeading')}
           </h2>
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
-          <a
-            href="/demo-account"
-            className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center rounded-full text-[15px] font-medium text-white transition-colors"
-          >
-            {t('ctaBtn')}
-          </a>
         </div>
       </section>
     </>

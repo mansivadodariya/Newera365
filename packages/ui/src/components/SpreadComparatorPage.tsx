@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 // ---------------------------------------------------------------------------
@@ -30,52 +29,36 @@ interface SpreadComparatorPageProps {
   instruments?: CmsSpreadInstrument[];
 }
 
-function SpreadBar({ value, max, color }: { value: number; max: number; color: string }) {
-  const pct = max > 0 ? Math.max(4, (value / max) * 100) : 4;
-  return (
-    <div className="dark:bg-surface-elevated h-[6px] w-full overflow-hidden rounded-full bg-[#e5e7eb]">
-      <div
-        className="h-full rounded-full transition-all duration-500"
-        style={{ width: `${pct}%`, backgroundColor: color }}
-      />
-    </div>
-  );
-}
-
 export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComparatorPageProps) {
-  const locale = useLocale();
   const t = useTranslations('spreadComparator');
 
   const instruments = cmsInstruments ?? [];
 
   const [instrumentSymbol, setInstrumentSymbol] = useState(instruments[0]?.symbol ?? '');
 
-  if (instruments.length === 0) {
-    return (
-      <section className="px-5 py-20">
-        <p className="font-body text-muted text-center text-[14px]">{t('noInstruments')}</p>
-      </section>
-    );
-  }
-
   const selectedInstrument =
-    instruments.find((i) => i.symbol === instrumentSymbol) ?? instruments[0]!;
+    instruments.find((i) => i.symbol === instrumentSymbol) ?? instruments[0];
 
-  // Normalise CMS data into the shape the template expects
-  const data = {
-    industry: selectedInstrument.spreadIndustry ?? 1.9,
-    standard: selectedInstrument.spreadStandard ?? 1.0,
-    raw: selectedInstrument.spreadRaw ?? 0.0,
-    vip: selectedInstrument.spreadVip ?? 0.0,
-    pipValue: selectedInstrument.pipValue ?? 10,
-    // Unit label: forex uses 'pip', metals use 'USD', crypto uses 'pt'
-    unit:
-      selectedInstrument.symbol.includes('USD') && selectedInstrument.symbol.startsWith('X')
-        ? 'USD'
-        : selectedInstrument.symbol.includes('BTC') || selectedInstrument.symbol.includes('ETH')
-          ? 'pt'
-          : 'pip',
-  };
+  // Normalise CMS data into the shape the template expects. selectedInstrument
+  // is undefined only when there are no instruments; the defaults below keep the
+  // hooks unconditional (Rules of Hooks) and the empty state returns afterwards.
+  const data = useMemo(() => {
+    const symbol = selectedInstrument?.symbol ?? '';
+    return {
+      industry: selectedInstrument?.spreadIndustry ?? 1.9,
+      standard: selectedInstrument?.spreadStandard ?? 1.0,
+      raw: selectedInstrument?.spreadRaw ?? 0.0,
+      vip: selectedInstrument?.spreadVip ?? 0.0,
+      pipValue: selectedInstrument?.pipValue ?? 10,
+      // Unit label: forex uses 'pip', metals use 'USD', crypto uses 'pt'
+      unit:
+        symbol.includes('USD') && symbol.startsWith('X')
+          ? 'USD'
+          : symbol.includes('BTC') || symbol.includes('ETH')
+            ? 'pt'
+            : 'pip',
+    };
+  }, [selectedInstrument]);
 
   const costPerLot = useMemo(
     () => ({
@@ -93,50 +76,22 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
     return Math.max(0, industryCost - rawCost);
   }, [costPerLot]);
 
-  const maxSpread = data.industry;
+  // Empty state — returns after all hooks so hook order is stable across renders.
+  if (instruments.length === 0) {
+    return (
+      <section className="px-5 py-20">
+        <p className="font-body text-muted text-center text-[14px]">{t('noInstruments')}</p>
+      </section>
+    );
+  }
 
-  const rows: {
-    label: string;
-    spread: number;
-    commission: number;
-    color: string;
-    isHighlighted: boolean;
-  }[] = [
-    {
-      label: t('industryAvg'),
-      spread: data.industry,
-      commission: 0,
-      color: '#6B7280',
-      isHighlighted: false,
-    },
-    {
-      label: t('stdLabel'),
-      spread: data.standard,
-      commission: COMMISSIONS.standard,
-      color: '#374151',
-      isHighlighted: false,
-    },
-    {
-      label: t('rawLabel'),
-      spread: data.raw,
-      commission: COMMISSIONS.raw,
-      color: '#00B050',
-      isHighlighted: true,
-    },
-    {
-      label: t('vipLabel'),
-      spread: data.vip,
-      commission: COMMISSIONS.vip,
-      color: '#8B5CF6',
-      isHighlighted: false,
-    },
-  ];
+  const maxSpread = data.industry;
 
   return (
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
             {t('heroLine1')}
             <br />
@@ -150,7 +105,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
 
       {/* Instrument selector */}
       <section className="px-5 pb-6">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
             {t('kicker')}
           </SectionKicker>
@@ -174,7 +129,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
 
       {/* Spread bars — SPREAD · PIP */}
       <section className="px-5 pb-6">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
             SPREAD · PIP
           </SectionKicker>
@@ -187,13 +142,13 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
                 </span>
                 <div className="relative flex h-[8px] flex-1 overflow-hidden rounded-full bg-[#f4f4f3] dark:bg-white/10">
                   <div
-                    className="absolute left-0 top-0 h-full rounded-full bg-[#00b050] transition-all duration-500"
+                    className="absolute start-0 top-0 h-full rounded-full bg-[#00b050] transition-all duration-500"
                     style={{
                       width: `${data.raw === 0 ? 4 : Math.max(4, (data.raw / maxSpread) * 100)}%`,
                     }}
                   />
                 </div>
-                <span className="w-[30px] flex-shrink-0 text-right font-mono text-[11px] font-medium text-[#111] dark:text-white">
+                <span className="w-[30px] flex-shrink-0 text-end font-mono text-[11px] font-medium text-[#111] dark:text-white">
                   {data.raw === 0 ? '0.0' : data.raw.toLocaleString('en-US')}
                 </span>
               </div>
@@ -204,11 +159,11 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
                 </span>
                 <div className="relative flex h-[8px] flex-1 overflow-hidden rounded-full bg-[#f4f4f3] dark:bg-white/10">
                   <div
-                    className="absolute left-0 top-0 h-full rounded-full bg-[#111] transition-all duration-500 dark:bg-white"
+                    className="absolute start-0 top-0 h-full rounded-full bg-[#111] transition-all duration-500 dark:bg-white"
                     style={{ width: `${Math.max(4, (data.standard / maxSpread) * 100)}%` }}
                   />
                 </div>
-                <span className="w-[30px] flex-shrink-0 text-right font-mono text-[11px] font-medium text-[#111] dark:text-white">
+                <span className="w-[30px] flex-shrink-0 text-end font-mono text-[11px] font-medium text-[#111] dark:text-white">
                   {data.standard.toLocaleString('en-US')}
                 </span>
               </div>
@@ -219,13 +174,13 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
                 </span>
                 <div className="relative flex h-[8px] flex-1 overflow-hidden rounded-full bg-[#f4f4f3] dark:bg-white/10">
                   <div
-                    className="absolute left-0 top-0 h-full rounded-full bg-[#1f8a5b] transition-all duration-500"
+                    className="absolute start-0 top-0 h-full rounded-full bg-[#1f8a5b] transition-all duration-500"
                     style={{
                       width: `${data.vip === 0 ? 4 : Math.max(4, (data.vip / maxSpread) * 100)}%`,
                     }}
                   />
                 </div>
-                <span className="w-[30px] flex-shrink-0 text-right font-mono text-[11px] font-medium text-[#111] dark:text-white">
+                <span className="w-[30px] flex-shrink-0 text-end font-mono text-[11px] font-medium text-[#111] dark:text-white">
                   {data.vip === 0 ? '0.0' : data.vip.toLocaleString('en-US')}
                 </span>
               </div>
@@ -236,11 +191,11 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
                 </span>
                 <div className="relative flex h-[8px] flex-1 overflow-hidden rounded-full bg-[#f4f4f3] dark:bg-white/10">
                   <div
-                    className="absolute left-0 top-0 h-full rounded-full bg-[#9ca3af] transition-all duration-500"
+                    className="absolute start-0 top-0 h-full rounded-full bg-[#9ca3af] transition-all duration-500"
                     style={{ width: `${Math.max(4, (data.industry / maxSpread) * 100)}%` }}
                   />
                 </div>
-                <span className="w-[30px] flex-shrink-0 text-right font-mono text-[11px] font-medium text-[#111] dark:text-white">
+                <span className="w-[30px] flex-shrink-0 text-end font-mono text-[11px] font-medium text-[#111] dark:text-white">
                   {data.industry.toLocaleString('en-US')}
                 </span>
               </div>
@@ -251,7 +206,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
 
       {/* Account cards — stacked full-width */}
       <section className="px-5 pb-6">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
             {t('compKicker')}
           </SectionKicker>
@@ -264,7 +219,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
               <div className="flex flex-col gap-px overflow-hidden rounded-[20px] bg-[rgba(17,17,17,0.08)] dark:bg-white/[0.06]">
                 {[
                   {
-                    label: `${t('colSpread')} (${selectedInstrument.name})`,
+                    label: `${t('colSpread')} (${selectedInstrument?.name ?? ''})`,
                     value: `${data.standard.toLocaleString('en-US')} ${data.unit}`,
                   },
                   { label: t('colCommission'), value: t('commNone') },
@@ -290,7 +245,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
               className="relative overflow-hidden rounded-[20px] bg-[#111] p-[22px]"
               style={{ boxShadow: '0 4px 24px rgba(0,176,80,0.18)' }}
             >
-              <div className="pointer-events-none absolute right-[-20px] top-[-50px] h-[180px] w-[180px] rounded-full bg-[#00b050]/[0.12] blur-[60px]" />
+              <div className="pointer-events-none absolute end-[-20px] top-[-50px] h-[180px] w-[180px] rounded-full bg-[#00b050]/[0.12] blur-[60px]" />
               <div className="relative mb-4 flex items-center justify-between">
                 <p className="font-sans text-[20px] font-semibold tracking-[-0.4px] text-white">
                   {t('rawLabel')}
@@ -302,7 +257,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
               <div className="relative flex flex-col gap-px overflow-hidden rounded-[20px] bg-white/10">
                 {[
                   {
-                    label: `${t('colSpread')} (${selectedInstrument.name})`,
+                    label: `${t('colSpread')} (${selectedInstrument?.name ?? ''})`,
                     value: `${data.raw === 0 ? '0.0' : data.raw.toLocaleString('en-US')} ${data.unit}`,
                   },
                   { label: t('colCommission'), value: '$3.50/lot' },
@@ -329,7 +284,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
               <div className="flex flex-col gap-px overflow-hidden rounded-[20px] bg-[rgba(17,17,17,0.08)] dark:bg-white/[0.06]">
                 {[
                   {
-                    label: `${t('colSpread')} (${selectedInstrument.name})`,
+                    label: `${t('colSpread')} (${selectedInstrument?.name ?? ''})`,
                     value: `${data.vip === 0 ? '0.0' : data.vip.toLocaleString('en-US')} ${data.unit}`,
                   },
                   { label: t('colCommission'), value: t('commFrom') },
@@ -355,7 +310,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
 
       {/* Annual saving panel */}
       <section className="px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="rounded-[20px] bg-[#111111] px-5 py-6">
             <SectionKicker className="mb-3 [&>span:first-child]:bg-white/20 [&>span:last-child]:text-white/50">
               {t('savingKicker')}
@@ -366,21 +321,6 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
             <p className="font-body mt-1 text-[13px] leading-[1.55] text-white/60">
               {t('savingDesc', { lots: LOTS_PER_MONTH })}
             </p>
-            <Link
-              href={`/${locale}/register?account=raw`}
-              className="bg-accent hover:bg-accent/90 font-body mt-[22px] flex h-[50px] w-full items-center justify-center gap-2 rounded-[10px] text-[15px] font-medium text-white transition-colors"
-            >
-              {t('savingCta')}
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M3 8h10M9 4l4 4-4 4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Link>
           </div>
         </div>
       </section>

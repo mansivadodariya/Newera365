@@ -5,10 +5,19 @@ import { getInstruments } from '@/lib/cms';
 import type { CmsInstrument } from '@/lib/cms';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Fees & Spreads | NewEra365',
-  description: 'Live spread table, overnight swaps, and a full breakdown of all account charges.',
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const isAr = params.locale === 'ar';
+  return {
+    title: isAr ? 'الرسوم والفروقات | نيو إيرا 365' : 'Fees & Spreads | NewEra365',
+    description: isAr
+      ? 'جدول الفروقات المباشرة، مقايضات الليلية، وتفاصيل شاملة لجميع رسوم الحساب.'
+      : 'Live spread table, overnight swaps, and a full breakdown of all account charges.',
+  };
+}
 
 function mapToSpreadRow(instrument: CmsInstrument): CmsSpreadRow {
   return {
@@ -23,8 +32,8 @@ function mapToSpreadRow(instrument: CmsInstrument): CmsSpreadRow {
 
 export default async function FeesRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  // Fetch the 6 most popular instruments by sort order for the spread table
-  const instruments = await getInstruments(undefined, 6);
+  // Fetch instruments in the requested locale so names are translated
+  const instruments = await getInstruments(undefined, 6, params.locale);
   const spreadData: CmsSpreadRow[] = instruments.length > 0 ? instruments.map(mapToSpreadRow) : [];
   return (
     <>

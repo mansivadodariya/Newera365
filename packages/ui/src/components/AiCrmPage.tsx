@@ -59,7 +59,7 @@ export function AiCrmPage() {
       title: t('auto2Title'),
       desc: t('auto2Desc'),
       icon: (
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="rtl:-scale-x-100">
           <path
             d="M3 8h10M9 4l4 4-4 4"
             stroke="currentColor"
@@ -121,7 +121,13 @@ export function AiCrmPage() {
                   className="font-body flex h-[48px] items-center gap-2 rounded-full bg-[#00B050] px-6 text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90"
                 >
                   {t('demoBtn')}
-                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    className="rtl:-scale-x-100"
+                  >
                     <path
                       d="M3 8h10M9 4l4 4-4 4"
                       stroke="currentColor"

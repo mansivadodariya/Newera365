@@ -3,7 +3,8 @@ import type { InstrumentSpec, MT5Response } from '@newera365/types';
 import { cacheSet } from '../cache/mt5Cache';
 
 const DEFAULT_INTERVAL_MS = 60_000;
-const FETCH_TIMEOUT_MS = Number(process.env.MT5_FETCH_TIMEOUT_MS ?? 5_000);
+// `|| 5_000` guards against a malformed env value parsing to NaN (NE I-4).
+const FETCH_TIMEOUT_MS = Number(process.env.MT5_FETCH_TIMEOUT_MS) || 5_000;
 
 type SyncStatus = 'synced' | 'failed';
 
@@ -209,8 +210,16 @@ async function runSync(payload: Payload): Promise<number> {
  */
 export function startMt5SyncJob(payload: Payload): void {
   const run = async (): Promise<void> => {
-    const nextMs = await runSync(payload);
-    setTimeout(run, nextMs);
+    let nextMs = DEFAULT_INTERVAL_MS;
+    try {
+      nextMs = await runSync(payload);
+    } catch (err) {
+      // runSync handles its own errors, but guard against anything unexpected so a
+      // single throw can't permanently halt the sync loop (NE code-review WR-9).
+      payload.logger.error({ err }, 'mt5Sync: unexpected tick error — rescheduling');
+    } finally {
+      setTimeout(run, nextMs);
+    }
   };
   setTimeout(run, 5_000);
   payload.logger.info('mt5Sync: background sync job scheduled');

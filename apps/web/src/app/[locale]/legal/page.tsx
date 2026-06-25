@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const metadata: Metadata = {
-  title: 'Legal Documents | NewEra365',
+  title: 'Legal Documents',
   description:
     'Terms & Conditions, Privacy Policy, Risk Disclosure, AML Policy, and Cookie Policy.',
 };

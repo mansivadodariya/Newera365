@@ -6,7 +6,7 @@ import type { CmsMediaPressItem } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Media & Press | NewEra365',
+  title: 'Media & Press',
   description: 'Press coverage, media mentions and brand asset downloads for NewEra365.',
 };
 

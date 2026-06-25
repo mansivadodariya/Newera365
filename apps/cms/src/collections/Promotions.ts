@@ -1,5 +1,8 @@
 import type { CollectionConfig } from 'payload/types';
-import { seoFields, slugField } from './_fields';
+import { publicReadWhere, seoFields, slugField } from './_fields';
+import CategorySelect from '../components/CategorySelect';
+
+const PROMO_TAGS = ['NEW', 'MONTHLY', 'PERMANENT', 'LIMITED', 'EXCLUSIVE'];
 
 // Powers /trade/promotions — promotional offers, bonuses, and campaigns.
 export const Promotions: CollectionConfig = {
@@ -10,7 +13,7 @@ export const Promotions: CollectionConfig = {
     defaultColumns: ['title', 'tag', 'status', 'activeTo'],
     description: 'Manage promotional cards shown on the /trade/promotions page.',
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'active' } }) },
   fields: [
     {
       name: 'title',
@@ -37,7 +40,8 @@ export const Promotions: CollectionConfig = {
       maxLength: 20,
       localized: true,
       admin: {
-        description: 'Short badge label shown on the card, e.g. "NEW", "MONTHLY", "PERMANENT".',
+        description: 'Short badge label shown on the card. Pick one or type a new tag.',
+        components: { Field: CategorySelect(PROMO_TAGS) },
       },
     },
     {

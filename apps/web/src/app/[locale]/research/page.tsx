@@ -7,6 +7,9 @@ import type { CmsResearchReport, CmsMedia } from '@/lib/cms';
 function mapReport(r: CmsResearchReport): CmsResearchReportItem {
   const file = r.reportFile;
   const reportUrl = file && typeof file !== 'number' ? ((file as CmsMedia).url ?? null) : null;
+  const thumb = r.thumbnail;
+  const thumbnailUrl =
+    thumb && typeof thumb !== 'number' ? ((thumb as CmsMedia).url ?? null) : null;
   return {
     id: r.id,
     title: r.title,
@@ -15,6 +18,7 @@ function mapReport(r: CmsResearchReport): CmsResearchReportItem {
     publishedDate: r.publishedDate,
     isGated: r.isGated,
     reportUrl,
+    thumbnailUrl,
   };
 }
 

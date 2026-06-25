@@ -3,7 +3,30 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
-import { TradingViewWidget } from './TradingViewWidget';
+import { ChartWidget } from './ChartWidget';
+import { AuthModal, AuthModalType } from './AuthModal';
+import { sameCategory } from './filterUtils';
+
+export interface CmsAnalystCallItem {
+  id: number;
+  symbol: string;
+  tvSymbol: string;
+  currentPrice: string;
+  targetPrice: string;
+  confidence: number;
+  sentiment: 'BULLISH' | 'BEARISH' | 'NEUTRAL';
+  category: 'Majors' | 'Crosses' | 'Commodities' | 'Crypto';
+  sparkPoints?: string | null;
+}
+
+export interface CmsAnalystProfile {
+  initials?: string | null;
+  name?: string | null;
+  title?: string | null;
+  updated?: string | null;
+  commentaryEn?: string | null;
+  commentaryAr?: string | null;
+}
 
 type FilterTab = 'All' | 'Majors' | 'Crosses' | 'Commodities' | 'Crypto';
 type Sentiment = 'BULLISH' | 'BEARISH' | 'NEUTRAL';
@@ -103,6 +126,34 @@ const ANALYST = {
 
 const TABS: FilterTab[] = ['All', 'Majors', 'Crosses', 'Commodities', 'Crypto'];
 
+interface AnalystChartPageProps {
+  cmsCalls?: CmsAnalystCallItem[];
+  cmsAnalyst?: CmsAnalystProfile | null;
+  locale?: string;
+}
+
+function mapCmsCall(c: CmsAnalystCallItem): PairCall {
+  let sparkPoints: number[] = [30, 31, 32, 33, 34, 35, 36, 37, 38, 39];
+  if (c.sparkPoints) {
+    try {
+      sparkPoints = JSON.parse(c.sparkPoints) as number[];
+    } catch {
+      // keep default
+    }
+  }
+  return {
+    symbol: c.symbol,
+    tv: c.tvSymbol,
+    price: c.currentPrice,
+    target: c.targetPrice,
+    conf: c.confidence,
+    sentiment: c.sentiment,
+    up: c.sentiment === 'BULLISH',
+    category: c.category as FilterTab,
+    sparkPoints,
+  };
+}
+
 const TIMEFRAMES = ['1H', '4H', '1D', '1W'];
 
 function Sparkline({ points, up }: { points: number[]; up: boolean }) {
@@ -135,6 +186,7 @@ function Sparkline({ points, up }: { points: number[]; up: boolean }) {
 
 function FeaturedChart({ pair }: { pair: PairCall }) {
   const [tf, setTf] = useState('1D');
+  const t = useTranslations('analystChart');
 
   return (
     <div
@@ -147,15 +199,15 @@ function FeaturedChart({ pair }: { pair: PairCall }) {
           {pair.symbol} <span className="text-white/30">·</span> {tf}
         </p>
         <div className="flex gap-1">
-          {TIMEFRAMES.map((t) => (
+          {TIMEFRAMES.map((tfLabel) => (
             <button
-              key={t}
-              onClick={() => setTf(t)}
+              key={tfLabel}
+              onClick={() => setTf(tfLabel)}
               className={`font-body rounded px-2 py-[3px] text-[10px] transition-colors ${
-                tf === t ? 'bg-[#00B050] text-white' : 'text-white/40 hover:text-white/70'
+                tf === tfLabel ? 'bg-[#00B050] text-white' : 'text-white/40 hover:text-white/70'
               }`}
             >
-              {t}
+              {tfLabel}
             </button>
           ))}
         </div>
@@ -164,7 +216,7 @@ function FeaturedChart({ pair }: { pair: PairCall }) {
       {/* Live TradingView chart — re-keyed on symbol/interval so it remounts cleanly */}
       <div className="mt-3 px-3">
         <div style={{ height: 280 }}>
-          <TradingViewWidget
+          <ChartWidget
             key={`${pair.tv}-${tf}`}
             type="advanced-chart"
             symbol={pair.tv}
@@ -187,7 +239,7 @@ function FeaturedChart({ pair }: { pair: PairCall }) {
       {/* Target */}
       <div className="flex justify-end px-5 pb-4 pt-3">
         <span className="font-body text-[10px] uppercase tracking-[0.1em] text-white/40">
-          TARGET {pair.target.replace('+ ', '')}
+          {t('targetLabel')} {pair.target.replace('+ ', '')}
         </span>
       </div>
     </div>
@@ -200,18 +252,29 @@ const SENTIMENT_STYLES: Record<Sentiment, string> = {
   NEUTRAL: 'bg-[#6B7280]/10 text-[#6B7280]',
 };
 
-export function AnalystChartPage() {
+export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartPageProps = {}) {
   const t = useTranslations('analystChart');
   const [tab, setTab] = useState<FilterTab>('All');
-  const analyst = ANALYST;
-  const filtered = tab === 'All' ? CALLS : CALLS.filter((c) => c.category === tab);
-  const featured = filtered[0] ?? CALLS[0]!;
+
+  const calls = cmsCalls?.length ? cmsCalls.map(mapCmsCall) : CALLS;
+  const analyst = {
+    initials: cmsAnalyst?.initials ?? ANALYST.initials,
+    name: cmsAnalyst?.name ?? ANALYST.name,
+    title: cmsAnalyst?.title ?? ANALYST.title,
+    updated: cmsAnalyst?.updated ?? ANALYST.updated,
+    commentary:
+      (locale === 'ar' ? cmsAnalyst?.commentaryAr : cmsAnalyst?.commentaryEn) ?? ANALYST.commentary,
+  };
+
+  const filtered = tab === 'All' ? calls : calls.filter((c) => sameCategory(c.category, tab));
+  const featured = filtered[0] ?? calls[0]!;
+  const [authModal, setAuthModal] = useState<AuthModalType>(null);
 
   return (
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-6 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.08] tracking-[-1.14px]">
             {t('heroLine1')}
             <br />
@@ -227,14 +290,14 @@ export function AnalystChartPage() {
 
       {/* Featured chart card */}
       <section className="px-5 pb-6">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <FeaturedChart pair={featured} />
         </div>
       </section>
 
       {/* Pair filter + This week's calls */}
       <section className="px-5 pb-6">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Filter */}
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('filterKicker')}
@@ -258,7 +321,7 @@ export function AnalystChartPage() {
                       ? t('filterCrosses')
                       : tabItem === 'Commodities'
                         ? t('filterCommodities')
-                        : 'Crypto'}
+                        : t('filterCrypto')}
               </button>
             ))}
           </div>
@@ -282,16 +345,20 @@ export function AnalystChartPage() {
                     <span
                       className={`font-body rounded-full px-2 py-[2px] text-[10px] font-semibold ${SENTIMENT_STYLES[pair.sentiment]}`}
                     >
-                      {pair.sentiment}
+                      {pair.sentiment === 'BULLISH'
+                        ? t('sentimentBullish')
+                        : pair.sentiment === 'BEARISH'
+                          ? t('sentimentBearish')
+                          : t('sentimentNeutral')}
                     </span>
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="text-end">
                   <p className="text-foreground font-mono text-[13px] font-semibold">
                     {pair.price}
                   </p>
                   <p className="font-body text-[11px] text-[#6B7280]">
-                    Target {pair.target} · {pair.conf}%
+                    {t('targetLabel')} {pair.target} · {pair.conf}%
                   </p>
                 </div>
               </div>
@@ -302,7 +369,7 @@ export function AnalystChartPage() {
 
       {/* Analyst commentary */}
       <section className="px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('commentaryLabel')}
           </SectionKicker>
@@ -332,12 +399,18 @@ export function AnalystChartPage() {
             {t('ctaHeading')}
           </h2>
           <p className="font-body mb-7 text-[14px] text-white/60">{t('ctaDesc')}</p>
-          <a
-            href="/en/register"
+          <button
+            onClick={() => setAuthModal('register')}
             className="bg-accent font-body hover:bg-accent/90 inline-flex h-[52px] items-center justify-center gap-2 rounded-full px-8 text-[14px] font-medium text-white transition-colors"
           >
             {t('ctaBtn')}
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 16 16"
+              fill="none"
+              className="rtl:-scale-x-100"
+            >
               <path
                 d="M3 8h10M9 4l4 4-4 4"
                 stroke="currentColor"
@@ -346,9 +419,10 @@ export function AnalystChartPage() {
                 strokeLinejoin="round"
               />
             </svg>
-          </a>
+          </button>
         </div>
       </section>
+      <AuthModal type={authModal} onClose={() => setAuthModal(null)} />
     </>
   );
 }

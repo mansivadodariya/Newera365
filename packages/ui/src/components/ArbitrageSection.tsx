@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { SectionKicker } from './SectionKicker';
+import { useRef, useEffect } from 'react';
 
 const CARDS = [
   { valueKey: 'arbStat1Value', labelKey: 'arbStat1Label', descKey: 'arbStat1Desc' },
@@ -10,6 +10,114 @@ const CARDS = [
   { valueKey: 'arbStat3Value', labelKey: 'arbStat3Label', descKey: 'arbStat3Desc' },
   { valueKey: 'arbStat4Value', labelKey: 'arbStat4Label', descKey: 'arbStat4Desc' },
 ] as const;
+
+/** Animates numeric value from 0 using GSAP when element enters viewport */
+function AnimatedValue({ value }: { value: string }) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const triggered = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Parse: e.g. "32%", "0.0 ms", "99.9%", "$1M+"
+    const match = value.match(/(\d+(?:\.\d+)?)/);
+    if (!match) return;
+
+    const numStr = match[1] ?? match[0];
+    const target = parseFloat(numStr);
+    const decimals = (numStr.split('.')[1] ?? '').length;
+    const prefix = value.slice(0, match.index ?? 0);
+    const suffix = value.slice((match.index ?? 0) + numStr.length);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting) || triggered.current) return;
+        triggered.current = true;
+        observer.disconnect();
+
+        import('gsap').then(({ gsap }) => {
+          const obj = { val: 0 };
+          gsap.to(obj, {
+            val: target,
+            duration: 1.4,
+            ease: 'power2.out',
+            onUpdate() {
+              if (el) el.textContent = `${prefix}${obj.val.toFixed(decimals)}${suffix}`;
+            },
+            onComplete() {
+              if (el) el.textContent = value;
+            },
+          });
+        });
+      },
+      { threshold: 0.3 },
+    );
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, [value]);
+
+  return (
+    <p ref={ref} className="text-accent font-sans text-[22px] font-bold leading-none">
+      {value}
+    </p>
+  );
+}
+
+/** Individual stat card with fade-up entrance */
+function ArbCard({
+  value,
+  label,
+  desc,
+  index,
+}: {
+  value: string;
+  label: string;
+  desc: string;
+  index: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          const delay = index * 90;
+          el.style.transition = `opacity 0.5s ease ${delay}ms, transform 0.5s ease ${delay}ms`;
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, [index]);
+
+  return (
+    <div
+      ref={ref}
+      className="flex flex-col gap-[8px] py-[16px] xl:rounded-[14px] xl:bg-white xl:p-[18px] xl:dark:bg-[#1c1c1c]"
+    >
+      <AnimatedValue value={value} />
+      <p className="text-foreground font-body text-[15px] font-semibold leading-tight">{label}</p>
+      <p className="font-body text-[13px] leading-[19px] text-[#6B7280] dark:text-[#B8BFCC]">
+        {desc}
+      </p>
+    </div>
+  );
+}
 
 export function ArbitrageSection() {
   const t = useTranslations('home');
@@ -47,17 +155,12 @@ export function ArbitrageSection() {
         <div className="flex flex-col xl:grid xl:grid-cols-4 xl:gap-[20px]">
           {CARDS.map((card, i) => (
             <div key={card.valueKey}>
-              <div className="flex flex-col gap-[8px] py-[16px] xl:rounded-[14px] xl:bg-white xl:p-[18px] xl:dark:bg-[#1c1c1c]">
-                <p className="text-accent font-sans text-[22px] font-bold leading-none">
-                  {t(card.valueKey)}
-                </p>
-                <p className="text-foreground font-body text-[15px] font-semibold leading-tight">
-                  {t(card.labelKey)}
-                </p>
-                <p className="font-body text-[13px] leading-[19px] text-[#6B7280] dark:text-[#B8BFCC]">
-                  {t(card.descKey)}
-                </p>
-              </div>
+              <ArbCard
+                value={t(card.valueKey)}
+                label={t(card.labelKey)}
+                desc={t(card.descKey)}
+                index={i}
+              />
               {i < CARDS.length - 1 && (
                 <div className="h-px bg-[#d9dbe0] xl:hidden dark:bg-[#2a2a2a]" />
               )}

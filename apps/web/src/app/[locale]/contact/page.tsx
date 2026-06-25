@@ -5,7 +5,7 @@ import { getSiteSettings } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Contact Us | NewEra365',
+  title: 'Contact Us',
   description: 'Get in touch with our support team — email, phone, or live chat.',
 };
 

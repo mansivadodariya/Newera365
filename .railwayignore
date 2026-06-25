@@ -1,0 +1,12 @@
+# Dev-only artifacts — not needed to build/run the CMS. Slims the railway up upload.
+.git/
+graphify-out/
+apps/web/graphify-out/
+.audit/
+code-review/
+docs/
+**/.next/
+**/dist/
+**/.turbo/
+*.log
+apps/cms/_e2e/

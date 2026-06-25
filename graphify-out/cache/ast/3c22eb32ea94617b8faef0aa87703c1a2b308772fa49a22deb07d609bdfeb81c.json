@@ -1,0 +1,79 @@
+{
+  "nodes": [
+    {
+      "id": "d_newera365_newera365_app_code_review_fix_report_md",
+      "label": "FIX-REPORT.md",
+      "file_type": "document",
+      "source_file": "code-review/FIX-REPORT.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "code_review_fix_report_audit_fix_report_newera365",
+      "label": "Audit-Fix Report \u2014 NewEra365",
+      "file_type": "document",
+      "source_file": "code-review/FIX-REPORT.md",
+      "source_location": "L11"
+    },
+    {
+      "id": "code_review_fix_report_fixed_20",
+      "label": "Fixed (20)",
+      "file_type": "document",
+      "source_file": "code-review/FIX-REPORT.md",
+      "source_location": "L19"
+    },
+    {
+      "id": "code_review_fix_report_deferred_need_infra_schema_or_a_product_decision_17",
+      "label": "Deferred \u2014 need infra, schema, or a product decision (17)",
+      "file_type": "document",
+      "source_file": "code-review/FIX-REPORT.md",
+      "source_location": "L50"
+    },
+    {
+      "id": "code_review_fix_report_next_steps",
+      "label": "Next steps",
+      "file_type": "document",
+      "source_file": "code-review/FIX-REPORT.md",
+      "source_location": "L62"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_newera365_newera365_app_code_review_fix_report_md",
+      "target": "code_review_fix_report_audit_fix_report_newera365",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/FIX-REPORT.md",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_fix_report_audit_fix_report_newera365",
+      "target": "code_review_fix_report_fixed_20",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/FIX-REPORT.md",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_fix_report_audit_fix_report_newera365",
+      "target": "code_review_fix_report_deferred_need_infra_schema_or_a_product_decision_17",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/FIX-REPORT.md",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_fix_report_audit_fix_report_newera365",
+      "target": "code_review_fix_report_next_steps",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/FIX-REPORT.md",
+      "source_location": "L62",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

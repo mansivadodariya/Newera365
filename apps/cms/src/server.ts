@@ -9,10 +9,15 @@ import { startMt5SyncJob } from './jobs/mt5Sync';
 const app = express();
 const port = Number(process.env.PORT ?? 3001);
 
-// Trust the first reverse-proxy hop (Railway / Cloudflare).
+// Number of reverse-proxy hops to trust for req.ip / X-Forwarded-For.
 // Without this, req.ip resolves to the proxy's internal IP for every request,
-// making all express-rate-limit counters key on the same address → useless.
-app.set('trust proxy', 1);
+// making all rate-limit counters key on the same address → useless. But trusting
+// MORE hops than actually exist lets clients spoof X-Forwarded-For to bypass the
+// IP rate limits (NE code-review WR-1), so the count MUST match the real edge
+// topology (e.g. Cloudflare → Railway = 2). Configurable via TRUST_PROXY_HOPS;
+// behind Cloudflare, prefer keying limits on the un-spoofable CF-Connecting-IP.
+const trustProxyHops = Number(process.env.TRUST_PROXY_HOPS ?? 1);
+app.set('trust proxy', Number.isFinite(trustProxyHops) ? trustProxyHops : 1);
 
 // Serve public assets (logo, etc.)
 app.use('/public', express.static(path.join(__dirname, '../public')));
@@ -28,20 +33,29 @@ const r2Host = (() => {
     return undefined;
   }
 })();
-app.use((_req: Request, res: Response, next: NextFunction) => {
-  const imgSrc = ["'self'", 'data:', 'https://s3.tradingview.com'];
-  if (r2Host) imgSrc.push(`https://${r2Host}`);
-  res.setHeader(
-    'Content-Security-Policy',
-    [
-      "default-src 'self'",
-      `img-src ${imgSrc.join(' ')}`,
-      "script-src 'self' 'unsafe-inline' https://s3.tradingview.com https://www.tradingview.com",
-      'frame-src https://www.tradingview.com https://s.tradingview.com',
-      "style-src 'self' 'unsafe-inline'",
-      "connect-src 'self'",
-    ].join('; '),
-  );
+app.use((req: Request, res: Response, next: NextFunction) => {
+  // Skip the strict CSP for the Payload admin panel. The admin SPA boots through
+  // runtime code generation (ajv compiles field validators via the Function
+  // constructor), which a CSP lacking 'unsafe-eval' blocks — leaving a blank
+  // white panel. Payload ships no CSP on the admin by default; mirror that and
+  // keep the strict CSP on the public API/content routes only. The other
+  // hardening headers below still apply everywhere, including /admin.
+  const isAdmin = req.path === '/admin' || req.path.startsWith('/admin/');
+  if (!isAdmin) {
+    const imgSrc = ["'self'", 'data:', 'https://s3.tradingview.com'];
+    if (r2Host) imgSrc.push(`https://${r2Host}`);
+    res.setHeader(
+      'Content-Security-Policy',
+      [
+        "default-src 'self'",
+        `img-src ${imgSrc.join(' ')}`,
+        "script-src 'self' 'unsafe-inline' https://s3.tradingview.com https://www.tradingview.com",
+        'frame-src https://www.tradingview.com https://s.tradingview.com',
+        "style-src 'self' 'unsafe-inline'",
+        "connect-src 'self'",
+      ].join('; '),
+    );
+  }
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');

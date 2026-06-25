@@ -1,0 +1,2952 @@
+{
+  ".figma-cache/home-nodes-d8.json": {
+    "mtime": 1779778266.4575162,
+    "ast_hash": "5cade015b50a3e1eb1395a58642bb092",
+    "semantic_hash": ""
+  },
+  ".figma-cache/home-nodes.json": {
+    "mtime": 1779778266.460234,
+    "ast_hash": "5cade015b50a3e1eb1395a58642bb092",
+    "semantic_hash": ""
+  },
+  ".figma-cache/styles.json": {
+    "mtime": 1779778266.4680636,
+    "ast_hash": "92c644dcb82fd4b42f131dc9097e32fa",
+    "semantic_hash": ""
+  },
+  ".husky/_/applypatch-msg": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/_/commit-msg": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/_/h": {
+    "mtime": 1781899496.7811282,
+    "ast_hash": "15239a01c5554e56ff745570fb583a91",
+    "semantic_hash": ""
+  },
+  ".husky/_/husky.sh": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "13871d2ab13e8423790ecb2c01c78c18",
+    "semantic_hash": ""
+  },
+  ".husky/_/post-applypatch": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/_/post-checkout": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/_/post-commit": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/_/post-merge": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/_/post-rewrite": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/_/pre-applypatch": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/_/pre-auto-gc": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/_/pre-commit": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/_/pre-merge-commit": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/_/pre-push": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/_/pre-rebase": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/_/prepare-commit-msg": {
+    "mtime": 1781942460.1834652,
+    "ast_hash": "0b71c2e7d39daa010985d529f1320b37",
+    "semantic_hash": ""
+  },
+  ".husky/pre-commit": {
+    "mtime": 1780299847.8991828,
+    "ast_hash": "9f40c6d68a396c00e5e877818a93f5ed",
+    "semantic_hash": ""
+  },
+  "apps/cms/.eslintrc.js": {
+    "mtime": 1780501955.252493,
+    "ast_hash": "c9ebf60d64247ae92b9525dd630fb190",
+    "semantic_hash": ""
+  },
+  "apps/cms/migrations/001_slug_locale_unique_indexes.sql": {
+    "mtime": 1779866575.2733634,
+    "ast_hash": "4f60ee29bed1a111a03d8c2a23934b71",
+    "semantic_hash": ""
+  },
+  "apps/cms/migrations/002_mt5_sync_awards_site_settings.sql": {
+    "mtime": 1779866983.9093485,
+    "ast_hash": "33064895c4a1971fd68fc581fb2a9ea2",
+    "semantic_hash": ""
+  },
+  "apps/cms/migrations/003_site_settings_rels.sql": {
+    "mtime": 1779867622.2760952,
+    "ast_hash": "32ada057acf4545a49b4b472e471f715",
+    "semantic_hash": ""
+  },
+  "apps/cms/migrations/004_rename_enum_columns_to_camelcase.sql": {
+    "mtime": 1781777738.8696022,
+    "ast_hash": "08b67ddab13f10722592a50b86ec4462",
+    "semantic_hash": ""
+  },
+  "apps/cms/nodemon.json": {
+    "mtime": 1780502407.116611,
+    "ast_hash": "d91330362bf9d11200cd325d7e8a59a3",
+    "semantic_hash": ""
+  },
+  "apps/cms/package.json": {
+    "mtime": 1781942392.8843164,
+    "ast_hash": "fe666c913cfb3d228a225416222cbc83",
+    "semantic_hash": ""
+  },
+  "apps/cms/scripts/apply-schema.mjs": {
+    "mtime": 1781777749.8835132,
+    "ast_hash": "f8a8777bfa1337ad29c2e2cb791721cd",
+    "semantic_hash": ""
+  },
+  "apps/cms/scripts/seed-account-types.ts": {
+    "mtime": 1780552164.0984678,
+    "ast_hash": "ce7d76991c3235bb91c49d592bfa7d2c",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/cache/mt5Cache.ts": {
+    "mtime": 1779864273.0912445,
+    "ast_hash": "f1ba7cab150df2eb0084ac7e3c3bf146",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/AccountTypes.ts": {
+    "mtime": 1781777163.233313,
+    "ast_hash": "eb862f4bde0ea1334e78d0fa190d8034",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/AnalystCalls.ts": {
+    "mtime": 1781777161.648719,
+    "ast_hash": "f126da570c37ac803c7300f7f536ada4",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/Awards.ts": {
+    "mtime": 1781777157.870216,
+    "ast_hash": "10a4a93ebf417f57929787cd3c46b371",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/BlogPosts.ts": {
+    "mtime": 1781777145.4068937,
+    "ast_hash": "e3ffb2cfbd5e680abe4d2e18e437c771",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/Careers.ts": {
+    "mtime": 1781777156.617717,
+    "ast_hash": "7ed0c33f416696de5eb4da3ffc3a3fd2",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/ContactSubmissions.ts": {
+    "mtime": 1781689656.5058534,
+    "ast_hash": "9850ea457eb29a6f1b9902213ebe87a1",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/EducationContent.ts": {
+    "mtime": 1781777593.428089,
+    "ast_hash": "d5f355e7de9060a4d93f994356c2fa97",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/FAQs.ts": {
+    "mtime": 1781777167.7267096,
+    "ast_hash": "871cf810380b5f095c9dae512919233d",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/IBContent.ts": {
+    "mtime": 1781795793.7892754,
+    "ast_hash": "384ec54a3e9228c4743339dd03c5b0b6",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/LegalPages.ts": {
+    "mtime": 1781777150.8329885,
+    "ast_hash": "21410e74170357ee572a71eee19087a3",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/MarketAnalysis.ts": {
+    "mtime": 1781892175.0568464,
+    "ast_hash": "57a5fd4b0378a7e18700fef7855360be",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/Media.ts": {
+    "mtime": 1781921749.752485,
+    "ast_hash": "918702ce6e1c9536415b2ad37e8d3797",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/MediaPress.ts": {
+    "mtime": 1781777168.9569004,
+    "ast_hash": "7caa5354fd71870e2c874bebfeca2e86",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/News.ts": {
+    "mtime": 1781777146.6044607,
+    "ast_hash": "21893464f329b90e43cc42b79aac1708",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/NewsletterSubscribers.ts": {
+    "mtime": 1779559005.8939912,
+    "ast_hash": "c9fb8e2a75e0fbcce93aef760e85929d",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/PaymentMethods.ts": {
+    "mtime": 1781795334.2432263,
+    "ast_hash": "215d803d48b1d321ead8bb500d2db710",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/ProductsInstruments.ts": {
+    "mtime": 1781795760.5800102,
+    "ast_hash": "cf85c550708f5db69efc34f782d6e92d",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/Promotions.ts": {
+    "mtime": 1781777153.6284103,
+    "ast_hash": "2ff728627c38380d43d9f9caab5d378e",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/ResearchReports.ts": {
+    "mtime": 1781777149.3829806,
+    "ast_hash": "96c55f7dd80e914c239d10186d72f94c",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/TeamMembers.ts": {
+    "mtime": 1781777158.8196096,
+    "ast_hash": "6f37b96fe9a61b1f6e21ae34d0fc0e65",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/Users.ts": {
+    "mtime": 1781942360.6251645,
+    "ast_hash": "31ca290dbae142d429a2b0289a21bf5c",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/WebinarRegistrations.ts": {
+    "mtime": 1779518359.7459261,
+    "ast_hash": "aedb497083419d4e7bdee68ea7406157",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/Webinars.ts": {
+    "mtime": 1781777155.0494764,
+    "ast_hash": "e1363406a3b355b9a0535e11d9ce9962",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/_fields.ts": {
+    "mtime": 1781777589.089686,
+    "ast_hash": "6c0c9eb08f6bd06df85a72aa44c98b42",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/components/Mt5SyncStatusCell.tsx": {
+    "mtime": 1779904483.3124635,
+    "ast_hash": "98f93d95325c40c905ca192b4640ce0f",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/db/runSlugIndexMigration.ts": {
+    "mtime": 1779517781.4480062,
+    "ast_hash": "df9610127758d0175ab8af3ee0bf21cb",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/email/escapeHtml.ts": {
+    "mtime": 1779517834.84281,
+    "ast_hash": "89ecb048a22f68f10b459463a5d5158d",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/email/transport.mock.ts": {
+    "mtime": 1780502407.4701433,
+    "ast_hash": "a96070dbeacb737747466d350f7a2dcc",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/email/transport.ts": {
+    "mtime": 1781882398.976278,
+    "ast_hash": "efbb9c1595eb22e91401728dc3ec71da",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/endpoints/index.ts": {
+    "mtime": 1781880673.554162,
+    "ast_hash": "525ea27dee1476e60b354d438d4ab25c",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/globals/SiteSettings.ts": {
+    "mtime": 1781697564.533562,
+    "ast_hash": "f858aa6e74bbc2e332560030b7cf9c39",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/graphics/Icon.tsx": {
+    "mtime": 1781113316.6029544,
+    "ast_hash": "d68802d74a51c54040b95d4ed1c857fb",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/graphics/Logo.tsx": {
+    "mtime": 1781113323.75862,
+    "ast_hash": "9b90ef4fc8b6d59c47241d7653dbe513",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/hooks/index.ts": {
+    "mtime": 1780501955.8531973,
+    "ast_hash": "4a5863e9a3636211ecccb06366147a7f",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/jobs/mt5Sync.ts": {
+    "mtime": 1781777675.9574554,
+    "ast_hash": "b4af057e0433a60de8c4a3c4753ac687",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/payload-types.ts": {
+    "mtime": 1781942398.971704,
+    "ast_hash": "89b1b8e2656cd64a5115f6f6a7f544c1",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/payload.config.ts": {
+    "mtime": 1781942376.4768186,
+    "ast_hash": "c8f4f7b6f383dda002f010dcd04e8af4",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/rateLimit/postgresStore.ts": {
+    "mtime": 1781777682.6888597,
+    "ast_hash": "45f474b1558c08a7f7dd43418f207274",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/apply-localization-schema.js": {
+    "mtime": 1780501955.929491,
+    "ast_hash": "43ff0766fec509b7f7986ae9f55b0e19",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/ensure-admin.ts": {
+    "mtime": 1781777364.1090078,
+    "ast_hash": "cee48912efc126da949d024aacfed10e",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/fix-schema.js": {
+    "mtime": 1780397359.8120415,
+    "ast_hash": "fa301e0c7bec597649cd2f3436653633",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/migrate-missing-columns.ts": {
+    "mtime": 1781891203.4326434,
+    "ast_hash": "c09f46ecbb406353daaec906ae61003e",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/migrate-slug-indexes.ts": {
+    "mtime": 1779517787.5068588,
+    "ast_hash": "14cebb42a270e9027f0fe5f59a57d1a1",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/normalize-schema.js": {
+    "mtime": 1780501955.984016,
+    "ast_hash": "afe82a0b830a6bb28a9857c81fd21297",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/patch-arabic.ts": {
+    "mtime": 1781628947.452503,
+    "ast_hash": "00c1d3e1b9084e6be1ded7a804950eae",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/pre-migrate-localization.js": {
+    "mtime": 1780501956.0052059,
+    "ast_hash": "ffa8f69dbbe8b38328f1ab81d90ce9b7",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/seed-education-only.js": {
+    "mtime": 1781689658.2004118,
+    "ast_hash": "50cf872bfa9d9c396ed8d55ca5bbe55a",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/seed-ib-only.ts": {
+    "mtime": 1781693387.9228892,
+    "ast_hash": "f63f2d56a50b5f1b5058b002ce355c60",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/seed-media-press.js": {
+    "mtime": 1781060832.9632897,
+    "ast_hash": "777441d361f149ddd57f5729c090c135",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/seed.ts": {
+    "mtime": 1781944756.6868017,
+    "ast_hash": "c6db2ec8f322635836fef08cd1ec93ea",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/update-account-copy.ts": {
+    "mtime": 1781096083.4779887,
+    "ast_hash": "a1c04be8911cbb5017fdd724cdb2f0f6",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/server.ts": {
+    "mtime": 1781936271.0415542,
+    "ast_hash": "21a6e8fd8f06b64200c1bd24f75f8f7c",
+    "semantic_hash": ""
+  },
+  "apps/cms/tsconfig.json": {
+    "mtime": 1779202189.6354873,
+    "ast_hash": "af77837a3d027b4e76d8118c25afcaf8",
+    "semantic_hash": ""
+  },
+  "apps/mt5-service/.eslintrc.js": {
+    "mtime": 1779202283.2389624,
+    "ast_hash": "9d48b4fa1a91ed8824a64670a5382d95",
+    "semantic_hash": ""
+  },
+  "apps/mt5-service/package.json": {
+    "mtime": 1779202280.8184402,
+    "ast_hash": "c1dc10f194c0eca0a224c0e8c84a9741",
+    "semantic_hash": ""
+  },
+  "apps/mt5-service/src/data/fallback.json": {
+    "mtime": 1779202290.0862398,
+    "ast_hash": "54a38a434e2849116fabe968c6a38dce",
+    "semantic_hash": ""
+  },
+  "apps/mt5-service/src/index.ts": {
+    "mtime": 1781777871.3036933,
+    "ast_hash": "42913c7048d666c18a58c9fdce7ae44b",
+    "semantic_hash": ""
+  },
+  "apps/mt5-service/src/manager.ts": {
+    "mtime": 1779559006.22821,
+    "ast_hash": "9d211150f1ac0bdaadea9dd1d865359a",
+    "semantic_hash": ""
+  },
+  "apps/mt5-service/tsconfig.json": {
+    "mtime": 1779202282.3823283,
+    "ast_hash": "2a07b8cb0eb5a489d44fad7ceb3a940b",
+    "semantic_hash": ""
+  },
+  "apps/web/.eslintrc.js": {
+    "mtime": 1779202141.912761,
+    "ast_hash": "705eb5fd02e88b1d4f60d28eec38b894",
+    "semantic_hash": ""
+  },
+  "apps/web/messages/ar.json": {
+    "mtime": 1781944752.0192971,
+    "ast_hash": "a364d0d5320eb6f43464c7dc749cdbf5",
+    "semantic_hash": ""
+  },
+  "apps/web/messages/en.json": {
+    "mtime": 1781944750.7121868,
+    "ast_hash": "7c41dda4067cce1d045e3ac53c222ce9",
+    "semantic_hash": ""
+  },
+  "apps/web/next.config.mjs": {
+    "mtime": 1781947463.1644776,
+    "ast_hash": "a7fe4d3aea74007937c686fcf06fb2a1",
+    "semantic_hash": ""
+  },
+  "apps/web/package.json": {
+    "mtime": 1781549266.431134,
+    "ast_hash": "1473fe5456c15c51e18dff759c5a85b7",
+    "semantic_hash": ""
+  },
+  "apps/web/postcss.config.js": {
+    "mtime": 1779202141.0981767,
+    "ast_hash": "8640f9b2e6475cc3f5b1ff4548925765",
+    "semantic_hash": ""
+  },
+  "apps/web/scripts/check-i18n.js": {
+    "mtime": 1779518530.7503169,
+    "ast_hash": "ad92146c64443fc5ffb1840b2aed0dad",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/ai-crm/loading.tsx": {
+    "mtime": 1781459527.8352373,
+    "ast_hash": "7fee28b80f0ec6914d244434b697c8a4",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/ai-crm/page.tsx": {
+    "mtime": 1781059478.9549713,
+    "ast_hash": "86333fb665f0ea87f72c4e586cec805d",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/blog/[slug]/loading.tsx": {
+    "mtime": 1780663629.2335303,
+    "ast_hash": "8334d2263a5ae3456a4d6b04d5791e76",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/blog/[slug]/page.tsx": {
+    "mtime": 1781891266.079749,
+    "ast_hash": "080223e1f09357229450002112a59541",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/blog/loading.tsx": {
+    "mtime": 1780663675.556305,
+    "ast_hash": "f9c69b48935d6eb518a41f9ea564f10c",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/blog/page.tsx": {
+    "mtime": 1780501956.8066692,
+    "ast_hash": "c75836d9cb945ed422a119653b76e300",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/company/about/loading.tsx": {
+    "mtime": 1781892062.4387298,
+    "ast_hash": "48e4c2468e91b4c52f8ca6b8423726d8",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/company/about/page.tsx": {
+    "mtime": 1781885187.6905468,
+    "ast_hash": "d81a7bb1205b072efd4a3e83ee8f96c6",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/company/awards/loading.tsx": {
+    "mtime": 1781892064.4623578,
+    "ast_hash": "fb82d12b627cfe2e0b7e6818121d55ea",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/company/awards/page.tsx": {
+    "mtime": 1780664462.731673,
+    "ast_hash": "f5e91f7d4e47e55275dcc35f4639b0ba",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/company/careers/loading.tsx": {
+    "mtime": 1781892066.218986,
+    "ast_hash": "5600779abd7bafa11476a3f91fd66d4f",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/company/careers/page.tsx": {
+    "mtime": 1780501955.506393,
+    "ast_hash": "54d78f0d5bf4b2c23bbcf84b920cd706",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/company/media-press/loading.tsx": {
+    "mtime": 1781892068.1044955,
+    "ast_hash": "76ffffe5cd5c61f46f2acc2c83e9acfd",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/company/media-press/page.tsx": {
+    "mtime": 1780664462.7670255,
+    "ast_hash": "a3fdedb7a7e065b0d596317d540a5466",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/contact/loading.tsx": {
+    "mtime": 1781340499.4676616,
+    "ast_hash": "672a77f4a997c80f714c4c0a9a30ca56",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/contact/page.tsx": {
+    "mtime": 1780501955.554303,
+    "ast_hash": "6528eef14a1fec852793505a41e365fe",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/daily-news/loading.tsx": {
+    "mtime": 1780663629.2335303,
+    "ast_hash": "f9c69b48935d6eb518a41f9ea564f10c",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/daily-news/page.tsx": {
+    "mtime": 1780501955.5802872,
+    "ast_hash": "3458b4de6c34100153007ed1238569d3",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/ebooks/loading.tsx": {
+    "mtime": 1781892070.051331,
+    "ast_hash": "1f515d22e2fd847a067c72977b337d3d",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/ebooks/page.tsx": {
+    "mtime": 1780501955.62124,
+    "ast_hash": "1bd463d71a9adb4ce8d09853c83dff4e",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/education/audio/loading.tsx": {
+    "mtime": 1781892074.220277,
+    "ast_hash": "8e836cbe454eec4d868c70d5ab890f0b",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/education/audio/page.tsx": {
+    "mtime": 1781525993.7359726,
+    "ast_hash": "8aafd35f7c109fd7e26d536040e20924",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/education/loading.tsx": {
+    "mtime": 1780663675.5578117,
+    "ast_hash": "9ef2c7ffaa5b955ca183f516d554c0b9",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/education/media/loading.tsx": {
+    "mtime": 1781892071.8733504,
+    "ast_hash": "5af5de31bbccdfc127bc9ad59c99d25c",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/education/media/page.tsx": {
+    "mtime": 1780994842.9612763,
+    "ast_hash": "98efbf505db791335017e90b94f4ed80",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/education/page.tsx": {
+    "mtime": 1780979148.018105,
+    "ast_hash": "9448dabf0c9da7ec4dae824d2d7867e5",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/education/webinars/loading.tsx": {
+    "mtime": 1781892080.3098028,
+    "ast_hash": "a0dc896b8f8d05a207e5d9249a95a11a",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/education/webinars/page.tsx": {
+    "mtime": 1781525987.699797,
+    "ast_hash": "118f34e0570edfda414033882c50357b",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/error.tsx": {
+    "mtime": 1781665294.3773885,
+    "ast_hash": "54cfee8e4f6895535e0c1ca06badaabd",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/faqs/loading.tsx": {
+    "mtime": 1780663675.5578117,
+    "ast_hash": "d5e791e55eeac56243a45ac6eb0a5401",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/faqs/page.tsx": {
+    "mtime": 1780501955.7417376,
+    "ast_hash": "ffbaa8b4676f7f2fe6a17a2c5b44a7a6",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/glossary/loading.tsx": {
+    "mtime": 1781340505.0735402,
+    "ast_hash": "07e4a50c02bd380e1adebd5c8fcd7808",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/glossary/page.tsx": {
+    "mtime": 1780994853.49955,
+    "ast_hash": "7f1f880db71db9ed935003245df4d349",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/guides/[slug]/loading.tsx": {
+    "mtime": 1780663629.2315235,
+    "ast_hash": "8334d2263a5ae3456a4d6b04d5791e76",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/guides/[slug]/page.tsx": {
+    "mtime": 1781689804.3040879,
+    "ast_hash": "96e192370934050f9f0ef3d85180ccf5",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/guides/loading.tsx": {
+    "mtime": 1781892076.1397681,
+    "ast_hash": "0cdc211fdd74585ea77daf1cb110f72f",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/guides/page.tsx": {
+    "mtime": 1780501955.809759,
+    "ast_hash": "2959a9961b6a4365a9342bf27437011b",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/layout.tsx": {
+    "mtime": 1781710080.4004903,
+    "ast_hash": "289a1fab9e48c2638ded85f906e79bbb",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/legal/loading.tsx": {
+    "mtime": 1781340498.5252132,
+    "ast_hash": "77d1e7db55213710fbc3bbfcf1b8701e",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/legal/page.tsx": {
+    "mtime": 1780501955.9081345,
+    "ast_hash": "e2b44aec724be728d1d0efe01696087b",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/live-chat/loading.tsx": {
+    "mtime": 1781340500.8854418,
+    "ast_hash": "5569a52f2cb92652d759ef84b4d9ca72",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/live-chat/page.tsx": {
+    "mtime": 1779958570.021126,
+    "ast_hash": "d7740e94be44214e0d40062feb78fb10",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/loading.tsx": {
+    "mtime": 1780582842.7657373,
+    "ast_hash": "94cb96433421ce4dbbcdc62b6ec2d821",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/markets/[category]/loading.tsx": {
+    "mtime": 1780663675.5578117,
+    "ast_hash": "3767307d7b452312d7098b3f849b1afe",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/markets/[category]/page.tsx": {
+    "mtime": 1781549180.3659146,
+    "ast_hash": "ad7da65f7389834e44e8e9c4ad17d924",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/newsletter/confirmed/loading.tsx": {
+    "mtime": 1781459576.9820347,
+    "ast_hash": "e9b55fc1984a8e46e92c4a0424f398d3",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/newsletter/confirmed/page.tsx": {
+    "mtime": 1780567457.885178,
+    "ast_hash": "3b54dffe71096cd1a7d74fca9c76483d",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/newsletter/loading.tsx": {
+    "mtime": 1781340501.8291671,
+    "ast_hash": "97334e867aa92709179e66f9ff791ae6",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/newsletter/page.tsx": {
+    "mtime": 1781529369.108801,
+    "ast_hash": "d304f6bf7fe80b362dc71edc5d182559",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/newsletter/unsubscribed/loading.tsx": {
+    "mtime": 1781459583.898642,
+    "ast_hash": "b71fc710561cffa432055a2b4eb8b338",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/newsletter/unsubscribed/page.tsx": {
+    "mtime": 1780567457.902042,
+    "ast_hash": "3a1f913cf330ac8e456e1daf9bc56ee7",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/not-found.tsx": {
+    "mtime": 1781665289.880633,
+    "ast_hash": "a8f00fdda9687161844e0b7716ff19bc",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/page.tsx": {
+    "mtime": 1781850794.827912,
+    "ast_hash": "3d73bea42712d698325ca4b2084aa835",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/platform/[slug]/loading.tsx": {
+    "mtime": 1780663675.5578117,
+    "ast_hash": "950f211d72efee8d442fff175b40ae6a",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/platform/[slug]/page.tsx": {
+    "mtime": 1781944748.4566348,
+    "ast_hash": "cbbbbedb38f15b9301ea3117231885df",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/research/[slug]/loading.tsx": {
+    "mtime": 1780663629.2335303,
+    "ast_hash": "8334d2263a5ae3456a4d6b04d5791e76",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/research/[slug]/page.tsx": {
+    "mtime": 1781891274.0258994,
+    "ast_hash": "ba68f2ac7ad154a5fe946314d3028e0a",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/research/analyst-chart/loading.tsx": {
+    "mtime": 1781892078.4741266,
+    "ast_hash": "eda57927c11a92b0d9a4304e96cf57af",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/research/analyst-chart/page.tsx": {
+    "mtime": 1781513503.7568944,
+    "ast_hash": "86e11c583c472c6046ebd08833f8ab39",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/research/loading.tsx": {
+    "mtime": 1780663675.5578117,
+    "ast_hash": "f9c69b48935d6eb518a41f9ea564f10c",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/research/page.tsx": {
+    "mtime": 1780501956.047568,
+    "ast_hash": "b0e050de17a5d3f5ed44cc6410e58d05",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/ai-crm/page.tsx": {
+    "mtime": 1781528341.9948807,
+    "ast_hash": "f14f4d7e8f5f172811a3c02725e347ff",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/calendar/loading.tsx": {
+    "mtime": 1781340504.1745863,
+    "ast_hash": "88147f6f92205d92c28fbaf665fa701d",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/calendar/page.tsx": {
+    "mtime": 1780501956.076431,
+    "ast_hash": "d44e7d85076a32cf365ce3a5ba090a8e",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/fibonacci/loading.tsx": {
+    "mtime": 1780663629.2372043,
+    "ast_hash": "651d81b09dbc5267b67cf6b5146d043e",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/fibonacci/page.tsx": {
+    "mtime": 1780501956.0861208,
+    "ast_hash": "bffa8392cc24668c143c9990dc576727",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/loading.tsx": {
+    "mtime": 1780663629.2335303,
+    "ast_hash": "651d81b09dbc5267b67cf6b5146d043e",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/page.tsx": {
+    "mtime": 1780975213.9208553,
+    "ast_hash": "e951a7d40fc7d95bf188727f8682461c",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/pivot/loading.tsx": {
+    "mtime": 1780663629.2372043,
+    "ast_hash": "651d81b09dbc5267b67cf6b5146d043e",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/pivot/page.tsx": {
+    "mtime": 1780501956.1224697,
+    "ast_hash": "6a1f266cd8a6b93f7febb65579b39aa8",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/profit/loading.tsx": {
+    "mtime": 1780663629.2372043,
+    "ast_hash": "651d81b09dbc5267b67cf6b5146d043e",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/profit/page.tsx": {
+    "mtime": 1781530284.5469792,
+    "ast_hash": "6ed5eee31dbda062136e2dbb13dce125",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/spread-comparator/loading.tsx": {
+    "mtime": 1780663629.2351334,
+    "ast_hash": "651d81b09dbc5267b67cf6b5146d043e",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/spread-comparator/page.tsx": {
+    "mtime": 1780975479.6637216,
+    "ast_hash": "8bfb8573e81892a5128f6cc8c6569e11",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/watchlist/loading.tsx": {
+    "mtime": 1781340503.2877595,
+    "ast_hash": "a56789a2fad167582cb62b8df33f0c36",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/tools/watchlist/page.tsx": {
+    "mtime": 1780501956.1646717,
+    "ast_hash": "6fc2192f49e90fcde61168fbd7386140",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/trade/accounts/loading.tsx": {
+    "mtime": 1780663675.5578117,
+    "ast_hash": "17f29fa5866299f71b84ffd2bf123863",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/trade/accounts/page.tsx": {
+    "mtime": 1781549122.653092,
+    "ast_hash": "2ddc35af242810454c614cc9558651b6",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/trade/fees/loading.tsx": {
+    "mtime": 1781142113.0472474,
+    "ast_hash": "7c1ba44defc1134d6c4d701a7a459864",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/trade/fees/page.tsx": {
+    "mtime": 1781548954.4984818,
+    "ast_hash": "a92716fac305c4d3cf1ac274d626d5d1",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/trade/funding/loading.tsx": {
+    "mtime": 1781142113.0472474,
+    "ast_hash": "c491d96dbea67878fdb746a49e1fbd67",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/trade/funding/page.tsx": {
+    "mtime": 1781869332.9875174,
+    "ast_hash": "94cdb11d31f794513fff970e800a6121",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/trade/ib/loading.tsx": {
+    "mtime": 1781142113.0472474,
+    "ast_hash": "aaa7de953ab555f24ccf3fec56e95d14",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/trade/ib/page.tsx": {
+    "mtime": 1781549130.1111221,
+    "ast_hash": "9f98223e12f10ea3fa3b65864e32c87f",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/trade/promotions/loading.tsx": {
+    "mtime": 1781142113.0472474,
+    "ast_hash": "399eac8ff524388fd9840ac101b76e00",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/trade/promotions/page.tsx": {
+    "mtime": 1781114847.7002003,
+    "ast_hash": "e9bef087f45826927da4b7b98fad5b9e",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/layout.tsx": {
+    "mtime": 1781413208.995207,
+    "ast_hash": "21351f193ba49e5f07385bc9b7cb834c",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/not-found.tsx": {
+    "mtime": 1781413148.3871112,
+    "ast_hash": "b752461f71af0decdcc1ea8cdd883d8f",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/robots.ts": {
+    "mtime": 1781412615.9515777,
+    "ast_hash": "6829d07b9e39cf31e752f4f63472d386",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/sitemap.ts": {
+    "mtime": 1781944773.719548,
+    "ast_hash": "9527b74c53a84f86be83b25bd2a895a1",
+    "semantic_hash": ""
+  },
+  "apps/web/src/components/Analytics.tsx": {
+    "mtime": 1781525624.58435,
+    "ast_hash": "f552222545916913a740276a622a183b",
+    "semantic_hash": ""
+  },
+  "apps/web/src/components/CookieConsent.tsx": {
+    "mtime": 1781525636.6004465,
+    "ast_hash": "91aa4334e3e3968d3d290e6f138c0e16",
+    "semantic_hash": ""
+  },
+  "apps/web/src/components/PageFade.tsx": {
+    "mtime": 1781142125.34716,
+    "ast_hash": "3c4bb15e7dca31011e3957cae2e66115",
+    "semantic_hash": ""
+  },
+  "apps/web/src/components/ui/skeleton.tsx": {
+    "mtime": 1780501956.4822488,
+    "ast_hash": "aeff67f898b84f2ce2e5f000cdd502e3",
+    "semantic_hash": ""
+  },
+  "apps/web/src/i18n/request.ts": {
+    "mtime": 1779202153.5896614,
+    "ast_hash": "3cf911a6c8a60a75662de6be6d48fce0",
+    "semantic_hash": ""
+  },
+  "apps/web/src/i18n/routing.ts": {
+    "mtime": 1780502408.5972147,
+    "ast_hash": "1f95591eff14bccf2cdd10355a63b68f",
+    "semantic_hash": ""
+  },
+  "apps/web/src/lib/cms.ts": {
+    "mtime": 1781892175.9913027,
+    "ast_hash": "851a883586410883715a507412c210f9",
+    "semantic_hash": ""
+  },
+  "apps/web/src/lib/utils.ts": {
+    "mtime": 1780396289.2943692,
+    "ast_hash": "d508ac5fd8f4934bd84aae0ef8ea1ff9",
+    "semantic_hash": ""
+  },
+  "apps/web/src/middleware.ts": {
+    "mtime": 1780502408.6538467,
+    "ast_hash": "8b908ca550a729ab0ec7a9e343e93dce",
+    "semantic_hash": ""
+  },
+  "apps/web/tailwind.config.ts": {
+    "mtime": 1780502408.6595747,
+    "ast_hash": "d25ead6c1f3ebe7fd7ec8bfd17fad480",
+    "semantic_hash": ""
+  },
+  "apps/web/tsconfig.json": {
+    "mtime": 1780502408.6595747,
+    "ast_hash": "64988735facf51bda7bbec504de61073",
+    "semantic_hash": ""
+  },
+  "apps/web/vercel.json": {
+    "mtime": 1780934284.2520635,
+    "ast_hash": "869993e332377ca64d8433fc4face5e2",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1781898209.6947744,
+    "ast_hash": "22687afda8916f773a7ff7125c78f4bf",
+    "semantic_hash": ""
+  },
+  "packages/config/eslint-preset.js": {
+    "mtime": 1780502408.8721426,
+    "ast_hash": "44468ad03588e662eed3450224945b86",
+    "semantic_hash": ""
+  },
+  "packages/config/index.js": {
+    "mtime": 1779202080.8780265,
+    "ast_hash": "31e0b9d683d4b2e2f87f4a2b434e1533",
+    "semantic_hash": ""
+  },
+  "packages/config/package.json": {
+    "mtime": 1780502408.8721426,
+    "ast_hash": "2a9535e49a04ab8a67d65aa4110572dd",
+    "semantic_hash": ""
+  },
+  "packages/config/tailwind-preset.js": {
+    "mtime": 1781945553.9382534,
+    "ast_hash": "944bba0324473563835f8a1ef44d6cb3",
+    "semantic_hash": ""
+  },
+  "packages/types/.eslintrc.js": {
+    "mtime": 1779202095.8336992,
+    "ast_hash": "9d48b4fa1a91ed8824a64670a5382d95",
+    "semantic_hash": ""
+  },
+  "packages/types/package.json": {
+    "mtime": 1780502408.8872662,
+    "ast_hash": "8a7a619d118989e5fab52269655aaa9b",
+    "semantic_hash": ""
+  },
+  "packages/types/src/index.ts": {
+    "mtime": 1779202102.9648402,
+    "ast_hash": "bb0de68a24ee6357b5126d1878f50c4a",
+    "semantic_hash": ""
+  },
+  "packages/types/src/locales.ts": {
+    "mtime": 1779202098.1805396,
+    "ast_hash": "932ec79e1495ed4ac74a8c2d755b92f2",
+    "semantic_hash": ""
+  },
+  "packages/types/src/mt5.ts": {
+    "mtime": 1780502408.9042027,
+    "ast_hash": "f7a2929eb83f567adf34cebd2595a368",
+    "semantic_hash": ""
+  },
+  "packages/types/tsconfig.build.json": {
+    "mtime": 1780502408.9065368,
+    "ast_hash": "3233a87c7e89d407ba89dd1f74d8d287",
+    "semantic_hash": ""
+  },
+  "packages/types/tsconfig.json": {
+    "mtime": 1779202094.9835744,
+    "ast_hash": "e83fd469a74c274788857a1106d85650",
+    "semantic_hash": ""
+  },
+  "packages/ui/.eslintrc.js": {
+    "mtime": 1781690065.9484105,
+    "ast_hash": "4b9ce07fe513bb45ba4d6e6d92cfd1f6",
+    "semantic_hash": ""
+  },
+  "packages/ui/package.json": {
+    "mtime": 1781540961.3478484,
+    "ast_hash": "3dde79fec177ce194cfdd92a843bf080",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/AboutPage.tsx": {
+    "mtime": 1781885200.9578834,
+    "ast_hash": "9784ab2273eb39eaaa3e8ee094599ba4",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/AccountsPage.tsx": {
+    "mtime": 1781611999.5760055,
+    "ast_hash": "9893993e9c50362093e57f4455b147ea",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/AiCrmPage.tsx": {
+    "mtime": 1781802019.928515,
+    "ast_hash": "3382e1cb562286e09419811a1af91ccc",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/AiCrmSkeleton.tsx": {
+    "mtime": 1781893832.1919284,
+    "ast_hash": "1b8dac3a3bec210203ae807f860a2a60",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/AnalystChartPage.tsx": {
+    "mtime": 1781802019.9325078,
+    "ast_hash": "37491689b7957b227026d2a35aceb934",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ArbitrageSection.tsx": {
+    "mtime": 1781549333.3781881,
+    "ast_hash": "07138326d22e103c45272e904ecb90e0",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ArticleDetailSkeleton.tsx": {
+    "mtime": 1781894046.4839551,
+    "ast_hash": "2972824aaf145e20bcd8a46790807759",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/AuthModal.tsx": {
+    "mtime": 1781801378.8614676,
+    "ast_hash": "56a66c412e483659a1479fa74faacc61",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/AwardsPage.tsx": {
+    "mtime": 1781635609.3607912,
+    "ast_hash": "db92758a8349c2e3dd7c1a408398bf11",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/Button.tsx": {
+    "mtime": 1780502409.1037807,
+    "ast_hash": "8ffe6d8fd84067527f4038cd6d9a5550",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/CalcSelect.tsx": {
+    "mtime": 1781801042.726783,
+    "ast_hash": "34dafd93883554472b07bb89d8c04033",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/CalendarSkeleton.tsx": {
+    "mtime": 1781893878.2058136,
+    "ast_hash": "ed45a53f904a898a79954b4e5547a033",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/CareersPage.tsx": {
+    "mtime": 1781882776.3514051,
+    "ast_hash": "076029f802bcf035667f483ecbf87283",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ChartWidget.tsx": {
+    "mtime": 1781459781.8541057,
+    "ast_hash": "15809541e4b7b28adf0786cb5a43d54d",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ContactPage.tsx": {
+    "mtime": 1781882904.3475218,
+    "ast_hash": "af7bda04e76af11db384f15f53a14686",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ContactPageSkeleton.tsx": {
+    "mtime": 1781893857.7488904,
+    "ast_hash": "888cdd5bf5cf294aa4d34dca9280152c",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/CountUp.tsx": {
+    "mtime": 1781115356.643288,
+    "ast_hash": "87cde85c9f4f2dcaf08bd3474a1604e2",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/CtaBanner.tsx": {
+    "mtime": 1781801044.1835768,
+    "ast_hash": "d285fcf2a9beb575467539ce20c77e08",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/EbooksPage.tsx": {
+    "mtime": 1781880710.8140771,
+    "ast_hash": "27bc54fc8cc4d18d5bfa729aaecb7942",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/EconomicCalendarPage.tsx": {
+    "mtime": 1781802019.949536,
+    "ast_hash": "09a4deedc64fb77559cbd46e7c30ca17",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/EducationHubPage.tsx": {
+    "mtime": 1781799106.2753398,
+    "ast_hash": "ba3a152210c247167d06a893ce943e4c",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/EducationHubSkeleton.tsx": {
+    "mtime": 1781891967.31314,
+    "ast_hash": "ffd6c7c702c0778ddc8a11549ad6694a",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/FaqPage.tsx": {
+    "mtime": 1781802019.9505358,
+    "ast_hash": "792c9b24c8fd70ed7c834c27ff2b2d53",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/FeaturesSection.tsx": {
+    "mtime": 1781801171.277722,
+    "ast_hash": "44dd70d128280af74d8590a2dc2e2a31",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/FeesPage.tsx": {
+    "mtime": 1781802019.95194,
+    "ast_hash": "0ed72d62d9c9290939077d6cf32e88fd",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/FeesPageSkeleton.tsx": {
+    "mtime": 1781116213.8924713,
+    "ast_hash": "ed83d90090f02b59adb065f3b4cf9bee",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/FibonacciCalculatorPage.tsx": {
+    "mtime": 1781633113.8669095,
+    "ast_hash": "b4ae91e7bc658ace003464829b9958cc",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/Footer.tsx": {
+    "mtime": 1781944746.4831364,
+    "ast_hash": "3e5b00ada80b5d764491b0a5e4b5eda3",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/FundingPage.tsx": {
+    "mtime": 1781795410.117691,
+    "ast_hash": "8500ea3e72e5c410d10789b72f57e625",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/FundingPageSkeleton.tsx": {
+    "mtime": 1781116183.4170258,
+    "ast_hash": "4236511f10921efdf71315902f74f78d",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/GlossaryPage.tsx": {
+    "mtime": 1781802019.9549487,
+    "ast_hash": "32738adde0b3f26cfeff48f92a56821f",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/GlossarySkeleton.tsx": {
+    "mtime": 1781893899.287082,
+    "ast_hash": "ba4689e44ba0b1b901b27633334166d6",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/GuideDetailPage.tsx": {
+    "mtime": 1781802266.8418412,
+    "ast_hash": "6585e36c5aaac229f5eb5fbcc1c83c0f",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/GuidesPage.tsx": {
+    "mtime": 1781802019.9559479,
+    "ast_hash": "c8e99a35adb4e62dbc334ac53c4bc714",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/Header.tsx": {
+    "mtime": 1781879903.2984953,
+    "ast_hash": "d8288cbe9a6bc61193d678a009aa40bd",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/HeroCanvas.tsx": {
+    "mtime": 1781549477.5845258,
+    "ast_hash": "c8cf72f12e7ff0a3d4a23fcd893ecdfd",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/HomePageSkeleton.tsx": {
+    "mtime": 1781116320.895793,
+    "ast_hash": "20893cca9b6ade4a755aa3813e99f487",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/IBPage.tsx": {
+    "mtime": 1781611130.1746275,
+    "ast_hash": "f5dbd64580ba192b28889d076deca864",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/IBPageSkeleton.tsx": {
+    "mtime": 1781142189.5026774,
+    "ast_hash": "db524e7902eee57a51e6e2b67aefc71d",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/InstrumentsPage.tsx": {
+    "mtime": 1781802019.9652364,
+    "ast_hash": "67eec55b7b200b3082e74acf17cc4510",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/LanguageToggle.tsx": {
+    "mtime": 1780937564.4757473,
+    "ast_hash": "b7f1c75b1031c95aac6ab0ba2b2b9283",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/LegalPage.tsx": {
+    "mtime": 1781884300.1325247,
+    "ast_hash": "ba79848faa0c9e340a9157f0230f4be2",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/LegalPageSkeleton.tsx": {
+    "mtime": 1781893913.6210783,
+    "ast_hash": "0480d5584819976562a00354ca7320cb",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/LiveChatPage.tsx": {
+    "mtime": 1781802139.5971265,
+    "ast_hash": "811c9d3a60acc6abbffe5892482d219e",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/LiveChatPageSkeleton.tsx": {
+    "mtime": 1781340452.5269332,
+    "ast_hash": "48771ecbbee0529ce986889a4693b7a2",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/LiveWatchlistPage.tsx": {
+    "mtime": 1781802019.9694047,
+    "ast_hash": "2ea5dea0e8972d6dc934a4da746f9c93",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/MarketCategoryPage.tsx": {
+    "mtime": 1781802019.9727354,
+    "ast_hash": "f72effc3febb575e4d1f2b8f7731d74d",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/MarketPageSkeleton.tsx": {
+    "mtime": 1781891997.9511092,
+    "ast_hash": "944039abec76a1243a18f84771a2bb44",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/MarketsSectionGrid.tsx": {
+    "mtime": 1781936769.7386196,
+    "ast_hash": "2cf924dd0937d5eb80be4f29dd997338",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/MediaListingPage.tsx": {
+    "mtime": 1781802019.9767647,
+    "ast_hash": "be36c58c88634b59dde94b953b6c3f6c",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/MediaPressPage.tsx": {
+    "mtime": 1781340046.8344624,
+    "ast_hash": "165536db230059613c056b5b90afbdf8",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/MobileMenu.tsx": {
+    "mtime": 1781850357.3426733,
+    "ast_hash": "a8fe41ee57c3967a4e7387dad4229ac6",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/Mt5ChartWidget.tsx": {
+    "mtime": 1781459771.2700827,
+    "ast_hash": "f3f163b1c3cfcf934ba8eed095cd148d",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/NewsSection.tsx": {
+    "mtime": 1781802019.9821606,
+    "ast_hash": "540dd6fa6544cd966c40cfc78dc8aa33",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/NewsletterPage.tsx": {
+    "mtime": 1781802019.9811664,
+    "ast_hash": "1d6b08677f87ba94b0f3b1942184b183",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/NewsletterPageSkeleton.tsx": {
+    "mtime": 1781893845.5737374,
+    "ast_hash": "69748513028842334bef92522d7e81a4",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/Pagination.tsx": {
+    "mtime": 1781802139.6031513,
+    "ast_hash": "f5ab1cd7499df458e9c4fae11150a6c4",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/PivotCalculatorPage.tsx": {
+    "mtime": 1781633107.1182175,
+    "ast_hash": "492cc9044b137bf876911c0ad1d74d67",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/PlatformPage.tsx": {
+    "mtime": 1781935077.941382,
+    "ast_hash": "67ca0880a40a47d9b27e38a14583ebdc",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/PlatformPageSkeleton.tsx": {
+    "mtime": 1781893943.5820146,
+    "ast_hash": "641052592fe8538e2585adb4fe85e32a",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ProfitCalculatorPage.tsx": {
+    "mtime": 1781802019.9853578,
+    "ast_hash": "09a82e37a2b021fde3d36cbd5852dac0",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/PromoPage.tsx": {
+    "mtime": 1781801281.9466734,
+    "ast_hash": "76cf2bb24fe260b706c2d5825fbdc9fd",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/PromoPageSkeleton.tsx": {
+    "mtime": 1781260367.1405575,
+    "ast_hash": "0332dd16ef5d247b7991c01f172db3e0",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ResearchDetailPage.tsx": {
+    "mtime": 1781892176.1556602,
+    "ast_hash": "6f4729e68a9c5376da1bc07e63c12828",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ResearchListSkeleton.tsx": {
+    "mtime": 1781893964.7395203,
+    "ast_hash": "5617d8754c35d906bdfc10bdc5022507",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ResearchPage.tsx": {
+    "mtime": 1781802019.9886959,
+    "ast_hash": "a0cf61771728134e18269736e2381491",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/RichText.tsx": {
+    "mtime": 1781800842.7173162,
+    "ast_hash": "b30437fd6ada7fdbc8457119e2c9c74e",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/RiskBanner.tsx": {
+    "mtime": 1780323995.1298306,
+    "ast_hash": "84525708d98dceed66506bc4aaa1db83",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ScrollReveal.tsx": {
+    "mtime": 1781540998.5736446,
+    "ast_hash": "4ea0bf67eb7ae6bd2661468f925fb26a",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/SectionKicker.tsx": {
+    "mtime": 1779904484.3794117,
+    "ast_hash": "0857141c5f9c52ace66504984e6fa004",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/SkeletonBlocks.tsx": {
+    "mtime": 1781893797.8912222,
+    "ast_hash": "dd58f5ab5c53dbb5fb5b4573033e210c",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/SmartCtaBanner.tsx": {
+    "mtime": 1780415093.1752114,
+    "ast_hash": "4bd5e43543181183b98a260dc389656c",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/SpreadComparatorPage.tsx": {
+    "mtime": 1781800910.2296093,
+    "ast_hash": "a5c11da461f2abc35c0104fe6e833d1b",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/StatsSectionClient.tsx": {
+    "mtime": 1781549004.5662844,
+    "ast_hash": "a9d48102e0256904143b0e34328321ba",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/SupportPageSkeleton.tsx": {
+    "mtime": 1781893927.8023505,
+    "ast_hash": "77ac4da11771483e53a9ea9707fdb0cf",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/TickerStrip.tsx": {
+    "mtime": 1779778268.1865466,
+    "ast_hash": "916759a72b4eef8f37118ee2dc9c8df7",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ToastProvider.tsx": {
+    "mtime": 1779778268.196845,
+    "ast_hash": "9f6b2a9e9cb4fd2d48638e479571fb43",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ToolsPageSkeleton.tsx": {
+    "mtime": 1780663502.3768797,
+    "ast_hash": "e6baafb1c0967a2caa94df2c18533bc5",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/TradePageSkeleton.tsx": {
+    "mtime": 1781893810.929332,
+    "ast_hash": "29aa746a47453f1041fa34ce75c7c878",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/TraderToolsPage.tsx": {
+    "mtime": 1781802020.0032146,
+    "ast_hash": "09d0bf515bd1567c203659b09f594bec",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/TradingViewTicker.tsx": {
+    "mtime": 1781798610.794425,
+    "ast_hash": "57b415cece849e0f6e898db18d88783e",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/TradingViewWidget.tsx": {
+    "mtime": 1781798542.0759242,
+    "ast_hash": "217a6a9f5796279dba39fc537e58a4cd",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/WatchlistSkeleton.tsx": {
+    "mtime": 1781893865.3013408,
+    "ast_hash": "003247ce365e9ab9b7ed08e375f78ed5",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/WebTraderPage.tsx": {
+    "mtime": 1781802020.0062222,
+    "ast_hash": "a20231ac7b1e560d0076059e5f05a3df",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/WebinarsPage.tsx": {
+    "mtime": 1781525710.034395,
+    "ast_hash": "5a892814e695637164913f779b4a5888",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/index.ts": {
+    "mtime": 1781892024.2410433,
+    "ast_hash": "d1a03827f498b7d5e8a82402bbad1dc3",
+    "semantic_hash": ""
+  },
+  "packages/ui/tsconfig.json": {
+    "mtime": 1779750766.5448532,
+    "ast_hash": "54cac7417e0e3390be8e0c7ea71feb46",
+    "semantic_hash": ""
+  },
+  "tsconfig.base.json": {
+    "mtime": 1779202055.4538977,
+    "ast_hash": "446fe37d63e49ca78c7ed4ccc095aac3",
+    "semantic_hash": ""
+  },
+  "turbo.json": {
+    "mtime": 1779202053.0314734,
+    "ast_hash": "52c9701cd055e13bba1397d4565a2bcc",
+    "semantic_hash": ""
+  },
+  "vercel.json": {
+    "mtime": 1781947813.138338,
+    "ast_hash": "e09a435afae8f99fde649bda4971f6c6",
+    "semantic_hash": ""
+  },
+  ".github/workflows/ci.yml": {
+    "mtime": 1781899200.064865,
+    "ast_hash": "a161f45abe23d13b980621e3472f3de6",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1781942416.256143,
+    "ast_hash": "d2c9d11d44e66300a46643081354ddac",
+    "semantic_hash": ""
+  },
+  "GUIDE.md": {
+    "mtime": 1781689929.1606505,
+    "ast_hash": "e33c1c9119932e6fa32b44292ed8745f",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1780502410.469941,
+    "ast_hash": "6afb305aae65777a0788a337fccf2c4e",
+    "semantic_hash": ""
+  },
+  "SECURITY.md": {
+    "mtime": 1779559004.9237645,
+    "ast_hash": "a0367b3fb0de9b27c5a8078828e8edd8",
+    "semantic_hash": ""
+  },
+  "docs/cms-integration-audit-prompt.md": {
+    "mtime": 1781688014.0905573,
+    "ast_hash": "3ac417525dcc243884254bb222ce15e7",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/report-pdf-gold-2026-safe-haven-real-yields.pdf": {
+    "mtime": 1781893880.3236556,
+    "ast_hash": "17531c243c67fce5da743a45a5856a11",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/report-pdf-mena-fx-quarterly-2026.pdf": {
+    "mtime": 1781893871.2802868,
+    "ast_hash": "4b74bdf0cc5caf2d2e64ec14f3f9d6f6",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/report-pdf-q3-2026-global-macro-outlook.pdf": {
+    "mtime": 1781893862.2405045,
+    "ast_hash": "da6f90da8e0e68889af0fe13f800beb7",
+    "semantic_hash": ""
+  },
+  "apps/cms/public/newera-logo-dark.png": {
+    "mtime": 1781080461.783102,
+    "ast_hash": "2b3988d43296fc0eb9d1757d68fe4079",
+    "semantic_hash": ""
+  },
+  "apps/cms/public/newera-logo.jpeg": {
+    "mtime": 1779469396.8142834,
+    "ast_hash": "bd31e007a8e22d4b10bebb666abf6370",
+    "semantic_hash": ""
+  },
+  "apps/cms/public/newera-logo.png": {
+    "mtime": 1779469396.8174298,
+    "ast_hash": "b3036cc1542cdf7454c3d14a9f52ba2c",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/award-best-forex-broker-mena-2025-400x300.png": {
+    "mtime": 1781893467.6415102,
+    "ast_hash": "612d6b407f669a68092cc70a0b0f9147",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/award-best-forex-broker-mena-2025.png": {
+    "mtime": 1781893467.6415102,
+    "ast_hash": "85701f69f8af311e1eda9dba9cfd8c33",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/award-best-low-spread-broker-2024-400x300.png": {
+    "mtime": 1781893482.4108121,
+    "ast_hash": "e96fa7350d76103a818d9c8379a95095",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/award-best-low-spread-broker-2024.png": {
+    "mtime": 1781893482.4108121,
+    "ast_hash": "bb4a40c71c7e9ba498e83431ab53c780",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/award-most-trusted-broker-global-forex-2025-400x300.png": {
+    "mtime": 1781893475.2786784,
+    "ast_hash": "7af03ca6f6108dd3cab802e38428db55",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/award-most-trusted-broker-global-forex-2025.png": {
+    "mtime": 1781893475.2786784,
+    "ast_hash": "88b11ec006a6f252be7bae62f7c838ec",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-carry-trade-explained-400x300.png": {
+    "mtime": 1781893664.8041635,
+    "ast_hash": "9bf7b90737793253a37bc77c2e3c60cc",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-carry-trade-explained-768x1024.png": {
+    "mtime": 1781893664.8041635,
+    "ast_hash": "9fc4e7542d8fa61194125a13d27df033",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-carry-trade-explained.png": {
+    "mtime": 1781893664.8041635,
+    "ast_hash": "bf1eb76fda20907c0392038b877051bd",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-inside-the-fed-traders-view-400x300.png": {
+    "mtime": 1781893649.5852454,
+    "ast_hash": "258b8b545cb5fae67449b167d47607d1",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-inside-the-fed-traders-view-768x1024.png": {
+    "mtime": 1781893649.5858502,
+    "ast_hash": "0c71b8c5b90d5dc98d416dd89ddaaae7",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-inside-the-fed-traders-view.png": {
+    "mtime": 1781893649.5695572,
+    "ast_hash": "371abae1bfbcb5b1b5aa18478eb9df85",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-interview-london-market-maker-400x300.png": {
+    "mtime": 1781893688.1563542,
+    "ast_hash": "e8fe395a1d8e3410c35cba972636e8c6",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-interview-london-market-maker-768x1024.png": {
+    "mtime": 1781893688.1563542,
+    "ast_hash": "90d809a22a290defa4c6c35c186ee0f7",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-interview-london-market-maker.png": {
+    "mtime": 1781893688.1563542,
+    "ast_hash": "440106febb9a98449f41cf2f74671550",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-live-boe-rate-decision-400x300.png": {
+    "mtime": 1781893703.3717432,
+    "ast_hash": "e1021d91968f142965e78afa2e838158",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-live-boe-rate-decision-768x1024.png": {
+    "mtime": 1781893703.3725033,
+    "ast_hash": "c3a9c703617555c4d53a38612e19f582",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-live-boe-rate-decision.png": {
+    "mtime": 1781893703.3562582,
+    "ast_hash": "617f5b04abc7bdfcad90b82d806a9335",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-position-sizing-without-guesswork-400x300.png": {
+    "mtime": 1781893672.4545057,
+    "ast_hash": "5ff09b220030e928cd271ec01d37d818",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-position-sizing-without-guesswork-768x1024.png": {
+    "mtime": 1781893672.4545057,
+    "ast_hash": "f89869e5e910e5a707720c0107119069",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-position-sizing-without-guesswork.png": {
+    "mtime": 1781893672.4380417,
+    "ast_hash": "72c7ea4fb06670adec7bd5b2ed200dee",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-reading-the-cot-report-400x300.png": {
+    "mtime": 1781893657.1877005,
+    "ast_hash": "ecc5a9fbc3b9ef4b48709392cb5f1f34",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-reading-the-cot-report-768x1024.png": {
+    "mtime": 1781893657.1877005,
+    "ast_hash": "a2921951994713503ae337d53cd2bf2f",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-reading-the-cot-report.png": {
+    "mtime": 1781893657.1877005,
+    "ast_hash": "f2c50c4ead9afe1c819f9d4d83bcbdbd",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-technical-analysis-that-works-400x300.png": {
+    "mtime": 1781893679.6381998,
+    "ast_hash": "4d557e7a44a5a0484e1680ea25132c08",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-technical-analysis-that-works-768x1024.png": {
+    "mtime": 1781893679.6381998,
+    "ast_hash": "08b80ed66463e14e06d4554a042689c0",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-technical-analysis-that-works.png": {
+    "mtime": 1781893679.6381998,
+    "ast_hash": "962e18ab29d5a86cef153e543d04d52d",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-why-oil-moves-tuesday-400x300.png": {
+    "mtime": 1781893696.2226493,
+    "ast_hash": "d2479d976cce6c1425472f8e58314a93",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-why-oil-moves-tuesday-768x1024.png": {
+    "mtime": 1781893696.2226493,
+    "ast_hash": "5446662e73111ab03bb30ed99a826b93",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/edu-why-oil-moves-tuesday.png": {
+    "mtime": 1781893696.2226493,
+    "ast_hash": "a447d20be3a1f06c3e948abf091b7acb",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/pay-bank-wire-swift-400x300.png": {
+    "mtime": 1781892988.673072,
+    "ast_hash": "14f4a5dd70e14d3b6388b94885b7f1e1",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/pay-bank-wire-swift.png": {
+    "mtime": 1781892988.6720698,
+    "ast_hash": "2c301928aca5d56ea8048f50c61991a0",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/pay-crypto-usdt-btc-400x300.png": {
+    "mtime": 1781893013.0853896,
+    "ast_hash": "68c5cb6754513da48cdee4fef4f9c30c",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/pay-crypto-usdt-btc.png": {
+    "mtime": 1781893013.0842788,
+    "ast_hash": "464f34ad5a01a6fa8cfb4a5b4df6fb02",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/pay-local-bank-transfer-400x300.png": {
+    "mtime": 1781893020.6742408,
+    "ast_hash": "e20a65c16a30010eaad1d68e1e3bed13",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/pay-local-bank-transfer.png": {
+    "mtime": 1781893020.6733224,
+    "ast_hash": "0ef6b38767dd9ce47c8223bb4bf5f2c6",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/pay-neteller-400x300.png": {
+    "mtime": 1781893005.527014,
+    "ast_hash": "7d76e4aabef66d749924735d6fe88b04",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/pay-neteller.png": {
+    "mtime": 1781893005.5260081,
+    "ast_hash": "5489070eb1a946821c6c163fd587100d",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/pay-skrill-400x300.png": {
+    "mtime": 1781892997.245489,
+    "ast_hash": "65cd025b741113bf71546229bc1fb9b0",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/pay-skrill.png": {
+    "mtime": 1781892997.245489,
+    "ast_hash": "0fa86c265dd60dc281e09cecfa359c26",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/pay-visa-mastercard-400x300.png": {
+    "mtime": 1781892980.074839,
+    "ast_hash": "1cb18007b2f59d2cc42548bad215630c",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/pay-visa-mastercard.png": {
+    "mtime": 1781892980.072821,
+    "ast_hash": "8f78af039d3ceee886ea2d82a334b16d",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/press-logo-bloomberg-400x300.png": {
+    "mtime": 1781893907.2687807,
+    "ast_hash": "7c7e43ec97fe089a5f614c5596e5b299",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/press-logo-bloomberg.png": {
+    "mtime": 1781893907.266774,
+    "ast_hash": "be29ad61f44139b5c9f5dc992d3ccc52",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/press-logo-forbes-middle-east-400x300.png": {
+    "mtime": 1781893921.470283,
+    "ast_hash": "9286ec2e0198401067f75f8e76ecead6",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/press-logo-forbes-middle-east.png": {
+    "mtime": 1781893921.467655,
+    "ast_hash": "208cd590cd081079b1f84b82b9164a26",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/press-logo-reuters-400x300.png": {
+    "mtime": 1781893914.3747995,
+    "ast_hash": "d24fdb39e524b7dc4a5ccd386949cdf3",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/press-logo-reuters.png": {
+    "mtime": 1781893914.3712535,
+    "ast_hash": "24c0fc516404edbd627eaa2d6fa12867",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/press-logo-the-national-400x300.png": {
+    "mtime": 1781893928.5430546,
+    "ast_hash": "96be46089ee7d3b10724fa84cde69bfa",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/press-logo-the-national.png": {
+    "mtime": 1781893928.5430546,
+    "ast_hash": "e03a3aaa078b20b015810bf0ca9edb92",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-gold-trading-cot-institutional-positioning-400x300.png": {
+    "mtime": 1781893801.1729143,
+    "ast_hash": "d14f4038cd89451ebdd5fe88d0fe9cbc",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-gold-trading-cot-institutional-positioning-768x1024.png": {
+    "mtime": 1781893801.1729143,
+    "ast_hash": "facdb2c422b773eba254e40d0530f97e",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-gold-trading-cot-institutional-positioning.png": {
+    "mtime": 1781893801.1729143,
+    "ast_hash": "239bdccc0e91fed434cd91d77d941343",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-introduction-to-cfd-trading-contracts-costs-400x300.png": {
+    "mtime": 1781893836.9487767,
+    "ast_hash": "6e41942df6f74c39ab37ac2ef092d736",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-introduction-to-cfd-trading-contracts-costs-768x1024.png": {
+    "mtime": 1781893836.9487767,
+    "ast_hash": "3e0d2ebbfa40d819c849226741fb0220",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-introduction-to-cfd-trading-contracts-costs.png": {
+    "mtime": 1781893836.9487767,
+    "ast_hash": "dca8adf64aeb641f600aac3d77a73223",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-live-trading-eurusd-strategy-q3-2026-400x300.png": {
+    "mtime": 1781893792.329356,
+    "ast_hash": "8483a6fbfd8e74a82c6b634b9cbe0ffc",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-live-trading-eurusd-strategy-q3-2026-768x1024.png": {
+    "mtime": 1781893792.329356,
+    "ast_hash": "36144b62229dee85a6c9020bf2dbf139",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-live-trading-eurusd-strategy-q3-2026.png": {
+    "mtime": 1781893792.329356,
+    "ast_hash": "51f689c0549927310f0f172ccec21021",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-metatrader-5-ea-development-automation-400x300.png": {
+    "mtime": 1781893808.3235152,
+    "ast_hash": "a0d27d4486039e480d4baf04385ef413",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-metatrader-5-ea-development-automation-768x1024.png": {
+    "mtime": 1781893808.3235152,
+    "ast_hash": "1ae706464370f91b2f14caed98dc5e6b",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-metatrader-5-ea-development-automation.png": {
+    "mtime": 1781893808.3235152,
+    "ast_hash": "881e30d4c3628b152e6a175eaa293f09",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-risk-management-masterclass-volatile-markets-400x300.png": {
+    "mtime": 1781893815.4962704,
+    "ast_hash": "71b596c90edca464d46619114afd92d7",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-risk-management-masterclass-volatile-markets-768x1024.png": {
+    "mtime": 1781893815.4973593,
+    "ast_hash": "e0e003d0dce6684e74b3abd00d6576fd",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-risk-management-masterclass-volatile-markets.png": {
+    "mtime": 1781893815.4934266,
+    "ast_hash": "8d48b3e27188a731bfbc538049e6b536",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-technical-analysis-foundations-support-resistance-400x300.png": {
+    "mtime": 1781893822.6474576,
+    "ast_hash": "f1cb117206f3db307f7526e30c27bbd0",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-technical-analysis-foundations-support-resistance-768x1024.png": {
+    "mtime": 1781893822.6474576,
+    "ast_hash": "43b49e15d927bffb038c83a9885d0c7f",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-technical-analysis-foundations-support-resistance.png": {
+    "mtime": 1781893822.6474576,
+    "ast_hash": "329be9f6a71bbf745de3e3e0d6061b65",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-trading-economic-calendar-cpi-gdp-nfp-400x300.png": {
+    "mtime": 1781893829.8146803,
+    "ast_hash": "3bb7f6e22b26af05650c5964854ad329",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-trading-economic-calendar-cpi-gdp-nfp-768x1024.png": {
+    "mtime": 1781893829.8146803,
+    "ast_hash": "59ecf84710c7a16826bf05933f3ebb43",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-trading-economic-calendar-cpi-gdp-nfp.png": {
+    "mtime": 1781893829.8146803,
+    "ast_hash": "1ae5bc9945d7089a4c21972ebfaee07d",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-trading-psychology-fear-greed-revenge-trading-400x300.png": {
+    "mtime": 1781893844.1154656,
+    "ast_hash": "5e258a3017b2c806975036e480a8f619",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-trading-psychology-fear-greed-revenge-trading-768x1024.png": {
+    "mtime": 1781893844.1154656,
+    "ast_hash": "ebe9aae0a9dd9445ede089ac8e613e9e",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/webinar-trading-psychology-fear-greed-revenge-trading.png": {
+    "mtime": 1781893844.0986495,
+    "ast_hash": "43924aca6785c33d409a09cdfedefa30",
+    "semantic_hash": ""
+  },
+  "apps/web/public/favicon-dark.png": {
+    "mtime": 1781080461.804381,
+    "ast_hash": "60419d0e4fb91600b090135bd3f6f627",
+    "semantic_hash": ""
+  },
+  "apps/web/public/favicon-light.png": {
+    "mtime": 1781080461.8188417,
+    "ast_hash": "d2e64c3611c7073d049dc06709366096",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/authority.png": {
+    "mtime": 1779791624.755664,
+    "ast_hash": "344c03abefdbb3b52153d8f8b5ba4275",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/commodities.png": {
+    "mtime": 1779722235.3078098,
+    "ast_hash": "1ac0d64ff44cae454d765783d7849204",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/crypto.png": {
+    "mtime": 1779722235.3134744,
+    "ast_hash": "16c5e50a9b37c9d8e0193ac64bb41402",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/exchange.png": {
+    "mtime": 1779722235.3134744,
+    "ast_hash": "dc884f1ee094aae3ec293dd7c1979341",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/feature-clock.png": {
+    "mtime": 1780310552.834159,
+    "ast_hash": "c4b053d7d8d6589db83dd1553010a559",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/feature-execution.svg": {
+    "mtime": 1780310551.0169888,
+    "ast_hash": "c8c236fb6991e793970c1db5b69a1fe6",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/feature-segregated.svg": {
+    "mtime": 1780310551.6178627,
+    "ast_hash": "2aac158d238cd67085333b7822b5356a",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/feature-spreads.svg": {
+    "mtime": 1780310552.2105236,
+    "ast_hash": "e09507885aeae0e56aacc88ea70fc16e",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/forex.png": {
+    "mtime": 1779722235.3134744,
+    "ast_hash": "681173cf56b26411f826891753a78cb9",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/icon-box-execution.png": {
+    "mtime": 1780369602.7154455,
+    "ast_hash": "c8c236fb6991e793970c1db5b69a1fe6",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/icon-earth-lock.png": {
+    "mtime": 1780369603.320866,
+    "ast_hash": "2aac158d238cd67085333b7822b5356a",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/market-commodities-icon.png": {
+    "mtime": 1780369590.3188078,
+    "ast_hash": "1ac0d64ff44cae454d765783d7849204",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/market-commodities.png": {
+    "mtime": 1780309840.3434498,
+    "ast_hash": "1ac0d64ff44cae454d765783d7849204",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/market-crypto-icon.png": {
+    "mtime": 1780369591.7523417,
+    "ast_hash": "16c5e50a9b37c9d8e0193ac64bb41402",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/market-crypto.png": {
+    "mtime": 1780309841.8086417,
+    "ast_hash": "16c5e50a9b37c9d8e0193ac64bb41402",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/market-etfs-icon.png": {
+    "mtime": 1780369592.4779134,
+    "ast_hash": "681173cf56b26411f826891753a78cb9",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/market-etfs.png": {
+    "mtime": 1780309842.6144154,
+    "ast_hash": "681173cf56b26411f826891753a78cb9",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/market-forex-icon.png": {
+    "mtime": 1780369588.8932836,
+    "ast_hash": "dc884f1ee094aae3ec293dd7c1979341",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/market-forex.png": {
+    "mtime": 1780309839.0143993,
+    "ast_hash": "dc884f1ee094aae3ec293dd7c1979341",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/market-indices-icon.png": {
+    "mtime": 1780369589.605342,
+    "ast_hash": "96b1d3facf2291afd2d17ff8013854f8",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/market-indices.png": {
+    "mtime": 1780309839.694445,
+    "ast_hash": "96b1d3facf2291afd2d17ff8013854f8",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/market-stocks-icon.png": {
+    "mtime": 1780369591.0436242,
+    "ast_hash": "e18bb67fe33a9ce7278f13516febf49f",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/market-stocks.png": {
+    "mtime": 1780309841.049784,
+    "ast_hash": "e18bb67fe33a9ce7278f13516febf49f",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/performance.png": {
+    "mtime": 1779722235.3078098,
+    "ast_hash": "96b1d3facf2291afd2d17ff8013854f8",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/products.png": {
+    "mtime": 1779722235.3134744,
+    "ast_hash": "e18bb67fe33a9ce7278f13516febf49f",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/regulated.png": {
+    "mtime": 1779722235.3134744,
+    "ast_hash": "344c03abefdbb3b52153d8f8b5ba4275",
+    "semantic_hash": ""
+  },
+  "apps/web/public/icons/support.png": {
+    "mtime": 1779722235.3078098,
+    "ast_hash": "c4b053d7d8d6589db83dd1553010a559",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/apple-store.png": {
+    "mtime": 1781264611.9960728,
+    "ast_hash": "8de007138379f7592b90b2a2b4cb22e5",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/google-play.png": {
+    "mtime": 1781264631.573254,
+    "ast_hash": "dc6d34239efe6e011b684db3a8376c9b",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/hero-chart-static.png": {
+    "mtime": 1780369602.1018598,
+    "ast_hash": "1b952056773fca530989caa71a8a2345",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/hero-chart.jpg": {
+    "mtime": 1779722235.3078098,
+    "ast_hash": "b0564d23231a30024d9793d4c328ce20",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/hero-chart.png": {
+    "mtime": 1779803880.7817347,
+    "ast_hash": "55ebae4a0fa867ac3d6c87d7d8d9b6a5",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/hero-green-chart.jpg": {
+    "mtime": 1779722235.3078098,
+    "ast_hash": "1e2969d428ab126d2b71a768a1f7524c",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/laptop.jpg": {
+    "mtime": 1781330500.6426845,
+    "ast_hash": "5c15a1de99bb0dbd8f7c078dbc1c9ccc",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/logo-dark.png": {
+    "mtime": 1781854942.645,
+    "ast_hash": "5281e99192096ff5933c5425475c6d44",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/logo-light.png": {
+    "mtime": 1781854942.64,
+    "ast_hash": "194836f295697862c8fe936512f2ffdc",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/market-commodities.jpg": {
+    "mtime": 1780311599.6392856,
+    "ast_hash": "d4c39c22ff694b21404eb37a5195c615",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/market-crypto.jpg": {
+    "mtime": 1780311600.9882412,
+    "ast_hash": "371b138f2aba39a86e52ee27614dc165",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/market-etfs.jpg": {
+    "mtime": 1780311601.8930402,
+    "ast_hash": "770e2bdb615fd3a28cee8a327f901047",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/market-forex.jpg": {
+    "mtime": 1780311598.2896132,
+    "ast_hash": "ce81e83d1463d358bede089fe844e932",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/market-indices.jpg": {
+    "mtime": 1780311598.975449,
+    "ast_hash": "3e229255c6aeded53291d3816ca5a065",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/market-stocks.jpg": {
+    "mtime": 1780311600.3066082,
+    "ast_hash": "e015ed9f1fa42eccc31fd428d35597c6",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/payment/bank.png": {
+    "mtime": 1781114630.5591202,
+    "ast_hash": "6196fdcc980965b11e3be674fbc2bbf1",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/payment/card.png": {
+    "mtime": 1781114629.9323866,
+    "ast_hash": "7ff456f81fa6372fb19e2018fab27582",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/payment/crypto.png": {
+    "mtime": 1781114632.2964694,
+    "ast_hash": "e06df67000178b3f0ccd95b8c8943e23",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/payment/local.png": {
+    "mtime": 1781114632.875199,
+    "ast_hash": "b064782431c4230cec30c21de4168dfb",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/payment/neteller.png": {
+    "mtime": 1781114631.7777627,
+    "ast_hash": "d76d18136c5260cf8b1d2dabf13380b2",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/payment/skrill.png": {
+    "mtime": 1781114631.0718255,
+    "ast_hash": "e718aed14aa0e1f15486d0e8c09d34ff",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/platform-mobile.jpg": {
+    "mtime": 1781330157.4230764,
+    "ast_hash": "5c15a1de99bb0dbd8f7c078dbc1c9ccc",
+    "semantic_hash": ""
+  },
+  "apps/web/public/images/windows.png": {
+    "mtime": 1781264642.2045803,
+    "ast_hash": "c21f1d5bb1c6e9ed26bc535d68e1c5a6",
+    "semantic_hash": ""
+  },
+  "apps/web/public/logo-dark.png": {
+    "mtime": 1779722235.3134744,
+    "ast_hash": "62637d6b23bdc3115087c70cd6126263",
+    "semantic_hash": ""
+  },
+  "apps/web/public/logo-light.png": {
+    "mtime": 1779722235.3078098,
+    "ast_hash": "f04aaabebf5994ba57a3f7fda97eae6f",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/migrate-ib-steps-array-id.ts": {
+    "mtime": 1781693261.487504,
+    "ast_hash": "5747135162b503b7e1de6877b9f9bafc",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/[locale]/landing-demo/page.tsx": {
+    "mtime": 1781852217.6994565,
+    "ast_hash": "c307d01498a0093c4aec6b456d301472",
+    "semantic_hash": ""
+  },
+  "apps/web/src/components/RouteChrome.tsx": {
+    "mtime": 1781853525.7560098,
+    "ast_hash": "b8b9440251caae0099d37a81e3b72048",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/CtaBannerDemo.tsx": {
+    "mtime": 1781710739.8043811,
+    "ast_hash": "bd4732817ac9b17f3d426099ddc89d49",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/HeaderDemo.tsx": {
+    "mtime": 1781881816.3402607,
+    "ast_hash": "aa6b658af951999fc9daf23bb26453ad",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/HeroChartCard.tsx": {
+    "mtime": 1781801055.6672702,
+    "ast_hash": "17077864e6a346a17b8276fdb2a90011",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/HeroSectionDemo.tsx": {
+    "mtime": 1781943868.996603,
+    "ast_hash": "b640e31777df3aeabb5df512afe177a3",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/MarketsSectionDemo.tsx": {
+    "mtime": 1781801174.0697844,
+    "ast_hash": "19959346a497a9d2192b3b6861c9c41e",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/MobileMenuDemo.tsx": {
+    "mtime": 1781882106.1020148,
+    "ast_hash": "ac16dfb9b11fcbf3b0507d2accbb5b95",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/RevealDemo.tsx": {
+    "mtime": 1781710686.925414,
+    "ast_hash": "5d3df25bc3e0eb09dc029c1b7e96fd01",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/StatsSectionDemo.tsx": {
+    "mtime": 1781852177.0547113,
+    "ast_hash": "23e502cba16d522bb91e1b9f203c5d97",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ThreeStepsSectionDemo.tsx": {
+    "mtime": 1781788706.5987008,
+    "ast_hash": "702ecdce3d483ae99066f8ebf8a1b886",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/TrustStripDemo.tsx": {
+    "mtime": 1781852184.498393,
+    "ast_hash": "2ea5fcde5147e938b097373562343459",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/ThreeStepsClient.tsx": {
+    "mtime": 1781946279.8474581,
+    "ast_hash": "d93931310100d9b84039e5876a1f4314",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/lib/safeUrl.ts": {
+    "mtime": 1781778144.420019,
+    "ast_hash": "b0dbc888aa8703dc81234d292157a1f3",
+    "semantic_hash": ""
+  },
+  "PRODUCTION_CHECKLIST.md": {
+    "mtime": 1781942427.3418999,
+    "ast_hash": "aed01884dc2c944dbbfc9fb620c96f3e",
+    "semantic_hash": ""
+  },
+  "code-review/01-cms-api-security.md": {
+    "mtime": 1781775388.2133403,
+    "ast_hash": "652c47cd2e345777188c96b700fd1365",
+    "semantic_hash": ""
+  },
+  "code-review/02-cms-data-collections.md": {
+    "mtime": 1781775485.5195982,
+    "ast_hash": "391aad9e897fcfd07de837075112c854",
+    "semantic_hash": ""
+  },
+  "code-review/03-web-frontend.md": {
+    "mtime": 1781775869.1591454,
+    "ast_hash": "14f42a94343085b44cef9525b2b477bd",
+    "semantic_hash": ""
+  },
+  "code-review/04-packages-mt5.md": {
+    "mtime": 1781775827.9967017,
+    "ast_hash": "73dfd0d7b7cad7a1986562f5f3c686d1",
+    "semantic_hash": ""
+  },
+  "code-review/FIX-REPORT.md": {
+    "mtime": 1781778321.6977324,
+    "ast_hash": "6911ab15a85a60e14a85ae06ce6558b9",
+    "semantic_hash": ""
+  },
+  "code-review/REVIEW.md": {
+    "mtime": 1781776049.9804153,
+    "ast_hash": "9ed1e43b96f02fcea7c2053c64dbe5b8",
+    "semantic_hash": ""
+  },
+  "docs/zeptomail-smtp-migration-plan.md": {
+    "mtime": 1781801692.081836,
+    "ast_hash": "1d46432c1a2f241be3ea060be7321a08",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/collections/CompanyMilestones.ts": {
+    "mtime": 1781885076.3664384,
+    "ast_hash": "d98be846f7331d96351992c6cc56571b",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/email/mailer.ts": {
+    "mtime": 1781880627.3452837,
+    "ast_hash": "291ddba4f7bbb52576d97e1249d0e68e",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/backfill-tv-symbols.ts": {
+    "mtime": 1781795996.7542248,
+    "ast_hash": "0a10868ab801d3281f3383f7958bb201",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/migrate-analyst-calls-table.ts": {
+    "mtime": 1781792730.6118534,
+    "ast_hash": "73e44210b3418cba34bd208d0d0bfe04",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/migrate-company-milestones-table.ts": {
+    "mtime": 1781885111.1338265,
+    "ast_hash": "7ce5cc812536c2fdac8850bc54651ae9",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/migrate-contact-submissions-table.ts": {
+    "mtime": 1781867598.5921552,
+    "ast_hash": "187621f9221359966ba263c7f87a800c",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/seed-ebooks-only.ts": {
+    "mtime": 1781895897.9523277,
+    "ast_hash": "c5e3499201d200edee5e1fb51ff60202",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/seed-extra-content.ts": {
+    "mtime": 1781895896.6428266,
+    "ast_hash": "6ca26826b5602478e9a06ebc6ef9571b",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/seed-milestones-only.ts": {
+    "mtime": 1781885328.8367438,
+    "ast_hash": "6459a9790a6e5a5195178f208d96b1d2",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/verify-email.ts": {
+    "mtime": 1781803487.28431,
+    "ast_hash": "ab8d8826509e229c06720891a7ba373c",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/AboutPageSkeleton.tsx": {
+    "mtime": 1781891826.4356031,
+    "ast_hash": "61b075157cc3d5456223fa414dd372a0",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/AnalystChartSkeleton.tsx": {
+    "mtime": 1781891940.782222,
+    "ast_hash": "18614d599fea85a296c3f86a564e8eb3",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/AwardsPageSkeleton.tsx": {
+    "mtime": 1781891841.2255232,
+    "ast_hash": "7f275aaf3a4c2b961da58a915d4d23f4",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/CareersPageSkeleton.tsx": {
+    "mtime": 1781891856.142917,
+    "ast_hash": "9cc4aa4fdd472ef1c572b63be257994a",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/EbooksSkeleton.tsx": {
+    "mtime": 1781891890.6862588,
+    "ast_hash": "b4a3afeba4d0e077b3942fa4a06eebe3",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/GuidesSkeleton.tsx": {
+    "mtime": 1781891923.8894994,
+    "ast_hash": "e807bf76cc8232d1f55bfb09d2b80e9f",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/JourneyTimelineClient.tsx": {
+    "mtime": 1781946309.9990408,
+    "ast_hash": "91faea72e867c13f87a5ef36fbc644fb",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/MediaListingSkeleton.tsx": {
+    "mtime": 1781891904.7777822,
+    "ast_hash": "8a500c19241545de8ed98499e656da8d",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/MediaPressPageSkeleton.tsx": {
+    "mtime": 1781893980.603304,
+    "ast_hash": "cee413c9d6635076b1aed41c19bd632e",
+    "semantic_hash": ""
+  },
+  "packages/ui/src/components/WebinarsSkeleton.tsx": {
+    "mtime": 1781891951.928416,
+    "ast_hash": "423785ed4b925f700be381771d41ff3b",
+    "semantic_hash": ""
+  },
+  "apps/cms/public/favicon.png": {
+    "mtime": 1781942341.8570118,
+    "ast_hash": "d2e64c3611c7073d049dc06709366096",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/analysis-dollar-move-starts-frankfurt.jpg": {
+    "mtime": 1781891451.6840155,
+    "ast_hash": "dce434b8fd3fa610f02ddaee408cd397",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/analysis-ecb-rate-decision-what-traders-missed.jpg": {
+    "mtime": 1781891454.7510424,
+    "ast_hash": "cd1dc15ce2854d19ace257b3968627df",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/analysis-gold-1400-momentum-or-top.jpg": {
+    "mtime": 1781891455.0514555,
+    "ast_hash": "742c74757d304495c322d19a6e30c333",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/analysis-pip-swap-calculators-on-mobile.jpg": {
+    "mtime": 1781891453.5175793,
+    "ast_hash": "a79c04cdbbf22534041d4bf8db66b0f6",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/analysis-traders-guide-understanding-slippage.jpg": {
+    "mtime": 1781891452.2395973,
+    "ast_hash": "42ebe13aeb870ce1459236ae66a14533",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/analysis-volatility-trap-three-setups.jpg": {
+    "mtime": 1781891451.1171496,
+    "ast_hash": "7132f9e7c1dc917f16756edffe8d2b89",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/blog-audusd-rba-decision-preview.jpg": {
+    "mtime": 1781890329.051753,
+    "ast_hash": "18da47bc8f95f15afde9916f4a6080d2",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/blog-bitcoin-breaks-70000-institutional-demand.jpg": {
+    "mtime": 1781890330.812961,
+    "ast_hash": "bdc1a201b98a99d5c4e41cef3d6ef252",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/blog-eurusd-weekly-outlook-fed-signals.jpg": {
+    "mtime": 1781890328.5804956,
+    "ast_hash": "a66feec9a7f3cbd25da5f8b01aa418d9",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/blog-gbpusd-technical-outlook-boe-rate-decision.jpg": {
+    "mtime": 1781890335.009102,
+    "ast_hash": "264838859f619937a1bd728efa76c035",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/blog-gold-rally-stalls-2350-key-levels.jpg": {
+    "mtime": 1781890332.471146,
+    "ast_hash": "742c74757d304495c322d19a6e30c333",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/blog-monday-briefing-macro-themes-june-2026.jpg": {
+    "mtime": 1781890329.6794412,
+    "ast_hash": "8ccc0d8b751ef3b0f1c7f65ca69e4868",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/blog-nfp-trading-guide-non-farm-payrolls.jpg": {
+    "mtime": 1781890335.5270636,
+    "ast_hash": "fecb4f70800a9a01357bf45e2c50d41a",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/blog-oil-opec-cuts-85-dollar-level.jpg": {
+    "mtime": 1781890336.751434,
+    "ast_hash": "7132f9e7c1dc917f16756edffe8d2b89",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/blog-sp500-all-time-highs-forex-implications.jpg": {
+    "mtime": 1781890327.3252532,
+    "ast_hash": "a3b3b11b7ede222380d7c0b1094b0559",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/blog-usd-index-105-macro-drivers.jpg": {
+    "mtime": 1781890331.4662158,
+    "ast_hash": "736164d0ed386efd5f71842ab0e30b72",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/blog-usdjpy-155-japan-intervention-risk.jpg": {
+    "mtime": 1781890336.1384444,
+    "ast_hash": "be370ad47dc63e86d79cb032a96ae7a6",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/pay-bank-wire-swift.png": {
+    "mtime": 1781888519.4776158,
+    "ast_hash": "2c301928aca5d56ea8048f50c61991a0",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/pay-crypto-usdt-btc.png": {
+    "mtime": 1781888519.4942956,
+    "ast_hash": "464f34ad5a01a6fa8cfb4a5b4df6fb02",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/pay-local-bank-transfer.png": {
+    "mtime": 1781888519.5041952,
+    "ast_hash": "0ef6b38767dd9ce47c8223bb4bf5f2c6",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/pay-neteller.png": {
+    "mtime": 1781888519.524019,
+    "ast_hash": "5489070eb1a946821c6c163fd587100d",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/pay-skrill.png": {
+    "mtime": 1781888519.5298822,
+    "ast_hash": "0fa86c265dd60dc281e09cecfa359c26",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/pay-visa-mastercard.png": {
+    "mtime": 1781888519.5443375,
+    "ast_hash": "8f78af039d3ceee886ea2d82a334b16d",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/report-cover-gold-2026-safe-haven-real-yields.jpg": {
+    "mtime": 1781890334.306139,
+    "ast_hash": "515b1aa5c28f5d296c7f80ec0c9094a4",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/report-cover-mena-fx-quarterly-2026.jpg": {
+    "mtime": 1781890333.2006073,
+    "ast_hash": "0d32f1d7a6667d16137af6163cd4c4e3",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/report-cover-q3-2026-global-macro-outlook.jpg": {
+    "mtime": 1781890333.777575,
+    "ast_hash": "11ed0cf6ddd222fddc80dd59d940c5b6",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/team-claire-deschamps.jpg": {
+    "mtime": 1781887510.5557885,
+    "ast_hash": "e29333de2d10ee3297a7afca6c690c7e",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/team-james-hartley.jpg": {
+    "mtime": 1781887511.942,
+    "ast_hash": "40b26c1092badc6a6c8601490486faa2",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/team-omar-al-rashidi.jpg": {
+    "mtime": 1781887509.8909369,
+    "ast_hash": "46a9a4e2cd54d3b991b6f42729c4035f",
+    "semantic_hash": ""
+  },
+  "apps/cms/seed-assets/team-priya-kapoor.jpg": {
+    "mtime": 1781887509.1577497,
+    "ast_hash": "5f5fc831848cf2ca080c436f0bbd2f19",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-dollar-move-starts-frankfurt-1-400x300.jpg": {
+    "mtime": 1781893290.4441228,
+    "ast_hash": "7555b9709e8d91e1b320ade4f3591e60",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-dollar-move-starts-frankfurt-1-768x1024.jpg": {
+    "mtime": 1781893290.4441228,
+    "ast_hash": "bf2302d351e8a1b57382dee8a01cac6a",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-dollar-move-starts-frankfurt-1.jpg": {
+    "mtime": 1781893290.4441228,
+    "ast_hash": "35e18aeef3abacec7e0310b2e1fac142",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-ecb-rate-decision-what-traders-missed-1-400x300.jpg": {
+    "mtime": 1781893327.6628964,
+    "ast_hash": "fdc277f838dab9c9c0a87487db441c03",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-ecb-rate-decision-what-traders-missed-1-768x1024.jpg": {
+    "mtime": 1781893327.6628964,
+    "ast_hash": "3098d587bab0f85a3a9ac692331ddaee",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-ecb-rate-decision-what-traders-missed-1.jpg": {
+    "mtime": 1781893327.6628964,
+    "ast_hash": "f018b62826bbc19e3fe686e0796c7fcf",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-gold-1400-momentum-or-top-1-400x300.jpg": {
+    "mtime": 1781893305.3249598,
+    "ast_hash": "76f10907b9a091bad8d4dfaef0b8771c",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-gold-1400-momentum-or-top-1-768x1024.jpg": {
+    "mtime": 1781893305.3249598,
+    "ast_hash": "841fed38787b06725c9619f575397a32",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-gold-1400-momentum-or-top-1.jpg": {
+    "mtime": 1781893305.30897,
+    "ast_hash": "433b51e11a574ff699cafeea1be11e06",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-pip-swap-calculators-on-mobile-1-400x300.jpg": {
+    "mtime": 1781893320.2059386,
+    "ast_hash": "cbbc6fac6f7b8a06772ea291e879ac13",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-pip-swap-calculators-on-mobile-1-768x1024.jpg": {
+    "mtime": 1781893320.2059386,
+    "ast_hash": "81ee7e370c8ca926ea045ca4e262dd65",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-pip-swap-calculators-on-mobile-1.jpg": {
+    "mtime": 1781893320.2059386,
+    "ast_hash": "dd0868768b3925930ae68c8ab0f4c32a",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-traders-guide-understanding-slippage-1-400x300.jpg": {
+    "mtime": 1781893312.7724957,
+    "ast_hash": "be4ae6f0c5f9fbf372e6c0713e1e118c",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-traders-guide-understanding-slippage-1-768x1024.jpg": {
+    "mtime": 1781893312.7724957,
+    "ast_hash": "01b417a00997847c73fb24594f5f5617",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-traders-guide-understanding-slippage-1.jpg": {
+    "mtime": 1781893312.7564535,
+    "ast_hash": "8efff19b42a4e1cead68e325257fa180",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-volatility-trap-three-setups-1-400x300.jpg": {
+    "mtime": 1781893297.8605978,
+    "ast_hash": "79e53b367ec2cb34fd490913abbeabe2",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-volatility-trap-three-setups-1-768x1024.jpg": {
+    "mtime": 1781893297.8605978,
+    "ast_hash": "12df06412ec297e23418652a435d2557",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/analysis-volatility-trap-three-setups-1.jpg": {
+    "mtime": 1781893297.8605978,
+    "ast_hash": "c656252bda20f3bdd08c1975c40ec0fb",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-audusd-rba-decision-preview-400x300.jpg": {
+    "mtime": 1781893253.081177,
+    "ast_hash": "bb6ed4450925f121eeb322ced5b450be",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-audusd-rba-decision-preview-768x1024.jpg": {
+    "mtime": 1781893253.081177,
+    "ast_hash": "392106194744063422e79d7b802d36b5",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-audusd-rba-decision-preview.jpg": {
+    "mtime": 1781893253.081177,
+    "ast_hash": "8250d85237a3f4241164ea0fd29b258e",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-bitcoin-breaks-70000-institutional-demand-400x300.jpg": {
+    "mtime": 1781893238.6613019,
+    "ast_hash": "2fddc5f21758ed00ed39b6ff0911780c",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-bitcoin-breaks-70000-institutional-demand-768x1024.jpg": {
+    "mtime": 1781893238.6774707,
+    "ast_hash": "90f1e9cdc9c9f259aadab852b53428fd",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-bitcoin-breaks-70000-institutional-demand.jpg": {
+    "mtime": 1781893238.6613019,
+    "ast_hash": "9a6f91223ab0f00a24bde5204427e09e",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-eurusd-weekly-outlook-fed-signals-400x300.jpg": {
+    "mtime": 1781893195.2693088,
+    "ast_hash": "5e5c6357daf9f7a5ac586421b3d0c0da",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-eurusd-weekly-outlook-fed-signals-768x1024.jpg": {
+    "mtime": 1781893195.285129,
+    "ast_hash": "c619d3f3e1a2f30ad40bf8f97e80b167",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-eurusd-weekly-outlook-fed-signals.jpg": {
+    "mtime": 1781893195.2693088,
+    "ast_hash": "baf93df6402d538aa76a0a62aeeb287c",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-gbpusd-technical-outlook-boe-rate-decision-400x300.jpg": {
+    "mtime": 1781893216.97311,
+    "ast_hash": "7ff9d330b43d021ee7ebcf76bc8641f0",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-gbpusd-technical-outlook-boe-rate-decision-768x1024.jpg": {
+    "mtime": 1781893216.97311,
+    "ast_hash": "1a7d24de59249b04558b9ba706f9a6a0",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-gbpusd-technical-outlook-boe-rate-decision.jpg": {
+    "mtime": 1781893216.97311,
+    "ast_hash": "719d372e6bdd8e2d98a3ad2b49f2045d",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-gold-rally-stalls-2350-key-levels-400x300.jpg": {
+    "mtime": 1781893202.490981,
+    "ast_hash": "76f10907b9a091bad8d4dfaef0b8771c",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-gold-rally-stalls-2350-key-levels-768x1024.jpg": {
+    "mtime": 1781893202.490981,
+    "ast_hash": "841fed38787b06725c9619f575397a32",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-gold-rally-stalls-2350-key-levels.jpg": {
+    "mtime": 1781893202.490981,
+    "ast_hash": "433b51e11a574ff699cafeea1be11e06",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-monday-briefing-macro-themes-june-2026-400x300.jpg": {
+    "mtime": 1781893267.5173233,
+    "ast_hash": "094e0532960cc6412c7bc6c80dd8abd3",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-monday-briefing-macro-themes-june-2026-768x1024.jpg": {
+    "mtime": 1781893267.5173233,
+    "ast_hash": "33497057b40d1e575808219d237101d9",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-monday-briefing-macro-themes-june-2026.jpg": {
+    "mtime": 1781893267.5173233,
+    "ast_hash": "6ef77cbddc1ac3527b5471fb3a715347",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-nfp-trading-guide-non-farm-payrolls-400x300.jpg": {
+    "mtime": 1781893209.739393,
+    "ast_hash": "2155963ab173e80582cdfa2f0c92472f",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-nfp-trading-guide-non-farm-payrolls-768x1024.jpg": {
+    "mtime": 1781893209.739393,
+    "ast_hash": "11f90cb181bc22781868185724958895",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-nfp-trading-guide-non-farm-payrolls.jpg": {
+    "mtime": 1781893209.739393,
+    "ast_hash": "02c9967ff89634d604b457a6bd573fac",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-oil-opec-cuts-85-dollar-level-400x300.jpg": {
+    "mtime": 1781893224.2328997,
+    "ast_hash": "79e53b367ec2cb34fd490913abbeabe2",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-oil-opec-cuts-85-dollar-level-768x1024.jpg": {
+    "mtime": 1781893224.2328997,
+    "ast_hash": "12df06412ec297e23418652a435d2557",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-oil-opec-cuts-85-dollar-level.jpg": {
+    "mtime": 1781893224.2168162,
+    "ast_hash": "c656252bda20f3bdd08c1975c40ec0fb",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-sp500-all-time-highs-forex-implications-400x300.jpg": {
+    "mtime": 1781893245.8628592,
+    "ast_hash": "550a9c609a1956f74e429206fd713b1a",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-sp500-all-time-highs-forex-implications-768x1024.jpg": {
+    "mtime": 1781893245.8628592,
+    "ast_hash": "5255f9c8c04abaad5b21dc22d5d6a347",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-sp500-all-time-highs-forex-implications.jpg": {
+    "mtime": 1781893245.8470857,
+    "ast_hash": "cb30e34ca738342117a7f5ca84f4d398",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-usd-index-105-macro-drivers-400x300.jpg": {
+    "mtime": 1781893231.438502,
+    "ast_hash": "834535fae631583d43fa68b34683ace3",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-usd-index-105-macro-drivers-768x1024.jpg": {
+    "mtime": 1781893231.4545076,
+    "ast_hash": "3c70a38962522630882ff52c1dabe568",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-usd-index-105-macro-drivers.jpg": {
+    "mtime": 1781893231.438502,
+    "ast_hash": "5f43e580186fbd0cc5e176e4c758e1d6",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-usdjpy-155-japan-intervention-risk-400x300.jpg": {
+    "mtime": 1781893260.3070228,
+    "ast_hash": "6dde876b1dbe548b00a690a0de4e98e4",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-usdjpy-155-japan-intervention-risk-768x1024.jpg": {
+    "mtime": 1781893260.3070228,
+    "ast_hash": "40a72b08d11b2ccbcbee9456b45eda5a",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/blog-usdjpy-155-japan-intervention-risk.jpg": {
+    "mtime": 1781893260.3070228,
+    "ast_hash": "8f04fc741710e780dbc8f93ef44a5678",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/report-cover-gold-2026-safe-haven-real-yields-400x300.jpg": {
+    "mtime": 1781893878.4945521,
+    "ast_hash": "c9038a7345c404f416d6c30ce0544115",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/report-cover-gold-2026-safe-haven-real-yields-768x1024.jpg": {
+    "mtime": 1781893878.4945521,
+    "ast_hash": "5bebd00f282c26d24179c6cd2017c00e",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/report-cover-gold-2026-safe-haven-real-yields.jpg": {
+    "mtime": 1781893878.4907184,
+    "ast_hash": "981a9f5aefd9d58eeb88ba390deb6ec4",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/report-cover-mena-fx-quarterly-2026-400x300.jpg": {
+    "mtime": 1781893869.4498463,
+    "ast_hash": "95fd4399aba86ef676e4730fc1e58965",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/report-cover-mena-fx-quarterly-2026-768x1024.jpg": {
+    "mtime": 1781893869.4508834,
+    "ast_hash": "81b021dfdee0c315238d6c7970aa3fbd",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/report-cover-mena-fx-quarterly-2026.jpg": {
+    "mtime": 1781893869.4478748,
+    "ast_hash": "133a26c4e8897e26a8ad9357a254800a",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/report-cover-q3-2026-global-macro-outlook-400x300.jpg": {
+    "mtime": 1781893860.3990533,
+    "ast_hash": "6f5694a6c4bb06810f4a37b9fbc3a43d",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/report-cover-q3-2026-global-macro-outlook-768x1024.jpg": {
+    "mtime": 1781893860.3990533,
+    "ast_hash": "eff9e2e8cdc3ede99fbecde0446f1880",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/report-cover-q3-2026-global-macro-outlook.jpg": {
+    "mtime": 1781893860.3990533,
+    "ast_hash": "2ed6cbeb726d10c0214009ac06576bba",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/team-claire-deschamps-400x300.jpg": {
+    "mtime": 1781893452.7572012,
+    "ast_hash": "92451da05591ba34d68268ec3a9e4461",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/team-claire-deschamps-768x1024.jpg": {
+    "mtime": 1781893452.7572012,
+    "ast_hash": "9d41de0b6c82c2d25536e0735eb3bbd8",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/team-claire-deschamps.jpg": {
+    "mtime": 1781893452.7572012,
+    "ast_hash": "a588faea4943c7410460f50fde3e6dd9",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/team-james-hartley-400x300.jpg": {
+    "mtime": 1781893431.3065686,
+    "ast_hash": "ff2c77d179e3a8063eee8fa06f7b840b",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/team-james-hartley-768x1024.jpg": {
+    "mtime": 1781893431.3065686,
+    "ast_hash": "001fc8bcc4bfb6d8d2ad5fa5e98ab543",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/team-james-hartley.jpg": {
+    "mtime": 1781893431.3065686,
+    "ast_hash": "e02a8dbb50a405a30fe73c62cba30383",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/team-omar-al-rashidi-400x300.jpg": {
+    "mtime": 1781893445.623586,
+    "ast_hash": "85c26384aa4f9272841ca075962e9255",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/team-omar-al-rashidi-768x1024.jpg": {
+    "mtime": 1781893445.623586,
+    "ast_hash": "978665ba1de99b1f343f52859799ac53",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/team-omar-al-rashidi.jpg": {
+    "mtime": 1781893445.623586,
+    "ast_hash": "5948dc15b9985cbd495b0f0ce794d358",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/team-priya-kapoor-400x300.jpg": {
+    "mtime": 1781893438.466173,
+    "ast_hash": "615480ba2795e7ded6d54c307dbdd658",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/team-priya-kapoor-768x1024.jpg": {
+    "mtime": 1781893438.467173,
+    "ast_hash": "a83f1f23139aa05301dc80f05457e377",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/media/team-priya-kapoor.jpg": {
+    "mtime": 1781893438.4641728,
+    "ast_hash": "13b69172324b4f48c942a58101310a04",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/migrate-drop-totp-columns.ts": {
+    "mtime": 1781942744.0907357,
+    "ast_hash": "b9995f181ae539c3ef147dfb4de676da",
+    "semantic_hash": ""
+  },
+  "apps/cms/src/scripts/remove-mobile-footer-link.ts": {
+    "mtime": 1781947358.148942,
+    "ast_hash": "f4008cc28231c5c18a6e77919b9b14b6",
+    "semantic_hash": ""
+  }
+}

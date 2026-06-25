@@ -20,14 +20,31 @@ export interface CmsSocialLinks {
   tiktok?: string | null;
 }
 
+export interface CmsFooterContact {
+  email?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  hours?: string | null;
+}
+
 function Footer({
   footerColumns,
   riskDisclaimer,
   socialLinks,
+  contact,
+  paymentMethods,
+  regulatoryDisclosure,
+  companyRegistration,
+  liveChatUrl,
 }: {
   footerColumns?: CmsFooterColumn[];
   riskDisclaimer?: string | null;
   socialLinks?: CmsSocialLinks;
+  contact?: CmsFooterContact | null;
+  paymentMethods?: string[];
+  regulatoryDisclosure?: string | null;
+  companyRegistration?: string | null;
+  liveChatUrl?: string | null;
 }) {
   const locale = useLocale();
   const t = useTranslations('footer');
@@ -49,7 +66,6 @@ function Footer({
       items: [
         { label: t('linkMT5'), href: '/platform/mt5' },
         { label: t('linkWebTrader'), href: '/platform/webtrader' },
-        { label: t('linkMobileApp'), href: '/platform/mobile' },
         { label: t('linkTools'), href: '/tools' },
       ],
     },
@@ -280,15 +296,113 @@ function Footer({
           ))}
         </div>
 
-        {/* Thin divider — left-aligned, not full-width */}
-        <div className="mb-5 h-px w-full max-w-[342px] bg-[rgba(255,255,255,0.08)]" />
+        {/* Contact + payment methods (client feedback #6) — all CMS-driven; each
+            block renders only when its data is present. */}
+        {(contact?.email ||
+          contact?.phone ||
+          contact?.address ||
+          liveChatUrl ||
+          (paymentMethods && paymentMethods.length > 0)) && (
+          <div className="mb-9 grid gap-8 sm:grid-cols-2 xl:max-w-[760px]">
+            {(contact?.email || contact?.phone || contact?.address || liveChatUrl) && (
+              <div>
+                <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+                  {t('contactHeading')}
+                </p>
+                <ul className="flex flex-col gap-2 text-[13px]">
+                  {contact?.email && (
+                    <li>
+                      <a
+                        href={`mailto:${contact.email}`}
+                        className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
+                      >
+                        {contact.email}
+                      </a>
+                    </li>
+                  )}
+                  {contact?.phone && (
+                    <li>
+                      <a
+                        href={`tel:${contact.phone.replace(/\s+/g, '')}`}
+                        className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
+                      >
+                        {contact.phone}
+                      </a>
+                    </li>
+                  )}
+                  {contact?.hours && (
+                    <li className="font-body text-[rgba(255,255,255,0.55)]">{contact.hours}</li>
+                  )}
+                  {contact?.address && (
+                    <li className="font-body text-[rgba(255,255,255,0.55)]">{contact.address}</li>
+                  )}
+                  {liveChatUrl && (
+                    <li>
+                      <Link
+                        href={
+                          liveChatUrl.startsWith('http') ? liveChatUrl : `/${locale}${liveChatUrl}`
+                        }
+                        className="text-accent-bright font-body inline-flex items-center gap-1.5 transition-colors hover:text-white"
+                      >
+                        <span
+                          className="bg-accent-bright h-1.5 w-1.5 rounded-full"
+                          aria-hidden="true"
+                        />
+                        {t('liveChatShortcut')}
+                      </Link>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            )}
+            {paymentMethods && paymentMethods.length > 0 && (
+              <div>
+                <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+                  {t('paymentsHeading')}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {paymentMethods.map((m) => (
+                    <span
+                      key={m}
+                      className="font-body rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-[rgba(255,255,255,0.75)]"
+                    >
+                      {m}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
-        {/* Risk disclosure — left-aligned, constrained width */}
-        <div className="max-w-[342px]">
+        {/* Thin divider */}
+        <div className="mb-5 h-px w-full max-w-[640px] bg-[rgba(255,255,255,0.08)]" />
+
+        {/* Company / regulation + risk disclosure (client feedback #6) — CMS-driven.
+            Regulatory + company blocks hide when empty; the risk warning always
+            shows (CMS copy, else the standard regulatory boilerplate). */}
+        <div className="max-w-[640px]">
+          {(regulatoryDisclosure || companyRegistration) && (
+            <>
+              <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+                {t('regHeading')}
+              </p>
+              {regulatoryDisclosure && (
+                <p className="font-body mb-3 whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.45)]">
+                  {regulatoryDisclosure}
+                </p>
+              )}
+              {companyRegistration && (
+                <p className="font-body mb-5 whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.4)]">
+                  {companyRegistration}
+                </p>
+              )}
+            </>
+          )}
           <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
             {t('riskDisclosure')}
           </p>
-          <p className="font-body mb-4 text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.45)]">
+          <p className="font-body mb-4 whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.45)]">
             {riskDisclaimer ?? t('riskWarning')}
           </p>
 

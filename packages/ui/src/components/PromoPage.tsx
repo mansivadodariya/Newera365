@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
+import { AuthModal, type AuthModalType } from './AuthModal';
 import { SectionKicker } from './SectionKicker';
 
 export interface CmsPromoItem {
@@ -49,7 +51,7 @@ function ArrowRight({ size = 13 }: { size?: number }) {
       viewBox="0 0 16 16"
       fill="none"
       aria-hidden="true"
-      className="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
+      className="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 rtl:-scale-x-100"
     >
       <path
         d="M3 8h10M9 4l4 4-4 4"
@@ -62,39 +64,22 @@ function ArrowRight({ size = 13 }: { size?: number }) {
   );
 }
 
-function OfferEndsBadge({ label }: { label: string }) {
-  return (
-    <div className="bg-accent/10 mb-3.5 inline-flex items-center gap-1.5 rounded-full px-2.5 py-[5px]">
-      <span className="bg-accent h-1.5 w-1.5 shrink-0 rounded-full" />
-      <span className="font-body text-accent text-[11px] font-medium">{label}</span>
-    </div>
-  );
-}
-
-function TagBadge({ tag }: { tag: string }) {
-  return (
-    <span className="bg-accent/10 text-accent inline-flex items-center rounded-full px-2.5 py-[5px] font-mono text-[10px] tracking-[1.2px]">
-      {tag}
-    </span>
-  );
-}
-
 /** Promo card — light at rest, transitions to dark highlighted with green glow on hover */
 function PromoCard({
   promo,
   endsLabel,
   claimLabel,
   activeLabel,
-  claimHref,
+  onClaim,
 }: {
   promo: CmsPromoItem;
   endsLabel: string | null;
   claimLabel: string;
   activeLabel: string;
-  claimHref: string;
+  onClaim: () => void;
 }) {
   return (
-    <div className="hover:border-accent/25 dark:hover:border-accent/25 group relative isolate overflow-hidden rounded-[20px] border border-transparent bg-[#f2f2f2] p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-[#07090D] hover:shadow-[0_20px_56px_rgba(0,176,80,0.18)] dark:border-white/[0.06] dark:bg-[#111111] dark:hover:bg-[#07090D]">
+    <div className="hover:border-accent/25 dark:hover:border-accent/25 group relative isolate overflow-hidden rounded-[20px] border border-transparent bg-[#F2F2F2] p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-[#07090D] hover:shadow-[0_20px_56px_rgba(0,176,80,0.18)] dark:border-white/[0.06] dark:bg-[#111111] dark:hover:bg-[#07090D]">
       {/* Green glow blob — fades in on hover */}
       <span
         className="pointer-events-none absolute -top-[60px] left-[12%] h-[220px] w-[220px] rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -139,13 +124,14 @@ function PromoCard({
         <span className="font-mono text-[11.5px] leading-snug text-[#6b7280] transition-colors duration-300 group-hover:text-white/45 dark:text-white/40">
           {promo.terms ?? ''}
         </span>
-        <Link
-          href={claimHref}
+        <button
+          type="button"
+          onClick={onClaim}
           className="group-hover:bg-accent inline-flex shrink-0 items-center gap-1.5 rounded-[10px] bg-[#111] px-3.5 py-2.5 text-[13px] font-medium text-white transition-all duration-200 active:scale-[0.97] group-hover:shadow-[0_6px_20px_rgba(0,176,80,0.45)] dark:bg-white/[0.08]"
         >
           {claimLabel}
           <ArrowRight />
-        </Link>
+        </button>
       </div>
     </div>
   );
@@ -156,6 +142,7 @@ export function PromoPage({ promos }: PromoPageProps) {
   const t = useTranslations('promos');
   const offerEndsLabel = useOfferEndsLabel();
   const items = promos ?? [];
+  const [modal, setModal] = useState<AuthModalType>(null);
 
   // Split "from every trade." → "from " (dark) + "every trade." (green).
   // Works for EN ("from every trade.") and AR ("من كل صفقة.") — first word stays dark.
@@ -168,7 +155,7 @@ export function PromoPage({ promos }: PromoPageProps) {
     <>
       {/* ── Hero ──────────────────────────────────────────────── */}
       <section className="px-5 pb-8 pt-9 xl:px-[120px] xl:pb-10 xl:pt-14">
-        <div className="mx-auto max-w-[390px] xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] xl:max-w-[1200px]">
           <h1 className="mb-4 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px] text-[#111] xl:text-[48px] xl:tracking-[-1.5px] dark:text-white">
             {t('heroLine1')}
             <br />
@@ -183,7 +170,7 @@ export function PromoPage({ promos }: PromoPageProps) {
 
       {/* ── Promo cards — always single column, full width ─────── */}
       <section className="px-5 pb-10 xl:px-[120px]">
-        <div className="mx-auto max-w-[390px] xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] xl:max-w-[1200px]">
           {items.length === 0 ? (
             <p className="text-muted py-12 text-center text-[14px]">{t('noPromos')}</p>
           ) : (
@@ -191,7 +178,6 @@ export function PromoPage({ promos }: PromoPageProps) {
               {items.map((promo) => {
                 const endsLabel = offerEndsLabel(promo.activeTo);
                 const claimLabel = promo.ctaLabel ?? t('claimBtn');
-                const claimHref = promo.ctaHref ?? `/${locale}/register`;
                 const activeLabel = t('activeLabel');
 
                 return (
@@ -201,7 +187,7 @@ export function PromoPage({ promos }: PromoPageProps) {
                     endsLabel={endsLabel}
                     claimLabel={claimLabel}
                     activeLabel={activeLabel}
-                    claimHref={claimHref}
+                    onClaim={() => setModal('register')}
                   />
                 );
               })}
@@ -212,7 +198,7 @@ export function PromoPage({ promos }: PromoPageProps) {
 
       {/* ── T&C band ───────────────────────────────────────────── */}
       <section className="rounded-t-[32px] bg-black px-5 pb-14 pt-10 xl:px-[120px]">
-        <div className="mx-auto max-w-[390px] xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] xl:max-w-[1200px]">
           <SectionKicker className="mb-3 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/60">
             {t('termsKicker')}
           </SectionKicker>
@@ -244,6 +230,8 @@ export function PromoPage({ promos }: PromoPageProps) {
           </div>
         </div>
       </section>
+
+      <AuthModal type={modal} onClose={() => setModal(null)} />
     </>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 // Desktop cards show a brand cover banner (matches the desktop Figma). The CMS
@@ -96,12 +96,21 @@ const METHOD_TYPE_LABELS: Record<string, string> = {
 
 function isGreenDepositValue(v: string) {
   const lower = v.toLowerCase();
-  return lower === 'instant' || lower === 'same day' || lower.startsWith('same-day');
+  // Includes Arabic equivalents — depositTime is CMS-localized, so the value can
+  // arrive as "فوري" / "نفس اليوم" instead of the English term.
+  return (
+    lower === 'instant' ||
+    lower === 'same day' ||
+    lower.startsWith('same-day') ||
+    v === 'فوري' ||
+    v === 'نفس اليوم'
+  );
 }
 
 function isGreenFeeValue(v: string) {
   const lower = v.toLowerCase();
-  return lower === 'free' || lower === 'none' || lower === 'لا يوجد';
+  // "مجاني" / "لا يوجد" = the Arabic localized "Free" / "None".
+  return lower === 'free' || lower === 'none' || lower === 'لا يوجد' || v === 'مجاني';
 }
 
 const TRUST_ROWS = [
@@ -178,6 +187,7 @@ const TRUST_ROWS = [
 export interface CmsPaymentMethodItem {
   id: number;
   name: string;
+  nameAr?: string | null;
   methodType: string;
   depositTime?: string | null;
   withdrawalTime?: string | null;
@@ -193,6 +203,30 @@ interface FundingPageProps {
 
 function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem[] }) {
   const t = useTranslations('funding');
+  const locale = useLocale();
+
+  const translateMethodType = (type: string): string => {
+    if (type === 'card') return t('typeCard');
+    if (type === 'bank') return t('typeBank');
+    if (type === 'ewallet') return t('typeEwallet');
+    if (type === 'crypto') return t('typeCrypto');
+    if (type === 'local') return t('typeLocal');
+    return METHOD_TYPE_LABELS[type] ?? type.toUpperCase();
+  };
+
+  const translatePaymentValue = (v: string): string => {
+    const lower = v.toLowerCase().trim();
+    if (lower === 'instant') return t('valueInstant');
+    if (lower === 'same day' || lower === 'same-day') return t('valueSameDay');
+    if (lower === 'within 24h') return t('valueWithin24h');
+    if (lower === '1-3 days') return t('valueDays13');
+    if (lower === '2-5 days') return t('valueDays25');
+    if (lower === '1-2 days') return t('valueDays12');
+    if (lower.includes('30') && lower.includes('min')) return t('valueMin30');
+    if (lower === 'free') return t('valueFree');
+    if (lower.includes('network')) return t('valueNetworkOnly');
+    return v;
+  };
 
   const trustRows = [
     { key: 'seg1', icon: TRUST_ROWS[0]!.icon, title: t('seg1Title'), desc: t('seg1Desc') },
@@ -205,7 +239,7 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
     <>
       {/* Hero — visible on all screen sizes per Figma */}
       <section className="bg-transparent px-5 pb-5 pt-9 xl:px-[120px] xl:pb-8 xl:pt-[48px]">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="font-sans text-[36px] font-semibold leading-[1.05] tracking-[-1.08px] xl:text-[48px] xl:tracking-[-1.44px]">
             <span className="text-foreground">{t('heroLine1')}&nbsp;—&nbsp;</span>
             <span className="text-[#00b050]">{t('heroAccent')}</span>
@@ -218,7 +252,7 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
 
       {/* Payment Methods */}
       <section className="bg-transparent px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted mb-5 text-[#6B7280] dark:text-[#B8BFCC]">
             {t('methodsKicker')}
           </SectionKicker>
@@ -232,8 +266,8 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
               .map((method) => ({
                 key: String(method.id),
                 icon: METHOD_TYPE_ICONS[method.methodType] ?? <IconCreditCard />,
-                typeBadge: METHOD_TYPE_LABELS[method.methodType] ?? method.methodType.toUpperCase(),
-                name: method.name,
+                typeBadge: translateMethodType(method.methodType),
+                name: locale === 'ar' ? (method.nameAr ?? method.name) : method.name,
                 cover: method.coverImage || defaultCover(method.name, method.methodType),
                 deposit: method.depositTime ?? '—',
                 withdraw: method.withdrawalTime ?? '—',
@@ -245,7 +279,7 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
               .map((method) => (
                 <div
                   key={method.key}
-                  className="bg-background shadow-card flex flex-col gap-[14px] rounded-[18px] p-5 dark:shadow-none"
+                  className="bg-background shadow-card hover-lift flex flex-col gap-[14px] rounded-[18px] p-5 dark:shadow-none"
                 >
                   {/* Mobile header: icon box + type pill (hidden on desktop, replaced by cover) */}
                   <div className="flex items-start justify-between md:hidden">
@@ -274,10 +308,22 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
                   {/* Stats 2×2 grid — matches Figma rgba(17,17,17,0.08) wrapper, #fafaf9 cells */}
                   <div className="dark:bg-surface-elevated grid grid-cols-2 gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)]">
                     {[
-                      { label: t('colDeposit'), value: method.deposit, green: method.depositGreen },
-                      { label: t('colWithdraw'), value: method.withdraw, green: false },
+                      {
+                        label: t('colDeposit'),
+                        value: translatePaymentValue(method.deposit),
+                        green: method.depositGreen,
+                      },
+                      {
+                        label: t('colWithdraw'),
+                        value: translatePaymentValue(method.withdraw),
+                        green: false,
+                      },
                       { label: t('colMin'), value: method.min, green: false },
-                      { label: t('colFee'), value: method.fee, green: method.feeGreen },
+                      {
+                        label: t('colFee'),
+                        value: translatePaymentValue(method.fee),
+                        green: method.feeGreen,
+                      },
                     ].map((stat) => (
                       <div
                         key={stat.label}
@@ -302,7 +348,7 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
 
       {/* Trust section */}
       <section className="rounded-t-[32px] bg-gradient-to-r from-[#000000] to-[#1F262E] px-5 py-10 xl:px-[120px] xl:py-14">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-3 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/60">
             {t('safetyKicker')}
           </SectionKicker>
@@ -313,7 +359,7 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
             {trustRows.map((row) => (
               <div
                 key={row.key}
-                className="flex items-start gap-[14px] rounded-[14px] bg-[rgba(255,255,255,0.04)] p-[18px]"
+                className="hover-lift flex items-start gap-[14px] rounded-[14px] bg-[rgba(255,255,255,0.04)] p-[18px]"
               >
                 <div className="bg-accent/[0.12] text-accent flex h-[37px] w-[37px] flex-shrink-0 items-center justify-center rounded-[11px]">
                   {row.icon}

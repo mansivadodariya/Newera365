@@ -2,14 +2,17 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
+import { Analytics } from '@/components/Analytics';
+import { CookieConsent } from '@/components/CookieConsent';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { Outfit, Inter, JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
-import { ToastProvider, Header, Footer, RiskBanner, SmartCtaBanner } from '@newera365/ui';
+import { ToastProvider, Footer, RiskBanner, SmartCtaBanner } from '@newera365/ui';
 import type { CmsFooterColumn, CmsSocialLinks } from '@newera365/ui';
+import { RouteChrome } from '@/components/RouteChrome';
 import { dir, LOCALES, type Locale } from '@newera365/types';
 import { routing } from '@/i18n/routing';
-import { getSiteSettings } from '@/lib/cms';
+import { getSiteSettings, getPaymentMethods } from '@/lib/cms';
 import { PageFade } from '@/components/PageFade';
 import '../globals.css';
 
@@ -36,16 +39,49 @@ const jetbrainsMono = JetBrains_Mono({
 
 const isLocale = (value: string): value is Locale => (LOCALES as readonly string[]).includes(value);
 
-// Theme-aware favicon: dark wordmark on light browser chrome, white wordmark on
-// dark browser chrome (follows the OS/browser prefers-color-scheme).
-export const metadata: Metadata = {
-  icons: {
-    icon: [
-      { url: '/favicon-light.png', media: '(prefers-color-scheme: light)', type: 'image/png' },
-      { url: '/favicon-dark.png', media: '(prefers-color-scheme: dark)', type: 'image/png' },
-    ],
-  },
-};
+const BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, '');
+
+// Per-locale metadata so Next.js emits correct hreflang + canonical tags.
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const { locale } = params;
+  const isAr = locale === 'ar';
+  return {
+    metadataBase: new URL(BASE),
+    title: {
+      default: isAr
+        ? 'نيو إيرا 365 — تداول الفوركس والعقود مقابل الفروقات'
+        : 'NewEra365 — Forex & CFD Trading',
+      template: isAr ? '%s | نيو إيرا 365' : '%s | NewEra365',
+    },
+    description: isAr
+      ? 'تداول الفوركس والمؤشرات والسلع والعملات الرقمية مع نيو إيرا 365 — فروقات ضيقة وتنفيذ سريع ومنصة MT5. رأس المال في خطر.'
+      : 'Trade forex, indices, commodities and crypto CFDs with NewEra365 — tight spreads, fast execution, and MT5. Capital at risk.',
+    alternates: {
+      canonical: `${BASE}/${locale}`,
+      languages: {
+        en: `${BASE}/en`,
+        ar: `${BASE}/ar`,
+        'x-default': `${BASE}/en`,
+      },
+    },
+    openGraph: {
+      siteName: 'NewEra365',
+      type: 'website',
+      locale: locale === 'ar' ? 'ar_AE' : 'en_US',
+      alternateLocale: locale === 'ar' ? ['en_US'] : ['ar_AE'],
+    },
+    icons: {
+      icon: [
+        { url: '/favicon-light.png', media: '(prefers-color-scheme: light)', type: 'image/png' },
+        { url: '/favicon-dark.png', media: '(prefers-color-scheme: dark)', type: 'image/png' },
+      ],
+    },
+  };
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -93,6 +129,28 @@ export default async function LocaleLayout({
       }
     : undefined;
 
+  // Footer contact, regulatory & payment data — all CMS-driven (client feedback #6)
+  const isAr = locale === 'ar';
+  const contact = s
+    ? {
+        email: s.contactEmail ?? null,
+        phone: s.contactPhone ?? null,
+        address: (isAr ? s.contactAddressAr : s.contactAddressEn) ?? null,
+        hours: (isAr ? s.supportHoursAr : s.supportHoursEn) ?? null,
+      }
+    : undefined;
+  const regulatoryDisclosure = s
+    ? ((isAr ? s.regulatoryDisclosureAr : s.regulatoryDisclosureEn) ?? undefined)
+    : undefined;
+  const companyRegistration = s
+    ? ((isAr ? s.companyRegistrationAr : s.companyRegistrationEn) ?? undefined)
+    : undefined;
+  const liveChatUrl = s?.liveChatUrl ?? undefined;
+
+  const paymentMethods = (await getPaymentMethods(locale))
+    .map((p) => (isAr ? (p.nameAr ?? p.name) : p.name))
+    .filter((n): n is string => Boolean(n));
+
   return (
     <html
       lang={locale}
@@ -100,6 +158,27 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={`${outfit.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'FinancialService',
+              name: 'NewEra365',
+              url: BASE,
+              logo: `${BASE}/favicon-dark.png`,
+              description:
+                'Forex and CFD broker offering tight spreads, fast MT5 execution, and multilingual support.',
+              sameAs: [
+                'https://x.com/newera365',
+                'https://linkedin.com/company/newera365',
+                'https://instagram.com/newera365',
+              ],
+            }),
+          }}
+        />
+      </head>
       <body>
         <ThemeProvider
           attribute="class"
@@ -112,7 +191,7 @@ export default async function LocaleLayout({
               {/* CMS-controlled dismissible risk banner — shown above header */}
               <RiskBanner enabled={riskBannerEnabled} message={riskBannerMessage} />
 
-              <Header />
+              <RouteChrome />
               <div
                 className="fixed inset-0 -z-10 dark:hidden"
                 style={{ background: 'linear-gradient(0deg, #FFF 53.85%, #67FF59 100%)' }}
@@ -124,12 +203,19 @@ export default async function LocaleLayout({
                 aria-hidden="true"
               />
               <PageFade>{children}</PageFade>
+              <Analytics />
+              <CookieConsent />
               <Footer
                 footerColumns={
                   footerColumns && footerColumns.length > 0 ? footerColumns : undefined
                 }
                 riskDisclaimer={riskDisclaimer ?? undefined}
                 socialLinks={socialLinks}
+                contact={contact}
+                paymentMethods={paymentMethods}
+                regulatoryDisclosure={regulatoryDisclosure}
+                companyRegistration={companyRegistration}
+                liveChatUrl={liveChatUrl}
               />
             </ToastProvider>
           </NextIntlClientProvider>

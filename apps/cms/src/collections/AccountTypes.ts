@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
+import { publicReadWhere } from './_fields';
 import Mt5SyncStatusCell from '../components/Mt5SyncStatusCell';
 
 // Powers the /accounts comparison table, /fees-charges, and the Spread
@@ -32,7 +33,7 @@ export const AccountTypes: CollectionConfig = {
     description:
       'Account type records power the comparison table and calculators. Add nameAr / featuresAr for Arabic display.',
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'active' } }) },
   fields: [
     // ── Identity ────────────────────────────────────────────────────────────
     {
@@ -50,16 +51,11 @@ export const AccountTypes: CollectionConfig = {
     },
     {
       name: 'badge',
-      type: 'select',
-      options: [
-        { label: 'FREE (Demo)', value: 'free' },
-        { label: 'POPULAR (Standard)', value: 'popular' },
-        { label: 'PRO (Professional)', value: 'pro' },
-        { label: 'ISLAMIC (Swap-Free)', value: 'islamic' },
-      ],
+      type: 'text',
+      maxLength: 50,
       admin: {
         description:
-          'Badge displayed on the account card header. Determines subtitle and card styling.',
+          'Badge label displayed on the account card header, e.g. "FREE", "POPULAR", "PRO", "ISLAMIC". Add any value — not restricted to a fixed list.',
       },
     },
     {

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
+import { publicReadWhere } from './_fields';
 
 // Powers the /company/media-press page — press coverage, media kit downloads, media inquiries.
 export const MediaPress: CollectionConfig = {
@@ -9,7 +10,7 @@ export const MediaPress: CollectionConfig = {
     defaultColumns: ['headline', 'publication', 'date', 'status'],
     description: 'Press coverage, media mentions, and brand asset downloads for NewEra365.',
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'published' } }) },
   fields: [
     {
       name: 'headline',

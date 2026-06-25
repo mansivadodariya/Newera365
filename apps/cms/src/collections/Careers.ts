@@ -1,5 +1,18 @@
 import type { CollectionConfig } from 'payload/types';
-import { seoFields, slugField } from './_fields';
+import { publicReadWhere, seoFields, slugField } from './_fields';
+import CategorySelect from '../components/CategorySelect';
+
+const DEPARTMENTS = [
+  'Engineering',
+  'Design',
+  'Marketing',
+  'Sales',
+  'Operations',
+  'Finance',
+  'Legal',
+  'Customer Support',
+];
+const EMPLOYMENT_TYPES = ['Full-Time', 'Part-Time', 'Contract', 'Internship', 'Remote'];
 
 // Powers /careers — job listings.
 export const Careers: CollectionConfig = {
@@ -9,24 +22,20 @@ export const Careers: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'department', 'status', 'publishedDate'],
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'open' } }) },
   fields: [
     { name: 'title', type: 'text', required: true, maxLength: 100, localized: true },
     slugField('title'),
     {
       name: 'department',
-      type: 'select',
+      type: 'text',
       required: true,
-      options: [
-        'engineering',
-        'design',
-        'marketing',
-        'sales',
-        'operations',
-        'compliance',
-        'support',
-        'finance',
-      ],
+      maxLength: 50,
+      admin: {
+        description:
+          'Department filter on /careers. Pick an existing one or type a new department.',
+        components: { Field: CategorySelect(DEPARTMENTS) },
+      },
     },
     {
       name: 'location',
@@ -38,9 +47,14 @@ export const Careers: CollectionConfig = {
     },
     {
       name: 'employmentType',
-      type: 'select',
+      type: 'text',
       required: true,
-      options: ['full-time', 'part-time', 'contract', 'freelance', 'internship'],
+      maxLength: 50,
+      admin: {
+        description:
+          'Employment type shown on job cards. Pick an existing one or type a new value.',
+        components: { Field: CategorySelect(EMPLOYMENT_TYPES) },
+      },
     },
     {
       name: 'summary',

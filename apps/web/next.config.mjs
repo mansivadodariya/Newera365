@@ -4,10 +4,50 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const isDev = process.env.NODE_ENV === 'development';
 
+// Fail the production build loudly if the CMS URL is unset rather than silently
+// baking in http://localhost:3001 — under upgrade-insecure-requests that localhost
+// connect-src blocks every client fetch, and the same fallback points public forms
+// at the visitor's own machine (NE code-review WR-12).
+const cmsUrl = process.env.NEXT_PUBLIC_CMS_URL?.trim();
+if (!isDev && !cmsUrl) {
+  throw new Error('NEXT_PUBLIC_CMS_URL must be set for production builds (NE code-review WR-12).');
+}
+
+// The CMS serves uploaded media from its own origin (Payload bakes serverURL into
+// each media `url`). Derive that host from NEXT_PUBLIC_CMS_URL so its images pass
+// CSP img-src and next/image wherever the CMS currently lives — today the Railway
+// URL, automatically cms.newera365.com once that domain is pointed at the CMS — with
+// no further code change. The explicit media./cms.newera365.com entries below remain
+// for the R2 + custom-domain end state.
+const cmsHost = cmsUrl ? new URL(cmsUrl).hostname : null;
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['@newera365/ui', '@newera365/types'],
+  // /platform/mobile was a duplicate of /platform/mt5 (same PlatformPage) and has
+  // been removed. Redirect it to the canonical page: this also guarantees the old
+  // path never serves a stale prerendered copy (Vercel does not purge the CDN entry
+  // for a path that simply dropped out of generateStaticParams). localePrefix is
+  // 'always', so only the /en and /ar prefixed forms exist.
+  async redirects() {
+    return [
+      {
+        source: '/:locale(en|ar)/platform/mobile',
+        destination: '/:locale/platform/mt5',
+        permanent: true,
+      },
+      // /markets/instruments was the standalone full-spec table; its route was removed
+      // and instrument specs now live within /markets/[category]. Without this redirect
+      // the path falls through to the [category] segment and soft-404s (HTTP 200 + "Page
+      // not found" UI), which is bad for SEO — send it to the canonical markets entry.
+      {
+        source: '/:locale(en|ar)/markets/instruments',
+        destination: '/:locale/markets/forex',
+        permanent: true,
+      },
+    ];
+  },
   images: {
     // Enumerate actual CDN subdomains rather than wildcarding all of *.newera365.com.
     // A broad wildcard would allow any compromised/misconfigured subdomain to serve
@@ -16,6 +56,11 @@ const nextConfig = {
       // Cloudflare R2 CDN (NE-027) — add more subdomains as they're provisioned.
       { protocol: 'https', hostname: 'media.newera365.com' },
       { protocol: 'https', hostname: 'cms.newera365.com' },
+      // Current CMS upload host from NEXT_PUBLIC_CMS_URL (the Railway URL until the
+      // custom domain is live). Skipped in dev — localhost is handled below.
+      ...(cmsHost && !isDev ? [{ protocol: 'https', hostname: cmsHost }] : []),
+      // Local Payload CMS uploads in development (served from port 3001).
+      ...(isDev ? [{ protocol: 'http', hostname: 'localhost', port: '3001' }] : []),
     ],
   },
   async headers() {
@@ -51,17 +96,29 @@ const nextConfig = {
               // RSC payload and hydration bootstrapping as inline scripts — blocking them
               // prevents React from hydrating and makes all interactive elements non-functional.
               // 'unsafe-eval' is dev-only (webpack HMR). Tighten to a nonce strategy post-launch (NE-028).
-              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://s3.tradingview.com https://s.tradingview.com https://www.tradingview.com`,
+              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://s3.tradingview.com https://s.tradingview.com https://www.tradingview.com https://www.googletagmanager.com https://connect.facebook.net`,
               // TradingView embed widgets render their chart inside an iframe served from
               // www.tradingview-widget.com (NOT tradingview.com) — it must be in frame-src or
               // every chart silently fails to mount. See TradingViewWidget.tsx.
               'frame-src https://www.tradingview.com https://s.tradingview.com https://www.tradingview-widget.com',
+              // frame-ancestors: more authoritative than X-Frame-Options in modern browsers.
+              // Restricts who can embed NewEra365 pages in an iframe.
+              "frame-ancestors 'self'",
               "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: https://media.newera365.com https://cms.newera365.com",
-              `connect-src 'self' ${(process.env.NEXT_PUBLIC_CMS_URL || 'http://localhost:3001').trim()}`,
+              // next/font self-hosts Google Fonts at build time — no external font CDN needed.
+              "font-src 'self' data:",
+              `img-src 'self' data: blob: https://media.newera365.com https://cms.newera365.com${cmsUrl ? ` ${cmsUrl}` : ''} https://www.facebook.com https://www.google-analytics.com${isDev ? ' http://localhost:3001' : ''}`,
+              // worker-src: TradingView charts use Web Workers for rendering.
+              "worker-src 'self' blob:",
+              // Analytics domains: GA4 and Meta Pixel fire only after cookie consent (Analytics.tsx),
+              // but CSP must whitelist their domains or the browser blocks the requests entirely.
+              // MT5 service URL is included so live instrument data can be fetched from the browser.
+              `connect-src 'self' ${cmsUrl || 'http://localhost:3001'}${process.env.NEXT_PUBLIC_MT5_SERVICE_URL ? ` ${process.env.NEXT_PUBLIC_MT5_SERVICE_URL.trim()}` : ''} https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://connect.facebook.net https://s3.tradingview.com`,
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",
+              // Upgrade insecure requests in production (HTTP → HTTPS).
+              ...(isDev ? [] : ["upgrade-insecure-requests"]),
             ].join('; '),
           },
         ],

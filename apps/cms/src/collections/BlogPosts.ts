@@ -1,5 +1,8 @@
 import type { CollectionConfig } from 'payload/types';
-import { seoFields, slugField } from './_fields';
+import { allowAnyCategory, publicReadWhere, seoFields, slugField } from './_fields';
+import CategorySelect from '../components/CategorySelect';
+
+const BLOG_CATEGORIES = ['market-news', 'analysis', 'tutorials', 'company-updates'];
 
 // Powers /blog (listing) and /blog/[slug] (article).
 export const BlogPosts: CollectionConfig = {
@@ -9,7 +12,7 @@ export const BlogPosts: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'status', 'publishedDate'],
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'published' } }) },
   fields: [
     { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),
@@ -20,12 +23,19 @@ export const BlogPosts: CollectionConfig = {
       defaultValue: 'draft',
       options: ['draft', 'published'],
     },
-    { name: 'publishedDate', type: 'date', admin: { description: 'Sort key on /blog listing.' } },
+    {
+      name: 'publishedDate',
+      type: 'date',
+      defaultValue: () => new Date().toISOString(),
+      admin: { description: 'Sort key on /blog listing. Defaults to creation time if left blank.' },
+    },
     {
       name: 'category',
       type: 'select',
       required: true,
-      options: ['market-news', 'analysis', 'tutorials', 'company-updates'],
+      options: BLOG_CATEGORIES,
+      validate: allowAnyCategory(true),
+      admin: { components: { Field: CategorySelect(BLOG_CATEGORIES) } },
     },
     {
       name: 'author',

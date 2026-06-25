@@ -1,8 +1,10 @@
 import type { CollectionConfig } from 'payload/types';
+import { publicReadWhere } from './_fields';
 
 // Powers /trade/funding — deposit and withdrawal methods.
-// Not locale-aware: payment method names and specs are global.
-// UI labels (e.g. "Instant", "None") are translated via i18n in the component.
+// Names use the parallel `nameAr` field. depositTime / withdrawalTime / fee are
+// localized (Payload locales) so editors set Arabic per row; methodType labels
+// are mapped via i18n in the component.
 export const PaymentMethods: CollectionConfig = {
   slug: 'payment-methods',
   admin: {
@@ -11,7 +13,7 @@ export const PaymentMethods: CollectionConfig = {
     defaultColumns: ['name', 'methodType', 'status', 'sortOrder'],
     description: 'Manage deposit/withdrawal methods shown on the /trade/funding page.',
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'active' } }) },
   fields: [
     {
       name: 'name',
@@ -19,6 +21,12 @@ export const PaymentMethods: CollectionConfig = {
       required: true,
       maxLength: 80,
       admin: { description: 'Display name, e.g. "Visa / Mastercard".' },
+    },
+    {
+      name: 'nameAr',
+      type: 'text',
+      maxLength: 120,
+      admin: { description: 'Arabic display name (leave blank to fall back to English name).' },
     },
     {
       name: 'methodType',
@@ -42,12 +50,14 @@ export const PaymentMethods: CollectionConfig = {
     {
       name: 'depositTime',
       type: 'text',
+      localized: true,
       maxLength: 80,
       admin: { description: 'Deposit processing time, e.g. "Instant" or "1–2 business days".' },
     },
     {
       name: 'withdrawalTime',
       type: 'text',
+      localized: true,
       maxLength: 80,
       admin: { description: 'Withdrawal processing time, e.g. "1–3 business days".' },
     },
@@ -60,6 +70,7 @@ export const PaymentMethods: CollectionConfig = {
     {
       name: 'fee',
       type: 'text',
+      localized: true,
       maxLength: 50,
       admin: { description: 'Fee description, e.g. "None" or "1.5%".' },
     },

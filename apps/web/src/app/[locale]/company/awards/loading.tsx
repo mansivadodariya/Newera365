@@ -1,5 +1,5 @@
-import { CompanyPageSkeleton } from '@newera365/ui';
+import { AwardsPageSkeleton } from '@newera365/ui';
 
 export default function Loading() {
-  return <CompanyPageSkeleton />;
+  return <AwardsPageSkeleton />;
 }

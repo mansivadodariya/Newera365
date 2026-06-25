@@ -1,6 +1,32 @@
 import type { CollectionConfig } from 'payload/types';
-import { seoFields, slugField } from './_fields';
+import {
+  allowAnyCategory,
+  gatedUploadRead,
+  publicReadWhere,
+  seoFields,
+  slugField,
+} from './_fields';
 import { deriveAlphabeticalIndex } from '../hooks';
+import CategorySelect from '../components/CategorySelect';
+
+const MEDIA_CATEGORIES = [
+  { label: 'Macro', value: 'macro' },
+  { label: 'Strategy', value: 'strategy' },
+  { label: 'Education', value: 'education' },
+  { label: 'Interviews', value: 'interviews' },
+  { label: 'Live', value: 'live' },
+];
+const GLOSSARY_CATEGORIES = [
+  { label: 'Pricing', value: 'PRICING' },
+  { label: 'Forex', value: 'FOREX' },
+  { label: 'Strategy', value: 'STRATEGY' },
+  { label: 'Risk', value: 'RISK' },
+  { label: 'Order / Execution', value: 'ORDER/EXEC' },
+  { label: 'Analysis', value: 'ANALYSIS' },
+  { label: 'Chart / Pattern', value: 'CHART/PATTERN' },
+  { label: 'Technical', value: 'TECHNICAL' },
+  { label: 'General', value: 'GENERAL' },
+];
 
 // Powers /videos, /audio, /ebooks, /glossary, /guides.
 export const EducationContent: CollectionConfig = {
@@ -10,7 +36,7 @@ export const EducationContent: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'contentType', 'status'],
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'published' } }) },
   hooks: {
     beforeChange: [deriveAlphabeticalIndex],
   },
@@ -57,6 +83,9 @@ export const EducationContent: CollectionConfig = {
       name: 'pdfFile',
       type: 'upload',
       relationTo: 'media',
+      // Withhold the file URL from anonymous REST reads when the item is gated,
+      // so the email gate (POST /api/education/gate) cannot be bypassed (NE CR-2).
+      access: { read: gatedUploadRead },
       admin: {
         description: 'PDF (max 50 MB).',
         condition: (data) => data?.contentType === 'ebook',
@@ -108,41 +137,29 @@ export const EducationContent: CollectionConfig = {
       defaultValue: false,
       admin: {
         description: 'Pin this item as the featured card at the top of its listing page.',
-        condition: (data) => data?.contentType === 'guide',
+        condition: (data) => ['guide', 'video', 'audio'].includes(data?.contentType),
       },
     },
     {
       name: 'mediaCategory',
       type: 'select',
-      options: [
-        { label: 'Macro', value: 'macro' },
-        { label: 'Strategy', value: 'strategy' },
-        { label: 'Education', value: 'education' },
-        { label: 'Interviews', value: 'interviews' },
-        { label: 'Live', value: 'live' },
-      ],
+      options: MEDIA_CATEGORIES,
+      validate: allowAnyCategory(false),
       admin: {
         description: 'Category filter tab shown on the Media Listing page.',
         condition: (data) => data?.contentType === 'video' || data?.contentType === 'audio',
+        components: { Field: CategorySelect(MEDIA_CATEGORIES) },
       },
     },
     {
       name: 'glossaryCategory',
       type: 'select',
-      options: [
-        { label: 'Pricing', value: 'PRICING' },
-        { label: 'Forex', value: 'FOREX' },
-        { label: 'Strategy', value: 'STRATEGY' },
-        { label: 'Risk', value: 'RISK' },
-        { label: 'Order / Execution', value: 'ORDER/EXEC' },
-        { label: 'Analysis', value: 'ANALYSIS' },
-        { label: 'Chart / Pattern', value: 'CHART/PATTERN' },
-        { label: 'Technical', value: 'TECHNICAL' },
-        { label: 'General', value: 'GENERAL' },
-      ],
+      options: GLOSSARY_CATEGORIES,
+      validate: allowAnyCategory(false),
       admin: {
         description: 'Category chip shown on the Glossary page.',
         condition: (data) => data?.contentType === 'glossary',
+        components: { Field: CategorySelect(GLOSSARY_CATEGORIES) },
       },
     },
     ...seoFields,

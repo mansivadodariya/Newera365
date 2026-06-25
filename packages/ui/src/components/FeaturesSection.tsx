@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
+import { useRef, useEffect } from 'react';
 import { SectionKicker } from './SectionKicker';
 
 // Inline line icons (Lucide) drawn with `currentColor` so they invert with the
@@ -88,11 +89,79 @@ const FEATURES = [
   { Icon: IconClock, titleKey: 'whyClockTitle', descKey: 'whyClockDesc' },
 ] as const satisfies readonly { Icon: () => ReactNode; titleKey: string; descKey: string }[];
 
+// Explicit "why us" reasons surfaced as a quick-scan checklist (client feedback
+// #3 — the homepage should spell out the concrete USPs, not just imply them).
+const USPS = ['usp1', 'usp2', 'usp3', 'usp4', 'usp5', 'usp6', 'usp7'] as const;
+
+/** Individual feature card — animates in via Intersection Observer */
+function FeatureCard({
+  Icon,
+  title,
+  desc,
+  index,
+}: {
+  Icon: () => ReactNode;
+  title: string;
+  desc: string;
+  index: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          const delay = index * 80;
+          el.style.transition = `opacity 0.55s ease ${delay}ms, transform 0.55s ease ${delay}ms`;
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, [index]);
+
+  return (
+    <div
+      ref={ref}
+      className="hover:border-accent/40 dark:hover:border-accent/30 group relative flex items-start gap-4 overflow-hidden rounded-[20px] border border-transparent bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_36px_rgba(0,176,80,0.14)] dark:bg-[#111316] dark:shadow-[0px_4px_16px_0px_rgba(0,0,0,0.3)]"
+    >
+      {/* Accent wash that fades in on hover */}
+      <span
+        aria-hidden="true"
+        className="bg-accent/10 pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
+      />
+      <div className="group-hover:bg-accent/10 group-hover:text-accent flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] text-[#6b7280] transition-all duration-300 group-hover:-rotate-6 group-hover:scale-110 dark:text-white/60">
+        <Icon />
+      </div>
+      <div className="relative flex-1 pt-0.5">
+        <h3 className="mb-[6px] font-sans text-[16px] font-semibold leading-normal text-[#111] dark:text-white">
+          {title}
+        </h3>
+        <p className="font-body text-[13px] leading-[1.5] text-[#6B7280] dark:text-[#B8BFCC]">
+          {desc}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export function FeaturesSection() {
   const t = useTranslations('home');
 
   return (
-    <section className="rounded-r-[32px] bg-gradient-to-l from-[#E2E2E2] to-white px-5 pb-9 pt-10 xl:pb-16 xl:pt-16 dark:from-[#1F262E] dark:to-[#000000]">
+    <section className="rounded-e-[32px] bg-gradient-to-l from-[#E2E2E2] to-white px-5 pb-9 pt-10 xl:pb-16 xl:pt-16 rtl:bg-gradient-to-r dark:from-[#1F262E] dark:to-[#000000]">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <SectionKicker className="text-muted mb-4 [&>span:first-child]:bg-[#6b7280]">
           {t('whyKicker')}
@@ -105,24 +174,40 @@ export function FeaturesSection() {
         <div className="h-[10px]" />
 
         <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-2">
-          {FEATURES.map(({ Icon, titleKey, descKey }) => (
-            <div
+          {FEATURES.map(({ Icon, titleKey, descKey }, i) => (
+            <FeatureCard
               key={titleKey}
-              className="hover:border-accent/20 dark:hover:border-accent/15 group flex items-start gap-4 rounded-[20px] border border-transparent bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(0,176,80,0.1)] dark:bg-[#111316] dark:shadow-[0px_4px_16px_0px_rgba(0,0,0,0.3)]"
-            >
-              <div className="group-hover:bg-accent/10 group-hover:text-accent flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] text-[#6b7280] transition-colors duration-200 dark:text-white/60">
-                <Icon />
-              </div>
-              <div className="flex-1 pt-0.5">
-                <h3 className="mb-[6px] font-sans text-[16px] font-semibold leading-normal text-[#111] dark:text-white">
-                  {t(titleKey)}
-                </h3>
-                <p className="font-body text-[13px] leading-[1.5] text-[#6B7280] dark:text-[#B8BFCC]">
-                  {t(descKey)}
-                </p>
-              </div>
-            </div>
+              Icon={Icon}
+              title={t(titleKey)}
+              desc={t(descKey)}
+              index={i}
+            />
           ))}
+        </div>
+
+        {/* USP checklist — explicit reasons to choose NewEra365 (feedback #3). */}
+        <div className="border-border mt-9 border-t pt-7">
+          <p className="text-muted mb-4 font-mono text-[11px] font-medium uppercase tracking-[0.14em]">
+            {t('uspHeading')}
+          </p>
+          <ul className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2 xl:grid-cols-3">
+            {USPS.map((key) => (
+              <li key={key} className="flex items-center gap-2.5">
+                <span className="bg-accent/[0.12] text-accent flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full">
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path
+                      d="M2.5 6.4l2.3 2.3L9.5 3.5"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+                <span className="font-body text-foreground text-[14px] font-medium">{t(key)}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

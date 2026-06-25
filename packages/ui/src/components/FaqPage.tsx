@@ -4,8 +4,8 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
-import { RichText } from './RichText';
 import type { SlateNode } from './RichText';
+import { norm, humanize } from './filterUtils';
 
 type FaqItem = { q: string; a: string; popular: boolean };
 type FaqGroup = { section: string; items: FaqItem[] };
@@ -46,6 +46,31 @@ const CATEGORY_STYLES: Record<string, { dot: string; activePill: string }> = {
   General: { dot: 'bg-[#6B7280]', activePill: 'bg-[#6B7280] text-white' },
 };
 
+const CAT_I18N: Record<
+  string,
+  | 'catPlatform'
+  | 'catSecurity'
+  | 'catFunding'
+  | 'catTrading'
+  | 'catAccounts'
+  | 'catDeposits'
+  | 'catWithdrawals'
+  | 'catPlatforms'
+  | 'catRegulation'
+  | 'catGeneral'
+> = {
+  Platform: 'catPlatform',
+  Security: 'catSecurity',
+  Funding: 'catFunding',
+  Trading: 'catTrading',
+  Accounts: 'catAccounts',
+  Deposits: 'catDeposits',
+  Withdrawals: 'catWithdrawals',
+  Platforms: 'catPlatforms',
+  Regulation: 'catRegulation',
+  General: 'catGeneral',
+};
+
 const CMS_CATEGORY_LABELS: Record<string, string> = {
   trading: 'Trading',
   accounts: 'Accounts',
@@ -63,7 +88,8 @@ function cmsFaqsToGroups(faqs: CmsFaqItem[]): FaqGroup[] {
     if (!faq.question?.trim()) continue;
     if (seen.has(faq.question)) continue;
     seen.add(faq.question);
-    const label = CMS_CATEGORY_LABELS[faq.category] ?? faq.category;
+    // Normalize so "Trading"/"trading"/"TRADING" collapse into one group.
+    const label = CMS_CATEGORY_LABELS[norm(faq.category)] ?? humanize(faq.category);
     if (!grouped.has(label)) grouped.set(label, []);
     grouped.get(label)!.push({
       q: faq.question,
@@ -82,7 +108,7 @@ function extractPlainText(node: SlateNode): string {
 function AccordionItem({
   question,
   answer,
-  answerRichText,
+  answerRichText: _answerRichText,
   id,
   section,
   openIdx,
@@ -96,19 +122,21 @@ function AccordionItem({
   openIdx: string | null;
   setOpenIdx: (v: string | null) => void;
 }) {
+  const t = useTranslations('faq');
   const isOpen = openIdx === id;
+  const displaySection = CAT_I18N[section] ? t(CAT_I18N[section]!) : section;
   return (
     <div className="rounded-[16px] bg-[#fafaf9] dark:bg-[#1a1c22]">
       <button
         onClick={() => setOpenIdx(isOpen ? null : id)}
-        className="flex w-full items-center justify-between gap-[14px] px-5 py-[18px] text-left"
+        className="flex w-full items-center justify-between gap-[14px] px-5 py-[18px] text-start"
         aria-expanded={isOpen}
       >
         {/* Category tag — color matches category per Figma */}
         <span
           className={`flex-shrink-0 rounded-full px-[10px] py-[5px] font-mono text-[10px] tracking-[1.2px] ${CAT_TAG_STYLE[section] ?? DEFAULT_CAT_TAG}`}
         >
-          {section.toUpperCase()}
+          {displaySection.toUpperCase()}
         </span>
         <span className="text-foreground flex-1 font-sans text-[15px] font-semibold leading-normal tracking-[-0.15px]">
           {question}
@@ -132,7 +160,7 @@ function AccordionItem({
         </div>
       </button>
       {isOpen && (
-        <div className="pb-5 pl-5 pr-5">
+        <div className="px-5 pb-5">
           <p className="font-body text-muted text-[14px] leading-[1.65]">{answer}</p>
         </div>
       )}
@@ -147,20 +175,12 @@ interface FaqPageProps {
 export function FaqPage({ faqs }: FaqPageProps) {
   const locale = useLocale();
   const t = useTranslations('faq');
+  const translateCat = (cat: string) => (CAT_I18N[cat] ? t(CAT_I18N[cat]!) : cat);
   const [openIdx, setOpenIdx] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const allGroups = useMemo(() => (faqs && faqs.length > 0 ? cmsFaqsToGroups(faqs) : []), [faqs]);
-
-  const cmsFaqMap = useMemo(() => {
-    if (!faqs) return null;
-    const map = new Map<string, SlateNode[]>();
-    for (const faq of faqs) {
-      map.set(faq.question, faq.answer);
-    }
-    return map;
-  }, [faqs]);
 
   const filteredGroups = useMemo(() => {
     const groups = activeCategory
@@ -198,7 +218,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
     <>
       {/* Hero + Search */}
       <section className="bg-transparent px-5 pb-6 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05]">
             {t('heroHeading')}
           </h1>
@@ -237,7 +257,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
 
       {/* Category filter tabs — matches Figma pills */}
       <section className="px-5 pb-4">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div
             className="scrollbar-hide -mx-5 flex gap-2 overflow-x-auto px-5 pb-1"
             style={{ scrollbarWidth: 'none' }}
@@ -257,7 +277,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
                       : 'bg-[#f2f2f4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e]'
                   }`}
                 >
-                  {cat}
+                  {isAll ? cat : translateCat(cat)}
                 </button>
               );
             })}
@@ -268,14 +288,13 @@ export function FaqPage({ faqs }: FaqPageProps) {
       {/* Popular questions — shown only when no search/filter active */}
       {showPopular && (
         <section className="px-5 pb-6">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
               {t('sectionPopular')}
             </SectionKicker>
             {/* Flat rounded-[14px] cards per Figma with category tag */}
             <div className="flex flex-col gap-[8px]">
               {popularItems.map((item, idx) => {
-                const style = CATEGORY_STYLES[item.section];
                 return (
                   <div
                     key={idx}
@@ -284,7 +303,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
                     <span
                       className={`flex-shrink-0 rounded-full px-[10px] py-[5px] font-mono text-[9px] tracking-[1.2px] ${CAT_TAG_STYLE[item.section] ?? DEFAULT_CAT_TAG}`}
                     >
-                      {item.section.toUpperCase()}
+                      {translateCat(item.section).toUpperCase()}
                     </span>
                     <span className="font-body text-foreground flex-1 text-[13.5px] font-medium leading-snug">
                       {item.q}
@@ -294,7 +313,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
                       height="14"
                       viewBox="0 0 14 14"
                       fill="none"
-                      className="text-muted ml-1 flex-shrink-0"
+                      className="text-muted ms-1 flex-shrink-0"
                       aria-hidden="true"
                     >
                       <path
@@ -316,7 +335,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
       {/* Search result count */}
       {search && (
         <section className="px-5 pb-2">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="xl:mx-auto xl:max-w-[730px]">
               <p className="font-body text-muted text-[12px]">
                 {totalResults !== 1
@@ -330,7 +349,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
 
       {/* ALL FAQs section — Figma: bg-white rounded-[16px] cards, gap-[10px] */}
       <section className="px-5 pb-6">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('sectionAll')}
           </SectionKicker>
@@ -358,7 +377,7 @@ export function FaqPage({ faqs }: FaqPageProps) {
 
       {/* Still stuck CTA — matches Figma: 26px h2, no kicker, green pill button */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] tracking-[-0.52px] text-white">
             {t('stuckHeading')}
             <br />
@@ -372,7 +391,14 @@ export function FaqPage({ faqs }: FaqPageProps) {
             className="bg-accent font-body hover:bg-accent/90 flex items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
           >
             {t('openChat')}
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 15 15"
+              fill="none"
+              aria-hidden="true"
+              className="rtl:-scale-x-100"
+            >
               <path
                 d="M2.5 7.5h10M8 3.5l4 4-4 4"
                 stroke="currentColor"

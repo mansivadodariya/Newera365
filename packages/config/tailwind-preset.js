@@ -61,6 +61,41 @@ module.exports = {
           from: { transform: 'translateX(0)' },
           to: { transform: 'translateX(100%)' },
         },
+        // Demo landing-page motion (additive — used only by *Demo components)
+        'float-y': {
+          '0%,100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
+        'draw-line': {
+          from: { strokeDashoffset: '1' },
+          to: { strokeDashoffset: '0' },
+        },
+        'chip-pulse': {
+          '0%,100%': { opacity: '1', transform: 'scale(1)' },
+          '50%': { opacity: '0.5', transform: 'scale(0.78)' },
+        },
+        'glow-pulse': {
+          '0%,100%': { opacity: '0.45' },
+          '50%': { opacity: '0.85' },
+        },
+        'rise-in': {
+          from: { opacity: '0', transform: 'translateY(14px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        // Quote-tick flash for the live hero terminal
+        'flash-up': {
+          from: { backgroundColor: 'rgba(38,166,154,0.28)' },
+          to: { backgroundColor: 'transparent' },
+        },
+        'flash-down': {
+          from: { backgroundColor: 'rgba(239,83,80,0.28)' },
+          to: { backgroundColor: 'transparent' },
+        },
+        // Scroll-progress connector fill (three-steps section)
+        'grow-y': {
+          from: { transform: 'scaleY(0)' },
+          to: { transform: 'scaleY(1)' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.2s ease-out',
@@ -68,6 +103,20 @@ module.exports = {
         ticker: 'ticker-scroll 40s linear infinite',
         'slide-in-right': 'slide-in-right 0.3s ease-out',
         'slide-out-right': 'slide-out-right 0.3s ease-in',
+        'float-y': 'float-y 4s ease-in-out infinite',
+        'draw-line': 'draw-line 1.6s ease-out forwards',
+        'chip-pulse': 'chip-pulse 1.8s ease-in-out infinite',
+        'glow-pulse': 'glow-pulse 5s ease-in-out infinite',
+        // `both` (not `forwards`) is required: these entrance animations are used
+        // with a staggered `animation-delay`. With `forwards` the `from` (opacity:0)
+        // state is NOT applied during the delay window, so a delayed element paints
+        // fully visible, then snaps to 0 the instant its animation starts and fades
+        // back in — a flicker. `backwards`/`both` back-fills the 0% state during the
+        // delay so it stays hidden until it fades in. (Reduced motion is unaffected:
+        // these are applied via `motion-safe:animate-rise-in`.)
+        'rise-in': 'rise-in 0.6s ease-out both',
+        'flash-up': 'flash-up 0.7s ease-out',
+        'flash-down': 'flash-down 0.7s ease-out',
       },
     },
   },

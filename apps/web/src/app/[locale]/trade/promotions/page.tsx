@@ -6,7 +6,7 @@ import type { CmsPromotion } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Promotions & Offers | NewEra365',
+  title: 'Promotions & Offers',
   description: 'Current trading bonuses, cashback, and promotional offers.',
 };
 

@@ -1,5 +1,15 @@
 import type { CollectionConfig } from 'payload/types';
-import { slugField } from './_fields';
+import { publicReadWhere, slugField } from './_fields';
+import CategorySelect from '../components/CategorySelect';
+
+const AWARD_CATEGORIES = [
+  'Execution',
+  'Service',
+  'Innovation',
+  'Regulation',
+  'Platform',
+  'Trading',
+];
 
 // Powers the /about → Awards section and any awards carousel on the homepage.
 export const Awards: CollectionConfig = {
@@ -10,7 +20,7 @@ export const Awards: CollectionConfig = {
     defaultColumns: ['title', 'date', 'status'],
     description: 'Industry awards and recognition received by NewEra365.',
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'published' } }) },
   fields: [
     {
       name: 'title',
@@ -36,6 +46,16 @@ export const Awards: CollectionConfig = {
       maxLength: 500,
       localized: true,
       admin: { description: 'Short summary of the award and awarding body (shown on cards).' },
+    },
+    {
+      name: 'awardCategory',
+      type: 'text',
+      maxLength: 50,
+      admin: {
+        description:
+          'Filter category on /company/awards (e.g. Execution, Service, Innovation). Pick one or type a new category.',
+        components: { Field: CategorySelect(AWARD_CATEGORIES) },
+      },
     },
     {
       name: 'logo',

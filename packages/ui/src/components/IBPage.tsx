@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { useState, type FormEvent, type ChangeEvent } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
@@ -9,8 +9,18 @@ export interface IBCmsContent {
   ibDescription?: string | null;
   affiliateDescription?: string | null;
   whiteLabelDescription?: string | null;
+  ibTag?: string | null;
   ibRateDisplay?: string | null;
+  ibPayoutsFrequency?: string | null;
+  ibMinimum?: string | null;
+  affiliateTag?: string | null;
   affiliateCpaMax?: string | null;
+  affiliateCookieDays?: string | null;
+  affiliateMinCpa?: string | null;
+  wlTag?: string | null;
+  wlSetupTime?: string | null;
+  wlSpreadMarkup?: string | null;
+  wlTechStack?: string | null;
   steps?: { stepTitle: string; stepDescription: string }[] | null;
   ctaHeading?: string | null;
   ctaSubtitle?: string | null;
@@ -50,44 +60,54 @@ const STEP_NUMS = ['01', '02', '03', '04'] as const;
 
 type StepItem = { num: string; title: string; desc: string };
 
+const AR_STAT_VALUES: Record<string, string> = {
+  Monthly: 'شهرياً',
+  None: 'لا يوجد',
+  Custom: 'مخصص',
+  Turnkey: 'جاهز للعمل',
+};
+
 export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
-  const locale = useLocale();
   const t = useTranslations('ib');
+  const locale = useLocale();
+  const isAr = locale === 'ar';
+
+  const localiseStatValue = (v: string) => (isAr && AR_STAT_VALUES[v] ? AR_STAT_VALUES[v] : v);
 
   const heroSubtitle = cmsContent?.heroSubtitle ?? t('heroSubtitle');
 
   const resolvedPartnerTypes = [
     {
       ...PARTNER_TYPES[0],
-      desc:
-        cmsContent?.ibDescription ??
-        'Earn up to $8 per lot traded by your referrals. Tiered structure with monthly bonus.',
+      tag: cmsContent?.ibTag ?? t('mostPopular'),
+      desc: cmsContent?.ibDescription ?? t('ibDesc'),
       stats: [
         { label: 'UP TO', value: cmsContent?.ibRateDisplay ?? '$8/lot' },
-        { label: 'PAYOUTS', value: 'Monthly' },
-        { label: 'MINIMUM', value: 'None' },
+        { label: 'PAYOUTS', value: localiseStatValue(cmsContent?.ibPayoutsFrequency ?? 'Monthly') },
+        { label: 'MINIMUM', value: localiseStatValue(cmsContent?.ibMinimum ?? 'None') },
       ],
     },
     {
       ...PARTNER_TYPES[1],
-      desc:
-        cmsContent?.affiliateDescription ??
-        'Fixed cost-per-acquisition payouts up to $1,200 per qualified trader. Built for digital marketers.',
+      tag: cmsContent?.affiliateTag ?? t('cpaBadge'),
+      desc: cmsContent?.affiliateDescription ?? t('affiliateDesc'),
       stats: [
         { label: 'UP TO', value: cmsContent?.affiliateCpaMax ?? '$1,200' },
-        { label: 'COOKIE', value: '90 days' },
-        { label: 'MIN CPA', value: '$50' },
+        { label: 'COOKIE', value: cmsContent?.affiliateCookieDays ?? '90 days' },
+        { label: 'MIN CPA', value: cmsContent?.affiliateMinCpa ?? '$50' },
       ],
     },
     {
       ...PARTNER_TYPES[2],
-      desc:
-        cmsContent?.whiteLabelDescription ??
-        'Launch your own brokerage on our infrastructure. Full MT5 stack, KYC, treasury, support.',
+      tag: cmsContent?.wlTag ?? t('wlEnterprise'),
+      desc: cmsContent?.whiteLabelDescription ?? t('wlDesc'),
       stats: [
-        { label: 'SETUP', value: '< 30 days' },
-        { label: 'SPREAD MARK-UP', value: 'Custom' },
-        { label: 'TECH', value: 'Turnkey' },
+        { label: 'SETUP', value: cmsContent?.wlSetupTime ?? '< 30 days' },
+        {
+          label: 'SPREAD MARK-UP',
+          value: localiseStatValue(cmsContent?.wlSpreadMarkup ?? 'Custom'),
+        },
+        { label: 'TECH', value: localiseStatValue(cmsContent?.wlTechStack ?? 'Turnkey') },
       ],
     },
   ];
@@ -102,11 +122,54 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
   const ctaHeading = cmsContent?.ctaHeading ?? t('ctaDesc');
   const ctaSubtitle = cmsContent?.ctaSubtitle ?? t('ctaSubDesc');
 
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    company: '',
+    website: '',
+    country: '',
+    message: '',
+  });
+  const [applyLoading, setApplyLoading] = useState(false);
+  const [applyDone, setApplyDone] = useState(false);
+  const [applyError, setApplyError] = useState('');
+  const setField =
+    (k: keyof typeof form) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm((f) => ({ ...f, [k]: e.target.value }));
+  async function submitApply(e: FormEvent) {
+    e.preventDefault();
+    if (applyLoading) return;
+    setApplyLoading(true);
+    setApplyError('');
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_CMS_URL ?? 'http://localhost:3001'}/api/partners/apply`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(form),
+        },
+      );
+      if (res.ok) {
+        setApplyDone(true);
+      } else {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        setApplyError(data.error ?? t('applyError'));
+      }
+    } catch {
+      setApplyError(t('applyError'));
+    } finally {
+      setApplyLoading(false);
+    }
+  }
+  const inputCls =
+    'font-body text-foreground focus:border-accent w-full rounded-[12px] border border-[#e5e5e3] bg-[#fafaf9] px-4 py-3 text-[14px] outline-none dark:border-white/10 dark:bg-[#1a1c22]';
+
   return (
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:grid xl:max-w-[1200px] xl:grid-cols-2 xl:items-center xl:gap-14">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:grid xl:max-w-[1200px] xl:grid-cols-2 xl:items-center xl:gap-14">
           <div>
             {/* h1: 42px tracking-[-1.26px] per Figma, scaled up on desktop */}
             <h1 className="font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px] xl:text-[56px] xl:tracking-[-1.68px]">
@@ -120,21 +183,12 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
 
             {/* CTAs — matches Figma: green pill + ghost text button */}
             <div className="mb-6 flex gap-[10px]">
-              <Link
-                href={`/${locale}/register?type=partner`}
-                className="bg-accent font-body hover:bg-accent/90 flex items-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
+              <a
+                href="#apply"
+                className="bg-accent hover:bg-accent/90 font-body flex items-center rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
               >
-                {t('heroApplyBtn')}
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                  <path
-                    d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Link>
+                {t('applyNow')}
+              </a>
               <a
                 href="#programs"
                 className="text-foreground font-body flex items-center px-[22px] py-4 text-[15px] font-medium transition-opacity hover:opacity-70"
@@ -203,7 +257,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
         id="programs"
         className="rounded-t-[32px] bg-[#FFFFFF] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16 dark:bg-[#07090D]"
       >
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted mb-4 text-[#6B7280] dark:text-[#B8BFCC]">
             {t('chooseKicker')}
           </SectionKicker>
@@ -276,23 +330,6 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                     </div>
                   ))}
                 </div>
-
-                {/* CTA */}
-                <Link
-                  href={`/${locale}/register?type=partner&program=${pt.id}`}
-                  className="font-body group-hover:bg-accent relative mt-1 flex items-center justify-center gap-2 rounded-full bg-[#111] px-5 py-[14px] text-[14px] font-medium text-white transition-all duration-200 hover:opacity-100 group-hover:shadow-[0_6px_20px_rgba(0,176,80,0.4)] dark:bg-white/10"
-                >
-                  {t('applyBtn')}
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path
-                      d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </Link>
               </div>
             ))}
           </div>
@@ -304,7 +341,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
         className="rounded-[32px] px-5 pb-9 pt-10 xl:pb-16 xl:pt-16"
         style={{ background: 'var(--gradient-features)' }}
       >
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('stepsKicker')}
           </SectionKicker>
@@ -333,6 +370,80 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
         </div>
       </section>
 
+      {/* Partner application form — POSTs to /api/partners/apply */}
+      <section id="apply" className="bg-transparent px-5 pb-12 pt-2">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[760px]">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            {t('applyKicker')}
+          </SectionKicker>
+          <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[1.1] tracking-[-0.6px] xl:text-[32px]">
+            {t('applyHeading')}
+          </h2>
+          {applyDone ? (
+            <div className="bg-accent/10 text-accent font-body rounded-[16px] px-5 py-6 text-[14px]">
+              {t('applySuccess')}
+            </div>
+          ) : (
+            <form onSubmit={submitApply} className="flex flex-col gap-3">
+              <div className="grid gap-3 md:grid-cols-2">
+                <input
+                  required
+                  type="text"
+                  placeholder={t('applyName')}
+                  value={form.name}
+                  onChange={setField('name')}
+                  className={inputCls}
+                />
+                <input
+                  required
+                  type="email"
+                  placeholder={t('applyEmail')}
+                  value={form.email}
+                  onChange={setField('email')}
+                  className={inputCls}
+                />
+                <input
+                  type="text"
+                  placeholder={t('applyCompany')}
+                  value={form.company}
+                  onChange={setField('company')}
+                  className={inputCls}
+                />
+                <input
+                  type="url"
+                  placeholder={t('applyWebsite')}
+                  value={form.website}
+                  onChange={setField('website')}
+                  className={inputCls}
+                />
+              </div>
+              <input
+                type="text"
+                placeholder={t('applyCountry')}
+                value={form.country}
+                onChange={setField('country')}
+                className={inputCls}
+              />
+              <textarea
+                placeholder={t('applyMessage')}
+                value={form.message}
+                onChange={setField('message')}
+                rows={4}
+                className={inputCls}
+              />
+              {applyError && <p className="font-body text-[12px] text-red-500">{applyError}</p>}
+              <button
+                type="submit"
+                disabled={applyLoading}
+                className="bg-accent hover:bg-accent/90 font-body w-full rounded-full px-6 py-4 text-[15px] font-medium text-white transition-colors disabled:opacity-60 xl:w-auto xl:self-start xl:px-10"
+              >
+                {applyLoading ? t('applySubmitting') : t('applyCta')}
+              </button>
+            </form>
+          )}
+        </div>
+      </section>
+
       {/* CTA — matches Figma: centered 32px heading, green pill + ghost text */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-11 xl:pb-16 xl:pt-16">
         <div className="mx-auto flex max-w-[390px] flex-col items-center md:max-w-2xl xl:max-w-[1200px]">
@@ -342,33 +453,27 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
           <p className="font-body mb-[22px] max-w-[300px] text-center text-[14px] leading-[1.55] text-white/60 xl:max-w-[480px] xl:text-[16px]">
             {ctaSubtitle}
           </p>
-          <Link
-            href={`/${locale}/register?type=partner`}
-            className="bg-accent font-body hover:bg-accent/90 mb-2 flex w-full items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors xl:w-auto xl:px-12"
+          <a
+            href="#apply"
+            className="bg-accent hover:bg-accent/90 font-body flex items-center justify-center gap-2 rounded-full px-8 py-4 text-[15px] font-medium text-white transition-colors"
           >
-            {t('ctaApply')}
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            {t('applyCta')}
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 16 16"
+              fill="none"
+              className="rtl:-scale-x-100"
+            >
               <path
-                d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
+                d="M3 8h10M9 4l4 4-4 4"
                 stroke="currentColor"
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
             </svg>
-          </Link>
-          <button className="font-body flex w-full items-center justify-center py-4 text-[15px] font-medium text-white transition-opacity hover:opacity-70 xl:w-auto xl:px-8">
-            {t('ctaDeck')}
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M8 3v8M4 9l4 4 4-4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+          </a>
         </div>
       </section>
     </>

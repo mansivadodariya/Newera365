@@ -29,7 +29,8 @@
     "*.{ts,tsx,js,jsx,json,md}": "prettier --write"
   },
   "overrides": {
-    "qs": "^6.15.2"
+    "qs": "^6.15.2",
+    "drizzle-kit": "0.23.2"
   },
   "engines": {
     "node": ">=20.0.0",

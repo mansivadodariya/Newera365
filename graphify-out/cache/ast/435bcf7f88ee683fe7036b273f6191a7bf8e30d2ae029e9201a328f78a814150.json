@@ -1,0 +1,223 @@
+{
+  "nodes": [
+    {
+      "id": "d_newera365_newera365_app_code_review_03_web_frontend_md",
+      "label": "03-web-frontend.md",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "code_review_03_web_frontend_area_3_web_frontend_next_js_security_bug_review",
+      "label": "Area 3: Web Frontend (Next.js) \u2014 Security & Bug Review",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L38"
+    },
+    {
+      "id": "code_review_03_web_frontend_summary",
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L40"
+    },
+    {
+      "id": "code_review_03_web_frontend_warnings",
+      "label": "Warnings",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L70"
+    },
+    {
+      "id": "code_review_03_web_frontend_warning_cms_ts_cms_fetches_have_no_timeout_a_hung_cms_stalls_ssr_render",
+      "label": "[WARNING] cms.ts \u2014 CMS fetches have no timeout; a hung CMS stalls SSR render",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L72"
+    },
+    {
+      "id": "code_review_03_web_frontend_warning_next_config_mjs_connect_src_build_time_fallback_can_ship_localhost_csp_to_prod",
+      "label": "[WARNING] next.config.mjs \u2014 `connect-src` build-time fallback can ship `localhost` CSP to prod",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L99"
+    },
+    {
+      "id": "code_review_03_web_frontend_warning_next_config_mjs_production_csp_allows_script_src_unsafe_inline_no_nonce",
+      "label": "[WARNING] next.config.mjs \u2014 production CSP allows `script-src 'unsafe-inline'` (no nonce)",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L127"
+    },
+    {
+      "id": "code_review_03_web_frontend_warning_detail_routes_return_http_200_with_thin_generic_content_for_arbitrary_slugs",
+      "label": "[WARNING] Detail routes return HTTP 200 with thin/generic content for arbitrary slugs",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L150"
+    },
+    {
+      "id": "code_review_03_web_frontend_info",
+      "label": "Info",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L178"
+    },
+    {
+      "id": "code_review_03_web_frontend_info_vercel_json_files_ship_deprecated_x_xss_protection_and_duplicate_weaker_headers",
+      "label": "[INFO] vercel.json files ship deprecated `X-XSS-Protection` and duplicate weaker headers",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L180"
+    },
+    {
+      "id": "code_review_03_web_frontend_info_inconsistent_generatestaticparams_locale_handling_across_dynamic_routes",
+      "label": "[INFO] Inconsistent `generateStaticParams` locale handling across dynamic routes",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L196"
+    },
+    {
+      "id": "code_review_03_web_frontend_info_fetchcollection_path_segment_is_interpolated_unescaped_no_current_exploit",
+      "label": "[INFO] `fetchCollection` path segment is interpolated unescaped (no current exploit)",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L210"
+    },
+    {
+      "id": "code_review_03_web_frontend_info_cms_responses_are_cast_to_t_with_no_shape_validation",
+      "label": "[INFO] CMS responses are cast to `T` with no shape validation",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L224"
+    },
+    {
+      "id": "code_review_03_web_frontend_info_slugtotitle_is_locale_blind_english_style_title_case_applied_to_ar_routes",
+      "label": "[INFO] `slugToTitle` is locale-blind (English-style Title Case applied to AR routes)",
+      "file_type": "document",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L237"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_newera365_newera365_app_code_review_03_web_frontend_md",
+      "target": "code_review_03_web_frontend_area_3_web_frontend_next_js_security_bug_review",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_03_web_frontend_area_3_web_frontend_next_js_security_bug_review",
+      "target": "code_review_03_web_frontend_summary",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L40",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_03_web_frontend_area_3_web_frontend_next_js_security_bug_review",
+      "target": "code_review_03_web_frontend_warnings",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L70",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_03_web_frontend_warnings",
+      "target": "code_review_03_web_frontend_warning_cms_ts_cms_fetches_have_no_timeout_a_hung_cms_stalls_ssr_render",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_03_web_frontend_warnings",
+      "target": "code_review_03_web_frontend_warning_next_config_mjs_connect_src_build_time_fallback_can_ship_localhost_csp_to_prod",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L99",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_03_web_frontend_warnings",
+      "target": "code_review_03_web_frontend_warning_next_config_mjs_production_csp_allows_script_src_unsafe_inline_no_nonce",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L127",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_03_web_frontend_warnings",
+      "target": "code_review_03_web_frontend_warning_detail_routes_return_http_200_with_thin_generic_content_for_arbitrary_slugs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L150",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_03_web_frontend_area_3_web_frontend_next_js_security_bug_review",
+      "target": "code_review_03_web_frontend_info",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L178",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_03_web_frontend_info",
+      "target": "code_review_03_web_frontend_info_vercel_json_files_ship_deprecated_x_xss_protection_and_duplicate_weaker_headers",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L180",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_03_web_frontend_info",
+      "target": "code_review_03_web_frontend_info_inconsistent_generatestaticparams_locale_handling_across_dynamic_routes",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L196",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_03_web_frontend_info",
+      "target": "code_review_03_web_frontend_info_fetchcollection_path_segment_is_interpolated_unescaped_no_current_exploit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L210",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_03_web_frontend_info",
+      "target": "code_review_03_web_frontend_info_cms_responses_are_cast_to_t_with_no_shape_validation",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L224",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_03_web_frontend_info",
+      "target": "code_review_03_web_frontend_info_slugtotitle_is_locale_blind_english_style_title_case_applied_to_ar_routes",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/03-web-frontend.md",
+      "source_location": "L237",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

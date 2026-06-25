@@ -24,13 +24,27 @@ const HEALTH_CHECK_TOKEN = process.env.HEALTH_CHECK_TOKEN;
 // When unset the service logs a warning but remains accessible (dev convenience).
 const MT5_INTERNAL_API_TOKEN = process.env.MT5_INTERNAL_API_TOKEN;
 if (!MT5_INTERNAL_API_TOKEN) {
+  if (process.env.NODE_ENV === 'production') {
+    // Refuse to boot unprotected in production (NE code-review WR-7).
+    throw new Error(
+      '[mt5-service] MT5_INTERNAL_API_TOKEN must be set in production — refusing to start with unprotected /instruments endpoints.',
+    );
+  }
   // eslint-disable-next-line no-console
   console.warn(
     '[mt5-service] MT5_INTERNAL_API_TOKEN is not set — /instruments endpoints are unprotected. Set this in production.',
   );
 }
 
-app.use(cors());
+// CORS: restrict to an explicit origin allow-list when configured (comma-separated
+// MT5_CORS_ORIGIN). The CMS calls this service server-to-server (CORS-exempt); a
+// permissive default is only needed if a browser hits it directly (NE code-review WR-7).
+const MT5_CORS_ORIGINS = (process.env.MT5_CORS_ORIGIN ?? '')
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean);
+
+app.use(cors(MT5_CORS_ORIGINS.length > 0 ? { origin: MT5_CORS_ORIGINS } : undefined));
 app.use(express.json());
 
 // Internal auth middleware — applied to all /instruments routes.

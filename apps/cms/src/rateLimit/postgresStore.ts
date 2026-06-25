@@ -91,6 +91,17 @@ export async function createRateLimitStoreFactory(): Promise<((prefix: string) =
          expires_at timestamptz NOT NULL
        );`,
     );
+    // Periodically purge expired rows so idle keys can't grow the table unbounded
+    // (NE code-review I-3). The CMS is a long-running Express server, so a timer is
+    // appropriate; unref() keeps it from holding the process open at shutdown.
+    const cleanup = setInterval(() => {
+      getPool()
+        .query(`DELETE FROM rate_limit_hits WHERE expires_at < now();`)
+        .catch(() => {
+          /* best-effort — the next tick retries */
+        });
+    }, 10 * 60_000);
+    cleanup.unref?.();
     return (prefix: string) => new PostgresRateLimitStore(prefix);
   } catch {
     return null;

@@ -43,7 +43,7 @@ jobs:
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET || 'ci-dummy-secret-32-chars-minimum!!' }}
           DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://user:pass@localhost/db' }}
           FRONTEND_URL: https://newera365.com
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY || 're_placeholder' }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS || 'ci-dummy-smtp-token' }}
           EMAIL_FROM: no-reply@newera365.com
           PAYLOAD_PUBLIC_SERVER_URL: https://cms.newera365.com
           # Web

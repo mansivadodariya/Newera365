@@ -1,5 +1,8 @@
 import type { CollectionConfig } from 'payload/types';
-import { seoFields, slugField } from './_fields';
+import { allowAnyCategory, publicReadWhere, seoFields, slugField } from './_fields';
+import CategorySelect from '../components/CategorySelect';
+
+const NEWS_CATEGORIES = ['forex', 'commodities', 'indices', 'crypto', 'company', 'regulation'];
 
 // Powers /daily-news and /news-feed.
 export const News: CollectionConfig = {
@@ -9,7 +12,7 @@ export const News: CollectionConfig = {
     useAsTitle: 'headline',
     defaultColumns: ['headline', 'category', 'status', 'publishedDate'],
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'published' } }) },
   fields: [
     { name: 'headline', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('headline'),
@@ -31,7 +34,15 @@ export const News: CollectionConfig = {
       name: 'category',
       type: 'select',
       required: true,
-      options: ['forex', 'commodities', 'indices', 'crypto', 'company', 'regulation'],
+      options: NEWS_CATEGORIES,
+      validate: allowAnyCategory(true),
+      admin: { components: { Field: CategorySelect(NEWS_CATEGORIES) } },
+    },
+    {
+      name: 'featuredImage',
+      type: 'upload',
+      relationTo: 'media',
+      admin: { description: 'Article image — shown as the card thumbnail on /daily-news.' },
     },
     {
       name: 'body',

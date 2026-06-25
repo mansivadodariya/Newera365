@@ -50,6 +50,10 @@ export interface CmsNews {
   publishedDate: string;
   category: 'forex' | 'commodities' | 'indices' | 'crypto' | 'company' | 'regulation';
   status: 'draft' | 'published';
+  featuredImage?: CmsMedia | number | null;
+  body?: SlateNode[] | null;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
 }
 
 export interface CmsInstrument {
@@ -104,6 +108,7 @@ export interface CmsBlogPost {
   slug: string;
   status: 'draft' | 'published';
   publishedDate?: string | null;
+  createdAt?: string | null;
   category: 'market-news' | 'analysis' | 'tutorials' | 'company-updates';
   author?: string | null;
   excerpt?: string | null;
@@ -153,6 +158,7 @@ export interface CmsResearchReportItem {
   publishedDate: string;
   isGated?: boolean | null;
   reportUrl: string | null;
+  thumbnailUrl?: string | null;
 }
 
 export interface CmsEducationContent {
@@ -248,6 +254,7 @@ export interface CmsAward {
   slug: string;
   date: string;
   description?: string | null;
+  awardCategory?: string | null;
   logo?: CmsMedia | number | null;
   externalUrl?: string | null;
   sortOrder?: number | null;
@@ -286,11 +293,15 @@ export interface CmsArticle {
   title: string;
   assetCategory: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
   editorialCategory?: 'macro' | 'strategy' | 'analysis' | 'education' | null;
+  /** Raw CMS category — drives data-driven, case-insensitive filter tabs. */
+  category?: string | null;
   analyst?: string | null;
   publishedDate: string;
   status: 'draft' | 'published';
   thumbnailUrl?: string | null;
   summary?: string | null;
+  /** When set, the listing card links to this external URL instead of an internal detail page. */
+  externalUrl?: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -362,6 +373,30 @@ export interface CmsSiteSettings {
   analystUpdated?: string | null;
   analystCommentaryEn?: string | null;
   analystCommentaryAr?: string | null;
+  // Social proof (client feedback #5)
+  socialProofHeadlineEn?: string | null;
+  socialProofHeadlineAr?: string | null;
+  ratingValue?: string | null;
+  ratingCountEn?: string | null;
+  ratingCountAr?: string | null;
+  testimonials?:
+    | {
+        quoteEn: string;
+        quoteAr: string;
+        authorName: string;
+        authorRoleEn?: string | null;
+        authorRoleAr?: string | null;
+        rating?: number | null;
+        avatarUrl?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  // Footer company & regulation (client feedback #6)
+  regulatoryDisclosureEn?: string | null;
+  regulatoryDisclosureAr?: string | null;
+  companyRegistrationEn?: string | null;
+  companyRegistrationAr?: string | null;
+  liveChatUrl?: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -524,23 +559,6 @@ export function slugToTitle(slug: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// News
-// ---------------------------------------------------------------------------
-
-export async function getLatestNews(locale: string, limit = 4): Promise<CmsNews[]> {
-  const data = await fetchCollection<CmsNews>(
-    'news',
-    {
-      'where[status][equals]': 'published',
-      sort: '-publishedDate',
-      limit: String(limit),
-    },
-    locale,
-  );
-  return data.docs;
-}
-
-// ---------------------------------------------------------------------------
 // Products / Instruments
 // ---------------------------------------------------------------------------
 
@@ -600,6 +618,8 @@ export async function getResearchArticles(locale: string, limit = 10): Promise<C
       title: a.title,
       assetCategory: a.assetCategory,
       editorialCategory: a.editorialCategory ?? null,
+      // Research filter tabs key off editorialCategory, falling back to asset class.
+      category: a.editorialCategory ?? a.assetCategory,
       analyst: a.analyst ?? null,
       publishedDate: a.publishedDate,
       status: a.status,
@@ -621,17 +641,6 @@ export async function getSiteSettings(): Promise<CmsSiteSettings | null> {
 // Blog Posts
 // ---------------------------------------------------------------------------
 
-// Map blog category to the assetCategory shape ResearchPage expects.
-// Blog posts are general content, so map all categories to 'forex' as the
-// default tab, rather than incorrectly placing tutorials in etfs or
-// company-updates in indices.
-const BLOG_CAT_TO_ASSET: Record<string, CmsArticle['assetCategory']> = {
-  'market-news': 'forex',
-  analysis: 'forex',
-  tutorials: 'forex',
-  'company-updates': 'forex',
-};
-
 export async function getBlogPosts(locale: string, limit = 10): Promise<CmsArticle[]> {
   const data = await fetchCollection<CmsBlogPost>(
     'blog-posts',
@@ -650,9 +659,11 @@ export async function getBlogPosts(locale: string, limit = 10): Promise<CmsArtic
       id: post.id,
       slug: post.slug,
       title: post.title,
-      assetCategory: BLOG_CAT_TO_ASSET[post.category] ?? 'forex',
+      // Blog posts have no asset class; tabs use the real CMS `category` below.
+      assetCategory: 'forex',
+      category: post.category,
       analyst: post.author ?? null,
-      publishedDate: post.publishedDate ?? new Date().toISOString(),
+      publishedDate: post.publishedDate ?? post.createdAt ?? '',
       status: post.status,
       thumbnailUrl,
       summary: post.excerpt ?? null,
@@ -662,6 +673,60 @@ export async function getBlogPosts(locale: string, limit = 10): Promise<CmsArtic
 
 export async function getBlogPostBySlug(slug: string, locale: string): Promise<CmsBlogPost | null> {
   return fetchBySlug<CmsBlogPost>('blog-posts', slug, locale);
+}
+
+// ---------------------------------------------------------------------------
+// News
+// ---------------------------------------------------------------------------
+
+// True when a Slate richtext value contains at least one non-empty text node.
+// An "empty" Payload richText field still serializes as a single blank paragraph,
+// so a plain length check would report false positives.
+function richTextHasContent(nodes?: SlateNode[] | null): boolean {
+  if (!Array.isArray(nodes)) return false;
+  const hasText = (node: SlateNode): boolean => {
+    if (typeof node.text === 'string' && node.text.trim() !== '') return true;
+    return Array.isArray(node.children) ? node.children.some(hasText) : false;
+  };
+  return nodes.some(hasText);
+}
+
+export async function getNews(locale: string, limit = 20): Promise<CmsArticle[]> {
+  const data = await fetchCollection<CmsNews>(
+    'news',
+    {
+      'where[status][equals]': 'published',
+      sort: '-publishedDate',
+      depth: '1',
+      limit: String(limit),
+    },
+    locale,
+  );
+  return data.docs.map((n) => {
+    const img = n.featuredImage;
+    const thumbnailUrl = img && typeof img !== 'number' ? ((img as CmsMedia).url ?? null) : null;
+    // Body-less news items are pointers to an external story — link the card
+    // straight to the source instead of an internal page with placeholder prose.
+    const externalUrl = !richTextHasContent(n.body) && n.sourceUrl ? n.sourceUrl : null;
+    return {
+      id: n.id,
+      slug: n.slug,
+      title: n.headline,
+      // News has no asset class; the filter tabs use the real CMS `category` below.
+      assetCategory: 'forex',
+      category: n.category,
+      analyst: n.source ?? null,
+      publishedDate: n.publishedDate,
+      status: n.status,
+      thumbnailUrl,
+      summary: null,
+      externalUrl,
+    };
+  });
+}
+
+export async function getNewsBySlug(slug: string, locale: string): Promise<CmsNews | null> {
+  return fetchBySlug<CmsNews>('news', slug, locale);
 }
 
 // ---------------------------------------------------------------------------

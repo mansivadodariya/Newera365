@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { CalcSelect } from './CalcSelect';
 
 type PivotMethod = 'Classical' | 'Camarilla' | 'Woodie' | 'Fibonacci';
 
@@ -78,52 +79,6 @@ function computePivots(method: PivotMethod, H: number, L: number, C: number): Pi
 
 function fmt(n: number) {
   return n.toFixed(4);
-}
-
-function SelectInput({
-  label,
-  value,
-  options,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  options: readonly string[];
-  onChange: (v: string) => void;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">{label}</label>
-      <div className="border-border relative overflow-hidden rounded-[12px] border bg-white dark:bg-[#1c1c1c]">
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="font-body text-foreground w-full appearance-none bg-transparent px-4 py-3 text-[14px] outline-none"
-        >
-          {options.map((o) => (
-            <option key={o} value={o}>
-              {o}
-            </option>
-          ))}
-        </select>
-        <svg
-          className="text-muted pointer-events-none absolute right-4 top-1/2 -translate-y-1/2"
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-        >
-          <path
-            d="M2 4l4 4 4-4"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
-    </div>
-  );
 }
 
 function NumberInput({
@@ -313,8 +268,8 @@ export function PivotCalculatorPage() {
 
           {/* Inputs + results */}
           <div className="xl:flex xl:gap-8">
-            <div className="flex flex-col gap-4 xl:grid xl:flex-1 xl:grid-cols-2 xl:gap-4">
-              <SelectInput
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:flex-1">
+              <CalcSelect
                 label={t('fieldMethod')}
                 value={method}
                 options={METHODS}
@@ -334,7 +289,7 @@ export function PivotCalculatorPage() {
               <NumberInput label={t('fieldClose')} value={close} onChange={setClose} />
 
               {/* Buttons */}
-              <div className="flex items-center gap-3 xl:col-span-2">
+              <div className="col-span-full flex items-center gap-3">
                 <button
                   onClick={handleCalculate}
                   className="font-body flex h-[48px] flex-1 items-center justify-center rounded-full bg-[#00B050] text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90 xl:flex-none xl:px-8"
@@ -377,19 +332,19 @@ export function PivotCalculatorPage() {
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3 xl:gap-5">
             {[
               {
-                tag: 'Pre-trade',
+                tag: t('tagPreTrade'),
                 label: t('marginTitle'),
                 desc: t('marginDesc'),
                 href: `/${locale}/tools`,
               },
               {
-                tag: 'P&L',
+                tag: t('tagPL'),
                 label: t('profitTitle'),
                 desc: t('profitDesc'),
                 href: `/${locale}/tools/profit`,
               },
               {
-                tag: 'Technical',
+                tag: t('tagTechnical'),
                 label: t('fibTitle'),
                 desc: t('fibDesc'),
                 href: `/${locale}/tools/fibonacci`,

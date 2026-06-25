@@ -6,7 +6,7 @@ import type { CmsEducationContent, CmsMedia } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Free Trading Ebooks | NewEra365',
+  title: 'Free Trading Ebooks',
   description: 'Download free ebooks on trading strategy, risk management, and market analysis.',
 };
 

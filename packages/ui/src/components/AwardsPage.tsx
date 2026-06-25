@@ -2,14 +2,17 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { norm, humanize, distinctCategories } from './filterUtils';
+
 export interface AwardCardItem {
   id: number | string;
   title: string;
   organisation?: string | null;
   year?: string | null;
   description?: string | null;
+  category?: string | null;
   imageUrl?: string | null;
   externalUrl?: string | null;
 }
@@ -29,23 +32,36 @@ const CARD_GRADIENTS = [
 ];
 
 const YEAR_FILTERS = ['ALL', '2026', '2025', '2024', '2023'] as const;
-const CAT_FILTERS = ['ALL', 'Execution', 'Service', 'Innovation'] as const;
+const FALLBACK_CATS = ['Execution', 'Service', 'Innovation'];
 type YearFilter = (typeof YEAR_FILTERS)[number];
-type CatFilter = (typeof CAT_FILTERS)[number];
 
 export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
-  const locale = useLocale();
   const t = useTranslations('awards');
+
+  const CAT_I18N: Record<string, string> = {
+    Execution: t('catExecution'),
+    Service: t('catService'),
+    Innovation: t('catInnovation'),
+  };
+  const translateCat = (c: string) => (c === 'ALL' ? t('filterAll') : (CAT_I18N[c] ?? humanize(c)));
+
   const [yearFilter, setYearFilter] = useState<YearFilter>('ALL');
-  const [catFilter, setCatFilter] = useState<CatFilter>('ALL');
+  const [catFilter, setCatFilter] = useState<string>('ALL');
 
   const allItems = cmsAwards ?? [];
+  // Filter tabs reflect the real CMS awardCategory values; fall back to the
+  // canonical set for legacy awards that have none.
+  const dataCats = distinctCategories(allItems, (a) => a.category);
+  const catFilters = ['ALL', ...(dataCats.length ? dataCats : FALLBACK_CATS)];
   const items = allItems.filter((a) => {
     const yearOk = yearFilter === 'ALL' || a.year === yearFilter;
     const catOk =
       catFilter === 'ALL' ||
-      (a.description ?? '').toLowerCase().includes(catFilter.toLowerCase()) ||
-      (a.title ?? '').toLowerCase().includes(catFilter.toLowerCase());
+      (a.category
+        ? norm(a.category) === norm(catFilter)
+        : `${a.description ?? ''} ${a.title ?? ''}`
+            .toLowerCase()
+            .includes(catFilter.toLowerCase()));
     return yearOk && catOk;
   });
 
@@ -53,7 +69,7 @@ export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('kicker')}
           </SectionKicker>
@@ -70,7 +86,7 @@ export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
 
       {/* Filter tabs */}
       <section className="bg-transparent px-5 pb-6">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Year filter */}
           <div className="mb-3 flex flex-wrap gap-2">
             {YEAR_FILTERS.map((y) => (
@@ -89,7 +105,7 @@ export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
           </div>
           {/* Category filter */}
           <div className="flex flex-wrap gap-2">
-            {CAT_FILTERS.map((c) => (
+            {catFilters.map((c) => (
               <button
                 key={c}
                 onClick={() => setCatFilter(c)}
@@ -99,7 +115,7 @@ export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
                     : 'bg-accent/10 text-accent hover:bg-accent/15'
                 }`}
               >
-                {c === 'ALL' ? 'All Categories' : c}
+                {translateCat(c)}
               </button>
             ))}
           </div>
@@ -189,7 +205,7 @@ export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
                       rel="noopener noreferrer"
                       className="font-body hover:text-accent mt-4 flex items-center gap-1.5 text-[12px] text-white/50 transition-colors"
                     >
-                      View announcement
+                      {t('viewAnnouncement')}
                       <svg
                         width="10"
                         height="10"
@@ -216,7 +232,7 @@ export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
 
       {/* Stats strip */}
       <section className="bg-transparent px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="grid grid-cols-3 gap-px overflow-hidden rounded-[18px] bg-[#e5e7eb] dark:bg-[#1a1c22]">
             {[
               { value: '$34M+', label: t('statsSegregated') },
@@ -232,41 +248,6 @@ export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-11">
-        <div className="mx-auto flex max-w-[390px] flex-col items-center gap-0 md:max-w-2xl xl:max-w-[1200px]">
-          <h2 className="mb-3 text-center font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px] text-white">
-            {t('ctaHeading')}
-            <br />
-            <span className="text-accent">{t('ctaAccent')}</span>
-          </h2>
-          <p className="font-body mb-6 max-w-[280px] text-center text-[13px] text-white/60">
-            {t('ctaSubtitle')}
-          </p>
-          <Link
-            href={`/${locale}/register`}
-            className="bg-accent hover:bg-accent/90 font-body mb-3 flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 text-[15px] font-medium text-white transition-colors"
-          >
-            {t('ctaBtn')}
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
-          <Link
-            href={`/${locale}/register?type=demo`}
-            className="font-body text-[14px] font-medium text-white/60 transition-opacity hover:opacity-80"
-          >
-            {t('ctaDemo')}
-          </Link>
         </div>
       </section>
     </>

@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { CalcSelect } from './CalcSelect';
 
 type ToolTab = 'MARGIN' | 'PIP' | 'SWAP';
 
@@ -26,54 +27,6 @@ export interface CmsCalculatorInstrument {
 interface TraderToolsPageProps {
   /** Live instrument data from the CMS ProductsInstruments collection */
   instruments?: CmsCalculatorInstrument[];
-}
-
-function SelectInput({
-  label,
-  value,
-  options,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  options: readonly string[];
-  onChange: (v: string) => void;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="font-body text-[11px] uppercase tracking-[0.1em] text-[#6b7280] dark:text-white/40">
-        {label}
-      </label>
-      <div className="focus-within:border-accent relative overflow-hidden rounded-[12px] border border-[#e5e7eb] bg-white transition-colors dark:border-white/10 dark:bg-[#1a1c22]">
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="font-body w-full appearance-none bg-transparent px-4 py-3 text-[14px] text-[#111] outline-none dark:text-white"
-        >
-          {options.map((o) => (
-            <option key={o} value={o} className="bg-white dark:bg-[#1a1c22]">
-              {o}
-            </option>
-          ))}
-        </select>
-        <svg
-          className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#6b7280] dark:text-white/40"
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-        >
-          <path
-            d="M2 4l4 4 4-4"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
-    </div>
-  );
 }
 
 function NumberInput({
@@ -166,7 +119,7 @@ function ResultCard({
         <p className="font-sans text-[42px] font-semibold leading-[1.1] text-white">
           {activeTab === 'SWAP' && swap < 0 ? '-' : ''}
           {Math.abs(activeTab === 'MARGIN' ? margin : activeTab === 'PIP' ? pip : swap).toFixed(2)}
-          <span className="ml-1 text-[22px] font-normal text-white/60">{currency}</span>
+          <span className="ms-1 text-[22px] font-normal text-white/60">{currency}</span>
         </p>
       </div>
       <div className="mx-5 border-t border-white/10" />
@@ -295,10 +248,13 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
   const lev = parseFloat(leverage) || 1;
   const contractSize = selectedInstrument?.contractSize ?? 100000;
   const pipValue = selectedInstrument?.pipValue ?? 10;
-  const swapRate = {
-    long: selectedInstrument?.swapRateLong ?? -0.52,
-    short: selectedInstrument?.swapRateShort ?? 0.14,
-  };
+  const swapRate = useMemo(
+    () => ({
+      long: selectedInstrument?.swapRateLong ?? -0.52,
+      short: selectedInstrument?.swapRateShort ?? 0.14,
+    }),
+    [selectedInstrument],
+  );
 
   // Helper: find instrument by display name (used in the onChange handler)
   function handleInstrumentChange(name: string) {
@@ -349,21 +305,21 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
   const CALC_TOOLS = [
     {
       id: 'pivot',
-      tag: 'Technical',
+      tag: t('tagTechnical'),
       label: t('pivotTitle'),
       desc: t('pivotDesc'),
       href: `/${locale}/tools/pivot`,
     },
     {
       id: 'profit',
-      tag: 'P&L',
+      tag: t('tagPL'),
       label: t('profitTitle'),
       desc: t('profitDesc'),
       href: `/${locale}/tools/profit`,
     },
     {
       id: 'fib',
-      tag: 'Technical',
+      tag: t('tagTechnical'),
       label: t('fibTitle'),
       desc: t('fibDesc'),
       href: `/${locale}/tools/fibonacci`,
@@ -390,7 +346,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
       <>
         {/* Hero */}
         <section className="bg-transparent px-5 pb-6 pt-9">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
               {t('heroLine1')}
               <br />
@@ -409,7 +365,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-6 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
             {t('heroLine1')}
             <br />
@@ -423,7 +379,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
 
       {/* Calculator */}
       <section className="px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Tab switcher */}
           <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-[#1a1c22]">
             {TABS.map((tab) => (
@@ -444,14 +400,14 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
           {/* Inputs */}
           <div className="xl:flex xl:gap-8">
             {/* Input fields: 2-col grid on xl */}
-            <div className="flex flex-col gap-4 xl:grid xl:flex-1 xl:grid-cols-2 xl:gap-4">
-              <SelectInput
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:flex-1">
+              <CalcSelect
                 label={t('fieldCurrency')}
                 value={currency}
                 options={['USD', 'EUR', 'GBP']}
                 onChange={setCurrency}
               />
-              <SelectInput
+              <CalcSelect
                 label={t('fieldInstrument')}
                 value={selectedInstrument?.name ?? ''}
                 options={instrumentNames}
@@ -464,7 +420,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
                 step="0.01"
                 min="0.01"
               />
-              <SelectInput
+              <CalcSelect
                 label={t('fieldLeverage')}
                 value={leverage}
                 options={['10', '20', '50', '100', '200', '500']}
@@ -544,7 +500,13 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
             }}
           >
             {t('calculateBtn')}
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 16 16"
+              fill="none"
+              className="rtl:-scale-x-100"
+            >
               <path
                 d="M3 8h10M9 4l4 4-4 4"
                 stroke="currentColor"
@@ -589,7 +551,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
 
       {/* Other tools */}
       <section className="bg-transparent px-5 pb-10 pt-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
             {t('moreKicker')}
           </SectionKicker>
@@ -657,33 +619,6 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
               </Link>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            {t('ctaLine1')}
-            <br />
-            {t('ctaLine2')}
-          </h2>
-          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
-          <Link
-            href={`/${locale}/register`}
-            className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
-          >
-            {t('ctaBtn')}
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
         </div>
       </section>
     </>

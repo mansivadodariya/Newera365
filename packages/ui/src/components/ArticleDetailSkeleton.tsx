@@ -1,6 +1,6 @@
 'use client';
 
-import { Pulse, HeroSkeleton } from './SkeletonBlocks';
+import { Pulse } from './SkeletonBlocks';
 
 export function ArticleDetailSkeleton() {
   return (

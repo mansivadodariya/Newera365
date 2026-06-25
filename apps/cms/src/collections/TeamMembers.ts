@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
-import { slugField } from './_fields';
+import { publicReadWhere, slugField } from './_fields';
 
 // Powers the /about team section.
 export const TeamMembers: CollectionConfig = {
@@ -9,7 +9,7 @@ export const TeamMembers: CollectionConfig = {
     useAsTitle: 'name',
     defaultColumns: ['name', 'role', 'status'],
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'active' } }) },
   fields: [
     { name: 'name', type: 'text', required: true, maxLength: 100, localized: true },
     slugField('name'),

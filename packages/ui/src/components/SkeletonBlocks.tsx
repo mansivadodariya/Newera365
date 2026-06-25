@@ -154,6 +154,21 @@ export function CtaBannerSkeleton() {
   );
 }
 
+// A page's own closing dark CTA section (heading + subtitle + pill button).
+// Distinct from CtaBannerSkeleton (the route-level banner) — several pages
+// render BOTH, producing two stacked dark bands at the bottom.
+export function DarkCtaSkeleton() {
+  return (
+    <div className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
+      <div className="mx-auto flex max-w-[390px] flex-col items-center gap-4 md:max-w-2xl xl:max-w-[1200px]">
+        <div className="h-7 w-2/3 animate-pulse rounded bg-white/10" />
+        <div className="h-4 w-3/4 animate-pulse rounded bg-white/10" />
+        <div className="bg-accent/40 mt-2 h-[49px] w-[200px] animate-pulse rounded-full" />
+      </div>
+    </div>
+  );
+}
+
 // 2×2 stat card grid
 export function StatsGridSkeleton() {
   return (

@@ -1,0 +1,351 @@
+{
+  "nodes": [
+    {
+      "id": "d_newera365_newera365_app_claude_md",
+      "label": "CLAUDE.md",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "newera365_app_claude_claude_md",
+      "label": "CLAUDE.md",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "newera365_app_claude_project",
+      "label": "Project",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L5"
+    },
+    {
+      "id": "newera365_app_claude_commands",
+      "label": "Commands",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L9"
+    },
+    {
+      "id": "newera365_app_claude_architecture",
+      "label": "Architecture",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L43"
+    },
+    {
+      "id": "newera365_app_claude_apps_web_next_js_14_frontend",
+      "label": "`apps/web` \u2014 Next.js 14 frontend",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L47"
+    },
+    {
+      "id": "newera365_app_claude_apps_cms_payload_cms_v2_express",
+      "label": "`apps/cms` \u2014 Payload CMS v2 + Express",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L51"
+    },
+    {
+      "id": "newera365_app_claude_apps_mt5_service_mock_mt5_bridge",
+      "label": "`apps/mt5-service` \u2014 Mock MT5 bridge",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L74"
+    },
+    {
+      "id": "newera365_app_claude_packages_types_shared_typescript_types",
+      "label": "`packages/types` \u2014 shared TypeScript types",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L78"
+    },
+    {
+      "id": "newera365_app_claude_packages_ui_shared_react_components",
+      "label": "`packages/ui` \u2014 shared React components",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L82"
+    },
+    {
+      "id": "newera365_app_claude_packages_config_shared_eslint_tailwind_presets",
+      "label": "`packages/config` \u2014 shared ESLint + Tailwind presets",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L86"
+    },
+    {
+      "id": "newera365_app_claude_conventions_gotchas",
+      "label": "Conventions & gotchas",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L90"
+    },
+    {
+      "id": "newera365_app_claude_deployment",
+      "label": "Deployment",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L112"
+    },
+    {
+      "id": "newera365_app_claude_completed_frontend_pages",
+      "label": "Completed Frontend Pages",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L125"
+    },
+    {
+      "id": "newera365_app_claude_trade",
+      "label": "Trade",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L129"
+    },
+    {
+      "id": "newera365_app_claude_markets",
+      "label": "Markets",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L139"
+    },
+    {
+      "id": "newera365_app_claude_platform",
+      "label": "Platform",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L146"
+    },
+    {
+      "id": "newera365_app_claude_education",
+      "label": "Education",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L153"
+    },
+    {
+      "id": "newera365_app_claude_research_tools",
+      "label": "Research & Tools",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L164"
+    },
+    {
+      "id": "newera365_app_claude_company",
+      "label": "Company",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L176"
+    },
+    {
+      "id": "newera365_app_claude_support_legal",
+      "label": "Support & Legal",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L183"
+    },
+    {
+      "id": "newera365_app_claude_graphify",
+      "label": "graphify",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L193"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_newera365_newera365_app_claude_md",
+      "target": "newera365_app_claude_claude_md",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_claude_md",
+      "target": "newera365_app_claude_project",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_claude_md",
+      "target": "newera365_app_claude_commands",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_claude_md",
+      "target": "newera365_app_claude_architecture",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_architecture",
+      "target": "newera365_app_claude_apps_web_next_js_14_frontend",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_architecture",
+      "target": "newera365_app_claude_apps_cms_payload_cms_v2_express",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_architecture",
+      "target": "newera365_app_claude_apps_mt5_service_mock_mt5_bridge",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L74",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_architecture",
+      "target": "newera365_app_claude_packages_types_shared_typescript_types",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L78",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_architecture",
+      "target": "newera365_app_claude_packages_ui_shared_react_components",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L82",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_architecture",
+      "target": "newera365_app_claude_packages_config_shared_eslint_tailwind_presets",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L86",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_claude_md",
+      "target": "newera365_app_claude_conventions_gotchas",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L90",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_claude_md",
+      "target": "newera365_app_claude_deployment",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_claude_md",
+      "target": "newera365_app_claude_completed_frontend_pages",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L125",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_completed_frontend_pages",
+      "target": "newera365_app_claude_trade",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L129",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_completed_frontend_pages",
+      "target": "newera365_app_claude_markets",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L139",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_completed_frontend_pages",
+      "target": "newera365_app_claude_platform",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L146",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_completed_frontend_pages",
+      "target": "newera365_app_claude_education",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L153",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_completed_frontend_pages",
+      "target": "newera365_app_claude_research_tools",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L164",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_completed_frontend_pages",
+      "target": "newera365_app_claude_company",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L176",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_completed_frontend_pages",
+      "target": "newera365_app_claude_support_legal",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L183",
+      "weight": 1.0
+    },
+    {
+      "source": "newera365_app_claude_claude_md",
+      "target": "newera365_app_claude_graphify",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L193",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

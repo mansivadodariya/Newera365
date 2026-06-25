@@ -1,0 +1,205 @@
+{
+  "id": 1,
+  "mt5SyncEnabled": false,
+  "mt5RefreshIntervalSecs": 60,
+  "kpiStats": [
+    {
+      "id": "6a3625c0f5a2b5000113472d",
+      "valueEn": "12+",
+      "valueAr": "+12",
+      "labelEn": "Years in Markets",
+      "labelAr": "سنة في الأسواق"
+    },
+    {
+      "id": "6a3625c0f5a2b5000113472e",
+      "valueEn": "180k",
+      "valueAr": "180 ألف",
+      "labelEn": "Active Traders",
+      "labelAr": "متداول نشط"
+    },
+    {
+      "id": "6a3625c0f5a2b5000113472f",
+      "valueEn": "< 12 ms",
+      "valueAr": "< 12 ms",
+      "labelEn": "Avg Execution",
+      "labelAr": "متوسط التنفيذ"
+    },
+    {
+      "id": "6a3625c0f5a2b50001134730",
+      "valueEn": "99.99%",
+      "valueAr": "99.99%",
+      "labelEn": "Platform Uptime",
+      "labelAr": "وقت التشغيل"
+    }
+  ],
+  "socialProofLogos": [],
+  "socialProofHeadlineEn": "TEST — Trusted by 25,000+ traders worldwide",
+  "socialProofHeadlineAr": "TEST — موثوق به من أكثر من 25,000 متداول حول العالم",
+  "ratingValue": "4.8",
+  "ratingCountEn": "TEST — based on 2,400+ verified reviews",
+  "ratingCountAr": "TEST — بناءً على أكثر من 2,400 مراجعة موثّقة",
+  "testimonials": [
+    {
+      "id": "b97c7e86aa4707ac",
+      "quoteEn": "Execution is genuinely fast and withdrawals clear same-day. Best broker experience I have had.",
+      "quoteAr": "التنفيذ سريع فعلاً والسحوبات تتم في نفس اليوم. أفضل تجربة وساطة مررت بها.",
+      "authorName": "Omar A.",
+      "authorRoleEn": "Day trader · Dubai",
+      "authorRoleAr": "متداول يومي · دبي",
+      "rating": 5,
+      "avatarUrl": null
+    },
+    {
+      "id": "4810f2b682aaf4c1",
+      "quoteEn": "Spreads are tight and the relationship manager actually picks up the phone.",
+      "quoteAr": "الفروقات ضيقة ومدير الحساب يرد على الهاتف فعلاً.",
+      "authorName": "Sarah K.",
+      "authorRoleEn": "Swing trader · London",
+      "authorRoleAr": "متداولة تأرجح · لندن",
+      "rating": 5,
+      "avatarUrl": null
+    },
+    {
+      "id": "21fc0dd6b0f7da27",
+      "quoteEn": "Clean platform, no hidden fees, and the MT5 setup took two minutes.",
+      "quoteAr": "منصة نظيفة، بلا رسوم خفية، وإعداد MT5 استغرق دقيقتين.",
+      "authorName": "Yusuf M.",
+      "authorRoleEn": "Forex · Riyadh",
+      "authorRoleAr": "فوركس · الرياض",
+      "rating": 4,
+      "avatarUrl": null
+    }
+  ],
+  "downloadMt5Windows": "https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe",
+  "downloadMt5Mac": "https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/MetaTrader5.dmg",
+  "downloadMt5Ios": "https://apps.apple.com/app/metatrader-5/id413251709",
+  "downloadMt5Android": "https://play.google.com/store/apps/details?id=net.metaquotes.metatrader5",
+  "downloadWebTrader": "https://trade.newera365.com",
+  "contactEmail": "support@newera365.com",
+  "contactEmailCompliance": "compliance@newera365.com",
+  "contactPhone": "+1 867-778-3511",
+  "contactAddressEn": "Level 14, Boulevard Plaza Tower 1, Sheikh Mohammed Bin Rashid Boulevard, Dubai, UAE",
+  "contactAddressAr": "الطابق 14، برج بلازا بوليفارد 1، شارع الشيخ محمد بن راشد، دبي، الإمارات",
+  "supportHoursEn": "Sunday–Friday 00:00–21:00 GMT+4",
+  "supportHoursAr": "الأحد–الجمعة 00:00–21:00 GMT+4",
+  "socialFacebook": null,
+  "socialX": "https://x.com/newera365",
+  "socialLinkedIn": "https://linkedin.com/company/newera365",
+  "socialInstagram": "https://instagram.com/newera365",
+  "socialYoutube": "https://youtube.com/@newera365",
+  "socialTelegram": "https://t.me/newera365",
+  "socialTiktok": null,
+  "riskBannerEnabled": true,
+  "riskBannerEn": "CFDs are complex instruments. 74% of retail investor accounts lose money when trading CFDs with this provider. You should consider whether you understand how CFDs work and whether you can afford to take the high risk of losing your money.",
+  "riskBannerAr": "عقود الفروقات أدوات مالية معقدة. 74% من حسابات المستثمرين الأفراد تخسر أموالها عند تداول عقود الفروقات مع هذا المزود.",
+  "footerEn": [
+    {
+      "id": "6a3625c0f5a2b50001134731",
+      "heading": "Markets",
+      "links": [
+        { "id": "6a3625c0f5a2b50001134739", "label": "Forex", "href": "/markets/forex" },
+        { "id": "6a3625c0f5a2b5000113473a", "label": "Indices", "href": "/markets/indices" },
+        {
+          "id": "6a3625c0f5a2b5000113473b",
+          "label": "Commodities",
+          "href": "/markets/commodities"
+        },
+        { "id": "6a3625c0f5a2b5000113473c", "label": "Stocks", "href": "/markets/stocks" },
+        { "id": "6a3625c0f5a2b5000113473d", "label": "ETFs", "href": "/markets/etfs" },
+        { "id": "6a3625c0f5a2b5000113473e", "label": "Crypto", "href": "/markets/crypto" }
+      ]
+    },
+    {
+      "id": "6a3625c0f5a2b50001134732",
+      "heading": "Platform",
+      "links": [
+        { "id": "6a3625c0f5a2b5000113473f", "label": "MetaTrader 5", "href": "/platform/mt5" },
+        { "id": "6a3625c0f5a2b50001134740", "label": "Web Trader", "href": "/platform/webtrader" },
+        { "id": "6a3625c0f5a2b50001134742", "label": "Tools", "href": "/tools" }
+      ]
+    },
+    {
+      "id": "6a3625c0f5a2b50001134733",
+      "heading": "Company",
+      "links": [
+        { "id": "6a3625c0f5a2b50001134743", "label": "About", "href": "/company/about" },
+        { "id": "6a3625c0f5a2b50001134744", "label": "Careers", "href": "/company/careers" },
+        { "id": "6a3625c0f5a2b50001134745", "label": "Awards", "href": "/company/awards" },
+        { "id": "6a3625c0f5a2b50001134746", "label": "Media", "href": "/education/media" }
+      ]
+    },
+    {
+      "id": "6a3625c0f5a2b50001134734",
+      "heading": "Support",
+      "links": [
+        { "id": "6a3625c0f5a2b50001134747", "label": "Contact", "href": "/contact" },
+        { "id": "6a3625c0f5a2b50001134748", "label": "FAQs", "href": "/faqs" },
+        { "id": "6a3625c0f5a2b50001134749", "label": "Live Chat", "href": "/live-chat" },
+        { "id": "6a3625c0f5a2b5000113474a", "label": "Legal", "href": "/legal" }
+      ]
+    }
+  ],
+  "footerAr": [
+    {
+      "id": "6a3625c0f5a2b50001134735",
+      "heading": "الأسواق",
+      "links": [
+        { "id": "6a3625c0f5a2b5000113474b", "label": "الفوركس", "href": "/markets/forex" },
+        { "id": "6a3625c0f5a2b5000113474c", "label": "المؤشرات", "href": "/markets/indices" },
+        { "id": "6a3625c0f5a2b5000113474d", "label": "السلع", "href": "/markets/commodities" },
+        { "id": "6a3625c0f5a2b5000113474e", "label": "الأسهم", "href": "/markets/stocks" },
+        { "id": "6a3625c0f5a2b5000113474f", "label": "صناديق ETF", "href": "/markets/etfs" },
+        { "id": "6a3625c0f5a2b50001134750", "label": "العملات الرقمية", "href": "/markets/crypto" }
+      ]
+    },
+    {
+      "id": "6a3625c0f5a2b50001134736",
+      "heading": "المنصة",
+      "links": [
+        { "id": "6a3625c0f5a2b50001134751", "label": "ميتاتريدر 5", "href": "/platform/mt5" },
+        {
+          "id": "6a3625c0f5a2b50001134752",
+          "label": "المتداول الإلكتروني",
+          "href": "/platform/webtrader"
+        },
+        { "id": "6a3625c0f5a2b50001134754", "label": "الأدوات", "href": "/tools" }
+      ]
+    },
+    {
+      "id": "6a3625c0f5a2b50001134737",
+      "heading": "الشركة",
+      "links": [
+        { "id": "6a3625c0f5a2b50001134755", "label": "من نحن", "href": "/company/about" },
+        { "id": "6a3625c0f5a2b50001134756", "label": "الوظائف", "href": "/company/careers" },
+        { "id": "6a3625c0f5a2b50001134757", "label": "الجوائز", "href": "/company/awards" },
+        { "id": "6a3625c0f5a2b50001134758", "label": "الإعلام", "href": "/education/media" }
+      ]
+    },
+    {
+      "id": "6a3625c0f5a2b50001134738",
+      "heading": "الدعم",
+      "links": [
+        { "id": "6a3625c0f5a2b50001134759", "label": "اتصل بنا", "href": "/contact" },
+        { "id": "6a3625c0f5a2b5000113475a", "label": "الأسئلة الشائعة", "href": "/faqs" },
+        { "id": "6a3625c0f5a2b5000113475b", "label": "الدردشة المباشرة", "href": "/live-chat" },
+        { "id": "6a3625c0f5a2b5000113475c", "label": "القانونية", "href": "/legal" }
+      ]
+    }
+  ],
+  "regulatoryDisclosureEn": "TEST — NewEra365 is authorised and regulated by [Regulator] under licence no. 000000. Replace with verified text.",
+  "regulatoryDisclosureAr": "TEST — نيو إيرا 365 مرخّصة ومنظّمة من [الجهة] برقم 000000. استبدلها بالنص الموثّق.",
+  "companyRegistrationEn": "TEST — NewEra365 Ltd, registered in [Jurisdiction], company no. 000000. Placeholder.",
+  "companyRegistrationAr": "TEST — نيو إيرا 365 المحدودة، مسجّلة في [الولاية]، رقم الشركة 000000. مؤقت.",
+  "liveChatUrl": "/live-chat",
+  "analystInitials": "DR",
+  "analystName": "Diego Romero",
+  "analystTitle": "Senior FX Analyst",
+  "analystUpdated": "20 May, 09:14 UTC",
+  "analystCommentaryEn": "EUR/USD continues to grind higher as the ECB pushes back against July cut expectations. With US data softening and the dollar index breaking below the 200-day average, we see room for a move toward 1.0980 in the coming weeks. Key risk: a hot NFP print could trigger a sharp reversal back toward 1.0750.",
+  "analystCommentaryAr": "يواصل اليورو/دولار ارتفاعه في ظل تراجع توقعات خفض الفائدة في يوليو. مع تباطؤ البيانات الأمريكية وكسر مؤشر الدولار المتوسط المتحرك لـ200 يوم، نرى مجالاً للصعود نحو 1.0980. المخاطر: بيانات التوظيف القوية قد تعكس الاتجاه نحو 1.0750.",
+  "riskDisclaimerEn": "NewEra365 is authorised and regulated by the FCA (UK), ASIC (Australia), and CySEC (Cyprus). Trading leveraged products carries significant risk. Not suitable for all investors.",
+  "riskDisclaimerAr": "نيو إيرا 365 مرخصة ومنظمة من قبل FCA وASIC وCySEC. التداول بالمنتجات ذات الرافعة المالية ينطوي على مخاطر عالية.",
+  "updatedAt": "2026-06-20T05:31:44.694Z",
+  "createdAt": null,
+  "globalType": "site-settings"
+}

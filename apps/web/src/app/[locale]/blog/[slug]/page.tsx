@@ -1,6 +1,7 @@
+import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { ResearchDetailPage } from '@newera365/ui';
-import type { ArticleDetailData } from '@newera365/ui';
+import type { ArticleDetailData, RelatedArticle } from '@newera365/ui';
 import { LOCALES } from '@newera365/types';
 import { getBlogPostBySlug, getBlogPosts, slugToTitle } from '@/lib/cms';
 import type { Metadata } from 'next';
@@ -39,25 +40,40 @@ export default async function BlogDetailRoute({ params }: Props) {
   setRequestLocale(params.locale);
 
   const post = await getBlogPostBySlug(params.slug, params.locale);
+  if (!post) notFound();
 
-  // No notFound(): when the CMS has no matching document, ResearchDetailPage
-  // renders generic fallback article content so the link resolves to a real
-  // page instead of 404-ing.
-  const featuredImage = post?.featuredImage;
+  const featuredImage = post.featuredImage;
   const imageUrl =
     featuredImage && typeof featuredImage !== 'number' ? (featuredImage.url ?? null) : null;
 
-  const article: ArticleDetailData | null = post
-    ? {
-        title: post.title,
-        category: post.category,
-        author: post.author,
-        date: post.publishedDate,
-        image: imageUrl,
-        imageAlt: post.title,
-        body: post.body,
-      }
-    : null;
+  const article: ArticleDetailData = {
+    title: post.title,
+    category: post.category,
+    author: post.author,
+    date: post.publishedDate,
+    image: imageUrl,
+    imageAlt: post.title,
+    body: post.body,
+  };
 
-  return <ResearchDetailPage slug={params.slug} article={article} basePath="blog" />;
+  // "Keep reading" — other published posts with their CMS cover images.
+  const all = await getBlogPosts(params.locale, 6);
+  const relatedArticles: RelatedArticle[] = all
+    .filter((p) => p.slug !== params.slug)
+    .slice(0, 3)
+    .map((p) => ({
+      slug: p.slug,
+      category: p.category,
+      title: p.title,
+      image: p.thumbnailUrl,
+    }));
+
+  return (
+    <ResearchDetailPage
+      slug={params.slug}
+      article={article}
+      relatedArticles={relatedArticles}
+      basePath="blog"
+    />
+  );
 }

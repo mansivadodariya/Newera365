@@ -32,43 +32,41 @@ const DOCUMENTS = [
 
 type DocId = (typeof DOCUMENTS)[number]['id'];
 
-const TOC: Record<DocId, { num: string; title: string }[]> = {
+const DOC_ALIAS: Record<string, string> = {
+  privacy: 'privacy-policy',
+  risk: 'risk-disclosure',
+  aml: 'aml-policy',
+  cookies: 'cookie-policy',
+};
+
+const TOC_KEYS: Record<string, string[]> = {
   terms: [
-    { num: '1', title: 'Introduction' },
-    { num: '2', title: 'Definitions' },
-    { num: '3', title: 'Account opening' },
-    { num: '4', title: 'Trading policy' },
-    { num: '5', title: 'Order execution' },
-    { num: '6', title: 'Fees and charges' },
-    { num: '7', title: 'Limitation of liability' },
-    { num: '8', title: 'Governing law' },
+    'tocIntro',
+    'tocDefinitions',
+    'tocAccountOpening',
+    'tocTradingPolicy',
+    'tocOrderExecution',
+    'tocFees',
+    'tocLiability',
+    'tocGoverningLaw',
   ],
-  privacy: [
-    { num: '1', title: 'Data we collect' },
-    { num: '2', title: 'How we use it' },
-    { num: '3', title: 'Third parties' },
-    { num: '4', title: 'Your rights' },
-    { num: '5', title: 'Retention' },
-    { num: '6', title: 'Contact' },
+  'privacy-policy': [
+    'tocDataCollect',
+    'tocDataUse',
+    'tocThirdParties',
+    'tocYourRights',
+    'tocRetention',
+    'tocContactUs',
   ],
-  risk: [
-    { num: '1', title: 'Nature of CFDs' },
-    { num: '2', title: 'Leverage risk' },
-    { num: '3', title: 'Market risk' },
-    { num: '4', title: 'Liquidity risk' },
-    { num: '5', title: 'Technology risk' },
+  'risk-disclosure': [
+    'tocCfdNature',
+    'tocLeverageRisk',
+    'tocMarketRisk',
+    'tocLiquidityRisk',
+    'tocTechRisk',
   ],
-  aml: [
-    { num: '1', title: 'Policy scope' },
-    { num: '2', title: 'Customer due diligence' },
-    { num: '3', title: 'Monitoring' },
-    { num: '4', title: 'Reporting' },
-  ],
-  cookies: [
-    { num: '1', title: 'What are cookies' },
-    { num: '2', title: 'Types we use' },
-    { num: '3', title: 'Managing cookies' },
-  ],
+  'aml-policy': ['tocPolicyScope', 'tocCdd', 'tocMonitoring', 'tocReporting'],
+  'cookie-policy': ['tocWhatAreCookies', 'tocCookieTypes', 'tocManageCookies'],
 };
 
 interface SectionProps {
@@ -79,7 +77,7 @@ interface SectionProps {
 
 function Section({ id, title, children }: SectionProps) {
   return (
-    <section id={id} className="flex flex-col gap-3">
+    <section id={id} className="flex scroll-mt-[88px] flex-col gap-3">
       <h2 className="text-foreground font-sans text-[24px] font-semibold tracking-[-0.48px]">
         {title}
       </h2>
@@ -327,12 +325,47 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
   ),
 };
 
+// Deterministic so server and client render identically (no hydration mismatch):
+// fixed UTC timezone + Latin digits regardless of locale.
+function formatLegalDate(iso: string, locale: string) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return new Intl.DateTimeFormat(`${locale}-u-nu-latn`, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(d);
+}
+
 interface LegalPageProps {
   documents?: CmsLegalDocument[];
 }
 
 export function LegalPage({ documents }: LegalPageProps) {
   const t = useTranslations('legal');
+  const locale = useLocale();
+
+  const normalizeDocId = (id: string) => DOC_ALIAS[id] ?? id;
+  const docLabel = (id: string) => {
+    const nid = normalizeDocId(id);
+    return nid === 'terms'
+      ? t('docTerms')
+      : nid === 'privacy-policy'
+        ? t('docPrivacy')
+        : nid === 'risk-disclosure'
+          ? t('docRisk')
+          : nid === 'aml-policy'
+            ? t('docAml')
+            : t('docCookies');
+  };
+  const getStaticToc = (docId: string) =>
+    (TOC_KEYS[normalizeDocId(docId)] ?? []).map((key, idx) => ({
+      num: String(idx + 1),
+      title: t(key as Parameters<typeof t>[0]),
+      id: `section-${idx + 1}`,
+    }));
+
   const hasCms = documents && documents.length > 0;
 
   const uniqueDocs = hasCms
@@ -348,13 +381,21 @@ export function LegalPage({ documents }: LegalPageProps) {
     ? uniqueDocs.map((d) => ({ id: d.pageType, label: PAGE_TYPE_LABELS[d.pageType] ?? d.title }))
     : null;
 
-  const [activeDoc, setActiveDoc] = useState<DocId>('terms');
+  const [activeDoc, setActiveDoc] = useState<string>(uniqueDocs?.[0]?.pageType ?? 'terms');
+  const cmsDoc = uniqueDocs?.find((d) => d.pageType === activeDoc) ?? null;
+  const tocItems = cmsDoc
+    ? extractHeadings(cmsDoc.body).map((h, idx) => ({
+        num: String(idx + 1),
+        title: h.text,
+        id: h.id,
+      }))
+    : getStaticToc(activeDoc);
 
   return (
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-6 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground font-sans text-[36px] font-semibold leading-[1.08] tracking-[-1.08px]">
             {t('heroLine1')}
             <br />
@@ -368,7 +409,7 @@ export function LegalPage({ documents }: LegalPageProps) {
 
       {/* Document selector */}
       <section className="px-5 pb-4">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
             {(cmsDocList ?? DOCUMENTS).map((doc) => (
               <button
@@ -380,77 +421,81 @@ export function LegalPage({ documents }: LegalPageProps) {
                     : 'bg-[#F2F2F4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e]'
                 }`}
               >
-                {doc.id === 'terms'
-                  ? t('docTerms')
-                  : doc.id === 'privacy'
-                    ? t('docPrivacy')
-                    : doc.id === 'risk'
-                      ? t('docRisk')
-                      : doc.id === 'aml'
-                        ? t('docAml')
-                        : doc.id === 'cookies'
-                          ? t('docCookies')
-                          : doc.label}
+                {docLabel(doc.id)}
               </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Table of Contents */}
-      <section className="px-5 pb-4">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="rounded-[14px] bg-[#fafaf9] p-4 dark:bg-[#1a1c22]">
-            <p className="text-muted mb-3 font-mono text-[10px] tracking-[1.4px]">
-              {t('tocHeading')}
-            </p>
-            <div className="flex flex-col gap-2">
-              {TOC[activeDoc].map((item) => (
-                <a
-                  key={item.num}
-                  href={`#section-${item.num}`}
-                  className="font-body text-foreground/75 hover:text-accent flex items-center gap-3 text-[13px] transition-colors dark:text-white/75"
-                >
-                  <span className="text-muted w-5">{item.num}.</span>
-                  {item.title}
-                </a>
-              ))}
+      {/* Table of Contents — only render when the document actually has headings */}
+      {tocItems.length > 0 && (
+        <section className="px-5 pb-4">
+          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <div className="rounded-[14px] bg-[#fafaf9] p-4 dark:bg-[#1a1c22]">
+              <p className="text-muted mb-3 font-mono text-[10px] tracking-[1.4px]">
+                {t('tocHeading')}
+              </p>
+              <div className="flex flex-col gap-2">
+                {tocItems.map((item) => (
+                  <a
+                    key={item.num}
+                    href={`#${item.id}`}
+                    className="font-body text-foreground/75 hover:text-accent flex items-center gap-3 text-[13px] transition-colors dark:text-white/75"
+                  >
+                    <span className="text-muted w-5">{item.num}.</span>
+                    {item.title}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Document body */}
       <section className="px-5 pb-12">
         <div className="mx-auto flex max-w-[390px] flex-col gap-6 md:max-w-2xl xl:max-w-[1200px]">
-          {DOC_CONTENT[activeDoc]}
+          {cmsDoc ? (
+            <>
+              {(cmsDoc.effectiveDate || cmsDoc.version) && (
+                <p className="text-muted font-mono text-[11px] tracking-[1.54px]">
+                  {[
+                    cmsDoc.effectiveDate
+                      ? `${t('effectivePrefix')} ${formatLegalDate(cmsDoc.effectiveDate, locale)}`
+                      : null,
+                    cmsDoc.version || null,
+                  ]
+                    .filter(Boolean)
+                    .join(' · ')}
+                </p>
+              )}
+              <RichText content={cmsDoc.body} className="flex flex-col gap-3" />
+            </>
+          ) : (
+            DOC_CONTENT[activeDoc as DocId]
+          )}
         </div>
       </section>
 
       {/* Footer note */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="font-body mb-5 text-[12px] leading-[1.7] text-white/50">
             {t('footerDisclaimer')}
           </p>
           <div className="flex flex-wrap gap-3">
-            {DOCUMENTS.filter((d) => d.id !== activeDoc).map((doc) => (
-              <button
-                key={doc.id}
-                onClick={() => setActiveDoc(doc.id)}
-                className="font-body rounded-full border border-white/20 px-4 py-2 text-[12px] text-white/70 transition-colors hover:border-white/40 hover:text-white"
-              >
-                {doc.id === 'terms'
-                  ? t('docTerms')
-                  : doc.id === 'privacy'
-                    ? t('docPrivacy')
-                    : doc.id === 'risk'
-                      ? t('docRisk')
-                      : doc.id === 'aml'
-                        ? t('docAml')
-                        : t('docCookies')}
-              </button>
-            ))}
+            {(cmsDocList ?? DOCUMENTS)
+              .filter((d) => d.id !== activeDoc)
+              .map((doc) => (
+                <button
+                  key={doc.id}
+                  onClick={() => setActiveDoc(doc.id)}
+                  className="font-body rounded-full border border-white/20 px-4 py-2 text-[12px] text-white/70 transition-colors hover:border-white/40 hover:text-white"
+                >
+                  {docLabel(doc.id)}
+                </button>
+              ))}
           </div>
         </div>
       </section>

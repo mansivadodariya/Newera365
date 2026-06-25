@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { useLocale } from 'next-intl';
 
 export type AuthModalType = 'register' | 'demo' | null;
 
@@ -25,7 +23,6 @@ function CloseIcon() {
 }
 
 export function AuthModal({ type, onClose }: AuthModalProps) {
-  const locale = useLocale();
   const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -71,7 +68,7 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
         <button
           onClick={onClose}
           aria-label="Close"
-          className="text-muted hover:text-foreground absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full bg-black/5 transition-colors dark:bg-white/10"
+          className="text-muted hover:text-foreground absolute end-4 top-4 flex h-7 w-7 items-center justify-center rounded-full bg-black/5 transition-colors dark:bg-white/10"
         >
           <CloseIcon />
         </button>
@@ -128,17 +125,6 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
                 Create account
               </button>
             </form>
-
-            <p className="font-body mt-4 text-center text-[12px] text-[#6b7280]">
-              Already registered?{' '}
-              <Link
-                href={`/${locale}/login`}
-                onClick={onClose}
-                className="text-foreground font-medium underline-offset-2 hover:underline"
-              >
-                Log in
-              </Link>
-            </p>
           </>
         ) : (
           /* ── Demo ── */
@@ -170,17 +156,6 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
                 Launch demo account
               </button>
             </form>
-
-            <p className="font-body mt-4 text-center text-[12px] text-[#6b7280]">
-              Have an account?{' '}
-              <Link
-                href={`/${locale}/login`}
-                onClick={onClose}
-                className="text-foreground font-medium underline-offset-2 hover:underline"
-              >
-                Log in
-              </Link>
-            </p>
           </>
         )}
       </div>

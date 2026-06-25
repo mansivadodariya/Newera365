@@ -6,7 +6,7 @@ import type { CmsEducationContent } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Trading Glossary | NewEra365',
+  title: 'Trading Glossary',
   description: 'Definitions for hundreds of trading, forex, and financial market terms.',
 };
 

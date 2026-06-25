@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { Pagination } from './Pagination';
+import { humanize, distinctCategories, sameCategory } from './filterUtils';
 
-// Category tabs shown when CMS items have mediaCategory set
-const CATEGORY_TABS = ['ALL', 'MACRO', 'STRATEGY', 'EDUCATION', 'INTERVIEWS', 'LIVE'] as const;
+const MEDIA_PER_PAGE = 9;
 
 // Fallback type tabs when no categories in CMS
 type TypeTab = 'ALL' | 'VIDEO' | 'AUDIO';
@@ -32,6 +33,7 @@ export interface CmsVideoItem {
   videoEmbed?: string | null;
   description?: string | null;
   mediaCategory?: string | null;
+  isFeatured?: boolean | null;
 }
 
 interface EpisodeItem {
@@ -50,7 +52,7 @@ interface EpisodeItem {
   href?: string | null;
 }
 
-function videoItemToEpisode(v: CmsVideoItem, index: number): EpisodeItem {
+function videoItemToEpisode(v: CmsVideoItem): EpisodeItem {
   const type: 'VIDEO' | 'AUDIO' = v.contentType === 'audio' ? 'AUDIO' : 'VIDEO';
   const cat = v.mediaCategory ? v.mediaCategory.toUpperCase() : type;
   return {
@@ -62,7 +64,7 @@ function videoItemToEpisode(v: CmsVideoItem, index: number): EpisodeItem {
     title: v.title,
     desc: v.description ?? '',
     type,
-    featured: index === 0,
+    featured: v.isFeatured === true,
     thumbnailUrl: v.thumbnailUrl,
     href: v.videoEmbed ?? null,
   };
@@ -92,25 +94,6 @@ const TAG_COLORS: Record<string, string> = {
   LIVE: 'bg-[#EF4444]/15 text-[#EF4444]',
 };
 
-function PlayIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
-      <circle cx="10" cy="10" r="9" stroke="white" strokeWidth="1.5" />
-      <path d="M8 7l6 3-6 3V7z" fill="white" />
-    </svg>
-  );
-}
-
-function AudioIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
-      <circle cx="10" cy="10" r="9" stroke="white" strokeWidth="1.5" />
-      <path d="M7 12V9a3 3 0 016 0v3" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M5 11h2v3H5zM13 11h2v3h-2z" fill="white" />
-    </svg>
-  );
-}
-
 interface MediaListingPageProps {
   cmsVideos?: CmsVideoItem[];
   /** @deprecated use cmsVideos */
@@ -120,8 +103,24 @@ interface MediaListingPageProps {
 export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPageProps) {
   const locale = useLocale();
   const t = useTranslations('media');
+
+  const CAT_I18N_KEYS: Record<string, string> = {
+    MACRO: 'catMacro',
+    STRATEGY: 'catStrategy',
+    EDUCATION: 'catEducation',
+    INTERVIEWS: 'catInterviews',
+    LIVE: 'catLive',
+  };
+  function translateMediaCat(cat: string) {
+    if (cat === 'ALL') return t('filterAll');
+    const key = CAT_I18N_KEYS[(cat ?? '').toUpperCase()];
+    return key ? t(key as Parameters<typeof t>[0]) : humanize(cat);
+  }
+
   const [activeTab, setActiveTab] = useState<string>('ALL');
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const listRef = useRef<HTMLDivElement>(null);
 
   const episodes = useMemo<EpisodeItem[]>(() => {
     if (cmsVideos?.length) return cmsVideos.map(videoItemToEpisode);
@@ -139,17 +138,20 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
   // Build tab list dynamically — only show categories that exist in the data
   const tabs: string[] = useMemo(() => {
     if (!hasCategoryData) return TYPE_TABS;
-    const present = new Set(episodes.map((ep) => ep.categoryTab));
-    return ['ALL', ...CATEGORY_TABS.slice(1).filter((c) => present.has(c))];
+    // Data-driven: show every category present (incl. new creatable ones).
+    return ['ALL', ...distinctCategories(episodes, (ep) => ep.categoryTab)];
   }, [episodes, hasCategoryData]);
 
-  const featured = episodes.find((e) => e.featured);
-  const rest = episodes.filter((e) => !e.featured);
+  // Honor the CMS isFeatured flag; fall back to the first item so the featured slot is never empty.
+  const featured = episodes.find((e) => e.featured) ?? episodes[0];
+  const rest = episodes.filter((e) => e !== featured);
 
   const filtered = rest.filter((ep) => {
     const matchTab =
       activeTab === 'ALL' ||
-      (hasCategoryData ? ep.categoryTab === activeTab : ep.typeTab === activeTab);
+      (hasCategoryData
+        ? sameCategory(ep.categoryTab, activeTab)
+        : sameCategory(ep.typeTab, activeTab));
     const matchSearch =
       !search ||
       ep.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -157,11 +159,23 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
     return matchTab && matchSearch;
   });
 
+  const totalPages = Math.ceil(filtered.length / MEDIA_PER_PAGE);
+  const pagedFiltered = filtered.slice((page - 1) * MEDIA_PER_PAGE, page * MEDIA_PER_PAGE);
+
+  function handleTabChange(tab: string) {
+    setActiveTab(tab);
+    setPage(1);
+  }
+  function handleSearchChange(val: string) {
+    setSearch(val);
+    setPage(1);
+  }
+
   return (
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-6 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.08] tracking-[-1.2px]">
             {t('heroLine1')}
             <br />
@@ -176,7 +190,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
           {/* Search */}
           <div className="relative">
             <svg
-              className="text-muted pointer-events-none absolute left-4 top-1/2 -translate-y-1/2"
+              className="text-muted pointer-events-none absolute start-4 top-1/2 -translate-y-1/2"
               width="14"
               height="14"
               viewBox="0 0 16 16"
@@ -189,8 +203,8 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
               type="text"
               placeholder={t('searchPlaceholder')}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="border-border font-body text-foreground placeholder-muted focus:border-accent bg-surface w-full rounded-xl py-3 pl-10 pr-4 text-[14px] font-medium outline-none"
+              onChange={(e) => handleSearchChange(e.target.value)}
+              className="border-border font-body text-foreground placeholder-muted focus:border-accent bg-surface w-full rounded-xl py-3 pe-4 ps-10 text-[14px] font-medium outline-none"
             />
           </div>
         </div>
@@ -198,19 +212,19 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
 
       {/* Tabs */}
       <section className="px-5 pb-4">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
             {tabs.map((tab) => (
               <button
                 key={tab}
-                onClick={() => setActiveTab(tab)}
+                onClick={() => handleTabChange(tab)}
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-medium transition-colors ${
                   activeTab === tab
                     ? 'bg-accent text-white'
                     : 'bg-[#F2F2F4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e]'
                 }`}
               >
-                {tab === 'ALL' ? t('filterAll') : tab.charAt(0) + tab.slice(1).toLowerCase()}
+                {translateMediaCat(tab)}
               </button>
             ))}
           </div>
@@ -225,7 +239,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
             : activeTab === featured.typeTab)) &&
         !search && (
           <section className="px-5 pb-6">
-            <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
               <div
                 className="overflow-hidden rounded-[22px] bg-[#0d0d0d] xl:flex xl:flex-row"
                 onClick={() =>
@@ -244,17 +258,17 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   {/* NEW EPISODE badge */}
-                  <div className="bg-accent absolute left-3 top-3 rounded-full px-2.5 py-[3px]">
+                  <div className="bg-accent absolute start-3 top-3 rounded-full px-2.5 py-[3px]">
                     <span className="font-body text-[9px] font-semibold uppercase tracking-[0.1em] text-white">
                       {t('newEpisodeBadge')}
                     </span>
                   </div>
                   {/* Duration */}
-                  <div className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1">
+                  <div className="absolute end-3 top-3 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1">
                     <span className="font-body text-[10px] text-white/80">{featured.duration}</span>
                   </div>
                   {/* Play button */}
-                  <div className="bg-accent absolute bottom-4 left-4 flex h-10 w-10 items-center justify-center rounded-full shadow-lg xl:h-14 xl:w-14">
+                  <div className="bg-accent absolute bottom-4 start-4 flex h-10 w-10 items-center justify-center rounded-full shadow-lg xl:h-14 xl:w-14">
                     <svg
                       width="14"
                       height="14"
@@ -272,7 +286,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
                     <span
                       className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${TAG_COLORS[featured.tagDisplay]}`}
                     >
-                      {featured.tagDisplay}
+                      {translateMediaCat(featured.tagDisplay)}
                     </span>
                     <span className="font-body text-[11px] text-white/40">{featured.type}</span>
                     <span className="font-body text-[11px] text-white/30">
@@ -292,7 +306,10 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
         )}
       {/* Episode grid */}
       <section className="px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div
+          ref={listRef}
+          className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]"
+        >
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mx-auto mb-5 mt-2">
             {t('latestEpisodes')}
           </SectionKicker>
@@ -300,7 +317,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
             <p className="font-body text-muted py-8 text-center text-[14px]">{t('noResults')}</p>
           ) : (
             <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-3">
-              {filtered.map((ep) => (
+              {pagedFiltered.map((ep) => (
                 <div
                   key={ep.id}
                   className="dark:hover:border-accent/20 flex cursor-pointer flex-col gap-3 overflow-hidden rounded-[18px] bg-[#fafaf9] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,176,80,0.08)] dark:bg-[#1a1c22] dark:shadow-none"
@@ -333,7 +350,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
                         </svg>
                       )}
                     </div>
-                    <div className="absolute right-2 top-2 rounded-full bg-black/60 px-2 py-[2px]">
+                    <div className="absolute end-2 top-2 rounded-full bg-black/60 px-2 py-[2px]">
                       <span className="font-body text-[9px] text-white">{ep.duration}</span>
                     </div>
                   </div>
@@ -343,7 +360,7 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
                       <span
                         className={`font-body rounded-full px-2 py-[2px] text-[8px] font-semibold uppercase tracking-[0.08em] ${TAG_COLORS[ep.tagDisplay]}`}
                       >
-                        {ep.tagDisplay}
+                        {translateMediaCat(ep.tagDisplay)}
                       </span>
                     </div>
                     <p className="text-foreground font-sans text-[12px] font-semibold leading-[1.4]">
@@ -354,12 +371,18 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
               ))}
             </div>
           )}
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            listRef={listRef}
+          />
         </div>
       </section>
 
       {/* Bottom CTA */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
             {t('ctaKicker')}
           </SectionKicker>
@@ -373,7 +396,13 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
               className="font-body flex h-[50px] items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"
             >
               {t('ctaGuides')}
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 16 16"
+                fill="none"
+                className="rtl:-scale-x-100"
+              >
                 <path
                   d="M3 8h10M9 4l4 4-4 4"
                   stroke="currentColor"
@@ -388,7 +417,13 @@ export function MediaListingPage({ cmsVideos, cmsWebinars }: MediaListingPagePro
               className="font-body flex h-[50px] items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"
             >
               {t('ctaGlossary')}
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 16 16"
+                fill="none"
+                className="rtl:-scale-x-100"
+              >
                 <path
                   d="M3 8h10M9 4l4 4-4 4"
                   stroke="currentColor"

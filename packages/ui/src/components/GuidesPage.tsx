@@ -1,9 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import { useState, useRef } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
-import { STATIC_GUIDES } from './staticGuides';
+import { Pagination } from './Pagination';
+
+const GUIDES_PER_PAGE = 9;
 
 export interface CmsGuide {
   id: number;
@@ -21,28 +24,20 @@ interface GuidesPageProps {
 export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
   const locale = useLocale();
   const t = useTranslations('guides');
+  const [page, setPage] = useState(1);
+  const listRef = useRef<HTMLDivElement>(null);
 
-  // Fall back to static guides so the listing (and its article links) work even
-  // with no CMS data — see staticGuides.ts.
-  const guides: CmsGuide[] =
-    cmsGuides && cmsGuides.length > 0
-      ? cmsGuides
-      : STATIC_GUIDES.map((g) => ({
-          id: g.id,
-          slug: g.slug,
-          title: g.title,
-          summary: g.summary,
-          author: g.author,
-          featured: g.featured,
-        }));
+  const guides: CmsGuide[] = cmsGuides ?? [];
   const featured = guides.find((g) => g.featured) ?? guides[0] ?? null;
   const rest = guides.filter((g) => g !== featured);
+  const totalPages = Math.ceil(rest.length / GUIDES_PER_PAGE);
+  const pagedRest = rest.slice((page - 1) * GUIDES_PER_PAGE, page * GUIDES_PER_PAGE);
 
   return (
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
             {t('heroLine1')}
             <br />
@@ -57,7 +52,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
       {/* Featured guide */}
       {featured && (
         <section className="px-5 pb-6">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="mb-4">{t('featuredLabel')}</SectionKicker>
             <Link
               href={`/${locale}/guides/${featured.slug}`}
@@ -86,17 +81,17 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
 
       {/* All guides */}
       <section className="px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mt-5">{t('allGuidesLabel')}</SectionKicker>
-          <div className="flex flex-col gap-0">
+          <div ref={listRef} className="flex flex-col gap-0">
             {rest.length === 0 && !featured && (
               <p className="font-body text-muted py-12 text-center text-[14px]">{t('noGuides')}</p>
             )}
-            {rest.map((guide, i) => (
+            {pagedRest.map((guide, i) => (
               <Link
                 key={guide.id}
                 href={`/${locale}/guides/${guide.slug}`}
-                className={`group flex flex-col gap-2 py-5 ${i < rest.length - 1 ? 'border-b border-[#e5e7eb] dark:border-white/[0.07]' : ''}`}
+                className={`group flex flex-col gap-2 py-5 ${i < pagedRest.length - 1 ? 'border-b border-[#e5e7eb] dark:border-white/[0.07]' : ''}`}
               >
                 <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] transition-colors">
                   {guide.title}
@@ -117,12 +112,18 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
               </Link>
             ))}
           </div>
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            listRef={listRef}
+          />
         </div>
       </section>
 
       {/* CTA */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:last-child]:text-white/50">
             {t('ctaKicker')}
           </SectionKicker>
@@ -136,7 +137,13 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
               className="bg-accent hover:bg-accent/90 font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
             >
               {t('ctaEducation')}
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 16 16"
+                fill="none"
+                className="rtl:-scale-x-100"
+              >
                 <path
                   d="M3 8h10M9 4l4 4-4 4"
                   stroke="currentColor"

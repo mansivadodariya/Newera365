@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
-import { TradingViewWidget } from './TradingViewWidget';
+import { ChartWidget } from './ChartWidget';
 
 const CATEGORIES = ['Forex', 'Indices', 'Commodities', 'Stocks', 'ETFs', 'Crypto'] as const;
 
@@ -54,6 +54,8 @@ export interface InstrumentItem {
   name: string;
   symbol: string;
   assetClass: string;
+  /** Exact TradingView chart symbol (EXCHANGE:SYMBOL), CMS-managed. */
+  tvSymbol?: string | null;
   spread?: number | null;
   leverage?: string | null;
   minTradeSize?: number | null;
@@ -74,7 +76,9 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
   const cmsRows = useMemo(
     () =>
       instruments
-        ? instruments.filter((i) => ASSET_CLASS_MAP[i.assetClass] === activeCategory)
+        ? instruments.filter(
+            (i) => ASSET_CLASS_MAP[(i.assetClass ?? '').toLowerCase()] === activeCategory,
+          )
         : [],
     [instruments, activeCategory],
   );
@@ -209,7 +213,13 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
                 : `View all ${activeCategory.toLowerCase()} pairs`}
             </span>
             <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 16 16"
+                fill="none"
+                className="rtl:-scale-x-100"
+              >
                 <path
                   d="M3 8h10M9 4l4 4-4 4"
                   stroke="white"
@@ -221,24 +231,20 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
             </div>
           </Link>
 
-          {/* TradingView chart — always shown, symbol updates on row click */}
+          {/* TradingView chart — always shown, symbol updates on row click.
+              Uses the CMS-managed tvSymbol (exact EXCHANGE:SYMBOL) so the chart
+              resolves correctly across asset classes; falls back to the category
+              default only when a row has no tvSymbol set. */}
           {(() => {
             const chartSymbol =
-              hasCmsData && filteredRows[selectedRowIdx]
-                ? `OANDA:${filteredRows[selectedRowIdx].symbol.replace('/', '')}`
-                : CATEGORY_TV_SYMBOL[activeCategory];
+              (hasCmsData && filteredRows[selectedRowIdx]?.tvSymbol) ||
+              CATEGORY_TV_SYMBOL[activeCategory];
             return (
               <div className="mt-3 overflow-hidden rounded-[20px] bg-[#07090D]">
                 {/* Period selector */}
                 <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-2.5">
                   <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-white/30">
-                    {chartSymbol
-                      .replace('OANDA:', '')
-                      .replace('CAPITALCOM:', '')
-                      .replace('COMEX:', '')
-                      .replace('NASDAQ:', '')
-                      .replace('AMEX:', '')
-                      .replace('COINBASE:', '')}
+                    {chartSymbol.split(':').pop()}
                   </span>
                   <div className="flex gap-[2px]">
                     {CHART_PERIODS.map((p) => (
@@ -257,7 +263,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
                   </div>
                 </div>
                 <div className="h-[340px] xl:h-[420px]">
-                  <TradingViewWidget
+                  <ChartWidget
                     key={`${chartSymbol}-${chartPeriod}`}
                     type="advanced-chart"
                     symbol={chartSymbol}
@@ -286,10 +292,10 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
                 <span className="font-body text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
                   {t('colSymbol')}
                 </span>
-                <span className="font-body text-right text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
+                <span className="font-body text-end text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
                   {t('colSpread')}
                 </span>
-                <span className="font-body text-right text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
+                <span className="font-body text-end text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
                   {t('colLeverage')}
                 </span>
               </div>
@@ -302,7 +308,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
                   <button
                     key={item.id}
                     onClick={() => setSelectedRowIdx(i)}
-                    className={`grid w-full grid-cols-[1fr_80px_80px] items-center px-4 py-[11px] text-left transition-colors xl:grid-cols-[1fr_120px_120px] xl:px-6 ${
+                    className={`grid w-full grid-cols-[1fr_80px_80px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_120px_120px] xl:px-6 ${
                       i < Math.min(filteredRows.length, 8) - 1 ? 'border-b border-white/[0.06]' : ''
                     } ${selectedRowIdx === i ? 'bg-[#161d27]' : 'hover:bg-white/[0.03]'}`}
                   >
@@ -319,10 +325,10 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
                         </p>
                       </div>
                     </div>
-                    <p className="font-body text-right text-[12px] font-medium text-white/70">
+                    <p className="font-body text-end text-[12px] font-medium text-white/70">
                       {item.spread != null ? item.spread : '—'}
                     </p>
-                    <p className="font-body text-right text-[12px] font-medium text-white/70">
+                    <p className="font-body text-end text-[12px] font-medium text-white/70">
                       {item.leverage ?? '—'}
                     </p>
                   </button>
@@ -367,7 +373,13 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
             className="bg-accent font-body hover:bg-accent-hover flex h-[48px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
           >
             {t('compareAccounts')}
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 16 16"
+              fill="none"
+              className="rtl:-scale-x-100"
+            >
               <path
                 d="M3 8h10M9 4l4 4-4 4"
                 stroke="currentColor"
@@ -394,13 +406,15 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
               <Link
                 key={market}
                 href={`/${locale}/markets/${market.toLowerCase()}`}
-                className="hover:border-accent/30 group flex items-center justify-between rounded-[18px] border border-white/[0.12] bg-white/[0.06] px-5 py-4 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/[0.10] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)]"
+                className="hover:border-accent/30 group flex items-center justify-between rounded-[18px] border border-white/[0.12] bg-[#FAFAF9] px-5 py-4 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/[0.10] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] dark:bg-[#000000]"
               >
                 <div>
-                  <p className="font-sans text-[15px] font-semibold text-white">{market}</p>
-                  <p className="font-body mt-[3px] text-[11px] text-white/40">{t('liveTag')}</p>
+                  <p className="text-foreground font-sans text-[15px] font-semibold">{market}</p>
+                  <p className="font-body mt-[3px] text-[11px] text-[#5D6067] dark:text-[#B8BFCC]">
+                    {t('liveTag')}
+                  </p>
                 </div>
-                <div className="group-hover:bg-accent flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/10 transition-colors">
+                <div className="group-hover:bg-accent flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[rgba(0,214,97,0.30)] to-[rgba(255,255,255,0.30)] transition-colors">
                   <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                     <path
                       d="M4 12L12 4M12 4H7M12 4v5"
@@ -408,6 +422,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      className="invert"
                     />
                   </svg>
                 </div>

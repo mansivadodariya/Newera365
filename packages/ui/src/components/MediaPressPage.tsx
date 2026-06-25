@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 export interface MediaPressItem {
@@ -67,7 +67,6 @@ function FileIcon({ color }: { color: string }) {
 }
 
 export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
-  const locale = useLocale();
   const t = useTranslations('mediaPress');
 
   const items = cmsItems ?? [];
@@ -80,7 +79,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
     <>
       {/* ── Hero ── */}
       <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-accent/20 [&>span:last-child]:text-accent mb-4">
             {t('kicker')}
           </SectionKicker>
@@ -97,7 +96,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
 
       {/* ── Press coverage list ── */}
       <section className="px-5 pb-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-accent/10 [&>span:last-child]:text-accent mb-5">
             {t('pressKicker')}
           </SectionKicker>
@@ -166,7 +165,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
 
       {/* ── Featured in strip ── */}
       <section className="border-y border-[#e5e7eb] px-5 py-6 dark:border-[#1a1c22]">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="font-body text-muted/50 mb-4 text-center text-[10px] font-semibold uppercase tracking-[0.2em]">
             — {t('featuredInLabel')} —
           </p>
@@ -182,7 +181,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
 
       {/* ── Media kit ── */}
       <section className="rounded-[32px] bg-[#f2f2f7] px-5 pb-9 pt-10 dark:bg-[#0f0f14]">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-[#d0d0d8] dark:[&>span:first-child]:bg-[#1a1c22] [&>span:last-child]:text-[#6B7280]">
             {t('assetsKicker')}
           </SectionKicker>
@@ -191,7 +190,10 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
           </h2>
           <div className="grid grid-cols-2 gap-3">
             {BRAND_ASSETS.map(({ nameKey, formatKey, color }) => (
-              <div key={nameKey} className="bg-surface flex flex-col gap-3 rounded-[18px] p-4">
+              <div
+                key={nameKey}
+                className="bg-surface hover-lift flex flex-col gap-3 rounded-[18px] p-4"
+              >
                 <FileIcon color={color} />
                 <div className="flex-1">
                   <p className="text-foreground font-sans text-[13px] font-semibold">
@@ -215,7 +217,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
 
       {/* ── By the numbers ── */}
       <section className="px-5 py-10">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="font-body text-muted/50 mb-8 text-center text-[10px] font-semibold uppercase tracking-[0.2em]">
             — {t('statsLabel')} —
           </p>
@@ -237,7 +239,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
       {/* ── Latest from the newsroom ── */}
       {newsroomItems.length > 0 && (
         <section className="px-5 pb-10">
-          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="[&>span:first-child]:bg-accent/10 [&>span:last-child]:text-accent mb-5">
               {t('newsroomKicker')}
             </SectionKicker>
@@ -294,7 +296,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
 
       {/* ── Media inquiries ── */}
       <section className="px-5 pb-12">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="rounded-[22px] bg-[#f2f2f7] px-6 py-8 text-center dark:bg-[#0f0f14]">
             <SectionKicker className="[&>span:first-child]:bg-accent/20 [&>span:last-child]:text-accent mb-4 justify-center">
               {t('inquiriesKicker')}
@@ -335,21 +337,6 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
           <p className="font-body mb-6 max-w-[280px] text-center text-[13px] text-white/60">
             {t('ctaSubtitle')}
           </p>
-          <Link
-            href={`/${locale}/register`}
-            className="bg-accent hover:bg-accent/90 font-body flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 text-[15px] font-medium text-white transition-colors"
-          >
-            {t('ctaBtn')}
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
         </div>
       </section>
     </>

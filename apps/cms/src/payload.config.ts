@@ -19,7 +19,7 @@ import { NewsletterSubscribers } from './collections/NewsletterSubscribers';
 import { Careers } from './collections/Careers';
 import { LegalPages } from './collections/LegalPages';
 import { Awards } from './collections/Awards';
-import { CompanyContent } from './collections/CompanyContent';
+import { CompanyMilestones } from './collections/CompanyMilestones';
 import { TeamMembers } from './collections/TeamMembers';
 import { WebinarRegistrations } from './collections/WebinarRegistrations';
 import { Promotions } from './collections/Promotions';
@@ -27,11 +27,11 @@ import { PaymentMethods } from './collections/PaymentMethods';
 import { IBContent } from './collections/IBContent';
 import { ContactSubmissions } from './collections/ContactSubmissions';
 import { MediaPress } from './collections/MediaPress';
+import { AnalystCalls } from './collections/AnalystCalls';
 import { SiteSettings } from './globals/SiteSettings';
 import { emailTransport } from './email/transport';
 import Logo from './graphics/Logo';
 import Icon from './graphics/Icon';
-import TwoFactorLoginField from './components/TwoFactorLoginField';
 
 // These checks run server-side only. payload.config.ts is also bundled by
 // webpack for the browser admin UI — in that context process.env vars are
@@ -53,8 +53,8 @@ if (typeof window === 'undefined') {
   if (!process.env.FRONTEND_URL && process.env.NODE_ENV === 'production') {
     throw new Error('FRONTEND_URL must be set in production');
   }
-  if (!process.env.RESEND_API_KEY && process.env.NODE_ENV === 'production') {
-    throw new Error('RESEND_API_KEY must be set in production');
+  if (!process.env.SMTP_PASS && process.env.NODE_ENV === 'production') {
+    throw new Error('SMTP_PASS (ZeptoMail Send Mail Token) must be set in production');
   }
   if (!process.env.EMAIL_FROM && process.env.NODE_ENV === 'production') {
     throw new Error('EMAIL_FROM must be set in production');
@@ -64,15 +64,30 @@ if (typeof window === 'undefined') {
   }
 }
 
+// Canonical site URL — used to build email links and redirect host checks
+// (see endpoints/index.ts). Must remain a single, valid URL.
 const corsOrigin = process.env.FRONTEND_URL ?? 'http://localhost:3000';
 
-// Mirrors the same logic in email/transport.ts and email/resend.ts:
-// use Resend's sandbox sender in dev/staging (no domain verification needed),
-// and the verified domain address only in production.
-const IS_PROD = process.env.NODE_ENV === 'production';
-const fromAddress = IS_PROD
-  ? (process.env.EMAIL_FROM ?? 'no-reply@newera365.com')
-  : 'onboarding@resend.dev';
+// Browser origins allowed for CORS + CSRF. Payload's corsHeaders middleware only
+// echoes back an `Access-Control-Allow-Origin` when the request's Origin EXACTLY
+// matches a list entry, so every origin the site is actually served from must be
+// listed here — the apex domain, www, the Vercel deployment alias
+// (…-app.vercel.app), and any preview URLs. FRONTEND_URL is always included;
+// CORS_ORIGINS adds extras as a comma-separated list. Values are trimmed so a
+// stray space/newline from the hosting provider's env UI can't silently break
+// the exact-match comparison.
+const allowedOrigins = Array.from(
+  new Set(
+    [corsOrigin, ...(process.env.CORS_ORIGINS ?? '').split(',')]
+      .map((origin) => origin.trim())
+      .filter(Boolean),
+  ),
+);
+
+// Single from-address for Payload's built-in email pipeline (forgot-password).
+// ZeptoMail has no sandbox sender, so the verified-domain address is used in every
+// environment — mirrors FROM in email/transport.ts.
+const fromAddress = process.env.EMAIL_FROM ?? 'no-reply@newera365.com';
 
 export default buildConfig({
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
@@ -84,21 +99,17 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     bundler: webpackBundler(),
-    // Keep server-only modules (nodemailer + the Resend SMTP transport) out
+    // Keep server-only modules (nodemailer + the ZeptoMail SMTP transport) out
     // of the admin browser bundle. Aliases swap them for a no-op stub at
     // build time so webpack does not try to resolve `stream`, `os`, `tls`,
     // etc. for the browser.
     webpack: (config) => {
       const transportPath = path.resolve(__dirname, 'email/transport');
       const transportMock = path.resolve(__dirname, 'email/transport.mock');
-      // The Resend SDK and endpoints module are server-only (use Node crypto, net, etc.).
+      // The mailer module and endpoints module are server-only (use Node net/tls, etc.).
       // Alias them to the no-op mock so webpack doesn't try to bundle them for the browser.
-      const resendEmailPath = path.resolve(__dirname, 'email/resend');
+      const mailerPath = path.resolve(__dirname, 'email/mailer');
       const endpointsPath = path.resolve(__dirname, 'endpoints');
-      // The TOTP module imports otplib + qrcode (Node crypto) — swap it for the
-      // browser-safe mock so the Users collection config still resolves in the bundle.
-      const totpPath = path.resolve(__dirname, 'auth/totp');
-      const totpMock = path.resolve(__dirname, 'auth/totp.mock');
       return {
         ...config,
         resolve: {
@@ -106,21 +117,20 @@ export default buildConfig({
           alias: {
             ...(config.resolve?.alias ?? {}),
             [transportPath]: transportMock,
-            [resendEmailPath]: transportMock,
+            [mailerPath]: transportMock,
             [endpointsPath]: transportMock,
-            [totpPath]: totpMock,
             // npm packages aliased to false → webpack emits empty modules,
             // preventing their Node-only internals from crashing the browser bundle.
             nodemailer: false,
-            resend: false,
-            otplib: false,
-            qrcode: false,
           },
         },
       };
     },
     meta: {
       titleSuffix: '— NEWERA',
+      // Match the public site's browser-tab icon instead of Payload's default.
+      // Served by the Express static mount in server.ts (/public → apps/cms/public).
+      favicon: '/public/favicon.png',
     },
     css: path.resolve(__dirname, 'admin.scss'),
     components: {
@@ -128,9 +138,6 @@ export default buildConfig({
         Logo,
         Icon,
       },
-      // Renders a 2FA code input on the login screen and injects `otp` into the
-      // login request. Enforcement is server-side in the Users beforeLogin hook.
-      beforeLogin: [TwoFactorLoginField],
     },
   },
   editor: slateEditor({}),
@@ -163,18 +170,19 @@ export default buildConfig({
     Careers,
     LegalPages,
     Awards,
+    CompanyMilestones,
     MediaPress,
-    CompanyContent,
     TeamMembers,
     WebinarRegistrations,
     Promotions,
     PaymentMethods,
     IBContent,
     ContactSubmissions,
+    AnalystCalls,
   ],
   globals: [SiteSettings],
-  cors: [corsOrigin],
-  csrf: [corsOrigin],
+  cors: allowedOrigins,
+  csrf: allowedOrigins,
   email: {
     fromName: 'NewEra365',
     fromAddress,

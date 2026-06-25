@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const metadata: Metadata = {
-  title: 'FAQs | NewEra365',
+  title: 'FAQs',
   description: 'Find answers to common questions about trading, accounts, deposits, and platforms.',
 };
 

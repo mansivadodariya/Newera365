@@ -7,7 +7,14 @@ export const Media: CollectionConfig = {
   admin: { group: 'Administration', useAsTitle: 'filename' },
   access: { read: () => true },
   upload: {
-    staticDir: 'media',
+    // Resolved at runtime so production can point uploads at a persistent mount
+    // (e.g. a Railway volume). The container filesystem is ephemeral — without a
+    // volume, every redeploy/restart wipes uploaded media while the DB rows
+    // survive, so the frontend gets valid-looking URLs that 404. Set MEDIA_DIR
+    // to the absolute volume mount path in production (e.g. /data/media); falls
+    // back to the repo-local ./media dir in dev. (R2 via plugin-cloud-storage
+    // remains the long-term store — NE-027.)
+    staticDir: process.env.MEDIA_DIR ?? 'media',
     mimeTypes: ['image/*', 'application/pdf', 'audio/*'],
     imageSizes: [
       { name: 'thumbnail', width: 400, height: 300, position: 'centre' },

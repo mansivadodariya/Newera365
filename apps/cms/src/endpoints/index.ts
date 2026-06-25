@@ -14,12 +14,13 @@ import {
 } from '@newera365/types';
 import {
   sendNewsletterConfirmation,
+  sendEbookDelivery,
   sendContactNotification,
   sendPartnersNotification,
   sendWebinarRegistrationConfirmation,
   sendWebinarRegistrationNotification,
-  syncSubscriberToAudience,
-} from '../email/resend';
+  sendNewsletterWelcome,
+} from '../email/mailer';
 
 /**
  * Custom REST endpoints layered on the Payload Express app. These are the
@@ -38,12 +39,20 @@ import {
  * tickets; do not surface ticket IDs in client responses.
  */
 
-const RATE_LIMIT_WINDOW_MS = Number(process.env.RATE_LIMIT_WINDOW_MS ?? 60_000);
-const CONTACT_RATE_LIMIT = Number(process.env.CONTACT_RATE_LIMIT ?? 3);
-const WEBINAR_RATE_LIMIT = Number(process.env.WEBINAR_RATE_LIMIT ?? 10);
-const NEWSLETTER_RATE_LIMIT = Number(process.env.NEWSLETTER_RATE_LIMIT ?? 5);
-const MAX_PAYLOAD_RESULTS = Number(process.env.MAX_PAYLOAD_RESULTS ?? 500);
-const MT5_FETCH_TIMEOUT_MS = Number(process.env.MT5_FETCH_TIMEOUT_MS ?? 5_000);
+// Parse a numeric env var, falling back when unset OR non-numeric. Plain
+// `Number(process.env.X ?? d)` yields NaN for a malformed value, which would
+// silently disable a rate limit or fetch timeout (NE code-review I-4).
+const numEnv = (raw: string | undefined, fallback: number): number => {
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : fallback;
+};
+
+const RATE_LIMIT_WINDOW_MS = numEnv(process.env.RATE_LIMIT_WINDOW_MS, 60_000);
+const CONTACT_RATE_LIMIT = numEnv(process.env.CONTACT_RATE_LIMIT, 3);
+const WEBINAR_RATE_LIMIT = numEnv(process.env.WEBINAR_RATE_LIMIT, 10);
+const NEWSLETTER_RATE_LIMIT = numEnv(process.env.NEWSLETTER_RATE_LIMIT, 5);
+const MAX_PAYLOAD_RESULTS = numEnv(process.env.MAX_PAYLOAD_RESULTS, 500);
+const MT5_FETCH_TIMEOUT_MS = numEnv(process.env.MT5_FETCH_TIMEOUT_MS, 5_000);
 const HEALTH_CHECK_TOKEN = process.env.HEALTH_CHECK_TOKEN;
 
 // Salt for IP hashing — prevents rainbow-table reversal of low-entropy IPv4 space.
@@ -81,6 +90,34 @@ const requestIdMiddleware = (req: ReqWithId, _res: Response, next: NextFunction)
 };
 
 const MT5_INTERNAL_API_TOKEN = process.env.MT5_INTERNAL_API_TOKEN;
+
+// Optional allow-list (comma-separated host[:port]) for the admin-configurable
+// MT5 endpoint. When set, only these hosts may be targeted.
+const MT5_ALLOWED_HOSTS = (process.env.MT5_ALLOWED_HOSTS ?? '')
+  .split(',')
+  .map((h) => h.trim().toLowerCase())
+  .filter(Boolean);
+
+// Validate the admin-supplied SiteSettings.mt5ApiEndpoint BEFORE the server
+// fetches it with the internal bearer token. Without this, a malicious/internal
+// URL saved in the CMS becomes an SSRF + token-exfil vector (NE code-review WR-3).
+// Returns the URL only when it is an absolute http(s) URL (and, if an allow-list
+// is configured, the host is permitted); otherwise undefined so the caller falls
+// back to the env/default endpoint instead of blindly fetching it.
+const safeMt5Endpoint = (candidate: string | undefined): string | undefined => {
+  if (!candidate) return undefined;
+  let url: URL;
+  try {
+    url = new URL(candidate);
+  } catch {
+    return undefined;
+  }
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return undefined;
+  if (MT5_ALLOWED_HOSTS.length > 0 && !MT5_ALLOWED_HOSTS.includes(url.host.toLowerCase())) {
+    return undefined;
+  }
+  return candidate;
+};
 
 // Returns the fetch Response (Node 18+ global). Return type inferred to avoid
 // a name clash with Express's `Response` type in this file.
@@ -205,7 +242,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
 
       // Step 3 — global is ON and cache miss; call the MT5 bridge service.
       const mt5Base =
-        (settings.mt5ApiEndpoint?.trim() || undefined) ??
+        safeMt5Endpoint(settings.mt5ApiEndpoint?.trim() || undefined) ??
         process.env.MT5_SERVICE_URL ??
         'http://localhost:4000';
       const mt5ApiKey = settings.mt5ApiKey?.trim() || undefined;
@@ -389,7 +426,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
 
       // Both switches ON and cache miss → fetch the specific instrument from the MT5 service.
       const mt5Base =
-        (settings.mt5ApiEndpoint?.trim() || undefined) ??
+        safeMt5Endpoint(settings.mt5ApiEndpoint?.trim() || undefined) ??
         process.env.MT5_SERVICE_URL ??
         'http://localhost:4000';
       const mt5ApiKey = settings.mt5ApiKey?.trim() || undefined;
@@ -483,7 +520,9 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         const existingDoc = existing.docs[0] as Record<string, unknown> | undefined;
 
         if (existingDoc?.status === 'subscribed') {
-          return res.json({ message: 'You are already subscribed.' });
+          // Generic response — identical to the fresh-subscribe message below so the
+          // endpoint can't be used to enumerate which emails are subscribed (NE WR-4).
+          return res.json({ message: 'Please check your email to confirm your subscription.' });
         }
 
         // Generate confirmation token and hash the IP.
@@ -568,7 +607,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
             'newsletter/subscribe: confirmation email failed — subscriber record saved, manual resend needed',
           );
           // Still return success: the record exists with confirmToken set.
-          // Admin can resend the email once Resend domain is verified.
+          // Admin can resend the email once the ZeptoMail sending domain is verified.
         }
 
         return res.json({ message: 'Please check your email to confirm your subscription.' });
@@ -626,25 +665,18 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         depth: 0,
       });
 
-      // Optional Resend Audience sync — no-op unless RESEND_AUDIENCE_ID is set.
-      // Non-fatal: a sync failure must never break the confirmation flow.
-      if (process.env.RESEND_AUDIENCE_ID && !doc.externalId) {
-        try {
-          const contactId = await syncSubscriberToAudience(doc.email as string);
-          if (contactId) {
-            await payload.update({
-              collection: 'newsletter-subscribers',
-              id: doc.id as string | number,
-              data: { externalId: contactId },
-              depth: 0,
-            });
-          }
-        } catch (syncErr) {
-          payload.logger.error(
-            { requestId: req.requestId, syncErr },
-            'newsletter/confirm: Resend Audience sync failed — subscriber still confirmed',
-          );
-        }
+      // Send welcome email — non-fatal, must never block the confirmation redirect.
+      try {
+        await sendNewsletterWelcome({
+          email: doc.email as string,
+          unsubscribeToken: doc.unsubscribeToken as string | undefined,
+          locale: (doc.locale as string | undefined) === 'ar' ? 'ar' : 'en',
+        });
+      } catch (welcomeErr) {
+        payload.logger.error(
+          { requestId: req.requestId, welcomeErr },
+          'newsletter/confirm: welcome email failed — subscriber still confirmed',
+        );
       }
 
       // Redirect to frontend success page, falling back to a plain JSON response
@@ -779,6 +811,8 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
       return res.status(400).json({ error: 'contentId is required.' });
     }
 
+    const safeLocale = locale === 'ar' ? 'ar' : 'en';
+
     try {
       // Fetch the content record to validate and get the file URL.
       // payload.findByID throws NotFound when the id doesn't exist (Payload v2
@@ -789,6 +823,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
           collection: 'education-content',
           id: contentId as string,
           depth: 1,
+          locale: safeLocale,
         })) as Record<string, unknown>;
       } catch {
         return res.status(404).json({ error: 'Content not found.' });
@@ -800,8 +835,6 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
       if (!content.isGated) {
         return res.status(400).json({ error: 'This content does not require a gate.' });
       }
-
-      const safeLocale = locale === 'ar' ? 'ar' : 'en';
 
       // Upsert subscriber (pending if new — they get a confirmation for the newsletter too)
       const existing = await payload.find({
@@ -857,11 +890,25 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
       // If subscriber already exists (any status) their email is captured — proceed to
       // return the content URL. We don't re-subscribe unsubscribed users here.
 
-      // Return the file URL. In production this would be a short-lived signed R2 URL.
+      // Resolve the file URL. In production this would be a short-lived signed R2 URL.
       const fileField = content.pdfFile as Record<string, unknown> | null | undefined;
       const fileUrl = (fileField?.url as string | undefined) ?? null;
 
-      return res.json({ url: fileUrl });
+      // Email the PDF to the requester (the primary delivery channel for ebooks).
+      // Fire-and-forget so a slow SMTP hop doesn't block the response; in dev with
+      // no SMTP_PASS this is logged via jsonTransport instead of sent.
+      if (fileUrl) {
+        const title = (content.title as string | undefined) ?? 'Your ebook';
+        sendEbookDelivery({
+          email: email.toLowerCase(),
+          ebookTitle: title,
+          fileUrl,
+          locale: safeLocale,
+        }).catch((err) => payload.logger.error({ err }, 'education gate: ebook email failed'));
+      }
+
+      // Still return the URL so the client can confirm delivery / offer a fallback.
+      return res.json({ url: fileUrl, delivered: Boolean(fileUrl) });
     } catch (err) {
       payload.logger.error({ requestId: req.requestId, err }, 'education/gate error');
       return res.status(500).json({ error: 'Something went wrong. Please try again later.' });
@@ -912,7 +959,6 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
       const ipHash = createHash('sha256')
         .update(CONSENT_IP_SALT + rawIp)
         .digest('hex');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await payload.create({
         collection: 'contact-submissions',
         data: {
@@ -923,7 +969,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
           submittedAt: new Date().toISOString(),
           ipHash,
           status: 'new',
-        } as any,
+        },
         depth: 0,
       });
 
@@ -1005,7 +1051,6 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         .filter(Boolean)
         .join('\n');
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await payload.create({
         collection: 'contact-submissions',
         data: {
@@ -1016,7 +1061,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
           submittedAt: new Date().toISOString(),
           ipHash,
           status: 'new',
-        } as any,
+        },
         depth: 0,
       });
 

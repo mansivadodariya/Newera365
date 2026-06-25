@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { safeUrl } from '../lib/safeUrl';
 
 export interface SlateNode {
   type?: string;
@@ -48,24 +49,38 @@ function renderNode(node: SlateNode, i: number): ReactNode {
           {children}
         </h1>
       );
-    case 'h2':
+    case 'h2': {
+      const h2id =
+        extractText(node)
+          .toLowerCase()
+          .replace(/[^\p{L}\p{N}]+/gu, '-')
+          .replace(/^-+|-+$/g, '') || undefined;
       return (
         <h2
           key={i}
+          id={h2id}
           className="text-foreground mb-3 mt-7 font-sans text-[22px] font-semibold leading-[1.25] first:mt-0"
         >
           {children}
         </h2>
       );
-    case 'h3':
+    }
+    case 'h3': {
+      const h3id =
+        extractText(node)
+          .toLowerCase()
+          .replace(/[^\p{L}\p{N}]+/gu, '-')
+          .replace(/^-+|-+$/g, '') || undefined;
       return (
         <h3
           key={i}
+          id={h3id}
           className="text-foreground mb-3 mt-6 font-sans text-[18px] font-semibold leading-[1.3] first:mt-0"
         >
           {children}
         </h3>
       );
+    }
     case 'h4':
       return (
         <h4
@@ -97,7 +112,7 @@ function renderNode(node: SlateNode, i: number): ReactNode {
       return (
         <ul
           key={i}
-          className="font-body text-foreground mb-4 list-disc space-y-1 pl-6 text-[15px] leading-[1.7]"
+          className="font-body text-foreground mb-4 list-disc space-y-1 ps-6 text-[15px] leading-[1.7]"
         >
           {children}
         </ul>
@@ -106,7 +121,7 @@ function renderNode(node: SlateNode, i: number): ReactNode {
       return (
         <ol
           key={i}
-          className="font-body text-foreground mb-4 list-decimal space-y-1 pl-6 text-[15px] leading-[1.7]"
+          className="font-body text-foreground mb-4 list-decimal space-y-1 ps-6 text-[15px] leading-[1.7]"
         >
           {children}
         </ol>
@@ -117,7 +132,7 @@ function renderNode(node: SlateNode, i: number): ReactNode {
       return (
         <a
           key={i}
-          href={node.url ?? '#'}
+          href={safeUrl(node.url)}
           {...(node.newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
           className="text-accent decoration-accent/30 hover:decoration-accent underline underline-offset-2 transition-colors"
         >
@@ -126,7 +141,7 @@ function renderNode(node: SlateNode, i: number): ReactNode {
       );
     case 'blockquote':
       return (
-        <blockquote key={i} className="border-accent/40 text-muted my-5 border-l-[3px] pl-4 italic">
+        <blockquote key={i} className="border-accent/40 text-muted my-5 border-s-[3px] ps-4 italic">
           {children}
         </blockquote>
       );
@@ -136,7 +151,7 @@ function renderNode(node: SlateNode, i: number): ReactNode {
       return (
         <figure key={i} className="my-6">
           <img
-            src={media.url}
+            src={safeUrl(media.url)}
             alt={media.alt ?? ''}
             width={media.width ?? undefined}
             height={media.height ?? undefined}

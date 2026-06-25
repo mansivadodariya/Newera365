@@ -1,6 +1,6 @@
 {
   "buildCommand": "npx turbo run build --filter=@newera365/web...",
-  "installCommand": "npm install",
+  "installCommand": "npm ci",
   "outputDirectory": "apps/web/.next",
   "framework": "nextjs",
   "headers": [

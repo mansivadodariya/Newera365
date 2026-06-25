@@ -148,6 +148,28 @@ const migrations: Array<{ description: string; sql: string }> = [
     description: 'market_analysis_rels.media_id',
     sql: `ALTER TABLE market_analysis_rels ADD COLUMN IF NOT EXISTS media_id integer REFERENCES media(id);`,
   },
+  // ── News: featuredImage upload. Payload v2's postgres adapter stores upload
+  //    targets in <table>_rels (path + media_id), not a main-table column. News had
+  //    no relationship/upload fields, so news_rels never existed — create it mirroring
+  //    blog_posts_rels, otherwise every save of a News doc with featuredImage 500s. ──
+  {
+    description: 'news_rels table (featuredImage)',
+    sql: `
+      CREATE TABLE IF NOT EXISTS news_rels (
+        id serial PRIMARY KEY,
+        "order" integer,
+        parent_id integer NOT NULL,
+        path varchar NOT NULL,
+        media_id integer,
+        CONSTRAINT news_rels_parent_fk FOREIGN KEY (parent_id) REFERENCES news(id) ON DELETE CASCADE,
+        CONSTRAINT news_rels_media_fk FOREIGN KEY (media_id) REFERENCES media(id) ON DELETE CASCADE
+      );
+      CREATE INDEX IF NOT EXISTS news_rels_order_idx ON news_rels USING btree ("order");
+      CREATE INDEX IF NOT EXISTS news_rels_parent_idx ON news_rels USING btree (parent_id);
+      CREATE INDEX IF NOT EXISTS news_rels_path_idx ON news_rels USING btree (path);
+      CREATE INDEX IF NOT EXISTS news_rels_media_id_idx ON news_rels USING btree (media_id);
+    `,
+  },
   // ── SiteSettings: analyst profile fields (snake_case — drizzle adapter naming for globals) ──
   {
     description: 'site_settings.analyst_initials',

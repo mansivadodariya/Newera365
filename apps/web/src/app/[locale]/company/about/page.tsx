@@ -1,12 +1,12 @@
 import { setRequestLocale } from 'next-intl/server';
 import { AboutPage, CtaBanner } from '@newera365/ui';
-import type { CmsTeamMemberItem, CmsAwardItem } from '@newera365/ui';
-import { getTeamMembers, getAwards } from '@/lib/cms';
-import type { CmsTeamMember, CmsAward, CmsMedia } from '@/lib/cms';
+import type { CmsTeamMemberItem, CmsMilestoneItem } from '@newera365/ui';
+import { getTeamMembers, getMilestones } from '@/lib/cms';
+import type { CmsTeamMember, CmsMedia, CmsMilestone } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'About Us | NewEra365',
+  title: 'About Us',
   description: 'Our story, our team, and our mission to democratise professional trading.',
 };
 
@@ -26,29 +26,21 @@ function mapTeamMember(m: CmsTeamMember): CmsTeamMemberItem {
   };
 }
 
-function mapAward(a: CmsAward): CmsAwardItem {
-  return {
-    id: a.id,
-    title: a.title,
-    date: a.date,
-    description: a.description,
-    logoUrl: resolveUrl(a.logo),
-    logoAlt: a.title,
-    externalUrl: a.externalUrl,
-  };
+function mapMilestone(m: CmsMilestone): CmsMilestoneItem {
+  return { year: m.year, label: m.label, description: m.description };
 }
 
 export default async function AboutRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  const [members, awards] = await Promise.all([
+  const [members, milestones] = await Promise.all([
     getTeamMembers(params.locale),
-    getAwards(params.locale),
+    getMilestones(params.locale),
   ]);
   return (
     <>
       <AboutPage
         team={members.length > 0 ? members.map(mapTeamMember) : undefined}
-        awards={awards.length > 0 ? awards.map(mapAward) : undefined}
+        milestones={milestones.length > 0 ? milestones.map(mapMilestone) : undefined}
       />
       <CtaBanner />
     </>

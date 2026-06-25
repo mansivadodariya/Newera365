@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
-import { seoFields, slugField } from './_fields';
+import { publicReadWhere, seoFields, slugField } from './_fields';
 
 // Powers /webinars — upcoming sessions + replay archive.
 export const Webinars: CollectionConfig = {
@@ -9,7 +9,7 @@ export const Webinars: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'speaker', 'status', 'scheduledAt'],
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { not_equals: 'cancelled' } }) },
   fields: [
     { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),

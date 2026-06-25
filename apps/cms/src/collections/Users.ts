@@ -1,21 +1,18 @@
 import type { CollectionConfig } from 'payload/types';
 import { escapeHtml } from '../email/escapeHtml';
-import {
-  totpSetupHandler,
-  totpVerifyHandler,
-  totpDisableHandler,
-  enforceTotpOnLogin,
-} from '../auth/totp';
 
 const adminOnly = ({ req }: { req: { user?: unknown } }): boolean => Boolean(req.user);
-// totpSecret / totpTempSecret must never be serialised to any API response.
-const denyRead = (): boolean => false;
 
 // CMS admin-panel staff accounts. Not content-locale-specific.
 // All users have the admin role — there is no editor tier.
 export const Users: CollectionConfig = {
   slug: 'users',
   auth: {
+    // Brute-force protection. Payload's built-in POST /api/users/login is not
+    // covered by the custom Postgres rate limiter, so account lockout is the
+    // primary defence for the admin panel (NE code-review CR-3).
+    maxLoginAttempts: 5,
+    lockTime: 600_000, // 10 minutes, in ms
     forgotPassword: {
       generateEmailSubject: () => 'Reset your NewEra365 admin password',
       generateEmailHTML: ({ token, user } = {}) => {
@@ -37,7 +34,7 @@ export const Users: CollectionConfig = {
   admin: {
     group: 'Administration',
     useAsTitle: 'email',
-    defaultColumns: ['email', 'name', 'totpEnabled'],
+    defaultColumns: ['email', 'name'],
   },
   access: {
     read: adminOnly,
@@ -45,49 +42,5 @@ export const Users: CollectionConfig = {
     update: adminOnly,
     delete: adminOnly,
   },
-  // Require a valid TOTP code at login when the user has 2FA enabled.
-  // The admin login form supplies `otp` via the TwoFactorLoginField component.
-  hooks: {
-    beforeLogin: [
-      async ({ req, user }) => {
-        await enforceTotpOnLogin(req, user as { id: string | number; totpEnabled?: boolean });
-        return user;
-      },
-    ],
-  },
-  // TOTP enrolment endpoints — full paths /api/users/2fa/{setup,verify,disable}.
-  // req.user is populated by Payload's auth middleware on collection endpoints.
-  endpoints: [
-    { path: '/2fa/setup', method: 'post', handler: totpSetupHandler },
-    { path: '/2fa/verify', method: 'post', handler: totpVerifyHandler },
-    { path: '/2fa/disable', method: 'post', handler: totpDisableHandler },
-  ],
-  fields: [
-    { name: 'name', type: 'text', required: true },
-    {
-      name: 'totpEnabled',
-      type: 'checkbox',
-      defaultValue: false,
-      label: 'Two-factor authentication enabled',
-      admin: {
-        readOnly: true,
-        description:
-          'Set automatically when the user enrols a TOTP authenticator via /api/users/2fa/verify. Disable via /api/users/2fa/disable.',
-      },
-    },
-    // Confirmed TOTP secret. Hidden + read-denied so it is never returned by the API.
-    {
-      name: 'totpSecret',
-      type: 'text',
-      hidden: true,
-      access: { read: denyRead },
-    },
-    // Pending secret during enrolment, before the first successful verify.
-    {
-      name: 'totpTempSecret',
-      type: 'text',
-      hidden: true,
-      access: { read: denyRead },
-    },
-  ],
+  fields: [{ name: 'name', type: 'text', required: true }],
 };

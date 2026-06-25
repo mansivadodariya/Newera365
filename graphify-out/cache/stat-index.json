@@ -16,7 +16,7 @@
   },
   "D:\\NewEra365\\newera365-app\\.husky\\_\\husky.sh": {
     "size": 160,
-    "mtime_ns": 1780054315371864800,
+    "mtime_ns": 1781942460183465200,
     "hash": "6db0aa99aece6ebd17bbc27c5e5287a462fb39cc4a2ca3a82a6277c166bdb3a0"
   },
   "D:\\NewEra365\\newera365-app\\apps\\cms\\migrations\\001_slug_locale_unique_indexes.sql": {
@@ -35,9 +35,9 @@
     "hash": "09a97c6ee0e171cc0e52c5760cb7eaa8ef9c27c032df859874ace97f45401f3a"
   },
   "D:\\NewEra365\\newera365-app\\apps\\cms\\migrations\\004_rename_enum_columns_to_camelcase.sql": {
-    "size": 447,
-    "mtime_ns": 1779868174065486900,
-    "hash": "e17e7ca5c34e5ff55a527d959ef82303bb1f2e3a806e58f2fee9beb183f71181"
+    "size": 938,
+    "mtime_ns": 1781777738869602100,
+    "hash": "6d7d03afe81861af149bcedbbdebd1ee8b566e6fdb9854edf9bd284bc52fabd9"
   },
   "D:\\NewEra365\\newera365-app\\apps\\cms\\nodemon.json": {
     "size": 98,
@@ -45,9 +45,9 @@
     "hash": "43e56e28c034501f95508c01be3287dc1ab60dcb422ab09f9806468875aebdcb"
   },
   "D:\\NewEra365\\newera365-app\\apps\\cms\\package.json": {
-    "size": 1697,
-    "mtime_ns": 1780501955258514600,
-    "hash": "dcd28dd731c9c9b507be69c73a4dbfec57240b5138a4191e8e2c2c0314a342cf"
+    "size": 2015,
+    "mtime_ns": 1781942392884316400,
+    "hash": "e69509e7a419153c9433c9385f9c7988112cfffeb7c6fb8c3604a916a0e9ed42"
   },
   "D:\\NewEra365\\newera365-app\\apps\\cms\\tsconfig.json": {
     "size": 411,
@@ -70,19 +70,19 @@
     "hash": "5dc1ec9ff29eea3d267c87d139aa732af72d6f2cb28dac3734601baa68c60cd6"
   },
   "D:\\NewEra365\\newera365-app\\apps\\web\\messages\\ar.json": {
-    "size": 71395,
-    "mtime_ns": 1781115705257156800,
-    "hash": "d2bf40c0e3153b0b5e78020cd12502566ab9d8def9857454513a50d2625c562c"
+    "size": 86044,
+    "mtime_ns": 1782139726939578300,
+    "hash": "ff4f35ad538c72c3f4108da5f3f9c80cc1ac1382ef0f2edf31f7c9f1b6de8bdf"
   },
   "D:\\NewEra365\\newera365-app\\apps\\web\\messages\\en.json": {
-    "size": 53055,
-    "mtime_ns": 1781115705297068100,
-    "hash": "99bb00352cdadb24773c2739742df56cf03609d1d47647bdf11250c1ccac3682"
+    "size": 64442,
+    "mtime_ns": 1782139722820776100,
+    "hash": "4c3928b98777343557d31fd978335ff36289f81d588b6c1454146dc3e4c0274a"
   },
   "D:\\NewEra365\\newera365-app\\apps\\web\\package.json": {
-    "size": 1049,
-    "mtime_ns": 1780502408133336000,
-    "hash": "3f73f36255854ac08b717cace64cd2e5e6f3552daac431e8c66fc33faaeb72b6"
+    "size": 1095,
+    "mtime_ns": 1781549266431134000,
+    "hash": "12bc4437bb2d341d085cc410bf0312a6b7065a75d0f0ec5d90c2ec049e4eab36"
   },
   "D:\\NewEra365\\newera365-app\\apps\\web\\tsconfig.json": {
     "size": 663,
@@ -95,9 +95,9 @@
     "hash": "28c4c72feb9a92299685bb80860a42a80a92cf4423ddbfcc2fd0b431d76dd5a0"
   },
   "D:\\NewEra365\\newera365-app\\package.json": {
-    "size": 937,
-    "mtime_ns": 1780502408854306200,
-    "hash": "f752c9020cf39e982cc855d36a7a320419230d883fc09118621380f9b60fc618"
+    "size": 966,
+    "mtime_ns": 1781898209694774400,
+    "hash": "40abae15debba2d50355c80a23eab22b823c17f1cfcd0e90ab175e9588e6fb81"
   },
   "D:\\NewEra365\\newera365-app\\packages\\config\\package.json": {
     "size": 477,
@@ -120,9 +120,9 @@
     "hash": "b166b645f712fb45dc39d763809d44c7159dc7d9b21aece780dd4444e61891bf"
   },
   "D:\\NewEra365\\newera365-app\\packages\\ui\\package.json": {
-    "size": 622,
-    "mtime_ns": 1780502408919381400,
-    "hash": "49d4f6ab410bbaf7107e7554c0fb7f6413a77450a3cd3300f70d53eb488c59f9"
+    "size": 727,
+    "mtime_ns": 1781540961347848300,
+    "hash": "3334b53132cf2112205a9ae919fe7a080446cb723b5c539a364c173cacfee901"
   },
   "D:\\NewEra365\\newera365-app\\packages\\ui\\tsconfig.json": {
     "size": 166,
@@ -140,9 +140,9 @@
     "hash": "62be9924e162132f8ecd3414f6d91a01b291fdf3fde8ef3978c8a6f60f5c20d7"
   },
   "D:\\NewEra365\\newera365-app\\vercel.json": {
-    "size": 444,
-    "mtime_ns": 1780934741992419200,
-    "hash": "86edc47daad6b8555badf5bb11628ebee65c03f8254125161b40aa2432eefbfb"
+    "size": 439,
+    "mtime_ns": 1781947813138338100,
+    "hash": "74d61cad1cf3bec59c13cc6a53b3f34d3e5b24835ad7064fceba3280549adb9d"
   },
   "D:\\NewEra365\\newera365-app\\.husky\\_\\applypatch-msg": {
     "size": 39,
@@ -1415,14 +1415,14 @@
     "hash": "f2f1fa06d56a647fd9be23db8298465dcdf199555bc0525b05cc3b1325f9914f"
   },
   "D:\\NewEra365\\newera365-app\\CLAUDE.md": {
-    "size": 15399,
-    "mtime_ns": 1781166029190264700,
-    "hash": "b9503b29a4ad47f88b5882b5f7b68a54af26f43a586ba9cec6c33d9a57bf2c23"
+    "size": 17912,
+    "mtime_ns": 1781942416256143100,
+    "hash": "9269a81af785611a744084dde18363edc9dffaacde35d1f64a4aebeb80db7fa1"
   },
   "D:\\NewEra365\\newera365-app\\GUIDE.md": {
-    "size": 10286,
-    "mtime_ns": 1779297713402292400,
-    "hash": "4652eab3d04e9db2c0f1fd6218955916aa07c050b12dec709055279a4574236d"
+    "size": 10646,
+    "mtime_ns": 1781689929160650500,
+    "hash": "dfb76bf87d770a5c095c58e85a3612c9a88da2ba186d318e8bca11e55835c25a"
   },
   "D:\\NewEra365\\newera365-app\\README.md": {
     "size": 1322,
@@ -1698,5 +1698,55 @@
     "size": 13921,
     "mtime_ns": 1779722235307809900,
     "hash": "df19aed128bbba7f67ecd589e3754b7995fafe3ffea07f19946b7994f5fce307"
+  },
+  "D:\\NewEra365\\newera365-app\\docs\\cms-integration-audit-prompt.md": {
+    "size": 9303,
+    "mtime_ns": 1781688014090557400,
+    "hash": "b9ed2c57a6f4ec251919bf628bcafd364d7fa69910e3ec9ed084bcaf6b7ad69c"
+  },
+  "D:\\NewEra365\\newera365-app\\PRODUCTION_CHECKLIST.md": {
+    "size": 17727,
+    "mtime_ns": 1781942427341899900,
+    "hash": "d3e11cbf395bb4535e8caf47450092b3060048851f4031eeda237215cfd10ec8"
+  },
+  "D:\\NewEra365\\newera365-app\\code-review\\01-cms-api-security.md": {
+    "size": 18950,
+    "mtime_ns": 1781775388213340400,
+    "hash": "0259e9490e99461afd0edbf2cf1e95c2c43608e5c34466f6f699fa57775ce746"
+  },
+  "D:\\NewEra365\\newera365-app\\code-review\\02-cms-data-collections.md": {
+    "size": 17646,
+    "mtime_ns": 1781775485519598300,
+    "hash": "22bd3dcd0ec76deb83fb76f6525e50eb0935224f9e29e421e9d13a99c3a6456f"
+  },
+  "D:\\NewEra365\\newera365-app\\code-review\\03-web-frontend.md": {
+    "size": 11717,
+    "mtime_ns": 1781775869159145400,
+    "hash": "435bcf7f88ee683fe7036b273f6191a7bf8e30d2ae029e9201a328f78a814150"
+  },
+  "D:\\NewEra365\\newera365-app\\code-review\\04-packages-mt5.md": {
+    "size": 12417,
+    "mtime_ns": 1781775827996701700,
+    "hash": "f9895e2a2d9fe496e3ce8dfea6f5ca6355ced64aff74356f0d16cdc0fd0a877f"
+  },
+  "D:\\NewEra365\\newera365-app\\code-review\\FIX-REPORT.md": {
+    "size": 6270,
+    "mtime_ns": 1781778321697732500,
+    "hash": "3c22eb32ea94617b8faef0aa87703c1a2b308772fa49a22deb07d609bdfeb81c"
+  },
+  "D:\\NewEra365\\newera365-app\\code-review\\REVIEW.md": {
+    "size": 13797,
+    "mtime_ns": 1781776049980415300,
+    "hash": "63ecacf52fbcb0996afd05066b3ac52ce91da659f5f734aca39a76c6e7eca477"
+  },
+  "D:\\NewEra365\\newera365-app\\docs\\zeptomail-smtp-migration-plan.md": {
+    "size": 15596,
+    "mtime_ns": 1781801692081836100,
+    "hash": "98f20b8919de8277190e49953ffd3b78f89d19b0b200a53467582079c5c1a4ba"
+  },
+  "D:\\NewEra365\\newera365-app\\.audit\\PROGRESS.md": {
+    "size": 9851,
+    "mtime_ns": 1782039285824383400,
+    "hash": "3073bfc496abc258d22aba5cf66dd83b89ad23b7971d38a2db7cd344ab975793"
   }
 }

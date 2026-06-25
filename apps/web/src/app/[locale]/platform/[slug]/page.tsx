@@ -4,7 +4,7 @@ import { PlatformPage, WebTraderPage, CtaBanner } from '@newera365/ui';
 import type { CmsPlatformDownloads } from '@newera365/ui';
 import { getSiteSettings } from '@/lib/cms';
 
-const VALID_SLUGS = ['mt5', 'metatrader-5', 'webtrader', 'mobile', 'tools'] as const;
+const VALID_SLUGS = ['mt5', 'metatrader-5', 'webtrader', 'tools'] as const;
 type PlatformSlug = (typeof VALID_SLUGS)[number];
 
 interface Props {

@@ -4,10 +4,12 @@ import {
   Pulse,
   HeroSkeleton,
   TabRowSkeleton,
-  FormSkeleton,
+  DarkCtaSkeleton,
   CtaBannerSkeleton,
 } from './SkeletonBlocks';
 
+// Mirrors FaqPage: hero + search, category tabs, FAQ accordion list, the page's
+// own dark "still stuck" CTA, then the route CtaBanner.
 export function SupportPageSkeleton() {
   return (
     <div className="bg-transparent">
@@ -36,7 +38,7 @@ export function SupportPageSkeleton() {
           </div>
         </div>
       </div>
-      <FormSkeleton fields={3} />
+      <DarkCtaSkeleton />
       <CtaBannerSkeleton />
     </div>
   );

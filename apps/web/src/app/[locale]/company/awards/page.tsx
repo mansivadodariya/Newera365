@@ -6,7 +6,7 @@ import type { CmsAward } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Awards & Recognition | NewEra365',
+  title: 'Awards & Recognition',
   description:
     'Industry awards and recognition received by NewEra365 for execution quality, platform excellence and customer support.',
 };
@@ -18,6 +18,7 @@ function mapAward(a: CmsAward): AwardCardItem {
     organisation: null,
     year: a.date ? new Date(a.date).getFullYear().toString() : null,
     description: a.description ?? null,
+    category: a.awardCategory ?? null,
     imageUrl: a.logo && typeof a.logo === 'object' && 'url' in a.logo ? (a.logo.url ?? null) : null,
     externalUrl: a.externalUrl ?? null,
   };

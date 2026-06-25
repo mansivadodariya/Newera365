@@ -6,7 +6,7 @@ import type { CmsEducationContent, CmsMedia } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Videos & Audio | NewEra365',
+  title: 'Videos & Audio',
   description:
     'Lessons, interviews, breakdowns and discussions from our trading desk and partners.',
 };
@@ -23,6 +23,7 @@ function mapMediaItem(item: CmsEducationContent): CmsVideoItem {
     videoEmbed: item.videoEmbed,
     description: item.seoDescription,
     mediaCategory: item.mediaCategory,
+    isFeatured: item.isFeatured,
   };
 }
 

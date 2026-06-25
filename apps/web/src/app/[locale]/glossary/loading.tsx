@@ -1,5 +1,5 @@
-import { EducationHubSkeleton } from '@newera365/ui';
+import { GlossarySkeleton } from '@newera365/ui';
 
 export default function Loading() {
-  return <EducationHubSkeleton />;
+  return <GlossarySkeleton />;
 }

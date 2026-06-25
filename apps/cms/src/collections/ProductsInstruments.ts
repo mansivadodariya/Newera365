@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload/types';
+import { publicReadWhere } from './_fields';
 import Mt5SyncStatusCell from '../components/Mt5SyncStatusCell';
 
 // Powers all 6 Markets pages, the 3 calculator widgets, and /fees-charges.
@@ -26,7 +27,7 @@ export const ProductsInstruments: CollectionConfig = {
     description:
       'Each instrument can pull live data from MT5 or be updated manually. Use the "Use MT5 Live Data" toggle per row to switch modes.',
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'active' } }) },
   fields: [
     // ── Identity ────────────────────────────────────────────────────────────
     {
@@ -52,6 +53,17 @@ export const ProductsInstruments: CollectionConfig = {
       admin: {
         description:
           'Exact symbol string in the MT5 Manager API feed — must match the broker server precisely. Required when "Use MT5 Live Data" is ON.',
+      },
+    },
+    {
+      name: 'tvSymbol',
+      type: 'text',
+      maxLength: 50,
+      admin: {
+        description:
+          'TradingView chart symbol in EXCHANGE:SYMBOL format, e.g. NASDAQ:AAPL, OANDA:EURUSD, TVC:USOIL, AMEX:SPY. ' +
+          'Powers the live chart on the Markets pages — it must be a real TradingView symbol or the chart shows "symbol doesn\'t exist". ' +
+          'Look it up at tradingview.com/symbols. If blank, the chart falls back to a category default.',
       },
     },
     {

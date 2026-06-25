@@ -37,6 +37,19 @@ export function PlatformPageSkeleton() {
           </div>
         </div>
       </div>
+
+      {/* Works everywhere — dark band with device pills */}
+      <div className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
+        <div className="mx-auto flex max-w-[390px] flex-col items-center gap-4 md:max-w-2xl xl:max-w-[1200px]">
+          <div className="h-8 w-2/3 animate-pulse rounded bg-white/10" />
+          <div className="mt-2 flex gap-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-[44px] w-[100px] animate-pulse rounded-full bg-white/10" />
+            ))}
+          </div>
+        </div>
+      </div>
+
       <CtaBannerSkeleton />
     </div>
   );

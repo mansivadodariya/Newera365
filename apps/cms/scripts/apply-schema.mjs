@@ -140,6 +140,7 @@ const migrations = [
 
 async function run() {
   const client = await pool.connect();
+  let failures = 0;
   try {
     for (const sql of migrations) {
       const label = sql.split('\n')[0].slice(0, 80);
@@ -151,6 +152,7 @@ async function run() {
         if (err.code === '42701' || err.code === '42P07' || err.message.includes('already exists')) {
           console.log(`  – already applied: ${label}`);
         } else {
+          failures++;
           console.error(`  ✗ FAILED: ${label}`);
           console.error(`    ${err.message}`);
         }
@@ -159,6 +161,12 @@ async function run() {
   } finally {
     client.release();
     await pool.end();
+  }
+  // Exit non-zero on real failures so CI/operators don't read a green run as success
+  // when statements actually failed (NE code-review I-7).
+  if (failures > 0) {
+    console.error(`\nSchema apply finished with ${failures} failure(s).`);
+    process.exit(1);
   }
   console.log('\nSchema apply complete.');
 }

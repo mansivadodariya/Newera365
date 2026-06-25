@@ -1,0 +1,207 @@
+{
+  "nodes": [
+    {
+      "id": "d_newera365_newera365_app_code_review_04_packages_mt5_md",
+      "label": "04-packages-mt5.md",
+      "file_type": "document",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "code_review_04_packages_mt5_area_4_shared_ui_packages_ui_mt5_service",
+      "label": "Area 4 \u2014 Shared UI (packages/ui) & MT5 Service",
+      "file_type": "document",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L38"
+    },
+    {
+      "id": "code_review_04_packages_mt5_summary",
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L40"
+    },
+    {
+      "id": "code_review_04_packages_mt5_warnings",
+      "label": "Warnings",
+      "file_type": "document",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L80"
+    },
+    {
+      "id": "code_review_04_packages_mt5_warning_richtext_renders_link_href_and_image_src_with_no_url_scheme_allowlist_stored_javascript_data_vector",
+      "label": "[WARNING] RichText renders link `href` and image `src` with no URL-scheme allowlist (stored `javascript:`/`data:` vector)",
+      "file_type": "document",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L82"
+    },
+    {
+      "id": "code_review_04_packages_mt5_warning_cms_supplied_href_src_rendered_without_scheme_validation_across_7_page_components",
+      "label": "[WARNING] CMS-supplied `href`/`src` rendered without scheme validation across 7 page components",
+      "file_type": "document",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L119"
+    },
+    {
+      "id": "code_review_04_packages_mt5_warning_mt5_service_uses_fully_permissive_cors_cors_with_no_origin_allowlist",
+      "label": "[WARNING] mt5-service uses fully permissive CORS (`cors()` with no origin allowlist)",
+      "file_type": "document",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L143"
+    },
+    {
+      "id": "code_review_04_packages_mt5_warning_all_four_public_forms_fall_back_to_http_localhost_3001_when_next_public_cms_url_is_unset_silent_prod_failure",
+      "label": "[WARNING] All four public forms fall back to `http://localhost:3001` when `NEXT_PUBLIC_CMS_URL` is unset \u2014 silent prod failure",
+      "file_type": "document",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L172"
+    },
+    {
+      "id": "code_review_04_packages_mt5_info",
+      "label": "Info",
+      "file_type": "document",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L198"
+    },
+    {
+      "id": "code_review_04_packages_mt5_info_tradingview_embed_config_is_built_from_props_without_an_explicit_symbol_allowlist",
+      "label": "[INFO] TradingView embed config is built from props without an explicit symbol allowlist",
+      "file_type": "document",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L200"
+    },
+    {
+      "id": "code_review_04_packages_mt5_info_next_locale_cookie_set_without_secure_flag",
+      "label": "[INFO] `NEXT_LOCALE` cookie set without `Secure` flag",
+      "file_type": "document",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L215"
+    },
+    {
+      "id": "code_review_04_packages_mt5_info_richtext_heading_ids_can_collide_producing_duplicate_dom_id_s",
+      "label": "[INFO] RichText heading IDs can collide, producing duplicate DOM `id`s",
+      "file_type": "document",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L228"
+    },
+    {
+      "id": "code_review_04_packages_mt5_info_authmodal_lacks_focus_trapping_initial_focus_for_an_aria_modal_dialog",
+      "label": "[INFO] AuthModal lacks focus trapping / initial focus for an `aria-modal` dialog",
+      "file_type": "document",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L240"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_newera365_newera365_app_code_review_04_packages_mt5_md",
+      "target": "code_review_04_packages_mt5_area_4_shared_ui_packages_ui_mt5_service",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_04_packages_mt5_area_4_shared_ui_packages_ui_mt5_service",
+      "target": "code_review_04_packages_mt5_summary",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L40",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_04_packages_mt5_area_4_shared_ui_packages_ui_mt5_service",
+      "target": "code_review_04_packages_mt5_warnings",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_04_packages_mt5_warnings",
+      "target": "code_review_04_packages_mt5_warning_richtext_renders_link_href_and_image_src_with_no_url_scheme_allowlist_stored_javascript_data_vector",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L82",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_04_packages_mt5_warnings",
+      "target": "code_review_04_packages_mt5_warning_cms_supplied_href_src_rendered_without_scheme_validation_across_7_page_components",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L119",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_04_packages_mt5_warnings",
+      "target": "code_review_04_packages_mt5_warning_mt5_service_uses_fully_permissive_cors_cors_with_no_origin_allowlist",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L143",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_04_packages_mt5_warnings",
+      "target": "code_review_04_packages_mt5_warning_all_four_public_forms_fall_back_to_http_localhost_3001_when_next_public_cms_url_is_unset_silent_prod_failure",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L172",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_04_packages_mt5_area_4_shared_ui_packages_ui_mt5_service",
+      "target": "code_review_04_packages_mt5_info",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L198",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_04_packages_mt5_info",
+      "target": "code_review_04_packages_mt5_info_tradingview_embed_config_is_built_from_props_without_an_explicit_symbol_allowlist",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L200",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_04_packages_mt5_info",
+      "target": "code_review_04_packages_mt5_info_next_locale_cookie_set_without_secure_flag",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L215",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_04_packages_mt5_info",
+      "target": "code_review_04_packages_mt5_info_richtext_heading_ids_can_collide_producing_duplicate_dom_id_s",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L228",
+      "weight": 1.0
+    },
+    {
+      "source": "code_review_04_packages_mt5_info",
+      "target": "code_review_04_packages_mt5_info_authmodal_lacks_focus_trapping_initial_focus_for_an_aria_modal_dialog",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "code-review/04-packages-mt5.md",
+      "source_location": "L240",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

@@ -1,4 +1,3 @@
-import { createHash } from 'crypto';
 import type { CollectionConfig } from 'payload/types';
 
 // Persists every contact form submission so data is never lost on email failures.

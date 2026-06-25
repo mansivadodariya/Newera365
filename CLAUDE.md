@@ -50,7 +50,7 @@ App Router. All pages live under `src/app/[locale]/`; `[locale]` is `en` or `ar`
 
 ### `apps/cms` — Payload CMS v2 + Express
 
-Config: `src/payload.config.ts`. Server entry: `src/server.ts`. Database: PostgreSQL via `@payloadcms/db-postgres` (Neon). **17 collections** in `src/collections/`: Users, Media, BlogPosts, MarketAnalysis, News, ResearchReports, EducationContent, Webinars, ProductsInstruments, AccountTypes, FAQs, NewsletterSubscribers, Careers, LegalPages, CompanyContent, TeamMembers, WebinarRegistrations — plus a `SiteSettings` global in `src/globals/`.
+Config: `src/payload.config.ts`. Server entry: `src/server.ts`. Database: PostgreSQL via `@payloadcms/db-postgres` (Neon). **24 collections** in `src/collections/`: Users, Media, BlogPosts, MarketAnalysis, News, ResearchReports, AnalystCalls, EducationContent, Webinars, WebinarRegistrations, ProductsInstruments, AccountTypes, PaymentMethods, Promotions, IBContent, FAQs, ContactSubmissions, NewsletterSubscribers, Careers, TeamMembers, Awards, CompanyMilestones, MediaPress, LegalPages — plus a `SiteSettings` global in `src/globals/`. (The legacy `CompanyContent` collection was removed — `Awards` and `MediaPress` cover its awards/press content, which the frontend actually reads.) `CompanyMilestones` (`company-milestones`) backs the /company/about journey timeline; localized `label`/`description`, non-localized `year`/`sortOrder`; tables created via `migrate-company-milestones-table.ts`, seeded EN+AR via `seed-milestones-only.ts`.
 
 Custom non-CMS REST endpoints are all implemented in `src/endpoints/index.ts`:
 
@@ -68,8 +68,6 @@ Custom non-CMS REST endpoints are all implemented in `src/endpoints/index.ts`:
 | `POST /api/webinars/register`        | 10 req/min/IP; creates `webinar-registrations` record             |
 
 Rate limiting is backed by a Postgres table `rate_limit_hits` (created by `src/rateLimit/postgresStore.ts`, outside Payload's schema). On CMS restarts, drizzle schema push will prompt to drop this unknown table — type `y` to accept (it's transient rate-limit data, not content).
-
-TOTP 2FA for admin users is implemented in `src/auth/totp.ts` (server-only) and aliased to `src/auth/totp.mock.ts` in the webpack admin bundle to avoid Node-only imports reaching the browser.
 
 ### `apps/mt5-service` — Mock MT5 bridge
 
@@ -95,6 +93,10 @@ Brand tokens are placeholders pending Gate 2 design handoff (NE-024).
 
 **`generate:types` strips a required `@ts-ignore`** — after running `npm run generate:types --workspace=@newera365/cms`, re-add the `@ts-ignore` comment that the generator removes from `apps/cms/src/payload-types.ts` or `tsc` type-check will fail.
 
+**Schema drift (`push: false`)** — because the postgres adapter runs with `push: false`, fields added to a collection after its initial migration do **not** create their DB columns automatically, and every read of that collection then 500s (`column X does not exist`). Backfill missing columns by adding idempotent `ALTER TABLE … ADD COLUMN IF NOT EXISTS` entries to `apps/cms/src/scripts/migrate-missing-columns.ts` and running it (`ts-node --transpile-only src/scripts/migrate-missing-columns.ts` from `apps/cms`; it connects to the **direct** Neon endpoint for DDL). The drizzle adapter (`@payloadcms/db-postgres@0.8.10`) expects **snake_case** columns on main/array tables and **single-underscore** locale tables (`<table>_locales`, e.g. `ib_content_locales`, `promotions_locales`). (A few empty **double-underscore** `__locales` tables existed as stale artifacts of an abandoned migration; they were dropped — do not target them.)
+
+**Resolved — `ib_content` array tables (was NE-0xx):** the `ib_content_steps` table had been provisioned with an `integer` `id`, but Payload v2 assigns **varchar** ids to array rows, so creating/saving an IB document **with `steps`** failed (`invalid input syntax for type integer`). Fixed via `apps/cms/src/scripts/migrate-ib-steps-array-id.ts` (idempotent, transactional, direct Neon endpoint): retyped `ib_content_steps.id` and the live `ib_content_steps_locales._parent_id` to `varchar`, recreated the FK, and dropped the stale empty `ib_content__locales` / `ib_content_steps__locales` duplicates. `seed-ib-only.ts` now seeds the full EN+AR `steps` array (reusing the EN array-row ids in the AR patch so the localized rows aren't recreated), and `/trade/ib` renders the CMS steps in both locales. All IB fields, including steps, are now CMS-managed.
+
 **Payload is v2**, not v3 — APIs differ significantly. Do not use the Next.js-embedded CMS pattern; the CMS runs on a standalone Express server and is not Vercel-serverless compatible.
 
 **Arabic is a first-class locale** — every component and template must include a full RTL layout flip, not just `dir="rtl"`. Use `dir()` / `isRtl()` from `@newera365/types`.
@@ -116,7 +118,9 @@ Brand tokens are placeholders pending Gate 2 design handoff (NE-024).
 
 CI: lint → type-check → build on push to `main`/`staging` (`.github/workflows/ci.yml`). Husky pre-commit runs Prettier via lint-staged.
 
-Required env vars are validated on CMS startup: `PAYLOAD_SECRET` (warn in dev, error in prod), `FRONTEND_URL`, `RESEND_API_KEY`, `EMAIL_FROM`, `CONSENT_IP_SALT` (all error in prod only). `HEALTH_CHECK_TOKEN` must be set to a non-empty value or the `/api/health` endpoint will always return 401.
+Required env vars are validated on CMS startup: `PAYLOAD_SECRET` (warn in dev, error in prod), `FRONTEND_URL`, `SMTP_PASS` (the ZeptoMail Send Mail Token), `EMAIL_FROM`, `CONSENT_IP_SALT` (all error in prod only). `HEALTH_CHECK_TOKEN` must be set to a non-empty value or the `/api/health` endpoint will always return 401.
+
+Email is sent via **ZeptoMail SMTP** (Zoho's transactional service) through a single nodemailer transport in `apps/cms/src/email/transport.ts` (`sendMail()` helper), which also backs Payload's built-in forgot-password flow. The senders live in `apps/cms/src/email/mailer.ts`. Configure with `SMTP_HOST`/`SMTP_PORT`/`SMTP_USER` (literal `emailapikey`)/`SMTP_PASS` (Send Mail Token) + `EMAIL_FROM` (on the verified domain). With `SMTP_PASS` unset in dev, nodemailer's `jsonTransport` logs emails instead of sending. Set `SKIP_SMTP_VERIFY=true` if the host blocks SMTP ports.
 
 ## Completed Frontend Pages
 
@@ -134,10 +138,11 @@ All components live in `packages/ui/src/components/` and are exported from `pack
 
 ### Markets
 
-| Component            | Route                  | Notes                      |
-| -------------------- | ---------------------- | -------------------------- |
-| `InstrumentsPage`    | `/markets/instruments` | Full instrument spec table |
-| `MarketCategoryPage` | `/markets/[category]`  | Per-category page          |
+| Component            | Route                 | Notes             |
+| -------------------- | --------------------- | ----------------- |
+| `MarketCategoryPage` | `/markets/[category]` | Per-category page |
+
+> The standalone `/markets/instruments` route was removed; instrument specs now live within `/markets/[category]`. The old path 308-redirects to `/markets/forex` (see `redirects()` in `apps/web/next.config.mjs`) so it no longer soft-404s. `InstrumentsPage.tsx` is retained only for its `InstrumentItem` type (imported by `MarketCategoryPage`).
 
 ### Platform
 
@@ -166,7 +171,7 @@ All components live in `packages/ui/src/components/` and are exported from `pack
 | `TraderToolsPage`      | `/tools`                   | Margin/Pip/Swap calculator; all `.toLocaleString('en-US')` to avoid SSR hydration mismatch |
 | `SpreadComparatorPage` | `/tools/spread-comparator` | Instrument tabs, spread bars, annual saving panel                                          |
 | `EconomicCalendarPage` | `/tools/calendar`          | Filter by impact + currency; 3-dot impact visualization                                    |
-| `AnalystChartPage`     | `/tools/analyst-chart`     | Featured price + SVG chart + analyst commentary                                            |
+| `AnalystChartPage`     | `/research/analyst-chart`  | Featured price + SVG chart + analyst commentary                                            |
 | `LiveWatchlistPage`    | `/tools/watchlist`         | Dark table, tab filter (Indices/Futures/Bonds/Forex)                                       |
 
 ### Company

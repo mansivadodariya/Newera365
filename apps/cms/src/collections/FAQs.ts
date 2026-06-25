@@ -1,4 +1,16 @@
 import type { CollectionConfig } from 'payload/types';
+import { publicReadWhere } from './_fields';
+import CategorySelect from '../components/CategorySelect';
+
+const FAQ_CATEGORIES = [
+  'trading',
+  'accounts',
+  'deposits',
+  'withdrawals',
+  'platforms',
+  'regulation',
+  'general',
+];
 
 // Powers /faqs — searchable accordion.
 export const FAQs: CollectionConfig = {
@@ -8,23 +20,20 @@ export const FAQs: CollectionConfig = {
     useAsTitle: 'question',
     defaultColumns: ['question', 'category', 'status'],
   },
-  access: { read: () => true },
+  access: { read: publicReadWhere({ status: { equals: 'active' } }) },
   fields: [
     { name: 'question', type: 'text', required: true, maxLength: 300, localized: true },
     { name: 'answer', type: 'richText', required: true, localized: true },
     {
       name: 'category',
-      type: 'select',
+      type: 'text',
       required: true,
-      options: [
-        'trading',
-        'accounts',
-        'deposits',
-        'withdrawals',
-        'platforms',
-        'regulation',
-        'general',
-      ],
+      maxLength: 50,
+      admin: {
+        description:
+          'Category filter on the FAQ page. Pick an existing one or type a new category.',
+        components: { Field: CategorySelect(FAQ_CATEGORIES) },
+      },
     },
     {
       name: 'sortOrder',

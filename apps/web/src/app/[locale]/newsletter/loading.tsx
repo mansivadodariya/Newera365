@@ -1,5 +1,5 @@
-import { SupportPageSkeleton } from '@newera365/ui';
+import { NewsletterPageSkeleton } from '@newera365/ui';
 
 export default function Loading() {
-  return <SupportPageSkeleton />;
+  return <NewsletterPageSkeleton />;
 }

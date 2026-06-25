@@ -1,24 +1,113 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-export function NewsletterPage() {
+interface NewsletterPageProps {
+  initialState?: 'confirmed' | 'unsubscribed';
+}
+
+export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
   const t = useTranslations('newsletter');
+  const locale = useLocale();
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_CMS_URL ?? 'http://localhost:3001'}/api/newsletter/subscribe`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, locale }),
+        },
+      );
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError((data as { error?: string }).error ?? 'Something went wrong. Please try again.');
+      }
+    } catch {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (initialState === 'confirmed' || initialState === 'unsubscribed') {
+    const isConfirmed = initialState === 'confirmed';
+    return (
+      <section className="min-h-[60vh] px-5 py-20">
+        <div className="mx-auto flex max-w-[390px] flex-col items-center text-center md:max-w-md">
+          <div
+            className={`mb-6 flex h-16 w-16 items-center justify-center rounded-full ${isConfirmed ? 'bg-accent' : 'bg-[#f2f2f4] dark:bg-[#1a1c22]'}`}
+          >
+            {isConfirmed ? (
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M5 12l5 5L20 7"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            ) : (
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="text-[#6b7280]"
+              >
+                <path
+                  d="M18 6L6 18M6 6l12 12"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            )}
+          </div>
+          <h1 className="text-foreground mb-3 font-sans text-[28px] font-semibold leading-[1.15]">
+            {isConfirmed ? t('confirmedHeading') : t('unsubscribedHeading')}
+          </h1>
+          <p className="font-body text-muted mb-8 text-[14px] leading-relaxed">
+            {isConfirmed ? t('confirmedDesc') : t('unsubscribedDesc')}
+          </p>
+          {isConfirmed ? (
+            <a
+              href={`/${locale}/newsletter`}
+              className="font-body text-accent text-[13px] font-medium underline-offset-2 hover:underline"
+            >
+              {t('confirmedLink')}
+            </a>
+          ) : (
+            <a
+              href={`/${locale}/newsletter`}
+              className="font-body text-accent text-[13px] font-medium underline-offset-2 hover:underline"
+            >
+              {t('resubscribeLink')}
+            </a>
+          )}
+        </div>
+      </section>
+    );
   }
 
   return (
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-10 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground mb-4 font-sans text-[44px] font-semibold leading-[1.05] xl:text-[64px]">
             {t('heroLine1')}
             <br />
@@ -32,7 +121,7 @@ export function NewsletterPage() {
 
       {/* Subscribe form */}
       <section className="px-5 pb-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {submitted ? (
             <div className="bg-surface rounded-[20px] px-6 py-10 text-center">
               <div className="bg-accent mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full">
@@ -73,12 +162,20 @@ export function NewsletterPage() {
               <span className="font-body text-muted text-[12px] leading-relaxed">
                 {t('consentText')}
               </span>
+              {error && <p className="font-body text-[12px] text-red-500">{error}</p>}
               <button
                 type="submit"
-                className="bg-accent font-body hover:bg-accent/90 flex w-full items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors"
+                disabled={loading}
+                className="bg-accent font-body hover:bg-accent/90 flex w-full items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors disabled:opacity-60"
               >
                 {t('subscribeBtn')}
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  className="rtl:-scale-x-100"
+                >
                   <path
                     d="M3 8h10M9 4l4 4-4 4"
                     stroke="currentColor"
@@ -96,7 +193,7 @@ export function NewsletterPage() {
 
       {/* What you get */}
       <section className="px-5 pb-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
             {t('whatKicker')}
           </SectionKicker>
@@ -192,7 +289,7 @@ export function NewsletterPage() {
 
       {/* Social proof */}
       <section className="rounded-t-[32px] bg-[#111111] px-5 pb-12 pt-10 xl:px-[80px]">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
             {t('socialKicker')}
           </SectionKicker>
