@@ -167,14 +167,46 @@ function Footer({
           </div>
         </div>
 
-        {/* Contact + payment methods (client feedback #6) — all CMS-driven; each
-            block renders only when its data is present. */}
-        {(contact?.email ||
-          contact?.phone ||
-          contact?.address ||
-          liveChatUrl ||
-          (paymentMethods && paymentMethods.length > 0)) && (
-          <div className="mb-9 grid gap-8 sm:grid-cols-2 xl:max-w-[760px]">
+        {/* Thin divider — full width on desktop */}
+        <div className="mb-8 h-px w-full bg-[rgba(255,255,255,0.08)]" />
+
+        {/* Bottom legal zone (client feedback #6) — all CMS-driven. Two balanced
+            columns: the regulatory pair (company registration + risk disclosure)
+            on the left, the practical pair (contact + payment methods) on the
+            right — so neither column leaves the dead space the single long risk
+            block used to. Each block hides when its data is empty; the risk
+            warning always shows. */}
+        <div className="grid gap-x-16 gap-y-10 xl:grid-cols-2">
+          {/* Regulatory: company registration + risk disclosure */}
+          <div className="flex flex-col gap-8">
+            {(regulatoryDisclosure || companyRegistration) && (
+              <div>
+                <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+                  {t('regHeading')}
+                </p>
+                {regulatoryDisclosure && (
+                  <p className="font-body mb-3 whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.45)]">
+                    {regulatoryDisclosure}
+                  </p>
+                )}
+                {companyRegistration && (
+                  <p className="font-body whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.4)]">
+                    {companyRegistration}
+                  </p>
+                )}
+              </div>
+            )}
+            <div>
+              <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+                {t('riskDisclosure')}
+              </p>
+              <p className="font-body whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.45)]">
+                {riskDisclaimer ?? t('riskWarning')}
+              </p>
+            </div>
+          </div>
+          {/* Practical: contact details + payment methods */}
+          <div className="flex flex-col gap-8">
             {(contact?.email || contact?.phone || contact?.address || liveChatUrl) && (
               <div>
                 <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
@@ -243,40 +275,6 @@ function Footer({
                 </div>
               </div>
             )}
-          </div>
-        )}
-
-        {/* Thin divider — full width on desktop */}
-        <div className="mb-5 h-px w-full bg-[rgba(255,255,255,0.08)]" />
-
-        {/* Company / regulation + risk disclosure (client feedback #6) — CMS-driven.
-            Regulatory + company blocks hide when empty; the risk warning always
-            shows (CMS copy, else the standard regulatory boilerplate). */}
-        <div className="grid gap-x-16 gap-y-8 xl:grid-cols-2">
-          {(regulatoryDisclosure || companyRegistration) && (
-            <div>
-              <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
-                {t('regHeading')}
-              </p>
-              {regulatoryDisclosure && (
-                <p className="font-body mb-3 whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.45)]">
-                  {regulatoryDisclosure}
-                </p>
-              )}
-              {companyRegistration && (
-                <p className="font-body whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.4)]">
-                  {companyRegistration}
-                </p>
-              )}
-            </div>
-          )}
-          <div>
-            <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
-              {t('riskDisclosure')}
-            </p>
-            <p className="font-body whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.45)]">
-              {riskDisclaimer ?? t('riskWarning')}
-            </p>
           </div>
         </div>
 
