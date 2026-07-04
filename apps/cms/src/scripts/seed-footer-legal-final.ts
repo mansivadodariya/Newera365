@@ -39,7 +39,7 @@ const RISK_EN =
 
 // AI draft — client compliance to verify before launch.
 const RISK_AR =
-  'ينطوي تداول العملات الأجنبية (الفوركس) والعقود مقابل الفروقات (CFDs) على العملات والسلع والمؤشرات والأسهم على مستوى عالٍ من المخاطر وقد لا يكون مناسباً لجميع المستثمرين. تُتداول هذه الأدوات بالهامش، أي أنها تنطوي على الرافعة المالية التي يمكن أن تضاعف الأرباح والخسائر على حد سواء. ونتيجة لذلك، قد تخسر أكثر من إيداعك الأولي، وقد تؤدي ظروف السوق إلى تغيّرات سريعة في أرصدة الحسابات. وقبل اتخاذ قرار التداول، ينبغي أن تدرس بعناية أهدافك الاستثمارية ومستوى خبرتك وقدرتك على تحمّل المخاطر.\n\n' +
+  'ينطوي تداول العملات الأجنبية (الفوركس، FX) والعقود مقابل الفروقات (CFDs) على العملات والسلع والمؤشرات والأسهم على مستوى عالٍ من المخاطر وقد لا يكون مناسباً لجميع المستثمرين. تُتداول هذه الأدوات بالهامش، أي أنها تنطوي على الرافعة المالية التي يمكن أن تضاعف الأرباح والخسائر على حد سواء. ونتيجة لذلك، قد تخسر أكثر من إيداعك الأولي، وقد تؤدي ظروف السوق إلى تغيّرات سريعة في أرصدة الحسابات. وقبل اتخاذ قرار التداول، ينبغي أن تدرس بعناية أهدافك الاستثمارية ومستوى خبرتك وقدرتك على تحمّل المخاطر.\n\n' +
   'نوصي بشدة بالحصول على مشورة مالية مستقلة إذا كنت غير متأكد من مدى ملاءمة هذه المنتجات لظروفك. ولا ينبغي لك التداول ما لم تفهم المخاطر المعنية وتقبلها بالكامل.';
 
 const VALUES: Record<string, string> = {
@@ -47,7 +47,7 @@ const VALUES: Record<string, string> = {
     'NewEra Capital Markets (Pty) Ltd is a company registered in the Republic of South Africa under registration number 2024/447619/07. Registered office: 1 Edgemere Road, Elfindale, Cape Town, Western Cape, 7945, South Africa.',
   // AI draft — client compliance to verify. Entity name + address kept in Latin (registered legal form).
   company_registration_ar:
-    'تُعد NewEra Capital Markets (Pty) Ltd شركة مسجلة في جمهورية جنوب أفريقيا بموجب رقم التسجيل 2024/447619/07. العنوان المسجل: 1 Edgemere Road, Elfindale, Cape Town, Western Cape, 7945, South Africa.',
+    'تُعد NewEra Capital Markets (Pty) Ltd شركة مسجلة في جمهورية جنوب أفريقيا بموجب رقم التسجيل 2024/447619/07. المكتب المسجل: 1 Edgemere Road, Elfindale, Cape Town, Western Cape, 7945, South Africa.',
   risk_disclaimer_en: RISK_EN,
   risk_disclaimer_ar: RISK_AR,
   // No separate licence/regulator statement in the client copy — clear the interim block.
