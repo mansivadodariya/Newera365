@@ -2,7 +2,11 @@ import type { MetadataRoute } from 'next';
 import { LOCALES } from '@newera365/types';
 import { getBlogPosts, getGuides, getResearchArticles } from '@/lib/cms';
 
-const BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, '');
+// .trim() first: a stray trailing newline in the Vercel env var was leaking into
+// sitemap/robots URLs as `https://host%0A/en`. Strip whitespace, then trailing slashes.
+const BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000')
+  .trim()
+  .replace(/\/+$/, '');
 
 // Curated public routes. Transactional/utility pages (newsletter confirmation
 // landings) are intentionally omitted — they should not be indexed.
@@ -30,7 +34,7 @@ const STATIC_PATHS = [
   '/guides',
   '/research',
   '/research/analyst-chart',
-  '/blog',
+  '/education/blog',
   '/daily-news',
   '/tools',
   '/tools/spread-comparator',
@@ -84,7 +88,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getGuides('en'),
       getResearchArticles('en', 100),
     ]);
-    for (const p of blog) entries.push(...entry(`/blog/${p.slug}`, { priority: 0.5 }));
+    for (const p of blog) entries.push(...entry(`/education/blog/${p.slug}`, { priority: 0.5 }));
     for (const g of guides) entries.push(...entry(`/guides/${g.slug}`, { priority: 0.5 }));
     for (const r of research) entries.push(...entry(`/research/${r.slug}`, { priority: 0.5 }));
   } catch {

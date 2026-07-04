@@ -96,6 +96,12 @@ function Check() {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
+const PLATFORM_LABELS: Record<string, string> = {
+  mt5: 'MT5',
+  'web-trader': 'Web',
+  mobile: 'Mobile',
+};
+
 export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
   const locale = useLocale();
   const t = useTranslations('accounts');
@@ -175,6 +181,57 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
       ctaLabel: t('startTrading'),
     };
   });
+
+  // ── Comparison matrix data ──────────────────────────────────────────────
+  // Columns = live (non-demo) CMS accounts, capped at 3. The boolean
+  // MATRIX_ROW_DATA maps by column index (std/raw/vip) — reordering accounts
+  // in the CMS shifts the boolean columns; acceptable, they're marketing-static.
+  const isArLocale = locale === 'ar';
+  const matrixAccounts = (cmsAccounts ?? [])
+    .filter((a) => a.badge !== 'free' && a.minDeposit !== 0)
+    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+    .slice(0, 3);
+  const matrixColNames = matrixAccounts.length
+    ? matrixAccounts.map((a) => (isArLocale ? a.nameAr || a.name : a.name))
+    : [t('stdCol'), t('rawCol'), t('vipCol')];
+  const popularIdx = matrixAccounts.findIndex((a) => a.badge === 'popular' || a.isPopular);
+  const highlightIdx = popularIdx !== -1 ? popularIdx : Math.min(1, matrixColNames.length - 1);
+  const matrixValueRows = matrixAccounts.length
+    ? [
+        {
+          id: 'minDeposit',
+          label: t('matrixMinDeposit'),
+          values: matrixAccounts.map((a) => `$${a.minDeposit.toLocaleString('en-US')}`),
+        },
+        {
+          id: 'spread',
+          label: t('matrixSpreadFrom'),
+          values: matrixAccounts.map((a) => (a.spreadFrom ? cleanSpread(a.spreadFrom) : '—')),
+        },
+        {
+          id: 'commission',
+          label: t('matrixCommission'),
+          values: matrixAccounts.map((a) => (a.commission ? cleanCommission(a.commission) : '—')),
+        },
+        {
+          id: 'leverage',
+          label: t('matrixLeverage'),
+          values: matrixAccounts.map((a) => a.leverage?.match(/1:\d+/)?.[0] ?? a.leverage ?? '—'),
+        },
+        {
+          id: 'platforms',
+          label: t('matrixPlatforms'),
+          values: matrixAccounts.map((a) =>
+            a.platforms?.length
+              ? a.platforms.map((p) => PLATFORM_LABELS[p] ?? p).join(' · ')
+              : 'MT5',
+          ),
+        },
+      ]
+    : [];
+  const matrixGridStyle = {
+    gridTemplateColumns: `132px repeat(${matrixColNames.length}, minmax(96px, 1fr))`,
+  };
 
   return (
     <div className="bg-transparent">
@@ -291,7 +348,22 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                 <div className="flex flex-1 flex-col gap-[11px]">
                   {account.features.slice(0, 3).map((feat, i) => (
                     <div key={i} className="flex items-center gap-[10px]">
-                      <span className="font-body text-[13px] font-bold text-[#00b050]">✓</span>
+                      <svg
+                        width="13"
+                        height="13"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        aria-hidden="true"
+                        className="flex-shrink-0 text-[#00b050]"
+                      >
+                        <path
+                          d="M2.5 6.4l2.3 2.3L9.5 3.5"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
                       <span className="font-body text-[13px] text-[#6b7280]">{feat}</span>
                     </div>
                   ))}
@@ -324,42 +396,102 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
             {t('featureMatrixHeading')}
           </h2>
 
-          <div className="motion-safe:animate-rise-in overflow-hidden rounded-[16px] bg-white/[0.06]">
-            {/* Header row */}
-            <div className="grid grid-cols-[1fr_65px_65px_65px] bg-white/[0.04] px-[14px] py-3">
-              <span className="font-mono text-[9px] uppercase tracking-[1.08px] text-white/55">
-                {t('featureCol')}
-              </span>
-              {[t('stdCol'), t('rawCol'), t('vipCol')].map((h) => (
-                <div key={h} className="flex items-center justify-center">
-                  <span
-                    className={`font-mono text-[9px] uppercase tracking-[1.08px] ${h === t('rawCol') ? 'text-[#00b050]' : 'text-white/55'}`}
+          {/* Horizontal scroll on mobile with a sticky first column; fits
+              without scrolling from md up. */}
+          <div className="motion-safe:animate-rise-in overflow-x-auto rounded-[16px]">
+            <div className="min-w-[560px] rounded-[16px] bg-white/[0.06] md:min-w-0">
+              {/* Header row */}
+              <div className="grid" style={matrixGridStyle}>
+                <span className="sticky start-0 z-[1] bg-[#171717] px-[14px] py-3 font-mono text-[9px] uppercase tracking-[1.08px] text-white/55 md:bg-white/[0.04]">
+                  {t('featureCol')}
+                </span>
+                {matrixColNames.map((h, j) => (
+                  <div
+                    key={h}
+                    className={`flex items-center justify-center py-3 ${
+                      j === highlightIdx ? 'bg-accent/[0.08]' : 'bg-white/[0.04]'
+                    }`}
                   >
-                    {h}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {matrixRows.map((row, i) => (
-              <div
-                key={row.id}
-                className={`grid grid-cols-[1fr_65px_65px_65px] px-[14px] py-[11px] ${
-                  i < matrixRows.length - 1 ? 'border-b border-white/[0.06]' : ''
-                }`}
-              >
-                <span className="font-body text-[12px] text-white/85">{row.feature}</span>
-                {[row.std, row.raw, row.vip].map((val, j) => (
-                  <div key={j} className="flex items-center justify-center">
-                    {val ? (
-                      <Check />
-                    ) : (
-                      <span className="font-body text-[14px] text-white/30">—</span>
-                    )}
+                    <span
+                      className={`font-mono text-[9px] uppercase tracking-[1.08px] ${
+                        j === highlightIdx ? 'text-[#00b050]' : 'text-white/55'
+                      }`}
+                    >
+                      {h}
+                    </span>
                   </div>
                 ))}
               </div>
-            ))}
+
+              {/* Value rows — the numbers people actually compare */}
+              {matrixValueRows.map((row) => (
+                <div
+                  key={row.id}
+                  className="grid border-b border-white/[0.06]"
+                  style={matrixGridStyle}
+                >
+                  <span className="font-body sticky start-0 z-[1] bg-[#121212] px-[14px] py-[11px] text-[12px] text-white/85 md:bg-transparent">
+                    {row.label}
+                  </span>
+                  {row.values.map((val, j) => (
+                    <div
+                      key={j}
+                      className={`flex items-center justify-center py-[11px] ${
+                        j === highlightIdx ? 'bg-accent/[0.06]' : ''
+                      }`}
+                    >
+                      <span
+                        className="font-body px-1 text-center text-[12px] font-semibold tabular-nums text-white"
+                        dir="ltr"
+                      >
+                        {val}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ))}
+
+              {/* Divider between values and boolean feature rows */}
+              {matrixValueRows.length > 0 && (
+                <div className="grid" style={matrixGridStyle}>
+                  <span className="sticky start-0 z-[1] bg-[#171717] px-[14px] py-2 font-mono text-[9px] uppercase tracking-[1.08px] text-white/40 md:bg-white/[0.03]">
+                    {t('matrixFeaturesLabel')}
+                  </span>
+                  {matrixColNames.map((_, j) => (
+                    <div
+                      key={j}
+                      className={j === highlightIdx ? 'bg-accent/[0.06]' : 'bg-white/[0.03]'}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {matrixRows.map((row, i) => (
+                <div
+                  key={row.id}
+                  className={`grid ${i < matrixRows.length - 1 ? 'border-b border-white/[0.06]' : ''}`}
+                  style={matrixGridStyle}
+                >
+                  <span className="font-body sticky start-0 z-[1] bg-[#121212] px-[14px] py-[11px] text-[12px] text-white/85 md:bg-transparent">
+                    {row.feature}
+                  </span>
+                  {[row.std, row.raw, row.vip].slice(0, matrixColNames.length).map((val, j) => (
+                    <div
+                      key={j}
+                      className={`flex items-center justify-center py-[11px] ${
+                        j === highlightIdx ? 'bg-accent/[0.06]' : ''
+                      }`}
+                    >
+                      {val ? (
+                        <Check />
+                      ) : (
+                        <span className="font-body text-[14px] text-white/30">—</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

@@ -18,7 +18,7 @@ export function CtaBannerDemo() {
         {/* Accent glow */}
         <div
           aria-hidden="true"
-          className="animate-glow-pulse pointer-events-none absolute -top-1/2 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,176,80,0.35),transparent_65%)] blur-2xl motion-reduce:animate-none"
+          className="pointer-events-none absolute -top-1/2 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,176,80,0.3),transparent_65%)] blur-2xl"
         />
         <div className="relative flex flex-col items-center gap-7 px-7 py-16 text-center xl:py-20">
           <div className="max-w-[640px]">
@@ -33,13 +33,13 @@ export function CtaBannerDemo() {
           <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <button
               onClick={() => setAuthModal('register')}
-              className="bg-accent hover:bg-accent-hover flex h-[52px] w-full items-center justify-center rounded-full px-8 text-[15px] font-semibold text-white shadow-[0_16px_40px_-12px_rgba(0,176,80,0.9)] transition-colors sm:w-auto"
+              className="bg-accent hover:bg-accent-hover focus-visible:ring-accent flex h-[52px] w-full items-center justify-center rounded-full px-8 text-[15px] font-semibold text-white shadow-[0_16px_40px_-12px_rgba(0,176,80,0.9)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:w-auto"
             >
               {t('ctaBannerLive')}
             </button>
             <button
               onClick={() => setAuthModal('demo')}
-              className="font-body flex h-[52px] w-full items-center justify-center rounded-full border border-white/20 px-8 text-[15px] font-medium text-white transition-colors hover:border-white/50 sm:w-auto"
+              className="font-body focus-visible:ring-accent flex h-[52px] w-full items-center justify-center rounded-full border border-white/20 px-8 text-[15px] font-medium text-white transition-colors hover:border-white/50 focus-visible:outline-none focus-visible:ring-2 sm:w-auto"
             >
               {t('ctaBannerDemo')}
             </button>

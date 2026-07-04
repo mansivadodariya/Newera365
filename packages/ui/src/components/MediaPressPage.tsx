@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
 export interface MediaPressItem {
@@ -20,8 +20,6 @@ interface MediaPressPageProps {
   items?: MediaPressItem[];
 }
 
-const FEATURED_IN = ['Bloomberg', 'Reuters', 'Finance Magnates', 'FX Empire', 'Investing.com'];
-
 const BRAND_ASSETS = [
   { nameKey: 'logoPack', formatKey: 'logoPackFormat', color: '#00B050' },
   { nameKey: 'brandGuidelines', formatKey: 'brandGuidelinesFormat', color: '#3B82F6' },
@@ -38,9 +36,10 @@ const STATS = [
   { valueKey: 'statsFunds', labelKey: 'statsFundsLabel' },
 ] as const;
 
-function formatDate(dateStr: string) {
+function formatDate(dateStr: string, locale: string) {
   try {
-    return new Intl.DateTimeFormat('en-GB', {
+    // Locale-aware: Arabic month names + numerals on /ar, day-first English on /en.
+    return new Intl.DateTimeFormat(locale === 'ar' ? 'ar' : 'en-GB', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -68,12 +67,16 @@ function FileIcon({ color }: { color: string }) {
 
 export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
   const t = useTranslations('mediaPress');
+  const locale = useLocale();
 
   const items = cmsItems ?? [];
   const sorted = [...items].sort((a, b) => (a.sortOrder ?? 99) - (b.sortOrder ?? 99));
   // External press coverage = not featured; newsroom press releases = featured
   const coverageItems = sorted.filter((i) => !i.isFeatured);
   const newsroomItems = sorted.filter((i) => i.isFeatured);
+  // "Featured in" chips derive from the real coverage publications (already
+  // locale-resolved upstream) — not a hardcoded list — so they stay in sync and localize.
+  const featuredPublications = [...new Set(coverageItems.map((i) => i.publication))];
 
   return (
     <>
@@ -116,7 +119,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
               >
                 {/* Publication label */}
                 <span className="font-body text-accent mb-2 block text-[10px] font-semibold uppercase tracking-[0.12em]">
-                  {item.publication.toUpperCase().replace(/\s+/g, '.')}
+                  {item.publication.toUpperCase()}
                 </span>
                 {/* Headline */}
                 {item.url ? (
@@ -144,7 +147,7 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
                 {/* Date + read link */}
                 <div className="mt-3 flex items-center justify-between">
                   <span className="font-body text-muted/70 text-[12px]">
-                    {formatDate(item.date)}
+                    {formatDate(item.date, locale)}
                   </span>
                   {item.url && (
                     <Link
@@ -164,20 +167,22 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
       </section>
 
       {/* ── Featured in strip ── */}
-      <section className="border-y border-[#e5e7eb] px-5 py-6 dark:border-[#1a1c22]">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <p className="font-body text-muted/50 mb-4 text-center text-[10px] font-semibold uppercase tracking-[0.2em]">
-            — {t('featuredInLabel')} —
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-            {FEATURED_IN.map((pub) => (
-              <span key={pub} className="font-body text-muted text-[13px] font-medium">
-                {pub}
-              </span>
-            ))}
+      {featuredPublications.length > 0 && (
+        <section className="border-y border-[#e5e7eb] px-5 py-6 dark:border-[#1a1c22]">
+          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <p className="font-body text-muted/50 mb-4 text-center text-[10px] font-semibold uppercase tracking-[0.2em]">
+              — {t('featuredInLabel')} —
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+              {featuredPublications.map((pub) => (
+                <span key={pub} className="font-body text-muted text-[13px] font-medium">
+                  {pub}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── Media kit ── */}
       <section className="rounded-[32px] bg-[#f2f2f7] px-5 pb-9 pt-10 dark:bg-[#0f0f14]">
@@ -253,7 +258,9 @@ export function MediaPressPage({ items: cmsItems }: MediaPressPageProps) {
                   className={`flex items-center justify-between gap-4 py-4 ${i < newsroomItems.length - 1 ? 'border-b border-[#e5e7eb] dark:border-[#1a1c22]' : ''}`}
                 >
                   <div className="min-w-0">
-                    <p className="font-body text-muted mb-1 text-[11px]">{formatDate(item.date)}</p>
+                    <p className="font-body text-muted mb-1 text-[11px]">
+                      {formatDate(item.date, locale)}
+                    </p>
                     {item.url ? (
                       <Link
                         href={item.url}

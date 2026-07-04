@@ -53,6 +53,7 @@ function useNavGroups(t: ReturnType<typeof useTranslations<'nav'>>): NavGroup[] 
         { label: t('eduEbooksLabel'), href: '/ebooks' },
         { label: t('eduGlossaryLabel'), href: '/glossary' },
         { label: t('eduGuidesLabel'), href: '/guides' },
+        { label: t('eduBlogLabel'), href: '/education/blog' },
       ],
     },
     {
@@ -83,7 +84,6 @@ function useNavGroups(t: ReturnType<typeof useTranslations<'nav'>>): NavGroup[] 
         { label: t('companyCareersLabel'), href: '/company/careers' },
         { label: t('companyAwardsLabel'), href: '/company/awards' },
         { label: t('companyMediaLabel'), href: '/company/media-press' },
-        { label: t('researchBlogLabel'), href: '/blog' },
       ],
     },
     {
@@ -191,16 +191,16 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
             <Image
               src="/images/logo-light.png"
               alt="NewEra365"
-              width={120}
-              height={24}
+              width={133}
+              height={26}
               className="block dark:hidden"
               priority
             />
             <Image
               src="/images/logo-dark.png"
               alt="NewEra365"
-              width={120}
-              height={24}
+              width={133}
+              height={26}
               className="hidden dark:block"
               priority
             />

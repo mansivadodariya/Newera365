@@ -64,7 +64,7 @@ module.exports = {
         // Demo landing-page motion (additive — used only by *Demo components)
         'float-y': {
           '0%,100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-6px)' },
+          '50%': { transform: 'translateY(-3px)' },
         },
         'draw-line': {
           from: { strokeDashoffset: '1' },
@@ -96,6 +96,18 @@ module.exports = {
           from: { transform: 'scaleY(0)' },
           to: { transform: 'scaleY(1)' },
         },
+        // Route-transition top progress bar (TopLoadingBar). The crawl eases to
+        // ~92% and holds (loading.tsx unmounts on resolve), so it never needs a
+        // 100% frame; the `loading-blip` highlight conveys ongoing activity.
+        'loading-bar': {
+          '0%': { width: '0%' },
+          '55%': { width: '68%' },
+          '100%': { width: '92%' },
+        },
+        'loading-blip': {
+          from: { transform: 'translateX(-100%)' },
+          to: { transform: 'translateX(450%)' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.2s ease-out',
@@ -103,7 +115,7 @@ module.exports = {
         ticker: 'ticker-scroll 40s linear infinite',
         'slide-in-right': 'slide-in-right 0.3s ease-out',
         'slide-out-right': 'slide-out-right 0.3s ease-in',
-        'float-y': 'float-y 4s ease-in-out infinite',
+        'float-y': 'float-y 7s ease-in-out infinite',
         'draw-line': 'draw-line 1.6s ease-out forwards',
         'chip-pulse': 'chip-pulse 1.8s ease-in-out infinite',
         'glow-pulse': 'glow-pulse 5s ease-in-out infinite',
@@ -117,6 +129,8 @@ module.exports = {
         'rise-in': 'rise-in 0.6s ease-out both',
         'flash-up': 'flash-up 0.7s ease-out',
         'flash-down': 'flash-down 0.7s ease-out',
+        'loading-bar': 'loading-bar 1.2s ease-out forwards',
+        'loading-blip': 'loading-blip 1s ease-in-out infinite',
       },
     },
   },

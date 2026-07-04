@@ -10,6 +10,7 @@ type WidgetType =
   | 'screener'
   | 'economic-calendar'
   | 'symbol-info'
+  | 'single-quote'
   | 'ticker-tape'
   | 'forex-cross-rates'
   | 'market-quotes';
@@ -41,6 +42,7 @@ const WIDGET_URLS: Record<WidgetType, string> = {
   screener: 'https://s3.tradingview.com/external-embedding/embed-widget-screener.js',
   'economic-calendar': 'https://s3.tradingview.com/external-embedding/embed-widget-events.js',
   'symbol-info': 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js',
+  'single-quote': 'https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js',
   'ticker-tape': 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js',
   'forex-cross-rates':
     'https://s3.tradingview.com/external-embedding/embed-widget-forex-cross-rates.js',
@@ -102,7 +104,27 @@ export function TradingViewWidget({
   // the UI shows a graceful notice instead of a permanently-empty box.
   const [status, setStatus] = useState<'loading' | 'ready' | 'failed'>('loading');
 
-  useEffect(() => setMounted(true), []);
+  // Defer the (heavy) embed script until the widget is near the viewport —
+  // below-fold embeds stop competing with above-fold work. The container and
+  // its skeleton stay visible throughout, so nothing is hidden behind the gate.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') {
+      setMounted(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setMounted(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: '400px 0px' },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   const configKey = JSON.stringify(config);
 
@@ -123,13 +145,30 @@ export function TradingViewWidget({
     script.onerror = () => setStatus('failed');
     container.appendChild(script);
 
-    // The embed script injects an <iframe> once it loads. Watch for it to flip
-    // out of the loading state; if nothing appears in time, assume it's blocked.
+    // The embed script injects an <iframe> once it loads. The iframe *element*
+    // appears before its cross-origin document paints, so flipping to ready on
+    // insertion flashes a blank/white box. Wait for the iframe's load event
+    // (fires cross-origin) plus a short settle, with a fallback timer in case
+    // load already fired or never fires.
+    let cancelled = false;
+    let revealTimer: ReturnType<typeof setTimeout> | undefined;
+    let settleTimer: ReturnType<typeof setTimeout> | undefined;
+    let revealed = false;
+    const reveal = () => {
+      if (revealed || cancelled) return;
+      revealed = true;
+      requestAnimationFrame(() => {
+        settleTimer = setTimeout(() => {
+          if (!cancelled) setStatus('ready');
+        }, 200);
+      });
+    };
     const observer = new MutationObserver(() => {
-      if (container.querySelector('iframe')) {
-        setStatus('ready');
-        observer.disconnect();
-      }
+      const iframe = container.querySelector('iframe');
+      if (!iframe) return;
+      observer.disconnect();
+      iframe.addEventListener('load', reveal, { once: true });
+      revealTimer = setTimeout(reveal, 2500);
     });
     observer.observe(container, { childList: true, subtree: true });
 
@@ -138,8 +177,11 @@ export function TradingViewWidget({
     }, 8000);
 
     return () => {
+      cancelled = true;
       observer.disconnect();
       clearTimeout(timeout);
+      clearTimeout(revealTimer);
+      clearTimeout(settleTimer);
       container.innerHTML = '';
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -158,11 +200,30 @@ export function TradingViewWidget({
         <div className="tradingview-widget-container__widget" />
       </div>
 
-      {status === 'loading' && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="h-full w-full animate-pulse rounded-[inherit] bg-black/[0.04] dark:bg-white/[0.04]" />
+      {/* Branded loading skeleton — opaque surface so the embed's blank first
+          paint never shows through; fades out once the iframe has painted. */}
+      <div
+        className={[
+          'absolute inset-0 z-[5] overflow-hidden rounded-[inherit] transition-opacity duration-300',
+          theme === 'light' ? 'bg-white' : 'bg-[#0d1117]',
+          status === 'loading' ? 'opacity-100' : 'pointer-events-none opacity-0',
+        ].join(' ')}
+        aria-hidden="true"
+      >
+        <div className="flex h-full w-full flex-col justify-center gap-3 px-5 py-4">
+          {[82, 64, 91, 73].map((w, i) => (
+            <div
+              key={i}
+              className={[
+                'h-3 rounded-full',
+                theme === 'light' ? 'bg-black/[0.06]' : 'bg-white/[0.06]',
+                status === 'loading' ? 'motion-safe:animate-pulse' : '',
+              ].join(' ')}
+              style={{ width: `${w}%`, animationDelay: `${i * 150}ms` }}
+            />
+          ))}
         </div>
-      )}
+      </div>
 
       {status === 'failed' && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-[inherit] bg-black/[0.03] px-4 text-center dark:bg-white/[0.04]">

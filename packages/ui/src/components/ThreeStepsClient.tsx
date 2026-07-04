@@ -119,12 +119,18 @@ export function ThreeStepsClient({
     const update = () => {
       raf = 0;
       const rect = ol.getBoundingClientRect();
-      const enter = vh * 0.85;
-      const exit = vh * 0.35;
-      const p = clamp((enter - rect.top) / (enter - exit + rect.height), 0, 1);
+      // Fill progress spans the stepper's whole pass through the lower half of
+      // the viewport (client feedback round 3, #5 — the old centre-crossing
+      // window started late and finished early): p=0 the moment the stepper's
+      // top enters the viewport (still fully below the page midpoint), p=1 when
+      // its bottom edge rises above the midpoint.
+      const center = vh * 0.5;
+      const p = clamp((vh - rect.top) / (rect.height + (vh - center)), 0, 1);
       setFill(p);
       const n = steps.length;
-      const count = steps.reduce((acc, _s, i) => (p >= i / (n - 1) - 0.0001 ? i + 1 : acc), 0);
+      // Each node lights as the fill reaches it; the first lights only once the
+      // fill has actually begun (p > 0), so nothing is pre-activated above centre.
+      const count = p <= 0 ? 0 : steps.reduce((acc, _s, i) => (p >= i / (n - 1) ? i + 1 : acc), 0);
       setActive((prev) => (prev === count ? prev : count));
     };
     const schedule = () => {

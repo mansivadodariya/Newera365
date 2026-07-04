@@ -28,10 +28,11 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
   const listRef = useRef<HTMLDivElement>(null);
 
   const guides: CmsGuide[] = cmsGuides ?? [];
-  const featured = guides.find((g) => g.featured) ?? guides[0] ?? null;
-  const rest = guides.filter((g) => g !== featured);
+  const featured = guides.find((g) => g.featured) ?? null;
+  // The featured guide gets its own card above the list, so the list excludes it.
+  const rest = featured ? guides.filter((g) => g !== featured) : guides;
   const totalPages = Math.ceil(rest.length / GUIDES_PER_PAGE);
-  const pagedRest = rest.slice((page - 1) * GUIDES_PER_PAGE, page * GUIDES_PER_PAGE);
+  const paged = rest.slice((page - 1) * GUIDES_PER_PAGE, page * GUIDES_PER_PAGE);
 
   return (
     <>
@@ -49,31 +50,58 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
         </div>
       </section>
 
-      {/* Featured guide */}
+      {/* Featured guide — dark editorial panel, no imagery (guides are prose) */}
       {featured && (
-        <section className="px-5 pb-6">
+        <section className="px-5 pb-4">
           <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <SectionKicker className="mb-4">{t('featuredLabel')}</SectionKicker>
             <Link
               href={`/${locale}/guides/${featured.slug}`}
-              className="shadow-card-dark group block overflow-hidden rounded-[22px] bg-[#111111] p-6"
+              className="group block overflow-hidden rounded-[22px] border border-transparent bg-[#111111] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_44px_rgba(0,0,0,0.28)] dark:border-white/[0.08] dark:bg-[#15171c]"
             >
-              <h2 className="group-hover:text-accent mb-3 font-sans text-[24px] font-semibold leading-[1.1] text-white transition-colors">
-                {featured.title}
-              </h2>
-              <p className="font-body mb-4 text-[13px] leading-[1.6] text-white/60">
-                {featured.summary ?? ''}
-              </p>
-              {featured.author && (
-                <div className="flex items-center gap-2">
-                  <div className="bg-accent/20 flex h-6 w-6 items-center justify-center rounded-full">
-                    <span className="text-accent font-sans text-[9px] font-semibold">
-                      {featured.author[0]}
-                    </span>
-                  </div>
-                  <span className="font-body text-[11px] text-white/50">{featured.author}</span>
+              <div className="p-6 xl:p-9">
+                <p className="text-accent-bright mb-3 font-mono text-[10px] font-medium uppercase tracking-[0.18em]">
+                  {t('featuredLabel')}
+                </p>
+                <h2 className="group-hover:text-accent-bright max-w-[26ch] font-sans text-[22px] font-semibold leading-[1.15] text-white transition-colors duration-200 xl:text-[28px]">
+                  {featured.title}
+                </h2>
+                {featured.summary && (
+                  <p className="font-body mt-3 max-w-[64ch] text-[13.5px] leading-[1.6] text-white/60">
+                    {featured.summary}
+                  </p>
+                )}
+                <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/[0.08] pt-5">
+                  {featured.author ? (
+                    <div className="flex items-center gap-2.5">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/[0.08] font-sans text-[11px] font-semibold text-white/80">
+                        {featured.author[0]}
+                      </span>
+                      <span className="font-body text-[12px] text-white/60">{featured.author}</span>
+                    </div>
+                  ) : (
+                    <span aria-hidden="true" />
+                  )}
+                  <span className="font-body inline-flex items-center gap-1.5 text-[13px] font-medium text-white">
+                    {t('featuredRead')}
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      aria-hidden="true"
+                      className="rtl:-scale-x-100"
+                    >
+                      <path
+                        d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
                 </div>
-              )}
+              </div>
             </Link>
           </div>
         </section>
@@ -87,11 +115,11 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
             {rest.length === 0 && !featured && (
               <p className="font-body text-muted py-12 text-center text-[14px]">{t('noGuides')}</p>
             )}
-            {pagedRest.map((guide, i) => (
+            {paged.map((guide, i) => (
               <Link
                 key={guide.id}
                 href={`/${locale}/guides/${guide.slug}`}
-                className={`group flex flex-col gap-2 py-5 ${i < pagedRest.length - 1 ? 'border-b border-[#e5e7eb] dark:border-white/[0.07]' : ''}`}
+                className={`group flex flex-col gap-2 py-5 ${i < paged.length - 1 ? 'border-b border-[#e5e7eb] dark:border-white/[0.07]' : ''}`}
               >
                 <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] transition-colors">
                   {guide.title}

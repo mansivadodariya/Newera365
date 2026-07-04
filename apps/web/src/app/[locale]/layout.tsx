@@ -7,14 +7,23 @@ import { CookieConsent } from '@/components/CookieConsent';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { Outfit, Inter, JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
-import { ToastProvider, Footer, RiskBanner, SmartCtaBanner } from '@newera365/ui';
-import type { CmsFooterColumn, CmsSocialLinks } from '@newera365/ui';
+import {
+  ToastProvider,
+  Footer,
+  RiskBanner,
+  StickyCtaBar,
+  FloatingContactWidget,
+} from '@newera365/ui';
+import type { CmsSocialLinks } from '@newera365/ui';
 import { RouteChrome } from '@/components/RouteChrome';
 import { dir, LOCALES, type Locale } from '@newera365/types';
 import { routing } from '@/i18n/routing';
 import { getSiteSettings, getPaymentMethods } from '@/lib/cms';
 import { PageFade } from '@/components/PageFade';
 import '../globals.css';
+// Self-hosted Flaticon Uicons brand glyphs (footer social icons). Fonts are
+// served from 'self', so the hardened CSP (font-src 'self') needs no changes.
+import '@flaticon/flaticon-uicons/css/brands/all.css';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -39,7 +48,9 @@ const jetbrainsMono = JetBrains_Mono({
 
 const isLocale = (value: string): value is Locale => (LOCALES as readonly string[]).includes(value);
 
-const BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, '');
+const BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000')
+  .trim()
+  .replace(/\/+$/, '');
 
 // Per-locale metadata so Next.js emits correct hreflang + canonical tags.
 export async function generateMetadata({
@@ -104,10 +115,6 @@ export default async function LocaleLayout({
   const messages = await getMessages();
   const s = await getSiteSettings();
 
-  const footerColumns: CmsFooterColumn[] | undefined = s
-    ? ((locale === 'ar' ? s.footerAr : s.footerEn) ?? undefined)
-    : undefined;
-
   const riskDisclaimer = s
     ? ((locale === 'ar' ? s.riskDisclaimerAr : s.riskDisclaimerEn) ?? undefined)
     : undefined;
@@ -159,6 +166,11 @@ export default async function LocaleLayout({
       className={`${outfit.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <head>
+        {/* TradingView embeds: loader script from s3, widget iframe from
+            tradingview-widget.com — warm both origins before the embeds mount. */}
+        <link rel="preconnect" href="https://s3.tradingview.com" />
+        <link rel="preconnect" href="https://www.tradingview-widget.com" />
+        <link rel="dns-prefetch" href="https://s.tradingview.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -205,10 +217,16 @@ export default async function LocaleLayout({
               <PageFade>{children}</PageFade>
               <Analytics />
               <CookieConsent />
+              {/* Floating CTAs live outside PageFade so they persist across
+                  route transitions. */}
+              <StickyCtaBar />
+              <FloatingContactWidget
+                email={s?.contactEmail ?? null}
+                phone={s?.contactPhone ?? null}
+                whatsapp={s?.whatsappNumber ?? null}
+                liveChatUrl={s?.liveChatUrl ?? null}
+              />
               <Footer
-                footerColumns={
-                  footerColumns && footerColumns.length > 0 ? footerColumns : undefined
-                }
                 riskDisclaimer={riskDisclaimer ?? undefined}
                 socialLinks={socialLinks}
                 contact={contact}

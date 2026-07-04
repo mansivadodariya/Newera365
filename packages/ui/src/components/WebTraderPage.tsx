@@ -83,12 +83,14 @@ function buildCandles(pts: number[], seed: number): Candle[] {
 function TerminalChart({ tf }: { tf: Timeframe }) {
   const candles = buildCandles(EURUSD_PTS, TF_SEEDS[tf]);
 
-  const VW = 580,
-    VH = 302;
+  const VH = 302;
   const cTop = 10,
     cBot = 238,
     cLeft = 6,
     cRight = 504;
+  // Fixed-width price axis, decoupled from container width so it never leaves
+  // dead space on wide screens. ponytail: bump if 5-digit labels ever overflow.
+  const AXIS_W = 60;
   const cW = cRight - cLeft,
     cH = cBot - cTop;
   const vTop = 246,
@@ -116,20 +118,19 @@ function TerminalChart({ tf }: { tf: Timeframe }) {
   const priceColor = last.c >= last.o ? BULL : BEAR;
 
   const gridLevels = [0.2, 0.4, 0.6, 0.8].map((r) => pLo + r * (pHi - pLo));
-  // Percentage of container width occupied by the price axis on the right
-  const axisWidthPct = `${((VW - cRight) / VW) * 100}%`;
 
   return (
-    <div className="relative w-full" style={{ height: 320 }}>
-      {/* SVG stretches to fill container — geometry only, no text (avoids distortion) */}
+    <div className="relative w-full bg-[#0D0F14]" style={{ height: 320 }}>
+      {/* Chart SVG fills everything except the fixed price-axis column on the right.
+          Geometry only, no text (HTML overlay handles labels to avoid distortion). */}
       <svg
-        viewBox={`0 0 ${VW} ${VH}`}
-        width="100%"
+        viewBox={`0 0 ${cRight} ${VH}`}
         height="100%"
         preserveAspectRatio="none"
-        className="absolute inset-0 block"
+        className="absolute inset-y-0 left-0 block"
+        style={{ width: `calc(100% - ${AXIS_W}px)` }}
       >
-        <rect width={VW} height={VH} fill="#0D0F14" />
+        <rect width={cRight} height={VH} fill="#0D0F14" />
 
         {/* Chart / axis divider */}
         <line
@@ -208,10 +209,10 @@ function TerminalChart({ tf }: { tf: Timeframe }) {
         />
       </svg>
 
-      {/* Price axis labels — HTML overlay so text never distorts at any width */}
+      {/* Price axis labels — fixed-width column, HTML overlay so text never distorts */}
       <div
         className="pointer-events-none absolute bottom-0 right-0 top-0"
-        style={{ width: axisWidthPct }}
+        style={{ width: AXIS_W }}
       >
         {gridLevels.map((lv, i) => (
           <div

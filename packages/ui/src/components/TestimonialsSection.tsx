@@ -113,11 +113,11 @@ export function TestimonialsSection({
               <figure className="border-border hover-lift shadow-card dark:shadow-card-dark flex h-full flex-col gap-4 rounded-[20px] border bg-white p-6 dark:bg-[#111316]">
                 {/* Quote glyph (locale-neutral — avoids LTR quote chars in RTL) */}
                 <svg
-                  width="26"
-                  height="20"
+                  width="32"
+                  height="24"
                   viewBox="0 0 26 20"
                   aria-hidden="true"
-                  className="text-accent/30 rtl:-scale-x-100"
+                  className="text-accent/25 rtl:-scale-x-100"
                 >
                   <path
                     d="M0 20V11.5C0 5.2 3.9 1 9.8 0l.9 2.9C7.6 4 6 6 5.8 8.6H10V20H0zm15 0V11.5C15 5.2 18.9 1 24.8 0l.9 2.9C22.6 4 21 6 20.8 8.6H25V20H15z"
@@ -125,7 +125,7 @@ export function TestimonialsSection({
                   />
                 </svg>
 
-                <blockquote className="font-body text-foreground flex-1 text-[15px] leading-[1.6]">
+                <blockquote className="font-body text-foreground flex-1 text-[16px] font-medium leading-[1.6] xl:text-[17px]">
                   {item.quote}
                 </blockquote>
 
@@ -144,7 +144,7 @@ export function TestimonialsSection({
                     </span>
                   )}
                   <div className="min-w-0">
-                    <figcaption className="text-foreground truncate font-sans text-[14px] font-semibold">
+                    <figcaption className="text-foreground truncate font-sans text-[15px] font-semibold">
                       {item.authorName}
                     </figcaption>
                     {item.authorRole && (

@@ -1,6 +1,10 @@
 import type { MetadataRoute } from 'next';
 
-const BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, '');
+// .trim() first: a stray trailing newline in the Vercel env var was leaking into
+// sitemap/robots URLs as `https://host%0A/en`. Strip whitespace, then trailing slashes.
+const BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000')
+  .trim()
+  .replace(/\/+$/, '');
 
 export default function robots(): MetadataRoute.Robots {
   return {

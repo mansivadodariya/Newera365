@@ -10,6 +10,7 @@ import {
   TradingViewTicker,
   TrustStripDemo,
   TestimonialsSection,
+  SecurityTrustBand,
 } from '@newera365/ui';
 import type { TrustLogo, TestimonialItem } from '@newera365/ui';
 import { getSiteSettings } from '@/lib/cms';
@@ -64,6 +65,8 @@ export default async function HomePage({ params }: { params: { locale: string } 
           appear before the journey/stats). */}
       <FeaturesSection />
       <StatsSectionDemo kpiStats={kpiStats} locale={params.locale} />
+      {/* Numbers immediately followed by safeguards (feedback round 2, #3). */}
+      <SecurityTrustBand />
       {/* Account journey surfaced high (feedback #4 — "how do I become a client?"
           was hidden far down the page). */}
       <ThreeStepsSectionDemo />

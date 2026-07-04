@@ -100,6 +100,33 @@ const migrations: Array<{ description: string; sql: string }> = [
     description: 'products_instruments.swap_rate_short',
     sql: `ALTER TABLE products_instruments ADD COLUMN IF NOT EXISTS swap_rate_short numeric;`,
   },
+  // ── ProductsInstruments: spec-panel fields (safety entries — most exist from
+  // the initial schema; idempotent no-ops in that case) ──
+  {
+    description: 'products_instruments.swap_long',
+    sql: `ALTER TABLE products_instruments ADD COLUMN IF NOT EXISTS swap_long numeric;`,
+  },
+  {
+    description: 'products_instruments.swap_short',
+    sql: `ALTER TABLE products_instruments ADD COLUMN IF NOT EXISTS swap_short numeric;`,
+  },
+  {
+    description: 'products_instruments.margin_requirement',
+    sql: `ALTER TABLE products_instruments ADD COLUMN IF NOT EXISTS margin_requirement numeric;`,
+  },
+  {
+    description: 'products_instruments.contract_size',
+    sql: `ALTER TABLE products_instruments ADD COLUMN IF NOT EXISTS contract_size numeric;`,
+  },
+  {
+    description: 'products_instruments.trading_hours',
+    sql: `ALTER TABLE products_instruments ADD COLUMN IF NOT EXISTS trading_hours varchar(255);`,
+  },
+  // ── SiteSettings: floating contact widget WhatsApp channel ──
+  {
+    description: 'site_settings.whatsapp_number',
+    sql: `ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS whatsapp_number varchar(30);`,
+  },
   // ── Promotions: value_display in locales table ──
   {
     description: 'promotions_locales.value_display',

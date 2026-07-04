@@ -3,10 +3,19 @@ import { ResearchPage, CtaBanner } from '@newera365/ui';
 import type { Metadata } from 'next';
 import { getNews } from '@/lib/cms';
 
-export const metadata: Metadata = {
-  title: 'Daily News',
-  description: 'Latest forex, commodities, indices and crypto market news.',
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const isAr = params.locale === 'ar';
+  return {
+    title: isAr ? 'الأخبار اليومية' : 'Daily News',
+    description: isAr
+      ? 'آخر أخبار الفوركس والسلع والمؤشرات والعملات الرقمية.'
+      : 'Latest forex, commodities, indices and crypto market news.',
+  };
+}
 
 export default async function DailyNewsRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);

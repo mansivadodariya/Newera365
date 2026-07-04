@@ -178,7 +178,18 @@ export function ArbitrageSection() {
           {/* Green dot */}
           <span className="bg-accent h-[8px] w-[8px] flex-shrink-0 rounded-full" />
           <p className="font-body flex-1 text-[12px] font-medium text-white">{t('arbStrip')}</p>
-          <span className="text-accent text-[14px] font-medium">→</span>
+          <svg
+            viewBox="0 0 24 24"
+            className="text-accent h-[14px] w-[14px] flex-shrink-0 rtl:-scale-x-100"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
         </Link>
       </div>
     </section>

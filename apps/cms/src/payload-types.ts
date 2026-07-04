@@ -106,7 +106,7 @@ export interface Media {
 export interface BlogPost {
   id: number;
   title: string;
-  slug: string;
+  slug?: string | null;
   status: 'draft' | 'published';
   publishedDate?: string | null;
   category: 'market-news' | 'analysis' | 'tutorials' | 'company-updates';
@@ -128,7 +128,7 @@ export interface BlogPost {
 export interface MarketAnalysis {
   id: number;
   title: string;
-  slug: string;
+  slug?: string | null;
   status: 'draft' | 'published';
   publishedDate: string;
   assetCategory: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
@@ -188,11 +188,12 @@ export interface ProductsInstrument {
 export interface News {
   id: number;
   headline: string;
-  slug: string;
+  slug?: string | null;
   source?: string | null;
   sourceUrl?: string | null;
   publishedDate: string;
   category: 'forex' | 'commodities' | 'indices' | 'crypto' | 'company' | 'regulation';
+  featuredImage?: number | Media | null;
   body?:
     | {
         [k: string]: unknown;
@@ -211,7 +212,7 @@ export interface News {
 export interface ResearchReport {
   id: number;
   title: string;
-  slug: string;
+  slug?: string | null;
   status: 'draft' | 'published';
   publishedDate: string;
   summary?: string | null;
@@ -230,7 +231,7 @@ export interface ResearchReport {
 export interface EducationContent {
   id: number;
   title: string;
-  slug: string;
+  slug?: string | null;
   contentType: 'video' | 'audio' | 'ebook' | 'guide' | 'glossary';
   status: 'draft' | 'published';
   isGated?: boolean | null;
@@ -272,7 +273,7 @@ export interface EducationContent {
 export interface Webinar {
   id: number;
   title: string;
-  slug: string;
+  slug?: string | null;
   speaker: string;
   speakerBio?: string | null;
   scheduledAt: string;
@@ -372,7 +373,7 @@ export interface NewsletterSubscriber {
 export interface Career {
   id: number;
   title: string;
-  slug: string;
+  slug?: string | null;
   department: string;
   location: string;
   employmentType: string;
@@ -396,7 +397,7 @@ export interface Career {
 export interface LegalPage {
   id: number;
   title: string;
-  slug: string;
+  slug?: string | null;
   pageType: 'terms' | 'privacy-policy' | 'risk-disclosure' | 'aml-policy' | 'cookie-policy';
   body: {
     [k: string]: unknown;
@@ -417,7 +418,7 @@ export interface LegalPage {
 export interface Award {
   id: number;
   title: string;
-  slug: string;
+  slug?: string | null;
   date: string;
   description?: string | null;
   awardCategory?: string | null;
@@ -450,6 +451,7 @@ export interface MediaPress {
   id: number;
   headline: string;
   publication: string;
+  publicationAr?: string | null;
   date: string;
   url?: string | null;
   excerpt?: string | null;
@@ -467,7 +469,7 @@ export interface MediaPress {
 export interface TeamMember {
   id: number;
   name: string;
-  slug: string;
+  slug?: string | null;
   role: string;
   bio?: string | null;
   photo?: number | Media | null;
@@ -498,7 +500,7 @@ export interface WebinarRegistration {
 export interface Promotion {
   id: number;
   title: string;
-  slug: string;
+  slug?: string | null;
   valueDisplay?: string | null;
   tag?: string | null;
   tagColor?: ('accent' | 'amber' | 'blue' | 'purple' | 'red' | 'grey') | null;
@@ -669,6 +671,23 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  socialProofHeadlineEn?: string | null;
+  socialProofHeadlineAr?: string | null;
+  ratingValue?: string | null;
+  ratingCountEn?: string | null;
+  ratingCountAr?: string | null;
+  testimonials?:
+    | {
+        quoteEn: string;
+        quoteAr: string;
+        authorName: string;
+        authorRoleEn?: string | null;
+        authorRoleAr?: string | null;
+        rating?: number | null;
+        avatarUrl?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   downloadMt5Windows?: string | null;
   downloadMt5Mac?: string | null;
   downloadMt5Ios?: string | null;
@@ -677,6 +696,7 @@ export interface SiteSetting {
   contactEmail?: string | null;
   contactEmailCompliance?: string | null;
   contactPhone?: string | null;
+  whatsappNumber?: string | null;
   contactAddressEn?: string | null;
   contactAddressAr?: string | null;
   supportHoursEn?: string | null;
@@ -717,6 +737,11 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  regulatoryDisclosureEn?: string | null;
+  regulatoryDisclosureAr?: string | null;
+  companyRegistrationEn?: string | null;
+  companyRegistrationAr?: string | null;
+  liveChatUrl?: string | null;
   analystInitials?: string | null;
   analystName?: string | null;
   analystTitle?: string | null;
@@ -730,6 +755,8 @@ export interface SiteSetting {
 }
 
 declare module 'payload' {
-  // @ts-ignore — Payload v2 re-declares GeneratedTypes; suppress the duplicate-identifier error.
+  // @ts-ignore — payload's own .d.ts already declares GeneratedTypes; this
+  // augmentation intentionally re-declares it (Payload v2 convention). The
+  // generator strips this comment on every `generate:types` run — re-add it.
   export interface GeneratedTypes extends Config {}
 }

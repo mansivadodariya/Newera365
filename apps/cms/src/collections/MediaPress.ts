@@ -28,6 +28,15 @@ export const MediaPress: CollectionConfig = {
       admin: { description: 'Name of the publication or outlet (e.g. "Bloomberg", "Reuters").' },
     },
     {
+      name: 'publicationAr',
+      type: 'text',
+      maxLength: 100,
+      admin: {
+        description:
+          'Arabic name of the publication (optional). The Arabic site falls back to the English name when blank.',
+      },
+    },
+    {
       name: 'date',
       type: 'date',
       required: true,

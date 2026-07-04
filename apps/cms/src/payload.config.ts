@@ -91,6 +91,17 @@ const fromAddress = process.env.EMAIL_FROM ?? 'no-reply@newera365.com';
 
 export default buildConfig({
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
+  // Payload's default limiter (500 req / 15 min / IP) covers EVERY REST route,
+  // including the public GETs the frontend depends on. A single `next build`
+  // makes hundreds of CMS fetches from one IP, and ISR fetch failures render
+  // silently empty — so the default cap can starve the site of its own content
+  // (observed live: 429s mid-audit after two local builds). Keep the limiter as
+  // an abuse backstop but give read traffic ample headroom; the public form
+  // endpoints keep their own much stricter Postgres-backed per-route limits.
+  rateLimit: {
+    window: 15 * 60 * 1000,
+    max: 10000,
+  },
   localization: {
     locales: ['en', 'ar'],
     defaultLocale: 'en',

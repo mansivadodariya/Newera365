@@ -74,6 +74,9 @@ export interface CmsInstrument {
   pipValue?: number | null;
   tickSize?: number | null;
   marginRequirement?: number | null;
+  // Manual overnight swaps (points/day; shown when MT5 sync is off or as published values)
+  swapLong?: number | null;
+  swapShort?: number | null;
   // Spread comparator fields
   spreadIndustry?: number | null;
   spreadStandard?: number | null;
@@ -337,6 +340,7 @@ export interface CmsSiteSettings {
   contactEmail?: string | null;
   contactEmailCompliance?: string | null;
   contactPhone?: string | null;
+  whatsappNumber?: string | null;
   contactAddressEn?: string | null;
   contactAddressAr?: string | null;
   supportHoursEn?: string | null;
@@ -980,6 +984,7 @@ export interface CmsMediaPressItem {
   id: number;
   headline: string;
   publication: string;
+  publicationAr?: string | null;
   date: string;
   url?: string | null;
   excerpt?: string | null;

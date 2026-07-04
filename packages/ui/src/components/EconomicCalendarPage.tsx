@@ -1,7 +1,6 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { SectionKicker } from './SectionKicker';
 import { ChartWidget } from './ChartWidget';
 
 export function EconomicCalendarPage() {
@@ -26,17 +25,22 @@ export function EconomicCalendarPage() {
       {/* TradingView Economic Calendar Widget */}
       <section className="px-5 pb-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <ChartWidget
-            type="economic-calendar"
-            theme="dark"
-            height={700}
-            className="overflow-hidden rounded-[20px]"
-            config={{
-              importanceFilter: '-1,0,1',
-              countryFilter: 'ar,au,br,ca,cn,fr,de,in,id,it,jp,kr,mx,ru,sa,za,tr,gb,us,eu',
-              isTransparent: false,
-            }}
-          />
+          {/* Height scales with the viewport so rows aren't clipped on small
+              screens (the widget renders taller rows below ~640px wide). */}
+          <div className="h-[560px] w-full overflow-hidden rounded-[20px] border border-transparent md:h-[640px] xl:h-[720px] dark:border-white/[0.08]">
+            <ChartWidget
+              type="economic-calendar"
+              theme="dark"
+              width="100%"
+              height="100%"
+              className="h-full"
+              config={{
+                importanceFilter: '-1,0,1',
+                countryFilter: 'ar,au,br,ca,cn,fr,de,in,id,it,jp,kr,mx,ru,sa,za,tr,gb,us,eu',
+                isTransparent: false,
+              }}
+            />
+          </div>
         </div>
       </section>
     </>

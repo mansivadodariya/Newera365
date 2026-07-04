@@ -87,7 +87,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const isAr = params.locale === 'ar';
   const m = CATEGORY_META[cat][isAr ? 'ar' : 'en'];
   return {
-    title: `${m.title} | ${isAr ? 'نيو إيرا 365' : 'NewEra365'}`,
+    title: m.title,
     description: m.desc,
   };
 }

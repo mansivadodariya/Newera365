@@ -24,8 +24,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // slug-derived title instead of the bare site default.
     const isAr = params.locale === 'ar';
     return {
-      title: `${slugToTitle(params.slug)} | ${isAr ? 'نيو إيرا 365' : 'NewEra365'}`,
+      title: slugToTitle(params.slug),
       description: isAr ? 'آخر أخبار الأسواق من NewEra365.' : 'Latest market news from NewEra365.',
+      // notFound() on ISR-filled dynamic routes responds 200 (soft-404), so keep
+      // deleted/unknown slugs out of search indexes explicitly.
+      robots: { index: false, follow: false },
     };
   }
   return {

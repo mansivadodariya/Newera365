@@ -349,8 +349,19 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                   <dev.Icon />
                   <span className="font-body truncate text-[13px] font-medium">{t(dev.key)}</span>
                 </div>
-                <div className="font-inter text-[18px] font-normal text-[rgba(255,255,255,0.30)]">
-                  ›
+                <div className="flex items-center text-[rgba(255,255,255,0.30)]">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-[18px] w-[18px] rtl:-scale-x-100"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m9 18 6-6-6-6" />
+                  </svg>
                 </div>
               </div>
             ))}

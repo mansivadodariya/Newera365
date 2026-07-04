@@ -255,6 +255,8 @@ const SENTIMENT_STYLES: Record<Sentiment, string> = {
 export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartPageProps = {}) {
   const t = useTranslations('analystChart');
   const [tab, setTab] = useState<FilterTab>('All');
+  // Symbol picked from the week's-calls list; null = first call of the filter.
+  const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null);
 
   const calls = cmsCalls?.length ? cmsCalls.map(mapCmsCall) : CALLS;
   const analyst = {
@@ -267,7 +269,10 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
   };
 
   const filtered = tab === 'All' ? calls : calls.filter((c) => sameCategory(c.category, tab));
-  const featured = filtered[0] ?? calls[0]!;
+  const selectedCall = selectedSymbol
+    ? filtered.find((c) => c.symbol === selectedSymbol)
+    : undefined;
+  const featured = selectedCall ?? filtered[0] ?? calls[0]!;
   const [authModal, setAuthModal] = useState<AuthModalType>(null);
 
   return (
@@ -330,11 +335,19 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
             {t('callsKicker')}
           </SectionKicker>
+          {/* Rows are buttons: clicking a call loads it into the featured chart. */}
           <div className="flex flex-col gap-3">
             {filtered.map((pair) => (
-              <div
+              <button
                 key={pair.symbol}
-                className="flex items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-3 dark:bg-[#16181d]"
+                type="button"
+                onClick={() => setSelectedSymbol(pair.symbol)}
+                aria-pressed={pair.symbol === featured.symbol}
+                className={`focus-visible:ring-accent flex w-full cursor-pointer items-center justify-between rounded-[14px] border px-4 py-3 text-start transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 ${
+                  pair.symbol === featured.symbol
+                    ? 'border-accent/50 bg-accent/[0.06] dark:bg-accent/[0.08]'
+                    : 'hover:border-accent/30 border-transparent bg-[#FAFAF9] dark:bg-[#16181d]'
+                }`}
               >
                 <div className="flex items-center gap-3">
                   <Sparkline points={pair.sparkPoints} up={pair.up} />
@@ -361,7 +374,7 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
                     {t('targetLabel')} {pair.target} · {pair.conf}%
                   </p>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>

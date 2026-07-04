@@ -28,7 +28,6 @@ export interface CmsFooterContact {
 }
 
 function Footer({
-  footerColumns,
   riskDisclaimer,
   socialLinks,
   contact,
@@ -37,7 +36,6 @@ function Footer({
   companyRegistration,
   liveChatUrl,
 }: {
-  footerColumns?: CmsFooterColumn[];
   riskDisclaimer?: string | null;
   socialLinks?: CmsSocialLinks;
   contact?: CmsFooterContact | null;
@@ -49,6 +47,10 @@ function Footer({
   const locale = useLocale();
   const t = useTranslations('footer');
 
+  // Navigation columns are deliberately frontend-owned (client feedback round
+  // 3): they must render even when the CMS is unreachable, and they change
+  // with code (routes), not with content. CMS keeps the content-ish footer
+  // fields (regulatory, contact, social, payments).
   const FOOTER_LINKS = [
     {
       heading: t('headingMarkets'),
@@ -67,6 +69,7 @@ function Footer({
         { label: t('linkMT5'), href: '/platform/mt5' },
         { label: t('linkWebTrader'), href: '/platform/webtrader' },
         { label: t('linkTools'), href: '/tools' },
+        { label: t('linkAiCrm'), href: '/ai-crm' },
       ],
     },
     {
@@ -89,211 +92,79 @@ function Footer({
     },
   ];
 
-  const columns =
-    footerColumns && footerColumns.length > 0
-      ? footerColumns.map((col) => ({
-          heading: col.heading ?? '',
-          items: (col.links ?? []).map((l) => ({ label: l.label ?? '', href: l.href ?? '' })),
-        }))
-      : FOOTER_LINKS;
+  const columns = FOOTER_LINKS;
 
   return (
     <footer className="bg-footer-bg px-5 pb-14 pt-12 text-white xl:px-[120px] xl:py-[64px]">
       <div className="mx-auto max-w-[390px] xl:max-w-[1200px]">
-        {/* Logo */}
-        <Image
-          src="/images/logo-dark.png"
-          alt="NewEra365"
-          width={133}
-          height={26}
-          className="mb-[18px]"
-        />
+        {/* Top section — on desktop the brand block sits left and the link
+            columns spread across the remaining width so the row fills 1200px. */}
+        <div className="xl:mb-12 xl:flex xl:items-start xl:justify-between xl:gap-16">
+          {/* Brand block: logo, tagline, social */}
+          <div className="xl:w-[300px] xl:shrink-0">
+            <Image
+              src="/images/logo-dark.png"
+              alt="NewEra365"
+              width={133}
+              height={26}
+              className="mb-[18px]"
+            />
 
-        {/* Tagline */}
-        <p className="font-body mb-8 max-w-[280px] text-[13px] leading-[155%] text-[rgba(255,255,255,0.55)]">
-          {t('tagline')}
-        </p>
+            <p className="font-body mb-8 max-w-[280px] text-[13px] leading-[155%] text-[rgba(255,255,255,0.55)]">
+              {t('tagline')}
+            </p>
 
-        {/* Social icons — conditional on CMS data */}
-        {socialLinks && Object.values(socialLinks).some(Boolean) && (
-          <div className="mb-8 flex items-center gap-3">
-            {[
-              {
-                key: 'facebook',
-                href: socialLinks.facebook,
-                icon: (
-                  <path
-                    d="M14 2H10C8.34 2 7 3.34 7 5v3H5v3h2v7h3v-7h2.5l.5-3H10V5a1 1 0 011-1h3V2z"
-                    stroke="currentColor"
-                    strokeWidth="1.3"
-                    strokeLinejoin="round"
-                    fill="none"
-                  />
-                ),
-              },
-              {
-                key: 'x',
-                href: socialLinks.x,
-                icon: (
-                  <path
-                    d="M3 3l10 10M13 3L3 13"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                ),
-              },
-              {
-                key: 'linkedin',
-                href: socialLinks.linkedin,
-                icon: (
-                  <>
-                    <rect
-                      x="2"
-                      y="2"
-                      width="12"
-                      height="12"
-                      rx="2"
-                      stroke="currentColor"
-                      strokeWidth="1.3"
-                      fill="none"
-                    />
-                    <path
-                      d="M5 7v5M5 5v.5"
-                      stroke="currentColor"
-                      strokeWidth="1.4"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d="M8 12V9c0-1.1.9-2 2-2s2 .9 2 2v3"
-                      stroke="currentColor"
-                      strokeWidth="1.3"
-                      strokeLinecap="round"
-                      fill="none"
-                    />
-                    <path
-                      d="M8 7v5"
-                      stroke="currentColor"
-                      strokeWidth="1.4"
-                      strokeLinecap="round"
-                    />
-                  </>
-                ),
-              },
-              {
-                key: 'instagram',
-                href: socialLinks.instagram,
-                icon: (
-                  <>
-                    <rect
-                      x="2"
-                      y="2"
-                      width="12"
-                      height="12"
-                      rx="3.5"
-                      stroke="currentColor"
-                      strokeWidth="1.3"
-                      fill="none"
-                    />
-                    <circle
-                      cx="8"
-                      cy="8"
-                      r="2.5"
-                      stroke="currentColor"
-                      strokeWidth="1.3"
-                      fill="none"
-                    />
-                    <circle cx="11.5" cy="4.5" r="0.6" fill="currentColor" />
-                  </>
-                ),
-              },
-              {
-                key: 'youtube',
-                href: socialLinks.youtube,
-                icon: (
-                  <>
-                    <rect
-                      x="1.5"
-                      y="4"
-                      width="13"
-                      height="9"
-                      rx="2.5"
-                      stroke="currentColor"
-                      strokeWidth="1.3"
-                      fill="none"
-                    />
-                    <path d="M6.5 6l4 2.5-4 2.5V6z" fill="currentColor" />
-                  </>
-                ),
-              },
-              {
-                key: 'telegram',
-                href: socialLinks.telegram,
-                icon: (
-                  <path
-                    d="M2 8l12-5-4 12-3-4.5L2 8zm0 0l6.5 1.5"
-                    stroke="currentColor"
-                    strokeWidth="1.3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    fill="none"
-                  />
-                ),
-              },
-              {
-                key: 'tiktok',
-                href: socialLinks.tiktok,
-                icon: (
-                  <path
-                    d="M9 2v8a3 3 0 11-3-3h1V5a6 6 0 004 1"
-                    stroke="currentColor"
-                    strokeWidth="1.3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    fill="none"
-                  />
-                ),
-              },
-            ]
-              .filter((s) => Boolean(s.href))
-              .map((s) => (
-                <a
-                  key={s.key}
-                  href={s.href!}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.key.charAt(0).toUpperCase() + s.key.slice(1)}
-                  className="text-white/40 transition-colors hover:text-white/80"
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    {s.icon}
-                  </svg>
-                </a>
-              ))}
-          </div>
-        )}
-
-        {/* Link grid — 2 cols mobile, 2 cols desktop (2×2 wrap = 4 sections) */}
-        <div className="mb-10 grid grid-cols-2 gap-x-6 gap-y-8 xl:gap-x-6 xl:gap-y-8">
-          {columns.map((col) => (
-            <div key={col.heading}>
-              <p className="mb-3 font-mono text-[10px] font-medium uppercase leading-[100%] tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
-                {col.heading}
-              </p>
-              <ul className="flex flex-col gap-[8px]">
-                {col.items.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href.startsWith('http') ? item.href : `/${locale}${item.href}`}
-                      className="font-body text-[13px] font-normal leading-[100%] text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
+            {/* Social icons — Flaticon Uicons brand glyphs; conditional on CMS data */}
+            {socialLinks && Object.values(socialLinks).some(Boolean) && (
+              <div className="mb-8 flex items-center gap-4 xl:mb-0">
+                {[
+                  { key: 'facebook', href: socialLinks.facebook, icon: 'fi-brands-facebook' },
+                  { key: 'x', href: socialLinks.x, icon: 'fi-brands-twitter-alt' },
+                  { key: 'linkedin', href: socialLinks.linkedin, icon: 'fi-brands-linkedin' },
+                  { key: 'instagram', href: socialLinks.instagram, icon: 'fi-brands-instagram' },
+                  { key: 'youtube', href: socialLinks.youtube, icon: 'fi-brands-youtube' },
+                  { key: 'telegram', href: socialLinks.telegram, icon: 'fi-brands-telegram' },
+                  { key: 'tiktok', href: socialLinks.tiktok, icon: 'fi-brands-tik-tok' },
+                ]
+                  .filter((s) => Boolean(s.href))
+                  .map((s) => (
+                    <a
+                      key={s.key}
+                      href={s.href!}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.key.charAt(0).toUpperCase() + s.key.slice(1)}
+                      className="inline-flex text-white/40 transition-colors hover:text-white/80"
                     >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+                      <i className={`fi ${s.icon} text-[18px] leading-none`} aria-hidden="true" />
+                    </a>
+                  ))}
+              </div>
+            )}
+          </div>
+
+          {/* Link grid — 2 cols mobile, 4 cols desktop (fills the row) */}
+          <div className="mb-10 grid grid-cols-2 gap-x-6 gap-y-8 xl:mb-0 xl:flex-1 xl:grid-cols-4 xl:gap-x-8">
+            {columns.map((col) => (
+              <div key={col.heading}>
+                <p className="mb-3 font-mono text-[10px] font-medium uppercase leading-[100%] tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+                  {col.heading}
+                </p>
+                <ul className="flex flex-col gap-[8px]">
+                  {col.items.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href.startsWith('http') ? item.href : `/${locale}${item.href}`}
+                        className="font-body text-[13px] font-normal leading-[100%] text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Contact + payment methods (client feedback #6) — all CMS-driven; each
@@ -375,15 +246,15 @@ function Footer({
           </div>
         )}
 
-        {/* Thin divider */}
-        <div className="mb-5 h-px w-full max-w-[640px] bg-[rgba(255,255,255,0.08)]" />
+        {/* Thin divider — full width on desktop */}
+        <div className="mb-5 h-px w-full bg-[rgba(255,255,255,0.08)]" />
 
         {/* Company / regulation + risk disclosure (client feedback #6) — CMS-driven.
             Regulatory + company blocks hide when empty; the risk warning always
             shows (CMS copy, else the standard regulatory boilerplate). */}
-        <div className="max-w-[640px]">
+        <div className="grid gap-x-16 gap-y-8 xl:grid-cols-2">
           {(regulatoryDisclosure || companyRegistration) && (
-            <>
+            <div>
               <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
                 {t('regHeading')}
               </p>
@@ -393,28 +264,27 @@ function Footer({
                 </p>
               )}
               {companyRegistration && (
-                <p className="font-body mb-5 whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.4)]">
+                <p className="font-body whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.4)]">
                   {companyRegistration}
                 </p>
               )}
-            </>
+            </div>
           )}
-          <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
-            {t('riskDisclosure')}
-          </p>
-          <p className="font-body mb-4 whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.45)]">
-            {riskDisclaimer ?? t('riskWarning')}
-          </p>
-
-          {/* Copyright row */}
-          <div className="flex items-center justify-between pt-3">
-            <span className="font-mono text-[10px] font-medium tracking-[1.5px] text-[rgba(255,255,255,0.35)]">
-              {t('copyright')}
-            </span>
-            <span className="font-mono text-[10px] font-medium tracking-[1.5px] text-[rgba(255,255,255,0.35)]">
-              V 4.0
-            </span>
+          <div>
+            <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+              {t('riskDisclosure')}
+            </p>
+            <p className="font-body whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.45)]">
+              {riskDisclaimer ?? t('riskWarning')}
+            </p>
           </div>
+        </div>
+
+        {/* Copyright row */}
+        <div className="mt-6 border-t border-[rgba(255,255,255,0.08)] pt-5">
+          <span className="font-mono text-[10px] font-medium tracking-[1.5px] text-[rgba(255,255,255,0.35)]">
+            {t('copyright')}
+          </span>
         </div>
       </div>
     </footer>

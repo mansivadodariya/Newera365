@@ -10,11 +10,13 @@ export const metadata: Metadata = {
   description: 'Press coverage, media mentions and brand asset downloads for NewEra365.',
 };
 
-function mapItem(item: CmsMediaPressItem): MediaPressItem {
+function mapItem(item: CmsMediaPressItem, locale: string): MediaPressItem {
   return {
     id: item.id,
     headline: item.headline,
-    publication: item.publication,
+    // Publication is a per-field bilingual pair (publication / publicationAr),
+    // resolved here by locale; Arabic falls back to the English name when blank.
+    publication: locale === 'ar' ? (item.publicationAr ?? item.publication) : item.publication,
     date: item.date,
     url: item.url ?? null,
     excerpt: item.excerpt ?? null,
@@ -31,7 +33,9 @@ export default async function MediaPressRoute({ params }: { params: { locale: st
   const items = await getMediaPressItems(params.locale);
   return (
     <>
-      <MediaPressPage items={items.length > 0 ? items.map(mapItem) : undefined} />
+      <MediaPressPage
+        items={items.length > 0 ? items.map((item) => mapItem(item, params.locale)) : undefined}
+      />
       <CtaBanner />
     </>
   );

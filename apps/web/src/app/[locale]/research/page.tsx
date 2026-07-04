@@ -1,8 +1,23 @@
 import { setRequestLocale } from 'next-intl/server';
 import { ResearchPage, CtaBanner } from '@newera365/ui';
 import type { CmsResearchReportItem } from '@newera365/ui';
+import type { Metadata } from 'next';
 import { getResearchArticles, getResearchReports } from '@/lib/cms';
 import type { CmsResearchReport, CmsMedia } from '@/lib/cms';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const isAr = params.locale === 'ar';
+  return {
+    title: isAr ? 'الأبحاث' : 'Research',
+    description: isAr
+      ? 'تحليلات وأبحاث الأسواق من مكتب NewEra365.'
+      : 'Market analysis and research from the NewEra365 desk.',
+  };
+}
 
 function mapReport(r: CmsResearchReport): CmsResearchReportItem {
   const file = r.reportFile;

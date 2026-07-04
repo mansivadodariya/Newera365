@@ -15,20 +15,22 @@ interface RiskBannerProps {
  * current session but reappears on a fresh visit.
  */
 export function RiskBanner({ enabled, message }: RiskBannerProps) {
-  const [visible, setVisible] = useState(false);
+  // Visible by default so the banner is in the server-rendered HTML — it sits
+  // at the top of every page and was the LCP element, so a client-only reveal
+  // (previous behaviour) pushed first paint out to hydration. Dismissal is
+  // re-applied after mount; the brief flash for already-dismissed sessions is
+  // the cheaper trade-off.
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    if (!enabled || !message) return;
     try {
-      const dismissed = sessionStorage.getItem(DISMISSED_KEY);
-      if (!dismissed) setVisible(true);
+      if (sessionStorage.getItem(DISMISSED_KEY)) setVisible(false);
     } catch {
-      // sessionStorage unavailable (private mode, etc.) — show banner
-      setVisible(true);
+      // sessionStorage unavailable (private mode, etc.) — keep banner shown
     }
-  }, [enabled, message]);
+  }, []);
 
-  if (!visible || !message) return null;
+  if (!enabled || !visible || !message) return null;
 
   function dismiss() {
     setVisible(false);

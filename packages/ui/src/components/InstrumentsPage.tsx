@@ -59,6 +59,12 @@ export interface InstrumentItem {
   spread?: number | null;
   leverage?: string | null;
   minTradeSize?: number | null;
+  // Specification fields surfaced on the market-category spec panel
+  contractSize?: number | null;
+  marginRequirement?: number | null;
+  tradingHours?: string | null;
+  swapLong?: number | null;
+  swapShort?: number | null;
 }
 
 interface InstrumentsPageProps {

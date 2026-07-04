@@ -46,7 +46,7 @@ const EXPLORE_LINKS = [
   },
   {
     label: 'Media & press',
-    href: '/company/media',
+    href: '/company/media-press',
     desc: 'Latest coverage of NewEra365',
     icon: (
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -260,7 +260,7 @@ export function AboutPage({ team: cmsTeam, milestones: cmsMilestones }: AboutPag
                       ? t('exploreCareers')
                       : link.href === '/company/awards'
                         ? t('exploreAwards')
-                        : link.href === '/company/media'
+                        : link.href === '/company/media-press'
                           ? t('exploreMedia')
                           : t('exploreContact')}
                   </p>
@@ -269,12 +269,23 @@ export function AboutPage({ team: cmsTeam, milestones: cmsMilestones }: AboutPag
                       ? t('exploreCareersDesc')
                       : link.href === '/company/awards'
                         ? t('exploreAwardsDesc')
-                        : link.href === '/company/media'
+                        : link.href === '/company/media-press'
                           ? t('exploreMediaDesc')
                           : t('exploreContactDesc')}
                   </p>
                 </div>
-                <span className="text-muted flex-shrink-0 text-[18px]">›</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  className="text-muted h-[18px] w-[18px] flex-shrink-0 rtl:-scale-x-100"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
               </Link>
             ))}
           </div>

@@ -209,7 +209,7 @@ export function ResearchPage({
   const articles = useMemo(() => toDisplayArticles(cmsArticles), [cmsArticles]);
 
   // Tabs reflect the real CMS categories present (case-insensitive), never a
-  // hardcoded list — so /blog, /research and /daily-news each show their own.
+  // hardcoded list — so /education/blog, /research and /daily-news each show their own.
   const categories = useMemo(
     () => ['ALL', ...distinctCategories(articles, (a) => a.category)],
     [articles],
@@ -316,68 +316,64 @@ export function ResearchPage({
       {!isFiltering && featured && (
         <section className="px-5 pb-6">
           <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            {/* Mobile: image on top. Desktop: content start-side, image capped
+                at a fixed end-side column (flex-row-reverse keeps the DOM
+                image-first for the mobile stack while placing it at the
+                inline end on xl — correct in RTL too). */}
             <Link
               href={hrefFor(featured)}
               {...extProps(featured)}
-              className="shadow-card-dark group flex flex-col overflow-hidden rounded-[22px] bg-[#111111]"
+              className="shadow-card-dark group flex flex-col overflow-hidden rounded-[22px] border border-transparent bg-[#111111] xl:flex-row-reverse dark:border-white/[0.08]"
             >
-              {/* Thumbnail */}
-              <div className="relative h-[180px] overflow-hidden bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111]">
-                <div className="absolute inset-0 flex items-end p-4">
-                  <div className="w-full">
-                    <svg width="100%" height="50" viewBox="0 0 280 50" preserveAspectRatio="none">
-                      <polyline
-                        points="0,40 30,35 60,42 90,28 120,32 150,18 180,22 210,10 240,15 280,5"
-                        fill="none"
-                        stroke="#00B050"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <polygon
-                        points="0,40 30,35 60,42 90,28 120,32 150,18 180,22 210,10 240,15 280,5 280,50 0,50"
-                        fill="url(#featGradient)"
-                        opacity="0.3"
-                      />
-                      <defs>
-                        <linearGradient id="featGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#00B050" />
-                          <stop offset="100%" stopColor="#00B050" stopOpacity="0" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                  </div>
-                </div>
-                <div className="absolute start-4 top-4">
+              {/* Thumbnail — real CMS cover image when present */}
+              <div className="relative h-[180px] overflow-hidden xl:h-auto xl:w-[380px] xl:flex-shrink-0">
+                {featured.thumbnailUrl ? (
+                  <img
+                    src={featured.thumbnailUrl}
+                    alt={featured.title}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  />
+                ) : (
+                  <div
+                    className="absolute inset-0 bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111]"
+                    aria-hidden="true"
+                  />
+                )}
+              </div>
+
+              {/* Content */}
+              <div className="flex flex-1 flex-col p-5 xl:min-h-[280px] xl:p-8">
+                <div className="mb-2.5 flex items-center gap-2.5">
+                  <p className="text-accent-bright font-mono text-[10px] font-medium uppercase tracking-[0.18em]">
+                    {t('featuredTag')}
+                  </p>
                   <span
                     className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${catColor(featured.category)}`}
                   >
                     {translateResearchCat(featured.category)}
                   </span>
                 </div>
-              </div>
-              {/* Content */}
-              <div className="p-5">
-                <p className="group-hover:text-accent mb-2 font-sans text-[18px] font-semibold leading-[1.25] text-white transition-colors">
+                <p className="group-hover:text-accent-bright max-w-[30ch] font-sans text-[18px] font-semibold leading-[1.25] text-white transition-colors xl:text-[24px]">
                   {featured.title}
                 </p>
                 {featured.summary && (
-                  <p className="font-body mb-4 text-[13px] leading-[1.55] text-white/60">
+                  <p className="font-body mt-2.5 max-w-[62ch] text-[13px] leading-[1.6] text-white/60 xl:text-[13.5px]">
                     {featured.summary}
                   </p>
                 )}
-                <div className="flex items-center justify-between">
-                  <span className="font-body text-[11px] text-white/40">
+                <div className="mt-5 flex items-center justify-between gap-4 border-t border-white/[0.08] pt-4 xl:mt-auto">
+                  <span className="font-body text-[11px] leading-none text-white/40">
                     {featured.date} ·{' '}
                     {t('readTimeLabel', { minutes: parseInt(featured.readTime, 10) || 5 })}
                   </span>
-                  <span className="font-body text-accent flex items-center gap-1.5 text-[12px] font-medium">
+                  <span className="font-body text-accent-bright flex items-center gap-1.5 text-[12px] font-medium leading-none">
                     {t('readArticle')}
                     <svg
                       width="11"
                       height="11"
                       viewBox="0 0 16 16"
                       fill="none"
+                      aria-hidden="true"
                       className="rtl:-scale-x-100"
                     >
                       <path
@@ -482,25 +478,25 @@ export function ResearchPage({
                       </svg>
                     </div>
                   )}
-                  <div className="absolute start-3 top-3">
+                </div>
+                {/* Content */}
+                <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
+                  <div className="mb-2">
                     <span
                       className={`font-body rounded-full px-2.5 py-[3px] text-[8px] font-semibold uppercase tracking-[0.1em] ${catColor(article.category)}`}
                     >
                       {translateResearchCat(article.category)}
                     </span>
                   </div>
-                </div>
-                {/* Content */}
-                <div className="flex flex-1 flex-col p-4">
-                  <p className="group-hover:text-accent mb-2 flex-1 font-sans text-[14px] font-semibold leading-[1.3] text-white transition-colors">
+                  <p className="group-hover:text-accent font-sans text-[14px] font-semibold leading-[1.3] text-white transition-colors">
                     {article.title}
                   </p>
                   {article.summary && (
-                    <p className="font-body mb-3 line-clamp-2 text-[12px] leading-[1.55] text-white/50">
+                    <p className="font-body mt-2 line-clamp-2 text-[12px] leading-[1.55] text-white/50">
                       {article.summary}
                     </p>
                   )}
-                  <div className="flex items-center justify-between">
+                  <div className="mt-auto flex items-center justify-between pt-3">
                     <span className="font-mono text-[10px] text-white/30">
                       {article.date} ·{' '}
                       {t('readTimeLabel', { minutes: parseInt(article.readTime, 10) || 5 })}
@@ -510,7 +506,8 @@ export function ResearchPage({
                       height="11"
                       viewBox="0 0 14 14"
                       fill="none"
-                      className="group-hover:text-accent text-white/30 transition-colors"
+                      aria-hidden="true"
+                      className="group-hover:text-accent text-white/30 transition-colors rtl:-scale-x-100"
                     >
                       <path
                         d="M2 12L12 2M12 2H7M12 2v5"

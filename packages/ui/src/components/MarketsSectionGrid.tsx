@@ -46,7 +46,7 @@ function MarketCard({ item, index }: { item: MarketItem; index: number }) {
     <Link
       ref={ref}
       href={item.href}
-      className="hover:border-accent/30 group relative flex h-[110px] flex-col justify-end overflow-hidden rounded-[18px] border border-transparent px-4 py-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_12px_32px_rgba(0,0,0,0.28)]"
+      className="group relative flex h-[110px] flex-col justify-end overflow-hidden rounded-[18px] border border-transparent px-4 py-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_12px_32px_rgba(0,0,0,0.28)]"
     >
       {/* Dark base */}
       <div className="absolute inset-0 bg-[#111]" />
@@ -59,8 +59,6 @@ function MarketCard({ item, index }: { item: MarketItem; index: number }) {
         className="pointer-events-none object-cover opacity-40 transition-all duration-500 ease-out group-hover:scale-110 group-hover:opacity-25"
         aria-hidden="true"
       />
-      {/* Subtle green top-edge glow on hover */}
-      <div className="bg-accent pointer-events-none absolute inset-x-0 top-0 h-[2px] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       {/* Explore affordance — slides in on hover (RTL-aware) */}
       <span
         aria-hidden="true"

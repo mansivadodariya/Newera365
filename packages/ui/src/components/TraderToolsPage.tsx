@@ -104,10 +104,7 @@ function ResultCard({
   };
 }) {
   return (
-    <div
-      className="overflow-hidden rounded-[18px] bg-[#111111]"
-      style={{ boxShadow: '0 4px 24px rgba(0,176,80,0.15)' }}
-    >
+    <div className="shadow-card-dark overflow-hidden rounded-[18px] border border-transparent bg-[#111111] dark:border-white/[0.08]">
       <div className="px-5 pb-5 pt-5">
         <p className="font-body mb-1 text-[10px] uppercase tracking-[0.12em] text-white/40">
           {activeTab === 'MARGIN'
@@ -116,7 +113,7 @@ function ResultCard({
               ? labels.resultPip
               : labels.resultSwap}
         </p>
-        <p className="font-sans text-[42px] font-semibold leading-[1.1] text-white">
+        <p className="font-sans text-[42px] font-semibold tabular-nums leading-[1.1] text-white">
           {activeTab === 'SWAP' && swap < 0 ? '-' : ''}
           {Math.abs(activeTab === 'MARGIN' ? margin : activeTab === 'PIP' ? pip : swap).toFixed(2)}
           <span className="ms-1 text-[22px] font-normal text-white/60">{currency}</span>
@@ -381,7 +378,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
       <section className="px-5 pb-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Tab switcher */}
-          <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-[#1a1c22]">
+          <div className="border-border mb-5 flex rounded-[14px] border bg-[#f2f2f4] p-1 dark:border-white/[0.08] dark:bg-[#1a1c22]">
             {TABS.map((tab) => (
               <button
                 key={tab.id}
@@ -426,40 +423,43 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
                 options={['10', '20', '50', '100', '200', '500']}
                 onChange={setLeverage}
               />
-            </div>
-            {activeTab === 'SWAP' && (
-              <>
-                <div className="flex flex-col gap-1.5">
-                  <label className="font-body text-[11px] uppercase tracking-[0.1em] text-[#6b7280] dark:text-white/40">
-                    {t('fieldDirection')}
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {(['long', 'short'] as const).map((d) => (
-                      <button
-                        key={d}
-                        onClick={() => setDirection(d)}
-                        className={`font-body rounded-[12px] border py-3 text-[13px] font-medium transition-colors ${
-                          direction === d
-                            ? d === 'long'
-                              ? 'border-[#26A69A] bg-[#26A69A]/10 text-[#26A69A]'
-                              : 'border-[#EF4444] bg-[#EF4444]/10 text-[#EF4444]'
-                            : 'border-border text-muted'
-                        }`}
-                      >
-                        {d === 'long' ? t('dirBuy') : t('dirSell')}
-                      </button>
-                    ))}
+              {/* Swap-only fields live INSIDE the input grid so the two-column
+                  rhythm holds (they used to render as stray flex children). */}
+              {activeTab === 'SWAP' && (
+                <>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-body text-[11px] uppercase tracking-[0.1em] text-[#6b7280] dark:text-white/40">
+                      {t('fieldDirection')}
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {(['long', 'short'] as const).map((d) => (
+                        <button
+                          key={d}
+                          onClick={() => setDirection(d)}
+                          aria-pressed={direction === d}
+                          className={`font-body cursor-pointer rounded-[12px] border py-3 text-[13px] font-medium transition-colors duration-200 ${
+                            direction === d
+                              ? d === 'long'
+                                ? 'border-[#26A69A] bg-[#26A69A]/10 text-[#26A69A]'
+                                : 'border-[#EF4444] bg-[#EF4444]/10 text-[#EF4444]'
+                              : 'border-border text-muted hover:text-foreground'
+                          }`}
+                        >
+                          {d === 'long' ? t('dirBuy') : t('dirSell')}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-                <NumberInput
-                  label={t('fieldDays')}
-                  value={days}
-                  onChange={setDays}
-                  step="1"
-                  min="1"
-                />
-              </>
-            )}
+                  <NumberInput
+                    label={t('fieldDays')}
+                    value={days}
+                    onChange={setDays}
+                    step="1"
+                    min="1"
+                  />
+                </>
+              )}
+            </div>
 
             {/* Result card + formula — right column on xl */}
             <div className="hidden xl:flex xl:w-[400px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
@@ -492,30 +492,8 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
             </div>
           </div>
 
-          {/* Calculate button — mobile/tablet only (desktop uses right column) */}
-          <button
-            className="bg-accent font-body mt-5 flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white shadow-[0_6px_20px_rgba(0,176,80,0.3)] transition-all hover:bg-[#00c85a] hover:shadow-[0_8px_28px_rgba(0,176,80,0.45)] active:scale-[0.99] xl:hidden"
-            onClick={() => {
-              /* auto-calculates live */
-            }}
-          >
-            {t('calculateBtn')}
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 16 16"
-              fill="none"
-              className="rtl:-scale-x-100"
-            >
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+          {/* Results render live below the inputs — the old no-op "Calculate"
+              button was removed (results always reflect the current inputs). */}
 
           {/* Result + formula — mobile/tablet only */}
           <div className="mt-5 flex flex-col gap-4 xl:hidden">
@@ -606,7 +584,8 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
                   height="12"
                   viewBox="0 0 7 12"
                   fill="none"
-                  className="group-hover:text-accent flex-shrink-0 text-[#6b7280] transition-colors dark:text-white/30"
+                  aria-hidden="true"
+                  className="group-hover:text-accent flex-shrink-0 text-[#6b7280] transition-colors rtl:-scale-x-100 dark:text-white/30"
                 >
                   <path
                     d="M1 1L6 6L1 11"

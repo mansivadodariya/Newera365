@@ -3,13 +3,18 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const isDev = process.env.NODE_ENV === 'development';
+// Only an actual production build (`next build` / Vercel set NODE_ENV=production)
+// must enforce the guard below. `next lint` and `tsc` also load this config but
+// leave NODE_ENV unset — they bake no bundle, so they must not trip the guard.
+// (Using `!isDev` before tripped CI's lint step, which has no CMS URL set.)
+const isProd = process.env.NODE_ENV === 'production';
 
 // Fail the production build loudly if the CMS URL is unset rather than silently
 // baking in http://localhost:3001 — under upgrade-insecure-requests that localhost
 // connect-src blocks every client fetch, and the same fallback points public forms
 // at the visitor's own machine (NE code-review WR-12).
 const cmsUrl = process.env.NEXT_PUBLIC_CMS_URL?.trim();
-if (!isDev && !cmsUrl) {
+if (isProd && !cmsUrl) {
   throw new Error('NEXT_PUBLIC_CMS_URL must be set for production builds (NE code-review WR-12).');
 }
 
@@ -20,6 +25,11 @@ if (!isDev && !cmsUrl) {
 // no further code change. The explicit media./cms.newera365.com entries below remain
 // for the R2 + custom-domain end state.
 const cmsHost = cmsUrl ? new URL(cmsUrl).hostname : null;
+// Protocol/port from the same URL — hardcoding https broke local prod smoke tests
+// (`next start` against http://localhost:3001 got 400s from /_next/image). Real
+// deployments set an https CMS URL, so the allowed pattern is unchanged there.
+const cmsProtocol = cmsUrl ? new URL(cmsUrl).protocol.replace(':', '') : null;
+const cmsPort = cmsUrl ? new URL(cmsUrl).port : '';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -37,6 +47,13 @@ const nextConfig = {
         destination: '/:locale/platform/mt5',
         permanent: true,
       },
+      // /tools/ai-crm was a page-level permanentRedirect; the route file was
+      // removed, so keep the path resolving (and CDN-purgeable) via config.
+      {
+        source: '/:locale(en|ar)/tools/ai-crm',
+        destination: '/:locale/ai-crm',
+        permanent: true,
+      },
       // /markets/instruments was the standalone full-spec table; its route was removed
       // and instrument specs now live within /markets/[category]. Without this redirect
       // the path falls through to the [category] segment and soft-404s (HTTP 200 + "Page
@@ -44,6 +61,19 @@ const nextConfig = {
       {
         source: '/:locale(en|ar)/markets/instruments',
         destination: '/:locale/markets/forex',
+        permanent: true,
+      },
+      // The blog moved from the Company section to Education — its route is now
+      // /education/blog. Redirect the old /blog and /blog/:slug so shared links and
+      // search-indexed URLs keep resolving instead of 404ing.
+      {
+        source: '/:locale(en|ar)/blog',
+        destination: '/:locale/education/blog',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|ar)/blog/:slug',
+        destination: '/:locale/education/blog/:slug',
         permanent: true,
       },
     ];
@@ -58,7 +88,9 @@ const nextConfig = {
       { protocol: 'https', hostname: 'cms.newera365.com' },
       // Current CMS upload host from NEXT_PUBLIC_CMS_URL (the Railway URL until the
       // custom domain is live). Skipped in dev — localhost is handled below.
-      ...(cmsHost && !isDev ? [{ protocol: 'https', hostname: cmsHost }] : []),
+      ...(cmsHost && !isDev
+        ? [{ protocol: cmsProtocol, hostname: cmsHost, ...(cmsPort ? { port: cmsPort } : {}) }]
+        : []),
       // Local Payload CMS uploads in development (served from port 3001).
       ...(isDev ? [{ protocol: 'http', hostname: 'localhost', port: '3001' }] : []),
     ],

@@ -107,7 +107,7 @@ export function ResearchDetailPage({
               href={`/${locale}/${basePath}`}
               className="font-body text-muted hover:text-foreground text-[12px] transition-colors"
             >
-              {basePath === 'blog'
+              {basePath === 'education/blog'
                 ? t('backBlog')
                 : basePath === 'daily-news'
                   ? t('backNews')

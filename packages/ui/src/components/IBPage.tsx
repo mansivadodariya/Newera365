@@ -268,18 +268,8 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
             {resolvedPartnerTypes.map((pt) => (
               <div
                 key={pt.id}
-                className="hover:border-accent/20 dark:hover:border-accent/25 group relative flex flex-col gap-[12px] overflow-hidden rounded-[22px] border border-transparent bg-[#f2f2f2] p-[22px] transition-all duration-300 hover:-translate-y-1 hover:bg-[#07090D] hover:shadow-[0_20px_48px_rgba(0,176,80,0.15)] dark:border-white/[0.06] dark:bg-[#1a1c22] dark:hover:bg-[#07090D]"
+                className="hover:border-accent/25 dark:hover:border-accent/30 group relative flex flex-col gap-[12px] overflow-hidden rounded-[22px] border border-transparent bg-[#f2f2f2] p-[22px] transition-all duration-300 hover:-translate-y-1 hover:bg-[#07090D] hover:shadow-[0_18px_44px_rgba(0,0,0,0.28)] dark:border-white/[0.08] dark:bg-[#15171c] dark:hover:bg-[#07090D]"
               >
-                {/* Green glow — fades in on hover */}
-                <span
-                  className="pointer-events-none absolute -top-[60px] left-[10%] h-[200px] w-[200px] rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-80"
-                  style={{
-                    background:
-                      'radial-gradient(circle, rgba(0,176,80,0.45) 0%, rgba(0,176,80,0.12) 44%, transparent 70%)',
-                  }}
-                  aria-hidden="true"
-                />
-
                 {/* Header */}
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-sans text-[22px] font-semibold tracking-[-0.44px] text-[#111] transition-colors duration-300 group-hover:text-white dark:text-white">
@@ -352,7 +342,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
             {resolvedSteps.map((step) => (
               <div
                 key={step.num}
-                className="bg-background shadow-card flex items-start gap-4 rounded-[18px] p-[18px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:shadow-none"
+                className="bg-background shadow-card flex items-start gap-4 rounded-[18px] border border-transparent p-[18px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:border-white/[0.08] dark:bg-[#101318] dark:shadow-none"
               >
                 {/* Step number — accent 22px per Figma */}
                 <span className="text-accent w-[38px] flex-shrink-0 font-sans text-[22px] font-semibold leading-none tracking-[-0.44px]">

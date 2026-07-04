@@ -37,6 +37,22 @@ apps/web/next-env.d.ts
 # TypeScript incremental build cache
 *.tsbuildinfo
 
+# graphify knowledge-graph output (regenerated locally by `graphify update`)
+graphify-out/
+
+# CMS seed source images (uploaded into the CMS by seed scripts; prod already seeded)
+apps/cms/seed-assets/
+
+# ad-hoc review / working docs (kept local, not pushed)
+UAT-REVIEW-2026-07-03.md
+PRODUCTION_CHECKLIST.md
+UAT-CONTENT-CHECKLIST.md
+SECURITY.md
+code-review/
+docs/
+.audit/
+
 .claude
 *.claude
 .vercel
+.figmacache/

@@ -362,6 +362,16 @@ export const SiteSettings: GlobalConfig = {
           admin: { description: 'International format, e.g. +971 4 123 4567.' },
         },
         {
+          name: 'whatsappNumber',
+          type: 'text',
+          label: 'WhatsApp Number',
+          maxLength: 30,
+          admin: {
+            description:
+              'International format with country code, e.g. +9714123456 — rendered as a wa.me link in the floating contact widget. Leave blank to hide the WhatsApp channel.',
+          },
+        },
+        {
           name: 'contactAddressEn',
           type: 'textarea',
           label: 'Office Address — EN',

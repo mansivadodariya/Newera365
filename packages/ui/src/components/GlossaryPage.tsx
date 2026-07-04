@@ -212,7 +212,9 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
       {/* Alphabet filter */}
       <section className="px-5 pb-4">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="scrollbar-hide flex gap-1 overflow-x-auto">
+          {/* Letters with entries read as tappable chips (bordered surface);
+              letters without entries are unmistakably inert. */}
+          <div className="scrollbar-hide flex gap-1.5 overflow-x-auto py-1">
             {ALPHABET.map((letter) => {
               const available = availableLetters.has(letter);
               const active = activeLetter === letter;
@@ -221,12 +223,13 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                   key={letter}
                   onClick={() => available && handleLetterClick(letter)}
                   disabled={!available}
-                  className={`font-body h-8 w-8 flex-shrink-0 rounded-full text-[11px] font-semibold transition-colors ${
+                  aria-disabled={!available}
+                  className={`font-body h-9 w-9 flex-shrink-0 rounded-full text-[11px] font-semibold transition-colors duration-200 ${
                     active
-                      ? 'bg-accent text-white'
+                      ? 'bg-accent border-accent border text-white'
                       : available
-                        ? 'text-foreground hover:bg-accent/10 hover:text-accent'
-                        : 'text-muted/30 cursor-default'
+                        ? 'border-border text-foreground hover:border-accent hover:text-accent cursor-pointer border bg-white dark:border-white/[0.12] dark:bg-white/[0.04]'
+                        : 'text-muted/25 cursor-default select-none border border-transparent opacity-50'
                   }`}
                 >
                   {letter}

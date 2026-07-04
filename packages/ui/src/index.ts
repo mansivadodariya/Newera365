@@ -16,12 +16,13 @@ export { AuthModal } from './components/AuthModal';
 export type { AuthModalType } from './components/AuthModal';
 export { LanguageToggle } from './components/LanguageToggle';
 export { RiskBanner } from './components/RiskBanner';
+export { TopLoadingBar } from './components/TopLoadingBar';
 
 // ── Landing redesign DEMO components (isolated; not used by live pages) ──
 export { HeaderDemo } from './components/HeaderDemo';
 export { MobileMenuDemo } from './components/MobileMenuDemo';
 export { HeroSectionDemo } from './components/HeroSectionDemo';
-export { HeroChartCard } from './components/HeroChartCard';
+export { HeroMarketPanel } from './components/HeroMarketPanel';
 export { RevealDemo } from './components/RevealDemo';
 export { TrustStripDemo } from './components/TrustStripDemo';
 export type { TrustLogo } from './components/TrustStripDemo';
@@ -44,8 +45,11 @@ export { MarketsSectionGrid } from './components/MarketsSectionGrid';
 export type { MarketItem } from './components/MarketsSectionGrid';
 export { FeaturesSection } from './components/FeaturesSection';
 export { CtaBanner } from './components/CtaBanner';
-export { SmartCtaBanner } from './components/SmartCtaBanner';
-export { HomePageSkeleton } from './components/HomePageSkeleton';
+export { SmartCtaBanner, NO_CTA_SUFFIXES } from './components/SmartCtaBanner';
+export { StickyCtaBar } from './components/StickyCtaBar';
+export { FloatingContactWidget } from './components/FloatingContactWidget';
+export { SecurityTrustBand } from './components/SecurityTrustBand';
+export type { FloatingContactWidgetProps } from './components/FloatingContactWidget';
 export { ArbitrageSection } from './components/ArbitrageSection';
 
 export { AccountsPage } from './components/AccountsPage';
@@ -102,6 +106,7 @@ export { EconomicCalendarPage } from './components/EconomicCalendarPage';
 export { AnalystChartPage } from './components/AnalystChartPage';
 export type { CmsAnalystCallItem, CmsAnalystProfile } from './components/AnalystChartPage';
 export { LiveWatchlistPage } from './components/LiveWatchlistPage';
+export { LiveMarketsSection } from './components/LiveMarketsSection';
 export { NewsletterPage } from './components/NewsletterPage';
 export { LiveChatPage } from './components/LiveChatPage';
 export { CareersPage } from './components/CareersPage';
@@ -122,48 +127,3 @@ export { AwardsPage } from './components/AwardsPage';
 export type { AwardCardItem } from './components/AwardsPage';
 export { MediaPressPage } from './components/MediaPressPage';
 export type { MediaPressItem } from './components/MediaPressPage';
-
-// Skeleton building blocks
-export {
-  Pulse,
-  DarkPulse,
-  HeroSkeleton,
-  CardGridSkeleton,
-  TableSkeleton,
-  ArticleListSkeleton,
-  TabRowSkeleton,
-  FormSkeleton,
-  CtaBannerSkeleton,
-  StatsGridSkeleton,
-} from './components/SkeletonBlocks';
-
-// Per-page skeletons
-export { TradePageSkeleton } from './components/TradePageSkeleton';
-export { FundingPageSkeleton } from './components/FundingPageSkeleton';
-export { PromoPageSkeleton } from './components/PromoPageSkeleton';
-export { FeesPageSkeleton } from './components/FeesPageSkeleton';
-export { IBPageSkeleton } from './components/IBPageSkeleton';
-export { MarketPageSkeleton } from './components/MarketPageSkeleton';
-export { PlatformPageSkeleton } from './components/PlatformPageSkeleton';
-export { EducationHubSkeleton } from './components/EducationHubSkeleton';
-export { EbooksSkeleton } from './components/EbooksSkeleton';
-export { MediaListingSkeleton } from './components/MediaListingSkeleton';
-export { GuidesSkeleton } from './components/GuidesSkeleton';
-export { WebinarsSkeleton } from './components/WebinarsSkeleton';
-export { ArticleDetailSkeleton } from './components/ArticleDetailSkeleton';
-export { ResearchListSkeleton } from './components/ResearchListSkeleton';
-export { AnalystChartSkeleton } from './components/AnalystChartSkeleton';
-export { ToolsPageSkeleton } from './components/ToolsPageSkeleton';
-export { AboutPageSkeleton } from './components/AboutPageSkeleton';
-export { AwardsPageSkeleton } from './components/AwardsPageSkeleton';
-export { CareersPageSkeleton } from './components/CareersPageSkeleton';
-export { MediaPressPageSkeleton } from './components/MediaPressPageSkeleton';
-export { SupportPageSkeleton } from './components/SupportPageSkeleton';
-export { AiCrmSkeleton } from './components/AiCrmSkeleton';
-export { LegalPageSkeleton } from './components/LegalPageSkeleton';
-export { ContactPageSkeleton } from './components/ContactPageSkeleton';
-export { LiveChatPageSkeleton } from './components/LiveChatPageSkeleton';
-export { NewsletterPageSkeleton } from './components/NewsletterPageSkeleton';
-export { WatchlistSkeleton } from './components/WatchlistSkeleton';
-export { CalendarSkeleton } from './components/CalendarSkeleton';
-export { GlossarySkeleton } from './components/GlossarySkeleton';

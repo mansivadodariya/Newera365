@@ -416,6 +416,56 @@ export function MarketCategoryPage({
     CATEGORY_TV_SYMBOL[category] ||
     'OANDA:EURUSD';
 
+  // Per-instrument specification cells for the selected CMS row. Swaps are
+  // signed values (negative = cost to hold overnight).
+  const fmtSwap = (v: number) => (v > 0 ? `+${v}` : `${v}`);
+  const specCells = selectedCmsRow
+    ? [
+        {
+          label: t('colSpread'),
+          value: selectedCmsRow.spread != null ? `${selectedCmsRow.spread}` : null,
+        },
+        { label: t('specLeverage'), value: selectedCmsRow.leverage ?? null },
+        {
+          label: t('specMinTrade'),
+          value: selectedCmsRow.minTradeSize != null ? `${selectedCmsRow.minTradeSize} lot` : null,
+        },
+        {
+          label: t('specContractSize'),
+          value:
+            selectedCmsRow.contractSize != null
+              ? selectedCmsRow.contractSize.toLocaleString('en-US')
+              : null,
+        },
+        {
+          label: t('specMarginRequirement'),
+          value:
+            selectedCmsRow.marginRequirement != null
+              ? `${selectedCmsRow.marginRequirement}%`
+              : null,
+        },
+        {
+          label: t('specSwapLong'),
+          value: selectedCmsRow.swapLong != null ? fmtSwap(selectedCmsRow.swapLong) : null,
+        },
+        {
+          label: t('specSwapShort'),
+          value: selectedCmsRow.swapShort != null ? fmtSwap(selectedCmsRow.swapShort) : null,
+        },
+        { label: t('specTradingHours'), value: selectedCmsRow.tradingHours ?? null },
+      ]
+    : [];
+  // Only worth a panel when the instrument actually carries spec data beyond
+  // what the watchlist row already shows.
+  const hasSpecPanel =
+    selectedCmsRow != null &&
+    (selectedCmsRow.contractSize != null ||
+      selectedCmsRow.marginRequirement != null ||
+      selectedCmsRow.tradingHours != null ||
+      selectedCmsRow.swapLong != null ||
+      selectedCmsRow.swapShort != null ||
+      selectedCmsRow.minTradeSize != null);
+
   return (
     <>
       {/* Hero */}
@@ -446,12 +496,12 @@ export function MarketCategoryPage({
             /* Forex: TradingView cross-rates heatmap */
             <>
               <SectionKicker className="mb-3">{`${label.toUpperCase()} · ${t('crossRates').toUpperCase()}`}</SectionKicker>
-              <div className="relative overflow-hidden rounded-[20px] bg-[#07090D] xl:rounded-[24px]">
+              <div className="relative h-[380px] overflow-hidden rounded-[20px] bg-[#07090D] md:h-[420px] xl:h-[460px] xl:rounded-[24px]">
                 <ChartWidget
                   type="forex-cross-rates"
                   theme="dark"
                   width="100%"
-                  height={460}
+                  height="100%"
                   config={{
                     currencies: ['EUR', 'USD', 'JPY', 'GBP', 'CHF', 'AUD', 'CAD', 'NZD'],
                     isTransparent: false,
@@ -463,12 +513,12 @@ export function MarketCategoryPage({
             /* Indices: market-quotes widget grouped by region with internal scroll */
             <>
               <SectionKicker className="mb-3">{`${label.toUpperCase()} · ${t('liveQuotes').toUpperCase()}`}</SectionKicker>
-              <div className="overflow-hidden rounded-[20px] bg-[#07090D] xl:rounded-[24px]">
+              <div className="h-[440px] overflow-hidden rounded-[20px] bg-[#07090D] md:h-[560px] xl:h-[700px] xl:rounded-[24px]">
                 <ChartWidget
                   type="market-quotes"
                   theme="dark"
                   width="100%"
-                  height={700}
+                  height="100%"
                   config={INDICES_MARKET_QUOTES_CONFIG}
                 />
               </div>
@@ -477,12 +527,12 @@ export function MarketCategoryPage({
             /* Crypto: full crypto screener */
             <>
               <SectionKicker className="mb-3">{`${label.toUpperCase()} · ${t('livePrices').toUpperCase()}`}</SectionKicker>
-              <div className="relative overflow-hidden rounded-[20px] bg-[#07090D] xl:rounded-[24px]">
+              <div className="relative h-[440px] overflow-hidden rounded-[20px] bg-[#07090D] md:h-[560px] xl:h-[700px] xl:rounded-[24px]">
                 <ChartWidget
                   type="screener"
                   theme="dark"
                   width="100%"
-                  height={700}
+                  height="100%"
                   config={{
                     market: 'crypto',
                     defaultColumn: 'overview',
@@ -545,14 +595,54 @@ export function MarketCategoryPage({
                 </div>
               </div>
 
+              {/* Per-instrument specifications — CMS-driven, follows the
+                  selected watchlist row; individual fields degrade to '—'. */}
+              {hasSpecPanel && selectedCmsRow && (
+                <div className="mb-3 overflow-hidden rounded-[20px] bg-[#111111] xl:rounded-[24px]">
+                  <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-2.5 xl:px-6">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-white/30">
+                      {t('specPanelHeading')}
+                    </span>
+                    <span
+                      className="font-mono text-[10px] uppercase tracking-[0.1em] text-white/50"
+                      dir="ltr"
+                    >
+                      {selectedCmsRow.symbol}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-4 px-4 py-4 xl:grid-cols-4 xl:px-6 xl:py-5">
+                    {specCells.map((cell) => (
+                      <div key={cell.label} className="min-w-0">
+                        <p className="font-body text-[10px] uppercase tracking-[0.08em] text-white/40">
+                          {cell.label}
+                        </p>
+                        <p
+                          className="font-body mt-1 truncate text-[13px] font-semibold tabular-nums text-white"
+                          dir="ltr"
+                          title={cell.value ?? undefined}
+                        >
+                          {cell.value ?? '—'}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Dark watchlist container */}
               <div className="overflow-hidden rounded-[20px] bg-[#111111] xl:rounded-[24px]">
-                <div className="border-white/8 grid grid-cols-[1fr_64px_64px] border-b px-4 py-2 xl:grid-cols-[1fr_120px_120px] xl:px-6">
+                <div className="border-white/8 grid grid-cols-[minmax(0,1fr)_72px_56px] border-b px-4 py-2 xl:grid-cols-[1fr_100px_110px_110px_110px] xl:px-6">
                   <span className="font-body text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
                     {t('colSymbol')}
                   </span>
                   <span className="font-body text-end text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
                     {t('colSpread')}
+                  </span>
+                  <span className="font-body hidden text-end text-[9px] font-medium uppercase tracking-[0.12em] text-white/30 xl:block">
+                    {t('colContract')}
+                  </span>
+                  <span className="font-body hidden text-end text-[9px] font-medium uppercase tracking-[0.12em] text-white/30 xl:block">
+                    {t('colMargin')}
                   </span>
                   <span className="font-body text-end text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
                     {t('colChange')}
@@ -565,14 +655,14 @@ export function MarketCategoryPage({
                         type="button"
                         key={item.id}
                         onClick={() => setSelectedIdx(i)}
-                        className={`grid w-full grid-cols-[1fr_64px_64px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_120px_120px] xl:px-6 xl:py-[14px] ${i < cmsRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-[#161d27]' : 'hover:bg-white/[0.03]'}`}
+                        className={`grid w-full grid-cols-[minmax(0,1fr)_72px_56px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_100px_110px_110px_110px] xl:px-6 xl:py-[14px] ${i < cmsRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-[#161d27]' : 'hover:bg-white/[0.03]'}`}
                       >
                         <div className="flex min-w-0 items-center gap-3">
                           <span
                             className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${selectedIdx === i ? 'bg-accent' : 'bg-[#26A69A]'}`}
                           />
                           <div className="min-w-0">
-                            <p className="font-sans text-[13px] font-semibold leading-none text-white">
+                            <p className="truncate font-sans text-[13px] font-semibold leading-none text-white">
                               {item.symbol}
                             </p>
                             <p className="font-body mt-[3px] truncate text-[10px] text-white/40">
@@ -580,11 +670,28 @@ export function MarketCategoryPage({
                             </p>
                           </div>
                         </div>
-                        <p className="font-body text-end text-[12px] font-medium text-white/70">
+                        <p
+                          className="font-body text-end text-[12px] font-medium tabular-nums text-white/70"
+                          dir="ltr"
+                        >
                           {item.spread != null ? `${item.spread}` : '—'}
                         </p>
+                        <p
+                          className="font-body hidden text-end text-[12px] font-medium tabular-nums text-white/70 xl:block"
+                          dir="ltr"
+                        >
+                          {item.contractSize != null
+                            ? item.contractSize.toLocaleString('en-US')
+                            : '—'}
+                        </p>
+                        <p
+                          className="font-body hidden text-end text-[12px] font-medium tabular-nums text-white/70 xl:block"
+                          dir="ltr"
+                        >
+                          {item.marginRequirement != null ? `${item.marginRequirement}%` : '—'}
+                        </p>
                         <div className="flex justify-end">
-                          <span className="font-body inline-flex items-center rounded-[6px] bg-white/10 px-2 py-[3px] text-[10px] font-semibold text-white/50">
+                          <span className="font-body inline-flex items-center rounded-[6px] bg-white/10 px-2 py-[3px] text-[10px] font-semibold tabular-nums text-white/50">
                             {item.leverage ?? '—'}
                           </span>
                         </div>
@@ -595,14 +702,14 @@ export function MarketCategoryPage({
                         type="button"
                         key={row.symbol}
                         onClick={() => setSelectedIdx(i)}
-                        className={`grid w-full grid-cols-[1fr_64px_64px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_120px_120px] xl:px-6 xl:py-[14px] ${i < meta.staticRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-[#161d27]' : 'hover:bg-white/[0.03]'}`}
+                        className={`grid w-full grid-cols-[minmax(0,1fr)_72px_56px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_100px_110px_110px_110px] xl:px-6 xl:py-[14px] ${i < meta.staticRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-[#161d27]' : 'hover:bg-white/[0.03]'}`}
                       >
                         <div className="flex min-w-0 items-center gap-3">
                           <span
                             className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${selectedIdx === i ? 'bg-accent' : row.up ? 'bg-[#26A69A]' : 'bg-[#EE5250]'}`}
                           />
                           <div className="min-w-0">
-                            <p className="font-sans text-[13px] font-semibold leading-none text-white">
+                            <p className="truncate font-sans text-[13px] font-semibold leading-none text-white">
                               {row.symbol}
                             </p>
                             <p className="font-body mt-[3px] truncate text-[10px] text-white/40">
@@ -610,8 +717,17 @@ export function MarketCategoryPage({
                             </p>
                           </div>
                         </div>
-                        <p className="font-body text-end text-[12px] font-medium text-white/70">
+                        <p
+                          className="font-body text-end text-[12px] font-medium tabular-nums text-white/70"
+                          dir="ltr"
+                        >
                           {row.spread}
+                        </p>
+                        <p className="font-body hidden text-end text-[12px] font-medium text-white/40 xl:block">
+                          —
+                        </p>
+                        <p className="font-body hidden text-end text-[12px] font-medium text-white/40 xl:block">
+                          —
                         </p>
                         <div className="flex justify-end">
                           <span

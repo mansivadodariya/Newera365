@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, MotionConfig } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
@@ -77,6 +78,7 @@ function useNavItems(t: ReturnType<typeof useTranslations<'nav'>>): NavItem[] {
         { label: t('eduGlossaryLabel'), sub: t('eduGlossarySub'), href: '/glossary' },
         { label: t('eduMediaLabel'), sub: t('eduMediaSub'), href: '/education/media' },
         { label: t('eduEbooksLabel'), sub: t('eduEbooksSub'), href: '/ebooks' },
+        { label: t('eduBlogLabel'), sub: t('eduBlogSub'), href: '/education/blog' },
       ],
     },
     {
@@ -119,13 +121,12 @@ function useNavItems(t: ReturnType<typeof useTranslations<'nav'>>): NavItem[] {
     {
       label: t('company'),
       href: '/company/about',
-      activeFor: ['/company', '/blog'],
+      activeFor: ['/company'],
       dropdown: [
         { label: t('companyAboutLabel'), sub: t('companyAboutSub'), href: '/company/about' },
         { label: t('companyCareersLabel'), sub: t('companyCareersSub'), href: '/company/careers' },
         { label: t('companyAwardsLabel'), sub: t('companyAwardsSub'), href: '/company/awards' },
         { label: t('companyMediaLabel'), sub: t('companyMediaSub'), href: '/company/media-press' },
-        { label: t('researchBlogLabel'), sub: t('researchBlogSub'), href: '/blog' },
       ],
     },
     {
@@ -212,22 +213,22 @@ function ThemeToggle() {
   );
 }
 
+// Trigger only — the dropdown panel is a single shared element rendered once at
+// the nav level (see HeaderDemo) so it can morph between triggers.
 function DesktopNavItem({
   item,
   locale,
   pathname,
-  open,
+  setRef,
   onOpen,
   onScheduleClose,
-  onCloseNow,
 }: {
   item: NavItem;
   locale: string;
   pathname: string;
-  open: boolean;
+  setRef: (el: HTMLDivElement | null) => void;
   onOpen: () => void;
   onScheduleClose: () => void;
-  onCloseNow: () => void;
 }) {
   const isActive = item.activeFor
     ? item.activeFor.some((r) => pathname.startsWith(`/${locale}${r}`))
@@ -235,94 +236,56 @@ function DesktopNavItem({
       ? pathname === `/${locale}` || pathname === `/${locale}/`
       : pathname.startsWith(`/${locale}${item.href}`);
 
-  // Highlight only the single most-specific dropdown item. Without this, a hub
-  // item (e.g. /tools or /education) stays lit on every sub-page alongside the
-  // actual active item, so two rows look selected at once.
-  const activeDropdownHref =
-    item.dropdown
-      ?.map((d) => d.href)
-      .filter((h) => pathname === `/${locale}${h}` || pathname.startsWith(`/${locale}${h}/`))
-      .sort((a, b) => b.length - a.length)[0] ?? null;
-
-  // Two-column panel for the larger menus, single column otherwise.
-  const twoCol = (item.dropdown?.length ?? 0) > 4;
-
   return (
     <div
-      className="group relative flex h-full items-center"
+      ref={setRef}
+      className="flex h-full items-center"
       onMouseEnter={onOpen}
       onMouseLeave={onScheduleClose}
     >
       <Link
         href={`/${locale}${item.href === '/' ? '' : item.href}`}
-        className={`font-body relative flex h-full items-center text-[15px] font-medium transition-colors ${
-          isActive ? 'text-accent' : 'text-foreground hover:text-accent'
+        className={`font-body flex h-full items-center text-[15px] font-medium transition-colors ${
+          isActive ? 'text-accent' : 'text-foreground'
         }`}
       >
         {item.label}
-        {/* Animated active / hover underline */}
-        <span
-          className={`bg-accent absolute -bottom-px left-0 h-[2px] w-full origin-center rounded-full transition-transform duration-200 ${
-            isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-          }`}
-        />
       </Link>
-
-      {item.dropdown && open && (
-        <div className="absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3">
-          <div
-            className={`bg-background border-border animate-fade-in rounded-[16px] border p-2 shadow-[0px_16px_40px_-8px_rgba(0,0,0,0.18)] dark:shadow-[0px_16px_40px_-8px_rgba(0,0,0,0.6)] ${
-              twoCol ? 'grid w-[460px] grid-cols-2 gap-1' : 'w-[264px]'
-            }`}
-          >
-            {item.dropdown.map((d) => {
-              const isDropdownActive = d.href === activeDropdownHref;
-              return (
-                <Link
-                  key={d.href}
-                  href={`/${locale}${d.href}`}
-                  onClick={onCloseNow}
-                  className={`relative block rounded-[10px] py-[9px] pe-3 ps-4 transition-colors ${
-                    isDropdownActive ? 'bg-accent/[0.08]' : 'hover:bg-surface'
-                  } before:bg-accent before:absolute before:bottom-1/2 before:start-1 before:w-[3px] before:translate-y-1/2 before:rounded-full before:transition-all ${
-                    isDropdownActive ? 'before:h-5' : 'before:h-0 hover:before:h-5'
-                  }`}
-                >
-                  <span
-                    className={`font-body block text-[14px] font-medium leading-[1.2] ${
-                      isDropdownActive ? 'text-accent' : 'dark:text-foreground text-[#1a1a1c]'
-                    }`}
-                  >
-                    {d.label}
-                  </span>
-                  <span className="font-body dark:text-muted mt-[2px] block text-[12px] leading-[1.3] text-[#6b6b73]">
-                    {d.sub}
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
 
+// Two-column panel for the larger menus, single column otherwise.
+const panelWidth = (item: NavItem | null) => ((item?.dropdown?.length ?? 0) > 4 ? 460 : 264);
+
 function HeaderDemo() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openNav, setOpenNav] = useState<string | null>(null);
+  const [panelX, setPanelX] = useState(0);
   const [authModal, setAuthModal] = useState<AuthModalType>(null);
   const [scrolled, setScrolled] = useState(false);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const openTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const navRef = useRef<HTMLElement | null>(null);
+  const triggerRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const locale = useLocale();
   const t = useTranslations('nav');
   const pathname = usePathname();
 
   const displayNav = useNavItems(t);
+  const activeItem = openNav ? (displayNav.find((i) => i.label === openNav) ?? null) : null;
+  const twoCol = panelWidth(activeItem) === 460;
+  // Highlight the single most-specific dropdown row for the current route.
+  const activeDropdownHref =
+    activeItem?.dropdown
+      ?.map((d) => d.href)
+      .filter((h) => pathname === `/${locale}${h}` || pathname.startsWith(`/${locale}${h}/`))
+      .sort((a, b) => b.length - a.length)[0] ?? null;
 
   useEffect(() => {
     return () => {
       if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+      if (openTimerRef.current) clearTimeout(openTimerRef.current);
     };
   }, []);
 
@@ -338,15 +301,52 @@ function HeaderDemo() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Park the shared panel's left edge under the hovered trigger, clamped to the
+  // viewport so edge menus never clip. framer-motion's `layout` animates the
+  // shift. ponytail: measured on open, not on resize — menus close on
+  // scroll/navigate before a resize matters.
+  function place(label: string) {
+    const el = triggerRefs.current[label];
+    const nav = navRef.current;
+    if (!el || !nav) return;
+    const w = panelWidth(displayNav.find((i) => i.label === label) ?? null);
+    const elRect = el.getBoundingClientRect();
+    const pad = 12;
+    const leftVp = Math.max(
+      pad,
+      Math.min(elRect.left + elRect.width / 2 - w / 2, window.innerWidth - w - pad),
+    );
+    setPanelX(leftVp - nav.getBoundingClientRect().left);
+  }
+
   function openMenu(label: string) {
+    const item = displayNav.find((i) => i.label === label);
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
-    setOpenNav(label);
+    if (openTimerRef.current) clearTimeout(openTimerRef.current);
+    // Menu-less item (Home) → close any open panel.
+    if (!item?.dropdown) {
+      setOpenNav(null);
+      return;
+    }
+    // Already open → slide to the new trigger instantly.
+    if (openNav !== null) {
+      place(label);
+      setOpenNav(label);
+      return;
+    }
+    // Cold open → brief hover intent so sweeping the bar doesn't flash menus.
+    openTimerRef.current = setTimeout(() => {
+      place(label);
+      setOpenNav(label);
+    }, 80);
   }
   function scheduleClose() {
+    if (openTimerRef.current) clearTimeout(openTimerRef.current);
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
-    closeTimerRef.current = setTimeout(() => setOpenNav(null), 120);
+    closeTimerRef.current = setTimeout(() => setOpenNav(null), 140);
   }
   function closeNow() {
+    if (openTimerRef.current) clearTimeout(openTimerRef.current);
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     setOpenNav(null);
   }
@@ -382,19 +382,88 @@ function HeaderDemo() {
               />
             </Link>
 
-            <nav className="hidden h-full items-center gap-7 xl:flex" aria-label="Main navigation">
+            <nav
+              ref={navRef}
+              className="relative hidden h-full items-center gap-7 xl:flex"
+              aria-label="Main navigation"
+            >
               {displayNav.map((item) => (
                 <DesktopNavItem
                   key={item.label}
                   item={item}
                   locale={locale}
                   pathname={pathname}
-                  open={openNav === item.label}
+                  setRef={(el) => (triggerRefs.current[item.label] = el)}
                   onOpen={() => openMenu(item.label)}
                   onScheduleClose={scheduleClose}
-                  onCloseNow={closeNow}
                 />
               ))}
+
+              {/* One shared panel that morphs (position + size) between triggers
+                  via framer-motion `layout`, instead of a separate panel per
+                  item popping in/out at a new spot. */}
+              <MotionConfig reducedMotion="user">
+                <AnimatePresence>
+                  {activeItem?.dropdown && (
+                    <motion.div
+                      key="nav-dropdown"
+                      layout
+                      onMouseEnter={() => openMenu(activeItem.label)}
+                      onMouseLeave={scheduleClose}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{
+                        layout: { type: 'spring', stiffness: 500, damping: 40, mass: 0.7 },
+                        opacity: { duration: 0.16, ease: 'easeOut' },
+                      }}
+                      style={{ left: panelX }}
+                      className="absolute top-full z-50 pt-3"
+                    >
+                      <div className="bg-background border-border overflow-hidden rounded-[16px] border p-2 shadow-[0px_16px_40px_-8px_rgba(0,0,0,0.18)] dark:shadow-[0px_16px_40px_-8px_rgba(0,0,0,0.6)]">
+                        <AnimatePresence mode="popLayout" initial={false}>
+                          <motion.div
+                            key={activeItem.label}
+                            layout="position"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.12, ease: 'easeOut' }}
+                            className={twoCol ? 'grid w-[460px] grid-cols-2 gap-1' : 'w-[264px]'}
+                          >
+                            {activeItem.dropdown.map((d) => {
+                              const isDropdownActive = d.href === activeDropdownHref;
+                              return (
+                                <Link
+                                  key={d.href}
+                                  href={`/${locale}${d.href}`}
+                                  onClick={closeNow}
+                                  className={`block rounded-[10px] px-3 py-[9px] transition-colors ${
+                                    isDropdownActive ? 'bg-accent/[0.08]' : 'hover:bg-surface'
+                                  }`}
+                                >
+                                  <span
+                                    className={`font-body block text-[14px] font-medium leading-[1.2] ${
+                                      isDropdownActive
+                                        ? 'text-accent'
+                                        : 'dark:text-foreground text-[#1a1a1c]'
+                                    }`}
+                                  >
+                                    {d.label}
+                                  </span>
+                                  <span className="font-body dark:text-muted mt-[2px] block text-[12px] leading-[1.3] text-[#6b6b73]">
+                                    {d.sub}
+                                  </span>
+                                </Link>
+                              );
+                            })}
+                          </motion.div>
+                        </AnimatePresence>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </MotionConfig>
             </nav>
           </div>
 
@@ -405,19 +474,20 @@ function HeaderDemo() {
             <div className="bg-border ms-3 h-5 w-px" />
             <button
               onClick={() => setAuthModal('demo')}
-              className="font-body text-foreground ms-1 text-[15px] font-medium transition-opacity hover:opacity-70"
+              className="font-body text-foreground ms-1 flex min-h-[38px] items-center text-[15px] font-medium transition-opacity hover:opacity-70"
             >
               {t('signIn')}
             </button>
             <button
               onClick={() => setAuthModal('register')}
-              className="font-body bg-accent hover:bg-accent-hover flex items-center rounded-full px-[22px] py-[11px] text-[15px] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(0,176,80,0.8)] transition-colors"
+              className="font-body bg-accent hover:bg-accent-hover focus-visible:ring-accent flex items-center rounded-full px-[22px] py-[11px] text-[15px] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(0,176,80,0.8)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
             >
               {t('getStarted')}
             </button>
           </div>
 
-          {/* Mobile controls */}
+          {/* Mobile controls — no CTA here: the logo needs the width, and the
+              scroll-triggered StickyCtaBar owns the mobile conversion slot. */}
           <div className="flex items-center gap-2 xl:hidden">
             <LanguageToggle />
             <ThemeToggle />

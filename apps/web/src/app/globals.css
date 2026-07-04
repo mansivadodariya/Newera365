@@ -41,12 +41,17 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* TradingView ticker — force the iframe's own background to the dark ticker
-   token so the widget never flashes the browser-default white background while
-   its dark-theme CSS loads (client-reported "ticker renders white in dark mode
-   sometimes"). The widget is pinned to colorTheme:'dark' + isTransparent. */
+/* TradingView ticker — keep it dark + square-edged.
+   bg + color-scheme back the dark theme (paired with isTransparent:false in
+   TradingViewTicker.tsx). The opaque ticker-tape paints a ROUNDED card inside
+   its cross-origin iframe (can't be restyled from here), so over-extend the
+   iframe 12px each side and let the wrapper's overflow:hidden crop the rounded
+   ends into square edges. */
 .tradingview-widget-container iframe {
   background-color: #030406 !important;
+  color-scheme: dark !important;
+  width: calc(100% + 24px) !important;
+  margin-left: -12px !important;
 }
 
 body {

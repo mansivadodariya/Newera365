@@ -24,7 +24,9 @@ export function LanguageToggle({ fullWidth = false }: LanguageToggleProps) {
 
   const next = locale === 'en' ? 'ar' : 'en';
   const label = locale === 'en' ? 'عربي' : 'EN';
-  const ariaLabel = locale === 'en' ? 'Switch to Arabic' : 'Switch to English';
+  // Accessible name must contain the visible label (WCAG 2.5.3 label-in-name),
+  // so voice-control users can activate the button by its on-screen text.
+  const ariaLabel = locale === 'en' ? 'عربي — switch to Arabic' : 'EN — switch to English';
 
   const toggle = useCallback(() => {
     // Persist through refreshes / new tabs (1 year)

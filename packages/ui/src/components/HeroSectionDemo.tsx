@@ -5,13 +5,13 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { AuthModal, type AuthModalType } from './AuthModal';
 import { SectionKicker } from './SectionKicker';
-import { HeroChartCard } from './HeroChartCard';
+import { HeroMarketPanel } from './HeroMarketPanel';
 
 /* ─── HeroSectionDemo ───────────────────────────────────────────────────
    Demo fork of HeroSection: elevated typographic hierarchy, an accent eyebrow,
-   inline spec chips under the CTAs, and an animated chart card (HeroChartCard)
-   in place of the static PNG. Theming/typography/CTAs unchanged from the live
-   hero. */
+   inline spec chips under the CTAs, and a live TradingView market panel
+   (HeroMarketPanel) in place of the static PNG. Theming/typography/CTAs
+   unchanged from the live hero. */
 export function HeroSectionDemo() {
   const t = useTranslations('home');
   const td = useTranslations('demo');
@@ -35,7 +35,7 @@ export function HeroSectionDemo() {
     const r = wrap.getBoundingClientRect();
     const px = (e.clientX - r.left) / r.width - 0.5;
     const py = (e.clientY - r.top) / r.height - 0.5;
-    const max = 5; // degrees
+    const max = 0.75; // degrees — barely-there parallax (client feedback round 3)
     tilt.style.transform = `rotateY(${(px * max).toFixed(2)}deg) rotateX(${(-py * max).toFixed(2)}deg)`;
   };
   const resetTilt = () => {
@@ -58,10 +58,10 @@ export function HeroSectionDemo() {
 
   return (
     <>
-      <section className="overflow-hidden bg-transparent px-5 pb-7 pt-9 xl:pb-10 xl:pt-16">
-        <div className="mx-auto flex max-w-[390px] flex-col gap-7 md:max-w-2xl xl:max-w-[1200px] xl:flex-row xl:items-center xl:gap-16">
-          {/* Left col */}
-          <div className="flex flex-col gap-[18px] xl:w-[516px] xl:flex-shrink-0 xl:pb-10 xl:pt-4">
+      <section className="overflow-hidden bg-transparent px-5 pb-7 pt-9 xl:pb-10 xl:pt-10">
+        <div className="mx-auto flex max-w-[390px] flex-col gap-7 md:max-w-2xl xl:max-w-[1200px] xl:flex-row xl:items-center xl:gap-8">
+          {/* Left col — kept narrow so the market panel gets the wider share. */}
+          <div className="flex flex-col gap-[18px] xl:w-[470px] xl:flex-shrink-0">
             <SectionKicker
               className={`text-accent [&>span:first-child]:bg-accent ${RISE}`}
               style={{ animationDelay: '80ms' }}
@@ -70,7 +70,7 @@ export function HeroSectionDemo() {
             </SectionKicker>
 
             <h1
-              className={`text-foreground font-sans text-[44px] font-semibold leading-[1.0] tracking-[-1.6px] xl:text-[56px] xl:tracking-[-2.2px] ${RISE}`}
+              className={`text-foreground font-sans text-[44px] font-semibold leading-[1.04] tracking-[-1.6px] [text-wrap:balance] xl:text-[48px] xl:tracking-[-1.8px] ${RISE}`}
               style={{ animationDelay: '200ms' }}
             >
               {t('heroLine1')}{' '}
@@ -93,6 +93,7 @@ export function HeroSectionDemo() {
                   larger, brighter green gradient + glow, lifts on hover. */}
               <button
                 onClick={() => setAuthModal('register')}
+                data-primary-cta="hero"
                 className="font-body from-accent to-accent-bright inline-flex flex-none items-center gap-2 rounded-full bg-gradient-to-r px-8 py-[18px] text-[16px] font-semibold tracking-[-0.075px] text-white shadow-[0_16px_44px_-12px_rgba(0,176,80,0.85)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_22px_52px_-12px_rgba(26,217,102,0.95)]"
               >
                 {t('heroCTALive')}
@@ -171,14 +172,14 @@ export function HeroSectionDemo() {
             ref={tiltWrapRef}
             onMouseMove={handleTilt}
             onMouseLeave={resetTilt}
-            className="animate-rise-in opacity-0 [perspective:1400px] motion-reduce:animate-none motion-reduce:opacity-100 xl:min-w-0 xl:flex-1"
+            className="animate-rise-in opacity-0 [perspective:1400px] motion-reduce:animate-none motion-reduce:opacity-100 xl:-me-12 xl:-ms-6 xl:min-w-0 xl:flex-1 min-[1440px]:-me-24"
             style={{ animationDelay: '0.2s' }}
           >
             <div
               ref={tiltRef}
               className="transition-transform duration-300 ease-out will-change-transform [transform-style:preserve-3d]"
             >
-              <HeroChartCard />
+              <HeroMarketPanel />
             </div>
           </div>
         </div>

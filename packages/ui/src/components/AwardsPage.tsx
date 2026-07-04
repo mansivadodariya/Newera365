@@ -21,15 +21,25 @@ interface AwardsPageProps {
   awards?: AwardCardItem[];
 }
 
-// Card background gradients — cycle through for visual variety
-const CARD_GRADIENTS = [
-  'from-[#0d2a1a] to-[#0a1510]',
-  'from-[#1a1a0a] to-[#0f0f08]',
-  'from-[#0a1a2a] to-[#060d18]',
-  'from-[#1a0a1a] to-[#0f060f]',
-  'from-[#1a0f0a] to-[#100806]',
-  'from-[#0a1a1a] to-[#060f0f]',
-];
+// Inline medal icon (Lucide "award"), drawn with currentColor so it inverts
+// with the theme — matches the inline-SVG icon idiom used across the site.
+function IconAward() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-6 w-6"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="8" r="6" />
+      <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+    </svg>
+  );
+}
 
 const YEAR_FILTERS = ['ALL', '2026', '2025', '2024', '2023'] as const;
 const FALLBACK_CATS = ['Execution', 'Service', 'Innovation'];
@@ -130,103 +140,76 @@ export function AwardsPage({ awards: cmsAwards }: AwardsPageProps) {
               {t('noAwards')}
             </p>
           )}
-          {items.map((award, idx) => {
-            const gradient = CARD_GRADIENTS[idx % CARD_GRADIENTS.length]!;
-            return (
-              <div
-                key={award.id}
-                className={`group flex flex-col overflow-hidden rounded-[22px] bg-gradient-to-br ${gradient} shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,176,80,0.15)] dark:shadow-none`}
-              >
-                {/* Image / illustration area */}
-                {award.imageUrl ? (
-                  <img
-                    src={award.imageUrl}
-                    alt={award.title}
-                    className="h-[180px] w-full object-cover"
-                  />
-                ) : (
-                  /* Decorative placeholder — green grid pattern */
-                  <div className="relative h-[160px] w-full overflow-hidden">
-                    <div
-                      className="absolute inset-0 opacity-10"
-                      style={{
-                        backgroundImage:
-                          'repeating-linear-gradient(0deg, #00b050 0, #00b050 1px, transparent 0, transparent 50%), repeating-linear-gradient(90deg, #00b050 0, #00b050 1px, transparent 0, transparent 50%)',
-                        backgroundSize: '32px 32px',
-                      }}
-                    />
-                    {/* Award trophy icon */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <svg
-                        width="48"
-                        height="48"
-                        viewBox="0 0 48 48"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M24 8L28 18H40L30 24L34 36L24 30L14 36L18 24L8 18H20L24 8Z"
-                          fill="#00b050"
-                          opacity="0.3"
-                        />
-                        <path
-                          d="M24 12L27 20H37L29 25.5L32 34L24 28.5L16 34L19 25.5L11 20H21L24 12Z"
-                          stroke="#00b050"
-                          strokeWidth="1.5"
-                          fill="none"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                )}
+          {items.map((award) => (
+            <div
+              key={award.id}
+              className="border-border hover-lift shadow-card dark:shadow-card-dark group relative flex flex-col overflow-hidden rounded-[20px] border bg-white p-6 dark:bg-[#111316]"
+            >
+              {/* Photographic header — real imagery from the CMS (never the old
+                  placeholder text-banners). Falls back to a plain header row
+                  when no image is set. */}
+              {award.imageUrl && (
+                <img
+                  src={award.imageUrl}
+                  alt=""
+                  aria-hidden="true"
+                  className="mb-5 h-[150px] w-full rounded-[14px] object-cover"
+                />
+              )}
 
-                {/* Card body */}
-                <div className="p-5">
-                  {award.year && (
-                    <span className="mb-3 inline-flex rounded-full bg-white/10 px-2.5 py-[3px] font-mono text-[10px] tracking-[1.2px] text-white/60">
-                      {award.year}
-                    </span>
-                  )}
-                  <h2 className="mb-1 font-sans text-[18px] font-semibold leading-[1.2] text-white">
-                    {award.title}
-                  </h2>
-                  {award.organisation && (
-                    <p className="font-body mb-3 text-[12px] text-white/50">{award.organisation}</p>
-                  )}
-                  {award.description && (
-                    <p className="font-body text-[13px] leading-[1.5] text-white/60">
-                      {award.description}
-                    </p>
-                  )}
-                  {award.externalUrl && (
-                    <Link
-                      href={award.externalUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-body hover:text-accent mt-4 flex items-center gap-1.5 text-[12px] text-white/50 transition-colors"
-                    >
-                      {t('viewAnnouncement')}
-                      <svg
-                        width="10"
-                        height="10"
-                        viewBox="0 0 14 14"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M2 12L12 2M12 2H6M12 2v6"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </Link>
-                  )}
-                </div>
+              {/* Header: issuer medal + year/category micro-labels */}
+              <div className="mb-4 flex items-start justify-between gap-3">
+                <span className="bg-accent/[0.12] text-accent flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[14px]">
+                  <IconAward />
+                </span>
+                <span className="text-muted font-mono text-[11px] font-medium uppercase tracking-[0.14em]">
+                  {[award.year, award.category ? translateCat(award.category) : null]
+                    .filter(Boolean)
+                    .join(' · ')}
+                </span>
               </div>
-            );
-          })}
+
+              {award.organisation && (
+                <p className="text-accent mb-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.12em]">
+                  {award.organisation}
+                </p>
+              )}
+              <h2 className="text-foreground mb-2 font-sans text-[18px] font-semibold leading-[1.2]">
+                {award.title}
+              </h2>
+              {award.description && (
+                <p className="font-body text-muted text-[13px] leading-[1.55]">
+                  {award.description}
+                </p>
+              )}
+              {award.externalUrl && (
+                <Link
+                  href={award.externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted hover:text-accent border-border mt-4 inline-flex items-center gap-1.5 border-t pt-4 text-[12px] font-medium transition-colors"
+                >
+                  {t('viewAnnouncement')}
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    aria-hidden="true"
+                    className="rtl:-scale-x-100"
+                  >
+                    <path
+                      d="M2 12L12 2M12 2H6M12 2v6"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+              )}
+            </div>
+          ))}
         </div>
       </section>
 

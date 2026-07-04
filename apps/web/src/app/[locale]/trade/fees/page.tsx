@@ -12,7 +12,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const isAr = params.locale === 'ar';
   return {
-    title: isAr ? 'الرسوم والفروقات | نيو إيرا 365' : 'Fees & Spreads | NewEra365',
+    title: isAr ? 'الرسوم والفروقات' : 'Fees & Spreads',
     description: isAr
       ? 'جدول الفروقات المباشرة، مقايضات الليلية، وتفاصيل شاملة لجميع رسوم الحساب.'
       : 'Live spread table, overnight swaps, and a full breakdown of all account charges.',

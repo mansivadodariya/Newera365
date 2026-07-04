@@ -4,251 +4,259 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 
-const FEATURE_STYLES = [
-  {
-    category: 'CRM',
-    dot: '#00B050',
-    cardCls:
-      'bg-[#f0fdf4] border-[#bbf7d0] hover:border-[#00B050]/40 dark:bg-[#061a0d] dark:border-[#00B050]/25 dark:hover:border-[#00B050]/50',
-    catCls: 'text-[#00B050]',
-  },
-  {
-    category: 'SYSTEM',
-    dot: '#3B82F6',
-    cardCls:
-      'bg-[#eff6ff] border-[#bfdbfe] hover:border-[#3B82F6]/40 dark:bg-[#06102a] dark:border-[#3B82F6]/25 dark:hover:border-[#3B82F6]/50',
-    catCls: 'text-[#3B82F6]',
-  },
-  {
-    category: 'REPORTING',
-    dot: '#8B5CF6',
-    cardCls:
-      'bg-[#faf5ff] border-[#ddd6fe] hover:border-[#8B5CF6]/40 dark:bg-[#150a2a] dark:border-[#8B5CF6]/25 dark:hover:border-[#8B5CF6]/50',
-    catCls: 'text-[#8B5CF6]',
-  },
+const FEATURE_CATEGORIES = ['CRM', 'SYSTEM', 'REPORTING'];
+
+/* Static mockup data — design fixture, not CMS content. */
+const KPI_VALUES = ['2,184', '92%', '$1.4M'];
+const LEAD_ROWS: Array<[string, number]> = [
+  ['Marko V.', 94],
+  ['Aiyana P.', 88],
+  ['L. Marchetti', 71],
 ];
+
+const AUTOMATION_ICONS = [
+  /* target — client management */
+  <svg key="target" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <circle cx="10" cy="10" r="7" stroke="#111" strokeWidth="1.5" />
+    <circle cx="10" cy="10" r="2.5" stroke="#111" strokeWidth="1.5" />
+  </svg>,
+  /* arrow — lead tracking */
+  <svg
+    key="arrow"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    aria-hidden="true"
+    className="rtl:-scale-x-100"
+  >
+    <path
+      d="M3 10h14M12 5l5 5-5 5"
+      stroke="#111"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>,
+  /* bars — broker dashboards */
+  <svg key="bars" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d="M4 16v-5M10 16V4m6 12v-8" stroke="#111" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>,
+  /* shield — admin & compliance */
+  <svg key="shield" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path
+      d="M10 2.5 4 5v4.5c0 3.7 2.6 6.6 6 8 3.4-1.4 6-4.3 6-8V5l-6-2.5Z"
+      stroke="#111"
+      strokeWidth="1.5"
+      strokeLinejoin="round"
+    />
+    <path
+      d="m7.5 10 1.8 1.8 3.2-3.6"
+      stroke="#111"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>,
+];
+
+function ArrowIcon() {
+  return (
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+      className="rtl:-scale-x-100"
+    >
+      <path
+        d="M3 8h10M9 4l4 4-4 4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 export function AiCrmPage() {
   const locale = useLocale();
   const t = useTranslations('aiCrm');
 
-  const features = FEATURE_STYLES.map((s, i) => ({
-    ...s,
+  const features = FEATURE_CATEGORIES.map((category, i) => ({
+    category,
     title: [t('feat1Title'), t('feat2Title'), t('feat3Title')][i],
     desc: [t('feat1Desc'), t('feat2Desc'), t('feat3Desc')][i],
   }));
 
   const automations = [
-    {
-      title: t('auto1Title'),
-      desc: t('auto1Desc'),
-      icon: (
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="5.5" stroke="currentColor" strokeWidth="1.4" />
-          <path
-            d="M8 5v3l2 2"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      ),
-    },
-    {
-      title: t('auto2Title'),
-      desc: t('auto2Desc'),
-      icon: (
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="rtl:-scale-x-100">
-          <path
-            d="M3 8h10M9 4l4 4-4 4"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      ),
-    },
-    {
-      title: t('auto3Title'),
-      desc: t('auto3Desc'),
-      icon: (
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-          <rect x="2" y="2" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.4" />
-          <rect x="9" y="2" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.4" />
-          <rect x="2" y="9" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.4" />
-          <rect x="9" y="9" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.4" />
-        </svg>
-      ),
-    },
-    {
-      title: t('auto4Title'),
-      desc: t('auto4Desc'),
-      icon: (
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="5.5" stroke="currentColor" strokeWidth="1.4" />
-          <path d="M8 7v4M8 5v.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
-      ),
-    },
+    { title: t('auto1Title'), desc: t('auto1Desc') },
+    { title: t('auto2Title'), desc: t('auto2Desc') },
+    { title: t('auto3Title'), desc: t('auto3Desc') },
+    { title: t('auto4Title'), desc: t('auto4Desc') },
   ];
+
+  const kpis = KPI_VALUES.map((value, i) => ({
+    value,
+    label: [t('kpiLeads'), t('kpiScore'), t('kpiDeposits')][i],
+  }));
+
+  const stages = [t('stageFunded'), t('stageKyc'), t('stageDemo')];
 
   return (
     <>
-      {/* Hero */}
-      <section className="px-5 pb-10 pt-9 xl:px-[80px] xl:py-20">
+      {/* Hero — light mode fades from brand green into white; dark inherits page bg */}
+      <section className="bg-gradient-to-b from-[#b2ffab] to-white px-5 pb-10 pt-9 xl:px-[80px] xl:pb-[60px] xl:pt-20 dark:bg-none">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="xl:grid xl:grid-cols-2 xl:items-center xl:gap-16">
+          <div className="xl:grid xl:grid-cols-[1fr_480px] xl:items-center xl:gap-[60px]">
             {/* Left: text + CTAs */}
             <div>
-              <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+              <SectionKicker className="mb-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280] dark:[&>span:last-child]:text-[#b8bfcc]">
                 {t('kicker')}
               </SectionKicker>
 
-              <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05] xl:text-[56px] dark:text-white">
+              <h1 className="mb-4 font-sans text-[40px] font-semibold leading-[1.1] text-[#111] xl:text-[48px] dark:text-white">
                 {t('heroLine1')}
                 <br />
                 <span className="text-[#00B050]">{t('heroLine2')}</span>
               </h1>
-              <p className="font-body text-muted mb-8 max-w-[340px] text-[14px] leading-[1.6] xl:max-w-[480px] xl:text-[16px] dark:text-white/60">
+              <p className="font-body mb-7 max-w-[480px] text-[14px] leading-[24px] text-[#6b7280] xl:text-[15px] dark:text-[#b8bfcc]">
                 {t('heroSubtitle')}
               </p>
 
               <div className="flex flex-wrap gap-3">
                 <Link
                   href={`/${locale}/contact`}
-                  className="font-body flex h-[48px] items-center gap-2 rounded-full bg-[#00B050] px-6 text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90"
+                  className="font-body flex items-center gap-2 rounded-[10px] bg-[#00B050] px-[22px] py-[14px] text-[14px] font-semibold text-white transition-colors hover:bg-[#00B050]/90"
                 >
                   {t('demoBtn')}
-                  <svg
-                    width="13"
-                    height="13"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    className="rtl:-scale-x-100"
-                  >
-                    <path
-                      d="M3 8h10M9 4l4 4-4 4"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  <ArrowIcon />
                 </Link>
                 <Link
                   href={`/${locale}/contact`}
-                  className="font-body border-foreground/20 text-foreground/80 hover:border-foreground/40 hover:text-foreground flex h-[48px] items-center rounded-full border px-6 text-[14px] font-medium transition-colors dark:border-white/20 dark:text-white/80 dark:hover:border-white/40 dark:hover:text-white"
+                  className="font-body flex items-center rounded-[10px] border border-[#111] px-5 py-[14px] text-[14px] font-semibold text-[#121212] transition-colors hover:bg-[#111]/5 dark:border-[#1f242e] dark:text-white dark:hover:bg-white/5"
                 >
                   {t('salesBtn')}
                 </Link>
               </div>
             </div>
 
-            {/* Right: dashboard mockup */}
-            <div className="mt-10 overflow-hidden rounded-[20px] border border-white/10 bg-[#111316] xl:mt-0">
-              <div className="flex items-center border-b border-white/10 px-5 py-3">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-[#00B050]" />
-                  <span className="font-body text-[11px] font-semibold uppercase tracking-[0.1em] text-white/60">
-                    {t('dashboardKicker')}
-                  </span>
-                </div>
+            {/* Right: CRM dashboard mockup — dark card in both modes */}
+            <div className="mt-10 flex flex-col gap-4 rounded-[16px] bg-[#111] p-[22px] xl:mt-0">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-[#00B050]" />
+                <span className="font-body flex-1 text-[12px] font-medium text-white dark:text-[#b8bfcc]">
+                  {t('dashboardKicker')}
+                </span>
+                <span className="font-body text-[10px] text-[#8c949e]">●●●</span>
               </div>
-              <div className="grid grid-cols-3 divide-x divide-white/10">
-                {[
-                  { value: '2.1k', label: t('tabLeads') },
-                  { value: '92%', label: t('tabScore') },
-                  { value: '$1.4M', label: t('tabAtc') },
-                ].map((stat) => (
-                  <div key={stat.label} className="px-5 py-4">
-                    <p className="font-sans text-[22px] font-semibold text-white">{stat.value}</p>
-                    <p className="font-body text-[10px] uppercase tracking-[0.08em] text-white/40">
-                      {stat.label}
+
+              <div className="flex gap-2.5">
+                {kpis.map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="flex flex-1 flex-col gap-1 rounded-[20px] bg-[#1f262e] px-3 py-3.5"
+                  >
+                    <p className="font-sans text-[20px] font-bold leading-none text-[#00B050]">
+                      {stat.value}
                     </p>
+                    <p className="font-body text-[11px] text-[#8c949e]">{stat.label}</p>
                   </div>
                 ))}
               </div>
-              <div className="border-t border-white/10 px-5 py-4">
-                <p className="font-body mb-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-[#00B050]">
+
+              <div className="flex flex-col gap-1 rounded-[20px] border border-[#00B050] bg-[#1f262e] p-3.5">
+                <p className="font-body text-[10px] font-medium uppercase tracking-[0.12em] text-[#00B050]">
                   {t('insightLabel')}
                 </p>
-                <p className="font-body text-[13px] leading-[1.5] text-white/80">
+                <p className="font-body text-[13px] leading-[18px] text-white dark:text-[#b8bfcc]">
                   {t('insightText')}
                 </p>
+              </div>
+
+              <div className="rounded-[20px] bg-[#1f262e]">
+                <div className="font-body flex px-3.5 py-2.5 text-[10px] font-medium tracking-[0.1em] text-[#8c949e]">
+                  <span className="flex-1">{t('tableLead')}</span>
+                  <span className="flex-1">{t('tableStage')}</span>
+                  <span className="flex-1">{t('tableScore')}</span>
+                </div>
+                {LEAD_ROWS.map(([name, score], i) => (
+                  <div key={name} className="font-body flex px-3.5 py-2.5 text-[12px]">
+                    <span className="flex-1 text-white dark:text-[#b8bfcc]">{name}</span>
+                    <span className="flex-1 text-white dark:text-[#b8bfcc]">{stages[i]}</span>
+                    <span className="flex-1 font-semibold text-[#00B050]">{score}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* What it does — feature cards with per-color tint */}
-      <section className="bg-white px-5 py-12 xl:px-[80px] xl:py-20 dark:bg-[#111316]">
+      {/* What it does — gradient cards with green category pills */}
+      <section className="bg-[#fafaf9] px-5 py-12 xl:px-[80px] xl:py-[60px] dark:bg-transparent">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-6 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-3.5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280] dark:[&>span:last-child]:text-[#b8bfcc]">
             {t('featuresKicker')}
           </SectionKicker>
-          <h2 className="text-foreground mb-10 font-sans text-[30px] font-semibold leading-[1.1] xl:text-[40px]">
-            {t('featuresLine1')}
-            <br />
-            {t('featuresLine2')}
+          <h2 className="mb-2 font-sans text-[28px] font-semibold leading-[1.15] text-[#111] xl:text-[32px] dark:text-white">
+            {t('featuresLine1')} {t('featuresLine2')}
           </h2>
+          <p className="font-body mb-8 max-w-[720px] text-[15px] leading-[24px] text-[#6b7280] dark:text-[#b8bfcc]">
+            {t('featuresSubtitle')}
+          </p>
 
-          <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3 xl:gap-[12px]">
+          <div className="flex flex-col gap-5 xl:grid xl:grid-cols-3">
             {features.map((item) => (
               <div
                 key={item.category}
-                className={`group flex flex-col gap-3 rounded-[18px] border p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${item.cardCls}`}
+                className="flex flex-col items-start gap-3.5 rounded-[20px] bg-gradient-to-l from-[#e2e2e2] to-white px-7 py-8 dark:bg-[#111] dark:bg-none"
               >
-                <div className="flex items-center gap-2">
-                  <span
-                    className="h-2 w-2 flex-shrink-0 rounded-full"
-                    style={{ backgroundColor: item.dot }}
-                  />
-                  <span
-                    className={`font-body text-[10px] font-semibold uppercase tracking-[0.12em] ${item.catCls}`}
-                  >
-                    {item.category}
-                  </span>
-                </div>
-                <p className="text-foreground font-sans text-[16px] font-semibold">{item.title}</p>
-                <p className="text-muted font-body text-[13px] leading-[1.6]">{item.desc}</p>
+                <span className="font-body rounded-[12px] bg-[#ecf8f1] px-2.5 py-[5px] text-[10px] font-medium tracking-[0.12em] text-[#00B050] dark:bg-white/[0.06]">
+                  {item.category}
+                </span>
+                <p className="font-sans text-[20px] font-semibold text-[#111] dark:text-white">
+                  {item.title}
+                </p>
+                <p className="font-body text-[14px] leading-[22px] text-[#6b7280] dark:text-[#b8bfcc]">
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Automation */}
-      <section className="bg-white px-5 pb-14 xl:px-[80px] xl:pb-20 dark:bg-[#111316]">
+      {/* Automation — 2×2 icon-tile cards */}
+      <section className="bg-white px-5 py-12 xl:px-[80px] xl:py-[60px] dark:bg-transparent">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-6 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+          <SectionKicker className="mb-3.5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280] dark:[&>span:last-child]:text-[#b8bfcc]">
             {t('autoKicker')}
           </SectionKicker>
-          <h2 className="text-foreground mb-10 font-sans text-[30px] font-semibold leading-[1.1] xl:text-[40px]">
-            {t('autoLine1')}
-            <br />
-            {t('autoLine2')}
+          <h2 className="mb-2 font-sans text-[28px] font-semibold leading-[1.15] text-[#111] xl:text-[32px] dark:text-white">
+            {t('autoLine1')} {t('autoLine2')}
           </h2>
+          <p className="font-body mb-8 max-w-[720px] text-[15px] leading-[24px] text-[#6b7280] dark:text-[#b8bfcc]">
+            {t('autoSubtitle')}
+          </p>
 
-          <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-2 xl:gap-[12px]">
-            {automations.map((item) => (
+          <div className="grid gap-5 sm:grid-cols-2">
+            {automations.map((item, i) => (
               <div
                 key={item.title}
-                className="group flex items-start gap-4 rounded-[16px] border border-[#e5e7eb] bg-[#fafaf9] p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:border-white/[0.07] dark:bg-[#1a1c22]"
+                className="flex flex-col items-start gap-3.5 rounded-[20px] bg-gradient-to-l from-[#e2e2e2] to-white p-7 dark:bg-[#111] dark:bg-none"
               >
-                <div className="group-hover:border-accent/30 group-hover:text-accent mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[#e5e7eb] bg-white text-[#111] transition-colors duration-200 dark:border-white/[0.07] dark:bg-[#111316] dark:text-white">
-                  {item.icon}
-                </div>
-                <div>
-                  <p className="text-foreground font-sans text-[14px] font-semibold">
-                    {item.title}
-                  </p>
-                  <p className="text-muted font-body mt-1 text-[13px] leading-[1.55]">
-                    {item.desc}
-                  </p>
-                </div>
+                <span className="flex h-11 w-11 items-center justify-center rounded-[10px] bg-[#ecf8f1] dark:bg-white">
+                  {AUTOMATION_ICONS[i]}
+                </span>
+                <p className="font-body text-[18px] font-semibold text-[#111] dark:text-white">
+                  {item.title}
+                </p>
+                <p className="font-body text-[14px] leading-[22px] text-[#6b7280] dark:text-[#b8bfcc]">
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
@@ -256,24 +264,24 @@ export function AiCrmPage() {
       </section>
 
       {/* CTA */}
-      <section className="overflow-hidden rounded-t-[32px] bg-[#111] px-6 py-10 text-center xl:px-24 xl:py-16">
-        <h2 className="mb-2 font-sans text-[26px] font-semibold text-white xl:text-[32px]">
+      <section className="bg-[#111] px-6 py-12 text-center xl:px-[80px] xl:py-[60px]">
+        <h2 className="mb-2.5 font-sans text-[30px] font-semibold text-white xl:text-[38px] dark:text-[#b8bfcc]">
           {t('ctaHeading')}
         </h2>
-        <p className="font-body mb-[18px] text-[13px] leading-[1.55] text-[#b8bfcc]">
+        <p className="font-body mb-6 text-[14px] leading-[1.55] text-[#b8bfcc] xl:text-[15px] dark:text-[#8c949e]">
           {t('ctaDesc')}
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-[10px]">
+        <div className="flex flex-wrap items-center justify-center gap-3">
           <Link
             href={`/${locale}/contact`}
-            className="font-body flex items-center gap-[6px] rounded-[22px] bg-[#00b050] px-[18px] py-[12px] text-[13px] font-semibold text-white transition-colors hover:bg-[#00b050]/90 xl:text-[14px]"
+            className="font-body flex items-center gap-2 rounded-[10px] bg-[#00b050] px-6 py-[14px] text-[14px] font-semibold text-white transition-colors hover:bg-[#00b050]/90"
           >
             {t('ctaDemoBtn')}
-            <span aria-hidden>→</span>
+            <ArrowIcon />
           </Link>
           <Link
             href={`/${locale}/contact`}
-            className="font-body flex items-center rounded-[22px] border border-white/30 px-[16px] py-[12px] text-[13px] font-semibold text-white transition-colors hover:border-white/60 xl:text-[14px]"
+            className="font-body flex items-center rounded-[10px] border border-white px-[22px] py-[14px] text-[14px] font-semibold text-white transition-colors hover:bg-white/10 dark:border-[#1f242e]"
           >
             {t('ctaSalesBtn')}
           </Link>
