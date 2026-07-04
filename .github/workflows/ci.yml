@@ -27,6 +27,11 @@ jobs:
       # ── Lint ────────────────────────────────────────────────────────────────
       - name: Lint
         run: npm run lint
+        env:
+          # `next lint` executes apps/web/next.config.mjs, whose WR-12 guard throws
+          # when NEXT_PUBLIC_CMS_URL is unset under NODE_ENV=production (which `next
+          # lint` sets on CI). Provide the same dummy CMS URL the Build step uses.
+          NEXT_PUBLIC_CMS_URL: https://cms.newera365.com
 
       # ── Type-check ──────────────────────────────────────────────────────────
       - name: Type-check
