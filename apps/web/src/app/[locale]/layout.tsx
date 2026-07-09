@@ -64,13 +64,13 @@ export async function generateMetadata({
     metadataBase: new URL(BASE),
     title: {
       default: isAr
-        ? 'نيو إيرا 365 — تداول الفوركس والعقود مقابل الفروقات'
-        : 'NewEra365 — Forex & CFD Trading',
+        ? 'نيو إيرا 365: تداول الفوركس والعقود مقابل الفروقات'
+        : 'NewEra365: Forex & CFD Trading',
       template: isAr ? '%s | نيو إيرا 365' : '%s | NewEra365',
     },
     description: isAr
-      ? 'تداول الفوركس والمؤشرات والسلع والعملات الرقمية مع نيو إيرا 365 — فروقات ضيقة وتنفيذ سريع ومنصة MT5. رأس المال في خطر.'
-      : 'Trade forex, indices, commodities and crypto CFDs with NewEra365 — tight spreads, fast execution, and MT5. Capital at risk.',
+      ? 'تداول الفوركس والمؤشرات والسلع والعملات الرقمية مع نيو إيرا 365، فروقات ضيقة وتنفيذ سريع ومنصة MT5. رأس المال في خطر.'
+      : 'Trade forex, indices, commodities and crypto CFDs with NewEra365: tight spreads, fast execution, and MT5. Capital at risk.',
     alternates: {
       canonical: `${BASE}/${locale}`,
       languages: {
@@ -152,8 +152,6 @@ export default async function LocaleLayout({
   const companyRegistration = s
     ? ((isAr ? s.companyRegistrationAr : s.companyRegistrationEn) ?? undefined)
     : undefined;
-  const liveChatUrl = s?.liveChatUrl ?? undefined;
-
   const paymentMethods = (await getPaymentMethods(locale))
     .map((p) => (isAr ? (p.nameAr ?? p.name) : p.name))
     .filter((n): n is string => Boolean(n));
@@ -204,16 +202,6 @@ export default async function LocaleLayout({
               <RiskBanner enabled={riskBannerEnabled} message={riskBannerMessage} />
 
               <RouteChrome />
-              <div
-                className="fixed inset-0 -z-10 dark:hidden"
-                style={{ background: 'linear-gradient(0deg, #FFF 53.85%, #67FF59 100%)' }}
-                aria-hidden="true"
-              />
-              <div
-                className="fixed inset-0 -z-10 hidden dark:block"
-                style={{ background: 'linear-gradient(0deg, #000 56.25%, #085a00 100%)' }}
-                aria-hidden="true"
-              />
               <PageFade>{children}</PageFade>
               <Analytics />
               <CookieConsent />
@@ -224,7 +212,6 @@ export default async function LocaleLayout({
                 email={s?.contactEmail ?? null}
                 phone={s?.contactPhone ?? null}
                 whatsapp={s?.whatsappNumber ?? null}
-                liveChatUrl={s?.liveChatUrl ?? null}
               />
               <Footer
                 riskDisclaimer={riskDisclaimer ?? undefined}
@@ -233,7 +220,6 @@ export default async function LocaleLayout({
                 paymentMethods={paymentMethods}
                 regulatoryDisclosure={regulatoryDisclosure}
                 companyRegistration={companyRegistration}
-                liveChatUrl={liveChatUrl}
               />
             </ToastProvider>
           </NextIntlClientProvider>

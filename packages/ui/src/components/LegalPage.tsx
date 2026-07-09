@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { RichText, extractHeadings } from './RichText';
 import type { SlateNode } from './RichText';
+import { SectionKicker } from './SectionKicker';
+import { ReadingProgress } from './ReadingProgress';
 
 export interface CmsLegalDocument {
   id: number;
@@ -75,12 +77,24 @@ interface SectionProps {
   children: React.ReactNode;
 }
 
+// Editorial section: a mono ghost numeral (derived from the anchor id) sits
+// beside a de-numbered heading, with a hairline rule above for clear rhythm.
+// scroll-mt keeps in-page anchors clear of the sticky header.
 function Section({ id, title, children }: SectionProps) {
+  const numMatch = /(\d+)/.exec(id);
+  const num = numMatch && numMatch[1] ? numMatch[1].padStart(2, '0') : '';
+  const heading = title.replace(/^\s*\d+\.\s*/, '');
   return (
-    <section id={id} className="flex scroll-mt-[88px] flex-col gap-3">
-      <h2 className="text-foreground font-sans text-[24px] font-semibold tracking-[-0.48px]">
-        {title}
-      </h2>
+    <section
+      id={id}
+      className="flex scroll-mt-[88px] flex-col gap-3 border-t border-black/[0.06] pt-7 first:border-t-0 first:pt-0 dark:border-white/10"
+    >
+      <div className="flex items-baseline gap-3">
+        {num && (
+          <span className="text-accent/70 font-mono text-caption tabular-nums">{num}</span>
+        )}
+        <h2 className="text-foreground text-title font-sans">{heading}</h2>
+      </div>
       {children}
     </section>
   );
@@ -156,11 +170,11 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
               def: 'means the funds required as a deposit to open and maintain a leveraged position.',
             },
           ].map((item) => (
-            <div key={item.term} className="rounded-[12px] bg-[#fafaf9] p-4 dark:bg-[#1a1c22]">
+            <div key={item.term} className="rounded-[12px] bg-[#F0F4F1] p-4 dark:bg-[#1a1c22]">
               <span className="font-body text-foreground text-[13px] font-semibold">
                 {item.term}
               </span>
-              <span className="font-body text-muted text-[13px]"> — {item.def}</span>
+              <span className="font-body text-muted text-[13px]">: {item.def}</span>
             </div>
           ))}
         </div>
@@ -261,8 +275,8 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
       </Section>
       <Section id="section-3" title="3. Market risk">
         <Para>
-          Financial markets can be highly volatile. Prices may gap significantly — particularly
-          around major economic announcements — resulting in execution at prices materially
+          Financial markets can be highly volatile. Prices may gap significantly, particularly
+          around major economic announcements, resulting in execution at prices materially
           different from your order price.
         </Para>
       </Section>
@@ -314,7 +328,7 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
             },
             { type: 'Marketing', desc: 'Used to deliver relevant advertising. Can be opted out.' },
           ].map((c) => (
-            <div key={c.type} className="rounded-[12px] bg-[#fafaf9] p-4 dark:bg-[#1a1c22]">
+            <div key={c.type} className="rounded-[12px] bg-[#F0F4F1] p-4 dark:bg-[#1a1c22]">
               <p className="font-body text-foreground text-[13px] font-semibold">{c.type}</p>
               <p className="font-body text-muted mt-0.5 text-[12px]">{c.desc}</p>
             </div>
@@ -391,12 +405,46 @@ export function LegalPage({ documents }: LegalPageProps) {
       }))
     : getStaticToc(activeDoc);
 
+  // Scroll-spy: highlight the TOC anchor for the section currently in view.
+  // A pure observer (no animation), so it stays on for reduced-motion users.
+  const [activeId, setActiveId] = useState<string>('');
+  const tocKey = tocItems.map((it) => it.id).join('|');
+  useEffect(() => {
+    const ids = tocKey ? tocKey.split('|') : [];
+    if (ids.length === 0) {
+      setActiveId('');
+      return;
+    }
+    const els = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (els.length === 0) return;
+    setActiveId(ids[0] ?? '');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        const top = visible[0];
+        if (top) setActiveId(top.target.id);
+      },
+      { rootMargin: '-88px 0px -66% 0px', threshold: 0 },
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [tocKey]);
+
+  const hasToc = tocItems.length > 0;
+
   return (
     <>
+      <ReadingProgress />
+
       {/* Hero */}
       <section className="bg-transparent px-5 pb-6 pt-9">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground font-sans text-[36px] font-semibold leading-[1.08] tracking-[-1.08px]">
+          <h1 className="text-foreground text-display font-sans">
             {t('heroLine1')}
             <br />
             <span className="text-accent">{t('heroLine2')}</span>
@@ -408,7 +456,7 @@ export function LegalPage({ documents }: LegalPageProps) {
       </section>
 
       {/* Document selector */}
-      <section className="px-5 pb-4">
+      <section className="px-5 pb-6">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="scrollbar-hide flex gap-2 overflow-x-auto">
             {(cmsDocList ?? DOCUMENTS).map((doc) => (
@@ -428,58 +476,82 @@ export function LegalPage({ documents }: LegalPageProps) {
         </div>
       </section>
 
-      {/* Table of Contents — only render when the document actually has headings */}
-      {tocItems.length > 0 && (
-        <section className="px-5 pb-4">
-          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <div className="rounded-[14px] bg-[#fafaf9] p-4 dark:bg-[#1a1c22]">
-              <p className="text-muted mb-3 font-mono text-[10px] tracking-[1.4px]">
-                {t('tocHeading')}
-              </p>
-              <div className="flex flex-col gap-2">
-                {tocItems.map((item) => (
-                  <a
-                    key={item.num}
-                    href={`#${item.id}`}
-                    className="font-body text-foreground/75 hover:text-accent flex items-center gap-3 text-[13px] transition-colors dark:text-white/75"
-                  >
-                    <span className="text-muted w-5">{item.num}.</span>
-                    {item.title}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Document body */}
+      {/* Sticky TOC rail + document body */}
       <section className="px-5 pb-12">
-        <div className="mx-auto flex max-w-[390px] flex-col gap-6 md:max-w-2xl xl:max-w-[1200px]">
-          {cmsDoc ? (
-            <>
-              {(cmsDoc.effectiveDate || cmsDoc.version) && (
-                <p className="text-muted font-mono text-[11px] tracking-[1.54px]">
-                  {[
-                    cmsDoc.effectiveDate
-                      ? `${t('effectivePrefix')} ${formatLegalDate(cmsDoc.effectiveDate, locale)}`
-                      : null,
-                    cmsDoc.version || null,
-                  ]
-                    .filter(Boolean)
-                    .join(' · ')}
-                </p>
-              )}
-              <RichText content={cmsDoc.body} className="flex flex-col gap-3" />
-            </>
-          ) : (
-            DOC_CONTENT[activeDoc as DocId]
+        <div
+          className={`mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px] ${
+            hasToc ? 'xl:grid xl:grid-cols-[260px_1fr] xl:gap-12' : ''
+          }`}
+        >
+          {/* Table of contents: collapses above the body on mobile, sticky rail on xl */}
+          {hasToc && (
+            <aside className="motion-safe:animate-rise-in mb-8 xl:mb-0">
+              <nav
+                aria-label={t('tocHeading')}
+                className="xl:sticky xl:top-[88px] rounded-[16px] border border-black/[0.06] bg-[#F0F4F1] p-4 xl:p-5 dark:border-white/10 dark:bg-[#1a1c22]"
+              >
+                <SectionKicker className="text-muted mb-4">{t('tocHeading')}</SectionKicker>
+                <ol className="flex flex-col gap-0.5">
+                  {tocItems.map((item) => {
+                    const active = item.id === activeId;
+                    return (
+                      <li key={item.num}>
+                        <a
+                          href={`#${item.id}`}
+                          aria-current={active ? 'true' : undefined}
+                          className={`group flex items-baseline gap-3 border-s-2 py-1.5 ps-3 text-[13px] transition-colors ${
+                            active
+                              ? 'border-accent text-foreground font-medium dark:text-white'
+                              : 'text-foreground/60 hover:text-foreground border-transparent dark:text-white/55 dark:hover:text-white'
+                          }`}
+                        >
+                          <span
+                            className={`font-mono text-[11px] tabular-nums ${
+                              active ? 'text-accent' : 'text-muted'
+                            }`}
+                          >
+                            {item.num.padStart(2, '0')}
+                          </span>
+                          <span className="link-underline">{item.title}</span>
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </nav>
+            </aside>
           )}
+
+          {/* Document body */}
+          <div className="flex min-w-0 flex-col gap-6">
+            {cmsDoc ? (
+              <>
+                {(cmsDoc.effectiveDate || cmsDoc.version) && (
+                  <p className="text-muted font-mono text-[11px] tracking-[1.54px]">
+                    {[
+                      cmsDoc.effectiveDate
+                        ? `${t('effectivePrefix')} ${formatLegalDate(cmsDoc.effectiveDate, locale)}`
+                        : null,
+                      cmsDoc.version || null,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}
+                  </p>
+                )}
+                <RichText
+                  content={cmsDoc.body}
+                  className="flex flex-col gap-3 [&_a]:link-underline [&_h2]:scroll-mt-[88px] [&_h3]:scroll-mt-[88px]"
+                />
+              </>
+            ) : (
+              DOC_CONTENT[activeDoc as DocId]
+            )}
+          </div>
         </div>
       </section>
 
       {/* Footer note */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
+      <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <p className="font-body mb-5 text-[12px] leading-[1.7] text-white/50">
             {t('footerDisclaimer')}

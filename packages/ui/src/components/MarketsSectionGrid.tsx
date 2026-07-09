@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRef, useEffect } from 'react';
+import { LiveSpark, useLiveInstrumentPrices } from './LiveSpark';
 
 export interface MarketItem {
   key: string;
@@ -10,9 +11,20 @@ export interface MarketItem {
   name: string;
   count: string;
   href: string;
+  /** Representative MT5 symbol for the live quote board (e.g. 'EURUSD'). When
+   * omitted, or when no live price is available, the tile shows only its count. */
+  symbol?: string;
 }
 
-function MarketCard({ item, index }: { item: MarketItem; index: number }) {
+function MarketCard({
+  item,
+  index,
+  price,
+}: {
+  item: MarketItem;
+  index: number;
+  price?: number;
+}) {
   const ref = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
@@ -20,10 +32,10 @@ function MarketCard({ item, index }: { item: MarketItem; index: number }) {
     if (!el) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    // Alternate slide direction: even = left, odd = right
-    const xStart = index % 2 === 0 ? -32 : 32;
+    // Staggered upward slide-in: reads coherently across the two desktop rows
+    // (a left/right alternation would scatter direction within each column).
     el.style.opacity = '0';
-    el.style.transform = `translateX(${xStart}px)`;
+    el.style.transform = 'translateY(24px)';
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -31,7 +43,7 @@ function MarketCard({ item, index }: { item: MarketItem; index: number }) {
           const delay = index * 60;
           el.style.transition = `opacity 0.5s ease ${delay}ms, transform 0.5s ease ${delay}ms`;
           el.style.opacity = '1';
-          el.style.transform = 'translateX(0)';
+          el.style.transform = 'translateY(0)';
           observer.disconnect();
         }
       },
@@ -46,18 +58,28 @@ function MarketCard({ item, index }: { item: MarketItem; index: number }) {
     <Link
       ref={ref}
       href={item.href}
-      className="group relative flex h-[110px] flex-col justify-end overflow-hidden rounded-[18px] border border-transparent px-4 py-[18px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_12px_32px_rgba(0,0,0,0.28)]"
+      className="group relative flex h-[168px] flex-col justify-end overflow-hidden rounded-[20px] border border-white/[0.08] px-4 py-4 shadow-[0_18px_40px_-20px_rgba(4,16,10,0.45)] transition-[border-color,box-shadow] duration-300 hover:border-accent/45 hover:shadow-[0_24px_48px_-20px_rgba(0,176,80,0.35)] xl:h-[210px]"
     >
       {/* Dark base */}
-      <div className="absolute inset-0 bg-[#111]" />
-      {/* Background photo — dims + zooms on hover */}
+      <div className="absolute inset-0 bg-[#0A130E]" />
+      {/* Background photo — full presence; on hover it dims a little and zooms
+          in (client-requested push-in; clipped by the card's overflow-hidden) */}
       <Image
         src={item.bg}
         alt=""
         fill
-        sizes="(min-width: 1280px) 180px, 50vw"
-        className="pointer-events-none object-cover opacity-40 transition-all duration-500 ease-out group-hover:scale-110 group-hover:opacity-25"
+        sizes="(min-width: 1280px) 200px, 50vw"
+        className="pointer-events-none object-cover opacity-[0.62] transition-[opacity,transform] duration-500 ease-out group-hover:opacity-[0.5] motion-safe:group-hover:scale-[1.08]"
         aria-hidden="true"
+      />
+      {/* Green-black scrim anchors the label zone */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-gradient-to-t from-[#03130B]/[0.88] via-[#03130B]/[0.28] to-transparent"
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-[20px] ring-1 ring-inset ring-white/[0.06]"
       />
       {/* Explore affordance — slides in on hover (RTL-aware) */}
       <span
@@ -74,12 +96,15 @@ function MarketCard({ item, index }: { item: MarketItem; index: number }) {
           />
         </svg>
       </span>
-      {/* Content — no icon per Figma; label + count anchored to the bottom */}
+      {/* Content: label, live quote, count anchored to the bottom */}
       <div className="relative z-10">
-        <p className="group-hover:text-accent font-sans text-[16px] font-medium text-white transition-colors duration-300">
+        <p className="group-hover:text-accent-bright font-sans text-[17px] font-semibold text-white transition-colors duration-300">
           {item.name}
         </p>
-        <p className="font-body mt-[2px] text-[11px] text-[#FFFFFFCC] transition-colors duration-300 group-hover:text-white dark:text-[#FFFFFF]">
+        {/* Living quote board: renders nothing until a live price arrives, so
+            the count line below always keeps the tile complete. */}
+        {item.symbol ? <LiveSpark symbol={item.symbol} price={price} className="mt-[5px]" /> : null}
+        <p className="mt-[3px] font-mono text-[11.5px] font-medium tracking-[0.06em] text-white/[0.72] transition-colors duration-300 group-hover:text-white">
           {item.count}
         </p>
       </div>
@@ -88,10 +113,18 @@ function MarketCard({ item, index }: { item: MarketItem; index: number }) {
 }
 
 export function MarketsSectionGrid({ items }: { items: MarketItem[] }) {
+  // Single shared poll for the whole grid (see LiveSpark). One request per
+  // interval feeds all six tiles rather than six independent fetch loops.
+  const prices = useLiveInstrumentPrices();
   return (
-    <div className="mb-[14px] grid grid-cols-2 gap-[10px] overflow-x-clip xl:grid-cols-6">
+    <div className="mb-[14px] grid grid-cols-2 gap-[10px] overflow-x-clip xl:grid-cols-3">
       {items.map((item, i) => (
-        <MarketCard key={item.key} item={item} index={i} />
+        <MarketCard
+          key={item.key}
+          item={item}
+          index={i}
+          price={item.symbol ? prices[item.symbol] : undefined}
+        />
       ))}
     </div>
   );

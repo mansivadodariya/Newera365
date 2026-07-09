@@ -1,5 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
-import { GuideDetailPage } from '@newera365/ui';
+import { GuideDetailPage, CtaBanner } from '@newera365/ui';
 import type { CmsGuideDetail } from '@newera365/ui';
 import { LOCALES } from '@newera365/types';
 import { getGuideBySlug, getGuides, slugToTitle } from '@/lib/cms';
@@ -47,5 +47,10 @@ export default async function GuideDetailRoute({ params }: Props) {
   // real page instead of 404-ing).
   const guide: CmsGuideDetail | null = item ? { title: item.title, body: item.body ?? [] } : null;
 
-  return <GuideDetailPage slug={params.slug} guide={guide} />;
+  return (
+    <>
+      <GuideDetailPage slug={params.slug} guide={guide} />
+      <CtaBanner />
+    </>
+  );
 }

@@ -121,6 +121,52 @@ async function main() {
       wlSetupTime: '< 30 days',
       wlSpreadMarkup: 'Custom',
       wlTechStack: 'Turnkey',
+      // Hero stat band + income ladder + rebate matrix + FTD condition — global
+      // (not localized), matching the ibRateDisplay-style fields above.
+      heroStat1Value: '$5,000',
+      heroStat2Value: '15',
+      heroStat3Value: '3',
+      heroStat4Value: '4',
+      incomeLadder: [
+        { balanceLabel: '$30,000 to $50,000', minBalance: 30000, incomeValue: '$500' },
+        { balanceLabel: '$50,000 to $100,000', minBalance: 50000, incomeValue: '$750' },
+        { balanceLabel: '$100,000 to $200,000', minBalance: 100000, incomeValue: '$1,250' },
+        { balanceLabel: '$200,000 to $300,000', minBalance: 200000, incomeValue: '$2,000' },
+        { balanceLabel: '$300,000 to $400,000', minBalance: 300000, incomeValue: '$3,000' },
+        { balanceLabel: '$400,000 to $500,000', minBalance: 400000, incomeValue: '$4,000' },
+        { balanceLabel: '$500,000+', minBalance: 500000, incomeValue: '$5,000', isTopSlab: true },
+      ],
+      rebateTables: [
+        {
+          instrumentNameEn: 'Gold, XAU/USD',
+          instrumentNameAr: 'الذهب، XAU/USD',
+          rows: [
+            { spread: '7-8', commission: '10', rebate: '3' },
+            { spread: '20', commission: '0', rebate: '5' },
+            { spread: '30', commission: '0', rebate: '15' },
+          ],
+        },
+        {
+          instrumentNameEn: 'FX majors',
+          instrumentNameAr: 'أزواج الفوركس الرئيسية',
+          rows: [
+            { spread: '2-4', commission: '7', rebate: '2' },
+            { spread: '12-15', commission: '0', rebate: '4' },
+            { spread: '18-22', commission: '0', rebate: '8' },
+          ],
+        },
+        {
+          instrumentNameEn: 'Silver, XAG/USD',
+          instrumentNameAr: 'الفضة، XAG/USD',
+          rows: [
+            { spread: '15-20', commission: '10', rebate: '3' },
+            { spread: '35-45', commission: '0', rebate: '8' },
+            { spread: '50-70', commission: '0', rebate: '15' },
+          ],
+        },
+      ],
+      ftdCap: 'USD 10,000',
+      ftdMinLots: '50',
       steps: stepsEn,
       ctaHeading: 'Ready to build a new revenue stream?',
       ctaSubtitle: 'Apply today. A partner manager will reach out within 48 hours.',

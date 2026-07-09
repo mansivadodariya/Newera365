@@ -5,6 +5,7 @@ import { useState, useMemo, useRef } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { Pagination } from './Pagination';
+import { ScrollReveal } from './ScrollReveal';
 import { norm, humanize, distinctCategories } from './filterUtils';
 
 const RESEARCH_PER_PAGE = 6;
@@ -146,6 +147,10 @@ function toDisplayArticles(cmsArticles?: CmsResearchArticle[]): ArticleDisplay[]
 
 interface ResearchPageProps {
   cmsArticles?: CmsResearchArticle[];
+  /** News feed (renders under the "News" source tab; detail links resolve to /daily-news/[slug]). */
+  newsArticles?: CmsResearchArticle[];
+  /** Blog feed (renders under the "Blog" source tab; detail links resolve to /education/blog/[slug]). */
+  blogArticles?: CmsResearchArticle[];
   cmsReports?: CmsResearchReportItem[];
   basePath?: string;
   /** Optional hero copy override (e.g. /daily-news supplies its own localized strings). */
@@ -154,12 +159,21 @@ interface ResearchPageProps {
 
 export function ResearchPage({
   cmsArticles,
+  newsArticles,
+  blogArticles,
   cmsReports,
   basePath = 'research',
   hero,
 }: ResearchPageProps) {
   const locale = useLocale();
   const t = useTranslations('research');
+
+  // When a caller supplies extra feeds (the merged /research desk), the page shows
+  // Analysis / News / Blog source tabs; each feed keeps its own detail route.
+  const hasFeeds = Boolean(newsArticles || blogArticles);
+  const [contentTab, setContentTab] = useState<'analysis' | 'news' | 'blog'>('analysis');
+  const detailBase =
+    contentTab === 'news' ? 'daily-news' : contentTab === 'blog' ? 'education/blog' : basePath;
 
   // Hero copy defaults to the research namespace, but callers (e.g. /daily-news)
   // can supply their own localized strings.
@@ -170,7 +184,7 @@ export function ResearchPage({
   // A card links to its external source when one is provided (news items are
   // often pointers to the original story); otherwise to the internal detail page.
   const hrefFor = (a: { slug: string; externalUrl?: string | null }) =>
-    a.externalUrl ? a.externalUrl : `/${locale}/${basePath}/${a.slug}`;
+    a.externalUrl ? a.externalUrl : `/${locale}/${detailBase}/${a.slug}`;
   const extProps = (a: { externalUrl?: string | null }) =>
     a.externalUrl ? { target: '_blank' as const, rel: 'noopener noreferrer' as const } : {};
 
@@ -206,7 +220,9 @@ export function ResearchPage({
   const [subLoading, setSubLoading] = useState(false);
   const [subError, setSubError] = useState('');
 
-  const articles = useMemo(() => toDisplayArticles(cmsArticles), [cmsArticles]);
+  const activeSource =
+    contentTab === 'news' ? newsArticles : contentTab === 'blog' ? blogArticles : cmsArticles;
+  const articles = useMemo(() => toDisplayArticles(activeSource), [activeSource]);
 
   // Tabs reflect the real CMS categories present (case-insensitive), never a
   // hardcoded list — so /education/blog, /research and /daily-news each show their own.
@@ -241,6 +257,12 @@ export function ResearchPage({
   const totalPages = Math.ceil(filteredList.length / RESEARCH_PER_PAGE);
   const pagedList = filteredList.slice((page - 1) * RESEARCH_PER_PAGE, page * RESEARCH_PER_PAGE);
 
+  function handleContentTab(tab: 'analysis' | 'news' | 'blog') {
+    setContentTab(tab);
+    setActiveCategory('ALL');
+    setSearch('');
+    setPage(1);
+  }
   function handleCategoryChange(cat: string) {
     setActiveCategory(cat);
     setPage(1);
@@ -255,7 +277,7 @@ export function ResearchPage({
       {/* Hero */}
       <section className="bg-transparent px-5 pb-6 pt-9">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.08] tracking-[-1.14px]">
+          <h1 className="text-foreground text-display mb-3 font-sans">
             {heroLine1}
             <br />
             <span className="text-accent">{heroLine2}</span>
@@ -265,6 +287,49 @@ export function ResearchPage({
           </p>
         </div>
       </section>
+
+      {/* Content source tabs — Analysis / News / Blog (merged insights desk) */}
+      {hasFeeds && (
+        <section className="px-5 pb-1 pt-1">
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <div className="border-border relative inline-grid grid-cols-3 rounded-[12px] border bg-[#f2f2f4] p-1 dark:border-white/[0.08] dark:bg-[#1a1c22]">
+              {/* Sliding active-tab indicator: transforms between the three feeds
+                  (snaps under reduced motion). Physical translateX is mirrored in
+                  RTL so it tracks the logical-start tab. */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-1 start-1 rounded-[9px] bg-white shadow-sm transition-transform duration-300 ease-out motion-reduce:transition-none dark:bg-[#2a2d36]"
+                style={{
+                  width: 'calc((100% - 0.5rem) / 3)',
+                  transform: `translateX(${
+                    ['analysis', 'news', 'blog'].indexOf(contentTab) *
+                    (locale === 'ar' ? -100 : 100)
+                  }%)`,
+                }}
+              />
+              {(
+                [
+                  { id: 'analysis', label: t('tabAnalysis') },
+                  { id: 'news', label: t('tabNews') },
+                  { id: 'blog', label: t('tabBlog') },
+                ] as const
+              ).map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => handleContentTab(s.id)}
+                  className={`font-body relative z-10 rounded-[9px] px-4 py-2 text-center text-[13px] font-medium transition-colors ${
+                    contentTab === s.id
+                      ? 'text-[#111] dark:text-white'
+                      : 'text-muted hover:text-foreground'
+                  }`}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Search bar */}
       <section className="px-5 pb-4">
@@ -325,17 +390,17 @@ export function ResearchPage({
               {...extProps(featured)}
               className="shadow-card-dark group flex flex-col overflow-hidden rounded-[22px] border border-transparent bg-[#111111] xl:flex-row-reverse dark:border-white/[0.08]"
             >
-              {/* Thumbnail — real CMS cover image when present */}
-              <div className="relative h-[180px] overflow-hidden xl:h-auto xl:w-[380px] xl:flex-shrink-0">
+              {/* Thumbnail — real CMS cover image when present; image zooms + gains an inner shadow on hover (client-approved article-card override) */}
+              <div className="relative h-[180px] overflow-hidden after:pointer-events-none after:absolute after:inset-0 after:opacity-0 after:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.14),inset_0_12px_36px_-8px_rgba(0,0,0,0.55)] after:transition-opacity after:duration-300 after:content-[''] motion-safe:group-hover:after:opacity-100 xl:h-auto xl:w-[380px] xl:flex-shrink-0">
                 {featured.thumbnailUrl ? (
                   <img
                     src={featured.thumbnailUrl}
                     alt={featured.title}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.05]"
                   />
                 ) : (
                   <div
-                    className="absolute inset-0 bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111]"
+                    className="absolute inset-0 bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111] transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.05]"
                     aria-hidden="true"
                   />
                 )}
@@ -407,15 +472,15 @@ export function ResearchPage({
                 {...extProps(article)}
                 className={`group flex items-start gap-3 py-4 transition-all duration-200 ${i < pagedList.length - 1 ? 'border-b border-[#ebebea] dark:border-white/[0.07]' : ''}`}
               >
-                <div className="relative h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[10px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111]">
+                <div className="relative h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[10px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111] after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.14),inset_0_6px_16px_-4px_rgba(0,0,0,0.5)] after:transition-opacity after:duration-300 after:content-[''] motion-safe:group-hover:after:opacity-100">
                   {article.thumbnailUrl ? (
                     <img
                       src={article.thumbnailUrl}
                       alt={article.title}
-                      className="absolute inset-0 h-full w-full object-cover"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.05]"
                     />
                   ) : (
-                    <div className="flex h-full items-end p-1.5">
+                    <div className="flex h-full items-end p-1.5 transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.05]">
                       <Sparkline data={article.sparkline} positive />
                     </div>
                   )}
@@ -440,86 +505,87 @@ export function ResearchPage({
             ))}
           </div>
 
-          {/* Desktop: vertical card grid */}
+          {/* Desktop: vertical card grid — staggered scroll reveal, cards come alive on hover */}
           <div className="hidden xl:grid xl:grid-cols-3 xl:gap-[14px]">
-            {pagedList.map((article) => (
-              <Link
-                key={article.id}
-                href={hrefFor(article)}
-                {...extProps(article)}
-                className="shadow-card-dark group flex flex-col overflow-hidden rounded-[18px] bg-[#111111] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
-              >
-                {/* Thumbnail */}
-                <div className="relative h-[140px] overflow-hidden bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111]">
-                  {article.thumbnailUrl ? (
-                    <img
-                      src={article.thumbnailUrl}
-                      alt={article.title}
-                      className="absolute inset-0 h-full w-full object-cover opacity-70 transition-transform duration-300 group-hover:scale-[1.03]"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-end p-3">
-                      <svg width="100%" height="44" viewBox="0 0 200 44" preserveAspectRatio="none">
-                        <polyline
-                          points={article.sparkline
-                            .map((v, i) => {
-                              const max = Math.max(...(article.sparkline as unknown as number[]));
-                              const min = Math.min(...(article.sparkline as unknown as number[]));
-                              const range = max - min || 1;
-                              return `${(i / (article.sparkline.length - 1)) * 200},${44 - ((v - min) / range) * 38}`;
-                            })
-                            .join(' ')}
-                          fill="none"
-                          stroke="#00B050"
+            {pagedList.map((article, idx) => (
+              <ScrollReveal key={article.id} index={idx} className="h-full">
+                <Link
+                  href={hrefFor(article)}
+                  {...extProps(article)}
+                  className="shadow-card-dark group flex h-full flex-col overflow-hidden rounded-[18px] bg-[#111111] transition-all duration-200 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+                >
+                  {/* Thumbnail — image zooms + gains an inner shadow on hover (client-approved article-card override) */}
+                  <div className="relative h-[140px] overflow-hidden bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111] after:pointer-events-none after:absolute after:inset-0 after:opacity-0 after:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.14),inset_0_10px_30px_-6px_rgba(0,0,0,0.5)] after:transition-opacity after:duration-300 after:content-[''] motion-safe:group-hover:after:opacity-100">
+                    {article.thumbnailUrl ? (
+                      <img
+                        src={article.thumbnailUrl}
+                        alt={article.title}
+                        className="absolute inset-0 h-full w-full object-cover opacity-70 transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.05]"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-end p-3 transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.05]">
+                        <svg width="100%" height="44" viewBox="0 0 200 44" preserveAspectRatio="none">
+                          <polyline
+                            points={article.sparkline
+                              .map((v, i) => {
+                                const max = Math.max(...(article.sparkline as unknown as number[]));
+                                const min = Math.min(...(article.sparkline as unknown as number[]));
+                                const range = max - min || 1;
+                                return `${(i / (article.sparkline.length - 1)) * 200},${44 - ((v - min) / range) * 38}`;
+                              })
+                              .join(' ')}
+                            fill="none"
+                            stroke="#00B050"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                  {/* Content */}
+                  <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
+                    <div className="mb-2">
+                      <span
+                        className={`font-body rounded-full px-2.5 py-[3px] text-[8px] font-semibold uppercase tracking-[0.1em] ${catColor(article.category)}`}
+                      >
+                        {translateResearchCat(article.category)}
+                      </span>
+                    </div>
+                    <p className="group-hover:text-accent font-sans text-[14px] font-semibold leading-[1.3] text-white transition-colors">
+                      {article.title}
+                    </p>
+                    {article.summary && (
+                      <p className="font-body mt-2 line-clamp-2 text-[12px] leading-[1.55] text-white/50">
+                        {article.summary}
+                      </p>
+                    )}
+                    <div className="mt-auto flex items-center justify-between pt-3">
+                      <span className="font-mono text-[10px] text-white/30">
+                        {article.date} ·{' '}
+                        {t('readTimeLabel', { minutes: parseInt(article.readTime, 10) || 5 })}
+                      </span>
+                      <svg
+                        width="11"
+                        height="11"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        aria-hidden="true"
+                        className="group-hover:text-accent text-white/30 transition-colors rtl:-scale-x-100"
+                      >
+                        <path
+                          d="M2 12L12 2M12 2H7M12 2v5"
+                          stroke="currentColor"
                           strokeWidth="1.5"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         />
                       </svg>
                     </div>
-                  )}
-                </div>
-                {/* Content */}
-                <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
-                  <div className="mb-2">
-                    <span
-                      className={`font-body rounded-full px-2.5 py-[3px] text-[8px] font-semibold uppercase tracking-[0.1em] ${catColor(article.category)}`}
-                    >
-                      {translateResearchCat(article.category)}
-                    </span>
                   </div>
-                  <p className="group-hover:text-accent font-sans text-[14px] font-semibold leading-[1.3] text-white transition-colors">
-                    {article.title}
-                  </p>
-                  {article.summary && (
-                    <p className="font-body mt-2 line-clamp-2 text-[12px] leading-[1.55] text-white/50">
-                      {article.summary}
-                    </p>
-                  )}
-                  <div className="mt-auto flex items-center justify-between pt-3">
-                    <span className="font-mono text-[10px] text-white/30">
-                      {article.date} ·{' '}
-                      {t('readTimeLabel', { minutes: parseInt(article.readTime, 10) || 5 })}
-                    </span>
-                    <svg
-                      width="11"
-                      height="11"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      aria-hidden="true"
-                      className="group-hover:text-accent text-white/30 transition-colors rtl:-scale-x-100"
-                    >
-                      <path
-                        d="M2 12L12 2M12 2H7M12 2v5"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              </ScrollReveal>
             ))}
           </div>
 
@@ -536,8 +602,8 @@ export function ResearchPage({
         </div>
       </section>
 
-      {/* Research Reports downloads */}
-      {cmsReports && cmsReports.length > 0 && (
+      {/* Research Reports downloads — analysis desk only */}
+      {contentTab === 'analysis' && cmsReports && cmsReports.length > 0 && (
         <section className="px-5 pb-10">
           <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="mb-5 flex items-center gap-3">
@@ -550,7 +616,7 @@ export function ResearchPage({
               {cmsReports.map((report) => (
                 <div
                   key={report.id}
-                  className="flex items-start justify-between gap-4 rounded-[16px] bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] dark:bg-[#1a1c22]"
+                  className="flex items-start justify-between gap-4 rounded-[16px] bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-[transform,box-shadow] duration-300 motion-safe:hover:-translate-y-1 hover:shadow-[0_16px_40px_-16px_rgba(8,19,12,0.18)] dark:bg-[#1a1c22]"
                 >
                   {report.thumbnailUrl && (
                     <img
@@ -608,7 +674,7 @@ export function ResearchPage({
       )}
 
       {/* Newsletter */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
+      <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="xl:flex xl:items-center xl:gap-16">
             {/* Left: heading */}
@@ -616,7 +682,7 @@ export function ResearchPage({
               <SectionKicker className="mb-3 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
                 {t('briefingKicker')}
               </SectionKicker>
-              <h2 className="mb-2 font-sans text-[28px] font-semibold leading-[1.1] text-white">
+              <h2 className="text-headline-sm mb-2 font-sans text-white">
                 {t('briefingHeading')}
                 <br />
                 {t('briefingTime')}

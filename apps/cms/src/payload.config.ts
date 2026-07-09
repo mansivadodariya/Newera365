@@ -76,9 +76,24 @@ const corsOrigin = process.env.FRONTEND_URL ?? 'http://localhost:3000';
 // CORS_ORIGINS adds extras as a comma-separated list. Values are trimmed so a
 // stray space/newline from the hosting provider's env UI can't silently break
 // the exact-match comparison.
+//
+// The canonical public origins are baked in as a safety net: a missing/reset
+// FRONTEND_URL or CORS_ORIGINS on the CMS host silently breaks EVERY browser
+// form (newsletter, contact, IB, webinars, ebook gate) — the POST preflight gets
+// no Access-Control-Allow-Origin and is blocked — while server-side content GETs
+// (which bypass CORS) keep rendering, so the site looks healthy. This gap has
+// recurred; hardcoding the known production origins here means a redeploy always
+// self-heals it regardless of the env, and survives an env typo like a trailing
+// slash. Overriding env vars still add anything extra (preview URLs, new domains).
+const PRODUCTION_ORIGINS = [
+  'https://newera365-app.vercel.app', // current Vercel production alias
+  'https://newera365.com', // custom domain (live post-DNS-cutover)
+  'https://www.newera365.com',
+];
+
 const allowedOrigins = Array.from(
   new Set(
-    [corsOrigin, ...(process.env.CORS_ORIGINS ?? '').split(',')]
+    [corsOrigin, ...PRODUCTION_ORIGINS, ...(process.env.CORS_ORIGINS ?? '').split(',')]
       .map((origin) => origin.trim())
       .filter(Boolean),
   ),

@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { RichText, extractHeadings } from './RichText';
 import type { SlateNode } from './RichText';
+import { ReadingProgress } from './ReadingProgress';
 
 export interface CmsGuideDetail {
   title: string;
@@ -33,6 +34,7 @@ export function GuideDetailPage({ slug: _slug, guide: cmsGuide }: GuideDetailPro
 
   return (
     <>
+      <ReadingProgress />
       {/* Top breadcrumb */}
       <section className="bg-transparent px-5 pb-0 pt-6">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
@@ -173,9 +175,7 @@ export function GuideDetailPage({ slug: _slug, guide: cmsGuide }: GuideDetailPro
           <SectionKicker className="mb-4 [&>span:last-child]:text-white/50">
             {t('ctaKicker')}
           </SectionKicker>
-          <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            {t('ctaHeading')}
-          </h2>
+          <h2 className="text-headline-sm mb-3 font-sans text-white">{t('ctaHeading')}</h2>
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
           <Link
             href={`/${locale}/guides`}

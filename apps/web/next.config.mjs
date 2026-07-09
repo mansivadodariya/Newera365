@@ -63,18 +63,68 @@ const nextConfig = {
         destination: '/:locale/markets/forex',
         permanent: true,
       },
-      // The blog moved from the Company section to Education — its route is now
-      // /education/blog. Redirect the old /blog and /blog/:slug so shared links and
-      // search-indexed URLs keep resolving instead of 404ing.
+      // The old /blog listing now resolves to the merged /research desk. /blog/:slug
+      // still points at the live article detail under /education/blog/:slug, so shared
+      // links and search-indexed URLs keep resolving instead of 404ing.
       {
         source: '/:locale(en|ar)/blog',
-        destination: '/:locale/education/blog',
+        destination: '/:locale/research',
         permanent: true,
       },
       {
         source: '/:locale(en|ar)/blog/:slug',
         destination: '/:locale/education/blog/:slug',
         permanent: true,
+      },
+      // IA consolidation (5-tab nav): calculators merged into /tools; webinars and audio
+      // into /education/media; awards and media-press into /company/recognition; faqs and
+      // contact into /support; daily-news and blog listings into the /research desk.
+      { source: '/:locale(en|ar)/tools/pivot', destination: '/:locale/tools', permanent: true },
+      { source: '/:locale(en|ar)/tools/profit', destination: '/:locale/tools', permanent: true },
+      {
+        source: '/:locale(en|ar)/tools/fibonacci',
+        destination: '/:locale/tools',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|ar)/education/audio',
+        destination: '/:locale/education/media',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|ar)/education/webinars',
+        destination: '/:locale/education/media',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|ar)/company/awards',
+        destination: '/:locale/company/recognition',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|ar)/company/media-press',
+        destination: '/:locale/company/recognition',
+        permanent: true,
+      },
+      { source: '/:locale(en|ar)/faqs', destination: '/:locale/support', permanent: true },
+      { source: '/:locale(en|ar)/contact', destination: '/:locale/support', permanent: true },
+      { source: '/:locale(en|ar)/daily-news', destination: '/:locale/research', permanent: true },
+      {
+        source: '/:locale(en|ar)/education/blog',
+        destination: '/:locale/research',
+        permanent: true,
+      },
+      // Careers + Recognition temporarily hidden (client request, 2026-07-09).
+      // permanent:false so they can be re-enabled later without cached 308s.
+      {
+        source: '/:locale(en|ar)/company/careers',
+        destination: '/:locale/company/about',
+        permanent: false,
+      },
+      {
+        source: '/:locale(en|ar)/company/recognition',
+        destination: '/:locale/company/about',
+        permanent: false,
       },
     ];
   },

@@ -1,9 +1,9 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
-import { ScrollReveal } from './ScrollReveal';
 
 export interface TestimonialItem {
   quote: string;
@@ -68,6 +68,76 @@ export function TestimonialsSection({
   items,
 }: TestimonialsSectionProps) {
   const t = useTranslations('demo');
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  // True while a programmatic scroll animates, so the scroll listener below
+  // doesn't fight the auto-advance / arrow taps mid-animation.
+  const programmatic = useRef(false);
+  const count = items?.length ?? 0;
+
+  // Auto-advance; pause on hover/focus/drag and for reduced motion. `active` is
+  // in the deps so any change — a dot/arrow tap included — restarts the dwell
+  // timer, otherwise a click could be overridden by an already-pending tick.
+  useEffect(() => {
+    if (paused || count <= 1) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const id = setInterval(() => setActive((a) => (a + 1) % count), 2000);
+    return () => clearInterval(id);
+  }, [paused, count, active]);
+
+  // Scroll the active slide to the logical start — scrollBy on the TRACK only.
+  // (scrollIntoView also nudged the page vertically and double-fought snap.)
+  // The delta is measured from bounding rects, so it is correct in LTR and RTL.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const slide = track.querySelector<HTMLElement>(`[data-idx="${active}"]`);
+    if (!slide) return;
+    const rtl = getComputedStyle(track).direction === 'rtl';
+    const tr = track.getBoundingClientRect();
+    const sr = slide.getBoundingClientRect();
+    const delta = rtl ? sr.right - tr.right : sr.left - tr.left;
+    if (Math.abs(delta) < 1) return;
+    programmatic.current = true;
+    track.scrollBy({ left: delta, behavior: 'smooth' });
+    const to = setTimeout(() => (programmatic.current = false), 600);
+    return () => clearTimeout(to);
+  }, [active]);
+
+  // Keep `active` in sync when the user drags/scrolls the track directly, so
+  // the dots and auto-advance never desync from what is actually on screen.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    let raf = 0;
+    const onScroll = () => {
+      if (programmatic.current) return;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const rtl = getComputedStyle(track).direction === 'rtl';
+        const edge = rtl
+          ? track.getBoundingClientRect().right
+          : track.getBoundingClientRect().left;
+        let nearest = 0;
+        let best = Infinity;
+        track.querySelectorAll<HTMLElement>('[data-idx]').forEach((s, i) => {
+          const sr = s.getBoundingClientRect();
+          const d = Math.abs((rtl ? sr.right : sr.left) - edge);
+          if (d < best) {
+            best = d;
+            nearest = i;
+          }
+        });
+        setActive((a) => (a === nearest ? a : nearest));
+      });
+    };
+    track.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      track.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
 
   if (!items || items.length === 0) return null;
 
@@ -82,13 +152,13 @@ export function TestimonialsSection({
             <SectionKicker className="text-muted mb-4 [&>span:first-child]:bg-[#6b7280]">
               {t('testimonialsKicker')}
             </SectionKicker>
-            <h2 className="text-foreground max-w-[18ch] font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
+            <h2 className="text-foreground text-headline max-w-[18ch] font-sans">
               {headline || t('testimonialsHeading')}
             </h2>
           </div>
 
           {ratingValue && (
-            <div className="border-border bg-surface-elevated shadow-card dark:shadow-card-dark flex items-center gap-4 rounded-[18px] border px-5 py-4">
+            <div className="border-border bg-surface-elevated shadow-card dark:shadow-card-dark flex items-center gap-4 rounded-[18px] border px-5 py-4 transition-[transform,border-color] duration-300 hover:border-accent/40 motion-safe:hover:scale-[1.02]">
               <span className="text-foreground font-sans text-[34px] font-bold tabular-nums leading-none">
                 {ratingValue}
                 <span className="text-muted text-[18px] font-medium"> / 5</span>
@@ -97,7 +167,7 @@ export function TestimonialsSection({
               <div className="flex flex-col gap-1.5">
                 <Stars rating={Number.isFinite(numericRating) ? numericRating : 5} />
                 {ratingCaption && (
-                  <span className="font-body text-muted text-[12px] leading-tight">
+                  <span className="font-body text-muted text-caption leading-tight">
                     {ratingCaption}
                   </span>
                 )}
@@ -106,11 +176,54 @@ export function TestimonialsSection({
           )}
         </div>
 
-        {/* Testimonial cards */}
-        <div className="mt-9 grid grid-cols-1 items-stretch gap-[14px] sm:grid-cols-2 xl:grid-cols-3">
-          {items.map((item, i) => (
-            <ScrollReveal key={i} index={i} className="h-full">
-              <figure className="border-border hover-lift shadow-card dark:shadow-card-dark flex h-full flex-col gap-4 rounded-[20px] border bg-white p-6 dark:bg-[#111316]">
+        {/* Testimonial carousel — auto-advancing, snap-scroll (drag on touch /
+            trackpad), pause on hover/focus, dots + arrows for pointer users. */}
+        <div
+          className="relative mt-9"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onFocusCapture={() => setPaused(true)}
+          onBlurCapture={() => setPaused(false)}
+          onPointerDown={() => setPaused(true)}
+          onPointerUp={() => setPaused(false)}
+        >
+          <div
+            ref={trackRef}
+            className={`scrollbar-hide flex snap-x snap-mandatory items-stretch gap-[14px] overflow-x-auto pb-1 ${
+              // On desktop the <=3 cards all fit, so drop the scroll clip and let
+              // the highlighted card scale + shadow bleed past the row edges for a
+              // seamless pop. (Falls back to a scroll-clip if more cards are added.)
+              count <= 3 ? 'xl:overflow-visible' : ''
+            }`}
+          >
+            {items.map((item, i) => {
+              const isActive = i === active;
+              // Edge cards scale inward (origin toward the row centre) so the
+              // active first/last card never overflows the track's clip box —
+              // RTL-flipped since index 0 is visually on the right there.
+              const originClass =
+                i === 0
+                  ? 'xl:origin-left rtl:xl:origin-right'
+                  : i === count - 1
+                    ? 'xl:origin-right rtl:xl:origin-left'
+                    : 'xl:origin-center';
+              return (
+              <div
+                key={i}
+                data-idx={i}
+                className="w-[86%] flex-shrink-0 snap-start sm:w-[calc(50%-7px)] xl:w-[calc(33.333%-10px)]"
+              >
+                {/* Active card grows to become the focus (the rest hold their
+                    size, dimmed) — the auto-advance and dots drive `active`, so
+                    on desktop where all cards are already visible the carousel
+                    reads as a moving spotlight rather than a dead scroll. */}
+                <figure
+                  className={`border-border relative flex h-full flex-col gap-4 rounded-[20px] border bg-white p-6 transition-[transform,opacity,box-shadow] duration-500 ease-out dark:bg-[#111316] ${originClass} ${
+                    isActive
+                      ? 'shadow-card dark:shadow-card-dark xl:border-accent/40 xl:z-10 xl:scale-[1.05] xl:shadow-xl'
+                      : 'shadow-card dark:shadow-card-dark xl:opacity-55'
+                  }`}
+                >
                 {/* Quote glyph (locale-neutral — avoids LTR quote chars in RTL) */}
                 <svg
                   width="32"
@@ -155,9 +268,76 @@ export function TestimonialsSection({
                     <Stars rating={item.rating ?? 5} />
                   </span>
                 </div>
-              </figure>
-            </ScrollReveal>
-          ))}
+                </figure>
+              </div>
+              );
+            })}
+          </div>
+
+          {count > 1 && (
+            <div className="mt-6 flex items-center justify-center gap-4">
+              <button
+                type="button"
+                aria-label={t('testimonialsPrev')}
+                onClick={() => setActive((a) => (a - 1 + count) % count)}
+                className="border-border text-muted hover:text-accent hover:border-accent/40 flex h-9 w-9 items-center justify-center rounded-full border transition-colors"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                  className="rtl:-scale-x-100"
+                >
+                  <path
+                    d="M10 3L5 8l5 5"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+              <div className="flex items-center gap-1.5">
+                {items.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    aria-label={`${i + 1}`}
+                    aria-current={i === active}
+                    onClick={() => setActive(i)}
+                    className={`h-1.5 rounded-full transition-all ${
+                      i === active ? 'bg-accent w-5' : 'bg-border hover:bg-muted w-1.5'
+                    }`}
+                  />
+                ))}
+              </div>
+              <button
+                type="button"
+                aria-label={t('testimonialsNext')}
+                onClick={() => setActive((a) => (a + 1) % count)}
+                className="border-border text-muted hover:text-accent hover:border-accent/40 flex h-9 w-9 items-center justify-center rounded-full border transition-colors"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                  className="rtl:-scale-x-100"
+                >
+                  <path
+                    d="M6 3l5 5-5 5"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </section>

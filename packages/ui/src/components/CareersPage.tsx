@@ -4,18 +4,20 @@ import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { ScrollReveal } from './ScrollReveal';
+import { CountUp, CountUpGroup } from './CountUp';
 import { Pagination } from './Pagination';
 
 const CAREERS_PER_PAGE = 6;
 
-const TYPE_COLORS: Record<string, string> = {
-  'Full-time': 'bg-accent/10 text-accent',
-  'full-time': 'bg-accent/10 text-accent',
-  Contract: 'bg-[#F59E0B]/10 text-[#F59E0B]',
-  contract: 'bg-[#F59E0B]/10 text-[#F59E0B]',
-  Remote: 'bg-[#6B7280]/10 text-[#6B7280]',
-  remote: 'bg-[#6B7280]/10 text-[#6B7280]',
+// Employment-type tag styling, keyed by lowercased CMS value. Bordered mono
+// chips (no fills that read as pastel cards); default is a quiet muted chip.
+const TYPE_STYLES: Record<string, string> = {
+  'full-time': 'text-accent border-accent/30 bg-accent/[0.07]',
+  contract: 'text-[#B26C05] border-[#B26C05]/30 bg-[#B26C05]/[0.07]',
+  freelance: 'text-[#B26C05] border-[#B26C05]/30 bg-[#B26C05]/[0.07]',
 };
+const DEFAULT_TYPE_STYLE = 'text-muted border-border';
 
 export interface CmsJobItem {
   id: number;
@@ -30,6 +32,20 @@ export interface CmsJobItem {
 
 interface CareersPageProps {
   jobs?: CmsJobItem[];
+}
+
+function ArrowGlyph() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="rtl:-scale-x-100">
+      <path
+        d="M3 8h10M9 4l4 4-4 4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
 }
 
 export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
@@ -49,6 +65,14 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
     internship: t('typeInternship'),
   };
   const translateType = (v: string) => TYPE_I18N[v.toLowerCase()] ?? v;
+
+  // Company facts for the metric ledger. Not CMS-backed (careers-desk stats).
+  const stats = [
+    { value: '120+', label: t('statTeam') },
+    { value: '12+', label: t('statCountries') },
+    { value: '3', label: t('statOffices') },
+    { value: '200K+', label: t('statClients') },
+  ];
 
   // Build department list dynamically from CMS data
   const deptIds: string[] = [
@@ -85,117 +109,214 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px]">
+      {/* Hero - Join the desk */}
+      <section className="px-5 pb-10 pt-9 xl:pt-12">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="[&>span:first-child]:bg-accent text-accent mb-5">
+            {t('heroKicker')}
+          </SectionKicker>
+          <h1 className="text-foreground text-display font-sans">
             {t('heroLine1')}
             <br />
             <span className="text-accent">{t('heroAccent')}</span>
           </h1>
-          <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
-            {t('heroDesc')}
-          </p>
-        </div>
+          <p className="text-muted text-lead mt-5 max-w-[48ch]">{t('heroDesc')}</p>
+        </ScrollReveal>
       </section>
 
-      {/* Stats */}
-      <section className="px-5 pb-8">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-4">
-            {[
-              { value: '120+', label: t('statTeam') },
-              { value: '12+', label: t('statCountries') },
-              { value: '3', label: t('statOffices') },
-              { value: '200K+', label: t('statClients') },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="bg-surface shadow-card hover-lift rounded-[18px] p-5 dark:shadow-none"
-              >
-                <p className="text-foreground font-sans text-[28px] font-semibold leading-[1]">
-                  {stat.value}
-                </p>
-                <p className="font-body text-muted mt-1 text-[12px]">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Values — content from i18n */}
-      <section className="px-5 pb-8">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            {t('valuesKicker')}
+      {/* Stats - the desk by the numbers (metric ledger) */}
+      <section className="px-5 pb-12">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+            {t('statsKicker')}
           </SectionKicker>
-          <div className="grid grid-cols-2 gap-[10px] xl:gap-5">
-            {([1, 2, 3, 4] as const).map((i) => (
-              <div
-                key={i}
-                className="bg-surface shadow-card hover-lift flex flex-col gap-2 rounded-[18px] p-4 dark:shadow-none"
-              >
-                <p className="text-foreground font-sans text-[13px] font-semibold">
-                  {t(`val${i}Title` as 'val1Title')}
-                </p>
-                <p className="font-body text-muted text-[12px] leading-relaxed">
-                  {t(`val${i}Desc` as 'val1Desc')}
-                </p>
+          <div className="border-border bg-surface shadow-card overflow-hidden rounded-[20px] border dark:shadow-none">
+            <CountUpGroup>
+              <div className="bg-border grid grid-cols-2 gap-px xl:grid-cols-4">
+                {stats.map((stat) => (
+                  <div key={stat.label} className="bg-surface flex flex-col gap-2 p-6 xl:p-7">
+                    <p
+                      dir="ltr"
+                      className="text-foreground text-metric-sm w-fit font-sans tabular-nums"
+                    >
+                      <CountUp value={stat.value} />
+                    </p>
+                    <p className="text-muted text-eyebrow font-mono uppercase">{stat.label}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </CountUpGroup>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
-      {/* Open roles */}
-      <section className="px-5 pb-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            {t('rolesHeading')}
-          </SectionKicker>
-
-          {/* Department tabs — built from actual CMS data */}
-          <div className="scrollbar-hide mb-5 flex gap-2 overflow-x-auto pb-1">
-            {deptIds.map((id) => (
-              <button
-                key={id}
-                onClick={() => handleDeptChange(id)}
-                className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
-                  dept === id
-                    ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'dark:bg-surface dark:text-muted bg-[#f3f4f6] text-[#6b7280]'
-                }`}
-              >
-                {getDeptLabel(id)}
-              </button>
-            ))}
-          </div>
-
-          {/* Job list */}
-          <div ref={listRef} className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb]">
-            {pagedFiltered.map((job) => (
-              <div
-                key={job.id}
-                className="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0"
-              >
-                <div className="flex flex-col gap-1">
-                  <p className="text-foreground font-sans text-[14px] font-semibold">{job.title}</p>
-                  <p className="font-body text-muted text-[12px]">{job.location}</p>
-                </div>
-                <div className="flex flex-shrink-0 items-center gap-2">
-                  <span
-                    className={`font-body rounded-full px-2.5 py-[4px] text-[10px] font-semibold ${TYPE_COLORS[job.employmentType] ?? 'bg-[#6B7280]/10 text-[#6B7280]'}`}
-                  >
-                    {translateType(job.employmentType)}
+      {/* Values - how the desk runs (editorial rows) */}
+      <section className="px-5 pb-14">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal>
+            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+              {t('valuesKicker')}
+            </SectionKicker>
+            <h2 className="text-foreground text-headline-sm mb-8 max-w-[18ch] font-sans">
+              {t('valuesHeading')}
+            </h2>
+          </ScrollReveal>
+          <div className="border-border border-t">
+            {([1, 2, 3, 4] as const).map((i, idx) => (
+              <ScrollReveal key={i} index={idx}>
+                <div className="border-border grid grid-cols-[auto_1fr] gap-x-5 gap-y-2 border-b py-6 md:grid-cols-[3.5rem_minmax(0,15rem)_1fr] md:gap-x-8 md:py-7">
+                  <span className="text-accent text-eyebrow pt-1.5 font-mono tabular-nums">
+                    {String(i).padStart(2, '0')}
                   </span>
+                  <p className="text-foreground text-title font-sans">
+                    {t(`val${i}Title` as 'val1Title')}
+                  </p>
+                  <p className="text-muted text-body col-span-2 md:col-span-1 md:pt-1">
+                    {t(`val${i}Desc` as 'val1Desc')}
+                  </p>
                 </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
+        </div>
+      </section>
 
-          {filtered.length === 0 && (
-            <p className="font-body text-muted py-8 text-center text-[14px]">{t('noRoles')}</p>
-          )}
+      {/* Open roles - the ledger */}
+      <section className="px-5 pb-14">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal>
+            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+              {t('rolesHeading')}
+            </SectionKicker>
+            <div className="mb-6 flex items-end justify-between gap-4">
+              <h2 className="text-foreground text-headline-sm font-sans">{t('rolesTitle')}</h2>
+              <span
+                dir="ltr"
+                className="text-muted text-eyebrow whitespace-nowrap font-mono uppercase tabular-nums"
+              >
+                {filtered.length} {t('openLabel')}
+              </span>
+            </div>
+          </ScrollReveal>
+
+          {/* Department filter - terminal chips (built from CMS data) */}
+          <div className="scrollbar-hide mb-6 flex gap-2 overflow-x-auto pb-1">
+            {deptIds.map((id) => {
+              const active = dept === id;
+              return (
+                <button
+                  key={id}
+                  onClick={() => handleDeptChange(id)}
+                  aria-pressed={active}
+                  className={`text-eyebrow flex-shrink-0 rounded-full border px-4 py-2 font-mono uppercase transition-colors active:scale-[0.98] ${
+                    active
+                      ? 'border-foreground bg-foreground text-background'
+                      : 'border-border text-muted hover:border-foreground/40 hover:text-foreground'
+                  }`}
+                >
+                  {getDeptLabel(id)}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Ledger */}
+          <ScrollReveal>
+            <div
+              ref={listRef}
+              className="border-border bg-surface shadow-card overflow-hidden rounded-[20px] border dark:shadow-none"
+            >
+              {/* Column header - md+ */}
+              {filtered.length > 0 && (
+                <div className="border-border text-muted text-eyebrow hidden border-b px-6 py-3 font-mono uppercase md:grid md:grid-cols-[3rem_minmax(0,1fr)_10rem_7rem_1.75rem] md:items-center md:gap-4">
+                  <span aria-hidden>#</span>
+                  <span>{t('ledgerRole')}</span>
+                  <span>{t('ledgerDesk')}</span>
+                  <span>{t('ledgerLocation')}</span>
+                  <span className="sr-only">{t('viewRole')}</span>
+                </div>
+              )}
+
+              <div className="divide-border divide-y">
+                {pagedFiltered.map((job, i) => {
+                  const index = (page - 1) * CAREERS_PER_PAGE + i + 1;
+                  const url = job.applyUrl?.trim();
+                  const external = !!url && /^https?:\/\//i.test(url);
+                  const href = url ? url : `/${locale}/support`;
+
+                  const rowClass =
+                    'group grid grid-cols-[2rem_1fr_auto] items-center gap-x-4 gap-y-1 px-5 py-5 transition-colors hover:bg-[#F0F4F1] md:grid-cols-[3rem_minmax(0,1fr)_10rem_7rem_1.75rem] md:gap-4 md:px-6 dark:hover:bg-white/[0.03]';
+
+                  const typeLabel = translateType(job.employmentType);
+                  const typeStyle =
+                    TYPE_STYLES[job.employmentType.toLowerCase()] ?? DEFAULT_TYPE_STYLE;
+
+                  const inner = (
+                    <>
+                      <span className="text-muted group-hover:text-accent text-eyebrow font-mono tabular-nums transition-colors">
+                        {String(index).padStart(2, '0')}
+                      </span>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2.5">
+                          <p className="text-foreground group-hover:text-accent text-body-lg truncate font-sans font-semibold transition-colors">
+                            {job.title}
+                          </p>
+                          <span
+                            className={`text-eyebrow hidden flex-shrink-0 rounded-full border px-2 py-0.5 font-mono uppercase md:inline-block ${typeStyle}`}
+                          >
+                            {typeLabel}
+                          </span>
+                        </div>
+                        <p className="text-muted text-caption mt-1 truncate font-mono md:hidden">
+                          {getDeptLabel(job.department.toUpperCase())} · {job.location} ·{' '}
+                          {typeLabel}
+                        </p>
+                      </div>
+                      <span className="text-muted text-caption hidden truncate font-mono md:block">
+                        {getDeptLabel(job.department.toUpperCase())}
+                      </span>
+                      <span className="text-muted text-caption hidden truncate font-mono md:block">
+                        {job.location}
+                      </span>
+                      <span
+                        aria-hidden
+                        className="text-muted group-hover:text-accent col-start-3 row-start-1 inline-flex justify-end transition-all duration-200 motion-safe:group-hover:translate-x-1 md:col-start-auto md:row-start-auto rtl:motion-safe:group-hover:-translate-x-1"
+                      >
+                        <ArrowGlyph />
+                      </span>
+                    </>
+                  );
+
+                  return external ? (
+                    <a
+                      key={job.id}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={rowClass}
+                      aria-label={`${job.title}: ${t('viewRole')}`}
+                    >
+                      {inner}
+                    </a>
+                  ) : (
+                    <Link
+                      key={job.id}
+                      href={href}
+                      className={rowClass}
+                      aria-label={`${job.title}: ${t('viewRole')}`}
+                    >
+                      {inner}
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {filtered.length === 0 && (
+                <p className="text-muted text-body px-6 py-12 text-center">{t('noRoles')}</p>
+              )}
+            </div>
+          </ScrollReveal>
+
           <Pagination
             page={page}
             totalPages={totalPages}
@@ -205,21 +326,21 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
         </div>
       </section>
 
-      {/* Don't see your role CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+      {/* Open application - ink closer */}
+      <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-12">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="xl:flex xl:flex-row xl:items-center xl:gap-10">
             {/* Left: text */}
             <div className="xl:flex-1">
-              <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
+              <SectionKicker className="[&>span:first-child]:bg-accent-bright text-accent-bright mb-4">
                 {t('openAppKicker')}
               </SectionKicker>
-              <h2 className="mb-3 font-sans text-[28px] font-semibold leading-[1.1] text-white xl:text-[36px]">
+              <h2 className="text-headline mb-3 font-sans text-white">
                 {t('openAppLine1')}
                 <br />
                 {t('openAppLine2')}
               </h2>
-              <p className="font-body mb-8 text-[13px] leading-relaxed text-white/60 xl:mb-0">
+              <p className="text-body mb-8 max-w-[42ch] text-white/60 xl:mb-0">
                 {t('openAppDesc')}
               </p>
             </div>
@@ -227,36 +348,22 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
             {/* Middle: CTA button */}
             <div className="xl:flex-shrink-0">
               <Link
-                href={`/${locale}/contact`}
-                className="bg-accent font-body hover:bg-accent/90 flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors xl:w-auto xl:px-8"
+                href={`/${locale}/support`}
+                className="bg-accent hover:bg-accent-bright text-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full font-medium text-white transition-all active:scale-[0.98] xl:w-auto xl:px-8"
               >
                 {t('openAppCta')}
-                <svg
-                  width="13"
-                  height="13"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  className="rtl:-scale-x-100"
-                >
-                  <path
-                    d="M3 8h10M9 4l4 4-4 4"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <ArrowGlyph />
               </Link>
             </div>
 
             {/* Right: review note */}
             <div className="mt-4 xl:mt-0 xl:flex-shrink-0 xl:text-end">
-              <p className="font-body text-[12px] text-white/40 xl:max-w-[180px]">
+              <p className="text-caption max-w-none text-white/40 xl:max-w-[180px]">
                 {t('openAppNote')}
               </p>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );

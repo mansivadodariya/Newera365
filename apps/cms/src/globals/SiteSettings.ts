@@ -170,6 +170,239 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
 
+    // ── Homepage USP Metrics ─────────────────────────────────────────────────
+    // The "Why NewEra" proof band — 6 oversized headline metrics (FeaturesSection).
+    {
+      type: 'collapsible',
+      label: 'Homepage USP Metrics',
+      admin: {
+        initCollapsed: true,
+        description:
+          'The 6 headline metrics on the homepage "Why NewEra" band (e.g. "< 15 ms" execution). ' +
+          'Value only — title/description stay bilingual per row.',
+      },
+      fields: [
+        {
+          name: 'uspMetrics',
+          type: 'array',
+          maxRows: 6,
+          labels: { singular: 'USP Metric', plural: 'USP Metrics' },
+          fields: [
+            {
+              name: 'valueEn',
+              type: 'text',
+              required: true,
+              maxLength: 20,
+              admin: { description: 'Metric value — EN, e.g. "< 15 ms".' },
+            },
+            {
+              name: 'valueAr',
+              type: 'text',
+              required: true,
+              maxLength: 20,
+              admin: { description: 'Metric value — AR.' },
+            },
+            {
+              name: 'titleEn',
+              type: 'text',
+              required: true,
+              maxLength: 60,
+              admin: { description: 'Metric title — EN, e.g. "Average execution speed".' },
+            },
+            {
+              name: 'titleAr',
+              type: 'text',
+              required: true,
+              maxLength: 60,
+              admin: { description: 'Metric title — AR.' },
+            },
+            {
+              name: 'descEn',
+              type: 'text',
+              required: true,
+              maxLength: 140,
+              admin: { description: 'One-line proof point — EN.' },
+            },
+            {
+              name: 'descAr',
+              type: 'text',
+              required: true,
+              maxLength: 140,
+              admin: { description: 'One-line proof point — AR.' },
+            },
+          ],
+        },
+      ],
+    },
+
+    // ── Partners / Infrastructure Wall ───────────────────────────────────────
+    // Liquidity, technology, payment and data providers (homepage PartnersSection).
+    {
+      type: 'collapsible',
+      label: 'Partners / Infrastructure Wall',
+      admin: {
+        initCollapsed: true,
+        description:
+          'Partner roster shown on the homepage partners wall, grouped by role. Drag to reorder ' +
+          'within the CMS list; the frontend groups rows by "Group" for display. Logo files are ' +
+          'served from apps/web/public/images/partners/ — upload the asset there first, then ' +
+          'enter its filename here.',
+      },
+      fields: [
+        {
+          name: 'partners',
+          type: 'array',
+          maxRows: 40,
+          labels: { singular: 'Partner', plural: 'Partners' },
+          fields: [
+            {
+              // type: 'text' (not 'select') — a Postgres enum backfilled via raw DDL is
+              // brittle to get byte-exact; this project already sidesteps that for
+              // FAQs.category the same way. Valid values: liquidity, technology, payments, data.
+              name: 'groupKey',
+              type: 'text',
+              required: true,
+              maxLength: 20,
+              admin: {
+                description:
+                  'Which role group this partner is displayed under. One of: liquidity, technology, payments, data.',
+              },
+            },
+            {
+              name: 'name',
+              type: 'text',
+              required: true,
+              maxLength: 60,
+              admin: { description: 'Partner name, e.g. "LMAX".' },
+            },
+            {
+              // type: 'text' for the same enum-avoidance reason as groupKey above.
+              name: 'logoType',
+              type: 'text',
+              defaultValue: 'none',
+              maxLength: 10,
+              admin: { description: 'How the logo cell renders. One of: wordmark, icon, none.' },
+            },
+            {
+              name: 'logoFilename',
+              type: 'text',
+              maxLength: 200,
+              admin: {
+                description:
+                  'Filename in apps/web/public/images/partners/, e.g. "lmax-full.png". Leave blank for name-only.',
+                condition: (_, siblingData) => siblingData?.logoType !== 'none',
+              },
+            },
+          ],
+        },
+      ],
+    },
+
+    // ── Page Stat Callouts ───────────────────────────────────────────────────
+    // Single oversized metrics used on individual pages, plus small stat rows.
+    {
+      type: 'collapsible',
+      label: 'Page Stat Callouts',
+      admin: {
+        initCollapsed: true,
+        description: 'Standalone numeric callouts used on individual pages (not the homepage).',
+      },
+      fields: [
+        {
+          name: 'aboutManifestoStatValue',
+          type: 'text',
+          label: 'About Page — Manifesto Stat Value',
+          maxLength: 20,
+          admin: {
+            description: 'e.g. "100%" (straight-to-market execution). Label stays in i18n.',
+          },
+        },
+        {
+          name: 'fundingWithdrawalStatValue',
+          type: 'text',
+          label: 'Funding Page — Withdrawal Cadence Stat Value',
+          maxLength: 20,
+          admin: { description: 'e.g. "24/7". Label stays in i18n.' },
+        },
+        {
+          name: 'supportPromiseStats',
+          type: 'array',
+          label: 'Support Page — Promise Stats',
+          maxRows: 3,
+          labels: { singular: 'Promise Stat', plural: 'Promise Stats' },
+          admin: { description: 'The 3 stats in the Support page "talk to a human" panel.' },
+          fields: [
+            {
+              name: 'valueEn',
+              type: 'text',
+              required: true,
+              maxLength: 20,
+              admin: { description: 'e.g. "< 6 min".' },
+            },
+            {
+              name: 'valueAr',
+              type: 'text',
+              required: true,
+              maxLength: 20,
+              admin: { description: 'AR value.' },
+            },
+            {
+              name: 'labelEn',
+              type: 'text',
+              required: true,
+              maxLength: 60,
+              admin: { description: 'e.g. "Average first response".' },
+            },
+            {
+              name: 'labelAr',
+              type: 'text',
+              required: true,
+              maxLength: 60,
+              admin: { description: 'AR label.' },
+            },
+          ],
+        },
+        {
+          name: 'webTraderSpecs',
+          type: 'array',
+          label: 'Web Trader — Platform Specs',
+          maxRows: 8,
+          labels: { singular: 'Spec', plural: 'Specs' },
+          admin: { description: 'The terminal spec ledger on the Web Trader platform page.' },
+          fields: [
+            {
+              name: 'valueEn',
+              type: 'text',
+              required: true,
+              maxLength: 20,
+              admin: { description: 'e.g. "2,000+".' },
+            },
+            {
+              name: 'valueAr',
+              type: 'text',
+              required: true,
+              maxLength: 20,
+              admin: { description: 'AR value.' },
+            },
+            {
+              name: 'labelEn',
+              type: 'text',
+              required: true,
+              maxLength: 60,
+              admin: { description: 'e.g. "Tradable markets".' },
+            },
+            {
+              name: 'labelAr',
+              type: 'text',
+              required: true,
+              maxLength: 60,
+              admin: { description: 'AR label.' },
+            },
+          ],
+        },
+      ],
+    },
+
     // ── Homepage Testimonials & Social Proof ─────────────────────────────────
     // Client testimonials + headline social-proof stats shown on the homepage
     // (client feedback #5). EN/AR suffix per house style — native localization
@@ -544,16 +777,16 @@ export const SiteSettings: GlobalConfig = {
     },
 
     // ── Footer — Company & Regulation ────────────────────────────────────────
-    // Regulatory disclosure, company registration / licence details, and the
-    // live-chat shortcut shown in the footer (client feedback #6). Risk
-    // disclaimer + contact details live in their own sections above.
+    // Regulatory disclosure and company registration / licence details shown in
+    // the footer (client feedback #6). Risk disclaimer + contact details live in
+    // their own sections above.
     {
       type: 'collapsible',
       label: 'Footer — Company & Regulation',
       admin: {
         initCollapsed: true,
         description:
-          'Regulatory + company registration copy and the live-chat link for the footer. ' +
+          'Regulatory + company registration copy for the footer. ' +
           'Each block hides itself when left blank.',
       },
       fields: [
@@ -585,15 +818,6 @@ export const SiteSettings: GlobalConfig = {
           type: 'textarea',
           label: 'Company Registration — AR',
           admin: { description: 'Company registration details — Arabic.' },
-        },
-        {
-          name: 'liveChatUrl',
-          type: 'text',
-          label: 'Live Chat URL',
-          maxLength: 500,
-          admin: {
-            description: 'Link target for the footer "Live chat" shortcut. Leave blank to hide.',
-          },
         },
       ],
     },

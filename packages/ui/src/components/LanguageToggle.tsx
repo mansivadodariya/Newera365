@@ -26,7 +26,7 @@ export function LanguageToggle({ fullWidth = false }: LanguageToggleProps) {
   const label = locale === 'en' ? 'عربي' : 'EN';
   // Accessible name must contain the visible label (WCAG 2.5.3 label-in-name),
   // so voice-control users can activate the button by its on-screen text.
-  const ariaLabel = locale === 'en' ? 'عربي — switch to Arabic' : 'EN — switch to English';
+  const ariaLabel = locale === 'en' ? 'عربي، switch to Arabic' : 'EN, switch to English';
 
   const toggle = useCallback(() => {
     // Persist through refreshes / new tabs (1 year)
@@ -63,7 +63,7 @@ export function LanguageToggle({ fullWidth = false }: LanguageToggleProps) {
       onClick={toggle}
       aria-label={ariaLabel}
       title={ariaLabel}
-      className="font-body text-foreground flex h-[38px] min-w-[38px] flex-shrink-0 items-center justify-center gap-1.5 rounded-xl bg-[#f4f4f5] px-2.5 text-[12px] font-semibold tracking-wide transition-colors hover:bg-[#e5e5e5] dark:bg-[#1c1c1c] dark:hover:bg-[#2a2a2a]"
+      className="font-body text-foreground flex h-[38px] min-w-[38px] flex-shrink-0 items-center justify-center gap-1.5 rounded-xl bg-[#f4f4f5] px-2.5 text-[12px] font-semibold tracking-wide transition-[background-color,transform] hover:bg-[#e9e9ec] active:scale-[0.94] dark:bg-surface dark:hover:bg-white/[0.06]"
     >
       {/* Globe icon */}
       <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">

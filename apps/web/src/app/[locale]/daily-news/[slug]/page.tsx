@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
-import { ResearchDetailPage } from '@newera365/ui';
+import { ResearchDetailPage, CtaBanner } from '@newera365/ui';
 import type { ArticleDetailData, RelatedArticle } from '@newera365/ui';
 import { LOCALES } from '@newera365/types';
 import { getNews, getNewsBySlug, slugToTitle } from '@/lib/cms';
@@ -70,11 +70,14 @@ export default async function DailyNewsDetailRoute({ params }: Props) {
     }));
 
   return (
-    <ResearchDetailPage
-      slug={params.slug}
-      article={article}
-      relatedArticles={relatedArticles}
-      basePath="daily-news"
-    />
+    <>
+      <ResearchDetailPage
+        slug={params.slug}
+        article={article}
+        relatedArticles={relatedArticles}
+        basePath="daily-news"
+      />
+      <CtaBanner />
+    </>
   );
 }

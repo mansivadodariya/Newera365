@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { useState, useMemo } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { ScrollReveal } from './ScrollReveal';
 import { RichText } from './RichText';
 import type { SlateNode } from './RichText';
 import { norm, humanize, distinctCategories } from './filterUtils';
@@ -22,21 +22,6 @@ type GlossaryTerm = {
   definition: string;
   body?: SlateNode[] | null;
 };
-
-const CATEGORY_COLORS: Record<string, string> = {
-  PRICING: 'bg-[#F59E0B]/15 text-[#F59E0B]',
-  FOREX: 'bg-[#3B82F6]/15 text-[#3B82F6]',
-  STRATEGY: 'bg-[#8B5CF6]/15 text-[#8B5CF6]',
-  RISK: 'bg-[#EF4444]/15 text-[#EF4444]',
-  'ORDER/EXEC': 'bg-accent/10 text-accent',
-  ANALYSIS: 'bg-[#06B6D4]/15 text-[#06B6D4]',
-  'CHART/PATTERN': 'bg-[#F97316]/15 text-[#F97316]',
-  TECHNICAL: 'bg-[#EC4899]/15 text-[#EC4899]',
-  GENERAL: 'bg-[#6b7280]/15 text-[#6b7280]',
-};
-
-const glossColor = (cat: string): string =>
-  CATEGORY_COLORS[(cat ?? '').toUpperCase()] ?? 'bg-accent/10 text-accent';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
@@ -63,17 +48,18 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
     const key = CAT_I18N_KEYS[(cat ?? '').toUpperCase()];
     return key ? t(key as Parameters<typeof t>[0]) : humanize(cat);
   }
+
   const [search, setSearch] = useState('');
   const [activeLetter, setActiveLetter] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const allTerms: GlossaryTerm[] = useMemo(() => {
     if (cmsTerms && cmsTerms.length > 0) {
-      return cmsTerms.map((t) => ({
-        term: t.glossaryTerm ?? '',
-        category: t.glossaryCategory ?? 'GENERAL',
+      return cmsTerms.map((term) => ({
+        term: term.glossaryTerm ?? '',
+        category: term.glossaryCategory ?? 'GENERAL',
         definition: '',
-        body: t.body,
+        body: term.body,
       }));
     }
     return [];
@@ -81,22 +67,36 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
 
   const filtered = useMemo(() => {
     let result = allTerms;
-
     if (search) {
+      const q = search.toLowerCase();
       result = result.filter(
-        (t) =>
-          t.term.toLowerCase().includes(search.toLowerCase()) ||
-          t.definition.toLowerCase().includes(search.toLowerCase()),
+        (term) =>
+          term.term.toLowerCase().includes(q) || term.definition.toLowerCase().includes(q),
       );
     }
     if (activeLetter) {
-      result = result.filter((t) => t.term.toUpperCase().startsWith(activeLetter));
+      result = result.filter((term) => term.term.toUpperCase().startsWith(activeLetter));
     }
     if (activeCategory) {
-      result = result.filter((t) => norm(t.category) === norm(activeCategory));
+      result = result.filter((term) => norm(term.category) === norm(activeCategory));
     }
     return result;
   }, [search, activeLetter, activeCategory, allTerms]);
+
+  // Alphabetically sorted, grouped into letter sections: the dictionary spine.
+  const groups = useMemo(() => {
+    const sorted = [...filtered].sort((a, b) =>
+      a.term.localeCompare(b.term, locale, { sensitivity: 'base' }),
+    );
+    const map = new Map<string, GlossaryTerm[]>();
+    for (const term of sorted) {
+      const letter = term.term?.[0]?.toUpperCase() ?? '#';
+      const bucket = map.get(letter);
+      if (bucket) bucket.push(term);
+      else map.set(letter, [term]);
+    }
+    return Array.from(map, ([letter, terms]) => ({ letter, terms }));
+  }, [filtered, locale]);
 
   const categoryList = useMemo(
     () => distinctCategories(allTerms, (term) => term.category),
@@ -104,7 +104,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
   );
 
   const availableLetters = useMemo(
-    () => new Set(allTerms.map((t) => t.term?.[0]?.toUpperCase() ?? '')),
+    () => new Set(allTerms.map((term) => term.term?.[0]?.toUpperCase() ?? '')),
     [allTerms],
   );
 
@@ -119,251 +119,234 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
     setActiveLetter(null);
   }
 
+  const statusLine = activeCategory
+    ? `${translateGlossCat(activeCategory)} · ${filtered.length} ${t('statusTerms')}`
+    : activeLetter
+      ? `${t('statusLetter')} ${activeLetter} · ${filtered.length} ${t('statusTerms')}`
+      : `${t('filterAll')} · ${filtered.length} ${t('statusTerms')}`;
+
+  // Shared classing for an A-Z index key (rail + mobile strip).
+  function letterClass(letter: string, size: string) {
+    const available = availableLetters.has(letter);
+    const active = activeLetter === letter;
+    if (active) return `${size} bg-accent font-mono font-semibold tabular-nums text-white`;
+    if (available)
+      return `${size} font-mono font-semibold tabular-nums text-foreground transition-colors hover:text-accent`;
+    // text-muted/25 is a no-op here (--muted is a hex var, not an RGB triple, so
+    // slash-opacity is invalid and falls back to full foreground). Use the
+    // opacity utility instead so unavailable letters actually read as faint.
+    return `${size} font-mono font-medium tabular-nums text-muted opacity-30 cursor-default select-none`;
+  }
+
   return (
     <>
-      {/* Hero */}
-      <section className="bg-transparent px-5 pb-6 pt-9">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">{t('kickerLabel')}</SectionKicker>
-          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
-            {t('heroLine1')}
-            <br />
-            <span className="text-accent">{t('heroAccent')}</span>
-          </h1>
-          <p className="font-body text-muted mb-6 max-w-[320px] text-[14px] leading-[1.55]">
-            {t('heroSubtitle')}
-          </p>
+      {/* Masthead: the reference cover */}
+      <section className="bg-transparent px-5 pb-8 pt-9 xl:pb-10 xl:pt-12">
+        <ScrollReveal>
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <SectionKicker className="mb-4">{t('kickerLabel')}</SectionKicker>
+            <h1 className="text-foreground text-display mb-3 font-sans">
+              {t('heroLine1')} <span className="text-accent">{t('heroAccent')}</span>
+            </h1>
+            <p className="font-body text-muted text-body-lg mb-7 max-w-[46ch] leading-[1.55]">
+              {t('heroSubtitle')}
+            </p>
 
-          {/* Search */}
-          <div className="relative xl:max-w-[600px]">
-            <svg
-              className="text-muted pointer-events-none absolute start-4 top-1/2 -translate-y-1/2"
-              width="14"
-              height="14"
-              viewBox="0 0 16 16"
-              fill="none"
-            >
-              <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-            <input
-              type="text"
-              placeholder={t('searchPlaceholder')}
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setActiveLetter(null);
-              }}
-              className="font-body focus:ring-accent/50 w-full rounded-[14px] bg-[#fafaf9] px-4 py-[14px] text-[14px] text-[#111] placeholder-[#9ca3af] outline-none focus:ring-1 dark:bg-[#1a1c22] dark:text-white dark:placeholder-white/30"
-            />
-            {search && (
-              <button
-                onClick={() => setSearch('')}
-                className="text-muted absolute end-4 top-1/2 -translate-y-1/2"
+            {/* Search: a bordered reference field, not a gray fill */}
+            <div className="relative xl:max-w-[560px]">
+              <svg
+                className="text-muted pointer-events-none absolute start-4 top-1/2 -translate-y-1/2"
+                width="15"
+                height="15"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
               >
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path
-                    d="M1 1L11 11M11 1L1 11"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
-            )}
+                <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
+                <path
+                  d="M11 11l3 3"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <input
+                type="text"
+                placeholder={t('searchPlaceholder')}
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setActiveLetter(null);
+                }}
+                className="font-body text-body border-border text-foreground placeholder:text-muted focus:border-accent focus:ring-accent/40 w-full rounded-full border bg-white py-3.5 ps-11 pe-11 outline-none transition-colors focus:ring-1 dark:border-white/[0.1] dark:bg-[#111318] dark:text-white dark:placeholder:text-white/30"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch('')}
+                  aria-label={t('filterAll')}
+                  className="text-muted hover:text-foreground absolute end-4 top-1/2 -translate-y-1/2 transition-colors"
+                >
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path
+                      d="M1 1L11 11M11 1L1 11"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
-      {/* Category filter pills */}
-      <section className="px-5 pb-3">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="scrollbar-hide flex gap-1.5 overflow-x-auto pb-1">
+      {/* The dictionary: index rail beside definition rows */}
+      <section className="px-5 pb-14 xl:pb-20">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="border-border mb-6 flex flex-col gap-4 border-t pt-6 md:flex-row md:items-end md:justify-between">
+            <SectionKicker>{t('indexKicker')}</SectionKicker>
+            <span className="font-mono text-caption text-muted tabular-nums uppercase tracking-[0.14em]">
+              {statusLine}
+            </span>
+          </div>
+
+          {/* Category chips: bordered, signal-accent when active (no pastel) */}
+          <div className="scrollbar-hide mb-6 flex gap-2 overflow-x-auto pb-1">
             <button
+              type="button"
               onClick={() => {
                 setActiveCategory(null);
                 setActiveLetter(null);
               }}
-              className={`font-body flex-shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
+              className={`font-mono text-caption flex-shrink-0 rounded-full border px-3.5 py-1.5 uppercase tracking-[0.1em] transition-colors ${
                 !activeCategory
-                  ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                  : 'bg-[#f0f0f0] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e] dark:hover:text-white/80'
+                  ? 'border-accent bg-accent/[0.08] text-accent'
+                  : 'border-border text-muted hover:text-foreground hover:border-foreground/25 dark:border-white/[0.12] dark:text-white/55 dark:hover:text-white'
               }`}
             >
               {t('filterAll')}
             </button>
-            {categoryList.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => handleCategoryClick(cat)}
-                className={`font-body flex-shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
-                  activeCategory === cat
-                    ? glossColor(cat)
-                    : 'hover:text-foreground dark:hover:text-foreground dark:bg-surface dark:text-muted bg-[#f0f0f0] text-[#6b7280]'
-                }`}
-              >
-                {translateGlossCat(cat)}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Alphabet filter */}
-      <section className="px-5 pb-4">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          {/* Letters with entries read as tappable chips (bordered surface);
-              letters without entries are unmistakably inert. */}
-          <div className="scrollbar-hide flex gap-1.5 overflow-x-auto py-1">
-            {ALPHABET.map((letter) => {
-              const available = availableLetters.has(letter);
-              const active = activeLetter === letter;
+            {categoryList.map((cat) => {
+              const active = norm(activeCategory ?? '') === norm(cat);
               return (
                 <button
-                  key={letter}
-                  onClick={() => available && handleLetterClick(letter)}
-                  disabled={!available}
-                  aria-disabled={!available}
-                  className={`font-body h-9 w-9 flex-shrink-0 rounded-full text-[11px] font-semibold transition-colors duration-200 ${
+                  key={cat}
+                  type="button"
+                  onClick={() => handleCategoryClick(cat)}
+                  className={`font-mono text-caption flex-shrink-0 rounded-full border px-3.5 py-1.5 uppercase tracking-[0.1em] transition-colors ${
                     active
-                      ? 'bg-accent border-accent border text-white'
-                      : available
-                        ? 'border-border text-foreground hover:border-accent hover:text-accent cursor-pointer border bg-white dark:border-white/[0.12] dark:bg-white/[0.04]'
-                        : 'text-muted/25 cursor-default select-none border border-transparent opacity-50'
+                      ? 'border-accent bg-accent/[0.08] text-accent'
+                      : 'border-border text-muted hover:text-foreground hover:border-foreground/25 dark:border-white/[0.12] dark:text-white/55 dark:hover:text-white'
                   }`}
                 >
-                  {letter}
+                  {translateGlossCat(cat)}
                 </button>
               );
             })}
           </div>
-        </div>
-      </section>
 
-      {/* Terms list */}
-      <section className="px-5 pb-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">
-            {activeCategory
-              ? `${translateGlossCat(activeCategory)} · ${filtered.length} ${t('statusTerms')}`
-              : activeLetter
-                ? `${t('statusLetter')} ${activeLetter} · ${filtered.length} ${t('statusTerms')}`
-                : `${t('statusAz')} · ${filtered.length} ${t('statusTerms')}`}
-          </SectionKicker>
-          {filtered.length === 0 ? (
-            <p className="font-body text-muted py-8 text-center text-[14px]">{t('noResults')}</p>
-          ) : (
-            <>
-              {/* Mobile: flat divider list */}
-              <div className="flex flex-col xl:hidden">
-                {filtered.map((term, i) => {
-                  const prevTerm = i > 0 ? filtered[i - 1] : undefined;
-                  const showLetter =
-                    i === 0 || term.term?.[0]?.toUpperCase() !== prevTerm?.term?.[0]?.toUpperCase();
-                  return (
-                    <div key={`m-${term.term}`}>
-                      {showLetter && (
-                        <div className="bg-background sticky top-16 z-10 py-2">
-                          <span className="text-accent font-sans text-[11px] font-semibold uppercase tracking-[0.1em]">
-                            {term.term?.[0]?.toUpperCase() ?? ''}
-                          </span>
-                        </div>
-                      )}
-                      <div
-                        className={`py-4 ${i < filtered.length - 1 ? 'border-b border-[#e5e7eb] dark:border-white/[0.07]' : ''}`}
-                      >
-                        <div className="mb-1.5 flex items-center justify-between gap-2">
-                          <span className="text-foreground font-sans text-[15px] font-semibold">
-                            {term.term}
-                          </span>
-                          <span
-                            className={`font-body rounded-full px-2 py-[2px] text-[8px] font-semibold uppercase tracking-[0.1em] ${CATEGORY_COLORS[term.category] ?? 'bg-gray-100 text-gray-600'}`}
-                          >
-                            {translateGlossCat(term.category)}
-                          </span>
-                        </div>
-                        {term.body && term.body.length > 0 ? (
-                          <RichText
-                            content={term.body}
-                            className="font-body text-muted text-[13px] leading-[1.6]"
-                          />
-                        ) : (
-                          <p className="font-body text-muted text-[13px] leading-[1.6]">
-                            {term.definition}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Desktop: 3-column card grid */}
-              <div className="hidden xl:grid xl:grid-cols-3 xl:gap-[14px]">
-                {filtered.map((term) => (
-                  <div
-                    key={`d-${term.term}`}
-                    className="hover:border-accent/25 dark:hover:border-accent/20 group flex flex-col gap-2 rounded-[18px] border border-[#e9e9e6] bg-[#f7f7f5] p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:border-white/[0.06] dark:bg-[#16181d] dark:hover:bg-[#1c1f28]"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="text-foreground font-sans text-[15px] font-semibold leading-[1.2]">
-                        {term.term}
-                      </span>
-                      <span
-                        className={`font-body mt-0.5 flex-shrink-0 rounded-full px-2 py-[2px] text-[8px] font-semibold uppercase tracking-[0.1em] ${CATEGORY_COLORS[term.category] ?? 'bg-gray-100 text-gray-600'}`}
-                      >
-                        {term.category}
-                      </span>
-                    </div>
-                    {term.body && term.body.length > 0 ? (
-                      <RichText
-                        content={term.body}
-                        className="font-body text-muted text-[12px] leading-[1.65]"
-                      />
-                    ) : (
-                      <p className="font-body text-muted text-[12px] leading-[1.65]">
-                        {term.definition}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:last-child]:text-white/50">
-            {t('ctaKicker')}
-          </SectionKicker>
-          <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            {t('ctaHeading')}
-          </h2>
-          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
-          <Link
-            href={`/${locale}/guides`}
-            className="bg-accent hover:bg-accent/90 font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[15px] font-medium text-white transition-colors"
+          {/* Mobile A-Z strip: sticky index key */}
+          <div
+            dir="ltr"
+            className="bg-background/95 scrollbar-hide sticky top-16 z-20 -mx-5 mb-2 flex gap-1 overflow-x-auto px-5 py-2 backdrop-blur xl:hidden"
           >
-            {t('ctaBtn')}
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 16 16"
-              fill="none"
-              className="rtl:-scale-x-100"
+            {ALPHABET.map((letter) => (
+              <button
+                key={letter}
+                type="button"
+                onClick={() => availableLetters.has(letter) && handleLetterClick(letter)}
+                disabled={!availableLetters.has(letter)}
+                aria-disabled={!availableLetters.has(letter)}
+                className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md text-[13px] ${letterClass(letter, '')}`}
+              >
+                {letter}
+              </button>
+            ))}
+          </div>
+
+          <div className="xl:grid xl:grid-cols-[auto_minmax(0,1fr)] xl:gap-x-12">
+            {/* Desktop sticky vertical index rail (start side; RTL-safe via grid order) */}
+            <nav
+              dir="ltr"
+              aria-label="A to Z index"
+              className="sticky top-24 hidden self-start xl:flex xl:flex-col xl:items-center xl:gap-0.5"
             >
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
+              {ALPHABET.map((letter) => (
+                <button
+                  key={letter}
+                  type="button"
+                  onClick={() => availableLetters.has(letter) && handleLetterClick(letter)}
+                  disabled={!availableLetters.has(letter)}
+                  aria-disabled={!availableLetters.has(letter)}
+                  className={`flex h-7 w-7 items-center justify-center rounded-md text-[12px] ${letterClass(letter, '')}`}
+                >
+                  {letter}
+                </button>
+              ))}
+            </nav>
+
+            {/* Definition rows */}
+            <div className="min-w-0">
+              {filtered.length === 0 ? (
+                <p className="font-body text-muted text-body py-12 text-center">{t('noResults')}</p>
+              ) : (
+                <ScrollReveal>
+                  <div className="flex flex-col gap-10">
+                    {groups.map((group) => (
+                      <section key={group.letter}>
+                        {/* Oversized editorial letter marker */}
+                        <header className="mb-4 flex items-baseline gap-4">
+                          <span
+                            id={`gl-${group.letter}`}
+                            dir="ltr"
+                            className="text-accent text-metric-sm scroll-mt-24 font-sans font-semibold leading-none"
+                          >
+                            {group.letter}
+                          </span>
+                          <span className="bg-border h-px flex-1" aria-hidden="true" />
+                          <span className="font-mono text-caption text-muted tabular-nums">
+                            {group.terms.length}
+                          </span>
+                        </header>
+
+                        <dl className="divide-border divide-y">
+                          {group.terms.map((term) => (
+                            <div
+                              key={term.term}
+                              className="grid gap-x-10 gap-y-2 py-5 xl:grid-cols-[minmax(0,15rem)_minmax(0,1fr)]"
+                            >
+                              <dt className="flex flex-col gap-1.5">
+                                <span className="text-foreground link-underline text-body-lg w-fit font-sans font-semibold leading-[1.25]">
+                                  {term.term}
+                                </span>
+                                <span className="text-muted flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em]">
+                                  <span
+                                    className="bg-accent h-1 w-1 flex-shrink-0 rounded-full"
+                                    aria-hidden="true"
+                                  />
+                                  {translateGlossCat(term.category)}
+                                </span>
+                              </dt>
+                              <dd className="min-w-0 max-w-[68ch]">
+                                {term.body && term.body.length > 0 ? (
+                                  <RichText
+                                    content={term.body}
+                                    className="font-body text-muted text-body leading-[1.7] [&>*:last-child]:mb-0"
+                                  />
+                                ) : null}
+                              </dd>
+                            </div>
+                          ))}
+                        </dl>
+                      </section>
+                    ))}
+                  </div>
+                </ScrollReveal>
+              )}
+            </div>
+          </div>
         </div>
       </section>
     </>

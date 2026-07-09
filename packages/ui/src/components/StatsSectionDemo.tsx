@@ -2,7 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import { SectionKicker } from './SectionKicker';
 import { CountUp, CountUpGroup } from './CountUp';
-import { RevealDemo } from './RevealDemo';
+import { ScrollReveal } from './ScrollReveal';
 
 export interface CmsKpiStat {
   valueEn: string;
@@ -45,46 +45,47 @@ export async function StatsSectionDemo({
           {t('statsByNumbers')}
         </SectionKicker>
 
-        <h2 className="text-foreground mb-6 whitespace-pre-line font-sans text-[28px] font-semibold leading-[110%] tracking-[-0.56px] xl:text-[34px]">
+        <h2 className="text-foreground text-headline mb-8 whitespace-pre-line font-sans">
           {t('statsHeading')}
         </h2>
 
-        <RevealDemo>
-          {/* Desktop columns follow the card count so the last row is never
-              left ragged (6 CMS tiles → 3×2, 4 fallback tiles → 4×1).
-              CountUpGroup starts every tile's animation on the same frame so
-              mixed-size stats begin and end in sync. */}
-          <CountUpGroup>
-            <div
-              className={`grid grid-cols-2 gap-3 ${
-                stats.length % 3 === 0 ? 'md:grid-cols-3' : 'md:grid-cols-4'
-              }`}
-            >
-              {stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="group relative flex flex-col gap-[6px] overflow-hidden rounded-[18px] bg-[#111] p-[22px] shadow-[0px_4px_16px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,176,80,0.16)] dark:bg-[#15171c]"
-                >
-                  {/* Corner accent wash on hover */}
+        {/* Desktop columns follow the card count so the last row is never left
+            ragged (6 CMS tiles → 3×2, 4 fallback tiles → 4×1). CountUpGroup
+            starts every tile on the same frame; each tile reveals on its own
+            stagger for a cascade, and the sheen'd numbers count as they land.
+            `flat` keeps grouped values (e.g. "25,000") on the single-node render
+            so the .text-sheen gradient paints them (the odometer would blank). */}
+        <CountUpGroup>
+          <div
+            className={`grid grid-cols-2 gap-3 ${
+              stats.length % 3 === 0 ? 'md:grid-cols-3' : 'md:grid-cols-4'
+            }`}
+          >
+            {stats.map((stat, i) => (
+              <ScrollReveal key={stat.label} index={i} className="h-full">
+                <div className="bg-ink-soft shadow-card relative flex h-full flex-col gap-2 overflow-hidden rounded-[18px] p-[26px] ring-1 ring-inset ring-white/[0.04] transition-[transform,box-shadow] duration-300 hover:ring-accent/30 motion-safe:hover:scale-[1.02] dark:bg-[#15171c]">
                   <span
+                    className="bg-accent/70 mb-1 block h-[3px] w-7 rounded-full"
                     aria-hidden="true"
-                    className="bg-accent/20 pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
                   />
-                  <span className="relative font-sans text-[30px] font-semibold tracking-[-0.6px] text-white">
-                    <CountUp value={stat.value} />
+                  <span
+                    dir="ltr"
+                    className="text-sheen text-metric-sm relative block w-fit font-sans tabular-nums"
+                  >
+                    <CountUp flat value={stat.value} />
                   </span>
-                  <span className="font-mono text-[10px] font-medium uppercase tracking-[1.2px] text-[#8c949e]">
+                  <span className="font-mono text-[11px] font-medium uppercase tracking-[0.13em] text-[#8c949e]">
                     {stat.label}
                   </span>
                 </div>
-              ))}
-            </div>
-          </CountUpGroup>
-        </RevealDemo>
+              </ScrollReveal>
+            ))}
+          </div>
+        </CountUpGroup>
 
         {/* Regulated badge */}
-        <div className="border-border bg-background mt-6 flex items-center gap-[14px] rounded-[16px] border px-5 py-[18px] dark:bg-[#15171c]">
-          <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#f2f4f7] dark:bg-[#23262d]">
+        <div className="border-border bg-surface shadow-card mt-6 flex items-center gap-[14px] rounded-[16px] border px-5 py-[18px] transition-[transform,box-shadow,border-color] duration-300 hover:border-accent/40 hover:shadow-card-lg motion-safe:hover:-translate-y-0.5 dark:bg-[#15171c]">
+          <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#eef3ef] dark:bg-[#23262d]">
             <Image
               src="/icons/authority.png"
               alt="Authority"
@@ -94,10 +95,10 @@ export async function StatsSectionDemo({
             />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="font-body text-[13px] font-medium leading-tight text-[#111] dark:text-white">
+            <p className="font-body text-body font-semibold leading-tight text-[#111] dark:text-white">
               {t('statsRegBadgeTitle')}
             </p>
-            <p className="font-body mt-0.5 text-[11px] text-[#6b7280] dark:text-[#B8BFCC]">
+            <p className="font-body text-caption text-muted mt-0.5 dark:text-[#B8BFCC]">
               {t('statsRegBadgeDesc')}
             </p>
           </div>

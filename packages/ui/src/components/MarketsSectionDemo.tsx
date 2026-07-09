@@ -2,42 +2,50 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import { SectionKicker } from './SectionKicker';
 import { MarketsSectionGrid } from './MarketsSectionGrid';
 
+// `symbol` maps each category to one representative MT5 instrument for the live
+// quote board (LiveSpark). Every symbol below exists in /api/mt5/instruments.
 const MARKETS = [
   {
     key: 'forex',
-    bg: '/images/market-forex.jpg',
+    bg: '/images/market-forex-dark.jpg',
     nameKey: 'marketsForex',
     countKey: 'marketsForexCount',
+    symbol: 'EURUSD',
   },
   {
     key: 'indices',
-    bg: '/images/market-indices.jpg',
+    bg: '/images/market-indices-dark.jpg',
     nameKey: 'marketsIndices',
     countKey: 'marketsIndicesCount',
+    symbol: 'US500',
   },
   {
     key: 'commodities',
-    bg: '/images/market-commodities.jpg',
+    bg: '/images/market-commodities-dark.jpg',
     nameKey: 'marketsCommodities',
     countKey: 'marketsCommoditiesCount',
+    symbol: 'XAUUSD',
   },
   {
     key: 'stocks',
-    bg: '/images/market-stocks.jpg',
+    bg: '/images/market-stocks-dark.jpg',
     nameKey: 'marketsStocks',
     countKey: 'marketsStocksCount',
+    symbol: 'AAPL.US',
   },
   {
     key: 'crypto',
-    bg: '/images/market-crypto.jpg',
+    bg: '/images/market-crypto-dark.jpg',
     nameKey: 'marketsCrypto',
     countKey: 'marketsCryptoCount',
+    symbol: 'BTCUSD',
   },
   {
     key: 'etfs',
-    bg: '/images/market-etfs.jpg',
+    bg: '/images/market-etfs-dark-v2.jpg',
     nameKey: 'marketsETFs',
     countKey: 'marketsETFsCount',
+    symbol: 'SPY.US',
   },
 ] as const;
 
@@ -56,19 +64,18 @@ export async function MarketsSectionDemo() {
     name: t(market.nameKey),
     count: t(market.countKey),
     href: `/${locale}/markets/${market.key}`,
+    symbol: market.symbol,
   }));
 
   return (
-    <section className="rounded-s-[32px] bg-gradient-to-r from-[#E2E2E2] to-white px-5 pb-9 pt-12 xl:pb-16 xl:pt-14 rtl:bg-gradient-to-l dark:from-[#1F262E] dark:to-[#000000]">
+    <section className="rounded-s-[32px] bg-gradient-to-r from-[#DCEAE1] to-[#F2F5F3] px-5 pb-9 pt-12 xl:pb-16 xl:pt-14 rtl:bg-gradient-to-l dark:from-[#1F262E] dark:to-[#000000]">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <SectionKicker className="text-foreground [&>span:first-child]:bg-accent mb-[14px]">
           {t('marketsKicker')}
         </SectionKicker>
 
-        <h2 className="text-foreground mb-3 font-sans text-[32px] font-semibold leading-[1.08] tracking-[-0.8px] xl:text-[38px]">
-          {t('marketsHeading')}
-        </h2>
-        <p className="font-body mb-5 max-w-[520px] text-[14px] leading-[1.55] text-[#363636] dark:text-[#FFFFFF]">
+        <h2 className="text-foreground text-headline mb-3 font-sans">{t('marketsHeading')}</h2>
+        <p className="font-body text-muted text-lead mb-6 max-w-[560px] dark:text-[#FFFFFF]">
           {t('marketsSubheading')}
         </p>
 

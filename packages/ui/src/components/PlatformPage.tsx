@@ -2,17 +2,35 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { ScrollReveal } from './ScrollReveal';
 import Image from 'next/image';
 
-function IconMt5() {
+function IconWindows() {
   return (
     <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-      <polyline
-        points="2,14 7,9 11,12 18,5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+      <rect x="2.5" y="2.5" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="11.5" y="2.5" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="2.5" y="11.5" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="11.5" y="11.5" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
+}
+function IconMac() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <path
+        fill="currentColor"
+        d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"
+      />
+    </svg>
+  );
+}
+function IconAndroid() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <path
+        fill="currentColor"
+        d="M6 9v7a1 1 0 001 1h1v3a1 1 0 002 0v-3h2v3a1 1 0 002 0v-3h1a1 1 0 001-1V9H6zM4.5 9a1 1 0 00-1 1v5a1 1 0 002 0v-5a1 1 0 00-1-1zm15 0a1 1 0 00-1 1v5a1 1 0 002 0v-5a1 1 0 00-1-1zM15.3 3.9l1.1-1.6a.4.4 0 00-.65-.45L14.6 3.5A6 6 0 0012 3a6 6 0 00-2.6.5L8.25 1.85a.4.4 0 10-.65.45L8.7 3.9A5 5 0 006 8h12a5 5 0 00-2.7-4.1zM9.5 6.5a.7.7 0 110-1.4.7.7 0 010 1.4zm5 0a.7.7 0 110-1.4.7.7 0 010 1.4z"
       />
     </svg>
   );
@@ -81,20 +99,78 @@ function IconHedging() {
     </svg>
   );
 }
-function IconIPhone() {
-  return <Image alt="Apple Store" src="/images/apple-store.png" width="33" height="33" />;
-}
-function IconPhone() {
-  return <Image alt="Play Store" src="/images/google-play.png" width="33" height="33" />;
-}
-function IconDesktop() {
-  return <Image alt="Windows" src="/images/windows.png" width="33" height="33" />;
+function IconLinux() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2c-2 0-3.2 1.6-3.2 3.7 0 1 .1 1.9-.4 2.8-.6 1-1.7 1.8-2.3 3.1-.5 1-.9 2.1-1.6 3-.4.5-.9.9-.8 1.5.1.5.7.6 1.2.7.9.2 1.3.5 1.8 1.1.6.7 1.6 1.3 3 1.5h4.6c1.4-.2 2.4-.8 3-1.5.5-.6.9-.9 1.8-1.1.5-.1 1.1-.2 1.2-.7.1-.6-.4-1-.8-1.5-.7-.9-1.1-2-1.6-3-.6-1.3-1.7-2.1-2.3-3.1-.5-.9-.4-1.8-.4-2.8C15.2 3.6 14 2 12 2zm-1.6 3.4a.7.7 0 110 1.4.7.7 0 010-1.4zm3.2 0a.7.7 0 110 1.4.7.7 0 010-1.4zM12 7.6c.7 0 1.5.4 1.5.9 0 .3-.7.6-1.5.6s-1.5-.3-1.5-.6c0-.5.8-.9 1.5-.9z" />
+    </svg>
+  );
 }
 
-const PLATFORM_CARDS = [
-  { id: 'mt5', Icon: IconMt5 },
-  { id: 'web', Icon: IconWeb },
-  { id: 'mobile', Icon: IconMobile },
+interface PlatformCard {
+  id: string;
+  Icon: () => JSX.Element;
+  urlKey: keyof CmsPlatformDownloads;
+  titleKey: string;
+  descKey: string;
+  badgeKey: string;
+  btnKey: string;
+  cta: 'download' | 'external';
+  webFallback?: boolean;
+}
+
+const PLATFORM_CARDS: PlatformCard[] = [
+  {
+    id: 'windows',
+    Icon: IconWindows,
+    urlKey: 'windows',
+    titleKey: 'winTitle',
+    descKey: 'winDesc',
+    badgeKey: 'winBadge',
+    btnKey: 'mt5Btn',
+    cta: 'download',
+  },
+  {
+    id: 'macos',
+    Icon: IconMac,
+    urlKey: 'mac',
+    titleKey: 'macTitle',
+    descKey: 'macDesc',
+    badgeKey: 'macBadge',
+    btnKey: 'mt5Btn',
+    cta: 'download',
+  },
+  {
+    id: 'web',
+    Icon: IconWeb,
+    urlKey: 'webTrader',
+    titleKey: 'webTitle',
+    descKey: 'webDesc',
+    badgeKey: 'webBadge',
+    btnKey: 'webBtn',
+    cta: 'external',
+    webFallback: true,
+  },
+  {
+    id: 'android',
+    Icon: IconAndroid,
+    urlKey: 'android',
+    titleKey: 'androidTitle',
+    descKey: 'androidDesc',
+    badgeKey: 'androidBadge',
+    btnKey: 'mobileBtn',
+    cta: 'external',
+  },
+  {
+    id: 'ios',
+    Icon: IconMobile,
+    urlKey: 'ios',
+    titleKey: 'iosTitle',
+    descKey: 'iosDesc',
+    badgeKey: 'iosBadge',
+    btnKey: 'mobileBtn',
+    cta: 'external',
+  },
 ];
 
 const TOOLS = [
@@ -104,10 +180,16 @@ const TOOLS = [
   { id: 'hedging', Icon: IconHedging },
 ];
 
+// Full device matrix for the "Works Everywhere" band (matches the reference
+// 6-tile grid). Linux has no dedicated MT5 build in CMS, so it points at the
+// browser Web Trader, which runs on Linux.
 const DEVICE_KEYS = [
-  { key: 'deviceIos' as const, Icon: IconIPhone },
-  { key: 'deviceAndroid' as const, Icon: IconPhone },
-  { key: 'deviceWindows' as const, Icon: IconDesktop },
+  { key: 'androidTitle' as const, urlKey: 'android' as const, Icon: IconAndroid },
+  { key: 'iosTitle' as const, urlKey: 'ios' as const, Icon: IconMobile },
+  { key: 'macTitle' as const, urlKey: 'mac' as const, Icon: IconMac },
+  { key: 'winTitle' as const, urlKey: 'windows' as const, Icon: IconWindows },
+  { key: 'linuxTitle' as const, urlKey: 'webTrader' as const, Icon: IconLinux },
+  { key: 'webTitle' as const, urlKey: 'webTrader' as const, Icon: IconWeb },
 ];
 
 export interface CmsPlatformDownloads {
@@ -129,15 +211,15 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="rounded-b-[32px] bg-gradient-to-b from-[#FFFFFF] to-[#B2FFAB] px-5 pb-8 pt-9 dark:bg-gradient-to-b dark:from-[#000000] dark:to-[#085A00]">
+      <section className="rounded-b-[32px] bg-gradient-to-b from-[#F2F5F3] to-[#BDEECA] px-5 pb-10 pt-10 dark:bg-gradient-to-b dark:from-[#000000] dark:to-[#085A00]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:max-w-[1200px] xl:items-center xl:gap-16">
           <div className="xl:flex-1">
-            <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px] xl:text-[52px] xl:tracking-[-1.56px]">
+            <h1 className="text-foreground text-display mb-5 font-sans [text-wrap:balance]">
               {t('heroLine1')} <span className="text-accent">{t('heroAccent')}</span>
               <br />
               {t('heroLine2')}
             </h1>
-            <p className="font-body max-w-[310px] text-[14px] leading-[1.55] xl:max-w-[380px] xl:text-[15px] dark:text-[#B8BFCC]">
+            <p className="font-body text-lead text-muted max-w-[340px] xl:max-w-[440px] dark:text-[#B8BFCC]">
               {t('heroSubtitle')}
             </p>
           </div>
@@ -173,196 +255,171 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       </section>
 
       {/* Terminal / Platform cards */}
-      <section className="rounded-t-[32px] bg-[#FFFFFF] px-5 py-[56px] dark:bg-[#07090D]">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+      <section className="rounded-t-[32px] bg-transparent px-5 py-[56px] xl:py-16 dark:bg-[#07090D]">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
             {t('terminalKicker')}
           </SectionKicker>
-          <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1] xl:text-[40px]">
-            {t('terminalHeading')}
-          </h2>
+          <h2 className="text-foreground text-headline mb-8 font-sans">{t('terminalHeading')}</h2>
 
-          <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-3 xl:gap-[18px]">
-            {PLATFORM_CARDS.map((card) => (
-              <div
-                key={card.id}
-                className="hover:border-accent/20 dark:hover:border-accent/25 group relative flex flex-col gap-[18px] overflow-hidden rounded-[22px] border border-transparent bg-[#f2f2f2] p-[22px] transition-all duration-300 hover:-translate-y-1 hover:bg-[#07090D] hover:shadow-[0_20px_48px_rgba(0,176,80,0.15)] xl:p-[28px] dark:border-white/[0.06] dark:bg-[#1a1c22] dark:hover:bg-[#07090D]"
-              >
-                {/* Green glow — fades in on hover */}
-                <span
-                  className="pointer-events-none absolute -top-[50px] left-[10%] h-[180px] w-[180px] rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-70"
-                  style={{
-                    background:
-                      'radial-gradient(circle, rgba(0,176,80,0.4) 0%, rgba(0,176,80,0.1) 50%, transparent 70%)',
-                  }}
-                  aria-hidden="true"
-                />
-
-                {/* Icon + tag */}
-                <div className="relative flex items-center justify-between">
-                  <div className="bg-accent/10 text-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white">
-                    <card.Icon />
-                  </div>
-                  <span className="font-body 'border-accent text-accent group-hover:border-accent/40 rounded-full border px-3 py-[5px] text-[9px] font-semibold uppercase tracking-[0.12em] transition-colors duration-300">
-                    {card.id === 'mt5'
-                      ? t('mt5Badge')
-                      : card.id === 'web'
-                        ? t('webBadge')
-                        : t('mobileBadge')}
-                  </span>
-                </div>
-
-                {/* Name + desc */}
-                <div className="relative">
-                  <p className="mb-2 font-sans text-[22px] font-semibold text-[#111] transition-colors duration-300 group-hover:text-white dark:text-white">
-                    {card.id === 'mt5'
-                      ? t('mt5Title')
-                      : card.id === 'web'
-                        ? t('webTitle')
-                        : t('mobileTitle')}
-                  </p>
-                  <p className="font-body text-[13px] leading-[1.55] text-[#6b7280] transition-colors duration-300 group-hover:text-white/60 dark:text-white/60">
-                    {card.id === 'mt5'
-                      ? t('mt5Desc')
-                      : card.id === 'web'
-                        ? t('webDesc')
-                        : t('mobileDesc')}
-                  </p>
-                </div>
-
-                {/* CTA */}
-                {card.id === 'mt5' ? (
-                  <a
-                    href={downloads?.windows ?? '#'}
-                    target={downloads?.windows ? '_blank' : undefined}
-                    rel={downloads?.windows ? 'noopener noreferrer' : undefined}
-                    className="font-body group-hover:bg-accent relative flex h-[44px] items-center justify-center gap-2 rounded-full bg-[#111] text-[13px] font-medium text-white transition-all duration-200 group-hover:shadow-[0_6px_20px_rgba(0,176,80,0.4)] dark:bg-white/10"
-                  >
-                    {t('mt5Btn')}
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                      <path
-                        d="M8 3v8M4 7l4 4 4-4"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </a>
-                ) : card.id === 'web' ? (
-                  <a
-                    href={downloads?.webTrader ?? `/${locale}/web-trader`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-body group-hover:bg-accent relative flex h-[44px] items-center justify-center gap-2 rounded-full bg-[#111] text-[13px] font-medium text-white transition-all duration-200 group-hover:shadow-[0_6px_20px_rgba(0,176,80,0.4)] dark:bg-white/10"
-                  >
-                    {t('webBtn')}
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                      <path
-                        d="M3 13L13 3M13 3H7M13 3v6"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </a>
+          {/* 3-up then 2-up (centered) on desktop — a balanced arrangement
+              instead of all five cramped into a single row. */}
+          <div className="grid grid-cols-2 gap-[14px] md:grid-cols-3 xl:grid-cols-6 xl:gap-[18px]">
+            {PLATFORM_CARDS.map((card, i) => {
+              const rawUrl = downloads?.[card.urlKey] ?? null;
+              const url = rawUrl ?? (card.webFallback ? `/${locale}/web-trader` : null);
+              const isInternal = url?.startsWith('/') ?? false;
+              const ctaClass =
+                'font-body group-hover:bg-accent relative flex h-[48px] items-center justify-center gap-2 rounded-full bg-[#111] text-[14px] font-semibold text-white transition-all duration-200 group-hover:shadow-[0_6px_20px_rgba(0,176,80,0.4)] dark:bg-white/10';
+              const arrow =
+                card.cta === 'download' ? (
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M8 3v8M4 7l4 4 4-4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 ) : (
-                  <a
-                    href={downloads?.ios ?? downloads?.android ?? '#'}
-                    target={downloads?.ios || downloads?.android ? '_blank' : undefined}
-                    rel={downloads?.ios || downloads?.android ? 'noopener noreferrer' : undefined}
-                    className="font-body group-hover:bg-accent relative flex h-[44px] items-center justify-center gap-2 rounded-full bg-[#111] text-[13px] font-medium text-white transition-all duration-200 group-hover:shadow-[0_6px_20px_rgba(0,176,80,0.4)] dark:bg-white/10"
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    className="rtl:-scale-x-100"
                   >
-                    {t('mobileBtn')}
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                      <path
-                        d="M8 3v8M4 7l4 4 4-4"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </a>
-                )}
-              </div>
-            ))}
+                    <path
+                      d="M3 13L13 3M13 3H7M13 3v6"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                );
+
+              return (
+                <div
+                  key={card.id}
+                  className={`border-border hover:border-accent/30 dark:hover:border-accent/25 shadow-card group relative flex flex-col gap-[18px] overflow-hidden rounded-[22px] border bg-white p-[22px] transition-all duration-300 hover:bg-[#07130c] hover:shadow-[0_20px_48px_rgba(0,176,80,0.18)] xl:col-span-2 xl:p-[24px] dark:border-white/[0.06] dark:bg-[#1a1c22] dark:hover:bg-[#07130c] ${
+                    i === 3 ? 'xl:col-start-2' : ''
+                  }`}
+                >
+                  {/* Green glow — fades in on hover */}
+                  <span
+                    className="pointer-events-none absolute -top-[50px] left-[10%] h-[180px] w-[180px] rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-70"
+                    style={{
+                      background:
+                        'radial-gradient(circle, rgba(0,176,80,0.4) 0%, rgba(0,176,80,0.1) 50%, transparent 70%)',
+                    }}
+                    aria-hidden="true"
+                  />
+
+                  {/* Icon + tag */}
+                  <div className="relative flex items-center justify-between gap-2">
+                    <div className="bg-accent/10 text-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white">
+                      <card.Icon />
+                    </div>
+                    <span className="border-accent/40 text-accent group-hover:border-accent/50 whitespace-nowrap rounded-full border px-3 py-[5px] font-mono text-[10px] font-semibold uppercase tracking-[0.12em] transition-colors duration-300">
+                      {t(card.badgeKey as 'winBadge')}
+                    </span>
+                  </div>
+
+                  {/* Name + desc */}
+                  <div className="relative">
+                    <p className="text-title mb-2 font-sans font-semibold text-[#111] transition-colors duration-300 group-hover:text-white dark:text-white">
+                      {t(card.titleKey as 'winTitle')}
+                    </p>
+                    <p className="font-body text-body text-muted transition-colors duration-300 group-hover:text-white/60 dark:text-white/60">
+                      {t(card.descKey as 'winDesc')}
+                    </p>
+                  </div>
+
+                  {/* CTA */}
+                  {url ? (
+                    <a
+                      href={url}
+                      target={isInternal ? undefined : '_blank'}
+                      rel={isInternal ? undefined : 'noopener noreferrer'}
+                      className={ctaClass}
+                    >
+                      {t(card.btnKey as 'mt5Btn')}
+                      {arrow}
+                    </a>
+                  ) : (
+                    <span
+                      className={`${ctaClass} pointer-events-none opacity-50`}
+                      aria-disabled="true"
+                    >
+                      {t(card.btnKey as 'mt5Btn')}
+                      {arrow}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
-      {/* Tools section — dark green bg matching Figma */}
-      <section className="rounded-t-[32px] bg-gradient-to-b from-[#26A69A] to-[#FFFFFF] px-5 pb-10 pt-10 xl:px-8 xl:py-16 dark:bg-gradient-to-b dark:from-[#26A69A] dark:to-[#07090D]">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-white dark:[&>span:first-child]:bg-black [&>span:last-child]:text-white dark:[&>span:last-child]:text-black">
+      {/* Tools section — brand-tinted band (replaced the off-palette teal) */}
+      <section className="rounded-t-[32px] bg-gradient-to-b from-[#DCEAE1] to-[#F2F5F3] px-5 pb-12 pt-12 xl:px-8 xl:py-16 dark:from-[#0C1F14] dark:to-[#07090D]">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="text-foreground [&>span:first-child]:bg-accent mb-4">
             {t('featuresKicker')}
           </SectionKicker>
-          <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1] xl:mb-8 xl:text-[40px]">
-            {t('featuresHeading')}
-          </h2>
+          <h2 className="text-foreground text-headline mb-8 font-sans">{t('featuresHeading')}</h2>
 
-          <div className="grid grid-cols-2 gap-[10px] xl:gap-[14px]">
+          <div className="grid grid-cols-2 gap-[12px] xl:gap-[16px]">
             {TOOLS.map((tool, i) => (
               <div
                 key={tool.id}
-                className="flex flex-col gap-3 rounded-[18px] bg-white p-4 dark:bg-[#111111]"
+                className="border-border hover-lift hover:border-accent/40 shadow-card flex flex-col gap-3 rounded-[18px] border bg-white p-5 xl:p-6 dark:border-white/[0.06] dark:bg-[#111111]"
               >
-                <div className="bg-accent/10 text-accent flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[14px]">
+                <div className="bg-accent/10 text-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[14px]">
                   <tool.Icon />
                 </div>
                 <div>
-                  <p className="mb-[4px] font-sans text-[14px] font-semibold text-[#111] xl:mb-1 xl:text-[18px] dark:text-white">
+                  <p className="mb-1 font-sans text-[16px] font-semibold text-[#111] xl:text-[20px] dark:text-white">
                     {t(`feat${i + 1}` as 'feat1')}
                   </p>
-                  <p className="font-body text-[11px] leading-snug text-[#6b7280] xl:text-[13px] dark:text-white/50">
+                  <p className="font-body text-caption xl:text-body text-muted leading-snug dark:text-white/50">
                     {t(`feat${i + 1}Desc` as 'feat1Desc')}
                   </p>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       {/* Works Everywhere */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/30 [&>span:last-child]:text-white/60">
+      <section className="ink-band rounded-t-[32px] px-5 pb-14 pt-12 xl:pb-16">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="text-accent-bright [&>span:first-child]:bg-accent-bright mb-4">
             {t('devicesKicker')}
           </SectionKicker>
-          <h2 className="mb-2 font-sans text-[32px] font-semibold leading-[1.1] text-white xl:text-[40px]">
-            {t('devicesLine1')}
-          </h2>
-          <h2 className="mb-6 font-sans text-[32px] font-semibold leading-[1.1] text-white xl:text-[40px]">
-            {t('devicesLine2')}
-          </h2>
+          <h2 className="text-headline font-sans text-white">{t('devicesLine1')}</h2>
+          <h2 className="text-headline mb-8 font-sans text-white">{t('devicesLine2')}</h2>
 
-          {/* 3 device pills — stack on mobile, row on larger screens */}
-          <div className="mb-8 flex flex-col gap-3 sm:flex-row">
+          {/* Device tiles — informational, not links or buttons. MT5 runs on
+              every surface; the actual downloads live in the terminal cards
+              above and the CTA below. Icons sit in glass badges (larger, house
+              set); the whole tile only warms its tint on hover. */}
+          <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {DEVICE_KEYS.map((dev) => (
               <div
                 key={dev.key}
-                className="flex min-w-0 flex-1 justify-between gap-[14px] rounded-[14px] bg-white/10 px-[20px] py-4 text-white transition-colors hover:bg-white/15"
+                className="group flex min-w-0 items-center gap-[14px] rounded-[16px] border border-white/[0.08] bg-white/[0.05] px-[18px] py-[14px] text-white transition-colors hover:border-accent/40 hover:bg-white/[0.10]"
               >
-                <div className="flex min-w-0 items-center gap-[14px]">
+                <span className="group-hover:border-accent/40 group-hover:bg-accent/[0.15] group-hover:text-accent-bright flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[12px] border border-white/[0.10] bg-white/[0.06] text-white transition-colors [&>svg]:h-[22px] [&>svg]:w-[22px]">
                   <dev.Icon />
-                  <span className="font-body truncate text-[13px] font-medium">{t(dev.key)}</span>
-                </div>
-                <div className="flex items-center text-[rgba(255,255,255,0.30)]">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-[18px] w-[18px] rtl:-scale-x-100"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="m9 18 6-6-6-6" />
-                  </svg>
-                </div>
+                </span>
+                <span className="font-body truncate text-[15px] font-medium">
+                  {t(dev.key as 'winTitle')}
+                </span>
               </div>
             ))}
           </div>
@@ -372,7 +429,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
             href={downloads?.windows ?? '#'}
             target={downloads?.windows ? '_blank' : undefined}
             rel={downloads?.windows ? 'noopener noreferrer' : undefined}
-            className="bg-accent font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors hover:bg-[#00c85a] xl:w-auto xl:px-8"
+            className="from-accent to-accent-bright font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r text-[15px] font-semibold text-white shadow-[0_16px_44px_-12px_rgba(0,176,80,0.85)] transition-all duration-300 hover:shadow-[0_22px_52px_-12px_rgba(26,217,102,0.95)] xl:w-auto xl:px-9"
           >
             {t('downloadMT5Btn')}
             <svg
@@ -402,7 +459,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
               />
             </svg>
           </a>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );

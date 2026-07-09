@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { ScrollReveal } from './ScrollReveal';
+import { CountUp } from './CountUp';
 
 interface NewsletterPageProps {
   initialState?: 'confirmed' | 'unsubscribed';
@@ -42,90 +44,23 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
     }
   }
 
+  // Post-action confirmation / unsubscribe screens
   if (initialState === 'confirmed' || initialState === 'unsubscribed') {
     const isConfirmed = initialState === 'confirmed';
     return (
-      <section className="min-h-[60vh] px-5 py-20">
-        <div className="mx-auto flex max-w-[390px] flex-col items-center text-center md:max-w-md">
-          <div
-            className={`mb-6 flex h-16 w-16 items-center justify-center rounded-full ${isConfirmed ? 'bg-accent' : 'bg-[#f2f2f4] dark:bg-[#1a1c22]'}`}
-          >
-            {isConfirmed ? (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M5 12l5 5L20 7"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            ) : (
-              <svg
-                width="28"
-                height="28"
-                viewBox="0 0 24 24"
-                fill="none"
-                className="text-[#6b7280]"
-              >
-                <path
-                  d="M18 6L6 18M6 6l12 12"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            )}
-          </div>
-          <h1 className="text-foreground mb-3 font-sans text-[28px] font-semibold leading-[1.15]">
-            {isConfirmed ? t('confirmedHeading') : t('unsubscribedHeading')}
-          </h1>
-          <p className="font-body text-muted mb-8 text-[14px] leading-relaxed">
-            {isConfirmed ? t('confirmedDesc') : t('unsubscribedDesc')}
-          </p>
-          {isConfirmed ? (
-            <a
-              href={`/${locale}/newsletter`}
-              className="font-body text-accent text-[13px] font-medium underline-offset-2 hover:underline"
+      <section className="px-5 py-20 md:py-28">
+        <ScrollReveal className="mx-auto w-full max-w-[420px]">
+          <div className="border-border bg-surface shadow-card rounded-[24px] border px-6 py-10 text-center md:px-8">
+            <p className="text-eyebrow text-accent mb-6 font-mono font-medium uppercase">
+              {t('masthead')}
+            </p>
+            <div
+              className={`mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full ${
+                isConfirmed ? 'bg-accent' : 'bg-section text-muted'
+              }`}
             >
-              {t('confirmedLink')}
-            </a>
-          ) : (
-            <a
-              href={`/${locale}/newsletter`}
-              className="font-body text-accent text-[13px] font-medium underline-offset-2 hover:underline"
-            >
-              {t('resubscribeLink')}
-            </a>
-          )}
-        </div>
-      </section>
-    );
-  }
-
-  return (
-    <>
-      {/* Hero */}
-      <section className="bg-transparent px-5 pb-10 pt-9">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[44px] font-semibold leading-[1.05] xl:text-[64px]">
-            {t('heroLine1')}
-            <br />
-            <span className="text-accent">{t('heroAccent')}</span>
-          </h1>
-          <p className="font-body text-muted max-w-[300px] text-[14px] leading-[1.6]">
-            {t('heroSubtitle')}
-          </p>
-        </div>
-      </section>
-
-      {/* Subscribe form */}
-      <section className="px-5 pb-8">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          {submitted ? (
-            <div className="bg-surface rounded-[20px] px-6 py-10 text-center">
-              <div className="bg-accent mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              {isConfirmed ? (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path
                     d="M5 12l5 5L20 7"
                     stroke="white"
@@ -134,186 +69,284 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
                     strokeLinejoin="round"
                   />
                 </svg>
-              </div>
-              <h2 className="text-foreground mb-2 font-sans text-[22px] font-semibold">
-                {t('successHeading')}
-              </h2>
-              <p className="font-body text-muted text-[13px] leading-relaxed">{t('successDesc')}</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-              <div className="flex flex-col gap-1.5">
-                <label
-                  htmlFor="nl-email"
-                  className="font-body text-muted text-[11px] uppercase tracking-[0.12em]"
-                >
-                  {t('fieldEmailLabel')}
-                </label>
-                <input
-                  id="nl-email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t('fieldEmailPlaceholder')}
-                  className="font-body text-foreground focus:border-accent bg-surface placeholder:text-muted w-full rounded-[14px] px-4 py-[14px] text-[14px] outline-none"
-                />
-              </div>
-              <span className="font-body text-muted text-[12px] leading-relaxed">
-                {t('consentText')}
-              </span>
-              {error && <p className="font-body text-[12px] text-red-500">{error}</p>}
-              <button
-                type="submit"
-                disabled={loading}
-                className="bg-accent font-body hover:bg-accent/90 flex w-full items-center justify-center gap-2 rounded-full px-[22px] py-4 text-[15px] font-medium text-white transition-colors disabled:opacity-60"
-              >
-                {t('subscribeBtn')}
+              ) : (
                 <svg
-                  width="13"
-                  height="13"
-                  viewBox="0 0 16 16"
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
                   fill="none"
-                  className="rtl:-scale-x-100"
+                  aria-hidden="true"
+                  className="text-muted"
                 >
                   <path
-                    d="M3 8h10M9 4l4 4-4 4"
+                    d="M18 6L6 18M6 6l12 12"
                     stroke="currentColor"
-                    strokeWidth="1.5"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              )}
+            </div>
+            <h1 className="text-foreground text-headline-sm mb-3 font-sans">
+              {isConfirmed ? t('confirmedHeading') : t('unsubscribedHeading')}
+            </h1>
+            <p className="font-body text-muted text-body mb-8">
+              {isConfirmed ? t('confirmedDesc') : t('unsubscribedDesc')}
+            </p>
+            <a
+              href={`/${locale}/newsletter`}
+              className="text-accent font-body link-underline text-caption font-medium"
+            >
+              {isConfirmed ? t('confirmedLink') : t('resubscribeLink')}
+            </a>
+          </div>
+        </ScrollReveal>
+      </section>
+    );
+  }
+
+  // The issue's table of contents (reuses the four "what you get" keys)
+  const contents = [
+    { i: '01', label: t('teaser1Label'), title: t('item1Title'), desc: t('item1Desc') },
+    { i: '02', label: t('teaser2Label'), title: t('item2Title'), desc: t('item2Desc') },
+    { i: '03', label: t('whatKicker'), title: t('item3Title'), desc: t('item3Desc') },
+    { i: '04', label: t('teaser3Label'), title: t('item4Title'), desc: t('item4Desc') },
+  ];
+
+  return (
+    <>
+      {/* Hero: editorial pitch + single-field form beside the issue front page */}
+      <section className="px-5 pb-14 pt-10 md:pb-20 xl:px-[80px]">
+        <div className="mx-auto grid max-w-[390px] items-center gap-10 md:max-w-2xl xl:max-w-[1200px] xl:grid-cols-[1.05fr_0.95fr] xl:gap-16">
+          {/* Left: the pitch and the form */}
+          <ScrollReveal className="w-full">
+            <SectionKicker className="text-accent [&>span:first-child]:bg-accent mb-6">
+              {t('heroKicker')}
+            </SectionKicker>
+            <h1 className="text-foreground text-display font-sans">
+              {t('heroLine1')} <span className="text-accent">{t('heroAccent')}</span>
+            </h1>
+            <p className="font-body text-muted text-lead mt-5 max-w-[440px]">
+              {t('heroSubtitle')}
+            </p>
+
+            {submitted ? (
+              <div className="border-accent/30 bg-accent/[0.06] mt-8 flex items-start gap-4 rounded-[18px] border p-5">
+                <div className="bg-accent flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                      d="M5 12l5 5L20 7"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-foreground text-title font-sans">{t('successHeading')}</h2>
+                  <p className="font-body text-muted text-body mt-1">{t('successDesc')}</p>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="mt-8 flex w-full max-w-[440px] flex-col gap-3">
+                <label
+                  htmlFor="nl-email"
+                  className="text-eyebrow text-muted font-mono font-medium uppercase"
+                >
+                  {t('formEyebrow')}
+                </label>
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <input
+                    id="nl-email"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder={t('fieldEmailPlaceholder')}
+                    aria-label={t('fieldEmailLabel')}
+                    className="font-body text-foreground text-body focus:border-accent border-border bg-surface placeholder:text-muted w-full rounded-[14px] border px-4 py-[14px] outline-none transition-colors sm:flex-1"
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="bg-accent font-body text-body active:scale-[0.98] hover:bg-accent/90 flex items-center justify-center gap-2 rounded-[14px] px-6 py-[14px] font-medium text-white transition-[background,transform] disabled:opacity-60"
+                  >
+                    {t('subscribeBtn')}
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      aria-hidden="true"
+                      className="rtl:-scale-x-100"
+                    >
+                      <path
+                        d="M3 8h10M9 4l4 4-4 4"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                {error && <p className="font-body text-caption text-down">{error}</p>}
+                <p className="font-body text-muted text-caption">{t('privacyNote')}</p>
+              </form>
+            )}
+          </ScrollReveal>
+
+          {/* Right: the front page of this week's issue */}
+          <ScrollReveal delay={0.12} className="w-full">
+            <article className="border-border bg-surface shadow-card relative overflow-hidden rounded-[24px] border p-6 transition-[transform,box-shadow,border-color] duration-300 hover:border-accent/40 hover:shadow-card-lg motion-safe:hover:-translate-y-1 md:p-8">
+              {/* Masthead */}
+              <div className="pt-2 text-center">
+                <p className="text-eyebrow text-accent font-mono font-medium uppercase">
+                  {t('issueTag')}
+                </p>
+                <h2 className="text-foreground text-headline-sm mt-2 font-sans uppercase leading-[1.02] tracking-tight">
+                  {t('masthead')}
+                </h2>
+                <p className="border-border text-caption text-muted mt-4 border-y py-2 font-mono uppercase tracking-[0.1em]">
+                  {t('issueMeta')}
+                </p>
+              </div>
+
+              {/* Lead story */}
+              <div className="mt-6 flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <p className="text-eyebrow text-accent font-mono font-medium uppercase">
+                    {t('leadLabel')}
+                  </p>
+                  <h3 className="text-foreground text-title mt-2 font-sans">{t('leadHeadline')}</h3>
+                </div>
+                <svg
+                  width="96"
+                  height="52"
+                  viewBox="0 0 96 52"
+                  fill="none"
+                  aria-hidden="true"
+                  className="hidden flex-shrink-0 self-end sm:block rtl:-scale-x-100"
+                >
+                  <path
+                    d="M2 42 L18 34 L30 38 L46 22 L60 28 L74 12 L94 4"
+                    stroke="#00B050"
+                    strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
+                  <path
+                    d="M2 42 L18 34 L30 38 L46 22 L60 28 L74 12 L94 4 L94 50 L2 50 Z"
+                    fill="#00B050"
+                    fillOpacity="0.08"
+                  />
                 </svg>
-              </button>
-              <p className="font-body text-muted text-center text-[11px]">{t('privacyNote')}</p>
-            </form>
-          )}
+              </div>
+
+              {/* Teaser headlines */}
+              <ul className="border-border mt-6 border-t">
+                {[
+                  { label: t('teaser1Label'), head: t('teaser1Head') },
+                  { label: t('teaser2Label'), head: t('teaser2Head') },
+                  { label: t('teaser3Label'), head: t('teaser3Head') },
+                ].map((row) => (
+                  <li
+                    key={row.label}
+                    className="border-border flex items-baseline gap-4 border-b py-3 last:border-b-0"
+                  >
+                    <span className="text-caption text-accent w-[84px] flex-shrink-0 font-mono uppercase tracking-[0.08em]">
+                      {row.label}
+                    </span>
+                    <span className="text-foreground font-body text-body font-medium">
+                      {row.head}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              <p className="border-border text-caption text-muted mt-5 border-t pt-4 font-mono uppercase tracking-[0.1em]">
+                {t('issueFooter')}
+              </p>
+            </article>
+          </ScrollReveal>
         </div>
       </section>
 
-      {/* What you get */}
-      <section className="px-5 pb-8">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
-            {t('whatKicker')}
-          </SectionKicker>
-          <div className="flex flex-col gap-[14px]">
-            {[
-              {
-                key: 'thesis' as const,
-                icon: (
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                    <rect x="3" y="10" width="2" height="7" rx="1" fill="currentColor" />
-                    <rect x="7" y="7" width="2" height="10" rx="1" fill="currentColor" />
-                    <rect x="11" y="4" width="2" height="13" rx="1" fill="currentColor" />
-                    <rect x="15" y="6" width="2" height="11" rx="1" fill="currentColor" />
-                  </svg>
-                ),
-                title: t('item1Title'),
-                desc: t('item1Desc'),
-              },
-              {
-                key: 'setup',
-                icon: (
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                    <path
-                      d="M10 3l2 6h6l-5 3.5 2 6L10 15l-5 3.5 2-6L2 9h6z"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                ),
-                title: t('item2Title'),
-                desc: t('item2Desc'),
-              },
-              {
-                key: 'education',
-                icon: (
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                    <rect
-                      x="3"
-                      y="3"
-                      width="14"
-                      height="14"
-                      rx="2"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    />
-                    <path
-                      d="M7 7h6M7 10h6M7 13h4"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                ),
-                title: t('item3Title'),
-                desc: t('item3Desc'),
-              },
-              {
-                key: 'events',
-                icon: (
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                    <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.5" />
-                    <path
-                      d="M10 7v3l2 2"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                ),
-                title: t('item4Title'),
-                desc: t('item4Desc'),
-              },
-            ].map((item) => (
-              <div key={item.key} className="flex items-start gap-4">
-                <div className="text-accent bg-accent/10 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px]">
-                  {item.icon}
-                </div>
-                <div className="flex-1 pt-0.5">
-                  <p className="text-foreground font-sans text-[14px] font-semibold">
-                    {item.title}
-                  </p>
-                  <p className="font-body text-muted mt-[3px] text-[12px] leading-[1.5]">
-                    {item.desc}
-                  </p>
-                </div>
-              </div>
+      {/* In every issue: the briefing's standing table of contents */}
+      <section className="px-5 pb-16 md:pb-20 xl:px-[80px]">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal>
+            <SectionKicker className="text-muted [&>span:first-child]:bg-muted mb-8">
+              {t('whatKicker')}
+            </SectionKicker>
+          </ScrollReveal>
+          <ul className="border-border border-t">
+            {contents.map((item, idx) => (
+              <li key={item.i} className="border-border border-b">
+                <ScrollReveal index={idx}>
+                  <div className="flex flex-col gap-2 py-6 sm:flex-row sm:items-baseline sm:gap-8">
+                    <div className="flex items-baseline gap-4 sm:w-[220px] sm:flex-shrink-0">
+                      <span
+                        className="text-metric-sm text-accent/40 font-sans tabular-nums"
+                        dir="ltr"
+                      >
+                        {item.i}
+                      </span>
+                      <span className="text-eyebrow text-muted mt-1 font-mono font-medium uppercase">
+                        {item.label}
+                      </span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-foreground text-title font-sans">{item.title}</p>
+                      <p className="font-body text-muted text-body-lg mt-1.5 max-w-[560px]">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 
-      {/* Social proof */}
-      <section className="rounded-t-[32px] bg-[#111111] px-5 pb-12 pt-10 xl:px-[80px]">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
-            {t('socialKicker')}
-          </SectionKicker>
-          <p className="font-sans text-[38px] font-semibold leading-[1.1] text-white">
-            {t('socialStat')}
-          </p>
-          <p className="mb-8 font-sans text-[24px] text-white/60">{t('socialSubtitle')}</p>
-
-          <div className="rounded-[18px] bg-white/[0.06] p-5">
-            <p className="font-body mb-4 text-[14px] leading-[1.7] text-white/80">
-              {t('testimonialText')}
-            </p>
-            <div className="flex items-center gap-3">
-              <div className="bg-accent/20 flex h-9 w-9 items-center justify-center rounded-full">
-                <span className="text-accent font-sans text-[12px] font-semibold">MC</span>
-              </div>
-              <div>
-                <p className="font-sans text-[13px] font-semibold text-white">
-                  {t('testimonialAuthor')}
-                </p>
-                <p className="font-body text-[11px] text-white/40">{t('testimonialSince')}</p>
-              </div>
+      {/* Ink closer: subscriber count + the pull-quote */}
+      <section className="ink-band rounded-t-[32px] px-5 py-16 md:py-20 xl:px-[80px]">
+        <div className="mx-auto grid max-w-[390px] items-center gap-12 md:max-w-2xl xl:max-w-[1200px] xl:grid-cols-2 xl:gap-20">
+          <ScrollReveal className="w-full">
+            <SectionKicker className="text-accent-bright [&>span:first-child]:bg-accent-bright mb-6">
+              {t('socialKicker')}
+            </SectionKicker>
+            <div className="text-sheen text-metric w-fit font-sans tabular-nums" dir="ltr">
+              <CountUp value={t('metricValue')} />
             </div>
-          </div>
+            <p className="text-lead mt-4 font-sans text-white/70">{t('metricLabel')}</p>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.12} className="w-full">
+            <figure className="rounded-[20px] border border-white/[0.1] bg-white/[0.05] p-6 transition-colors hover:border-white/20 hover:bg-white/[0.08] md:p-8">
+              <blockquote className="font-body text-body-lg leading-[1.7] text-white/85">
+                {t('testimonialText')}
+              </blockquote>
+              <figcaption className="mt-6 flex items-center gap-3">
+                <span className="bg-accent-bright/20 text-accent-bright flex h-10 w-10 items-center justify-center rounded-full font-sans text-caption font-semibold">
+                  {t('testimonialAuthor')
+                    .split(' ')
+                    .map((w) => w[0])
+                    .join('')}
+                </span>
+                <span>
+                  <span className="block font-sans text-caption font-semibold text-white">
+                    {t('testimonialAuthor')}
+                  </span>
+                  <span className="font-body block text-caption text-white/50">
+                    {t('testimonialSince')}
+                  </span>
+                </span>
+              </figcaption>
+            </figure>
+          </ScrollReveal>
         </div>
       </section>
     </>

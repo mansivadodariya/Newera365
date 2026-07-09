@@ -134,7 +134,6 @@
       "links": [
         { "id": "6a3625c0f5a2b50001134747", "label": "Contact", "href": "/contact" },
         { "id": "6a3625c0f5a2b50001134748", "label": "FAQs", "href": "/faqs" },
-        { "id": "6a3625c0f5a2b50001134749", "label": "Live Chat", "href": "/live-chat" },
         { "id": "6a3625c0f5a2b5000113474a", "label": "Legal", "href": "/legal" }
       ]
     }
@@ -181,7 +180,6 @@
       "links": [
         { "id": "6a3625c0f5a2b50001134759", "label": "اتصل بنا", "href": "/contact" },
         { "id": "6a3625c0f5a2b5000113475a", "label": "الأسئلة الشائعة", "href": "/faqs" },
-        { "id": "6a3625c0f5a2b5000113475b", "label": "الدردشة المباشرة", "href": "/live-chat" },
         { "id": "6a3625c0f5a2b5000113475c", "label": "القانونية", "href": "/legal" }
       ]
     }
@@ -190,7 +188,6 @@
   "regulatoryDisclosureAr": "TEST — نيو إيرا 365 مرخّصة ومنظّمة من [الجهة] برقم 000000. استبدلها بالنص الموثّق.",
   "companyRegistrationEn": "TEST — NewEra365 Ltd, registered in [Jurisdiction], company no. 000000. Placeholder.",
   "companyRegistrationAr": "TEST — نيو إيرا 365 المحدودة، مسجّلة في [الولاية]، رقم الشركة 000000. مؤقت.",
-  "liveChatUrl": "/live-chat",
   "analystInitials": "DR",
   "analystName": "Diego Romero",
   "analystTitle": "Senior FX Analyst",

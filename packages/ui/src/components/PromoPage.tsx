@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { AuthModal, type AuthModalType } from './AuthModal';
 import { SectionKicker } from './SectionKicker';
+import { ScrollReveal } from './ScrollReveal';
 
 export interface CmsPromoItem {
   id: number;
@@ -79,7 +80,7 @@ function PromoCard({
   onClaim: () => void;
 }) {
   return (
-    <div className="hover:border-accent/25 dark:hover:border-accent/25 group relative isolate overflow-hidden rounded-[20px] border border-transparent bg-[#F2F2F2] p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-[#07090D] hover:shadow-[0_20px_56px_rgba(0,176,80,0.18)] dark:border-white/[0.06] dark:bg-[#111111] dark:hover:bg-[#07090D]">
+    <div className="border-border hover:border-accent/30 dark:hover:border-accent/25 shadow-card group relative isolate overflow-hidden rounded-[20px] border bg-white p-6 transition-all duration-300 hover:bg-[#07130c] hover:shadow-[0_20px_56px_rgba(0,176,80,0.18)] dark:border-white/[0.06] dark:bg-[#111111] dark:hover:bg-[#07130c]">
       {/* Green glow blob — fades in on hover */}
       <span
         className="pointer-events-none absolute -top-[60px] left-[12%] h-[220px] w-[220px] rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -156,13 +157,13 @@ export function PromoPage({ promos }: PromoPageProps) {
       {/* ── Hero ──────────────────────────────────────────────── */}
       <section className="px-5 pb-8 pt-9 xl:px-[120px] xl:pb-10 xl:pt-14">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] xl:max-w-[1200px]">
-          <h1 className="mb-4 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px] text-[#111] xl:text-[48px] xl:tracking-[-1.5px] dark:text-white">
+          <h1 className="text-display mb-4 font-sans text-[#111] dark:text-white">
             {t('heroLine1')}
             <br />
             <span className="text-[#111] dark:text-white">{accentPrefix}</span>
             <span className="text-accent">{accentGreen}</span>
           </h1>
-          <p className="max-w-[320px] text-[14px] leading-[1.55] text-[#6b7280] xl:max-w-[680px] dark:text-white/60">
+          <p className="text-body text-muted max-w-[320px] xl:max-w-[680px] dark:text-white/60">
             {t('heroSubtitle')}
           </p>
         </div>
@@ -170,25 +171,26 @@ export function PromoPage({ promos }: PromoPageProps) {
 
       {/* ── Promo cards — always single column, full width ─────── */}
       <section className="px-5 pb-10 xl:px-[120px]">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] xl:max-w-[1200px]">
+        <div className="mx-auto max-w-[390px] xl:max-w-[1200px]">
           {items.length === 0 ? (
             <p className="text-muted py-12 text-center text-[14px]">{t('noPromos')}</p>
           ) : (
             <div className="flex flex-col gap-3.5">
-              {items.map((promo) => {
+              {items.map((promo, i) => {
                 const endsLabel = offerEndsLabel(promo.activeTo);
                 const claimLabel = promo.ctaLabel ?? t('claimBtn');
                 const activeLabel = t('activeLabel');
 
                 return (
-                  <PromoCard
-                    key={promo.id}
-                    promo={promo}
-                    endsLabel={endsLabel}
-                    claimLabel={claimLabel}
-                    activeLabel={activeLabel}
-                    onClaim={() => setModal('register')}
-                  />
+                  <ScrollReveal key={promo.id} index={i}>
+                    <PromoCard
+                      promo={promo}
+                      endsLabel={endsLabel}
+                      claimLabel={claimLabel}
+                      activeLabel={activeLabel}
+                      onClaim={() => setModal('register')}
+                    />
+                  </ScrollReveal>
                 );
               })}
             </div>
@@ -197,8 +199,8 @@ export function PromoPage({ promos }: PromoPageProps) {
       </section>
 
       {/* ── T&C band ───────────────────────────────────────────── */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-14 pt-10 xl:px-[120px]">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] xl:max-w-[1200px]">
+      <section className="ink-band rounded-t-[32px] px-5 pb-14 pt-10 xl:px-[120px]">
+        <ScrollReveal className="mx-auto max-w-[390px] xl:max-w-[1200px]">
           <SectionKicker className="mb-3 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/60">
             {t('termsKicker')}
           </SectionKicker>
@@ -228,7 +230,7 @@ export function PromoPage({ promos }: PromoPageProps) {
               ---{t('termsUpdated')}
             </p>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       <AuthModal type={modal} onClose={() => setModal(null)} />

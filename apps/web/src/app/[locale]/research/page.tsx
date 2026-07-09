@@ -2,7 +2,7 @@ import { setRequestLocale } from 'next-intl/server';
 import { ResearchPage, CtaBanner } from '@newera365/ui';
 import type { CmsResearchReportItem } from '@newera365/ui';
 import type { Metadata } from 'next';
-import { getResearchArticles, getResearchReports } from '@/lib/cms';
+import { getResearchArticles, getResearchReports, getNews, getBlogPosts } from '@/lib/cms';
 import type { CmsResearchReport, CmsMedia } from '@/lib/cms';
 
 export async function generateMetadata({
@@ -14,8 +14,8 @@ export async function generateMetadata({
   return {
     title: isAr ? 'الأبحاث' : 'Research',
     description: isAr
-      ? 'تحليلات وأبحاث الأسواق من مكتب NewEra365.'
-      : 'Market analysis and research from the NewEra365 desk.',
+      ? 'التحليلات والأخبار اليومية والمدونة من مكتب NewEra365 في مكان واحد.'
+      : 'Market analysis, daily news and blog from the NewEra365 desk, all in one place.',
   };
 }
 
@@ -39,14 +39,21 @@ function mapReport(r: CmsResearchReport): CmsResearchReportItem {
 
 export default async function ResearchRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  const [cmsArticles, rawReports] = await Promise.all([
+  const [cmsArticles, rawReports, news, blog] = await Promise.all([
     getResearchArticles(params.locale),
     getResearchReports(params.locale),
+    getNews(params.locale),
+    getBlogPosts(params.locale),
   ]);
   const cmsReports = rawReports.map(mapReport);
   return (
     <>
-      <ResearchPage cmsArticles={cmsArticles} cmsReports={cmsReports} />
+      <ResearchPage
+        cmsArticles={cmsArticles}
+        newsArticles={news.length > 0 ? news : undefined}
+        blogArticles={blog.length > 0 ? blog : undefined}
+        cmsReports={cmsReports}
+      />
       <CtaBanner />
     </>
   );

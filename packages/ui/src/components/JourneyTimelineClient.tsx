@@ -144,9 +144,7 @@ export function JourneyTimeline({
         <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
           {kicker}
         </SectionKicker>
-        <h2 className="text-foreground mb-8 font-sans text-[32px] font-semibold leading-[108%] tracking-[-0.8px] xl:text-[36px]">
-          {heading}
-        </h2>
+        <h2 className="text-foreground text-headline mb-8 font-sans">{heading}</h2>
 
         <ol ref={olRef} className="relative flex flex-col">
           {/* Rail track + scroll-coupled accent fill (rendered once geometry is known) */}

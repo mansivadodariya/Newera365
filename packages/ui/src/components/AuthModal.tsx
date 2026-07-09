@@ -80,7 +80,7 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
               Open your account
             </h2>
             <p className="font-body text-muted mb-5 text-[13px] leading-[1.5]">
-              Enjoy 0% hidden fees, backed by regulators — supporting your growth.
+              Enjoy 0% hidden fees, backed by regulators, supporting your growth.
             </p>
 
             <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-3">
@@ -133,7 +133,7 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
               Start a free demo
             </h2>
             <p className="font-body text-muted mb-5 text-[13px] leading-[1.5]">
-              $50,000 virtual funds for demo — no deposit, no pressure.
+              $50,000 virtual funds for demo, no deposit, no pressure.
             </p>
 
             <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-3">

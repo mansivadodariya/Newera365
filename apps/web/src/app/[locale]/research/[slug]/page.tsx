@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
-import { ResearchDetailPage } from '@newera365/ui';
+import { ResearchDetailPage, CtaBanner } from '@newera365/ui';
 import type { ArticleDetailData, RelatedArticle, RelatedInstrument } from '@newera365/ui';
 import { LOCALES } from '@newera365/types';
 import { getMarketAnalysisBySlug, getResearchArticles, slugToTitle } from '@/lib/cms';
@@ -83,11 +83,14 @@ export default async function ResearchDetailRoute({ params }: Props) {
     }));
 
   return (
-    <ResearchDetailPage
-      slug={params.slug}
-      article={article}
-      relatedArticles={relatedArticles}
-      basePath="research"
-    />
+    <>
+      <ResearchDetailPage
+        slug={params.slug}
+        article={article}
+        relatedArticles={relatedArticles}
+        basePath="research"
+      />
+      <CtaBanner />
+    </>
   );
 }

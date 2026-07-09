@@ -1,9 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
-import { SectionKicker } from './SectionKicker';
+import { useTranslations } from 'next-intl';
 import type { CmsCalculatorInstrument } from './TraderToolsPage';
 import { CalcSelect } from './CalcSelect';
 
@@ -168,14 +166,13 @@ function FormulaBox({
   );
 }
 
-interface ProfitCalculatorPageProps {
+interface ProfitCalculatorProps {
   instruments?: CmsCalculatorInstrument[];
 }
 
-export function ProfitCalculatorPage({
+export function ProfitCalculator({
   instruments: cmsInstruments,
-}: ProfitCalculatorPageProps = {}) {
-  const locale = useLocale();
+}: ProfitCalculatorProps = {}) {
   const t = useTranslations('profit');
 
   const activeInstruments = cmsInstruments?.map((i) => i.symbol) ?? [...INSTRUMENTS_FALLBACK];
@@ -235,25 +232,8 @@ export function ProfitCalculatorPage({
   }, [computeResult, defaultInstrument]);
 
   return (
-    <>
-      {/* Hero */}
-      <section className="bg-transparent px-5 pb-6 pt-9 xl:px-[80px] xl:py-16">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-3 font-sans text-[42px] font-semibold leading-[1.05]">
-            {t('heroLine1')}
-            <br />
-            <span className="text-[#00B050]">{t('heroLine2')}</span>
-          </h1>
-          <p className="font-body text-muted max-w-[340px] text-[14px] leading-[1.55]">
-            {t('heroSubtitle')}
-          </p>
-        </div>
-      </section>
-
-      {/* Calculator */}
-      <section className="bg-background px-5 pb-10 xl:px-[80px]">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          {/* Mode tabs */}
+    <div>
+      {/* Mode tabs */}
           <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-[#1c1c1c]">
             {(['Profit', 'Loss', 'R/R'] as TabMode[]).map((tab) => (
               <button
@@ -382,63 +362,6 @@ export function ProfitCalculatorPage({
               calcDesc={t('calcDesc')}
             />
           </div>
-        </div>
-      </section>
-
-      {/* More Calculators */}
-      <section className="dark:bg-background bg-[#f9f9f9] px-5 pb-10 pt-8 xl:px-[80px]">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
-            {t('moreKicker')}
-          </SectionKicker>
-          <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3 xl:gap-5">
-            {[
-              {
-                tag: t('tagPreTrade'),
-                label: t('marginTitle'),
-                desc: t('marginDesc'),
-                href: `/${locale}/tools`,
-              },
-              {
-                tag: t('tagTechnical'),
-                label: t('pivotTitle'),
-                desc: t('pivotDesc'),
-                href: `/${locale}/tools/pivot`,
-              },
-              {
-                tag: t('tagTechnical'),
-                label: t('fibTitle'),
-                desc: t('fibDesc'),
-                href: `/${locale}/tools/fibonacci`,
-              },
-            ].map((calc) => (
-              <div
-                key={calc.label}
-                className="flex flex-col gap-3 rounded-[16px] bg-white p-5 dark:bg-[#1c1c1c]"
-                style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}
-              >
-                <span className="font-body inline-flex w-fit rounded-full bg-[#f3f4f6] px-2.5 py-[3px] text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6b7280] dark:bg-[#2a2a2a] dark:text-[#9ca3af]">
-                  {calc.tag}
-                </span>
-                <div>
-                  <p className="text-foreground font-sans text-[14px] font-semibold">
-                    {calc.label}
-                  </p>
-                  <p className="font-body text-muted mt-1 text-[12px] leading-[1.55]">
-                    {calc.desc}
-                  </p>
-                </div>
-                <Link
-                  href={calc.href}
-                  className="font-body mt-auto text-[13px] font-semibold text-[#00B050] hover:underline"
-                >
-                  {t('openBtn')}
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </>
+    </div>
   );
 }

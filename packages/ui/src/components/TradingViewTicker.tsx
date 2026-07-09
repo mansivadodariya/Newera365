@@ -52,6 +52,10 @@ export function TradingViewTicker() {
     script.innerHTML = JSON.stringify({
       symbols: SYMBOLS,
       showSymbolLogo: true,
+      // isTransparent stays false (true renders a light/transparent strip — the
+      // tape has no black backing of its own). The tape's fixed dark blue-gray
+      // (#131722) is crushed to true black by a CSS contrast filter on the iframe
+      // in globals.css, since the ticker-tape embed ignores `backgroundColor`.
       isTransparent: false,
       displayMode: 'regular',
       colorTheme: 'dark',
@@ -66,13 +70,13 @@ export function TradingViewTicker() {
 
   return (
     <div
-      className="bg-ticker-bg relative w-full overflow-hidden border-b border-[#1a1c22]"
+      className="relative w-full overflow-hidden border-b border-[#16181d] bg-black"
       aria-label="Live market prices"
     >
       {/* Fixed height reserves space to avoid layout shift while the iframe loads. */}
       <div
         ref={containerRef}
-        className="tradingview-widget-container h-[78px]"
+        className="tradingview-widget-container h-[92px]"
         suppressHydrationWarning
       >
         <div className="tradingview-widget-container__widget" />

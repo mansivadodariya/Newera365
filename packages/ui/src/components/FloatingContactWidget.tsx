@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { NO_CTA_SUFFIXES } from './SmartCtaBanner';
 
@@ -10,7 +9,6 @@ export interface FloatingContactWidgetProps {
   email?: string | null;
   phone?: string | null;
   whatsapp?: string | null;
-  liveChatUrl?: string | null;
 }
 
 // Mirrors StickyCtaBar's threshold — on small screens the FAB lifts above the
@@ -70,34 +68,12 @@ function MailIcon() {
   );
 }
 
-function LiveChatIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 /**
  * First-party floating contact launcher — chat-widget presentation (FAB →
  * mini chat card with support header + channel rows) without any third-party
- * script. Channels render only when their CMS value exists; the whole widget
- * disappears when no channel is configured, and on /live-chat where the chat
- * UI owns the viewport.
+ * script. Channels render only when their CMS value exists.
  */
-export function FloatingContactWidget({
-  email,
-  phone,
-  whatsapp,
-  liveChatUrl,
-}: FloatingContactWidgetProps) {
-  const locale = useLocale();
+export function FloatingContactWidget({ email, phone, whatsapp }: FloatingContactWidgetProps) {
   const t = useTranslations('contactWidget');
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -130,9 +106,11 @@ export function FloatingContactWidget({
     };
   }, [open]);
 
-  // Focus the first channel link when the panel opens.
+  // Move focus into the panel when it opens so keyboard users land inside it
+  // (the panel precedes the FAB in the DOM). Focus the container — not the first
+  // link — so mouse-opening doesn't paint a :focus-visible ring on a channel row.
   useEffect(() => {
-    if (open) panelRef.current?.querySelector<HTMLAnchorElement>('a')?.focus();
+    if (open) panelRef.current?.focus();
   }, [open]);
 
   // On small screens, lift above the sticky CTA bar once it appears (same
@@ -146,13 +124,7 @@ export function FloatingContactWidget({
     return () => window.removeEventListener('scroll', onScroll);
   }, [barOnThisRoute]);
 
-  // The internal /live-chat page always exists as a channel, so the widget
-  // always has something to offer; it only hides on the chat page itself.
-  if (pathname.endsWith('/live-chat')) return null;
-
   const waDigits = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : null;
-  const liveChatHref = liveChatUrl || `/${locale}/live-chat`;
-  const liveChatExternal = Boolean(liveChatUrl);
 
   const rowClass =
     'focus-visible:ring-accent flex items-center gap-3 rounded-[12px] px-3 py-[10px] transition-colors hover:bg-black/[0.04] focus-visible:outline-none focus-visible:ring-2 dark:hover:bg-white/[0.06]';
@@ -182,7 +154,8 @@ export function FloatingContactWidget({
         <div
           ref={panelRef}
           id="contact-widget-panel"
-          className="motion-safe:animate-rise-in absolute bottom-[calc(100%+12px)] end-0 w-[280px] overflow-hidden rounded-2xl border border-black/[0.06] bg-white shadow-[0_24px_60px_-16px_rgba(0,0,0,0.35)] dark:border-white/[0.08] dark:bg-[#0f0f14]"
+          tabIndex={-1}
+          className="motion-safe:animate-rise-in absolute bottom-[calc(100%+12px)] end-0 w-[280px] overflow-hidden rounded-2xl border border-black/[0.06] bg-white shadow-[0_24px_60px_-16px_rgba(0,0,0,0.35)] focus:outline-none focus-visible:outline-none dark:border-white/[0.08] dark:bg-[#0f0f14]"
         >
           {/* Support header — brand gradient, chat-card presentation */}
           <div className="relative overflow-hidden bg-gradient-to-br from-[#0c3b24] via-[#071510] to-black px-4 py-4">
@@ -228,35 +201,6 @@ export function FloatingContactWidget({
                   </span>
                 </span>
               </a>
-            )}
-            {liveChatExternal ? (
-              <a href={liveChatHref} target="_blank" rel="noopener noreferrer" className={rowClass}>
-                <span className={iconWrap}>
-                  <LiveChatIcon />
-                </span>
-                <span className="min-w-0">
-                  <span className="font-body text-foreground block text-[13px] font-semibold">
-                    {t('liveChat')}
-                  </span>
-                  <span className="font-body text-muted block truncate text-[11px]">
-                    {t('liveChatSub')}
-                  </span>
-                </span>
-              </a>
-            ) : (
-              <Link href={liveChatHref} className={rowClass}>
-                <span className={iconWrap}>
-                  <LiveChatIcon />
-                </span>
-                <span className="min-w-0">
-                  <span className="font-body text-foreground block text-[13px] font-semibold">
-                    {t('liveChat')}
-                  </span>
-                  <span className="font-body text-muted block truncate text-[11px]">
-                    {t('liveChatSub')}
-                  </span>
-                </span>
-              </Link>
             )}
             {phone && (
               <a href={`tel:${phone.replace(/\s+/g, '')}`} className={rowClass}>

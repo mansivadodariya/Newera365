@@ -4,22 +4,16 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { ScrollReveal } from './ScrollReveal';
 
+// Glyph tiles live only on the ink-art media cards; the paper reading index is
+// purely typographic (ghost numeral + level), so guides/glossary/ebooks glyphs
+// are intentionally not defined here.
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-  guides: (
+  videos: (
     <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-      <rect x="3" y="2" width="14" height="16" rx="2" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M7 7h6M7 10.5h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  ),
-  glossary: (
-    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-      <path
-        d="M4 5h12M4 10h8M4 15h6"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
+      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M8 7.5l5 2.5-5 2.5V7.5z" fill="currentColor" />
     </svg>
   ),
   webinars: (
@@ -31,24 +25,6 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
         strokeWidth="1.5"
         strokeLinejoin="round"
       />
-    </svg>
-  ),
-  ebooks: (
-    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-      <path
-        d="M10 3v10M6 9l4 4 4-4"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path d="M3 16h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  ),
-  videos: (
-    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M8 7.5l5 2.5-5 2.5V7.5z" fill="currentColor" />
     </svg>
   ),
   audio: (
@@ -64,56 +40,40 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   ),
 };
 
-const CATEGORIES = [
-  {
-    id: 'guides',
-    title: 'Guides',
-    desc: '5 in-depth articles on core trading concepts.',
-    count: '4x GUIDES',
-    href: '/guides',
-  },
-  {
-    id: 'glossary',
-    title: 'Glossary',
-    desc: 'Every trading term, defined in plain English.',
-    count: '430 TERMS',
-    href: '/glossary',
-  },
-  {
-    id: 'webinars',
-    title: 'Webinars',
-    desc: 'Live sessions from market experts.',
-    count: 'LIVE + 8',
-    href: '/education/media',
-  },
-  {
-    id: 'ebooks',
-    title: 'E-Books',
-    desc: 'Free downloadable trading guides.',
-    count: '4x EBOOKS',
-    href: '/ebooks',
-  },
-  {
-    id: 'videos',
-    title: 'Videos',
-    desc: 'Short-form analysis and market breakdowns.',
-    count: '30+ VIDEOS',
-    href: '/education/media',
-  },
-  {
-    id: 'audio',
-    title: 'Audio',
-    desc: 'Podcast episodes from trading experts.',
-    count: '20+ EPISODES',
-    href: '/education/media',
-  },
-] as const;
+type CatId = 'guides' | 'glossary' | 'webinars' | 'ebooks' | 'videos' | 'audio';
+type LevelKey = 'levelBeginner' | 'levelIntermediate' | 'levelAdvanced';
+
+interface CatDef {
+  id: CatId;
+  track: 'read' | 'media';
+  level?: LevelKey;
+  href: string;
+  /** objectPosition slice for the shared ink plate (media track only). */
+  crop?: string;
+}
+
+// The curriculum path: three reading chapters climbing Beginner -> Advanced,
+// then three media formats. Order IS the syllabus. `id` still drives the CMS
+// count filter and the existing type*/count* i18n keys.
+const CATEGORIES: CatDef[] = [
+  { id: 'glossary', track: 'read', level: 'levelBeginner', href: '/glossary' },
+  { id: 'guides', track: 'read', level: 'levelIntermediate', href: '/guides' },
+  { id: 'ebooks', track: 'read', level: 'levelAdvanced', href: '/ebooks' },
+  { id: 'videos', track: 'media', href: '/education/media', crop: '20% 40%' },
+  { id: 'webinars', track: 'media', href: '/education/media', crop: '50% 30%' },
+  { id: 'audio', track: 'media', href: '/education/media', crop: '82% 45%' },
+];
+
+const LEVEL_DOT: Record<LevelKey, string> = {
+  levelBeginner: 'bg-accent/40',
+  levelIntermediate: 'bg-accent/70',
+  levelAdvanced: 'bg-accent',
+};
 
 const FEATURED = [
   {
     id: 'macro',
     tag: 'NEW',
-    tagClass: 'bg-accent/10 text-accent',
     title: 'The 2026 macro outlook',
     desc: 'Rising inflation or rate cuts? We break down what every scenario means for your positions.',
     readTime: '6 min',
@@ -122,7 +82,6 @@ const FEATURED = [
   {
     id: 'risk',
     tag: 'POPULAR',
-    tagClass: 'bg-[#6B7280]/10 text-[#6B7280]',
     title: 'Risk management essentials',
     desc: 'Four frameworks that protect every account from outsized drawdowns.',
     readTime: '8 min',
@@ -131,9 +90,8 @@ const FEATURED = [
   {
     id: 'candle',
     tag: 'UPDATED',
-    tagClass: 'bg-[#3B82F6]/10 text-[#3B82F6]',
     title: 'Reading a candlestick chart',
-    desc: 'From opening price to daily wick — everything you need to parse a chart.',
+    desc: 'From opening price to daily wick, everything you need to parse a chart.',
     readTime: '5 min',
     href: '/guides/reading-candlestick-charts',
   },
@@ -153,6 +111,8 @@ interface EducationHubPageProps {
   content?: CmsEducationItem[];
 }
 
+const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+
 export function EducationHubPage({ content: cmsContent }: EducationHubPageProps) {
   const locale = useLocale();
   const t = useTranslations('education');
@@ -160,17 +120,19 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
   const [submitted, setSubmitted] = useState(false);
 
   // Live CMS count when available, else a localized fallback (the static
-  // `cat.count` is English — "4x GUIDES" etc. — so it must not render raw in AR).
+  // count keys are per-type, so they must never render raw English in AR).
   const cats = CATEGORIES.map((cat) => {
     const count = cmsContent ? cmsContent.filter((c) => c.contentType === cat.id).length : 0;
     return {
       ...cat,
-      count:
-        count > 0
-          ? `${count}`
-          : t(`count${cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}` as 'countGuides'),
+      title: t(`type${cap(cat.id)}Title` as 'typeGuidesTitle'),
+      desc: t(`type${cap(cat.id)}Desc` as 'typeGuidesDesc'),
+      count: count > 0 ? `${count}` : t(`count${cap(cat.id)}` as 'countGuides'),
     };
   });
+
+  const readingTrack = cats.filter((c) => c.track === 'read');
+  const mediaTrack = cats.filter((c) => c.track === 'media');
 
   // Localize the featured-article tag (NEW / POPULAR / UPDATED / GUIDE) for AR.
   const tagLabel = (tag: string): string =>
@@ -184,17 +146,12 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
   const cmsGuides = cmsContent
     ? cmsContent.filter((c) => c.contentType === 'guide' && /^[a-z0-9-]+$/.test(c.slug))
     : [];
-  const FEATURED_TAGS = [
-    { tag: 'NEW', tagClass: 'bg-accent/10 text-accent' },
-    { tag: 'POPULAR', tagClass: 'bg-[#6B7280]/10 text-[#6B7280]' },
-    { tag: 'UPDATED', tagClass: 'bg-[#3B82F6]/10 text-[#3B82F6]' },
-  ] as const;
+  const FEATURED_TAGS = ['NEW', 'POPULAR', 'UPDATED'] as const;
   const cmsFeatured =
     cmsGuides.length > 0
       ? cmsGuides.slice(0, 3).map((g, i) => ({
           id: g.id,
-          tag: FEATURED_TAGS[i]?.tag ?? 'GUIDE',
-          tagClass: FEATURED_TAGS[i]?.tagClass ?? 'bg-muted/10 text-muted',
+          tag: FEATURED_TAGS[i] ?? 'GUIDE',
           title: g.title,
           desc: g.description ?? '',
           href: `/guides/${g.slug}`,
@@ -206,177 +163,265 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
     if (email) setSubmitted(true);
   }
 
+  const chevron = (
+    <svg
+      width="7"
+      height="12"
+      viewBox="0 0 7 12"
+      fill="none"
+      className="rtl:-scale-x-100 flex-shrink-0"
+      aria-hidden="true"
+    >
+      <path
+        d="M1 1L6 6L1 11"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+
   return (
     <>
-      {/* Hero */}
-      <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:max-w-[1200px] xl:items-end xl:justify-between">
-          <div>
-            <h1 className="text-foreground mb-4 font-sans text-[42px] font-semibold leading-[1.05] tracking-[-1.26px] xl:text-[56px] xl:tracking-[-1.68px]">
-              {t('heroLine1')}
-              <br />
-              {t('heroLine2')}
-              <br />
-              <span className="text-accent">{t('heroAccent')}</span>
-            </h1>
-            <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55] xl:max-w-[400px] xl:text-[15px]">
-              {t('heroDesc')}
-            </p>
-          </div>
+      {/* Hero — the curriculum framing */}
+      <section className="px-5 pb-9 pt-9 xl:pt-14">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+            {t('heroKicker')}
+          </SectionKicker>
+          <h1 className="text-foreground text-display font-sans">
+            {t('heroLine1')}
+            <br />
+            {t('heroLine2')}
+            <br />
+            <span className="text-accent">{t('heroAccent')}</span>
+          </h1>
+          <p className="font-body text-lead text-muted mt-5 max-w-[520px]">{t('heroDesc')}</p>
         </div>
       </section>
 
-      {/* Category grid */}
-      <section className="px-5 pb-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
-            {t('browseKicker')}
-          </SectionKicker>
-          <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-3 xl:gap-[14px]">
-            {cats.map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/${locale}${cat.href}`}
-                className="hover:border-accent/25 dark:hover:border-accent/20 group flex flex-col gap-3 rounded-[18px] border border-[#e9e9e6] bg-[#f7f7f5] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] xl:p-5 dark:border-white/[0.06] dark:bg-[#16181d] dark:hover:bg-[#1c1f28]"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="bg-accent/10 text-accent group-hover:bg-accent/15 flex h-10 w-10 items-center justify-center rounded-[12px] transition-colors">
-                    {CATEGORY_ICONS[cat.id]}
-                  </div>
-                  <span className="font-body bg-accent/10 text-accent rounded-full px-2 py-[3px] text-[8px] font-semibold uppercase tracking-[0.1em]">
-                    {cat.count}
+      {/* Reading path — numbered editorial index inside a syllabus card */}
+      <section className="px-5 pb-12">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal>
+            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+              {t('readingKicker')}
+            </SectionKicker>
+            <h2 className="text-foreground text-headline mb-6 max-w-[640px] font-sans">
+              {t('readingHeading')}
+            </h2>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.08}>
+            <div className="border-border shadow-card overflow-hidden rounded-[24px] border bg-white dark:border-white/[0.06] dark:bg-[#12141a]">
+              {readingTrack.map((row, i) => (
+                <Link
+                  key={row.id}
+                  href={`/${locale}${row.href}`}
+                  className="group hover:bg-[#F0F4F1] flex items-center gap-4 border-b border-[#E6ECE8] px-5 py-6 transition-colors last:border-b-0 xl:gap-7 xl:px-8 xl:py-7 dark:border-white/[0.05] dark:hover:bg-white/[0.02]"
+                >
+                  {/* Ghost numeral — latin figure, reads LTR in both directions */}
+                  <span
+                    dir="ltr"
+                    className="text-metric-sm text-foreground/[0.12] w-[42px] flex-shrink-0 font-mono font-semibold leading-none tabular-nums xl:w-[62px] dark:text-white/[0.09]"
+                  >
+                    {String(i + 1).padStart(2, '0')}
                   </span>
-                </div>
-                <div>
-                  <p className="mb-1 font-sans text-[14px] font-semibold text-[#111] xl:text-[15px] dark:text-white">
-                    {t(
-                      `type${cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}Title` as 'typeGuidesTitle',
-                    )}
-                  </p>
-                  <p className="font-body text-[11px] leading-[1.5] text-[#6b7280] xl:text-[12px] dark:text-white/50">
-                    {t(
-                      `type${cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}Desc` as 'typeGuidesDesc',
-                    )}
-                  </p>
-                </div>
-              </Link>
+
+                  <div className="flex flex-1 flex-col gap-1.5">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                      {row.level && (
+                        <span className="inline-flex items-center gap-1.5">
+                          <span
+                            className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${LEVEL_DOT[row.level]}`}
+                          />
+                          <span className="text-eyebrow text-muted font-mono">
+                            {t(row.level as 'levelBeginner')}
+                          </span>
+                        </span>
+                      )}
+                      <span className="text-caption text-muted/70 font-mono tabular-nums">
+                        {row.count}
+                      </span>
+                    </div>
+                    <p className="link-underline text-title group-hover:text-accent text-foreground w-fit font-sans font-semibold transition-colors">
+                      {row.title}
+                    </p>
+                    <p className="font-body text-body text-muted line-clamp-1 max-w-[560px]">
+                      {row.desc}
+                    </p>
+                  </div>
+
+                  <span className="text-muted group-hover:text-accent transition-colors">
+                    {chevron}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Watch and listen — media formats as ink-art cards */}
+      <section className="px-5 pb-12">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal>
+            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+              {t('mediaKicker')}
+            </SectionKicker>
+            <h2 className="text-foreground text-headline mb-6 font-sans">{t('mediaHeading')}</h2>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {mediaTrack.map((row, j) => (
+              <ScrollReveal key={row.id} index={j}>
+                <Link
+                  href={`/${locale}${row.href}`}
+                  className="group relative block h-[188px] overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#0A130E] shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)] ring-1 ring-inset ring-white/[0.06] transition-colors hover:border-accent/45 xl:h-[212px]"
+                >
+                  <img
+                    src="/images/edge-flow.jpg"
+                    alt=""
+                    aria-hidden="true"
+                    style={{ objectPosition: row.crop }}
+                    className="absolute inset-0 h-full w-full object-cover opacity-[0.5] transition-opacity duration-300 group-hover:opacity-[0.72]"
+                  />
+                  {/* Green-black scrim anchoring the text zone */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#03130B]/[0.92] via-[#03130B]/[0.38] to-[#03130B]/[0.12]" />
+
+                  {/* Ghost numeral bleeding off the top corner (04..06) */}
+                  <span
+                    dir="ltr"
+                    className="pointer-events-none absolute top-1 end-4 select-none font-mono text-[84px] font-bold leading-none text-white/[0.08]"
+                  >
+                    {String(readingTrack.length + j + 1).padStart(2, '0')}
+                  </span>
+
+                  <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-5">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-[13px] border border-white/[0.16] bg-white/[0.08] text-white backdrop-blur">
+                      {CATEGORY_ICONS[row.id]}
+                    </div>
+                    <div className="flex items-end justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="font-sans text-[17px] font-semibold leading-tight text-white">
+                          {row.title}
+                        </p>
+                        <p className="font-body text-caption mt-1 text-white/[0.72]">{row.desc}</p>
+                      </div>
+                      <span className="text-caption inline-flex flex-shrink-0 items-center rounded-full border border-white/[0.14] bg-white/[0.09] px-2.5 py-1 font-mono tabular-nums text-white/80 backdrop-blur">
+                        {row.count}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Featured this week */}
-      <section className="bg-transparent px-5 pb-10 pt-8">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
-            {t('featuredKicker')}
-          </SectionKicker>
-          <div className="flex flex-col divide-y divide-[#e9e9e6] dark:divide-white/[0.06]">
+      {/* Featured this week — editorial divider rows */}
+      <section className="px-5 pb-12 pt-2">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal>
+            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+              {t('featuredKicker')}
+            </SectionKicker>
+          </ScrollReveal>
+          <div className="flex flex-col divide-y divide-[#E6ECE8] dark:divide-white/[0.06]">
             {(cmsFeatured ?? FEATURED).map((article, idx) => (
-              <Link
-                key={article.id}
-                href={`/${locale}${article.href}`}
-                className="group flex items-center gap-4 py-5 first:pt-0 last:pb-0 xl:py-6"
-              >
-                {/* Numbered or colored indicator */}
-                <div className="hidden h-[64px] w-[64px] flex-shrink-0 overflow-hidden rounded-[12px] bg-gradient-to-br from-[#0d2b1a] to-[#111] xl:flex xl:items-center xl:justify-center">
-                  <span className="text-accent/60 font-mono text-[22px] font-bold">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
-                </div>
-
-                {/* Content */}
-                <div className="flex flex-1 flex-col gap-1.5">
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${article.tagClass}`}
-                    >
-                      {tagLabel(article.tag)}
-                    </span>
-                    {'readTime' in article && (
-                      <span className="font-mono text-[9px] text-[#9ca3af]">
-                        · {(article as (typeof FEATURED)[0]).readTime} read
+              <ScrollReveal key={article.id} index={idx}>
+                <Link
+                  href={`/${locale}${article.href}`}
+                  className="group flex items-start gap-4 py-5 xl:gap-6 xl:py-6"
+                >
+                  <div className="flex flex-1 flex-col gap-1.5">
+                    <div className="flex items-center gap-2.5">
+                      <span
+                        className={`text-eyebrow inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono ${
+                          article.tag === 'NEW'
+                            ? 'border-accent/30 text-accent'
+                            : 'border-border text-muted dark:border-white/15'
+                        }`}
+                      >
+                        {article.tag === 'NEW' && (
+                          <span className="bg-accent h-1 w-1 rounded-full" />
+                        )}
+                        {tagLabel(article.tag)}
                       </span>
-                    )}
+                      {'readTime' in article && (
+                        <span className="text-caption text-muted/70 font-mono tabular-nums">
+                          {(article as (typeof FEATURED)[0]).readTime}
+                        </span>
+                      )}
+                    </div>
+                    <p className="link-underline text-title group-hover:text-accent text-foreground w-fit font-sans font-semibold transition-colors">
+                      {article.title}
+                    </p>
+                    <p className="font-body text-body text-muted line-clamp-2 max-w-[640px]">
+                      {article.desc}
+                    </p>
                   </div>
-                  <p className="group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] text-[#111] transition-colors xl:text-[16px] dark:text-white">
-                    {article.title}
-                  </p>
-                  <p className="font-body line-clamp-2 text-[12px] leading-[1.55] text-[#6b7280] xl:text-[13px] dark:text-white/50">
-                    {article.desc}
-                  </p>
-                </div>
 
+                  <span className="text-muted group-hover:text-accent mt-1.5 transition-colors">
+                    {chevron}
+                  </span>
+                </Link>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter CTA — ink-band dark closer */}
+      <section className="ink-band relative overflow-hidden rounded-t-[32px] px-5 pb-12 pt-10 xl:pb-16 xl:pt-14">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal>
+            <SectionKicker className="[&>span:first-child]:bg-accent-bright text-accent-bright mb-4">
+              {t('inboxKicker')}
+            </SectionKicker>
+            <h2 className="text-headline-sm mb-2 font-sans text-white">{t('inboxHeading')}</h2>
+            <p className="font-body text-body mb-6 text-white/60">{t('inboxDesc')}</p>
+            {submitted ? (
+              <div className="bg-accent/20 flex max-w-[560px] items-center gap-3 rounded-[14px] px-4 py-4">
                 <svg
-                  width="7"
-                  height="12"
-                  viewBox="0 0 7 12"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 20 20"
                   fill="none"
-                  className="group-hover:text-accent mb-0.5 flex-shrink-0 text-[#9ca3af] transition-colors dark:text-white/30"
+                  className="text-accent-bright flex-shrink-0"
+                  aria-hidden="true"
                 >
                   <path
-                    d="M1 1L6 6L1 11"
+                    d="M4 10l4 4 8-8"
                     stroke="currentColor"
-                    strokeWidth="1.5"
+                    strokeWidth="1.75"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
                 </svg>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Newsletter CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
-            {t('inboxKicker')}
-          </SectionKicker>
-          <h2 className="mb-2 font-sans text-[28px] font-semibold leading-[1.1] text-white">
-            {t('inboxHeading')}
-          </h2>
-          <p className="font-body mb-6 text-[13px] leading-relaxed text-white/60">
-            {t('inboxDesc')}
-          </p>
-          {submitted ? (
-            <div className="bg-accent/20 flex items-center gap-3 rounded-[14px] px-4 py-4">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 20 20"
-                fill="none"
-                className="text-accent flex-shrink-0"
-              >
-                <path
-                  d="M4 10l4 4 8-8"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                <span className="font-body text-body text-white">{t('inboxSuccess')}</span>
+              </div>
+            ) : (
+              <form onSubmit={handleSubscribe} className="flex max-w-[560px] gap-2">
+                <input
+                  type="email"
+                  required
+                  placeholder={t('inboxPlaceholder')}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="font-body text-body focus:border-accent-bright flex-1 rounded-full border border-white/20 bg-white/[0.07] px-4 py-3 text-white placeholder-white/40 outline-none transition-colors"
                 />
-              </svg>
-              <span className="font-body text-[14px] text-white">{t('inboxSuccess')}</span>
-            </div>
-          ) : (
-            <form onSubmit={handleSubscribe} className="flex gap-2">
-              <input
-                type="email"
-                required
-                placeholder={t('inboxPlaceholder')}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="font-body focus:border-accent flex-1 rounded-full border border-white/20 bg-white/[0.07] px-4 py-3 text-[13px] text-white placeholder-white/40 outline-none"
-              />
-              <button
-                type="submit"
-                className="bg-accent hover:bg-accent/90 font-body flex-shrink-0 rounded-full px-5 py-3 text-[13px] font-medium text-white transition-colors"
-              >
-                {t('inboxBtn')}
-              </button>
-            </form>
-          )}
+                <button
+                  type="submit"
+                  className="bg-accent hover:bg-accent-bright font-body text-body active:scale-[0.98] flex-shrink-0 rounded-full px-5 py-3 font-medium text-white transition-all"
+                >
+                  {t('inboxBtn')}
+                </button>
+              </form>
+            )}
+          </ScrollReveal>
         </div>
       </section>
     </>

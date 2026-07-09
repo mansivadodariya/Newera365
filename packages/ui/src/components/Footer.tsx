@@ -34,7 +34,6 @@ function Footer({
   paymentMethods,
   regulatoryDisclosure,
   companyRegistration,
-  liveChatUrl,
 }: {
   riskDisclaimer?: string | null;
   socialLinks?: CmsSocialLinks;
@@ -42,7 +41,6 @@ function Footer({
   paymentMethods?: string[];
   regulatoryDisclosure?: string | null;
   companyRegistration?: string | null;
-  liveChatUrl?: string | null;
 }) {
   const locale = useLocale();
   const t = useTranslations('footer');
@@ -76,17 +74,12 @@ function Footer({
       heading: t('headingCompany'),
       items: [
         { label: t('linkAbout'), href: '/company/about' },
-        { label: t('linkCareers'), href: '/company/careers' },
-        { label: t('linkAwards'), href: '/company/awards' },
-        { label: t('linkMedia'), href: '/education/media' },
       ],
     },
     {
       heading: t('headingSupport'),
       items: [
-        { label: t('linkContact'), href: '/contact' },
-        { label: t('linkFaqs'), href: '/faqs' },
-        { label: t('linkLiveChat'), href: '/live-chat' },
+        { label: t('linkSupport'), href: '/support' },
         { label: t('linkLegal'), href: '/legal' },
       ],
     },
@@ -110,7 +103,7 @@ function Footer({
               className="mb-[18px]"
             />
 
-            <p className="font-body mb-8 max-w-[280px] text-[13px] leading-[155%] text-[rgba(255,255,255,0.55)]">
+            <p className="font-body mb-8 max-w-[300px] text-[14px] leading-[160%] text-[rgba(255,255,255,0.55)]">
               {t('tagline')}
             </p>
 
@@ -147,7 +140,7 @@ function Footer({
           <div className="mb-10 grid grid-cols-2 gap-x-6 gap-y-8 xl:mb-0 xl:flex-1 xl:grid-cols-4 xl:gap-x-8">
             {columns.map((col) => (
               <div key={col.heading}>
-                <p className="mb-3 font-mono text-[10px] font-medium uppercase leading-[100%] tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+                <p className="mb-3 font-mono text-[11px] font-medium uppercase leading-[100%] tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
                   {col.heading}
                 </p>
                 <ul className="flex flex-col gap-[8px]">
@@ -155,7 +148,7 @@ function Footer({
                     <li key={item.href}>
                       <Link
                         href={item.href.startsWith('http') ? item.href : `/${locale}${item.href}`}
-                        className="font-body text-[13px] font-normal leading-[100%] text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
+                        className="font-body text-[14px] font-normal leading-[110%] text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
                       >
                         {item.label}
                       </Link>
@@ -181,38 +174,38 @@ function Footer({
           <div className="flex flex-col gap-8">
             {(regulatoryDisclosure || companyRegistration) && (
               <div>
-                <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+                <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
                   {t('regHeading')}
                 </p>
                 {regulatoryDisclosure && (
-                  <p className="font-body mb-3 whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.45)]">
+                  <p className="font-body mb-3 whitespace-pre-line text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.45)]">
                     {regulatoryDisclosure}
                   </p>
                 )}
                 {companyRegistration && (
-                  <p className="font-body whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.4)]">
+                  <p className="font-body whitespace-pre-line text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.4)]">
                     {companyRegistration}
                   </p>
                 )}
               </div>
             )}
             <div>
-              <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+              <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
                 {t('riskDisclosure')}
               </p>
-              <p className="font-body whitespace-pre-line text-[11px] font-normal leading-[160%] text-[rgba(255,255,255,0.45)]">
+              <p className="font-body whitespace-pre-line text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.45)]">
                 {riskDisclaimer ?? t('riskWarning')}
               </p>
             </div>
           </div>
           {/* Practical: contact details + payment methods */}
           <div className="flex flex-col gap-8">
-            {(contact?.email || contact?.phone || contact?.address || liveChatUrl) && (
+            {(contact?.email || contact?.phone || contact?.address) && (
               <div>
-                <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+                <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
                   {t('contactHeading')}
                 </p>
-                <ul className="flex flex-col gap-2 text-[13px]">
+                <ul className="flex flex-col gap-2 text-[14px]">
                   {contact?.email && (
                     <li>
                       <a
@@ -239,28 +232,12 @@ function Footer({
                   {contact?.address && (
                     <li className="font-body text-[rgba(255,255,255,0.55)]">{contact.address}</li>
                   )}
-                  {liveChatUrl && (
-                    <li>
-                      <Link
-                        href={
-                          liveChatUrl.startsWith('http') ? liveChatUrl : `/${locale}${liveChatUrl}`
-                        }
-                        className="text-accent-bright font-body inline-flex items-center gap-1.5 transition-colors hover:text-white"
-                      >
-                        <span
-                          className="bg-accent-bright h-1.5 w-1.5 rounded-full"
-                          aria-hidden="true"
-                        />
-                        {t('liveChatShortcut')}
-                      </Link>
-                    </li>
-                  )}
                 </ul>
               </div>
             )}
             {paymentMethods && paymentMethods.length > 0 && (
               <div>
-                <p className="mb-3 font-mono text-[10px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+                <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
                   {t('paymentsHeading')}
                 </p>
                 <div className="flex flex-wrap gap-2">

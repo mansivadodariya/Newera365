@@ -12,16 +12,18 @@ import { LanguageToggle } from './LanguageToggle';
 import { AuthModal, type AuthModalType } from './AuthModal';
 
 type DropdownItem = { label: string; sub: string; href: string };
+type DropdownGroup = { heading: string; items: DropdownItem[] };
 type NavItem = {
   label: string;
   href: string;
   dropdown?: DropdownItem[];
+  /** Grouped mega-panel (Education): rendered as titled columns instead of a flat list. */
+  groups?: DropdownGroup[];
   activeFor?: string[];
 };
 
 function useNavItems(t: ReturnType<typeof useTranslations<'nav'>>): NavItem[] {
   return [
-    { label: t('home'), href: '/' },
     {
       label: t('trade'),
       href: '/trade/accounts',
@@ -64,83 +66,101 @@ function useNavItems(t: ReturnType<typeof useTranslations<'nav'>>): NavItem[] {
           sub: t('platformWebtraderSub'),
           href: '/platform/webtrader',
         },
-        { label: t('platformToolsLabel'), sub: t('platformToolsSub'), href: '/tools' },
         { label: t('toolsAiCrmLabel'), sub: t('toolsAiCrmSub'), href: '/ai-crm' },
       ],
     },
     {
+      // Education absorbs the old Research and Tools tabs into one grouped panel.
       label: t('education'),
       href: '/education',
-      activeFor: ['/education', '/guides', '/glossary', '/ebooks'],
-      dropdown: [
-        { label: t('eduHubLabel'), sub: t('eduHubSub'), href: '/education' },
-        { label: t('eduGuidesLabel'), sub: t('eduGuidesSub'), href: '/guides' },
-        { label: t('eduGlossaryLabel'), sub: t('eduGlossarySub'), href: '/glossary' },
-        { label: t('eduMediaLabel'), sub: t('eduMediaSub'), href: '/education/media' },
-        { label: t('eduEbooksLabel'), sub: t('eduEbooksSub'), href: '/ebooks' },
-        { label: t('eduBlogLabel'), sub: t('eduBlogSub'), href: '/education/blog' },
+      activeFor: [
+        '/education',
+        '/guides',
+        '/glossary',
+        '/ebooks',
+        '/research',
+        '/daily-news',
+        '/newsletter',
+        '/tools',
+      ],
+      groups: [
+        {
+          heading: t('groupLearn'),
+          items: [
+            { label: t('eduHubLabel'), sub: t('eduHubSub'), href: '/education' },
+            { label: t('eduGuidesLabel'), sub: t('eduGuidesSub'), href: '/guides' },
+            { label: t('eduGlossaryLabel'), sub: t('eduGlossarySub'), href: '/glossary' },
+            { label: t('eduEbooksLabel'), sub: t('eduEbooksSub'), href: '/ebooks' },
+          ],
+        },
+        {
+          heading: t('groupResearch'),
+          items: [
+            { label: t('researchArticlesLabel'), sub: t('researchArticlesSub'), href: '/research' },
+            {
+              label: t('researchAnalystLabel'),
+              sub: t('researchAnalystSub'),
+              href: '/research/analyst-chart',
+            },
+            {
+              label: t('researchNewsletterLabel'),
+              sub: t('researchNewsletterSub'),
+              href: '/newsletter',
+            },
+          ],
+        },
+        {
+          heading: t('groupTools'),
+          items: [
+            { label: t('toolsMarginLabel'), sub: t('toolsMarginSub'), href: '/tools' },
+            { label: t('toolsCalendarLabel'), sub: t('toolsCalendarSub'), href: '/tools/calendar' },
+            {
+              label: t('toolsWatchlistLabel'),
+              sub: t('toolsWatchlistSub'),
+              href: '/tools/watchlist',
+            },
+            {
+              label: t('toolsSpreadLabel'),
+              sub: t('toolsSpreadSub'),
+              href: '/tools/spread-comparator',
+            },
+          ],
+        },
       ],
     },
     {
-      label: t('research'),
-      href: '/research',
-      activeFor: ['/research', '/daily-news', '/newsletter'],
-      dropdown: [
-        { label: t('researchArticlesLabel'), sub: t('researchArticlesSub'), href: '/research' },
-        { label: t('researchNewsLabel'), sub: t('researchNewsSub'), href: '/daily-news' },
-        {
-          label: t('researchAnalystLabel'),
-          sub: t('researchAnalystSub'),
-          href: '/research/analyst-chart',
-        },
-        {
-          label: t('researchNewsletterLabel'),
-          sub: t('researchNewsletterSub'),
-          href: '/newsletter',
-        },
-      ],
-    },
-    {
-      label: t('tools'),
-      href: '/tools',
-      activeFor: ['/tools'],
-      dropdown: [
-        { label: t('toolsMarginLabel'), sub: t('toolsMarginSub'), href: '/tools' },
-        { label: t('toolsPivotLabel'), sub: t('toolsPivotSub'), href: '/tools/pivot' },
-        { label: t('toolsProfitLabel'), sub: t('toolsProfitSub'), href: '/tools/profit' },
-        { label: t('toolsFibonacciLabel'), sub: t('toolsFibonacciSub'), href: '/tools/fibonacci' },
-        {
-          label: t('toolsSpreadLabel'),
-          sub: t('toolsSpreadSub'),
-          href: '/tools/spread-comparator',
-        },
-        { label: t('toolsWatchlistLabel'), sub: t('toolsWatchlistSub'), href: '/tools/watchlist' },
-        { label: t('toolsCalendarLabel'), sub: t('toolsCalendarSub'), href: '/tools/calendar' },
-      ],
-    },
-    {
+      // Company absorbs the old Legal & Support tab.
       label: t('company'),
       href: '/company/about',
-      activeFor: ['/company'],
+      activeFor: ['/company', '/support', '/legal'],
       dropdown: [
         { label: t('companyAboutLabel'), sub: t('companyAboutSub'), href: '/company/about' },
-        { label: t('companyCareersLabel'), sub: t('companyCareersSub'), href: '/company/careers' },
-        { label: t('companyAwardsLabel'), sub: t('companyAwardsSub'), href: '/company/awards' },
-        { label: t('companyMediaLabel'), sub: t('companyMediaSub'), href: '/company/media-press' },
-      ],
-    },
-    {
-      label: t('legalSupport'),
-      href: '/legal',
-      activeFor: ['/legal', '/faqs', '/contact', '/live-chat'],
-      dropdown: [
+        { label: t('companySupportLabel'), sub: t('companySupportSub'), href: '/support' },
         { label: t('companyLegalLabel'), sub: t('companyLegalSub'), href: '/legal' },
-        { label: t('companyFaqLabel'), sub: t('companyFaqSub'), href: '/faqs' },
-        { label: t('companyContactLabel'), sub: t('companyContactSub'), href: '/contact' },
-        { label: t('companyChatLabel'), sub: t('companyChatSub'), href: '/live-chat' },
       ],
     },
   ];
+}
+
+function ChevronDown({ open }: { open: boolean }) {
+  return (
+    <svg
+      width="10"
+      height="10"
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden="true"
+      className={`ms-1 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+    >
+      <path
+        d="M2.5 4.5 6 8l3.5-3.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
 }
 
 function HamburgerIcon() {
@@ -151,6 +171,11 @@ function HamburgerIcon() {
     </svg>
   );
 }
+
+// Shared square-chip styling for the header utility buttons (theme toggle,
+// hamburger) and the language toggle. Keep in sync with LanguageToggle.tsx.
+const CHIP =
+  'flex h-[38px] items-center justify-center rounded-xl bg-[#f4f4f5] text-foreground transition-[background-color,transform] hover:bg-[#e9e9ec] active:scale-[0.94] dark:bg-surface dark:hover:bg-white/[0.06]';
 
 function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -165,46 +190,38 @@ function ThemeToggle() {
     <button
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className="text-foreground dark:bg-surface flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-xl bg-[#f4f4f5] transition-colors"
+      className={`${CHIP} w-[38px] flex-shrink-0`}
     >
       {isDark ? (
         <svg
-          width="15"
-          height="15"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           aria-hidden="true"
           style={{ display: 'block' }}
         >
-          <circle
-            cx="12"
-            cy="12"
-            r="4"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
+          <circle cx="12" cy="12" r="4.4" stroke="currentColor" strokeWidth="1.8" />
           <path
-            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+            d="M12 2.6v2.1M12 19.3v2.1M4.7 4.7l1.5 1.5M17.8 17.8l1.5 1.5M2.6 12h2.1M19.3 12h2.1M4.7 19.3l1.5-1.5M17.8 6.2l1.5-1.5"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.8"
             strokeLinecap="round"
           />
         </svg>
       ) : (
         <svg
-          width="15"
-          height="15"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           aria-hidden="true"
           style={{ display: 'block' }}
         >
           <path
-            d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+            d="M20.5 13.4A8.3 8.3 0 1 1 10.6 3.5 6.6 6.6 0 0 0 20.5 13.4Z"
             stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
+            strokeWidth="1.8"
             strokeLinejoin="round"
           />
         </svg>
@@ -219,6 +236,7 @@ function DesktopNavItem({
   item,
   locale,
   pathname,
+  isOpen,
   setRef,
   onOpen,
   onScheduleClose,
@@ -226,6 +244,7 @@ function DesktopNavItem({
   item: NavItem;
   locale: string;
   pathname: string;
+  isOpen: boolean;
   setRef: (el: HTMLDivElement | null) => void;
   onOpen: () => void;
   onScheduleClose: () => void;
@@ -235,6 +254,8 @@ function DesktopNavItem({
     : item.href === '/'
       ? pathname === `/${locale}` || pathname === `/${locale}/`
       : pathname.startsWith(`/${locale}${item.href}`);
+
+  const hasMenu = Boolean(item.dropdown || item.groups);
 
   return (
     <div
@@ -250,13 +271,49 @@ function DesktopNavItem({
         }`}
       >
         {item.label}
+        {hasMenu && <ChevronDown open={isOpen} />}
       </Link>
     </div>
   );
 }
 
-// Two-column panel for the larger menus, single column otherwise.
-const panelWidth = (item: NavItem | null) => ((item?.dropdown?.length ?? 0) > 4 ? 460 : 264);
+// A single dropdown row — shared by the flat menus and the grouped mega-panel.
+function DropdownLink({
+  d,
+  isActive,
+  locale,
+  onClose,
+}: {
+  d: DropdownItem;
+  isActive: boolean;
+  locale: string;
+  onClose: () => void;
+}) {
+  return (
+    <Link
+      href={`/${locale}${d.href}`}
+      onClick={onClose}
+      className={`block rounded-[10px] px-3 py-[9px] transition-colors ${
+        isActive ? 'bg-accent/[0.08]' : 'hover:bg-background dark:hover:bg-white/[0.06]'
+      }`}
+    >
+      <span
+        className={`font-body block text-[15px] font-medium leading-[1.2] ${
+          isActive ? 'text-accent' : 'dark:text-foreground text-[#1a1a1c]'
+        }`}
+      >
+        {d.label}
+      </span>
+      <span className="font-body dark:text-muted mt-[2px] block text-[13px] leading-[1.35] text-[#6b6b73]">
+        {d.sub}
+      </span>
+    </Link>
+  );
+}
+
+// Grouped mega-panel (Education) is widest; two-column for the larger flat menus.
+const panelWidth = (item: NavItem | null) =>
+  item?.groups ? 720 : (item?.dropdown?.length ?? 0) > 4 ? 460 : 264;
 
 function HeaderDemo() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -276,9 +333,12 @@ function HeaderDemo() {
   const activeItem = openNav ? (displayNav.find((i) => i.label === openNav) ?? null) : null;
   const twoCol = panelWidth(activeItem) === 460;
   // Highlight the single most-specific dropdown row for the current route.
+  const activeDropdownItems = activeItem?.groups
+    ? activeItem.groups.flatMap((g) => g.items)
+    : (activeItem?.dropdown ?? []);
   const activeDropdownHref =
-    activeItem?.dropdown
-      ?.map((d) => d.href)
+    activeDropdownItems
+      .map((d) => d.href)
       .filter((h) => pathname === `/${locale}${h}` || pathname.startsWith(`/${locale}${h}/`))
       .sort((a, b) => b.length - a.length)[0] ?? null;
 
@@ -323,8 +383,8 @@ function HeaderDemo() {
     const item = displayNav.find((i) => i.label === label);
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     if (openTimerRef.current) clearTimeout(openTimerRef.current);
-    // Menu-less item (Home) → close any open panel.
-    if (!item?.dropdown) {
+    // Menu-less item → close any open panel.
+    if (!item?.dropdown && !item?.groups) {
       setOpenNav(null);
       return;
     }
@@ -354,16 +414,33 @@ function HeaderDemo() {
   return (
     <>
       <header
-        className={`border-border sticky top-0 z-40 w-full border-b backdrop-blur-md transition-[height,background-color,box-shadow] duration-300 ${
+        className={`border-border sticky top-0 z-40 w-full border-b transition-[height,box-shadow] duration-300 ${
           scrolled
-            ? 'h-[60px] bg-white/80 shadow-[0px_8px_24px_-6px_rgba(0,0,0,0.12)] dark:bg-[#07090d]/80'
-            : 'h-[72px] bg-white/90 shadow-[0px_2px_4px_rgba(0,0,0,0.05)] dark:bg-[#07090d]/90'
+            ? 'h-[60px] shadow-[0px_8px_24px_-6px_rgba(0,0,0,0.12)]'
+            : 'h-[72px] shadow-[0px_2px_4px_rgba(0,0,0,0.05)]'
         }`}
       >
-        <div className="flex h-full items-center justify-between px-5 xl:px-[80px]">
-          {/* Left: Logo + desktop nav */}
-          <div className="flex h-full items-center gap-11">
-            <Link href={`/${locale}`} aria-label="NewEra365 — go to home" className="flex-shrink-0">
+        {/* Blur + tint live on a layer confined to the bar — NOT on the <header>
+            element. A backdrop-filter on <header> would make it a backdrop root
+            and silently kill the dropdown's own blur (nested backdrop-filter is
+            a no-op). Keeping the header filter-free lets the dropdown below
+            frost the page exactly like this bar does. */}
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 -z-10 backdrop-blur-md transition-colors duration-300 ${
+            scrolled ? 'bg-white/80 dark:bg-[#07090d]/80' : 'bg-white/90 dark:bg-[#07090d]/90'
+          }`}
+        />
+        {/* Mobile: flex row (logo left, controls right). The 3-column grid only
+            engages at xl — on mobile the middle nav is display:none, which under
+            grid auto-placement pulled the right-hand controls into the centre. */}
+        <div className="flex h-full items-center justify-between px-5 xl:grid xl:grid-cols-[1fr_auto_1fr] xl:px-[80px]">
+          {/* Left: Logo */}
+          <Link
+            href={`/${locale}`}
+            aria-label="NewEra365, go to home"
+            className="flex-shrink-0 justify-self-start"
+          >
               <Image
                 src="/images/logo-light.png"
                 alt="NewEra365"
@@ -384,7 +461,7 @@ function HeaderDemo() {
 
             <nav
               ref={navRef}
-              className="relative hidden h-full items-center gap-7 xl:flex"
+              className="relative hidden h-full items-center justify-center gap-7 justify-self-center xl:flex"
               aria-label="Main navigation"
             >
               {displayNav.map((item) => (
@@ -393,6 +470,7 @@ function HeaderDemo() {
                   item={item}
                   locale={locale}
                   pathname={pathname}
+                  isOpen={openNav === item.label}
                   setRef={(el) => (triggerRefs.current[item.label] = el)}
                   onOpen={() => openMenu(item.label)}
                   onScheduleClose={scheduleClose}
@@ -404,7 +482,7 @@ function HeaderDemo() {
                   item popping in/out at a new spot. */}
               <MotionConfig reducedMotion="user">
                 <AnimatePresence>
-                  {activeItem?.dropdown && (
+                  {(activeItem?.dropdown || activeItem?.groups) && (
                     <motion.div
                       key="nav-dropdown"
                       layout
@@ -420,7 +498,7 @@ function HeaderDemo() {
                       style={{ left: panelX }}
                       className="absolute top-full z-50 pt-3"
                     >
-                      <div className="bg-background border-border overflow-hidden rounded-[16px] border p-2 shadow-[0px_16px_40px_-8px_rgba(0,0,0,0.18)] dark:shadow-[0px_16px_40px_-8px_rgba(0,0,0,0.6)]">
+                      <div className="border-border overflow-hidden rounded-[16px] border bg-white/90 p-2 shadow-[0px_16px_40px_-8px_rgba(0,0,0,0.18)] backdrop-blur-md dark:bg-[#07090d]/90 dark:shadow-[0px_16px_40px_-8px_rgba(0,0,0,0.6)]">
                         <AnimatePresence mode="popLayout" initial={false}>
                           <motion.div
                             key={activeItem.label}
@@ -429,34 +507,40 @@ function HeaderDemo() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.12, ease: 'easeOut' }}
-                            className={twoCol ? 'grid w-[460px] grid-cols-2 gap-1' : 'w-[264px]'}
+                            className={
+                              activeItem.groups
+                                ? 'grid w-[720px] grid-cols-3 gap-2'
+                                : twoCol
+                                  ? 'grid w-[460px] grid-cols-2 gap-1'
+                                  : 'w-[264px]'
+                            }
                           >
-                            {activeItem.dropdown.map((d) => {
-                              const isDropdownActive = d.href === activeDropdownHref;
-                              return (
-                                <Link
-                                  key={d.href}
-                                  href={`/${locale}${d.href}`}
-                                  onClick={closeNow}
-                                  className={`block rounded-[10px] px-3 py-[9px] transition-colors ${
-                                    isDropdownActive ? 'bg-accent/[0.08]' : 'hover:bg-surface'
-                                  }`}
-                                >
-                                  <span
-                                    className={`font-body block text-[14px] font-medium leading-[1.2] ${
-                                      isDropdownActive
-                                        ? 'text-accent'
-                                        : 'dark:text-foreground text-[#1a1a1c]'
-                                    }`}
-                                  >
-                                    {d.label}
-                                  </span>
-                                  <span className="font-body dark:text-muted mt-[2px] block text-[12px] leading-[1.3] text-[#6b6b73]">
-                                    {d.sub}
-                                  </span>
-                                </Link>
-                              );
-                            })}
+                            {activeItem.groups
+                              ? activeItem.groups.map((g) => (
+                                  <div key={g.heading} className="flex flex-col">
+                                    <span className="font-body text-muted block px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-[0.08em]">
+                                      {g.heading}
+                                    </span>
+                                    {g.items.map((d) => (
+                                      <DropdownLink
+                                        key={d.href}
+                                        d={d}
+                                        isActive={d.href === activeDropdownHref}
+                                        locale={locale}
+                                        onClose={closeNow}
+                                      />
+                                    ))}
+                                  </div>
+                                ))
+                              : activeItem.dropdown?.map((d) => (
+                                  <DropdownLink
+                                    key={d.href}
+                                    d={d}
+                                    isActive={d.href === activeDropdownHref}
+                                    locale={locale}
+                                    onClose={closeNow}
+                                  />
+                                ))}
                           </motion.div>
                         </AnimatePresence>
                       </div>
@@ -465,16 +549,17 @@ function HeaderDemo() {
                 </AnimatePresence>
               </MotionConfig>
             </nav>
-          </div>
 
-          {/* Desktop right CTAs */}
-          <div className="hidden items-center gap-3 xl:flex">
+          {/* Right: actions cluster (desktop CTAs / mobile controls) */}
+          <div className="flex items-center justify-self-end">
+            {/* Desktop right CTAs */}
+            <div className="hidden items-center gap-3 xl:flex">
             <LanguageToggle />
             <ThemeToggle />
-            <div className="bg-border ms-3 h-5 w-px" />
+            <div className="bg-border mx-1 h-5 w-px" />
             <button
               onClick={() => setAuthModal('demo')}
-              className="font-body text-foreground ms-1 flex min-h-[38px] items-center text-[15px] font-medium transition-opacity hover:opacity-70"
+              className="font-body text-foreground flex min-h-[38px] items-center text-[15px] font-medium transition-opacity hover:opacity-70"
             >
               {t('signIn')}
             </button>
@@ -496,10 +581,11 @@ function HeaderDemo() {
               aria-label="Open navigation menu"
               aria-expanded={menuOpen}
               aria-controls="mobile-menu-demo"
-              className="text-foreground dark:bg-surface flex h-[38px] w-[38px] items-center justify-center rounded-xl bg-[#f4f4f5]"
+              className={`${CHIP} w-[38px]`}
             >
               <HamburgerIcon />
             </button>
+          </div>
           </div>
         </div>
       </header>

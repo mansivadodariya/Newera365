@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { ScrollReveal } from './ScrollReveal';
 
 const ITEMS = [
   { titleKey: 'security1Title', subKey: 'security1Sub' },
@@ -21,6 +22,15 @@ const CELL_BORDERS = [
   '',
 ] as const;
 
+/* One safeguard glyph per cell (shield, encryption lock, segregated layers,
+   downside protection). Inline SVG keeps the ledger imagery-free but alive. */
+const ICONS = [
+  <svg key="0" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]" aria-hidden="true"><path d="M9 1.6 3 4.1v4.4c0 3.6 2.5 6.2 6 7.5 3.5-1.3 6-3.9 6-7.5V4.1L9 1.6Z" /><path d="m6.4 8.7 1.8 1.8 3.4-3.6" /></svg>,
+  <svg key="1" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]" aria-hidden="true"><rect x="3.4" y="8" width="11.2" height="7.6" rx="1.6" /><path d="M5.6 8V6.1a3.4 3.4 0 0 1 6.8 0V8" /></svg>,
+  <svg key="2" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]" aria-hidden="true"><path d="M9 2 2.6 5 9 8l6.4-3L9 2Z" /><path d="m2.6 9 6.4 3 6.4-3" /><path d="m2.6 12.6 6.4 3 6.4-3" /></svg>,
+  <svg key="3" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]" aria-hidden="true"><path d="M2.6 15.4h12.8" /><path d="M5 11.8 8 8.8l2.4 2.4L15 6.6" /></svg>,
+] as const;
+
 /**
  * "How your capital is protected" — a split panel: intro column (kicker,
  * heading, link to the legal library) beside a numbered 2×2 ledger of the four
@@ -34,7 +44,7 @@ export function SecurityTrustBand() {
 
   return (
     <section className="px-5 pb-12 pt-2 xl:pb-16">
-      <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+      <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <div className="border-border overflow-hidden rounded-[24px] border bg-white dark:bg-[#101318]">
           <div className="grid xl:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
             {/* Intro column */}
@@ -43,10 +53,10 @@ export function SecurityTrustBand() {
                 <SectionKicker className="text-foreground [&>span:first-child]:bg-accent mb-4">
                   {t('securityKicker')}
                 </SectionKicker>
-                <h2 className="text-foreground whitespace-pre-line font-sans text-[28px] font-semibold leading-[110%] tracking-[-0.56px] xl:text-[32px]">
+                <h2 className="text-foreground text-headline-sm whitespace-pre-line font-sans">
                   {t('securityHeading')}
                 </h2>
-                <p className="font-body text-muted mt-4 max-w-[42ch] text-[14px] leading-[1.6]">
+                <p className="font-body text-muted text-body mt-4 max-w-[42ch]">
                   {t('securityIntro')}
                 </p>
               </div>
@@ -77,22 +87,28 @@ export function SecurityTrustBand() {
             {/* Numbered safeguard ledger */}
             <div className="grid sm:grid-cols-2">
               {ITEMS.map(({ titleKey, subKey }, i) => (
-                <div key={titleKey} className={`border-border p-7 ${CELL_BORDERS[i]}`}>
-                  <span className="text-accent font-mono text-[11px] font-medium tracking-[0.18em]">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <h3 className="text-foreground mt-3 font-sans text-[16px] font-semibold leading-snug">
+                <div
+                  key={titleKey}
+                  className={`border-border p-7 transition-colors hover:bg-accent/[0.04] ${CELL_BORDERS[i]}`}
+                >
+                  <div className="mb-3 flex items-center gap-3">
+                    <span className="bg-accent/[0.10] text-accent flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px]">
+                      {ICONS[i]}
+                    </span>
+                    <span className="text-accent font-mono text-[11px] font-medium tracking-[0.18em]">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+                  <h3 className="text-foreground font-sans text-[17px] font-semibold leading-snug">
                     {t(titleKey)}
                   </h3>
-                  <p className="font-body text-muted mt-1.5 text-[13px] leading-[1.55]">
-                    {t(subKey)}
-                  </p>
+                  <p className="font-body text-muted text-body mt-1.5">{t(subKey)}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   );
 }

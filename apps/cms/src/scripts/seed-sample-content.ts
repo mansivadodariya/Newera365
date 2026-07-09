@@ -184,7 +184,6 @@ const SAMPLE: Dict = {
       ],
     },
   ],
-  liveChatUrl: '/live-chat',
 
   // ── Regulatory / company / risk (GENERIC placeholder — compliance must replace) ──
   regulatoryDisclosureEn:

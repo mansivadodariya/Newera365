@@ -80,7 +80,7 @@ export function StickyCtaBar() {
       >
         <div className="pointer-events-auto flex h-[56px] w-full max-w-[560px] items-center justify-between gap-3 rounded-full border border-black/[0.08] bg-white/85 p-2 ps-5 shadow-[0_16px_44px_-12px_rgba(0,0,0,0.3)] backdrop-blur-md dark:border-white/[0.1] dark:bg-[#0f1114]/85 dark:shadow-[0_16px_44px_-12px_rgba(0,0,0,0.7)]">
           <Link
-            href={`/${locale}/faqs`}
+            href={`/${locale}/support`}
             tabIndex={visible ? 0 : -1}
             className="font-body text-muted hover:text-foreground hidden items-center gap-2 text-[13px] font-medium transition-colors md:flex"
           >

@@ -402,16 +402,15 @@ async function seedSiteSettings() {
         links: [
           { label: 'About', href: '/company/about' },
           { label: 'Careers', href: '/company/careers' },
-          { label: 'Awards', href: '/company/awards' },
+          { label: 'Recognition', href: '/company/recognition' },
           { label: 'Media', href: '/education/media' },
         ],
       },
       {
         heading: 'Support',
         links: [
-          { label: 'Contact', href: '/contact' },
-          { label: 'FAQs', href: '/faqs' },
-          { label: 'Live Chat', href: '/live-chat' },
+          { label: 'Contact', href: '/support#contact' },
+          { label: 'FAQs', href: '/support' },
           { label: 'Legal', href: '/legal' },
         ],
       },
@@ -441,19 +440,155 @@ async function seedSiteSettings() {
         links: [
           { label: 'من نحن', href: '/company/about' },
           { label: 'الوظائف', href: '/company/careers' },
-          { label: 'الجوائز', href: '/company/awards' },
+          { label: 'التكريم', href: '/company/recognition' },
           { label: 'الإعلام', href: '/education/media' },
         ],
       },
       {
         heading: 'الدعم',
         links: [
-          { label: 'اتصل بنا', href: '/contact' },
-          { label: 'الأسئلة الشائعة', href: '/faqs' },
-          { label: 'الدردشة المباشرة', href: '/live-chat' },
+          { label: 'اتصل بنا', href: '/support#contact' },
+          { label: 'الأسئلة الشائعة', href: '/support' },
           { label: 'القانونية', href: '/legal' },
         ],
       },
+    ],
+    // Homepage USP metrics ("Why NewEra" band) — client USP pitch deck.
+    uspMetrics: [
+      {
+        valueEn: '< 15 ms',
+        valueAr: '< 15 ms',
+        titleEn: 'Average execution speed',
+        titleAr: 'متوسط سرعة التنفيذ',
+        descEn: 'Orders fill at real market speed, not screen speed.',
+        descAr: 'تُنفَّذ الأوامر بسرعة السوق الحقيقية، لا بسرعة الشاشة.',
+      },
+      {
+        valueEn: '24/7',
+        valueAr: '24/7',
+        titleEn: 'Support availability',
+        titleAr: 'توفر الدعم',
+        descEn: 'A human on the other end, any day of the week.',
+        descAr: 'شخص حقيقي في الطرف الآخر، في أي يوم من أيام الأسبوع.',
+      },
+      {
+        valueEn: '100%',
+        valueAr: '100%',
+        titleEn: 'Straight-to-market execution',
+        titleAr: 'تنفيذ مباشر إلى السوق',
+        descEn: 'No dealing desk intervention on client orders.',
+        descAr: 'لا تدخل من مكتب التداول في أوامر العملاء.',
+      },
+      {
+        valueEn: 'Tier-1',
+        valueAr: 'المستوى 1',
+        titleEn: 'Banking-grade liquidity',
+        titleAr: 'سيولة بمستوى مصرفي',
+        descEn: 'Pricing sourced from major global liquidity providers.',
+        descAr: 'التسعير مصدره كبار مزودي السيولة العالميين.',
+      },
+      {
+        valueEn: '0',
+        valueAr: '0',
+        titleEn: 'Re-quotes on market orders',
+        titleAr: 'إعادة تسعير على أوامر السوق',
+        descEn: 'The price you click is the price you get.',
+        descAr: 'السعر الذي تنقر عليه هو السعر الذي تحصل عليه.',
+      },
+      {
+        valueEn: '2026',
+        valueAr: '2026',
+        titleEn: 'Built for the next generation of trading',
+        titleAr: 'مصمم لجيل التداول القادم',
+        descEn: 'Modern infrastructure, not a legacy platform bolted together.',
+        descAr: 'بنية تحتية حديثة، وليست منصة قديمة مجمّعة.',
+      },
+    ],
+    // Partners / infrastructure wall — liquidity, technology, payments, data.
+    partners: [
+      {
+        groupKey: 'liquidity',
+        name: 'Scope Markets',
+        logoType: 'icon',
+        logoFilename: 'scope-markets.ico',
+      },
+      { groupKey: 'liquidity', name: 'Finalto', logoType: 'icon', logoFilename: 'finalto.png' },
+      { groupKey: 'liquidity', name: 'Equiti', logoType: 'none' },
+      { groupKey: 'liquidity', name: 'Amana', logoType: 'icon', logoFilename: 'amana.png' },
+      {
+        groupKey: 'liquidity',
+        name: 'B2Broker',
+        logoType: 'wordmark',
+        logoFilename: 'b2broker-full.svg',
+      },
+      { groupKey: 'liquidity', name: 'LMAX', logoType: 'wordmark', logoFilename: 'lmax-full.png' },
+      {
+        groupKey: 'liquidity',
+        name: 'MAZI Finance',
+        logoType: 'wordmark',
+        logoFilename: 'mazi-finance-full.png',
+      },
+      { groupKey: 'liquidity', name: 'Spectre Global', logoType: 'none' },
+      {
+        groupKey: 'liquidity',
+        name: 'Blueberry',
+        logoType: 'wordmark',
+        logoFilename: 'blueberry-full.png',
+      },
+      {
+        groupKey: 'liquidity',
+        name: 'CMS Prime',
+        logoType: 'wordmark',
+        logoFilename: 'cms-prime-full.svg',
+      },
+      { groupKey: 'technology', name: 'FXCubic', logoType: 'none' },
+      {
+        groupKey: 'technology',
+        name: 'Centroid',
+        logoType: 'wordmark',
+        logoFilename: 'centroid-full.svg',
+      },
+      { groupKey: 'technology', name: 'Tool For Broker', logoType: 'none' },
+      { groupKey: 'payments', name: 'Cregis', logoType: 'icon', logoFilename: 'cregis.png' },
+      { groupKey: 'payments', name: 'Epayme', logoType: 'none' },
+      { groupKey: 'data', name: 'Think Huge Limited', logoType: 'none' },
+      {
+        groupKey: 'data',
+        name: 'Centroid',
+        logoType: 'wordmark',
+        logoFilename: 'centroid-full.svg',
+      },
+    ],
+    // Page stat callouts (About / Funding / Support / Web Trader)
+    aboutManifestoStatValue: '100%',
+    fundingWithdrawalStatValue: '24/7',
+    supportPromiseStats: [
+      {
+        valueEn: '< 6 min',
+        valueAr: '< 6 دقائق',
+        labelEn: 'Average first response',
+        labelAr: 'متوسط أول رد',
+      },
+      { valueEn: '24/5', valueAr: '24/5', labelEn: 'Support availability', labelAr: 'توفر الدعم' },
+      { valueEn: '8', valueAr: '8', labelEn: 'Languages supported', labelAr: 'لغة مدعومة' },
+    ],
+    webTraderSpecs: [
+      {
+        valueEn: '2,000+',
+        valueAr: '+2,000',
+        labelEn: 'Tradable markets',
+        labelAr: 'أسواق قابلة للتداول',
+      },
+      {
+        valueEn: 'MetaTrader 5',
+        valueAr: 'ميتاتريدر 5',
+        labelEn: 'Platform',
+        labelAr: 'المنصة',
+      },
+      { valueEn: '21', valueAr: '21', labelEn: 'Timeframes', labelAr: 'أطر زمنية' },
+      { valueEn: '3', valueAr: '3', labelEn: 'Chart types', labelAr: 'أنواع الرسوم البيانية' },
+      { valueEn: '38+', valueAr: '+38', labelEn: 'Indicators', labelAr: 'مؤشرات' },
+      { valueEn: '6', valueAr: '6', labelEn: 'Order types', labelAr: 'أنواع الأوامر' },
     ],
   });
   console.log('   ✅ Site Settings updated');
@@ -3429,6 +3564,52 @@ async function seedIBContent() {
     wlSetupTime: '< 30 days',
     wlSpreadMarkup: 'Custom',
     wlTechStack: 'Turnkey',
+    // Hero stat band + income ladder + rebate matrix + FTD condition — global
+    // (not localized), matching the ibRateDisplay-style fields above.
+    heroStat1Value: '$5,000',
+    heroStat2Value: '15',
+    heroStat3Value: '3',
+    heroStat4Value: '4',
+    incomeLadder: [
+      { balanceLabel: '$30,000 to $50,000', minBalance: 30000, incomeValue: '$500' },
+      { balanceLabel: '$50,000 to $100,000', minBalance: 50000, incomeValue: '$750' },
+      { balanceLabel: '$100,000 to $200,000', minBalance: 100000, incomeValue: '$1,250' },
+      { balanceLabel: '$200,000 to $300,000', minBalance: 200000, incomeValue: '$2,000' },
+      { balanceLabel: '$300,000 to $400,000', minBalance: 300000, incomeValue: '$3,000' },
+      { balanceLabel: '$400,000 to $500,000', minBalance: 400000, incomeValue: '$4,000' },
+      { balanceLabel: '$500,000+', minBalance: 500000, incomeValue: '$5,000', isTopSlab: true },
+    ],
+    rebateTables: [
+      {
+        instrumentNameEn: 'Gold, XAU/USD',
+        instrumentNameAr: 'الذهب، XAU/USD',
+        rows: [
+          { spread: '7-8', commission: '10', rebate: '3' },
+          { spread: '20', commission: '0', rebate: '5' },
+          { spread: '30', commission: '0', rebate: '15' },
+        ],
+      },
+      {
+        instrumentNameEn: 'FX majors',
+        instrumentNameAr: 'أزواج الفوركس الرئيسية',
+        rows: [
+          { spread: '2-4', commission: '7', rebate: '2' },
+          { spread: '12-15', commission: '0', rebate: '4' },
+          { spread: '18-22', commission: '0', rebate: '8' },
+        ],
+      },
+      {
+        instrumentNameEn: 'Silver, XAG/USD',
+        instrumentNameAr: 'الفضة، XAG/USD',
+        rows: [
+          { spread: '15-20', commission: '10', rebate: '3' },
+          { spread: '35-45', commission: '0', rebate: '8' },
+          { spread: '50-70', commission: '0', rebate: '15' },
+        ],
+      },
+    ],
+    ftdCap: 'USD 10,000',
+    ftdMinLots: '50',
     steps: [
       {
         stepTitle: 'Apply online',

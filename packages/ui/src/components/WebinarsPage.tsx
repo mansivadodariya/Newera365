@@ -17,7 +17,7 @@ export interface WebinarItem {
   replayUrl?: string | null;
 }
 
-interface WebinarsPageProps {
+interface WebinarsSectionProps {
   webinars?: WebinarItem[];
 }
 
@@ -149,7 +149,7 @@ const STATUS_BADGE: Record<WebinarItem['status'], string> = {
   cancelled: 'bg-[#6b7280]/10 text-[#6b7280]',
 };
 
-export function WebinarsPage({ webinars = [] }: WebinarsPageProps) {
+export function WebinarsSection({ webinars = [] }: WebinarsSectionProps) {
   const t = useTranslations('webinars');
   const locale = useLocale();
   const [selected, setSelected] = useState<WebinarItem | null>(null);
@@ -160,23 +160,6 @@ export function WebinarsPage({ webinars = [] }: WebinarsPageProps) {
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-transparent px-5 pb-8 pt-9">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            {t('kicker')}
-          </SectionKicker>
-          <h1 className="text-foreground mb-4 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
-            {t('heroLine1')}
-            <br />
-            <span className="text-accent">{t('heroAccent')}</span>
-          </h1>
-          <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
-            {t('heroSubtitle')}
-          </p>
-        </div>
-      </section>
-
       {/* Upcoming */}
       {upcoming.length > 0 && (
         <section className="px-5 pb-8">
@@ -188,7 +171,7 @@ export function WebinarsPage({ webinars = [] }: WebinarsPageProps) {
               {upcoming.map((w) => (
                 <div
                   key={w.id}
-                  className="bg-surface flex flex-col gap-4 rounded-[20px] p-5 md:flex-row md:items-center md:justify-between"
+                  className="bg-surface flex flex-col gap-4 rounded-[20px] border border-transparent p-5 transition-colors duration-200 hover:border-accent/40 md:flex-row md:items-center md:justify-between"
                 >
                   <div className="flex-1">
                     <div className="mb-2 flex items-center gap-2">
@@ -234,7 +217,7 @@ export function WebinarsPage({ webinars = [] }: WebinarsPageProps) {
               {past.map((w) => (
                 <div
                   key={w.id}
-                  className="flex items-center justify-between rounded-[16px] bg-[#FAFAF9] px-4 py-3 dark:bg-[#16181d]"
+                  className="flex items-center justify-between rounded-[16px] border border-transparent bg-[#F0F4F1] px-4 py-3 transition-colors duration-200 hover:border-accent/40 dark:bg-[#16181d]"
                 >
                   <div>
                     <p className="text-foreground font-sans text-[14px] font-semibold">{w.title}</p>

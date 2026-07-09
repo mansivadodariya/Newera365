@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { ScrollReveal } from './ScrollReveal';
 import { ChartWidget } from './ChartWidget';
-import { AuthModal, AuthModalType } from './AuthModal';
 import { sameCategory } from './filterUtils';
 
 export interface CmsAnalystCallItem {
@@ -156,6 +156,22 @@ function mapCmsCall(c: CmsAnalystCallItem): PairCall {
 
 const TIMEFRAMES = ['1H', '4H', '1D', '1W'];
 
+// Desk container: mobile-first narrow, opens up on md/xl to a working spread.
+const DESK = 'mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]';
+
+// Strip the ledger prefix ("+ " / "± " / "- ") so the raw figure sits alone in mono.
+function targetValue(target: string): string {
+  return target.replace(/^[+\-±]\s*/, '');
+}
+
+function sentimentLabel(s: Sentiment, t: (key: string) => string): string {
+  return s === 'BULLISH'
+    ? t('sentimentBullish')
+    : s === 'BEARISH'
+      ? t('sentimentBearish')
+      : t('sentimentNeutral');
+}
+
 function Sparkline({ points, up }: { points: number[]; up: boolean }) {
   const w = 60;
   const h = 28;
@@ -184,26 +200,54 @@ function Sparkline({ points, up }: { points: number[]; up: boolean }) {
   );
 }
 
+// Vertical bias caret - direction is up/down, so it is NOT flipped for RTL.
+function Caret({ up }: { up: boolean }) {
+  return (
+    <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+      {up ? (
+        <path d="M5 2l3 5H2z" fill="currentColor" />
+      ) : (
+        <path d="M5 8L2 3h6z" fill="currentColor" />
+      )}
+    </svg>
+  );
+}
+
+const DARK_SENTIMENT: Record<Sentiment, string> = {
+  BULLISH: 'bg-[#00B050]/15 text-[#00B050]',
+  BEARISH: 'bg-[#EF4444]/15 text-[#EF4444]',
+  NEUTRAL: 'bg-white/10 text-white/60',
+};
+
+const SENTIMENT_STYLES: Record<Sentiment, string> = {
+  BULLISH: 'bg-[#00B050]/10 text-[#00B050]',
+  BEARISH: 'bg-[#EF4444]/10 text-[#EF4444]',
+  NEUTRAL: 'bg-[#6B7280]/10 text-[#6B7280]',
+};
+
 function FeaturedChart({ pair }: { pair: PairCall }) {
   const [tf, setTf] = useState('1D');
-  const t = useTranslations('analystChart');
 
   return (
     <div
-      className="overflow-hidden rounded-[20px] bg-[#111111]"
+      className="flex flex-col overflow-hidden rounded-[20px] border border-white/[0.06] bg-[#111111]"
       style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.12)' }}
     >
-      {/* Header row */}
+      {/* Terminal header: live symbol + timeframe selector */}
       <div className="flex items-center justify-between px-5 pt-4">
-        <p className="font-body text-[11px] uppercase tracking-[0.1em] text-white/50">
-          {pair.symbol} <span className="text-white/30">·</span> {tf}
+        <p
+          dir="ltr"
+          className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.1em] text-white/50"
+        >
+          <span className="inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#00B050]" />
+          {pair.symbol} <span className="text-white/30">/</span> {tf}
         </p>
         <div className="flex gap-1">
           {TIMEFRAMES.map((tfLabel) => (
             <button
               key={tfLabel}
               onClick={() => setTf(tfLabel)}
-              className={`font-body rounded px-2 py-[3px] text-[10px] transition-colors ${
+              className={`rounded px-2 py-[3px] font-mono text-[10px] tabular-nums transition-colors ${
                 tf === tfLabel ? 'bg-[#00B050] text-white' : 'text-white/40 hover:text-white/70'
               }`}
             >
@@ -213,9 +257,9 @@ function FeaturedChart({ pair }: { pair: PairCall }) {
         </div>
       </div>
 
-      {/* Live TradingView chart — re-keyed on symbol/interval so it remounts cleanly */}
-      <div className="mt-3 px-3">
-        <div style={{ height: 280 }}>
+      {/* Live TradingView chart - re-keyed on symbol/interval so it remounts cleanly */}
+      <div className="mt-3 flex-1 px-3 pb-4">
+        <div style={{ height: 300 }}>
           <ChartWidget
             key={`${pair.tv}-${tf}`}
             type="advanced-chart"
@@ -235,22 +279,71 @@ function FeaturedChart({ pair }: { pair: PairCall }) {
           />
         </div>
       </div>
-
-      {/* Target */}
-      <div className="flex justify-end px-5 pb-4 pt-3">
-        <span className="font-body text-[10px] uppercase tracking-[0.1em] text-white/40">
-          {t('targetLabel')} {pair.target.replace('+ ', '')}
-        </span>
-      </div>
     </div>
   );
 }
 
-const SENTIMENT_STYLES: Record<Sentiment, string> = {
-  BULLISH: 'bg-[#00B050]/10 text-[#00B050]',
-  BEARISH: 'bg-[#EF4444]/10 text-[#EF4444]',
-  NEUTRAL: 'bg-[#6B7280]/10 text-[#6B7280]',
-};
+// Terminal-ledger readout for the featured call: mono, tabular-nums, direction in accent/red.
+function ReadoutLedger({ pair }: { pair: PairCall }) {
+  const t = useTranslations('analystChart');
+  const dirColor = pair.up ? 'text-[#00B050]' : 'text-[#EF4444]';
+
+  return (
+    <div
+      className="flex h-full flex-col rounded-[20px] border border-white/[0.06] bg-[#111111] p-5"
+      style={{ boxShadow: '0 4px 32px rgba(0,176,80,0.10)' }}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-eyebrow font-mono uppercase text-white/40">{t('featuredKicker')}</p>
+          <p dir="ltr" className="text-title mt-1 font-sans font-semibold text-white">
+            {pair.symbol}
+          </p>
+        </div>
+        <span
+          className={`rounded px-2 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] ${DARK_SENTIMENT[pair.sentiment]}`}
+        >
+          {sentimentLabel(pair.sentiment, t)}
+        </span>
+      </div>
+
+      <dl className="mt-5 border-t border-white/[0.06]">
+        <div className="flex items-center justify-between border-b border-white/[0.06] py-3">
+          <dt className="text-eyebrow font-mono uppercase text-white/40">{t('lastLabel')}</dt>
+          <dd dir="ltr" className="font-mono text-[15px] tabular-nums text-white">
+            {pair.price}
+          </dd>
+        </div>
+        <div className="flex items-center justify-between border-b border-white/[0.06] py-3">
+          <dt className="text-eyebrow font-mono uppercase text-white/40">{t('targetLabel')}</dt>
+          <dd
+            dir="ltr"
+            className={`inline-flex items-center gap-1.5 font-mono text-[15px] font-semibold tabular-nums ${dirColor}`}
+          >
+            <Caret up={pair.up} />
+            {targetValue(pair.target)}
+          </dd>
+        </div>
+        <div className="flex items-center justify-between py-3">
+          <dt className="text-eyebrow font-mono uppercase text-white/40">{t('convictionLabel')}</dt>
+          <dd dir="ltr" className="font-mono text-[15px] tabular-nums text-white">
+            {pair.conf}%
+          </dd>
+        </div>
+      </dl>
+
+      {/* Conviction bar - represents the figure above, not decoration */}
+      <div className="mt-auto pt-5">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+          <div
+            className="h-full rounded-full bg-[#00B050] transition-[width] duration-500"
+            style={{ width: `${Math.max(0, Math.min(100, pair.conf))}%` }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartPageProps = {}) {
   const t = useTranslations('analystChart');
@@ -273,169 +366,205 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
     ? filtered.find((c) => c.symbol === selectedSymbol)
     : undefined;
   const featured = selectedCall ?? filtered[0] ?? calls[0]!;
-  const [authModal, setAuthModal] = useState<AuthModalType>(null);
 
   return (
     <>
-      {/* Hero */}
+      {/* Desk masthead */}
       <section className="bg-transparent px-5 pb-6 pt-9">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.08] tracking-[-1.14px]">
+        <ScrollReveal className={DESK}>
+          <SectionKicker className="[&>span:first-child]:bg-accent text-accent mb-4">
+            {t('deskKicker')}
+          </SectionKicker>
+          <h1 className="text-foreground text-display mb-3 font-sans">
             {t('heroLine1')}
             <br />
             {t('heroLine2')}
             <br />
             <span className="text-accent">{t('heroAccent')}</span>
           </h1>
-          <p className="font-body text-muted max-w-[300px] text-[14px] leading-[1.55]">
-            {t('heroSubtitle')}
-          </p>
-        </div>
+          <p className="text-body-lg text-muted max-w-[440px]">{t('heroSubtitle')}</p>
+
+          {/* Byline + timestamp - the masthead ledger line */}
+          <div className="border-border mt-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t pt-3 dark:border-white/[0.08]">
+            <p className="text-caption text-foreground">
+              <span className="font-semibold">{analyst.name}</span>
+              <span className="text-muted"> · {analyst.title}</span>
+            </p>
+            <p dir="ltr" className="text-muted font-mono text-[11px] uppercase tracking-[0.08em]">
+              {t('asOfLabel')} {analyst.updated}
+            </p>
+          </div>
+        </ScrollReveal>
       </section>
 
-      {/* Featured chart card */}
-      <section className="px-5 pb-6">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <FeaturedChart pair={featured} />
-        </div>
-      </section>
-
-      {/* Pair filter + This week's calls */}
-      <section className="px-5 pb-6">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          {/* Filter */}
+      {/* Featured call - chart terminal + readout ledger */}
+      <section className="px-5 pb-8">
+        <ScrollReveal className={DESK}>
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            {t('filterKicker')}
+            {t('featuredKicker')}
           </SectionKicker>
-          <div className="mb-5 flex flex-wrap gap-2">
-            {TABS.map((tabItem) => (
-              <button
-                key={tabItem}
-                onClick={() => setTab(tabItem)}
-                className={`font-body rounded-full px-4 py-[7px] text-[12px] font-semibold transition-colors ${
-                  tab === tabItem
-                    ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'bg-[#f3f4f6] text-[#6b7280] dark:bg-[#1c1c1c] dark:text-[#9ca3af]'
-                }`}
-              >
-                {tabItem === 'All'
-                  ? t('filterAll')
-                  : tabItem === 'Majors'
-                    ? t('filterMajors')
-                    : tabItem === 'Crosses'
-                      ? t('filterCrosses')
-                      : tabItem === 'Commodities'
-                        ? t('filterCommodities')
-                        : t('filterCrypto')}
-              </button>
-            ))}
+          <div className="grid gap-4 xl:grid-cols-[1.9fr_1fr]">
+            <FeaturedChart pair={featured} />
+            <ReadoutLedger pair={featured} />
           </div>
-
-          {/* This week's calls */}
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
-            {t('callsKicker')}
-          </SectionKicker>
-          {/* Rows are buttons: clicking a call loads it into the featured chart. */}
-          <div className="flex flex-col gap-3">
-            {filtered.map((pair) => (
-              <button
-                key={pair.symbol}
-                type="button"
-                onClick={() => setSelectedSymbol(pair.symbol)}
-                aria-pressed={pair.symbol === featured.symbol}
-                className={`focus-visible:ring-accent flex w-full cursor-pointer items-center justify-between rounded-[14px] border px-4 py-3 text-start transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 ${
-                  pair.symbol === featured.symbol
-                    ? 'border-accent/50 bg-accent/[0.06] dark:bg-accent/[0.08]'
-                    : 'hover:border-accent/30 border-transparent bg-[#FAFAF9] dark:bg-[#16181d]'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <Sparkline points={pair.sparkPoints} up={pair.up} />
-                  <div>
-                    <p className="text-foreground font-sans text-[13px] font-semibold">
-                      {pair.symbol}
-                    </p>
-                    <span
-                      className={`font-body rounded-full px-2 py-[2px] text-[10px] font-semibold ${SENTIMENT_STYLES[pair.sentiment]}`}
-                    >
-                      {pair.sentiment === 'BULLISH'
-                        ? t('sentimentBullish')
-                        : pair.sentiment === 'BEARISH'
-                          ? t('sentimentBearish')
-                          : t('sentimentNeutral')}
-                    </span>
-                  </div>
-                </div>
-                <div className="text-end">
-                  <p className="text-foreground font-mono text-[13px] font-semibold">
-                    {pair.price}
-                  </p>
-                  <p className="font-body text-[11px] text-[#6B7280]">
-                    {t('targetLabel')} {pair.target} · {pair.conf}%
-                  </p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
+        </ScrollReveal>
       </section>
 
-      {/* Analyst commentary */}
-      <section className="px-5 pb-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+      {/* This week's calls - the desk blotter */}
+      <section className="px-5 pb-8">
+        <ScrollReveal className={DESK}>
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <SectionKicker className="[&>span:first-child]:bg-muted text-muted">
+              {t('callsKicker')}
+            </SectionKicker>
+            <div className="flex flex-wrap gap-2">
+              {TABS.map((tabItem) => (
+                <button
+                  key={tabItem}
+                  onClick={() => setTab(tabItem)}
+                  className={`rounded-full px-3.5 py-[6px] font-mono text-[11px] font-semibold uppercase tracking-[0.06em] transition-colors ${
+                    tab === tabItem
+                      ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                      : 'text-muted hover:text-foreground bg-[#F0F4F1] dark:bg-[#16181d] dark:hover:text-white'
+                  }`}
+                >
+                  {tabItem === 'All'
+                    ? t('filterAll')
+                    : tabItem === 'Majors'
+                      ? t('filterMajors')
+                      : tabItem === 'Crosses'
+                        ? t('filterCrosses')
+                        : tabItem === 'Commodities'
+                          ? t('filterCommodities')
+                          : t('filterCrypto')}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Ledger card: column masthead + hairline rows. Rows load the featured chart. */}
+          <div className="border-border shadow-card overflow-hidden rounded-[20px] border bg-white dark:border-white/[0.08] dark:bg-[#111318] dark:shadow-none">
+            {/* Column masthead */}
+            <div className="border-border text-muted hidden items-center justify-between border-b px-5 py-2.5 sm:flex dark:border-white/[0.06]">
+              <span className="text-eyebrow font-mono uppercase">{t('instrumentLabel')}</span>
+              <span className="text-eyebrow font-mono uppercase">
+                {t('lastLabel')} <span className="mx-1 opacity-40">/</span> {t('targetLabel')}
+              </span>
+            </div>
+
+            <div className="divide-border divide-y dark:divide-white/[0.06]">
+              {filtered.map((pair) => {
+                const active = pair.symbol === featured.symbol;
+                return (
+                  <button
+                    key={pair.symbol}
+                    type="button"
+                    onClick={() => setSelectedSymbol(pair.symbol)}
+                    aria-pressed={active}
+                    className={`focus-visible:ring-accent flex w-full cursor-pointer items-center justify-between border-s-2 px-5 py-3.5 text-start transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 ${
+                      active
+                        ? 'border-accent bg-accent/[0.06] dark:bg-accent/[0.08]'
+                        : 'hover:border-accent/40 hover:bg-accent/[0.03] border-transparent'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3.5">
+                      <Sparkline points={pair.sparkPoints} up={pair.up} />
+                      <div>
+                        <p
+                          dir="ltr"
+                          className="text-foreground font-sans text-[14px] font-semibold"
+                        >
+                          {pair.symbol}
+                        </p>
+                        <span
+                          className={`mt-0.5 inline-block rounded px-1.5 py-[2px] font-mono text-[9px] font-semibold uppercase tracking-[0.06em] ${SENTIMENT_STYLES[pair.sentiment]}`}
+                        >
+                          {sentimentLabel(pair.sentiment, t)}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4 sm:gap-6">
+                      <span
+                        dir="ltr"
+                        className="text-foreground hidden font-mono text-[13px] tabular-nums sm:inline"
+                      >
+                        {pair.price}
+                      </span>
+                      <span
+                        dir="ltr"
+                        className={`inline-flex items-center gap-1 font-mono text-[13px] font-semibold tabular-nums ${
+                          pair.up ? 'text-[#00B050]' : 'text-[#EF4444]'
+                        }`}
+                      >
+                        <Caret up={pair.up} />
+                        {targetValue(pair.target)}
+                      </span>
+                      <span className="text-muted w-9 text-end font-mono text-[12px] tabular-nums">
+                        {pair.conf}%
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </ScrollReveal>
+      </section>
+
+      {/* Analyst commentary - the research note */}
+      <section className="px-5 pb-14">
+        <ScrollReveal className={DESK}>
           <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
             {t('commentaryLabel')}
           </SectionKicker>
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
-              <span className="font-sans text-[13px] font-semibold text-white">
-                {analyst.initials}
-              </span>
-            </div>
-            <div>
-              <p className="text-foreground font-sans text-[14px] font-semibold">{analyst.name}</p>
-              <p className="font-body text-muted text-[11px]">
-                {analyst.title} · {analyst.updated}
-              </p>
+          <div className="border-border shadow-card rounded-[20px] border bg-white p-6 md:p-8 xl:p-10 dark:border-white/[0.08] dark:bg-[#111318] dark:shadow-none">
+            <div className="grid gap-8 xl:grid-cols-[2fr_1fr] xl:gap-10">
+              {/* The note: a pulled call-out quote with an accent margin rule */}
+              <blockquote className="relative">
+                <span
+                  aria-hidden="true"
+                  className="text-accent/25 absolute -top-3 start-0 select-none font-sans text-[64px] leading-none"
+                >
+                  &ldquo;
+                </span>
+                <p className="border-accent text-foreground text-lead border-s-2 ps-5 pt-6 font-sans leading-[1.75]">
+                  {analyst.commentary}
+                </p>
+              </blockquote>
+
+              {/* Margin: who signed it */}
+              <div className="border-border border-t pt-6 xl:border-s xl:border-t-0 xl:ps-8 xl:pt-0 dark:border-white/[0.08]">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#111111]">
+                    <span className="font-sans text-[13px] font-semibold text-white">
+                      {analyst.initials}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-foreground font-sans text-[14px] font-semibold">
+                      {analyst.name}
+                    </p>
+                    <p className="text-muted text-caption">{analyst.title}</p>
+                  </div>
+                </div>
+
+                <dl className="border-border mt-5 border-t pt-4 dark:border-white/[0.08]">
+                  <div className="flex items-center justify-between">
+                    <dt className="text-eyebrow text-muted font-mono uppercase">
+                      {t('asOfLabel')}
+                    </dt>
+                    <dd dir="ltr" className="text-foreground font-mono text-[12px] tabular-nums">
+                      {analyst.updated}
+                    </dd>
+                  </div>
+                </dl>
+
+                <p className="text-muted text-caption mt-5">{t('noteDisclaimer')}</p>
+              </div>
             </div>
           </div>
-          <p className="font-body text-foreground mt-4 text-[14px] leading-[1.7]">
-            {analyst.commentary}
-          </p>
-        </div>
+        </ScrollReveal>
       </section>
-
-      {/* CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="mx-auto max-w-[390px] text-center md:max-w-2xl xl:max-w-[1200px]">
-          <h2 className="mb-2 font-sans text-[28px] font-semibold leading-[1.1] text-white xl:text-[36px]">
-            {t('ctaHeading')}
-          </h2>
-          <p className="font-body mb-7 text-[14px] text-white/60">{t('ctaDesc')}</p>
-          <button
-            onClick={() => setAuthModal('register')}
-            className="bg-accent font-body hover:bg-accent/90 inline-flex h-[52px] items-center justify-center gap-2 rounded-full px-8 text-[14px] font-medium text-white transition-colors"
-          >
-            {t('ctaBtn')}
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 16 16"
-              fill="none"
-              className="rtl:-scale-x-100"
-            >
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
-      </section>
-      <AuthModal type={authModal} onClose={() => setAuthModal(null)} />
     </>
   );
 }

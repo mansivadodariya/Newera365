@@ -1,7 +1,7 @@
 import { setRequestLocale } from 'next-intl/server';
 import { AboutPage, CtaBanner } from '@newera365/ui';
 import type { CmsTeamMemberItem, CmsMilestoneItem } from '@newera365/ui';
-import { getTeamMembers, getMilestones } from '@/lib/cms';
+import { getTeamMembers, getMilestones, getSiteSettings } from '@/lib/cms';
 import type { CmsTeamMember, CmsMedia, CmsMilestone } from '@/lib/cms';
 import type { Metadata } from 'next';
 
@@ -32,15 +32,17 @@ function mapMilestone(m: CmsMilestone): CmsMilestoneItem {
 
 export default async function AboutRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  const [members, milestones] = await Promise.all([
+  const [members, milestones, siteSettings] = await Promise.all([
     getTeamMembers(params.locale),
     getMilestones(params.locale),
+    getSiteSettings(),
   ]);
   return (
     <>
       <AboutPage
         team={members.length > 0 ? members.map(mapTeamMember) : undefined}
         milestones={milestones.length > 0 ? milestones.map(mapMilestone) : undefined}
+        manifestoStatValue={siteSettings?.aboutManifestoStatValue}
       />
       <CtaBanner />
     </>

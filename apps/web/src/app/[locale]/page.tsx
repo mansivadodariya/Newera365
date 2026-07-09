@@ -5,10 +5,12 @@ import {
   MarketsSectionDemo,
   FeaturesSection,
   ThreeStepsSectionDemo,
+  TwoPathsSection,
   ArbitrageSection,
   CtaBannerDemo,
   TradingViewTicker,
   TrustStripDemo,
+  PartnersSection,
   TestimonialsSection,
   SecurityTrustBand,
 } from '@newera365/ui';
@@ -55,21 +57,24 @@ export default async function HomePage({ params }: { params: { locale: string } 
     ? (siteSettings?.ratingCountAr ?? null)
     : (siteSettings?.ratingCountEn ?? null);
 
+  const uspMetrics = siteSettings?.uspMetrics ?? undefined;
+  const partners = siteSettings?.partners ?? undefined;
+
   return (
     <>
       <TradingViewTicker />
       <HeroSectionDemo />
-      <TrustStripDemo logos={trustLogos} />
-      {/* USPs surfaced right after the trust strip (feedback #3 — most visitors
-          don't scroll past the third section, so the "why us" reasons need to
-          appear before the journey/stats). */}
-      <FeaturesSection />
+      {/* USPs directly after the hero (feedback #3 — most visitors don't
+          scroll past the third section, so the "why us" reasons come first). */}
+      <FeaturesSection metrics={uspMetrics} />
       <StatsSectionDemo kpiStats={kpiStats} locale={params.locale} />
       {/* Numbers immediately followed by safeguards (feedback round 2, #3). */}
       <SecurityTrustBand />
       {/* Account journey surfaced high (feedback #4 — "how do I become a client?"
           was hidden far down the page). */}
       <ThreeStepsSectionDemo />
+      {/* The funnel fork: beginners into Education, veterans into a live account. */}
+      <TwoPathsSection />
       <MarketsSectionDemo />
       <TestimonialsSection
         headline={socialProofHeadline}
@@ -77,6 +82,12 @@ export default async function HomePage({ params }: { params: { locale: string } 
         ratingCaption={ratingCaption}
         items={testimonials}
       />
+      {/* Press wordmarks ride directly under the testimonials so the social
+          proof reads as one block: what traders say, then who covered us. */}
+      <TrustStripDemo logos={trustLogos} />
+      {/* Infrastructure trust — liquidity, tech, payment & data partners
+          (client content brief item 13). */}
+      <PartnersSection partners={partners} />
       <ArbitrageSection />
       <CtaBannerDemo />
     </>

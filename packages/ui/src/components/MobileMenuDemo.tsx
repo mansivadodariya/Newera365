@@ -15,7 +15,6 @@ type NavGroup = { section: string | null; items: { label: string; href: string }
 
 function useNavGroups(t: ReturnType<typeof useTranslations<'nav'>>): NavGroup[] {
   return [
-    { section: null, items: [{ label: t('home'), href: '/' }] },
     {
       section: t('sectionTrade'),
       items: [
@@ -46,53 +45,28 @@ function useNavGroups(t: ReturnType<typeof useTranslations<'nav'>>): NavGroup[] 
       ],
     },
     {
-      section: t('sectionEducationHub'),
+      // Mirrors the desktop Education mega-panel: Learn, then Research, then Tools.
+      section: t('sectionEducation'),
       items: [
         { label: t('eduHubLabel'), href: '/education' },
-        { label: t('eduMediaLabel'), href: '/education/media' },
-        { label: t('eduEbooksLabel'), href: '/ebooks' },
-        { label: t('eduGlossaryLabel'), href: '/glossary' },
         { label: t('eduGuidesLabel'), href: '/guides' },
-        { label: t('eduBlogLabel'), href: '/education/blog' },
-      ],
-    },
-    {
-      section: t('sectionResearchAnalysis'),
-      items: [
+        { label: t('eduGlossaryLabel'), href: '/glossary' },
+        { label: t('eduEbooksLabel'), href: '/ebooks' },
         { label: t('researchArticlesLabel'), href: '/research' },
-        { label: t('researchNewsLabel'), href: '/daily-news' },
-        { label: t('researchCalendarLabel'), href: '/tools/calendar' },
         { label: t('researchAnalystLabel'), href: '/research/analyst-chart' },
         { label: t('researchNewsletterLabel'), href: '/newsletter' },
-      ],
-    },
-    {
-      section: t('sectionTools'),
-      items: [
         { label: t('toolsMarginLabel'), href: '/tools' },
-        { label: t('toolsSpreadLabel'), href: '/tools/spread-comparator' },
+        { label: t('toolsCalendarLabel'), href: '/tools/calendar' },
         { label: t('toolsWatchlistLabel'), href: '/tools/watchlist' },
-        { label: t('toolsPivotLabel'), href: '/tools/pivot' },
-        { label: t('toolsProfitLabel'), href: '/tools/profit' },
-        { label: t('toolsFibonacciLabel'), href: '/tools/fibonacci' },
+        { label: t('toolsSpreadLabel'), href: '/tools/spread-comparator' },
       ],
     },
     {
       section: t('sectionCompany'),
       items: [
         { label: t('companyAboutLabel'), href: '/company/about' },
-        { label: t('companyCareersLabel'), href: '/company/careers' },
-        { label: t('companyAwardsLabel'), href: '/company/awards' },
-        { label: t('companyMediaLabel'), href: '/company/media-press' },
-      ],
-    },
-    {
-      section: t('sectionLegalSupport'),
-      items: [
+        { label: t('companySupportLabel'), href: '/support' },
         { label: t('companyLegalLabel'), href: '/legal' },
-        { label: t('companyFaqLabel'), href: '/faqs' },
-        { label: t('companyContactLabel'), href: '/contact' },
-        { label: t('companyChatLabel'), href: '/live-chat' },
       ],
     },
   ];

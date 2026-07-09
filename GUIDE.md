@@ -90,9 +90,8 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_CMS_URL=http://localhost:3001
 MT5_SERVICE_URL=http://localhost:4000
 
-# Leave blank locally — not required until NE-026 / NE-039
+# Leave blank locally — not required until NE-026
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
-NEXT_PUBLIC_SALESIQ_WIDGET_CODE=
 ```
 
 ---

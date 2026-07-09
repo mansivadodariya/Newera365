@@ -12,17 +12,20 @@ import {
 
 /**
  * Animates the numeric part of a stat string (e.g. "180k", "12+", "99.99%",
- * "< 12 ms") when scrolled into view. Non-numeric prefix/suffix are preserved
- * verbatim, so localized values keep their units.
+ * "$5,000", "< 12 ms") when scrolled into view. Non-numeric prefix/suffix are
+ * preserved verbatim, so localized values keep their units. Every value counts
+ * up 0 → value over one fixed duration; grouped values keep their commas.
  *
- * - Small numbers (< 1000) count up 0 → value.
- * - Big numbers (≥ 1000, e.g. "180,000+") use an odometer digit-roll instead —
- *   counting through six digits read as churn (client feedback).
- * - Every animation runs the same fixed duration, so stats started together
- *   (via CountUpGroup) also STOP together.
+ * The odometer digit-roll (formerly used for values >= 1000) was RETIRED
+ * 2026-07-09: its nested per-digit spans do NOT inherit `.text-sheen`'s clipped
+ * gradient, so every sheen metric rendered blank (IB stat band showed "$ ,",
+ * the newsletter social-proof number vanished, etc.), and the fixed 1em digit
+ * windows risked clipping under tight metric line-heights. A single text node
+ * paints correctly under sheen and still animates on scroll. The `flat` prop is
+ * kept for back-compat and is now the only behaviour.
  *
- * Falls back to the static value when no number is present or the user
- * prefers reduced motion.
+ * Falls back to the static value when no number is present or the user prefers
+ * reduced motion.
  */
 
 const GroupCtx = createContext<boolean | null>(null);
@@ -88,14 +91,18 @@ function useStarted(ref: React.RefObject<HTMLElement>) {
   return group ?? self;
 }
 
-/* Each odometer column holds two full 0-9 cycles before the landing digits,
-   so every digit spins through the full range — without the spins, a column
-   whose target is 0 wouldn't move at all (all four zeros of "10,000" sat
-   still while the 1 hopped one step). */
-const ROLL_CYCLES = 2;
-const ROLL_STRIP = Array.from({ length: (ROLL_CYCLES + 1) * 10 }, (_, i) => i % 10);
-
-export function CountUp({ value, duration = 1400 }: { value: string; duration?: number }) {
+export function CountUp({
+  value,
+  duration = 1400,
+  flat,
+}: {
+  value: string;
+  duration?: number;
+  /** Accepted for back-compat; the flat single-node render is now the only
+      behaviour (the odometer was retired — see the component doc above). */
+  flat?: boolean;
+}) {
+  void flat;
   const ref = useRef<HTMLSpanElement>(null);
   const started = useStarted(ref);
   const [reducedMotion, setReducedMotion] = useState<boolean | null>(null);
@@ -126,11 +133,9 @@ export function CountUp({ value, duration = 1400 }: { value: string; duration?: 
   }, [value]);
 
   const isStatic = parsed === null || reducedMotion !== false;
-  const isRoll = !isStatic && parsed.target >= 1000;
 
-  // Count-up path (small numbers) — rAF loop over the shared fixed duration.
   useEffect(() => {
-    if (isStatic || isRoll) {
+    if (isStatic) {
       setDisplay(value);
       return;
     }
@@ -153,47 +158,7 @@ export function CountUp({ value, duration = 1400 }: { value: string; duration?: 
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [isStatic, isRoll, started, parsed, value, duration]);
-
-  if (isRoll) {
-    return (
-      <span ref={ref}>
-        {/* Screen readers get the plain value; the rolling digits are visual only. */}
-        <span className="sr-only">{value}</span>
-        <span
-          aria-hidden="true"
-          dir="ltr"
-          className="inline-flex items-center tabular-nums leading-none"
-        >
-          {parsed.prefix}
-          {[...parsed.numStr].map((ch, i) =>
-            /\d/.test(ch) ? (
-              <span key={i} className="inline-block h-[1em] overflow-hidden">
-                <span
-                  className="block text-center will-change-transform"
-                  style={{
-                    transform: started
-                      ? `translateY(-${ROLL_CYCLES * 10 + Number(ch)}em)`
-                      : 'translateY(0)',
-                    transition: `transform ${duration}ms cubic-bezier(0.23, 1, 0.32, 1)`,
-                  }}
-                >
-                  {ROLL_STRIP.map((d, j) => (
-                    <span key={j} className="block h-[1em] leading-[1em]">
-                      {d}
-                    </span>
-                  ))}
-                </span>
-              </span>
-            ) : (
-              <span key={i}>{ch}</span>
-            ),
-          )}
-          {parsed.suffix}
-        </span>
-      </span>
-    );
-  }
+  }, [isStatic, started, parsed, value, duration]);
 
   return <span ref={ref}>{display}</span>;
 }

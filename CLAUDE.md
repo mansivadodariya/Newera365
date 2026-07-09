@@ -107,6 +107,10 @@ Brand tokens are placeholders pending Gate 2 design handoff (NE-024).
 
 **Work tickets** — deferred work is tagged `NE-0xx` in comments; reference the ticket when noting blockers.
 
+## Design language
+
+**`DESIGN.md` at the repo root is the primary, binding reference for ANY design or styling change to any section or page — read it before touching UI.** Non-negotiables: semantic fluid type tokens (`text-display/-headline/-body/…` in `packages/config/tailwind-preset.js`) instead of per-component px sizes; light mode is green-tinted paper + white bordered cards (never white-on-white or gray fills); dark closers use the `.ink-band` utility (never `bg-black`/blue-gray gradients); `.text-sheen` only on oversized metrics on ink; **animation must serve its purpose — cards never levitate on hover** (definition via border/shadow; movement only for arrows, fills, live ticks; buttons press with `active:scale`); every string ships EN + real AR; RTL via logical utilities.
+
 ## Deployment
 
 | Component             | Platform                                                                         |
@@ -125,6 +129,8 @@ Email is sent via **ZeptoMail SMTP** (Zoho's transactional service) through a si
 ## Completed Frontend Pages
 
 All components live in `packages/ui/src/components/` and are exported from `packages/ui/src/index.ts`. Routes are thin wrappers in `apps/web/src/app/[locale]/`.
+
+> **IA consolidation (2026-07-08/09), read this before trusting the route tables below.** The header was clubbed from 9 tabs to **5**: Trade, Markets, Platform, **Education** (a 3-column mega-panel absorbing the old Research + Tools groups), **Company** (absorbing Legal & Support). Eleven routes were merged and permanent-redirected (see `redirects()` in `apps/web/next.config.mjs`): the three calculator pages (`/tools/pivot|profit|fibonacci`) fold into **`/tools`** (6-tab `TraderToolsPage`, calculators are embeddable `PivotCalculator`/`ProfitCalculator`/`FibonacciCalculator`); `/education/audio` + `/education/webinars` fold into **`/education/media`** (`WebinarsSection`); `/company/awards` + `/company/media-press` become **`/company/recognition`** (`RecognitionPage`, an editorial ledger); `/faqs` + `/contact` become **`/support`** (`SupportPage`, search-first FAQ accordion, human-escalation seam, contact form with POST `/api/contact` intact); `/daily-news` + `/education/blog` listings fold into **`/research`** (client `useState` Analysis/News/Blog feed tabs; detail routes `/research/[slug]`, `/daily-news/[slug]`, `/education/blog/[slug]` all still resolve). Design revamp added homepage `TwoPathsSection`, a seamless press `Marquee` (`TrustStripDemo`), `ScrollReveal`/`CountUp`/`TiltReveal` motion primitives, and a testimonial carousel. See DESIGN.md §8 for the Life system and card taxonomy. Copy rule: no em/en dashes anywhere (EN + AR). The tables below still name some pre-merge routes; the merged targets above win.
 
 ### Trade
 
@@ -183,13 +189,12 @@ All components live in `packages/ui/src/components/` and are exported from `pack
 
 ### Support & Legal
 
-| Component        | Route         | Notes                                                                               |
-| ---------------- | ------------- | ----------------------------------------------------------------------------------- |
-| `FaqPage`        | `/faqs`       | Search + category tabs + popular questions                                          |
-| `ContactPage`    | `/contact`    | 3 channel cards (Email/Call/Chat), department dropdown form, Three Cities section   |
-| `LegalPage`      | `/legal`      | 5-document selector, ToC, prose sections                                            |
-| `LiveChatPage`   | `/live-chat`  | Chat UI; scroll happens within container (not page) to prevent page jumping on load |
-| `NewsletterPage` | `/newsletter` | "The Monday Briefing" subscribe form, social proof                                  |
+| Component        | Route         | Notes                                                                        |
+| ---------------- | ------------- | ---------------------------------------------------------------------------- |
+| `FaqPage`        | `/faqs`       | Search + category tabs + popular questions                                   |
+| `ContactPage`    | `/contact`    | 2 channel cards (Email/Call), department dropdown form, Three Cities section |
+| `LegalPage`      | `/legal`      | 5-document selector, ToC, prose sections                                     |
+| `NewsletterPage` | `/newsletter` | "The Monday Briefing" subscribe form, social proof                           |
 
 ## graphify
 

@@ -1,32 +1,104 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { ScrollReveal } from './ScrollReveal';
 
 type Timeframe = 'M5' | 'M15' | 'H1' | 'D1';
 const TIMEFRAMES: Timeframe[] = ['M5', 'M15', 'H1', 'D1'];
 
-const FEATURES = [
-  { idx: 2, icon: 'stream' },
-  { idx: 3, icon: 'mt5' },
-  { idx: 4, icon: 'lock' },
+// ── Capability icons ──────────────────────────────────────────────────────────
+
+function IconStream() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path
+        d="M1 10h3l2-5 3 10 2.5-7 1.5 4h4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+function IconMt5() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <polyline
+        points="2,14 7,9 11,12 18,5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M18 5v4M18 5h-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+function IconLock() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <rect x="4" y="9" width="12" height="8" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M7 9V6.5a3 3 0 016 0V9" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="10" cy="13" r="1" fill="currentColor" />
+    </svg>
+  );
+}
+function IconChart() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <line x1="5" y1="3" x2="5" y2="17" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="3.5" y="6" width="3" height="6" rx="0.6" fill="currentColor" />
+      <line x1="12" y1="4" x2="12" y2="16" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="10.5" y="8" width="3" height="5" rx="0.6" fill="currentColor" />
+    </svg>
+  );
+}
+function IconDepth() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M3 5h11M3 8.5h7M3 12h9M3 15.5h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+function IconGlobe() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M2.5 10h15M10 2.5v15" stroke="currentColor" strokeWidth="1.5" />
+      <ellipse cx="10" cy="10" rx="3.5" ry="7.5" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+// The six capabilities read as a real terminal's spec list (keys feat2..feat7).
+const CAPABILITIES = [
+  { idx: 2, Icon: IconStream },
+  { idx: 3, Icon: IconMt5 },
+  { idx: 4, Icon: IconLock },
+  { idx: 5, Icon: IconChart },
+  { idx: 6, Icon: IconDepth },
+  { idx: 7, Icon: IconGlobe },
 ] as const;
 
-function CheckCircle() {
-  return (
-    <span className="bg-accent flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full">
-      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-        <path
-          d="M2 6l3 3 5-5"
-          stroke="white"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </span>
-  );
+// Terminal ledger: factual MetaTrader 5 platform specs (not performance claims).
+const SPECS = [
+  { label: 'specMarkets', value: '2,000+' },
+  { label: 'specPlatform', value: 'MetaTrader 5' },
+  { label: 'specTimeframes', value: '21' },
+  { label: 'specChartTypes', value: '3' },
+  { label: 'specIndicators', value: '38+' },
+  { label: 'specOrderTypes', value: '6' },
+] as const;
+
+export interface CmsWebTraderSpec {
+  valueEn: string;
+  valueAr: string;
+  labelEn: string;
+  labelAr: string;
+  id?: string | null;
 }
 
 // ── Terminal SVG ──────────────────────────────────────────────────────────────
@@ -48,7 +120,7 @@ interface Candle {
 const EURUSD_PTS = [28, 26, 30, 28, 32, 31, 35, 33, 30, 34, 38, 36, 33, 37, 40, 38, 36, 40, 44, 42];
 const TF_SEEDS: Record<Timeframe, number> = { M5: 11, M15: 23, H1: 37, D1: 53 };
 
-// Maps to real EUR/USD price range ~1.0820–1.0865
+// Maps to real EUR/USD price range ~1.0820..1.0865
 const BASE_PRICE = 1.082;
 const PRICE_RNG = 0.0045;
 
@@ -209,7 +281,7 @@ function TerminalChart({ tf }: { tf: Timeframe }) {
         />
       </svg>
 
-      {/* Price axis labels — fixed-width column, HTML overlay so text never distorts */}
+      {/* Price axis labels: fixed-width column, HTML overlay so text never distorts */}
       <div
         className="pointer-events-none absolute bottom-0 right-0 top-0"
         style={{ width: AXIS_W }}
@@ -217,7 +289,7 @@ function TerminalChart({ tf }: { tf: Timeframe }) {
         {gridLevels.map((lv, i) => (
           <div
             key={i}
-            className="absolute left-1 font-mono text-[8px] text-white/40"
+            className="absolute left-1 font-mono text-[8px] tabular-nums text-white/40"
             style={{ top: `${(py(lv) / VH) * 100}%`, transform: 'translateY(-50%)' }}
           >
             {toPrice(lv).toFixed(5)}
@@ -230,7 +302,7 @@ function TerminalChart({ tf }: { tf: Timeframe }) {
           style={{ top: `${(lastY / VH) * 100}%`, transform: 'translateY(-50%)' }}
         >
           <div
-            className="rounded-[3px] px-[5px] py-[2px] font-mono text-[7.5px] font-bold leading-none text-white"
+            className="rounded-[3px] px-[5px] py-[2px] font-mono text-[7.5px] font-bold leading-none tabular-nums text-white"
             style={{ backgroundColor: priceColor }}
           >
             {toPrice(last.c).toFixed(5)}
@@ -241,9 +313,10 @@ function TerminalChart({ tf }: { tf: Timeframe }) {
   );
 }
 
-// ── Bid / Ask panel (replaces TradingView symbol-info) ────────────────────────
+// ── Bid / Ask panel (the terminal's dealing rail) ─────────────────────────────
 
 function BidAskPanel() {
+  const t = useTranslations('webtrader');
   const [vol, setVol] = useState(0.1);
 
   return (
@@ -252,36 +325,42 @@ function BidAskPanel() {
         {/* BUY / Ask */}
         <div className="px-4 py-4">
           <p className="font-body mb-[3px] text-[10px] font-semibold uppercase tracking-[0.1em] text-[#26A69A]">
-            BUY
+            {t('buyLabel')}
           </p>
-          <p className="font-mono text-[22px] font-bold leading-none text-[#26A69A]">1.08562</p>
-          <p className="font-body mt-1 text-[10px] text-white/35">Ask</p>
+          <p dir="ltr" className="w-fit font-mono text-[22px] font-bold leading-none tabular-nums text-[#26A69A]">
+            1.08562
+          </p>
+          <p className="font-body mt-1 text-[10px] text-white/35">{t('askLabel')}</p>
         </div>
         {/* SELL / Bid */}
         <div className="px-4 py-4">
           <p className="font-body mb-[3px] text-[10px] font-semibold uppercase tracking-[0.1em] text-[#EF5350]">
-            SELL
+            {t('sellLabel')}
           </p>
-          <p className="font-mono text-[22px] font-bold leading-none text-[#EF5350]">1.08549</p>
-          <p className="font-body mt-1 text-[10px] text-white/35">Bid</p>
+          <p dir="ltr" className="w-fit font-mono text-[22px] font-bold leading-none tabular-nums text-[#EF5350]">
+            1.08549
+          </p>
+          <p className="font-body mt-1 text-[10px] text-white/35">{t('bidLabel')}</p>
         </div>
       </div>
 
       {/* Volume row */}
       <div className="flex items-center justify-between border-t border-white/[0.08] px-4 py-3">
-        <span className="font-body text-[11px] text-white/40">Volume (lots)</span>
+        <span className="font-body text-[11px] text-white/40">{t('volumeLabel')}</span>
         <div className="flex items-center gap-[6px]">
-          <span className="font-mono text-[13px] font-semibold text-white">{vol.toFixed(2)}</span>
+          <span dir="ltr" className="font-mono text-[13px] font-semibold tabular-nums text-white">
+            {vol.toFixed(2)}
+          </span>
           <button
             onClick={() => setVol((v) => Math.max(0.01, parseFloat((v - 0.01).toFixed(2))))}
-            className="flex h-6 w-6 items-center justify-center rounded-[6px] bg-white/10 text-[14px] text-white/70 transition-colors hover:bg-white/20"
+            className="flex h-6 w-6 items-center justify-center rounded-[6px] bg-white/10 text-[14px] text-white/70 transition-colors hover:bg-white/20 active:scale-[0.94]"
             aria-label="Decrease volume"
           >
             −
           </button>
           <button
             onClick={() => setVol((v) => parseFloat((v + 0.01).toFixed(2)))}
-            className="flex h-6 w-6 items-center justify-center rounded-[6px] bg-white/10 text-[14px] text-white/70 transition-colors hover:bg-white/20"
+            className="flex h-6 w-6 items-center justify-center rounded-[6px] bg-white/10 text-[14px] text-white/70 transition-colors hover:bg-white/20 active:scale-[0.94]"
             aria-label="Increase volume"
           >
             +
@@ -292,40 +371,76 @@ function BidAskPanel() {
   );
 }
 
+function ArrowRight() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="rtl:-scale-x-100" aria-hidden="true">
+      <path
+        d="M3 8h10M9 4l4 4-4 4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 
-export function WebTraderPage() {
+interface WebTraderPageProps {
+  specs?: CmsWebTraderSpec[];
+}
+
+export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
   const t = useTranslations('webtrader');
+  const locale = useLocale();
+  const isAr = locale === 'ar';
   const [tf, setTf] = useState<Timeframe>('H1');
+
+  const CONTAINER = 'mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]';
+
+  // Specs ledger: CMS-driven when seeded, falling back to the static defaults + i18n labels otherwise.
+  const specTiles =
+    specs && specs.length > 0
+      ? specs.map((s, idx) => ({
+          key: s.id ?? String(idx),
+          label: isAr ? s.labelAr : s.labelEn,
+          value: isAr ? s.valueAr : s.valueEn,
+        }))
+      : SPECS.map((s) => ({ key: s.label, label: t(s.label as 'specMarkets'), value: s.value }));
 
   return (
     <>
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <section className="px-5 pb-6 pt-9">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:last-child]:font-body mb-2 [&>span:first-child]:hidden [&>span:last-child]:text-[11px] [&>span:last-child]:font-semibold [&>span:last-child]:uppercase [&>span:last-child]:leading-[100%] [&>span:last-child]:tracking-[0.08em] [&>span:last-child]:text-[#1AD966]">
+        <ScrollReveal className={CONTAINER}>
+          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
             {t('kicker')}
           </SectionKicker>
-          <h1 className="text-foreground mb-3 font-sans text-[44px] font-semibold leading-[1.05] tracking-[-1.54px]">
+          <h1 className="text-foreground text-display mb-4 font-sans [text-wrap:balance]">
             {t('heading')}
           </h1>
-          <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
+          <p className="font-body text-lead text-muted max-w-[520px] dark:text-white/70">
             {t('subheading')}
           </p>
-        </div>
+        </ScrollReveal>
       </section>
 
-      {/* ── Trading Terminal Panel ─────────────────────────────────── */}
+      {/* ── The terminal (showpiece) ───────────────────────────────── */}
       <section className="px-5 pb-6">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#111111]">
+        <ScrollReveal className={CONTAINER}>
+          <div className="overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#111111] shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)]">
             {/* Ticker bar */}
             <div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-3">
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-[#1AD966]" />
                 <span className="font-sans text-[13px] font-semibold text-white">EURUSD</span>
-                <span className="font-mono text-[12px] font-semibold text-white">1.0856</span>
-                <span className="font-body text-[11px] text-[#26A69A]">+0.14%</span>
+                <span dir="ltr" className="font-mono text-[12px] font-semibold tabular-nums text-white">
+                  1.0856
+                </span>
+                <span dir="ltr" className="font-body text-[11px] tabular-nums text-[#26A69A]">
+                  +0.14%
+                </span>
               </div>
               <div className="flex gap-[2px]">
                 {TIMEFRAMES.map((t_) => (
@@ -333,7 +448,7 @@ export function WebTraderPage() {
                     key={t_}
                     onClick={() => setTf(t_)}
                     className={`rounded-[6px] px-2 py-1 font-mono text-[10px] font-semibold transition-colors ${
-                      tf === t_ ? 'bg-[#1AD966] text-[#111]' : 'text-white/50 hover:text-white/80'
+                      tf === t_ ? 'bg-accent-bright text-[#111]' : 'text-white/50 hover:text-white/80'
                     }`}
                   >
                     {t_}
@@ -348,29 +463,28 @@ export function WebTraderPage() {
             {/* BUY / SELL + volume */}
             <BidAskPanel />
 
-            {/* Footer */}
-            <div className="border-t border-white/[0.06] px-4 py-2">
-              <p className="text-center font-mono text-[9px] uppercase tracking-[0.12em] text-white/25">
+            {/* Footer: powered-by ledger line + contextual launch action */}
+            <div className="flex flex-col gap-3 border-t border-white/[0.06] px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/30">
                 {t('poweredBy')}
               </p>
+              <button className="bg-accent hover:bg-accent-bright inline-flex h-10 items-center justify-center gap-2 rounded-full px-5 font-sans text-[13px] font-semibold text-white transition-all duration-200 hover:shadow-[0_10px_28px_-8px_rgba(26,217,102,0.6)] active:scale-[0.98]">
+                {t('ctaBtn')}
+                <ArrowRight />
+              </button>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
-      {/* ── Fallback Card ─────────────────────────────────────────── */}
-      <section className="px-5 pb-8">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="rounded-[18px] border border-[#F97316]/20 bg-[#FFF7ED] p-5 dark:border-[#F97316]/15 dark:bg-[#1a130a]">
-            <div className="mb-3 flex items-center gap-2">
-              <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#F97316]/15">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <path
-                    d="M8 6v3M8 11v.5"
-                    stroke="#F97316"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
+      {/* ── Fallback notice ───────────────────────────────────────── */}
+      <section className="px-5 pb-10">
+        <ScrollReveal className={CONTAINER}>
+          <div className="border-border shadow-card rounded-[20px] border bg-white p-6 dark:border-white/[0.06] dark:bg-[#111111]">
+            <div className="mb-3 flex items-center gap-2.5">
+              <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#F97316]/[0.12]">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M8 6v3M8 11v.5" stroke="#F97316" strokeWidth="1.5" strokeLinecap="round" />
                   <path
                     d="M6.8 2.5L1.5 12a1.4 1.4 0 001.2 2h10.6a1.4 1.4 0 001.2-2L9.2 2.5a1.4 1.4 0 00-2.4 0z"
                     stroke="#F97316"
@@ -378,78 +492,89 @@ export function WebTraderPage() {
                   />
                 </svg>
               </span>
-              <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[#F97316]">
-                FALLBACK STATE
+              <span className="text-eyebrow font-mono uppercase text-[#F97316]">
+                {t('fallbackTag')}
               </span>
             </div>
-            <p className="mb-1 font-sans text-[15px] font-semibold text-[#111] dark:text-white">
+            <p className="text-foreground text-title mb-2 font-sans font-semibold">
               {t('fallbackHeading')}
             </p>
-            <p className="font-body mb-4 text-[12px] leading-[1.55] text-[#6b7280] dark:text-white/60">
+            <p className="font-body text-muted text-body mb-5 leading-relaxed dark:text-white/60">
               {t('fallbackDesc')}
             </p>
-            <div className="flex flex-wrap gap-2">
-              <button className="inline-flex items-center gap-1.5 rounded-[10px] bg-[#111] px-4 py-2.5 text-[12px] font-medium text-white transition-colors hover:bg-[#222] dark:bg-white/10 dark:hover:bg-white/20">
+            <div className="flex flex-wrap gap-2.5">
+              <button className="bg-foreground text-background hover:bg-accent inline-flex h-11 items-center justify-center rounded-full px-5 font-sans text-[13px] font-semibold transition-colors duration-200 active:scale-[0.98] dark:bg-white/10 dark:text-white dark:hover:bg-accent">
                 {t('fallbackDesktopBtn')}
               </button>
-              <button className="hover:text-accent dark:hover:text-accent inline-flex items-center gap-1.5 rounded-[10px] px-4 py-2.5 text-[12px] font-medium text-[#111] transition-colors dark:text-white/70">
+              <button className="border-border text-foreground hover:text-accent hover:border-accent/40 inline-flex h-11 items-center justify-center rounded-full border px-5 font-sans text-[13px] font-medium transition-colors duration-200 active:scale-[0.98] dark:border-white/10 dark:text-white/70">
                 {t('fallbackMobileBtn')}
               </button>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
-      {/* ── Features ──────────────────────────────────────────────── */}
-      <section className="px-5 pb-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h2 className="text-foreground mb-6 font-sans text-[32px] font-semibold leading-[1.1]">
-            {t('feat1Title')}
-            <br />
-            <span className="text-accent">{t('feat1Sub')}</span>
-          </h2>
-          <div className="flex flex-col gap-[10px]">
-            {FEATURES.map((feat) => (
+      {/* ── Terminal specs ledger ─────────────────────────────────── */}
+      <section className="px-5 pb-12">
+        <ScrollReveal className={CONTAINER}>
+          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
+            {t('specsKicker')}
+          </SectionKicker>
+          <h2 className="text-foreground text-headline mb-8 font-sans">{t('specsHeading')}</h2>
+
+          <div className="border-border shadow-card overflow-hidden rounded-[22px] border bg-white sm:grid sm:grid-cols-2 dark:border-white/[0.06] dark:bg-[#111111]">
+            {specTiles.map((s) => (
               <div
-                key={feat.idx}
-                className="flex items-start gap-3 rounded-[16px] bg-[#FAFAF9] px-4 py-4 dark:bg-[#16181d]"
+                key={s.key}
+                className="border-border flex items-center justify-between gap-4 border-b px-5 py-[18px] xl:px-6 sm:[&:nth-child(odd)]:border-e dark:border-white/[0.06]"
               >
-                <CheckCircle />
-                <div>
-                  <p className="text-foreground mb-0.5 font-sans text-[14px] font-semibold">
-                    {t(`feat${feat.idx}Title` as 'feat2Title')}
-                  </p>
-                  <p className="font-body text-muted text-[12px] leading-relaxed">
-                    {t(`feat${feat.idx}Desc` as 'feat2Desc')}
-                  </p>
-                </div>
+                <span className="text-eyebrow text-muted font-mono uppercase">{s.label}</span>
+                <span dir="ltr" className="text-foreground text-body-lg w-fit font-mono font-semibold tabular-nums">
+                  {s.value}
+                </span>
               </div>
             ))}
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
-      {/* ── Launch CTA ────────────────────────────────────────────── */}
-      <section className="px-5 pb-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <button className="bg-accent flex h-[52px] w-full items-center justify-center gap-2 rounded-full font-sans text-[15px] font-semibold text-white shadow-[0_8px_24px_rgba(0,176,80,0.35)] transition-all duration-200 hover:bg-[#00c85a] hover:shadow-[0_12px_32px_rgba(0,176,80,0.45)] active:scale-[0.98]">
-            {t('ctaBtn')}
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 16 16"
-              fill="none"
-              className="rtl:-scale-x-100"
-            >
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+      {/* ── Capabilities ──────────────────────────────────────────── */}
+      <section className="px-5 pb-12">
+        <ScrollReveal className={CONTAINER}>
+          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
+            {t('capabilitiesKicker')}
+          </SectionKicker>
+          <h2 className="text-foreground text-headline mb-8 font-sans">
+            {t('featuresHeading')} <span className="text-accent">{t('featuresHeadingAccent')}</span>
+          </h2>
+        </ScrollReveal>
+
+        <div className={`${CONTAINER} grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 xl:gap-4`}>
+          {CAPABILITIES.map((cap, i) => (
+            <ScrollReveal key={cap.idx} index={i}>
+              <div className="group border-border shadow-card hover:border-accent/40 flex h-full flex-col gap-4 rounded-[18px] border bg-white p-5 transition-[border-color,box-shadow] duration-300 hover:shadow-[0_20px_48px_-18px_rgba(0,176,80,0.22)] xl:p-6 dark:border-white/[0.06] dark:bg-[#111111]">
+                <div className="flex items-center justify-between">
+                  <span className="bg-accent/10 text-accent group-hover:bg-accent flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300 group-hover:text-white">
+                    <cap.Icon />
+                  </span>
+                  <span
+                    dir="ltr"
+                    className="text-muted group-hover:text-accent font-mono text-[13px] font-semibold tabular-nums transition-colors duration-300"
+                  >
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-foreground text-body-lg mb-1.5 font-sans font-semibold">
+                    {t(`feat${cap.idx}Title` as 'feat2Title')}
+                  </p>
+                  <p className="font-body text-muted text-body leading-relaxed dark:text-white/55">
+                    {t(`feat${cap.idx}Desc` as 'feat2Desc')}
+                  </p>
+                </div>
+              </div>
+            </ScrollReveal>
+          ))}
         </div>
       </section>
     </>

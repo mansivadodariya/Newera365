@@ -18,15 +18,17 @@ export function generateStaticParams() {
 export default async function PlatformRoute({ params }: Props) {
   setRequestLocale(params.locale);
   if (!VALID_SLUGS.includes(params.slug as PlatformSlug)) notFound();
+
+  const s = await getSiteSettings();
+
   if (params.slug === 'webtrader')
     return (
       <>
-        <WebTraderPage />
+        <WebTraderPage specs={s?.webTraderSpecs ?? undefined} />
         <CtaBanner />
       </>
     );
 
-  const s = await getSiteSettings();
   const downloads: CmsPlatformDownloads | undefined = s
     ? {
         windows: s.downloadMt5Windows,

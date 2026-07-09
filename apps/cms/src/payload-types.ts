@@ -561,6 +561,36 @@ export interface IbContent {
   wlSetupTime?: string | null;
   wlSpreadMarkup?: string | null;
   wlTechStack?: string | null;
+  heroStat1Value?: string | null;
+  heroStat2Value?: string | null;
+  heroStat3Value?: string | null;
+  heroStat4Value?: string | null;
+  incomeLadder?:
+    | {
+        balanceLabel: string;
+        minBalance: number;
+        incomeValue: string;
+        isTopSlab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  rebateTables?:
+    | {
+        instrumentNameEn: string;
+        instrumentNameAr: string;
+        rows?:
+          | {
+              spread: string;
+              commission: string;
+              rebate: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  ftdCap?: string | null;
+  ftdMinLots?: string | null;
   steps?:
     | {
         stepTitle: string;
@@ -671,6 +701,46 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  uspMetrics?:
+    | {
+        valueEn: string;
+        valueAr: string;
+        titleEn: string;
+        titleAr: string;
+        descEn: string;
+        descAr: string;
+        id?: string | null;
+      }[]
+    | null;
+  partners?:
+    | {
+        groupKey: string;
+        name: string;
+        logoType?: string | null;
+        logoFilename?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  aboutManifestoStatValue?: string | null;
+  fundingWithdrawalStatValue?: string | null;
+  supportPromiseStats?:
+    | {
+        valueEn: string;
+        valueAr: string;
+        labelEn: string;
+        labelAr: string;
+        id?: string | null;
+      }[]
+    | null;
+  webTraderSpecs?:
+    | {
+        valueEn: string;
+        valueAr: string;
+        labelEn: string;
+        labelAr: string;
+        id?: string | null;
+      }[]
+    | null;
   socialProofHeadlineEn?: string | null;
   socialProofHeadlineAr?: string | null;
   ratingValue?: string | null;
@@ -741,7 +811,6 @@ export interface SiteSetting {
   regulatoryDisclosureAr?: string | null;
   companyRegistrationEn?: string | null;
   companyRegistrationAr?: string | null;
-  liveChatUrl?: string | null;
   analystInitials?: string | null;
   analystName?: string | null;
   analystTitle?: string | null;
@@ -756,7 +825,6 @@ export interface SiteSetting {
 
 declare module 'payload' {
   // @ts-ignore — payload's own .d.ts already declares GeneratedTypes; this
-  // augmentation intentionally re-declares it (Payload v2 convention). The
-  // generator strips this comment on every `generate:types` run — re-add it.
+  // generated file re-declares it, which tsc flags as a duplicate identifier.
   export interface GeneratedTypes extends Config {}
 }

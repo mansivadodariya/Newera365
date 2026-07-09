@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState, useRef } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { ScrollReveal } from './ScrollReveal';
 import { Pagination } from './Pagination';
 
 const GUIDES_PER_PAGE = 9;
@@ -21,6 +22,37 @@ interface GuidesPageProps {
   guides?: CmsGuide[];
 }
 
+/** Small forward arrow — nudges toward the reading edge on row hover; RTL-mirrored. */
+function ReadArrow({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 14 14"
+      fill="none"
+      aria-hidden="true"
+      className={`rtl:-scale-x-100 ${className}`}
+    >
+      <path
+        d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Estimated reading time for an index row. The CMS list ships only title +
+    excerpt (no body/word count), so we derive a stable estimate from the
+    available text length and clamp it to a sensible guide range. Deterministic
+    for a given guide — never random. */
+function readingMinutes(guide: CmsGuide): number {
+  const chars = guide.title.length + (guide.summary?.length ?? 0);
+  return Math.min(14, Math.max(4, Math.round(chars / 20)));
+}
+
 export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
   const locale = useLocale();
   const t = useTranslations('guides');
@@ -29,7 +61,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
 
   const guides: CmsGuide[] = cmsGuides ?? [];
   const featured = guides.find((g) => g.featured) ?? null;
-  // The featured guide gets its own card above the list, so the list excludes it.
+  // The featured guide is the shelf's cover, shown above the index — exclude it from the list.
   const rest = featured ? guides.filter((g) => g !== featured) : guides;
   const totalPages = Math.ceil(rest.length / GUIDES_PER_PAGE);
   const paged = rest.slice((page - 1) * GUIDES_PER_PAGE, page * GUIDES_PER_PAGE);
@@ -39,106 +71,124 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-4 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
+          <SectionKicker className="mb-4">{t('heroKicker')}</SectionKicker>
+          <h1 className="text-foreground text-display mb-4 font-sans">
             {t('heroLine1')}
             <br />
             <span className="text-accent">{t('heroAccent')}</span>
           </h1>
-          <p className="font-body text-muted max-w-[320px] text-[14px] leading-[1.55]">
-            {t('heroSubtitle')}
-          </p>
+          <p className="text-muted text-lead max-w-[46ch] font-sans">{t('heroSubtitle')}</p>
         </div>
       </section>
 
-      {/* Featured guide — dark editorial panel, no imagery (guides are prose) */}
+      {/* Featured guide — the shelf's cover: editorial lead on an ink band, no imagery (guides are prose) */}
       {featured && (
-        <section className="px-5 pb-4">
-          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <Link
-              href={`/${locale}/guides/${featured.slug}`}
-              className="group block overflow-hidden rounded-[22px] border border-transparent bg-[#111111] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_44px_rgba(0,0,0,0.28)] dark:border-white/[0.08] dark:bg-[#15171c]"
-            >
-              <div className="p-6 xl:p-9">
-                <p className="text-accent-bright mb-3 font-mono text-[10px] font-medium uppercase tracking-[0.18em]">
-                  {t('featuredLabel')}
-                </p>
-                <h2 className="group-hover:text-accent-bright max-w-[26ch] font-sans text-[22px] font-semibold leading-[1.15] text-white transition-colors duration-200 xl:text-[28px]">
-                  {featured.title}
-                </h2>
-                {featured.summary && (
-                  <p className="font-body mt-3 max-w-[64ch] text-[13.5px] leading-[1.6] text-white/60">
-                    {featured.summary}
-                  </p>
-                )}
-                <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/[0.08] pt-5">
-                  {featured.author ? (
-                    <div className="flex items-center gap-2.5">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/[0.08] font-sans text-[11px] font-semibold text-white/80">
-                        {featured.author[0]}
-                      </span>
-                      <span className="font-body text-[12px] text-white/60">{featured.author}</span>
-                    </div>
-                  ) : (
-                    <span aria-hidden="true" />
+        <section className="px-5 pb-5">
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <ScrollReveal>
+              <Link
+                href={`/${locale}/guides/${featured.slug}`}
+                className="ink-band group block overflow-hidden rounded-[24px] border border-white/[0.08] ring-1 ring-inset ring-white/[0.05] transition-colors duration-200 hover:border-accent/40"
+              >
+                <div className="p-6 xl:p-9">
+                  <SectionKicker className="mb-4 [&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright">
+                    {t('featuredLabel')}
+                  </SectionKicker>
+                  <h2 className="text-title xl:text-headline-sm group-hover:text-accent-bright max-w-[26ch] font-sans font-semibold leading-[1.12] text-white transition-colors duration-200">
+                    {featured.title}
+                  </h2>
+                  {featured.summary && (
+                    <p className="text-body mt-3 max-w-[64ch] font-sans leading-relaxed text-white/70">
+                      {featured.summary}
+                    </p>
                   )}
-                  <span className="font-body inline-flex items-center gap-1.5 text-[13px] font-medium text-white">
-                    {t('featuredRead')}
-                    <svg
-                      width="13"
-                      height="13"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      aria-hidden="true"
-                      className="rtl:-scale-x-100"
-                    >
-                      <path
-                        d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
+                  <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.08] pt-5">
+                    <div className="flex items-center gap-3">
+                      <span className="text-eyebrow inline-flex items-center rounded-full border border-white/[0.14] bg-white/[0.08] px-2.5 py-1 font-mono uppercase text-white/70 backdrop-blur">
+                        {t('rowTag')}
+                      </span>
+                      {featured.author && (
+                        <span className="text-caption inline-flex items-center gap-2 font-sans text-white/60">
+                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/[0.1] text-[11px] font-semibold text-white/80">
+                            {featured.author[0]}
+                          </span>
+                          {featured.author}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-caption inline-flex items-center gap-1.5 font-sans font-medium text-white">
+                      <span className="link-underline group-hover:[background-size:100%_1px]">
+                        {t('featuredRead')}
+                      </span>
+                      <ReadArrow className="motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5" />
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </ScrollReveal>
           </div>
         </section>
       )}
 
-      {/* All guides */}
+      {/* All guides — the index: numbered ghost-numeral rows on ruled shelves */}
       <section className="px-5 pb-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mt-5">{t('allGuidesLabel')}</SectionKicker>
-          <div ref={listRef} className="flex flex-col gap-0">
+          <div ref={listRef} className="border-border mt-6 border-t">
             {rest.length === 0 && !featured && (
-              <p className="font-body text-muted py-12 text-center text-[14px]">{t('noGuides')}</p>
+              <p className="text-muted text-body py-12 text-center font-sans">{t('noGuides')}</p>
             )}
-            {paged.map((guide, i) => (
-              <Link
-                key={guide.id}
-                href={`/${locale}/guides/${guide.slug}`}
-                className={`group flex flex-col gap-2 py-5 ${i < paged.length - 1 ? 'border-b border-[#e5e7eb] dark:border-white/[0.07]' : ''}`}
-              >
-                <p className="text-foreground group-hover:text-accent font-sans text-[15px] font-semibold leading-[1.3] transition-colors">
-                  {guide.title}
-                </p>
-                <p className="font-body text-muted text-[12px] leading-[1.55]">
-                  {guide.summary ?? ''}
-                </p>
-                {guide.author && (
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-5 w-5 items-center justify-center rounded-full border border-[#e5e7eb] dark:border-white/20">
-                      <span className="text-muted font-sans text-[8px] font-semibold">
-                        {guide.author[0]}
-                      </span>
+            {paged.map((guide, i) => {
+              const index = (page - 1) * GUIDES_PER_PAGE + i + 1;
+              return (
+                <ScrollReveal key={guide.id} index={i}>
+                  <Link
+                    href={`/${locale}/guides/${guide.slug}`}
+                    className="group border-border grid grid-cols-[auto_1fr] items-baseline gap-4 border-b border-s-2 border-s-transparent py-6 ps-3 transition-colors duration-200 hover:border-s-accent xl:gap-6 xl:py-7 xl:ps-4"
+                  >
+                    <span
+                      dir="ltr"
+                      aria-hidden="true"
+                      className="text-foreground/[0.08] group-hover:text-accent/30 w-[46px] shrink-0 font-sans text-[46px] font-semibold leading-none tracking-tight tabular-nums transition-colors duration-200 xl:w-[64px] xl:text-[60px]"
+                    >
+                      {String(index).padStart(2, '0')}
+                    </span>
+                    <div className="min-w-0">
+                      <h3 className="text-foreground group-hover:text-accent text-body-lg font-sans font-semibold leading-snug transition-colors duration-200">
+                        {guide.title}
+                      </h3>
+                      {guide.summary && (
+                        <p className="text-muted text-body mt-2 max-w-[70ch] font-sans leading-relaxed">
+                          {guide.summary}
+                        </p>
+                      )}
+                      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+                        <span className="text-eyebrow border-border text-muted dark:border-white/10 dark:bg-white/[0.04] dark:text-white/50 inline-flex items-center rounded-full border bg-white px-2.5 py-1 font-mono uppercase">
+                          {t('rowTag')}
+                        </span>
+                        <span className="text-eyebrow text-muted inline-flex items-center font-mono uppercase tabular-nums">
+                          {t('minRead', { minutes: readingMinutes(guide) })}
+                        </span>
+                        {guide.author && (
+                          <span className="text-caption text-muted inline-flex items-center gap-1.5 font-sans">
+                            <span className="border-border text-muted dark:border-white/20 dark:text-white/60 flex h-5 w-5 items-center justify-center rounded-full border text-[9px] font-semibold">
+                              {guide.author[0]}
+                            </span>
+                            {guide.author}
+                          </span>
+                        )}
+                        <span className="text-caption text-foreground ms-auto inline-flex items-center gap-1.5 font-sans font-medium">
+                          <span className="link-underline group-hover:[background-size:100%_1px]">
+                            {t('readLink')}
+                          </span>
+                          <ReadArrow className="motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5" />
+                        </span>
+                      </div>
                     </div>
-                    <span className="font-body text-muted text-[11px]">{guide.author}</span>
-                  </div>
-                )}
-              </Link>
-            ))}
+                  </Link>
+                </ScrollReveal>
+              );
+            })}
           </div>
           <Pagination
             page={page}
@@ -150,40 +200,24 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
       </section>
 
       {/* CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
+      <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:last-child]:text-white/50">
+          <SectionKicker className="mb-4 [&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright">
             {t('ctaKicker')}
           </SectionKicker>
-          <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
-            {t('ctaHeading')}
-          </h2>
-          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
-          <div className="flex flex-col gap-3">
+          <h2 className="text-headline-sm mb-3 font-sans text-white">{t('ctaHeading')}</h2>
+          <p className="text-body mb-7 font-sans leading-relaxed text-white/60">{t('ctaDesc')}</p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
               href={`/${locale}/education`}
-              className="bg-accent hover:bg-accent/90 font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
+              className="bg-accent hover:bg-accent/90 text-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full px-6 font-sans font-medium text-white transition-colors active:scale-[0.98] sm:w-auto sm:px-8"
             >
               {t('ctaEducation')}
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 16 16"
-                fill="none"
-                className="rtl:-scale-x-100"
-              >
-                <path
-                  d="M3 8h10M9 4l4 4-4 4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <ReadArrow />
             </Link>
             <Link
               href={`/${locale}/glossary`}
-              className="font-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"
+              className="text-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full border border-white/20 px-6 font-sans font-medium text-white transition-colors hover:border-white/40 active:scale-[0.98] sm:w-auto sm:px-8"
             >
               {t('ctaGlossary')}
             </Link>

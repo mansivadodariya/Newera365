@@ -135,6 +135,141 @@ export const IBContent: CollectionConfig = {
       maxLength: 20,
       admin: { description: 'Tech stack stat, e.g. "Turnkey".' },
     },
+    // Hero stat band — 4 headline partnership metrics (client IB deck).
+    // Values only; the eyebrow/sub labels stay in next-intl (statUpTo, statPerMonth, etc).
+    {
+      name: 'heroStat1Value',
+      type: 'text',
+      maxLength: 20,
+      admin: { description: 'Hero stat 1 value, e.g. "$5,000" (up to / per month).' },
+    },
+    {
+      name: 'heroStat2Value',
+      type: 'text',
+      maxLength: 20,
+      admin: { description: 'Hero stat 2 value, e.g. "15" (up to / per lot).' },
+    },
+    {
+      name: 'heroStat3Value',
+      type: 'text',
+      maxLength: 20,
+      admin: { description: 'Hero stat 3 value, e.g. "3" (earning streams).' },
+    },
+    {
+      name: 'heroStat4Value',
+      type: 'text',
+      maxLength: 20,
+      admin: { description: 'Hero stat 4 value, e.g. "4" (target markets).' },
+    },
+    // Monthly income ladder — balance-to-income slabs. Also drives the
+    // interactive estimator's salary lookup so display and calc share one source.
+    {
+      name: 'incomeLadder',
+      type: 'array',
+      maxRows: 10,
+      labels: { singular: 'Ladder Slab', plural: 'Ladder Slabs' },
+      admin: {
+        description:
+          'Monthly income ladder rows, lowest balance first. Drives both the display table ' +
+          'and the interactive estimator’s salary lookup.',
+      },
+      fields: [
+        {
+          name: 'balanceLabel',
+          type: 'text',
+          required: true,
+          maxLength: 40,
+          admin: { description: 'Balance range shown, e.g. "$30,000 to $50,000" or "$500,000+".' },
+        },
+        {
+          name: 'minBalance',
+          type: 'number',
+          required: true,
+          admin: { description: 'Numeric floor of this slab, used by the estimator lookup.' },
+        },
+        {
+          name: 'incomeValue',
+          type: 'text',
+          required: true,
+          maxLength: 20,
+          admin: { description: 'Monthly income for this slab, e.g. "$500".' },
+        },
+        {
+          name: 'isTopSlab',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: { description: 'Highlight as the top slab (accent background + badge).' },
+        },
+      ],
+    },
+    // Rebate matrix — per-instrument spread/commission/rebate by tier (Raw/Standard/Pro).
+    {
+      name: 'rebateTables',
+      type: 'array',
+      maxRows: 6,
+      labels: { singular: 'Rebate Table', plural: 'Rebate Tables' },
+      admin: { description: 'One table per instrument group. Tier order: Raw, Standard, Pro.' },
+      fields: [
+        {
+          name: 'instrumentNameEn',
+          type: 'text',
+          required: true,
+          maxLength: 40,
+          admin: { description: 'Instrument group name — EN, e.g. "Gold (XAU/USD)".' },
+        },
+        {
+          name: 'instrumentNameAr',
+          type: 'text',
+          required: true,
+          maxLength: 40,
+          admin: { description: 'Instrument group name — AR.' },
+        },
+        {
+          name: 'rows',
+          type: 'array',
+          minRows: 3,
+          maxRows: 3,
+          labels: { singular: 'Tier Row', plural: 'Tier Rows' },
+          admin: { description: 'Exactly 3 rows, in order: Raw, Standard, Pro.' },
+          fields: [
+            {
+              name: 'spread',
+              type: 'text',
+              required: true,
+              maxLength: 20,
+              admin: { description: 'Spread in points, e.g. "7-8".' },
+            },
+            {
+              name: 'commission',
+              type: 'text',
+              required: true,
+              maxLength: 20,
+              admin: { description: 'Commission per lot, e.g. "10" or "0".' },
+            },
+            {
+              name: 'rebate',
+              type: 'text',
+              required: true,
+              maxLength: 20,
+              admin: { description: 'Rebate per lot, e.g. "3".' },
+            },
+          ],
+        },
+      ],
+    },
+    // FTD eligibility — both conditions required in the same monthly cycle.
+    {
+      name: 'ftdCap',
+      type: 'text',
+      maxLength: 20,
+      admin: { description: 'FTD deposit condition value, e.g. "USD 10,000".' },
+    },
+    {
+      name: 'ftdMinLots',
+      type: 'text',
+      maxLength: 20,
+      admin: { description: 'FTD minimum-lots condition value, e.g. "50".' },
+    },
     // Onboarding steps — 4 items expected
     {
       name: 'steps',

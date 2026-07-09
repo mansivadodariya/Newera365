@@ -104,10 +104,10 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
       <section className="bg-transparent px-5 pb-7 pt-9">
         <div className="mx-auto flex max-w-[390px] flex-col gap-[14px] md:max-w-2xl xl:max-w-[1200px]">
           <span>
-            <h1 className="text-foreground whitespace-pre-line font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
+            <h1 className="text-foreground text-display whitespace-pre-line font-sans">
               {t('heroLine1')}
             </h1>
-            <h1 className="text-accent whitespace-pre-line font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
+            <h1 className="text-accent text-display whitespace-pre-line font-sans">
               {t('heroLine2')}
             </h1>
           </span>
@@ -211,7 +211,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
           {/* View all — navigates to the per-category page */}
           <Link
             href={`/${locale}/markets/${activeCategory.toLowerCase()}`}
-            className="bg-surface dark:hover:bg-surface-elevated mt-3 flex w-full items-center justify-between rounded-[14px] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee]"
+            className="bg-surface dark:hover:bg-surface-elevated mt-3 flex w-full items-center justify-between rounded-[14px] px-4 py-[13px] transition-colors hover:bg-[#E9F0EB]"
           >
             <span className="font-body text-foreground text-[13px] font-medium">
               {hasCmsData
@@ -352,9 +352,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
           <SectionKicker className="[&>span:first-child]:bg-foreground [&>span:last-child]:text-foreground mb-4">
             {t('specsKicker')}
           </SectionKicker>
-          <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[1.1] tracking-[-0.02em]">
-            {t('specsHeading')}
-          </h2>
+          <h2 className="text-foreground text-headline-sm mb-6 font-sans">{t('specsHeading')}</h2>
 
           <div className="mb-5 overflow-hidden rounded-[18px] bg-[#111111]">
             {SPEC_ROWS.map((row, i) => (
@@ -404,15 +402,13 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
           <SectionKicker className="[&>span:first-child]:bg-foreground [&>span:last-child]:text-foreground mb-4 font-mono text-[10px] font-medium leading-[100%] tracking-[0.18em]">
             {t('otherKicker')}
           </SectionKicker>
-          <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.8px]">
-            {t('otherHeading')}
-          </h2>
+          <h2 className="text-foreground text-headline-sm mb-6 font-sans">{t('otherHeading')}</h2>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
             {OTHER_MARKETS.map((market) => (
               <Link
                 key={market}
                 href={`/${locale}/markets/${market.toLowerCase()}`}
-                className="hover:border-accent/30 group flex items-center justify-between rounded-[18px] border border-white/[0.12] bg-[#FAFAF9] px-5 py-4 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/[0.10] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] dark:bg-[#000000]"
+                className="hover:border-accent/30 group flex items-center justify-between rounded-[18px] border border-white/[0.12] bg-[#F0F4F1] px-5 py-4 transition-all duration-200 hover:bg-white/[0.10] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] dark:bg-[#000000]"
               >
                 <div>
                   <p className="text-foreground font-sans text-[15px] font-semibold">{market}</p>

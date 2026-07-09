@@ -27,6 +27,44 @@ module.exports = {
           muted: '#8C939E',
           divider: '#191E26',
         },
+        ink: {
+          DEFAULT: 'var(--ink)',
+          soft: 'var(--ink-soft)',
+        },
+      },
+      // Semantic fluid type scale — one place to retune the whole site.
+      // Every role scales with the viewport (clamp), so desktop gets the
+      // larger cut automatically without per-breakpoint classes.
+      fontSize: {
+        display: [
+          'clamp(2.75rem, 1.9rem + 3.6vw, 4.625rem)',
+          { lineHeight: '1.02', letterSpacing: '-0.03em', fontWeight: '600' },
+        ],
+        headline: [
+          'clamp(2.125rem, 1.55rem + 2.4vw, 3.375rem)',
+          { lineHeight: '1.06', letterSpacing: '-0.025em', fontWeight: '600' },
+        ],
+        'headline-sm': [
+          'clamp(1.75rem, 1.45rem + 1.3vw, 2.5rem)',
+          { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '600' },
+        ],
+        title: [
+          'clamp(1.375rem, 1.28rem + 0.5vw, 1.75rem)',
+          { lineHeight: '1.2', letterSpacing: '-0.015em' },
+        ],
+        lead: ['clamp(1.0625rem, 1rem + 0.3vw, 1.25rem)', { lineHeight: '1.55' }],
+        'body-lg': ['1.0625rem', { lineHeight: '1.6' }],
+        body: ['0.9375rem', { lineHeight: '1.6' }],
+        caption: ['0.8125rem', { lineHeight: '1.5' }],
+        eyebrow: ['0.75rem', { lineHeight: '1', letterSpacing: '0.16em' }],
+        metric: [
+          'clamp(3rem, 2.2rem + 3.4vw, 5rem)',
+          { lineHeight: '0.95', letterSpacing: '-0.04em', fontWeight: '600' },
+        ],
+        'metric-sm': [
+          'clamp(2rem, 1.7rem + 1.4vw, 2.875rem)',
+          { lineHeight: '1', letterSpacing: '-0.03em', fontWeight: '600' },
+        ],
       },
       fontFamily: {
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
@@ -113,6 +151,8 @@ module.exports = {
         'fade-in': 'fade-in 0.2s ease-out',
         'skeleton-pulse': 'skeleton-pulse 1.5s ease-in-out infinite',
         ticker: 'ticker-scroll 40s linear infinite',
+        // Seamless logo/press marquee — duration overridable via --marquee-duration.
+        marquee: 'ticker-scroll var(--marquee-duration, 40s) linear infinite',
         'slide-in-right': 'slide-in-right 0.3s ease-out',
         'slide-out-right': 'slide-out-right 0.3s ease-in',
         'float-y': 'float-y 7s ease-in-out infinite',

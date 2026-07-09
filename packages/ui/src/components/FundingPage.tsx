@@ -1,11 +1,15 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { ScrollReveal } from './ScrollReveal';
+import { CountUp } from './CountUp';
 
 // Desktop cards show a brand cover banner (matches the desktop Figma). The CMS
 // `coverImage` upload wins when set; otherwise we fall back to a bundled brand
-// default keyed by method. Mobile cards show the icon header instead (no cover).
+// default keyed by method. The cover is presented as a tactile bordered logo
+// tile (grayscale → colour on hover).
 function defaultCover(name: string, methodType: string): string {
   const n = name.toLowerCase();
   if (n.includes('skrill')) return '/images/payment/skrill.png';
@@ -113,6 +117,72 @@ function isGreenFeeValue(v: string) {
   return lower === 'free' || lower === 'none' || lower === 'لا يوجد' || v === 'مجاني';
 }
 
+/* ─── Flow beat icons (money in motion) ──────────────────────────────────── */
+
+// Deposit — arrow falling into a tray (money in).
+function IconDeposit() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-6 w-6 xl:h-8 xl:w-8">
+      <path
+        d="M12 3v9m0 0l-3.4-3.4M12 12l3.4-3.4"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4 13.5V17a2.5 2.5 0 002.5 2.5h11A2.5 2.5 0 0020 17v-3.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+// Trade — an upward price move.
+function IconTrade() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-6 w-6 xl:h-8 xl:w-8">
+      <path
+        d="M4 15.5l4.5-4.5 3 3L20 6"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15.5 6H20v4.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+// Withdraw — arrow lifting out of a tray (money out).
+function IconWithdraw() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-6 w-6 xl:h-8 xl:w-8">
+      <path
+        d="M12 12V3m0 0L8.6 6.4M12 3l3.4 3.4"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4 13.5V17a2.5 2.5 0 002.5 2.5h11A2.5 2.5 0 0020 17v-3.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 const TRUST_ROWS = [
   {
     title: 'Segregated client funds',
@@ -199,9 +269,188 @@ export interface CmsPaymentMethodItem {
 
 interface FundingPageProps {
   paymentMethods?: CmsPaymentMethodItem[];
+  withdrawalStatValue?: string | null;
 }
 
-function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem[] }) {
+/* ─── Money in motion — Deposit → Trade → Withdraw ────────────────────────────
+   The signature moment: three beats connected by a drawn SVG connector that
+   traces in on scroll (stroke-dashoffset). Horizontal on desktop, vertical on
+   mobile; the connector mirrors correctly in RTL so the flow always reads from
+   the logical start to the logical end. A faint static track guarantees the
+   line reads even before (or without) the draw, and reduced-motion draws it
+   instantly — content visibility is never gated behind the animation. */
+function MoneyFlow() {
+  const t = useTranslations('funding');
+  const railRef = useRef<HTMLDivElement>(null);
+  const iconRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [drawn, setDrawn] = useState(false);
+  // Measured geometry for the mobile vertical connector so it spans exactly
+  // first-icon-centre → last-icon-centre (never overshooting past the last
+  // step, whatever the description height / locale) and mirrors in RTL.
+  const [vline, setVline] = useState<{ top: number; height: number; left: number } | null>(null);
+
+  useEffect(() => {
+    const measure = () => {
+      const rail = railRef.current;
+      const first = iconRefs.current[0];
+      const last = iconRefs.current[iconRefs.current.length - 1];
+      if (!rail || !first || !last) return;
+      const rb = rail.getBoundingClientRect();
+      const fb = first.getBoundingClientRect();
+      const lb = last.getBoundingClientRect();
+      const top = fb.top - rb.top + fb.height / 2;
+      const bottom = lb.top - rb.top + lb.height / 2;
+      const left = fb.left - rb.left + fb.width / 2;
+      setVline({ top, height: Math.max(0, bottom - top), left: left - 1 });
+    };
+    measure();
+    const rail = railRef.current;
+    const ro = rail && typeof ResizeObserver !== 'undefined' ? new ResizeObserver(measure) : null;
+    ro?.observe(rail as Element);
+    window.addEventListener('resize', measure);
+    let cancelled = false;
+    void document.fonts?.ready?.then(() => {
+      if (!cancelled) measure();
+    });
+    return () => {
+      cancelled = true;
+      ro?.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setDrawn(true);
+      return;
+    }
+    const el = railRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') {
+      setDrawn(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setDrawn(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const beats = [
+    { n: '01', label: t('flowStep1'), desc: t('flowStep1Desc'), icon: <IconDeposit /> },
+    { n: '02', label: t('flowStep2'), desc: t('flowStep2Desc'), icon: <IconTrade /> },
+    { n: '03', label: t('flowStep3'), desc: t('flowStep3Desc'), icon: <IconWithdraw /> },
+  ];
+
+  const drawTransition = 'stroke-dashoffset 1.15s cubic-bezier(0.4, 0, 0.2, 1)';
+
+  return (
+    <div ref={railRef} className="relative">
+      {/* Horizontal connector — desktop. Mirrors in RTL so it traces start → end. */}
+      <div className="pointer-events-none absolute inset-x-0 top-[37px] hidden xl:block">
+        <svg
+          viewBox="0 0 1000 4"
+          preserveAspectRatio="none"
+          fill="none"
+          aria-hidden="true"
+          className="h-1 w-full rtl:-scale-x-100"
+        >
+          <line
+            x1="120"
+            y1="2"
+            x2="880"
+            y2="2"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeDasharray="1 9"
+            className="stroke-[#C6D6CC] dark:stroke-white/15"
+          />
+          <line
+            x1="120"
+            y1="2"
+            x2="880"
+            y2="2"
+            stroke="#00B050"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            style={{
+              strokeDasharray: 800,
+              strokeDashoffset: drawn ? 0 : 800,
+              transition: drawTransition,
+            }}
+          />
+        </svg>
+      </div>
+
+      {/* Vertical connector — mobile / tablet. Measured to span exactly the
+          first icon centre → the last, so it never overshoots the last step. */}
+      {vline && (
+        <div className="xl:hidden" aria-hidden="true">
+          <span
+            className="pointer-events-none absolute w-[2px] rounded-full bg-[#C6D6CC] dark:bg-white/15"
+            style={{ top: vline.top, height: vline.height, left: vline.left }}
+          />
+          <span
+            className="bg-accent pointer-events-none absolute w-[2px] origin-top rounded-full"
+            style={{
+              top: vline.top,
+              height: vline.height,
+              left: vline.left,
+              transform: drawn ? 'scaleY(1)' : 'scaleY(0)',
+              transition: drawTransition,
+            }}
+          />
+        </div>
+      )}
+
+      {/* Beats — stacked rows on mobile, centred columns on desktop */}
+      <div className="flex flex-col gap-9 xl:grid xl:grid-cols-3 xl:gap-8">
+        {beats.map((beat, i) => (
+          <ScrollReveal key={beat.n} index={i} className="relative">
+            <div className="flex items-start gap-4 xl:flex-col xl:items-center xl:gap-0 xl:text-center">
+              <div
+                ref={(el) => {
+                  iconRefs.current[i] = el;
+                }}
+                className="border-border text-accent relative z-10 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[15px] border bg-white shadow-[0_6px_18px_-6px_rgba(8,19,12,0.22)] xl:h-[76px] xl:w-[76px] xl:rounded-[22px] dark:border-white/[0.08] dark:bg-[#14161c]"
+              >
+                {beat.icon}
+              </div>
+              <div className="xl:mt-6">
+                <div className="mb-1.5 flex items-center gap-2 xl:justify-center">
+                  <span
+                    dir="ltr"
+                    className="text-accent font-mono text-caption font-semibold tabular-nums"
+                  >
+                    {beat.n}
+                  </span>
+                  <p className="text-title text-foreground font-sans font-semibold">{beat.label}</p>
+                </div>
+                <p className="font-body text-body text-muted max-w-[38ch] leading-[1.6] xl:mx-auto dark:text-white/60">
+                  {beat.desc}
+                </p>
+              </div>
+            </div>
+          </ScrollReveal>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HeroContent({
+  paymentMethods,
+  withdrawalStatValue,
+}: {
+  paymentMethods?: CmsPaymentMethodItem[];
+  withdrawalStatValue?: string | null;
+}) {
   const t = useTranslations('funding');
   const locale = useLocale();
 
@@ -235,78 +484,102 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
     { key: 'seg4', icon: TRUST_ROWS[3]!.icon, title: t('seg4Title'), desc: t('seg4Desc') },
   ];
 
+  const methods = (paymentMethods ?? []).map((method) => ({
+    key: String(method.id),
+    icon: METHOD_TYPE_ICONS[method.methodType] ?? <IconCreditCard />,
+    typeBadge: translateMethodType(method.methodType),
+    name: locale === 'ar' ? (method.nameAr ?? method.name) : method.name,
+    cover: method.coverImage || defaultCover(method.name, method.methodType),
+    deposit: method.depositTime ?? '-',
+    withdraw: method.withdrawalTime ?? '-',
+    min: method.minDeposit ?? '-',
+    fee: method.fee ?? '-',
+    depositGreen: isGreenDepositValue(method.depositTime ?? ''),
+    feeGreen: isGreenFeeValue(method.fee ?? ''),
+  }));
+
   return (
     <>
-      {/* Hero — visible on all screen sizes per Figma */}
-      <section className="bg-transparent px-5 pb-5 pt-9 xl:px-[120px] xl:pb-8 xl:pt-[48px]">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="font-sans text-[36px] font-semibold leading-[1.05] tracking-[-1.08px] xl:text-[48px] xl:tracking-[-1.44px]">
-            <span className="text-foreground">{t('heroLine1')}&nbsp;—&nbsp;</span>
-            <span className="text-[#00b050]">{t('heroAccent')}</span>
-          </h1>
-          <p className="font-body mt-4 max-w-[500px] text-[14px] leading-[1.55] text-[#6B7280] dark:text-[#B8BFCC]">
-            {t('heroSubtitle')}
-          </p>
+      {/* Hero */}
+      <section className="bg-transparent px-5 pb-6 pt-9 xl:px-[120px] xl:pb-8 xl:pt-[52px]">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal>
+            <h1 className="text-display text-foreground font-sans [text-wrap:balance]">
+              {t('heroLine1')} <span className="text-accent">{t('heroAccent')}</span>
+            </h1>
+            <p className="font-body text-lead text-muted mt-4 max-w-[540px] dark:text-white/70">
+              {t('heroSubtitle')}
+            </p>
+          </ScrollReveal>
         </div>
       </section>
 
-      {/* Payment Methods */}
-      <section className="bg-transparent px-5 pb-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted mb-5 text-[#6B7280] dark:text-[#B8BFCC]">
-            {t('methodsKicker')}
-          </SectionKicker>
-          <div className="grid grid-cols-1 gap-[14px] md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
-            {(!paymentMethods || paymentMethods.length === 0) && (
-              <p className="font-body col-span-full py-12 text-center text-[14px] text-[#6B7280] dark:text-[#B8BFCC]">
+      {/* Money in motion — the three-beat flow */}
+      <section className="bg-transparent px-5 py-10 xl:px-[120px] xl:py-14">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal>
+            <SectionKicker className="text-muted [&>span:first-child]:bg-accent mb-3 dark:text-white/60">
+              {t('flowKicker')}
+            </SectionKicker>
+            <h2 className="text-headline text-foreground font-sans [text-wrap:balance]">
+              {t('flowHeading')}
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal delay={0.1}>
+            <div className="border-border shadow-card mt-9 rounded-[28px] border bg-gradient-to-b from-[#E7F1EA] to-white px-6 py-12 xl:px-14 xl:py-16 dark:border-white/[0.06] dark:from-[#0e1218] dark:to-[#0a0c11] dark:shadow-none">
+              <MoneyFlow />
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Payment methods — tactile logo chips */}
+      <section className="bg-transparent px-5 pb-12 xl:px-[120px]">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal>
+            <SectionKicker className="text-muted [&>span:first-child]:bg-accent mb-5 dark:text-white/60">
+              {t('methodsKicker')}
+            </SectionKicker>
+          </ScrollReveal>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
+            {methods.length === 0 && (
+              <p className="font-body text-body text-muted col-span-full py-12 text-center dark:text-white/60">
                 {t('noMethods')}
               </p>
             )}
-            {(paymentMethods ?? [])
-              .map((method) => ({
-                key: String(method.id),
-                icon: METHOD_TYPE_ICONS[method.methodType] ?? <IconCreditCard />,
-                typeBadge: translateMethodType(method.methodType),
-                name: locale === 'ar' ? (method.nameAr ?? method.name) : method.name,
-                cover: method.coverImage || defaultCover(method.name, method.methodType),
-                deposit: method.depositTime ?? '—',
-                withdraw: method.withdrawalTime ?? '—',
-                min: method.minDeposit ?? '—',
-                fee: method.fee ?? '—',
-                depositGreen: isGreenDepositValue(method.depositTime ?? ''),
-                feeGreen: isGreenFeeValue(method.fee ?? ''),
-              }))
-              .map((method) => (
-                <div
-                  key={method.key}
-                  className="bg-background shadow-card hover-lift flex flex-col gap-[14px] rounded-[18px] p-5 dark:shadow-none"
-                >
-                  {/* Mobile header: icon box + type pill (hidden on desktop, replaced by cover) */}
-                  <div className="flex items-start justify-between md:hidden">
-                    <div className="bg-accent/[0.08] text-accent flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px]">
-                      {method.icon}
-                    </div>
-                    <span className="text-foreground dark:bg-surface-elevated dark:text-foreground rounded-full bg-[rgba(17,17,17,0.05)] px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px]">
-                      {method.typeBadge}
-                    </span>
+            {methods.map((method, i) => (
+              <ScrollReveal key={method.key} index={i}>
+                <div className="group border-border shadow-card hover-lift flex h-full flex-col gap-4 rounded-[20px] border bg-white p-5 dark:border-white/[0.06] dark:bg-[#14161c] dark:shadow-none">
+                  {/* Cover tile — borderless, always in full colour (client
+                      feedback); the banner fills the frame and zooms in slightly
+                      on hover. */}
+                  <div className="relative h-[92px] overflow-hidden rounded-[14px]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={method.cover}
+                      alt=""
+                      aria-hidden="true"
+                      className="h-full w-full object-cover object-center transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.05]"
+                    />
                   </div>
 
-                  {/* Desktop cover banner (matches desktop Figma) */}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={method.cover}
-                    alt=""
-                    aria-hidden="true"
-                    className="hidden h-[110px] self-stretch rounded-[20px] bg-cover bg-center bg-no-repeat md:block"
-                  />
+                  {/* Name + type badge */}
+                  <div className="flex items-center gap-2.5">
+                    <span className="bg-accent/[0.08] text-accent flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px]">
+                      {method.icon}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-foreground text-body-lg truncate font-sans font-semibold tracking-[-0.17px]">
+                        {method.name}
+                      </p>
+                      <span className="text-muted font-mono text-[10px] uppercase tracking-[1.2px] dark:text-white/50">
+                        {method.typeBadge}
+                      </span>
+                    </div>
+                  </div>
 
-                  {/* Name — Outfit SemiBold 17px tracking-[-0.17px] */}
-                  <p className="text-foreground font-sans text-[17px] font-semibold tracking-[-0.17px]">
-                    {method.name}
-                  </p>
-
-                  {/* Stats 2×2 grid — matches Figma rgba(17,17,17,0.08) wrapper, #fafaf9 cells */}
-                  <div className="dark:bg-surface-elevated grid grid-cols-2 gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)]">
+                  {/* Stats 2×2 — deposit / withdraw / min / fee */}
+                  <div className="dark:bg-surface-elevated mt-auto grid grid-cols-2 gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)]">
                     {[
                       {
                         label: t('colDeposit'),
@@ -327,13 +600,13 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
                     ].map((stat) => (
                       <div
                         key={stat.label}
-                        className="dark:bg-surface flex flex-col gap-[2px] bg-[#fafaf9] px-3 py-[10px]"
+                        className="dark:bg-surface flex flex-col gap-[2px] bg-[#F0F4F1] px-3 py-[10px]"
                       >
-                        <span className="text-muted font-mono text-[9px] tracking-[1.08px]">
+                        <span className="text-muted font-mono text-[10px] tracking-[1.08px]">
                           {stat.label}
                         </span>
                         <span
-                          className={`font-sans text-[13px] font-semibold ${stat.green ? 'text-accent' : 'text-foreground'}`}
+                          className={`font-sans text-[14px] font-semibold ${stat.green ? 'text-accent' : 'text-foreground'}`}
                         >
                           {stat.value}
                         </span>
@@ -341,37 +614,60 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
                     ))}
                   </div>
                 </div>
-              ))}
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Trust section */}
-      <section className="rounded-t-[32px] bg-gradient-to-r from-[#000000] to-[#1F262E] px-5 py-10 xl:px-[120px] xl:py-14">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-3 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/60">
-            {t('safetyKicker')}
-          </SectionKicker>
-          <h2 className="mb-[22px] font-sans text-[26px] font-semibold leading-[1.1] tracking-[-0.52px] text-white">
-            {t('safetyHeading')}
-          </h2>
-          <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-2 xl:gap-6">
-            {trustRows.map((row) => (
-              <div
-                key={row.key}
-                className="hover-lift flex items-start gap-[14px] rounded-[14px] bg-[rgba(255,255,255,0.04)] p-[18px]"
-              >
-                <div className="bg-accent/[0.12] text-accent flex h-[37px] w-[37px] flex-shrink-0 items-center justify-center rounded-[11px]">
-                  {row.icon}
-                </div>
-                <div className="flex-1">
-                  <p className="mb-[5px] font-sans text-[14px] font-semibold text-white">
-                    {row.title}
-                  </p>
-                  <p className="font-body text-[12.5px] leading-[1.5] text-white/55">{row.desc}</p>
-                </div>
+      {/* Ink closer — the withdrawal cadence metric + why it's safe */}
+      <section className="ink-band rounded-t-[32px] px-5 py-14 xl:px-[120px] xl:py-20">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          {/* Oversized withdrawal metric */}
+          <ScrollReveal>
+            <div className="xl:flex xl:items-end xl:justify-between xl:gap-12">
+              <div>
+                <SectionKicker className="text-accent-bright [&>span:first-child]:bg-accent-bright mb-5">
+                  {t('withdrawMetricEyebrow')}
+                </SectionKicker>
+                <span
+                  dir="ltr"
+                  className="text-sheen text-metric block w-fit font-sans tabular-nums"
+                >
+                  <CountUp value={withdrawalStatValue ?? '24/7'} />
+                </span>
               </div>
-            ))}
+              <p className="font-body text-lead mt-4 max-w-[400px] text-white/60 xl:mt-0">
+                {t('withdrawMetricLabel')}
+              </p>
+            </div>
+          </ScrollReveal>
+
+          {/* Why it's safe — static trust ledger (no hover: static info) */}
+          <div className="mt-12 border-t border-white/10 pt-10 xl:mt-16 xl:pt-14">
+            <ScrollReveal>
+              <SectionKicker className="mb-3 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/60">
+                {t('safetyKicker')}
+              </SectionKicker>
+              <h2 className="text-headline-sm mb-7 font-sans text-white">{t('safetyHeading')}</h2>
+            </ScrollReveal>
+            <div className="grid gap-3 xl:grid-cols-2 xl:gap-5">
+              {trustRows.map((row, i) => (
+                <ScrollReveal key={row.key} index={i}>
+                  <div className="flex h-full items-start gap-4 rounded-[14px] border border-white/[0.06] bg-white/[0.03] p-[18px]">
+                    <div className="bg-accent/[0.12] text-accent-bright flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-[11px]">
+                      {row.icon}
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-body-lg mb-1 font-sans font-semibold text-white">
+                        {row.title}
+                      </p>
+                      <p className="font-body text-body leading-[1.55] text-white/55">{row.desc}</p>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -379,6 +675,6 @@ function HeroContent({ paymentMethods }: { paymentMethods?: CmsPaymentMethodItem
   );
 }
 
-export function FundingPage({ paymentMethods }: FundingPageProps) {
-  return <HeroContent paymentMethods={paymentMethods} />;
+export function FundingPage({ paymentMethods, withdrawalStatValue }: FundingPageProps) {
+  return <HeroContent paymentMethods={paymentMethods} withdrawalStatValue={withdrawalStatValue} />;
 }

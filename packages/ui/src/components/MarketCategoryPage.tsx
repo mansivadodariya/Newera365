@@ -4,8 +4,27 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { ScrollReveal } from './ScrollReveal';
 import { ChartWidget } from './ChartWidget';
+import { Accordion } from './Accordion';
 import type { InstrumentItem } from './InstrumentsPage';
+
+// Capitalized category token used to build the per-category i18n key names for
+// the "Why trade" reasons and the FAQ accordion (e.g. whyForex1Title, faqForexQ1).
+const KEY_CAP: Record<string, string> = {
+  forex: 'Forex',
+  indices: 'Indices',
+  commodities: 'Commodities',
+  stocks: 'Stocks',
+  etfs: 'Etfs',
+  crypto: 'Crypto',
+};
+
+// Three editorial "why trade" reasons and four FAQ entries per category. The
+// content itself is category-keyed in messages/*.json; here we only carry the
+// row indices so each category renders its own copy.
+const WHY_ITEMS = [1, 2, 3] as const;
+const FAQ_ITEMS = [1, 2, 3, 4] as const;
 
 // Default TradingView symbol per category (used for the chart hero and as a
 // fallback when a row symbol can't be confidently mapped to a TV symbol).
@@ -135,7 +154,7 @@ const CATEGORY_META: Record<
   commodities: {
     label: 'Commodities',
     headline: 'Trade Commodities.',
-    sub: 'Gold, silver, oil and more — trade real assets at institutional pricing.',
+    sub: 'Gold, silver, oil and more: trade real assets at institutional pricing.',
     kicker: 'COMMODITIES · METALS & ENERGY',
     staticRows: [
       {
@@ -191,7 +210,7 @@ const CATEGORY_META: Record<
   stocks: {
     label: 'Stocks',
     headline: 'Trade Stocks.',
-    sub: 'CFDs on global equities — trade Apple, Tesla, Amazon and hundreds more.',
+    sub: 'CFDs on global equities: trade Apple, Tesla, Amazon and hundreds more.',
     kicker: 'STOCKS · GLOBAL EQUITIES',
     staticRows: [
       {
@@ -247,7 +266,7 @@ const CATEGORY_META: Record<
   etfs: {
     label: 'ETFs',
     headline: 'Trade ETFs.',
-    sub: "Diversified exposure in a single instrument — trade the world's top ETFs.",
+    sub: "Diversified exposure in a single instrument: trade the world's top ETFs.",
     kicker: 'ETFs · EXCHANGE-TRADED FUNDS',
     staticRows: [
       {
@@ -303,7 +322,7 @@ const CATEGORY_META: Record<
   crypto: {
     label: 'Crypto',
     headline: 'Trade Crypto.',
-    sub: 'Bitcoin, Ethereum and major altcoins — 24/7 crypto markets at your fingertips.',
+    sub: 'Bitcoin, Ethereum and major altcoins: 24/7 crypto markets at your fingertips.',
     kicker: 'CRYPTO · DIGITAL ASSETS',
     staticRows: [
       { symbol: 'BTC/USD', name: 'Bitcoin', spread: '12', change: '+1.82%', up: true },
@@ -397,6 +416,9 @@ export function MarketCategoryPage({
 
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [chartPeriod, setChartPeriod] = useState<ChartPeriod>('1M');
+  const [openFaq, setOpenFaq] = useState<string | null>(null);
+  // Capitalized token for building per-category "why"/"faq" i18n key names.
+  const cap = KEY_CAP[validKey];
   // The watchlist below renders meta.staticRows, so the chart follows the selected
   // static row. Resolve its TradingView symbol in priority order:
   //   1. the matching CMS instrument's tvSymbol (editor-managed, exact)
@@ -470,7 +492,7 @@ export function MarketCategoryPage({
     <>
       {/* Hero */}
       <section className="bg-transparent px-5 pb-7 pt-9">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="mb-4 flex items-center gap-3">
             <SectionKicker>{kicker}</SectionKicker>
             {mt5Enabled && (
@@ -480,18 +502,16 @@ export function MarketCategoryPage({
               </span>
             )}
           </div>
-          <h1 className="text-foreground mb-3 font-sans text-[40px] font-semibold leading-[1.05] tracking-[-1.2px]">
-            {headline}
-          </h1>
+          <h1 className="text-foreground text-display mb-3 font-sans">{headline}</h1>
           <p className="font-body text-muted max-w-[310px] text-[14px] leading-[155%] xl:max-w-[480px]">
             {sub}
           </p>
-        </div>
+        </ScrollReveal>
       </section>
 
       {/* Instrument list — forex cross-rates heatmap or watchlist widget */}
       <section className="px-5 pb-6">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {category === 'forex' ? (
             /* Forex: TradingView cross-rates heatmap */
             <>
@@ -746,7 +766,7 @@ export function MarketCategoryPage({
 
               <Link
                 href={`/${locale}/trade/accounts`}
-                className="dark:bg-surface dark:hover:bg-surface-elevated mt-3 flex w-full items-center justify-between rounded-[14px] bg-[#FAFAF9] px-4 py-[13px] transition-colors hover:bg-[#f0f0ee]"
+                className="dark:bg-surface dark:hover:bg-surface-elevated mt-3 flex w-full items-center justify-between rounded-[14px] bg-[#F0F4F1] px-4 py-[13px] transition-colors hover:bg-[#E9F0EB]"
               >
                 <span className="font-body text-foreground text-[13px] font-medium">
                   {t('openAccountLabel', { category: label.toLowerCase() })}
@@ -771,19 +791,77 @@ export function MarketCategoryPage({
               </Link>
             </>
           )}
-        </div>
+        </ScrollReveal>
+      </section>
+
+      {/* Why trade {category}: editorial reason ledger (ghost numerals, hairline rows) */}
+      <section className="bg-transparent px-5 pb-6 pt-2">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-4">
+            {`${label.toUpperCase()} · ${t('whyKickerLabel').toUpperCase()}`}
+          </SectionKicker>
+          <h2 className="text-foreground text-headline-sm mb-6 font-sans">
+            {t('whyHeading', { category: label })}
+          </h2>
+          <div className="border-border/70 border-t dark:border-white/[0.08]">
+            {WHY_ITEMS.map((n, i) => (
+              <ScrollReveal key={n} index={i}>
+                <div className="border-border/70 flex items-start gap-5 border-b py-6 dark:border-white/[0.08]">
+                  <span
+                    className="font-mono text-[28px] font-semibold leading-none tabular-nums text-[#0C1F14]/[0.14] xl:text-[36px] dark:text-white/[0.12]"
+                    dir="ltr"
+                  >
+                    {`0${n}`}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-foreground text-title font-sans font-semibold">
+                      {t(`why${cap}${n}Title`)}
+                    </h3>
+                    <p className="font-body text-muted text-body mt-2 max-w-[62ch]">
+                      {t(`why${cap}${n}Body`)}
+                    </p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </ScrollReveal>
+      </section>
+
+      {/* Frequently asked questions: shared animated accordion */}
+      <section className="bg-transparent px-5 pb-8 pt-2">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <SectionKicker className="mb-4">
+            {`${label.toUpperCase()} · ${t('faqKickerLabel').toUpperCase()}`}
+          </SectionKicker>
+          <h2 className="text-foreground text-headline-sm mb-6 font-sans">{t('faqHeading')}</h2>
+          <div className="flex flex-col gap-[10px]">
+            {FAQ_ITEMS.map((n, i) => {
+              const id = `market-faq-${n}`;
+              return (
+                <ScrollReveal key={n} index={i}>
+                  <Accordion
+                    id={id}
+                    question={t(`faq${cap}Q${n}`)}
+                    answer={t(`faq${cap}A${n}`)}
+                    isOpen={openFaq === id}
+                    onToggle={() => setOpenFaq(openFaq === id ? null : id)}
+                  />
+                </ScrollReveal>
+              );
+            })}
+          </div>
+        </ScrollReveal>
       </section>
 
       {/* Specs section */}
-      <section className="rounded-t-[32px] bg-gradient-to-r from-[#FFFFFF] to-[#E2E2E2] px-5 pb-10 pt-10 dark:bg-gradient-to-r dark:from-[#000000] dark:to-[#1F262E]">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+      <section className="rounded-t-[32px] bg-gradient-to-r from-[#DCEAE1] to-[#F2F5F3] px-5 pb-10 pt-10 rtl:bg-gradient-to-l dark:from-[#0C1F14] dark:to-[#07090D]">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* <SectionKicker className="mb-4 [&>span]:bg-white/40 [&>span:last-child]:text-white/50"> */}
           <SectionKicker className="[&>span:first-child]:bg-foreground [&>span:last-child]:text-foreground mb-4">
             {t('specsKicker')}
           </SectionKicker>
-          <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[1.1] tracking-[-0.02em]">
-            {t('specsHeading')}
-          </h2>
+          <h2 className="text-foreground text-headline-sm mb-6 font-sans">{t('specsHeading')}</h2>
 
           <div className="mb-5 overflow-hidden rounded-[18px] bg-[#111111]">
             {SPEC_ROWS.map((row, i) => (
@@ -824,49 +902,48 @@ export function MarketCategoryPage({
               />
             </svg>
           </Link>
-        </div>
+        </ScrollReveal>
       </section>
 
       {/* Other markets */}
-      <section className="bg-gradient-to-r from-[#FFFFFF] to-[#E2E2E2] px-5 pb-12 pt-10 dark:bg-gradient-to-r dark:from-[#000000] dark:to-[#1F262E]">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+      <section className="bg-gradient-to-r from-[#DCEAE1] to-[#F2F5F3] px-5 pb-12 pt-10 rtl:bg-gradient-to-l dark:from-[#0C1F14] dark:to-[#07090D]">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="[&>span:first-child]:bg-foreground [&>span:last-child]:text-foreground mb-4 font-mono text-[10px] font-medium leading-[100%] tracking-[0.18em]">
             {t('otherKicker')}
           </SectionKicker>
-          <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[108%] tracking-[-0.8px]">
-            {t('otherHeading')}
-          </h2>
+          <h2 className="text-foreground text-headline-sm mb-6 font-sans">{t('otherHeading')}</h2>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
-            {ALL_MARKETS.filter((m) => m.toLowerCase() !== validKey).map((market) => (
-              <Link
-                key={market}
-                href={`/${locale}/markets/${market.toLowerCase()}`}
-                className="hover:border-accent/30 group flex items-center justify-between rounded-[18px] border border-white/[0.12] bg-[#FAFAF9] px-5 py-4 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/[0.10] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] dark:bg-[#000000]"
-              >
-                <div>
-                  <p className="text-foreground font-sans text-[15px] font-semibold">
-                    {catText[market.toLowerCase() as keyof typeof catText]?.label ?? market}
-                  </p>
-                  <p className="font-body mt-[3px] text-[11px] text-[#5D6067] dark:text-[#B8BFCC]">
-                    {t('liveTag')}
-                  </p>
-                </div>
-                <div className="group-hover:bg-accent flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[rgba(0,214,97,0.30)] to-[rgba(255,255,255,0.30)] transition-colors">
-                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                    <path
-                      d="M4 12L12 4M12 4H7M12 4v5"
-                      stroke="white"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="invert"
-                    />
-                  </svg>
-                </div>
-              </Link>
+            {ALL_MARKETS.filter((m) => m.toLowerCase() !== validKey).map((market, i) => (
+              <ScrollReveal key={market} index={i}>
+                <Link
+                  href={`/${locale}/markets/${market.toLowerCase()}`}
+                  className="hover:border-accent/30 group flex items-center justify-between rounded-[18px] border border-white/[0.12] bg-[#F0F4F1] px-5 py-4 transition-all duration-200 hover:bg-white/[0.10] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] dark:bg-[#000000]"
+                >
+                  <div>
+                    <p className="text-foreground font-sans text-[15px] font-semibold">
+                      {catText[market.toLowerCase() as keyof typeof catText]?.label ?? market}
+                    </p>
+                    <p className="font-body mt-[3px] text-[11px] text-[#5D6067] dark:text-[#B8BFCC]">
+                      {t('liveTag')}
+                    </p>
+                  </div>
+                  <div className="group-hover:bg-accent flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[rgba(0,214,97,0.30)] to-[rgba(255,255,255,0.30)] transition-colors">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                      <path
+                        d="M4 12L12 4M12 4H7M12 4v5"
+                        stroke="white"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="invert"
+                      />
+                    </svg>
+                  </div>
+                </Link>
+              </ScrollReveal>
             ))}
           </div>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );

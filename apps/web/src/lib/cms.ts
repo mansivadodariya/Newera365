@@ -400,7 +400,37 @@ export interface CmsSiteSettings {
   regulatoryDisclosureAr?: string | null;
   companyRegistrationEn?: string | null;
   companyRegistrationAr?: string | null;
-  liveChatUrl?: string | null;
+  // Homepage USP metrics ("Why NewEra" band)
+  uspMetrics?:
+    | {
+        valueEn: string;
+        valueAr: string;
+        titleEn: string;
+        titleAr: string;
+        descEn: string;
+        descAr: string;
+        id?: string | null;
+      }[]
+    | null;
+  // Partners / infrastructure wall
+  partners?:
+    | {
+        groupKey: string;
+        name: string;
+        logoType?: string | null;
+        logoFilename?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  // Page stat callouts
+  aboutManifestoStatValue?: string | null;
+  fundingWithdrawalStatValue?: string | null;
+  supportPromiseStats?:
+    | { valueEn: string; valueAr: string; labelEn: string; labelAr: string; id?: string | null }[]
+    | null;
+  webTraderSpecs?:
+    | { valueEn: string; valueAr: string; labelEn: string; labelAr: string; id?: string | null }[]
+    | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -435,8 +465,41 @@ export interface CmsIBContent {
   ibDescription?: string | null;
   affiliateDescription?: string | null;
   whiteLabelDescription?: string | null;
+  ibTag?: string | null;
   ibRateDisplay?: string | null;
+  ibPayoutsFrequency?: string | null;
+  ibMinimum?: string | null;
+  affiliateTag?: string | null;
   affiliateCpaMax?: string | null;
+  affiliateCookieDays?: string | null;
+  affiliateMinCpa?: string | null;
+  wlTag?: string | null;
+  wlSetupTime?: string | null;
+  wlSpreadMarkup?: string | null;
+  wlTechStack?: string | null;
+  heroStat1Value?: string | null;
+  heroStat2Value?: string | null;
+  heroStat3Value?: string | null;
+  heroStat4Value?: string | null;
+  incomeLadder?:
+    | {
+        balanceLabel: string;
+        minBalance: number;
+        incomeValue: string;
+        isTopSlab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  rebateTables?:
+    | {
+        instrumentNameEn: string;
+        instrumentNameAr: string;
+        rows?: { spread: string; commission: string; rebate: string; id?: string | null }[] | null;
+        id?: string | null;
+      }[]
+    | null;
+  ftdCap?: string | null;
+  ftdMinLots?: string | null;
   steps?: { stepTitle: string; stepDescription: string; id?: string | null }[] | null;
   ctaHeading?: string | null;
   ctaSubtitle?: string | null;

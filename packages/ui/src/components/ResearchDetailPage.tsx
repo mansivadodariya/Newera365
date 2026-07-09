@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { RichText } from './RichText';
 import type { SlateNode } from './RichText';
+import { ReadingProgress } from './ReadingProgress';
 
 export interface RelatedInstrument {
   id: number;
@@ -99,6 +100,7 @@ export function ResearchDetailPage({
 
   return (
     <>
+      <ReadingProgress />
       {/* Breadcrumb */}
       <section className="bg-transparent px-5 pb-0 pt-6">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
@@ -240,13 +242,13 @@ export function ResearchDetailPage({
                     href={`/${locale}/${basePath}/${art.slug}`}
                     className="group flex items-center justify-between gap-4 py-4 xl:flex-col xl:items-start xl:gap-3 xl:py-0"
                   >
-                    {/* Desktop: cover thumbnail (CMS image, gradient fallback) */}
-                    <div className="hidden xl:block xl:h-[140px] xl:w-full xl:overflow-hidden xl:rounded-[12px] xl:bg-gradient-to-br xl:from-[#0d2b1a] xl:via-[#0a1f12] xl:to-[#111111]">
+                    {/* Desktop: cover thumbnail (CMS image, gradient fallback); image zooms + gains an inner shadow on hover (client-approved article-card override) */}
+                    <div className="relative hidden after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.14),inset_0_10px_30px_-6px_rgba(0,0,0,0.5)] after:transition-opacity after:duration-300 after:content-[''] motion-safe:group-hover:after:opacity-100 xl:block xl:h-[140px] xl:w-full xl:overflow-hidden xl:rounded-[12px] xl:bg-gradient-to-br xl:from-[#0d2b1a] xl:via-[#0a1f12] xl:to-[#111111]">
                       {art.image ? (
                         <img
                           src={art.image}
                           alt={art.title}
-                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                          className="h-full w-full object-cover transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.05]"
                         />
                       ) : null}
                     </div>
@@ -290,7 +292,7 @@ export function ResearchDetailPage({
       {/* CTA */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h2 className="mb-3 font-sans text-[26px] font-semibold leading-[1.1] text-white">
+          <h2 className="text-headline-sm mb-3 font-sans text-white">
             {t('tradeHeading')}
             <br />
             {t('tradeSubheading')}

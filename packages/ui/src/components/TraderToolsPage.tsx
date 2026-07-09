@@ -4,9 +4,13 @@ import { useState, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { CountUp } from './CountUp';
 import { CalcSelect } from './CalcSelect';
+import { PivotCalculator } from './PivotCalculatorPage';
+import { ProfitCalculator } from './ProfitCalculatorPage';
+import { FibonacciCalculator } from './FibonacciCalculatorPage';
 
-type ToolTab = 'MARGIN' | 'PIP' | 'SWAP';
+type ToolTab = 'MARGIN' | 'PIP' | 'SWAP' | 'PIVOT' | 'PROFIT' | 'FIBONACCI';
 
 // ---------------------------------------------------------------------------
 // CMS instrument shape (subset of what the route page fetches)
@@ -113,9 +117,13 @@ function ResultCard({
               ? labels.resultPip
               : labels.resultSwap}
         </p>
-        <p className="font-sans text-[42px] font-semibold tabular-nums leading-[1.1] text-white">
+        <p dir="ltr" className="font-mono text-[42px] font-semibold tabular-nums leading-[1.1] text-white">
           {activeTab === 'SWAP' && swap < 0 ? '-' : ''}
-          {Math.abs(activeTab === 'MARGIN' ? margin : activeTab === 'PIP' ? pip : swap).toFixed(2)}
+          <CountUp
+            value={Math.abs(
+              activeTab === 'MARGIN' ? margin : activeTab === 'PIP' ? pip : swap,
+            ).toFixed(2)}
+          />
           <span className="ms-1 text-[22px] font-normal text-white/60">{currency}</span>
         </p>
       </div>
@@ -134,7 +142,12 @@ function ResultCard({
               <span className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
                 {item.label}
               </span>
-              <span className="font-body text-[12px] font-medium text-white">{item.value}</span>
+              <span
+                dir="ltr"
+                className="w-fit font-mono text-[12px] font-medium tabular-nums text-white"
+              >
+                {item.value}
+              </span>
             </div>
           ))}
         {activeTab === 'PIP' &&
@@ -147,7 +160,12 @@ function ResultCard({
               <span className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
                 {item.label}
               </span>
-              <span className="font-body text-[12px] font-medium text-white">{item.value}</span>
+              <span
+                dir="ltr"
+                className="w-fit font-mono text-[12px] font-medium tabular-nums text-white"
+              >
+                {item.value}
+              </span>
             </div>
           ))}
         {activeTab === 'SWAP' &&
@@ -163,7 +181,12 @@ function ResultCard({
               <span className="font-body text-[9px] uppercase tracking-[0.1em] text-white/40">
                 {item.label}
               </span>
-              <span className="font-body text-[12px] font-medium text-white">{item.value}</span>
+              <span
+                dir="ltr"
+                className="w-fit font-mono text-[12px] font-medium tabular-nums text-white"
+              >
+                {item.value}
+              </span>
             </div>
           ))}
       </div>
@@ -192,32 +215,34 @@ function FormulaBox({
 }) {
   return (
     <div className="rounded-[14px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
-      <p className="font-body text-muted mb-2 text-[10px] uppercase tracking-[0.1em]">
+      <p className="font-mono text-muted mb-2.5 text-[10px] uppercase tracking-[0.1em]">
         {calcKicker}
       </p>
-      <p className="font-body text-foreground text-[13px] leading-[1.6]">
-        {activeTab === 'MARGIN' && (
-          <>
-            <span className="font-medium">{marginFormula}</span>
-            <br />
-            <span className="text-muted">{marginDesc}</span>
-          </>
-        )}
-        {activeTab === 'PIP' && (
-          <>
-            <span className="font-medium">{pipFormula}</span>
-            <br />
-            <span className="text-muted">{pipDesc}</span>
-          </>
-        )}
-        {activeTab === 'SWAP' && (
-          <>
-            <span className="font-medium">{swapFormula}</span>
-            <br />
-            <span className="text-muted">{swapDesc}</span>
-          </>
-        )}
-      </p>
+      {activeTab === 'MARGIN' && <FormulaRow formula={marginFormula} desc={marginDesc} />}
+      {activeTab === 'PIP' && <FormulaRow formula={pipFormula} desc={pipDesc} />}
+      {activeTab === 'SWAP' && <FormulaRow formula={swapFormula} desc={swapDesc} />}
+    </div>
+  );
+}
+
+/** Renders a formula as discrete mono "chips" (each whitespace-separated token —
+    variable or operator — a small bordered pill) so it reads like a terminal
+    expression: lots × contract × price. The strings themselves are unchanged. */
+function FormulaRow({ formula, desc }: { formula: string; desc: string }) {
+  const tokens = formula.split(/\s+/).filter(Boolean);
+  return (
+    <div>
+      <div className="flex flex-wrap items-center gap-1.5">
+        {tokens.map((tok, i) => (
+          <span
+            key={`${tok}-${i}`}
+            className="border-border text-foreground inline-flex items-center rounded-[7px] border bg-white px-2 py-[3px] font-mono text-[11px] tabular-nums dark:border-white/10 dark:bg-[#111]"
+          >
+            {tok}
+          </span>
+        ))}
+      </div>
+      <p className="font-body text-muted mt-2.5 text-[12px] leading-[1.6]">{desc}</p>
     </div>
   );
 }
@@ -282,7 +307,12 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
     { id: 'MARGIN', label: t('tabMargin') },
     { id: 'PIP', label: t('tabPip') },
     { id: 'SWAP', label: t('tabSwap') },
+    { id: 'PIVOT', label: t('tabPivot') },
+    { id: 'PROFIT', label: t('tabProfit') },
+    { id: 'FIBONACCI', label: t('tabFibonacci') },
   ];
+
+  const isBaseTab = activeTab === 'MARGIN' || activeTab === 'PIP' || activeTab === 'SWAP';
 
   const resultCardLabels = {
     resultMargin: t('resultMargin'),
@@ -298,30 +328,6 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
     infoLots: t('infoLots'),
     infoDays: t('infoDays'),
   };
-
-  const CALC_TOOLS = [
-    {
-      id: 'pivot',
-      tag: t('tagTechnical'),
-      label: t('pivotTitle'),
-      desc: t('pivotDesc'),
-      href: `/${locale}/tools/pivot`,
-    },
-    {
-      id: 'profit',
-      tag: t('tagPL'),
-      label: t('profitTitle'),
-      desc: t('profitDesc'),
-      href: `/${locale}/tools/profit`,
-    },
-    {
-      id: 'fib',
-      tag: t('tagTechnical'),
-      label: t('fibTitle'),
-      desc: t('fibDesc'),
-      href: `/${locale}/tools/fibonacci`,
-    },
-  ];
 
   const OTHER_TOOLS = [
     {
@@ -344,7 +350,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
         {/* Hero */}
         <section className="bg-transparent px-5 pb-6 pt-9">
           <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
+            <h1 className="text-foreground text-display mb-3 font-sans">
               {t('heroLine1')}
               <br />
               <span className="text-accent">{t('heroLine2')}</span>
@@ -363,7 +369,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
       {/* Hero */}
       <section className="bg-transparent px-5 pb-6 pt-9">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h1 className="text-foreground mb-3 font-sans text-[38px] font-semibold leading-[1.05] tracking-[-1.14px]">
+          <h1 className="text-foreground text-display mb-3 font-sans">
             {t('heroLine1')}
             <br />
             <span className="text-accent">{t('heroLine2')}</span>
@@ -378,12 +384,12 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
       <section className="px-5 pb-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Tab switcher */}
-          <div className="border-border mb-5 flex rounded-[14px] border bg-[#f2f2f4] p-1 dark:border-white/[0.08] dark:bg-[#1a1c22]">
+          <div className="border-border mb-5 flex gap-1 overflow-x-auto rounded-[14px] border bg-[#f2f2f4] p-1 [-ms-overflow-style:none] [scrollbar-width:none] dark:border-white/[0.08] dark:bg-[#1a1c22] [&::-webkit-scrollbar]:hidden">
             {TABS.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`font-body flex-1 rounded-[11px] py-2.5 text-[13px] font-medium transition-all ${
+                className={`flex-shrink-0 whitespace-nowrap rounded-[11px] px-4 py-2.5 font-mono text-[13px] font-medium uppercase tracking-[0.06em] transition-all xl:flex-1 ${
                   activeTab === tab.id
                     ? 'bg-white text-[#111] shadow-sm dark:bg-[#2a2d36] dark:text-white'
                     : 'text-[#6b7280] hover:text-[#111] dark:text-white/40 dark:hover:text-white/80'
@@ -394,8 +400,10 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
             ))}
           </div>
 
-          {/* Inputs */}
-          <div className="xl:flex xl:gap-8">
+          {isBaseTab && (
+            <>
+              {/* Inputs */}
+              <div className="xl:flex xl:gap-8">
             {/* Input fields: 2-col grid on xl */}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:flex-1">
               <CalcSelect
@@ -524,6 +532,12 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
               swapDesc={t('calcSwapDesc')}
             />
           </div>
+            </>
+          )}
+
+          {activeTab === 'PIVOT' && <PivotCalculator />}
+          {activeTab === 'PROFIT' && <ProfitCalculator instruments={cmsInstruments} />}
+          {activeTab === 'FIBONACCI' && <FibonacciCalculator />}
         </div>
       </section>
 
@@ -536,40 +550,13 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
           <h2 className="text-foreground mb-5 font-sans text-[24px] font-semibold leading-[1.15] tracking-[-0.48px]">
             {t('moreHeading')}
           </h2>
-          <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3 xl:gap-5">
-            {CALC_TOOLS.map((calc) => (
-              <div
-                key={calc.id}
-                className="hover:border-accent/30 dark:hover:border-accent/25 group flex flex-col gap-3 rounded-[16px] border border-[#e5e7eb] bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,176,80,0.1)] dark:border-white/[0.07] dark:bg-[#1a1c22]"
-              >
-                <span className="font-body bg-accent/10 text-accent inline-flex w-fit rounded-full px-2.5 py-[3px] text-[10px] font-semibold uppercase tracking-[0.08em]">
-                  {calc.tag}
-                </span>
-                <div>
-                  <p className="font-sans text-[14px] font-semibold text-[#111] dark:text-white">
-                    {calc.label}
-                  </p>
-                  <p className="font-body mt-1 text-[12px] leading-[1.55] text-[#6b7280] dark:text-white/50">
-                    {calc.desc}
-                  </p>
-                </div>
-                <Link
-                  href={calc.href}
-                  className="font-body text-accent mt-auto text-[13px] font-semibold hover:underline"
-                >
-                  {t('openCalcBtn')}
-                </Link>
-              </div>
-            ))}
-          </div>
-
           {/* Other tools */}
           <div className="mt-6 flex flex-col gap-[10px] xl:flex-row xl:gap-4">
             {OTHER_TOOLS.map((tool) => (
               <Link
                 key={tool.id}
                 href={tool.href}
-                className="hover:border-accent/30 dark:hover:border-accent/25 group flex items-center justify-between rounded-[16px] border border-[#e5e7eb] bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(0,176,80,0.08)] xl:flex-1 dark:border-white/[0.07] dark:bg-[#1a1c22]"
+                className="hover:border-accent/30 dark:hover:border-accent/25 group flex items-center justify-between rounded-[16px] border border-[#e5e7eb] bg-white p-4 transition-all duration-200 hover:shadow-[0_4px_16px_rgba(0,176,80,0.08)] xl:flex-1 dark:border-white/[0.07] dark:bg-[#1a1c22]"
               >
                 <div>
                   <p className="font-sans text-[14px] font-semibold text-[#111] dark:text-white">
