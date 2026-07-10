@@ -88,10 +88,10 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
             <ScrollReveal>
               <Link
                 href={`/${locale}/guides/${featured.slug}`}
-                className="ink-band group block overflow-hidden rounded-[24px] border border-white/[0.08] ring-1 ring-inset ring-white/[0.05] transition-colors duration-200 hover:border-accent/40"
+                className="ink-band hover:border-accent/40 group block overflow-hidden rounded-[24px] border border-white/[0.08] ring-1 ring-inset ring-white/[0.05] transition-colors duration-200"
               >
                 <div className="p-6 xl:p-9">
-                  <SectionKicker className="mb-4 [&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright">
+                  <SectionKicker className="[&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright mb-4">
                     {t('featuredLabel')}
                   </SectionKicker>
                   <h2 className="text-title xl:text-headline-sm group-hover:text-accent-bright max-w-[26ch] font-sans font-semibold leading-[1.12] text-white transition-colors duration-200">
@@ -144,12 +144,12 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
                 <ScrollReveal key={guide.id} index={i}>
                   <Link
                     href={`/${locale}/guides/${guide.slug}`}
-                    className="group border-border grid grid-cols-[auto_1fr] items-baseline gap-4 border-b border-s-2 border-s-transparent py-6 ps-3 transition-colors duration-200 hover:border-s-accent xl:gap-6 xl:py-7 xl:ps-4"
+                    className="border-border hover:border-s-accent group grid grid-cols-[auto_1fr] items-baseline gap-4 border-b border-s-2 border-s-transparent py-6 ps-3 transition-colors duration-200 xl:gap-6 xl:py-7 xl:ps-4"
                   >
                     <span
                       dir="ltr"
                       aria-hidden="true"
-                      className="text-foreground/[0.08] group-hover:text-accent/30 w-[46px] shrink-0 font-sans text-[46px] font-semibold leading-none tracking-tight tabular-nums transition-colors duration-200 xl:w-[64px] xl:text-[60px]"
+                      className="text-foreground/[0.08] group-hover:text-accent/30 w-[46px] shrink-0 font-sans text-[46px] font-semibold tabular-nums leading-none tracking-tight transition-colors duration-200 xl:w-[64px] xl:text-[60px]"
                     >
                       {String(index).padStart(2, '0')}
                     </span>
@@ -163,7 +163,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
                         </p>
                       )}
                       <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
-                        <span className="text-eyebrow border-border text-muted dark:border-white/10 dark:bg-white/[0.04] dark:text-white/50 inline-flex items-center rounded-full border bg-white px-2.5 py-1 font-mono uppercase">
+                        <span className="text-eyebrow border-border text-muted inline-flex items-center rounded-full border bg-white px-2.5 py-1 font-mono uppercase dark:border-white/10 dark:bg-white/[0.04] dark:text-white/50">
                           {t('rowTag')}
                         </span>
                         <span className="text-eyebrow text-muted inline-flex items-center font-mono uppercase tabular-nums">
@@ -171,7 +171,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
                         </span>
                         {guide.author && (
                           <span className="text-caption text-muted inline-flex items-center gap-1.5 font-sans">
-                            <span className="border-border text-muted dark:border-white/20 dark:text-white/60 flex h-5 w-5 items-center justify-center rounded-full border text-[9px] font-semibold">
+                            <span className="border-border text-muted flex h-5 w-5 items-center justify-center rounded-full border text-[9px] font-semibold dark:border-white/20 dark:text-white/60">
                               {guide.author[0]}
                             </span>
                             {guide.author}
@@ -202,7 +202,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
       {/* CTA */}
       <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright">
+          <SectionKicker className="[&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright mb-4">
             {t('ctaKicker')}
           </SectionKicker>
           <h2 className="text-headline-sm mb-3 font-sans text-white">{t('ctaHeading')}</h2>

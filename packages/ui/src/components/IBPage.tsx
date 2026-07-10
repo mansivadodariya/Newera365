@@ -31,7 +31,12 @@ export interface IBCmsContent {
   heroStat3Value?: string | null;
   heroStat4Value?: string | null;
   incomeLadder?:
-    | { balanceLabel: string; minBalance: number; incomeValue: string; isTopSlab?: boolean | null }[]
+    | {
+        balanceLabel: string;
+        minBalance: number;
+        incomeValue: string;
+        isTopSlab?: boolean | null;
+      }[]
     | null;
   rebateTables?:
     | {
@@ -50,10 +55,30 @@ export interface IBCmsContent {
 const DEFAULT_LADDER = [
   { balanceLabel: '$30,000 to $50,000', minBalance: 30000, incomeValue: '$500', isTopSlab: false },
   { balanceLabel: '$50,000 to $100,000', minBalance: 50000, incomeValue: '$750', isTopSlab: false },
-  { balanceLabel: '$100,000 to $200,000', minBalance: 100000, incomeValue: '$1,250', isTopSlab: false },
-  { balanceLabel: '$200,000 to $300,000', minBalance: 200000, incomeValue: '$2,000', isTopSlab: false },
-  { balanceLabel: '$300,000 to $400,000', minBalance: 300000, incomeValue: '$3,000', isTopSlab: false },
-  { balanceLabel: '$400,000 to $500,000', minBalance: 400000, incomeValue: '$4,000', isTopSlab: false },
+  {
+    balanceLabel: '$100,000 to $200,000',
+    minBalance: 100000,
+    incomeValue: '$1,250',
+    isTopSlab: false,
+  },
+  {
+    balanceLabel: '$200,000 to $300,000',
+    minBalance: 200000,
+    incomeValue: '$2,000',
+    isTopSlab: false,
+  },
+  {
+    balanceLabel: '$300,000 to $400,000',
+    minBalance: 300000,
+    incomeValue: '$3,000',
+    isTopSlab: false,
+  },
+  {
+    balanceLabel: '$400,000 to $500,000',
+    minBalance: 400000,
+    incomeValue: '$4,000',
+    isTopSlab: false,
+  },
   { balanceLabel: '$500,000+', minBalance: 500000, incomeValue: '$5,000', isTopSlab: true },
 ] as const;
 
@@ -254,8 +279,11 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       if (res.ok) {
         setApplyDone(true);
       } else {
-        const data = (await res.json().catch(() => ({}))) as { error?: string };
-        setApplyError(data.error ?? t('applyError'));
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: string;
+          errors?: { message?: string }[];
+        };
+        setApplyError(data.errors?.[0]?.message ?? data.error ?? t('applyError'));
       }
     } catch {
       setApplyError(t('applyError'));
@@ -270,7 +298,8 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
   // table below), single source of truth for both the display and the estimator.
   const incomeLadder = cmsContent?.incomeLadder?.length ? cmsContent.incomeLadder : DEFAULT_LADDER;
   // Non-null assertion is safe: DEFAULT_LADDER is a fixed 7-item literal, always non-empty.
-  const topSlab = incomeLadder.find((slab) => slab.isTopSlab) ?? DEFAULT_LADDER[DEFAULT_LADDER.length - 1]!;
+  const topSlab =
+    incomeLadder.find((slab) => slab.isTopSlab) ?? DEFAULT_LADDER[DEFAULT_LADDER.length - 1]!;
 
   // Interactive partner estimator (client IB deck): maintained balance maps to a
   // monthly income slab (from incomeLadder — ascending by minBalance); lots per
@@ -293,7 +322,11 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
   // Headline partnership metrics (client IB deck, "why partner with Newera").
   // CMS-driven values, i18n eyebrow/sub labels. CountUp animates the numeric part.
   const heroStats: { eyebrow: string | null; value: string; sub: string }[] = [
-    { eyebrow: t('statUpTo'), value: cmsContent?.heroStat1Value ?? '$5,000', sub: t('statPerMonth') },
+    {
+      eyebrow: t('statUpTo'),
+      value: cmsContent?.heroStat1Value ?? '$5,000',
+      sub: t('statPerMonth'),
+    },
     { eyebrow: t('statUpTo'), value: cmsContent?.heroStat2Value ?? '15', sub: t('statPerLot') },
     { eyebrow: null, value: cmsContent?.heroStat3Value ?? '3', sub: t('statStreams') },
     { eyebrow: null, value: cmsContent?.heroStat4Value ?? '4', sub: t('statMarkets') },
@@ -302,8 +335,8 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
   // Stream 1 — rebate per standard lot by instrument (IB deck figures, verbatim).
   // CMS-driven (falls back to the same figures); rows = Raw / Standard / Pro.
   const rebateTiers = [t('rebateTierRaw'), t('rebateTierStandard'), t('rebateTierPro')];
-  const rebateTables: { title: string; rows: [string, string, string][] }[] = cmsContent?.rebateTables
-    ?.length
+  const rebateTables: { title: string; rows: [string, string, string][] }[] = cmsContent
+    ?.rebateTables?.length
     ? cmsContent.rebateTables.map((rt) => ({
         title: isAr ? rt.instrumentNameAr : rt.instrumentNameEn,
         rows: (rt.rows ?? []).map((r) => [r.spread, r.commission, r.rebate]) as [
@@ -313,17 +346,39 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
         ][],
       }))
     : [
-        { title: t('rebateGold'), rows: [['7-8', '10', '3'], ['20', '0', '5'], ['30', '0', '15']] },
-        { title: t('rebateFx'), rows: [['2-4', '7', '2'], ['12-15', '0', '4'], ['18-22', '0', '8']] },
+        {
+          title: t('rebateGold'),
+          rows: [
+            ['7-8', '10', '3'],
+            ['20', '0', '5'],
+            ['30', '0', '15'],
+          ],
+        },
+        {
+          title: t('rebateFx'),
+          rows: [
+            ['2-4', '7', '2'],
+            ['12-15', '0', '4'],
+            ['18-22', '0', '8'],
+          ],
+        },
         {
           title: t('rebateSilver'),
-          rows: [['15-20', '10', '3'], ['35-45', '0', '8'], ['50-70', '0', '15']],
+          rows: [
+            ['15-20', '10', '3'],
+            ['35-45', '0', '8'],
+            ['50-70', '0', '15'],
+          ],
         },
       ];
 
   // Stream 2 — FTD eligibility: BOTH conditions in the same monthly cycle.
   const ftdConditions: { value: string; unit: string; detail: string }[] = [
-    { value: cmsContent?.ftdCap ?? 'USD 10,000', unit: t('ftdCond1Cap'), detail: t('ftdCond1Detail') },
+    {
+      value: cmsContent?.ftdCap ?? 'USD 10,000',
+      unit: t('ftdCond1Cap'),
+      detail: t('ftdCond1Detail'),
+    },
     { value: cmsContent?.ftdMinLots ?? '50', unit: t('ftdCond2Unit'), detail: t('ftdCond2Detail') },
   ];
 
@@ -586,7 +641,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
             ).map(([titleKey, descKey], i) => (
               <div
                 key={titleKey}
-                className="group border-border hover:border-accent/30 dark:hover:border-accent/30 shadow-card relative overflow-hidden rounded-[20px] border bg-white p-6 transition-all duration-300 hover:bg-[#07130c] hover:shadow-[0_18px_44px_rgba(0,0,0,0.28)] dark:border-white/[0.08] dark:bg-[#15171c] dark:hover:bg-[#07130c]"
+                className="border-border hover:border-accent/30 dark:hover:border-accent/30 shadow-card group relative overflow-hidden rounded-[20px] border bg-white p-6 transition-all duration-300 hover:bg-[#07130c] hover:shadow-[0_18px_44px_rgba(0,0,0,0.28)] dark:border-white/[0.08] dark:bg-[#15171c] dark:hover:bg-[#07130c]"
               >
                 <div className="flex items-center justify-between">
                   <span className="bg-accent/10 text-accent group-hover:bg-accent-bright/[0.16] group-hover:text-accent-bright flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300">
@@ -594,7 +649,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                   </span>
                   <span
                     dir="ltr"
-                    className="text-accent/70 group-hover:text-accent-bright font-sans text-[26px] font-semibold leading-none tabular-nums transition-colors duration-300"
+                    className="text-accent/70 group-hover:text-accent-bright font-sans text-[26px] font-semibold tabular-nums leading-none transition-colors duration-300"
                   >
                     {String(i + 1).padStart(2, '0')}
                   </span>
@@ -639,7 +694,9 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                   <div
                     key={slab.balanceLabel}
                     className={`grid grid-cols-[1fr_auto] items-center gap-x-6 border-t border-white/[0.06] px-3 py-3 ${
-                      slab.isTopSlab ? 'bg-accent/[0.08] -mx-1 rounded-[10px] border-transparent px-4' : ''
+                      slab.isTopSlab
+                        ? 'bg-accent/[0.08] -mx-1 rounded-[10px] border-transparent px-4'
+                        : ''
                     }`}
                   >
                     <span className="font-body flex items-center gap-2.5 text-[14px] text-white/80">
@@ -679,7 +736,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
             {rebateTables.map((table) => (
               <div
                 key={table.title}
-                className="group border-border shadow-card relative overflow-hidden rounded-[18px] border bg-white transition-[transform,box-shadow,border-color] duration-300 hover:border-accent/40 hover:shadow-[0_18px_44px_-12px_rgba(0,0,0,0.18)] motion-safe:hover:-translate-y-1 dark:border-white/[0.08] dark:bg-[#101318]"
+                className="border-border shadow-card hover:border-accent/40 group relative overflow-hidden rounded-[18px] border bg-white transition-[transform,box-shadow,border-color] duration-300 hover:shadow-[0_18px_44px_-12px_rgba(0,0,0,0.18)] motion-safe:hover:-translate-y-1 dark:border-white/[0.08] dark:bg-[#101318]"
               >
                 <span
                   aria-hidden="true"
@@ -754,7 +811,9 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
           <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
             {t('stream2Kicker')}
           </SectionKicker>
-          <h2 className="text-headline text-foreground max-w-[20ch] font-sans">{t('ftdHeading')}</h2>
+          <h2 className="text-headline text-foreground max-w-[20ch] font-sans">
+            {t('ftdHeading')}
+          </h2>
           <p className="font-body text-lead text-muted mt-3 max-w-[560px]">{t('ftdSub')}</p>
 
           {/* Two conditions joined by an explicit AND */}
@@ -881,7 +940,10 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                 <p className="text-eyebrow font-mono font-medium uppercase text-white/45">
                   {t('estTotalLabel')}
                 </p>
-                <p dir="ltr" className="text-sheen text-metric-sm mt-2 w-fit font-sans tabular-nums">
+                <p
+                  dir="ltr"
+                  className="text-sheen text-metric-sm mt-2 w-fit font-sans tabular-nums"
+                >
                   ${estTotal.toLocaleString('en-US')}
                   <span className="text-white/50">/mo</span>
                 </p>
@@ -905,10 +967,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
           </h2>
           <div className="bg-border border-border grid grid-cols-1 gap-px overflow-hidden rounded-[20px] border sm:grid-cols-2 xl:grid-cols-4">
             {targetMarkets.map((m) => (
-              <div
-                key={m.name}
-                className="flex flex-col gap-2 bg-white p-6 dark:bg-[#15171c]"
-              >
+              <div key={m.name} className="flex flex-col gap-2 bg-white p-6 dark:bg-[#15171c]">
                 <p className="text-foreground font-sans text-[17px] font-semibold">{m.name}</p>
                 <p className="font-body text-caption text-muted leading-relaxed">{m.desc}</p>
               </div>

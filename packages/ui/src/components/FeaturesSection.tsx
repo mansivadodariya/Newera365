@@ -79,7 +79,7 @@ export function FeaturesSection({ metrics }: FeaturesSectionProps) {
 
   return (
     <>
-      <section className="ink-band relative overflow-hidden px-5 py-14 xl:py-24">
+      <section className="ink-band relative overflow-hidden px-5 py-14 xl:py-20">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Header row */}
           <div className="xl:flex xl:items-end xl:justify-between xl:gap-16">
@@ -100,24 +100,24 @@ export function FeaturesSection({ metrics }: FeaturesSectionProps) {
           <RevealDemo>
             <CountUpGroup>
               <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 xl:mt-14 xl:grid-cols-3">
-              {resolvedMetrics.map(({ key, value, title, desc }, i) => (
-                <div
-                  key={key}
-                  className={`relative flex flex-col gap-4 px-1 py-8 transition-colors hover:bg-white/[0.03] sm:px-8 sm:py-9 xl:px-10 ${TILE_BORDERS[i]}`}
-                >
-                  {/* dir=ltr keeps "< 12 ms" glyph order in Arabic; w-fit lets the
+                {resolvedMetrics.map(({ key, value, title, desc }, i) => (
+                  <div
+                    key={key}
+                    className={`relative flex flex-col gap-4 px-1 py-8 transition-colors hover:bg-white/[0.03] sm:px-8 sm:py-9 xl:px-10 ${TILE_BORDERS[i]}`}
+                  >
+                    {/* dir=ltr keeps "< 12 ms" glyph order in Arabic; w-fit lets the
                       flex column place it at the logical start in both directions */}
-                  <span dir="ltr" className="text-sheen text-metric w-fit font-sans tabular-nums">
-                    <CountUp value={value} />
-                  </span>
-                  <div>
-                    <p className="text-body-lg font-sans font-semibold text-white">{title}</p>
-                    <p className="font-body text-body mt-1.5 max-w-[36ch] text-white/55">
-                      {desc}
-                    </p>
+                    <span dir="ltr" className="text-sheen text-metric w-fit font-sans tabular-nums">
+                      <CountUp value={value} />
+                    </span>
+                    <div>
+                      <p className="text-body-lg font-sans font-semibold text-white">{title}</p>
+                      <p className="font-body text-body mt-1.5 max-w-[36ch] text-white/55">
+                        {desc}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
               </div>
             </CountUpGroup>
           </RevealDemo>

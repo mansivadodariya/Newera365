@@ -57,7 +57,7 @@ export function HeroSectionDemo() {
 
   return (
     <>
-      <section className="relative overflow-hidden bg-transparent px-5 pb-10 pt-28 md:pt-32 xl:pb-16 xl:pt-40">
+      <section className="relative overflow-hidden bg-transparent px-5 pb-8 pt-28 md:pt-32 xl:pb-12 xl:pt-40">
         {/* Signal aurora — a slow-drifting signal-green gradient backdrop
             (.hero-aurora in globals.css) that replaces the earlier terminal
             photo plate. It bleeds down from the dark ticker strip above and
@@ -69,7 +69,7 @@ export function HeroSectionDemo() {
             keeps it static — visibility is never gated on motion). */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-[560px] select-none md:h-[640px] xl:h-[800px] [mask-image:radial-gradient(140%_110%_at_50%_-14%,#000_52%,transparent_92%)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[560px] select-none [mask-image:radial-gradient(140%_110%_at_50%_-14%,#000_52%,transparent_92%)] md:h-[640px] xl:h-[800px]"
         >
           <div className="hero-aurora absolute inset-0">
             <div className="hero-aurora__blobs">

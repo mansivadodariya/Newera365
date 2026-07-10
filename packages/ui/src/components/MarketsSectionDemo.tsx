@@ -68,7 +68,7 @@ export async function MarketsSectionDemo() {
   }));
 
   return (
-    <section className="rounded-s-[32px] bg-gradient-to-r from-[#DCEAE1] to-[#F2F5F3] px-5 pb-9 pt-12 xl:pb-16 xl:pt-14 rtl:bg-gradient-to-l dark:from-[#1F262E] dark:to-[#000000]">
+    <section className="rounded-s-[32px] bg-gradient-to-r from-[#DCEAE1] to-[#F2F5F3] px-5 pb-8 pt-10 xl:pb-12 xl:pt-12 rtl:bg-gradient-to-l dark:from-[#1F262E] dark:to-[#000000]">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <SectionKicker className="text-foreground [&>span:first-child]:bg-accent mb-[14px]">
           {t('marketsKicker')}

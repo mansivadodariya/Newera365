@@ -186,11 +186,7 @@ export function LiveSpark({ symbol, price, className }: LiveSparkProps) {
   }
 
   const priceColor =
-    dir === 'up'
-      ? 'text-accent-bright'
-      : dir === 'down'
-        ? 'text-down'
-        : 'text-white/90';
+    dir === 'up' ? 'text-accent-bright' : dir === 'down' ? 'text-down' : 'text-white/90';
 
   return (
     <span

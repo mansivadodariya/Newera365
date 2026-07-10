@@ -70,8 +70,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
     if (search) {
       const q = search.toLowerCase();
       result = result.filter(
-        (term) =>
-          term.term.toLowerCase().includes(q) || term.definition.toLowerCase().includes(q),
+        (term) => term.term.toLowerCase().includes(q) || term.definition.toLowerCase().includes(q),
       );
     }
     if (activeLetter) {
@@ -178,7 +177,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                   setSearch(e.target.value);
                   setActiveLetter(null);
                 }}
-                className="font-body text-body border-border text-foreground placeholder:text-muted focus:border-accent focus:ring-accent/40 w-full rounded-full border bg-white py-3.5 ps-11 pe-11 outline-none transition-colors focus:ring-1 dark:border-white/[0.1] dark:bg-[#111318] dark:text-white dark:placeholder:text-white/30"
+                className="font-body text-body border-border text-foreground placeholder:text-muted focus:border-accent focus:ring-accent/40 w-full rounded-full border bg-white py-3.5 pe-11 ps-11 outline-none transition-colors focus:ring-1 dark:border-white/[0.1] dark:bg-[#111318] dark:text-white dark:placeholder:text-white/30"
               />
               {search && (
                 <button
@@ -207,7 +206,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="border-border mb-6 flex flex-col gap-4 border-t pt-6 md:flex-row md:items-end md:justify-between">
             <SectionKicker>{t('indexKicker')}</SectionKicker>
-            <span className="font-mono text-caption text-muted tabular-nums uppercase tracking-[0.14em]">
+            <span className="text-caption text-muted font-mono uppercase tabular-nums tracking-[0.14em]">
               {statusLine}
             </span>
           </div>
@@ -220,7 +219,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                 setActiveCategory(null);
                 setActiveLetter(null);
               }}
-              className={`font-mono text-caption flex-shrink-0 rounded-full border px-3.5 py-1.5 uppercase tracking-[0.1em] transition-colors ${
+              className={`text-caption flex-shrink-0 rounded-full border px-3.5 py-1.5 font-mono uppercase tracking-[0.1em] transition-colors ${
                 !activeCategory
                   ? 'border-accent bg-accent/[0.08] text-accent'
                   : 'border-border text-muted hover:text-foreground hover:border-foreground/25 dark:border-white/[0.12] dark:text-white/55 dark:hover:text-white'
@@ -235,7 +234,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                   key={cat}
                   type="button"
                   onClick={() => handleCategoryClick(cat)}
-                  className={`font-mono text-caption flex-shrink-0 rounded-full border px-3.5 py-1.5 uppercase tracking-[0.1em] transition-colors ${
+                  className={`text-caption flex-shrink-0 rounded-full border px-3.5 py-1.5 font-mono uppercase tracking-[0.1em] transition-colors ${
                     active
                       ? 'border-accent bg-accent/[0.08] text-accent'
                       : 'border-border text-muted hover:text-foreground hover:border-foreground/25 dark:border-white/[0.12] dark:text-white/55 dark:hover:text-white'
@@ -306,7 +305,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                             {group.letter}
                           </span>
                           <span className="bg-border h-px flex-1" aria-hidden="true" />
-                          <span className="font-mono text-caption text-muted tabular-nums">
+                          <span className="text-caption text-muted font-mono tabular-nums">
                             {group.terms.length}
                           </span>
                         </header>

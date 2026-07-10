@@ -412,7 +412,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
             {DEVICE_KEYS.map((dev) => (
               <div
                 key={dev.key}
-                className="group flex min-w-0 items-center gap-[14px] rounded-[16px] border border-white/[0.08] bg-white/[0.05] px-[18px] py-[14px] text-white transition-colors hover:border-accent/40 hover:bg-white/[0.10]"
+                className="hover:border-accent/40 group flex min-w-0 items-center gap-[14px] rounded-[16px] border border-white/[0.08] bg-white/[0.05] px-[18px] py-[14px] text-white transition-colors hover:bg-white/[0.10]"
               >
                 <span className="group-hover:border-accent/40 group-hover:bg-accent/[0.15] group-hover:text-accent-bright flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[12px] border border-white/[0.10] bg-white/[0.06] text-white transition-colors [&>svg]:h-[22px] [&>svg]:w-[22px]">
                   <dev.Icon />

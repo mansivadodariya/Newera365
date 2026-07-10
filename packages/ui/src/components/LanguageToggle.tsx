@@ -63,7 +63,7 @@ export function LanguageToggle({ fullWidth = false }: LanguageToggleProps) {
       onClick={toggle}
       aria-label={ariaLabel}
       title={ariaLabel}
-      className="font-body text-foreground flex h-[38px] min-w-[38px] flex-shrink-0 items-center justify-center gap-1.5 rounded-xl bg-[#f4f4f5] px-2.5 text-[12px] font-semibold tracking-wide transition-[background-color,transform] hover:bg-[#e9e9ec] active:scale-[0.94] dark:bg-surface dark:hover:bg-white/[0.06]"
+      className="font-body text-foreground dark:bg-surface flex h-[38px] min-w-[38px] flex-shrink-0 items-center justify-center gap-1.5 rounded-xl bg-[#f4f4f5] px-2.5 text-[12px] font-semibold tracking-wide transition-[background-color,transform] hover:bg-[#e9e9ec] active:scale-[0.94] dark:hover:bg-white/[0.06]"
     >
       {/* Globe icon */}
       <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">

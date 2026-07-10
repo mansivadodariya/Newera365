@@ -10,6 +10,7 @@ import { useTheme } from 'next-themes';
 import { isRtl, type Locale } from '@newera365/types';
 import { LanguageToggle } from './LanguageToggle';
 import { AuthModal, type AuthModalType } from './AuthModal';
+import { NavIcon } from './navIcons';
 
 type NavGroup = { section: string | null; items: { label: string; href: string }[] };
 
@@ -333,14 +334,25 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
                                 : 'hover:bg-black/[0.04] dark:hover:bg-white/[0.06]'
                             }`}
                           >
-                            <span
-                              className={`font-body text-[15px] ${
-                                active
-                                  ? 'text-accent font-semibold'
-                                  : 'text-foreground/70 group-hover:text-foreground font-medium'
-                              }`}
-                            >
-                              {label}
+                            <span className="flex min-w-0 items-center gap-3">
+                              <NavIcon
+                                href={href}
+                                size={19}
+                                className={
+                                  active
+                                    ? 'text-accent'
+                                    : 'text-foreground/70 group-hover:text-accent transition-colors'
+                                }
+                              />
+                              <span
+                                className={`font-body truncate text-[15px] transition-colors ${
+                                  active
+                                    ? 'text-accent font-semibold'
+                                    : 'text-foreground/70 group-hover:text-accent font-medium'
+                                }`}
+                              >
+                                {label}
+                              </span>
                             </span>
                             <svg
                               width="6"

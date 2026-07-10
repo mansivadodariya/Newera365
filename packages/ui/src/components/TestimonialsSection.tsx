@@ -116,9 +116,7 @@ export function TestimonialsSection({
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         const rtl = getComputedStyle(track).direction === 'rtl';
-        const edge = rtl
-          ? track.getBoundingClientRect().right
-          : track.getBoundingClientRect().left;
+        const edge = rtl ? track.getBoundingClientRect().right : track.getBoundingClientRect().left;
         let nearest = 0;
         let best = Infinity;
         track.querySelectorAll<HTMLElement>('[data-idx]').forEach((s, i) => {
@@ -144,7 +142,7 @@ export function TestimonialsSection({
   const numericRating = ratingValue ? Number.parseFloat(ratingValue) : NaN;
 
   return (
-    <section className="bg-section px-5 py-10 xl:py-16">
+    <section className="bg-section px-5 py-10 xl:py-14">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         {/* Header: kicker + heading, with the rating band trailing on desktop */}
         <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
@@ -158,7 +156,7 @@ export function TestimonialsSection({
           </div>
 
           {ratingValue && (
-            <div className="border-border bg-surface-elevated shadow-card dark:shadow-card-dark flex items-center gap-4 rounded-[18px] border px-5 py-4 transition-[transform,border-color] duration-300 hover:border-accent/40 motion-safe:hover:scale-[1.02]">
+            <div className="border-border bg-surface-elevated shadow-card dark:shadow-card-dark hover:border-accent/40 flex items-center gap-4 rounded-[18px] border px-5 py-4 transition-[transform,border-color] duration-300 motion-safe:hover:scale-[1.02]">
               <span className="text-foreground font-sans text-[34px] font-bold tabular-nums leading-none">
                 {ratingValue}
                 <span className="text-muted text-[18px] font-medium"> / 5</span>
@@ -208,68 +206,70 @@ export function TestimonialsSection({
                     ? 'xl:origin-right rtl:xl:origin-left'
                     : 'xl:origin-center';
               return (
-              <div
-                key={i}
-                data-idx={i}
-                className="w-[86%] flex-shrink-0 snap-start sm:w-[calc(50%-7px)] xl:w-[calc(33.333%-10px)]"
-              >
-                {/* Active card grows to become the focus (the rest hold their
+                <div
+                  key={i}
+                  data-idx={i}
+                  className="w-[86%] flex-shrink-0 snap-start sm:w-[calc(50%-7px)] xl:w-[calc(33.333%-10px)]"
+                >
+                  {/* Active card grows to become the focus (the rest hold their
                     size, dimmed) — the auto-advance and dots drive `active`, so
                     on desktop where all cards are already visible the carousel
                     reads as a moving spotlight rather than a dead scroll. */}
-                <figure
-                  className={`border-border relative flex h-full flex-col gap-4 rounded-[20px] border bg-white p-6 transition-[transform,opacity,box-shadow] duration-500 ease-out dark:bg-[#111316] ${originClass} ${
-                    isActive
-                      ? 'shadow-card dark:shadow-card-dark xl:border-accent/40 xl:z-10 xl:scale-[1.05] xl:shadow-xl'
-                      : 'shadow-card dark:shadow-card-dark xl:opacity-55'
-                  }`}
-                >
-                {/* Quote glyph (locale-neutral — avoids LTR quote chars in RTL) */}
-                <svg
-                  width="32"
-                  height="24"
-                  viewBox="0 0 26 20"
-                  aria-hidden="true"
-                  className="text-accent/25 rtl:-scale-x-100"
-                >
-                  <path
-                    d="M0 20V11.5C0 5.2 3.9 1 9.8 0l.9 2.9C7.6 4 6 6 5.8 8.6H10V20H0zm15 0V11.5C15 5.2 18.9 1 24.8 0l.9 2.9C22.6 4 21 6 20.8 8.6H25V20H15z"
-                    fill="currentColor"
-                  />
-                </svg>
+                  <figure
+                    className={`border-border relative flex h-full flex-col gap-4 rounded-[20px] border bg-white p-6 transition-[transform,opacity,box-shadow] duration-500 ease-out dark:bg-[#111316] ${originClass} ${
+                      isActive
+                        ? 'shadow-card dark:shadow-card-dark xl:border-accent/40 xl:z-10 xl:scale-[1.05] xl:shadow-xl'
+                        : 'shadow-card dark:shadow-card-dark xl:opacity-55'
+                    }`}
+                  >
+                    {/* Quote glyph (locale-neutral — avoids LTR quote chars in RTL) */}
+                    <svg
+                      width="32"
+                      height="24"
+                      viewBox="0 0 26 20"
+                      aria-hidden="true"
+                      className="text-accent/25 rtl:-scale-x-100"
+                    >
+                      <path
+                        d="M0 20V11.5C0 5.2 3.9 1 9.8 0l.9 2.9C7.6 4 6 6 5.8 8.6H10V20H0zm15 0V11.5C15 5.2 18.9 1 24.8 0l.9 2.9C22.6 4 21 6 20.8 8.6H25V20H15z"
+                        fill="currentColor"
+                      />
+                    </svg>
 
-                <blockquote className="font-body text-foreground flex-1 text-[16px] font-medium leading-[1.6] xl:text-[17px]">
-                  {item.quote}
-                </blockquote>
+                    <blockquote className="font-body text-foreground flex-1 text-[16px] font-medium leading-[1.6] xl:text-[17px]">
+                      {item.quote}
+                    </blockquote>
 
-                <div className="border-border flex items-center gap-3 border-t pt-4">
-                  {item.avatarUrl ? (
-                    <Image
-                      src={item.avatarUrl}
-                      alt={item.authorName}
-                      width={40}
-                      height={40}
-                      className="h-10 w-10 flex-shrink-0 rounded-full object-cover"
-                    />
-                  ) : (
-                    <span className="bg-accent/[0.12] text-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full font-sans text-[13px] font-semibold">
-                      {initialsOf(item.authorName)}
-                    </span>
-                  )}
-                  <div className="min-w-0">
-                    <figcaption className="text-foreground truncate font-sans text-[15px] font-semibold">
-                      {item.authorName}
-                    </figcaption>
-                    {item.authorRole && (
-                      <p className="font-body text-muted truncate text-[12px]">{item.authorRole}</p>
-                    )}
-                  </div>
-                  <span className="ms-auto flex-shrink-0">
-                    <Stars rating={item.rating ?? 5} />
-                  </span>
+                    <div className="border-border flex items-center gap-3 border-t pt-4">
+                      {item.avatarUrl ? (
+                        <Image
+                          src={item.avatarUrl}
+                          alt={item.authorName}
+                          width={40}
+                          height={40}
+                          className="h-10 w-10 flex-shrink-0 rounded-full object-cover"
+                        />
+                      ) : (
+                        <span className="bg-accent/[0.12] text-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full font-sans text-[13px] font-semibold">
+                          {initialsOf(item.authorName)}
+                        </span>
+                      )}
+                      <div className="min-w-0">
+                        <figcaption className="text-foreground truncate font-sans text-[15px] font-semibold">
+                          {item.authorName}
+                        </figcaption>
+                        {item.authorRole && (
+                          <p className="font-body text-muted truncate text-[12px]">
+                            {item.authorRole}
+                          </p>
+                        )}
+                      </div>
+                      <span className="ms-auto flex-shrink-0">
+                        <Stars rating={item.rating ?? 5} />
+                      </span>
+                    </div>
+                  </figure>
                 </div>
-                </figure>
-              </div>
               );
             })}
           </div>

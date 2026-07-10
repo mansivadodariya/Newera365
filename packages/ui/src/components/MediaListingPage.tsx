@@ -168,24 +168,29 @@ export function MediaListingPage({ cmsVideos, webinars }: MediaListingPageProps)
           {/* Search */}
           {!isWebinars && (
             <div className="relative">
-            <svg
-              className="text-muted pointer-events-none absolute start-4 top-1/2 -translate-y-1/2"
-              width="14"
-              height="14"
-              viewBox="0 0 16 16"
-              fill="none"
-            >
-              <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-            <input
-              type="text"
-              placeholder={t('searchPlaceholder')}
-              value={search}
-              onChange={(e) => handleSearchChange(e.target.value)}
-              className="border-border font-body text-foreground placeholder-muted focus:border-accent bg-surface w-full rounded-xl py-3 pe-4 ps-10 text-[14px] font-medium outline-none"
-            />
-          </div>
+              <svg
+                className="text-muted pointer-events-none absolute start-4 top-1/2 -translate-y-1/2"
+                width="14"
+                height="14"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
+                <path
+                  d="M11 11l3 3"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <input
+                type="text"
+                placeholder={t('searchPlaceholder')}
+                value={search}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="border-border font-body text-foreground placeholder-muted focus:border-accent bg-surface w-full rounded-xl py-3 pe-4 ps-10 text-[14px] font-medium outline-none"
+              />
+            </div>
           )}
         </div>
       </section>
@@ -304,95 +309,97 @@ export function MediaListingPage({ cmsVideos, webinars }: MediaListingPageProps)
       {/* Episode grid */}
       {!isWebinars && (
         <section className="px-5 pb-10">
-        <div
-          ref={listRef}
-          className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]"
-        >
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mx-auto mb-5 mt-2">
-            {t('latestEpisodes')}
-          </SectionKicker>
-          {filtered.length === 0 ? (
-            <p className="font-body text-muted py-8 text-center text-[14px]">{t('noResults')}</p>
-          ) : (
-            <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-3">
-              {pagedFiltered.map((ep, epIndex) => (
-                <div
-                  key={ep.id}
-                  className="dark:hover:border-accent/20 flex cursor-pointer flex-col gap-3 overflow-hidden rounded-[18px] bg-[#F0F4F1] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition-all duration-200 hover:shadow-[0_8px_24px_rgba(0,176,80,0.08)] dark:bg-[#1a1c22] dark:shadow-none"
-                  onClick={() => ep.href && window.open(ep.href, '_blank', 'noopener,noreferrer')}
-                  style={{ cursor: ep.href ? 'pointer' : 'default' }}
-                >
-                  {/* Thumbnail — CMS cover, else the silk art plate. Each
+          <div
+            ref={listRef}
+            className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]"
+          >
+            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mx-auto mb-5 mt-2">
+              {t('latestEpisodes')}
+            </SectionKicker>
+            {filtered.length === 0 ? (
+              <p className="font-body text-muted py-8 text-center text-[14px]">{t('noResults')}</p>
+            ) : (
+              <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-3">
+                {pagedFiltered.map((ep, epIndex) => (
+                  <div
+                    key={ep.id}
+                    className="dark:hover:border-accent/20 flex cursor-pointer flex-col gap-3 overflow-hidden rounded-[18px] bg-[#F0F4F1] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition-all duration-200 hover:shadow-[0_8px_24px_rgba(0,176,80,0.08)] dark:bg-[#1a1c22] dark:shadow-none"
+                    onClick={() => ep.href && window.open(ep.href, '_blank', 'noopener,noreferrer')}
+                    style={{ cursor: ep.href ? 'pointer' : 'default' }}
+                  >
+                    {/* Thumbnail — CMS cover, else the silk art plate. Each
                       fallback crops a different slice (by grid position) so
                       neighbouring cards don't repeat. */}
-                  <div className="relative flex h-[120px] items-center justify-center overflow-hidden rounded-[11px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111]">
-                    {ep.thumbnailUrl ? (
-                      <img
-                        src={ep.thumbnailUrl}
-                        alt={ep.title}
-                        className="absolute inset-0 h-full w-full object-cover opacity-80"
-                        onError={(e) => {
-                          // Broken CMS media → swap to the house art plate.
-                          e.currentTarget.src = '/images/edge-flow.jpg';
-                          e.currentTarget.style.objectPosition = `${35 + (epIndex % 3) * 15}% ${24 + (epIndex % 2) * 14}%`;
-                          e.currentTarget.classList.remove('opacity-80');
-                        }}
-                      />
-                    ) : (
-                      <img
-                        src="/images/edge-flow.jpg"
-                        alt=""
-                        aria-hidden="true"
-                        className="absolute inset-0 h-full w-full object-cover"
-                        style={{ objectPosition: `${35 + (epIndex % 3) * 15}% ${24 + (epIndex % 2) * 14}%` }}
-                      />
-                    )}
-                    <div className="bg-accent/90 relative z-10 flex h-8 w-8 items-center justify-center rounded-full">
-                      {ep.type === 'VIDEO' ? (
-                        <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
-                          <path d="M4 3l10 5-10 5V3z" fill="white" />
-                        </svg>
+                    <div className="relative flex h-[120px] items-center justify-center overflow-hidden rounded-[11px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111]">
+                      {ep.thumbnailUrl ? (
+                        <img
+                          src={ep.thumbnailUrl}
+                          alt={ep.title}
+                          className="absolute inset-0 h-full w-full object-cover opacity-80"
+                          onError={(e) => {
+                            // Broken CMS media → swap to the house art plate.
+                            e.currentTarget.src = '/images/edge-flow.jpg';
+                            e.currentTarget.style.objectPosition = `${35 + (epIndex % 3) * 15}% ${24 + (epIndex % 2) * 14}%`;
+                            e.currentTarget.classList.remove('opacity-80');
+                          }}
+                        />
                       ) : (
-                        <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
-                          <circle cx="8" cy="6" r="3" stroke="white" strokeWidth="1.5" />
-                          <path
-                            d="M4 14c0-2.2 1.8-4 4-4s4 1.8 4 4"
-                            stroke="white"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                        </svg>
+                        <img
+                          src="/images/edge-flow.jpg"
+                          alt=""
+                          aria-hidden="true"
+                          className="absolute inset-0 h-full w-full object-cover"
+                          style={{
+                            objectPosition: `${35 + (epIndex % 3) * 15}% ${24 + (epIndex % 2) * 14}%`,
+                          }}
+                        />
                       )}
+                      <div className="bg-accent/90 relative z-10 flex h-8 w-8 items-center justify-center rounded-full">
+                        {ep.type === 'VIDEO' ? (
+                          <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
+                            <path d="M4 3l10 5-10 5V3z" fill="white" />
+                          </svg>
+                        ) : (
+                          <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
+                            <circle cx="8" cy="6" r="3" stroke="white" strokeWidth="1.5" />
+                            <path
+                              d="M4 14c0-2.2 1.8-4 4-4s4 1.8 4 4"
+                              stroke="white"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        )}
+                      </div>
+                      <div className="absolute end-2 top-2 rounded-full bg-black/60 px-2 py-[2px]">
+                        <span className="font-body text-[9px] text-white">{ep.duration}</span>
+                      </div>
                     </div>
-                    <div className="absolute end-2 top-2 rounded-full bg-black/60 px-2 py-[2px]">
-                      <span className="font-body text-[9px] text-white">{ep.duration}</span>
+                    {/* Content */}
+                    <div>
+                      <div className="mb-1.5 flex items-center gap-1.5">
+                        <span
+                          className={`font-body rounded-full px-2 py-[2px] text-[8px] font-semibold uppercase tracking-[0.08em] ${TAG_COLORS[ep.tagDisplay]}`}
+                        >
+                          {translateMediaCat(ep.tagDisplay)}
+                        </span>
+                      </div>
+                      <p className="text-foreground font-sans text-[12px] font-semibold leading-[1.4]">
+                        {ep.title}
+                      </p>
                     </div>
                   </div>
-                  {/* Content */}
-                  <div>
-                    <div className="mb-1.5 flex items-center gap-1.5">
-                      <span
-                        className={`font-body rounded-full px-2 py-[2px] text-[8px] font-semibold uppercase tracking-[0.08em] ${TAG_COLORS[ep.tagDisplay]}`}
-                      >
-                        {translateMediaCat(ep.tagDisplay)}
-                      </span>
-                    </div>
-                    <p className="text-foreground font-sans text-[12px] font-semibold leading-[1.4]">
-                      {ep.title}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-          <Pagination
-            page={page}
-            totalPages={totalPages}
-            onPageChange={setPage}
-            listRef={listRef}
-          />
-        </div>
-      </section>
+                ))}
+              </div>
+            )}
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+              listRef={listRef}
+            />
+          </div>
+        </section>
       )}
 
       {isWebinars && <WebinarsSection webinars={webinars} />}

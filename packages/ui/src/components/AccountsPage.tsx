@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { ScrollReveal } from './ScrollReveal';
+import { SectionKicker } from './SectionKicker';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -73,6 +74,21 @@ const MATRIX_ROW_DATA = [
   { id: 'spreads', featureKey: 'featureCustomSpreads' as const, std: false, raw: false, vip: true },
 ];
 
+// Universal execution & risk conditions that apply to every account tier (#5).
+// `kind` picks the value treatment: 'num' = tabular LTR figure (accent when the
+// zero/best value), 'allow' = accent tick + label, 'text' = plain. Values are
+// i18n strings — client-confirmed marketing facts, one-line to update.
+const TRADING_CONDITIONS = [
+  { labelKey: 'condExecutionLabel', valueKey: 'condExecutionValue', kind: 'text' },
+  { labelKey: 'condSpreadLabel', valueKey: 'condSpreadValue', kind: 'num', best: true },
+  { labelKey: 'condLeverageLabel', valueKey: 'condLeverageValue', kind: 'num' },
+  { labelKey: 'condMarginLabel', valueKey: 'condMarginValue', kind: 'num' },
+  { labelKey: 'condStopoutLabel', valueKey: 'condStopoutValue', kind: 'num' },
+  { labelKey: 'condHedgingLabel', valueKey: 'condHedgingValue', kind: 'allow' },
+  { labelKey: 'condScalpingLabel', valueKey: 'condScalpingValue', kind: 'allow' },
+  { labelKey: 'condEaLabel', valueKey: 'condEaValue', kind: 'allow' },
+] as const;
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function Check() {
@@ -93,6 +109,43 @@ function Check() {
         strokeLinejoin="round"
       />
     </svg>
+  );
+}
+
+// Crown badge for the recommended card — overhangs the card's top edge, so it
+// lives on the (overflow-visible) wrapper, not inside the overflow-hidden card.
+// Star + accent gradient + a slow sheen sweep that draws the eye without
+// pulsing (reduced-motion users get the static badge).
+function RecommendedBadge({ label }: { label: string }) {
+  return (
+    <div className="pointer-events-none absolute -top-3 left-1/2 z-20 -translate-x-1/2">
+      <span className="relative flex items-center gap-1.5 overflow-hidden rounded-full bg-gradient-to-b from-[#00c95d] to-[#009247] px-3.5 py-[6px] shadow-[0_10px_24px_-6px_rgba(0,176,80,0.75)] ring-1 ring-inset ring-white/30">
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+          className="text-[#04120a]"
+        >
+          <path d="M12 2.2l2.7 6.2 6.7.5-5.1 4.4 1.6 6.6L12 17.9 6.1 20.9l1.6-6.6L2.6 8.9l6.7-.5L12 2.2Z" />
+        </svg>
+        <span className="font-body whitespace-nowrap text-[11px] font-extrabold uppercase tracking-[0.7px] text-[#04120a]">
+          {label}
+        </span>
+        {/* Sheen sweep — width-independent (animates background-position). */}
+        <span
+          aria-hidden="true"
+          className="motion-safe:animate-badge-shine absolute inset-0"
+          style={{
+            backgroundImage:
+              'linear-gradient(100deg, transparent 35%, rgba(255,255,255,0.65) 50%, transparent 65%)',
+            backgroundSize: '220% 100%',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
+      </span>
+    </div>
   );
 }
 
@@ -300,162 +353,227 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
           {displayAccounts.map((account) => (
             <div
               key={String(account.id)}
-              className="border-border shadow-card group flex w-full flex-col overflow-hidden rounded-[20px] border bg-white transition-all duration-300 hover:border-[#00b050] hover:shadow-[0_12px_40px_-8px_rgba(0,176,80,0.4)] xl:flex-1 dark:border-white/[0.06] dark:bg-[#1a1c22]"
+              className={`relative flex w-full xl:flex-1 ${account.isPopular ? 'xl:z-10' : ''}`}
             >
-              {/* Gradient header — dark by default, green on hover only */}
-              <div className="relative flex flex-col items-center gap-[6px] overflow-hidden pb-[34px] pt-[26px]">
-                <div
-                  className="absolute inset-0"
-                  style={{ background: DARK_HEADER_GRADIENT }}
-                  aria-hidden="true"
-                />
-                <div
-                  className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                  style={{ background: GREEN_HEADER_GRADIENT }}
-                  aria-hidden="true"
-                />
-                <div className="relative flex flex-col items-center gap-[6px]">
-                  {/* Tier badge — every card carries its own label (incl. the
+              {account.isPopular && <RecommendedBadge label={account.badge} />}
+              <div className="border-border shadow-card group flex h-full w-full flex-col overflow-hidden rounded-[20px] border bg-white transition-all duration-300 hover:border-[#00b050] hover:shadow-[0_12px_40px_-8px_rgba(0,176,80,0.4)] dark:border-white/[0.06] dark:bg-[#1a1c22]">
+                {/* Gradient header — dark by default, green on hover only */}
+                <div className="relative flex flex-col items-center gap-[6px] overflow-hidden pb-[34px] pt-[26px]">
+                  <div
+                    className="absolute inset-0"
+                    style={{ background: DARK_HEADER_GRADIENT }}
+                    aria-hidden="true"
+                  />
+                  <div
+                    className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    style={{ background: GREEN_HEADER_GRADIENT }}
+                    aria-hidden="true"
+                  />
+                  <div className="relative flex flex-col items-center gap-[6px]">
+                    {/* Tier badge — every card carries its own label (incl. the
                       "Most Popular" recommendation) but no fixed highlight. */}
-                  {account.badge && (
-                    <span className="font-body rounded-[20px] bg-[#00b050] px-[13px] py-[5px] text-[12px] font-bold tracking-[0.6px] text-[#111]">
-                      {account.badge}
-                    </span>
-                  )}
-                  <p className="font-body text-[15px] font-normal text-white/75">
-                    {t('cardAccountLabel')}
-                  </p>
-                  <p className="font-body text-[32px] font-bold text-[#f0f0f0]">{account.name}</p>
-                  <p className="font-body text-[14px] text-white/70">{account.subtitle}</p>
-                </div>
-              </div>
-
-              {/* Card body — flex-1 so all cards stretch to equal height; the
-                  features block absorbs the slack, pinning CTAs to the bottom */}
-              <div className="flex flex-1 flex-col gap-[18px] px-[22px] py-[28px]">
-                {/* Trading Platform row */}
-                <div className="flex items-center justify-between">
-                  <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
-                    {t('tradingPlatform')}
-                  </span>
-                  <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
-                    MetaTrader 5
-                  </span>
-                </div>
-                <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
-
-                {/* Commission */}
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-col gap-px">
-                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
-                      {t('commission')}
-                    </span>
-                    <span className="font-body text-caption text-[#6b7380]">
-                      {account.commissionSub}
-                    </span>
-                  </div>
-                  <span
-                    dir="ltr"
-                    className={`font-sans text-[28px] font-bold tabular-nums ${
-                      isZeroNumeric(account.commission)
-                        ? 'text-accent'
-                        : 'text-[#111] dark:text-white'
-                    }`}
-                  >
-                    {account.commission}
-                  </span>
-                </div>
-                <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
-
-                {/* Spreads from */}
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-col gap-px">
-                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
-                      {t('spreadsFrom')}
-                    </span>
-                    <span className="font-body text-caption text-[#6b7380]">
-                      {account.spreadsSub}
-                    </span>
-                  </div>
-                  <span
-                    dir="ltr"
-                    className={`whitespace-nowrap font-sans text-[28px] font-bold tabular-nums ${
-                      isZeroNumeric(account.spreadsFrom)
-                        ? 'text-accent'
-                        : 'text-[#111] dark:text-white'
-                    }`}
-                  >
-                    {account.spreadsFrom}
-                  </span>
-                </div>
-                <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
-
-                {/* Min deposit — 20px per Figma (smaller than commission/spread) */}
-                <div className="flex items-center justify-between">
-                  <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
-                    {t('minDeposit')}
-                  </span>
-                  <span
-                    dir="ltr"
-                    className="whitespace-nowrap font-sans text-[22px] font-bold tabular-nums text-[#111] dark:text-white"
-                  >
-                    {account.minDeposit}
-                  </span>
-                </div>
-                <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
-
-                {/* Max leverage — reuses the matrix "Max leverage" label + CMS leverage */}
-                <div className="flex items-center justify-between">
-                  <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
-                    {t('matrixLeverage')}
-                  </span>
-                  <span
-                    dir="ltr"
-                    className="whitespace-nowrap font-sans text-[22px] font-bold tabular-nums text-[#111] dark:text-white"
-                  >
-                    {account.leverage}
-                  </span>
-                </div>
-                <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
-
-                {/* Features */}
-                <div className="flex flex-1 flex-col gap-[11px]">
-                  {account.features.slice(0, 3).map((feat, i) => (
-                    <div key={i} className="flex items-center gap-[10px]">
-                      <svg
-                        width="13"
-                        height="13"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        aria-hidden="true"
-                        className="flex-shrink-0 text-[#00b050]"
+                    {account.badge && (
+                      <span
+                        className={`font-body rounded-[20px] px-[13px] py-[5px] text-[12px] font-bold tracking-[0.6px] ${
+                          account.isPopular ? 'invisible' : 'bg-[#00b050] text-[#111]'
+                        }`}
                       >
-                        <path
-                          d="M2.5 6.4l2.3 2.3L9.5 3.5"
-                          stroke="currentColor"
-                          strokeWidth="1.7"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                      <span className="font-body text-body text-muted dark:text-[#9aa3ad]">
-                        {feat}
+                        {account.badge}
+                      </span>
+                    )}
+                    <p className="font-body text-[15px] font-normal text-white/75">
+                      {t('cardAccountLabel')}
+                    </p>
+                    <p className="font-body text-[32px] font-bold text-[#f0f0f0]">{account.name}</p>
+                    <p className="font-body text-[14px] text-white/70">{account.subtitle}</p>
+                  </div>
+                </div>
+
+                {/* Card body — flex-1 so all cards stretch to equal height; the
+                  features block absorbs the slack, pinning CTAs to the bottom */}
+                <div className="flex flex-1 flex-col gap-[18px] px-[22px] py-[28px]">
+                  {/* Trading Platform row */}
+                  <div className="flex items-center justify-between">
+                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                      {t('tradingPlatform')}
+                    </span>
+                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                      MetaTrader 5
+                    </span>
+                  </div>
+                  <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
+
+                  {/* Commission */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-col gap-px">
+                      <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                        {t('commission')}
+                      </span>
+                      <span className="font-body text-caption text-[#6b7380]">
+                        {account.commissionSub}
                       </span>
                     </div>
-                  ))}
-                </div>
+                    <span
+                      dir="ltr"
+                      className={`font-sans text-[28px] font-bold tabular-nums ${
+                        isZeroNumeric(account.commission)
+                          ? 'text-accent'
+                          : 'text-[#111] dark:text-white'
+                      }`}
+                    >
+                      {account.commission}
+                    </span>
+                  </div>
+                  <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
 
-                {/* CTA button — deep-links to the feature matrix (signup handled by CRM) */}
-                <a
-                  href="#feature-matrix"
-                  className="font-body border-border group-hover:border-accent group-hover:bg-accent inline-flex items-center justify-center rounded-full border px-5 py-3 text-[13px] font-bold uppercase tracking-[0.5px] text-[#111] transition-colors active:scale-[0.98] group-hover:text-[#04120a] dark:border-white/15 dark:text-white dark:group-hover:text-[#04120a]"
-                >
-                  {account.isDemo ? t('exploreFeatures') : t('tryFreeDemo')}
-                </a>
+                  {/* Spreads from */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-col gap-px">
+                      <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                        {t('spreadsFrom')}
+                      </span>
+                      <span className="font-body text-caption text-[#6b7380]">
+                        {account.spreadsSub}
+                      </span>
+                    </div>
+                    <span
+                      dir="ltr"
+                      className={`whitespace-nowrap font-sans text-[28px] font-bold tabular-nums ${
+                        isZeroNumeric(account.spreadsFrom)
+                          ? 'text-accent'
+                          : 'text-[#111] dark:text-white'
+                      }`}
+                    >
+                      {account.spreadsFrom}
+                    </span>
+                  </div>
+                  <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
+
+                  {/* Min deposit — 20px per Figma (smaller than commission/spread) */}
+                  <div className="flex items-center justify-between">
+                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                      {t('minDeposit')}
+                    </span>
+                    <span
+                      dir="ltr"
+                      className="whitespace-nowrap font-sans text-[22px] font-bold tabular-nums text-[#111] dark:text-white"
+                    >
+                      {account.minDeposit}
+                    </span>
+                  </div>
+                  <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
+
+                  {/* Max leverage — reuses the matrix "Max leverage" label + CMS leverage */}
+                  <div className="flex items-center justify-between">
+                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                      {t('matrixLeverage')}
+                    </span>
+                    <span
+                      dir="ltr"
+                      className="whitespace-nowrap font-sans text-[22px] font-bold tabular-nums text-[#111] dark:text-white"
+                    >
+                      {account.leverage}
+                    </span>
+                  </div>
+                  <div className="h-px bg-[#e5e8eb] dark:bg-[#2a2a2a]" />
+
+                  {/* Features */}
+                  <div className="flex flex-1 flex-col gap-[11px]">
+                    {account.features.slice(0, 3).map((feat, i) => (
+                      <div key={i} className="flex items-center gap-[10px]">
+                        <svg
+                          width="13"
+                          height="13"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          aria-hidden="true"
+                          className="flex-shrink-0 text-[#00b050]"
+                        >
+                          <path
+                            d="M2.5 6.4l2.3 2.3L9.5 3.5"
+                            stroke="currentColor"
+                            strokeWidth="1.7"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                        <span className="font-body text-body text-muted dark:text-[#9aa3ad]">
+                          {feat}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA button — deep-links to the feature matrix (signup handled by CRM) */}
+                  <a
+                    href="#feature-matrix"
+                    className="font-body border-border group-hover:border-accent group-hover:bg-accent inline-flex items-center justify-center rounded-full border px-5 py-3 text-[13px] font-bold uppercase tracking-[0.5px] text-[#111] transition-colors active:scale-[0.98] group-hover:text-[#04120a] dark:border-white/15 dark:text-white dark:group-hover:text-[#04120a]"
+                  >
+                    {account.isDemo ? t('exploreFeatures') : t('tryFreeDemo')}
+                  </a>
+                </div>
               </div>
             </div>
           ))}
         </ScrollReveal>
+      </section>
+
+      {/* ── Trading conditions — universal execution & risk terms (#5) ───── */}
+      <section className="bg-transparent px-5 pb-10">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal>
+            <SectionKicker className="text-muted [&>span:first-child]:bg-accent mb-3 dark:text-white/60">
+              {t('condKicker')}
+            </SectionKicker>
+            <div className="xl:flex xl:items-end xl:justify-between xl:gap-10">
+              <h2 className="text-headline text-foreground font-sans [text-wrap:balance]">
+                {t('condHeading')}
+              </h2>
+              <p className="font-body text-body text-muted mt-3 max-w-[42ch] xl:mt-0 dark:text-white/60">
+                {t('condSubtitle')}
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.1}>
+            <div className="border-border shadow-card mt-8 overflow-hidden rounded-[24px] border bg-white dark:border-white/[0.06] dark:bg-[#14161c] dark:shadow-none">
+              <div className="grid grid-cols-2 gap-px bg-[rgba(17,17,17,0.07)] md:grid-cols-4 dark:bg-white/[0.06]">
+                {TRADING_CONDITIONS.map((c) => (
+                  <div
+                    key={c.labelKey}
+                    className="flex flex-col gap-2 bg-white px-5 py-5 dark:bg-[#14161c]"
+                  >
+                    <span className="text-muted font-mono text-[10px] uppercase tracking-[1.1px] dark:text-white/45">
+                      {t(c.labelKey)}
+                    </span>
+                    {c.kind === 'allow' ? (
+                      <span className="text-accent flex items-center gap-1.5 font-sans text-[17px] font-semibold">
+                        <Check />
+                        {t(c.valueKey)}
+                      </span>
+                    ) : c.kind === 'num' ? (
+                      <span
+                        dir="ltr"
+                        className={`w-fit font-sans text-[22px] font-bold tabular-nums ${
+                          'best' in c && c.best ? 'text-accent' : 'text-foreground'
+                        }`}
+                      >
+                        {t(c.valueKey)}
+                      </span>
+                    ) : (
+                      <span className="text-foreground font-sans text-[17px] font-semibold">
+                        {t(c.valueKey)}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <p className="font-body text-caption text-muted border-t border-[rgba(17,17,17,0.07)] px-5 py-3.5 dark:border-white/[0.06] dark:text-white/45">
+                {t('condNote')}
+              </p>
+            </div>
+          </ScrollReveal>
+        </div>
       </section>
 
       {/* ── Feature Matrix — readable comparison on the ink band ─────────── */}

@@ -60,7 +60,13 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
       if (res.ok) {
         setSuccess(true);
       } else {
-        setError('Something went wrong. Please try again.');
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: string;
+          errors?: { message?: string }[];
+        };
+        setError(
+          data.errors?.[0]?.message ?? data.error ?? 'Something went wrong. Please try again.',
+        );
       }
     } catch {
       setError('Something went wrong. Please try again.');

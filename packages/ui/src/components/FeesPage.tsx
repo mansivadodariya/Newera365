@@ -99,7 +99,9 @@ export function FeesPage({ spreadData }: FeesPageProps) {
           <div className="border-border bg-surface shadow-card overflow-hidden rounded-[18px] border dark:border-white/[0.06]">
             {/* Receipt header strip */}
             <div className="border-border flex items-center justify-between border-b border-dashed px-5 py-3.5 dark:border-white/[0.1]">
-              <span className="text-eyebrow text-muted font-mono uppercase">{t('receiptStamp')}</span>
+              <span className="text-eyebrow text-muted font-mono uppercase">
+                {t('receiptStamp')}
+              </span>
               <span className="text-accent flex items-center gap-1.5">
                 <span className="bg-accent h-1.5 w-1.5 rounded-full" />
                 <span className="text-eyebrow font-mono uppercase">{t('spreadsKicker')}</span>
@@ -108,15 +110,25 @@ export function FeesPage({ spreadData }: FeesPageProps) {
 
             {/* Column header */}
             <div className="border-border grid grid-cols-[1fr_54px_54px_54px] border-b px-5 py-2.5 dark:border-white/[0.06]">
-              <span className="text-muted text-eyebrow font-mono uppercase">{t('colInstrument')}</span>
-              <span className="text-accent text-eyebrow text-end font-mono uppercase">{t('colRaw')}</span>
-              <span className="text-muted text-eyebrow text-end font-mono uppercase">{t('colStd')}</span>
-              <span className="text-muted text-eyebrow text-end font-mono uppercase">{t('colVip')}</span>
+              <span className="text-muted text-eyebrow font-mono uppercase">
+                {t('colInstrument')}
+              </span>
+              <span className="text-accent text-eyebrow text-end font-mono uppercase">
+                {t('colRaw')}
+              </span>
+              <span className="text-muted text-eyebrow text-end font-mono uppercase">
+                {t('colStd')}
+              </span>
+              <span className="text-muted text-eyebrow text-end font-mono uppercase">
+                {t('colVip')}
+              </span>
             </div>
 
             {/* Data rows — hairline ruled, mono tabular-nums */}
             {displaySpreads.length === 0 ? (
-              <p className="font-body text-muted px-5 py-8 text-center text-body">{t('noSpreads')}</p>
+              <p className="font-body text-muted text-body px-5 py-8 text-center">
+                {t('noSpreads')}
+              </p>
             ) : (
               <div className="divide-border divide-y dark:divide-white/[0.05]">
                 {displaySpreads.map((row) => (
@@ -129,19 +141,19 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                     </span>
                     <span
                       dir="ltr"
-                      className="text-accent text-end font-mono text-body font-semibold tabular-nums"
+                      className="text-accent text-body text-end font-mono font-semibold tabular-nums"
                     >
                       {row.raw}
                     </span>
                     <span
                       dir="ltr"
-                      className="text-muted text-end font-mono text-body tabular-nums"
+                      className="text-muted text-body text-end font-mono tabular-nums"
                     >
                       {row.std}
                     </span>
                     <span
                       dir="ltr"
-                      className="text-muted text-end font-mono text-body tabular-nums"
+                      className="text-muted text-body text-end font-mono tabular-nums"
                     >
                       {row.vip}
                     </span>
@@ -158,7 +170,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                 </span>
                 <span
                   dir="ltr"
-                  className="text-accent text-end font-mono text-title font-semibold tabular-nums"
+                  className="text-accent text-title text-end font-mono font-semibold tabular-nums"
                 >
                   {tightest}
                 </span>
@@ -214,7 +226,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                 >
                   <div className="px-5 py-[15px] transition-colors hover:bg-[#F0F4F1] dark:hover:bg-white/[0.02]">
                     <div className="flex items-baseline gap-3">
-                      <span className="text-foreground font-sans text-body-lg font-semibold">
+                      <span className="text-foreground text-body-lg font-sans font-semibold">
                         {t(`charge${key}` as 'chargeOpening')}
                       </span>
                       <span
@@ -223,7 +235,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                       />
                       <span
                         {...(isMetric ? { dir: 'ltr' as const } : {})}
-                        className={`font-mono text-body-lg font-semibold tabular-nums ${charge.green ? 'text-accent' : 'text-foreground'}`}
+                        className={`text-body-lg font-mono font-semibold tabular-nums ${charge.green ? 'text-accent' : 'text-foreground'}`}
                       >
                         {display}
                       </span>
@@ -242,7 +254,10 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                 {t('subtotalLabel')}
               </span>
               <span className="flex-1" />
-              <span dir="ltr" className="text-accent font-mono text-title font-semibold tabular-nums">
+              <span
+                dir="ltr"
+                className="text-accent text-title font-mono font-semibold tabular-nums"
+              >
                 $0.00
               </span>
             </div>
@@ -259,7 +274,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
 
           <span
             dir="ltr"
-            className="text-sheen text-metric block font-mono font-semibold leading-none tabular-nums"
+            className="text-sheen text-metric block font-mono font-semibold tabular-nums leading-none"
           >
             <CountUp value="$0" />
           </span>

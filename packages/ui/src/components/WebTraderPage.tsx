@@ -59,7 +59,12 @@ function IconChart() {
 function IconDepth() {
   return (
     <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <path d="M3 5h11M3 8.5h7M3 12h9M3 15.5h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M3 5h11M3 8.5h7M3 12h9M3 15.5h5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -302,7 +307,7 @@ function TerminalChart({ tf }: { tf: Timeframe }) {
           style={{ top: `${(lastY / VH) * 100}%`, transform: 'translateY(-50%)' }}
         >
           <div
-            className="rounded-[3px] px-[5px] py-[2px] font-mono text-[7.5px] font-bold leading-none tabular-nums text-white"
+            className="rounded-[3px] px-[5px] py-[2px] font-mono text-[7.5px] font-bold tabular-nums leading-none text-white"
             style={{ backgroundColor: priceColor }}
           >
             {toPrice(last.c).toFixed(5)}
@@ -327,7 +332,10 @@ function BidAskPanel() {
           <p className="font-body mb-[3px] text-[10px] font-semibold uppercase tracking-[0.1em] text-[#26A69A]">
             {t('buyLabel')}
           </p>
-          <p dir="ltr" className="w-fit font-mono text-[22px] font-bold leading-none tabular-nums text-[#26A69A]">
+          <p
+            dir="ltr"
+            className="w-fit font-mono text-[22px] font-bold tabular-nums leading-none text-[#26A69A]"
+          >
             1.08562
           </p>
           <p className="font-body mt-1 text-[10px] text-white/35">{t('askLabel')}</p>
@@ -337,7 +345,10 @@ function BidAskPanel() {
           <p className="font-body mb-[3px] text-[10px] font-semibold uppercase tracking-[0.1em] text-[#EF5350]">
             {t('sellLabel')}
           </p>
-          <p dir="ltr" className="w-fit font-mono text-[22px] font-bold leading-none tabular-nums text-[#EF5350]">
+          <p
+            dir="ltr"
+            className="w-fit font-mono text-[22px] font-bold tabular-nums leading-none text-[#EF5350]"
+          >
             1.08549
           </p>
           <p className="font-body mt-1 text-[10px] text-white/35">{t('bidLabel')}</p>
@@ -373,7 +384,14 @@ function BidAskPanel() {
 
 function ArrowRight() {
   return (
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="rtl:-scale-x-100" aria-hidden="true">
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      className="rtl:-scale-x-100"
+      aria-hidden="true"
+    >
       <path
         d="M3 8h10M9 4l4 4-4 4"
         stroke="currentColor"
@@ -435,7 +453,10 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-[#1AD966]" />
                 <span className="font-sans text-[13px] font-semibold text-white">EURUSD</span>
-                <span dir="ltr" className="font-mono text-[12px] font-semibold tabular-nums text-white">
+                <span
+                  dir="ltr"
+                  className="font-mono text-[12px] font-semibold tabular-nums text-white"
+                >
                   1.0856
                 </span>
                 <span dir="ltr" className="font-body text-[11px] tabular-nums text-[#26A69A]">
@@ -448,7 +469,9 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
                     key={t_}
                     onClick={() => setTf(t_)}
                     className={`rounded-[6px] px-2 py-1 font-mono text-[10px] font-semibold transition-colors ${
-                      tf === t_ ? 'bg-accent-bright text-[#111]' : 'text-white/50 hover:text-white/80'
+                      tf === t_
+                        ? 'bg-accent-bright text-[#111]'
+                        : 'text-white/50 hover:text-white/80'
                     }`}
                   >
                     {t_}
@@ -484,7 +507,12 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
             <div className="mb-3 flex items-center gap-2.5">
               <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#F97316]/[0.12]">
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M8 6v3M8 11v.5" stroke="#F97316" strokeWidth="1.5" strokeLinecap="round" />
+                  <path
+                    d="M8 6v3M8 11v.5"
+                    stroke="#F97316"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
                   <path
                     d="M6.8 2.5L1.5 12a1.4 1.4 0 001.2 2h10.6a1.4 1.4 0 001.2-2L9.2 2.5a1.4 1.4 0 00-2.4 0z"
                     stroke="#F97316"
@@ -503,7 +531,7 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
               {t('fallbackDesc')}
             </p>
             <div className="flex flex-wrap gap-2.5">
-              <button className="bg-foreground text-background hover:bg-accent inline-flex h-11 items-center justify-center rounded-full px-5 font-sans text-[13px] font-semibold transition-colors duration-200 active:scale-[0.98] dark:bg-white/10 dark:text-white dark:hover:bg-accent">
+              <button className="bg-foreground text-background hover:bg-accent dark:hover:bg-accent inline-flex h-11 items-center justify-center rounded-full px-5 font-sans text-[13px] font-semibold transition-colors duration-200 active:scale-[0.98] dark:bg-white/10 dark:text-white">
                 {t('fallbackDesktopBtn')}
               </button>
               <button className="border-border text-foreground hover:text-accent hover:border-accent/40 inline-flex h-11 items-center justify-center rounded-full border px-5 font-sans text-[13px] font-medium transition-colors duration-200 active:scale-[0.98] dark:border-white/10 dark:text-white/70">
@@ -526,10 +554,13 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
             {specTiles.map((s) => (
               <div
                 key={s.key}
-                className="border-border flex items-center justify-between gap-4 border-b px-5 py-[18px] xl:px-6 sm:[&:nth-child(odd)]:border-e dark:border-white/[0.06]"
+                className="border-border flex items-center justify-between gap-4 border-b px-5 py-[18px] xl:px-6 dark:border-white/[0.06] sm:[&:nth-child(odd)]:border-e"
               >
                 <span className="text-eyebrow text-muted font-mono uppercase">{s.label}</span>
-                <span dir="ltr" className="text-foreground text-body-lg w-fit font-mono font-semibold tabular-nums">
+                <span
+                  dir="ltr"
+                  className="text-foreground text-body-lg w-fit font-mono font-semibold tabular-nums"
+                >
                   {s.value}
                 </span>
               </div>
@@ -549,10 +580,12 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
           </h2>
         </ScrollReveal>
 
-        <div className={`${CONTAINER} grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 xl:gap-4`}>
+        <div
+          className={`${CONTAINER} grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 xl:gap-4`}
+        >
           {CAPABILITIES.map((cap, i) => (
             <ScrollReveal key={cap.idx} index={i}>
-              <div className="group border-border shadow-card hover:border-accent/40 flex h-full flex-col gap-4 rounded-[18px] border bg-white p-5 transition-[border-color,box-shadow] duration-300 hover:shadow-[0_20px_48px_-18px_rgba(0,176,80,0.22)] xl:p-6 dark:border-white/[0.06] dark:bg-[#111111]">
+              <div className="border-border shadow-card hover:border-accent/40 group flex h-full flex-col gap-4 rounded-[18px] border bg-white p-5 transition-[border-color,box-shadow] duration-300 hover:shadow-[0_20px_48px_-18px_rgba(0,176,80,0.22)] xl:p-6 dark:border-white/[0.06] dark:bg-[#111111]">
                 <div className="flex items-center justify-between">
                   <span className="bg-accent/10 text-accent group-hover:bg-accent flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300 group-hover:text-white">
                     <cap.Icon />

@@ -170,9 +170,7 @@ interface ProfitCalculatorProps {
   instruments?: CmsCalculatorInstrument[];
 }
 
-export function ProfitCalculator({
-  instruments: cmsInstruments,
-}: ProfitCalculatorProps = {}) {
+export function ProfitCalculator({ instruments: cmsInstruments }: ProfitCalculatorProps = {}) {
   const t = useTranslations('profit');
 
   const activeInstruments = cmsInstruments?.map((i) => i.symbol) ?? [...INSTRUMENTS_FALLBACK];
@@ -234,134 +232,134 @@ export function ProfitCalculator({
   return (
     <div>
       {/* Mode tabs */}
-          <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-[#1c1c1c]">
-            {(['Profit', 'Loss', 'R/R'] as TabMode[]).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setMode(tab)}
-                className={`font-body flex-1 rounded-[11px] py-2.5 text-[12px] font-medium transition-colors ${
-                  mode === tab
-                    ? 'text-foreground bg-white shadow-sm dark:bg-[#2a2a2a] dark:text-white'
-                    : 'text-muted hover:text-foreground'
-                }`}
+      <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-[#1c1c1c]">
+        {(['Profit', 'Loss', 'R/R'] as TabMode[]).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setMode(tab)}
+            className={`font-body flex-1 rounded-[11px] py-2.5 text-[12px] font-medium transition-colors ${
+              mode === tab
+                ? 'text-foreground bg-white shadow-sm dark:bg-[#2a2a2a] dark:text-white'
+                : 'text-muted hover:text-foreground'
+            }`}
+          >
+            {tab === 'Profit' ? t('tabProfit') : tab === 'Loss' ? t('tabLoss') : t('tabRR')}
+          </button>
+        ))}
+      </div>
+
+      <div className="xl:flex xl:gap-8">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:flex-1">
+          <CalcSelect
+            label={t('fieldCurrency')}
+            value={currency}
+            options={['USD']}
+            onChange={() => {}}
+          />
+          <CalcSelect
+            label={t('fieldInstrument')}
+            value={instrument}
+            options={activeInstruments}
+            onChange={(v) => setInstrument(v)}
+          />
+          <CalcSelect
+            label={t('fieldType')}
+            value={tradeType}
+            options={['Buy', 'Sell']}
+            onChange={(v) => setTradeType(v as 'Buy' | 'Sell')}
+          />
+          <NumberInput
+            label={t('fieldOpen')}
+            value={openPrice}
+            onChange={setOpenPrice}
+            step="0.00001"
+          />
+          <NumberInput
+            label={t('fieldClose')}
+            value={closePrice}
+            onChange={setClosePrice}
+            step="0.00001"
+          />
+          <NumberInput
+            label={t('fieldLots')}
+            value={lots}
+            onChange={setLots}
+            step="0.01"
+            min="0.01"
+          />
+
+          {/* Buttons */}
+          <div className="col-span-full flex items-center gap-3">
+            <button
+              onClick={handleCalculate}
+              className="font-body flex h-[48px] flex-1 items-center justify-center gap-2 rounded-full bg-[#00B050] text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90 xl:flex-none xl:px-8"
+            >
+              {t('calcBtn')}
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 16 16"
+                fill="none"
+                className="rtl:-scale-x-100"
               >
-                {tab === 'Profit' ? t('tabProfit') : tab === 'Loss' ? t('tabLoss') : t('tabRR')}
-              </button>
-            ))}
+                <path
+                  d="M3 8h10M9 4l4 4-4 4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <button
+              onClick={handleReset}
+              className="border-border font-body flex h-[48px] flex-1 items-center justify-center rounded-full border text-[14px] font-medium transition-colors xl:flex-none xl:px-8"
+            >
+              {t('resetBtn')}
+            </button>
           </div>
+        </div>
 
-          <div className="xl:flex xl:gap-8">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:flex-1">
-              <CalcSelect
-                label={t('fieldCurrency')}
-                value={currency}
-                options={['USD']}
-                onChange={() => {}}
-              />
-              <CalcSelect
-                label={t('fieldInstrument')}
-                value={instrument}
-                options={activeInstruments}
-                onChange={(v) => setInstrument(v)}
-              />
-              <CalcSelect
-                label={t('fieldType')}
-                value={tradeType}
-                options={['Buy', 'Sell']}
-                onChange={(v) => setTradeType(v as 'Buy' | 'Sell')}
-              />
-              <NumberInput
-                label={t('fieldOpen')}
-                value={openPrice}
-                onChange={setOpenPrice}
-                step="0.00001"
-              />
-              <NumberInput
-                label={t('fieldClose')}
-                value={closePrice}
-                onChange={setClosePrice}
-                step="0.00001"
-              />
-              <NumberInput
-                label={t('fieldLots')}
-                value={lots}
-                onChange={setLots}
-                step="0.01"
-                min="0.01"
-              />
+        {/* Desktop result panel */}
+        <div className="hidden xl:flex xl:w-[400px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
+          <ResultCard
+            result={result}
+            currency={currency}
+            mode={mode}
+            labelProfit={t('resultProfit')}
+            labelLoss={t('resultLoss')}
+            labelRR={t('resultRR')}
+            infoNotional={t('infoNotional')}
+            infoPips={t('infoPips')}
+            infoPipVal={t('infoPipVal')}
+          />
+          <FormulaBox
+            calcKicker={t('calcKicker')}
+            calcFormula={t('calcFormula')}
+            calcDesc={t('calcDesc')}
+          />
+        </div>
+      </div>
 
-              {/* Buttons */}
-              <div className="col-span-full flex items-center gap-3">
-                <button
-                  onClick={handleCalculate}
-                  className="font-body flex h-[48px] flex-1 items-center justify-center gap-2 rounded-full bg-[#00B050] text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90 xl:flex-none xl:px-8"
-                >
-                  {t('calcBtn')}
-                  <svg
-                    width="13"
-                    height="13"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    className="rtl:-scale-x-100"
-                  >
-                    <path
-                      d="M3 8h10M9 4l4 4-4 4"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-                <button
-                  onClick={handleReset}
-                  className="border-border font-body flex h-[48px] flex-1 items-center justify-center rounded-full border text-[14px] font-medium transition-colors xl:flex-none xl:px-8"
-                >
-                  {t('resetBtn')}
-                </button>
-              </div>
-            </div>
-
-            {/* Desktop result panel */}
-            <div className="hidden xl:flex xl:w-[400px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
-              <ResultCard
-                result={result}
-                currency={currency}
-                mode={mode}
-                labelProfit={t('resultProfit')}
-                labelLoss={t('resultLoss')}
-                labelRR={t('resultRR')}
-                infoNotional={t('infoNotional')}
-                infoPips={t('infoPips')}
-                infoPipVal={t('infoPipVal')}
-              />
-              <FormulaBox
-                calcKicker={t('calcKicker')}
-                calcFormula={t('calcFormula')}
-                calcDesc={t('calcDesc')}
-              />
-            </div>
-          </div>
-
-          {/* Mobile result panel */}
-          <div className="mt-5 flex flex-col gap-4 xl:hidden">
-            <ResultCard
-              result={result}
-              currency={currency}
-              mode={mode}
-              labelProfit={t('resultProfit')}
-              labelLoss={t('resultLoss')}
-              labelRR={t('resultRR')}
-              infoNotional={t('infoNotional')}
-              infoPips={t('infoPips')}
-              infoPipVal={t('infoPipVal')}
-            />
-            <FormulaBox
-              calcKicker={t('calcKicker')}
-              calcFormula={t('calcFormula')}
-              calcDesc={t('calcDesc')}
-            />
-          </div>
+      {/* Mobile result panel */}
+      <div className="mt-5 flex flex-col gap-4 xl:hidden">
+        <ResultCard
+          result={result}
+          currency={currency}
+          mode={mode}
+          labelProfit={t('resultProfit')}
+          labelLoss={t('resultLoss')}
+          labelRR={t('resultRR')}
+          infoNotional={t('infoNotional')}
+          infoPips={t('infoPips')}
+          infoPipVal={t('infoPipVal')}
+        />
+        <FormulaBox
+          calcKicker={t('calcKicker')}
+          calcFormula={t('calcFormula')}
+          calcDesc={t('calcDesc')}
+        />
+      </div>
     </div>
   );
 }

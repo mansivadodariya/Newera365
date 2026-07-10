@@ -16,15 +16,7 @@ export interface MarketItem {
   symbol?: string;
 }
 
-function MarketCard({
-  item,
-  index,
-  price,
-}: {
-  item: MarketItem;
-  index: number;
-  price?: number;
-}) {
+function MarketCard({ item, index, price }: { item: MarketItem; index: number; price?: number }) {
   const ref = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
@@ -58,7 +50,7 @@ function MarketCard({
     <Link
       ref={ref}
       href={item.href}
-      className="group relative flex h-[168px] flex-col justify-end overflow-hidden rounded-[20px] border border-white/[0.08] px-4 py-4 shadow-[0_18px_40px_-20px_rgba(4,16,10,0.45)] transition-[border-color,box-shadow] duration-300 hover:border-accent/45 hover:shadow-[0_24px_48px_-20px_rgba(0,176,80,0.35)] xl:h-[210px]"
+      className="hover:border-accent/45 group relative flex h-[168px] flex-col justify-end overflow-hidden rounded-[20px] border border-white/[0.08] px-4 py-4 shadow-[0_18px_40px_-20px_rgba(4,16,10,0.45)] transition-[border-color,box-shadow] duration-300 hover:shadow-[0_24px_48px_-20px_rgba(0,176,80,0.35)] xl:h-[210px]"
     >
       {/* Dark base */}
       <div className="absolute inset-0 bg-[#0A130E]" />

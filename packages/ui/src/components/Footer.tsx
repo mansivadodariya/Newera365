@@ -72,9 +72,7 @@ function Footer({
     },
     {
       heading: t('headingCompany'),
-      items: [
-        { label: t('linkAbout'), href: '/company/about' },
-      ],
+      items: [{ label: t('linkAbout'), href: '/company/about' }],
     },
     {
       heading: t('headingSupport'),

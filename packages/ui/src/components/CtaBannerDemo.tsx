@@ -31,7 +31,7 @@ export function CtaBannerDemo() {
           aria-hidden="true"
           className="pointer-events-none absolute -top-1/3 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,176,80,0.26),transparent_65%)] blur-2xl"
         />
-        <div className="relative mx-auto flex max-w-[720px] flex-col items-center gap-7 px-7 py-16 text-center xl:py-24">
+        <div className="relative mx-auto flex max-w-[720px] flex-col items-center gap-7 px-7 py-14 text-center xl:py-20">
           <span aria-hidden="true" className="bg-accent-bright/80 h-[3px] w-9 rounded-full" />
           <div className="max-w-[640px]">
             <h2 className="text-headline mb-4 font-sans text-white">{t('ctaBannerTitle')}</h2>

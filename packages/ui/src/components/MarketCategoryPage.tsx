@@ -808,7 +808,7 @@ export function MarketCategoryPage({
               <ScrollReveal key={n} index={i}>
                 <div className="border-border/70 flex items-start gap-5 border-b py-6 dark:border-white/[0.08]">
                   <span
-                    className="font-mono text-[28px] font-semibold leading-none tabular-nums text-[#0C1F14]/[0.14] xl:text-[36px] dark:text-white/[0.12]"
+                    className="font-mono text-[28px] font-semibold tabular-nums leading-none text-[#0C1F14]/[0.14] xl:text-[36px] dark:text-white/[0.12]"
                     dir="ltr"
                   >
                     {`0${n}`}

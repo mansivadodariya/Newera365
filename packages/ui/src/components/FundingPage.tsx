@@ -426,7 +426,7 @@ function MoneyFlow() {
                 <div className="mb-1.5 flex items-center gap-2 xl:justify-center">
                   <span
                     dir="ltr"
-                    className="text-accent font-mono text-caption font-semibold tabular-nums"
+                    className="text-accent text-caption font-mono font-semibold tabular-nums"
                   >
                     {beat.n}
                   </span>
@@ -549,7 +549,7 @@ function HeroContent({
             )}
             {methods.map((method, i) => (
               <ScrollReveal key={method.key} index={i}>
-                <div className="group border-border shadow-card hover-lift flex h-full flex-col gap-4 rounded-[20px] border bg-white p-5 dark:border-white/[0.06] dark:bg-[#14161c] dark:shadow-none">
+                <div className="border-border shadow-card hover-lift group flex h-full flex-col gap-4 rounded-[20px] border bg-white p-5 dark:border-white/[0.06] dark:bg-[#14161c] dark:shadow-none">
                   {/* Cover tile — borderless, always in full colour (client
                       feedback); the banner fills the frame and zooms in slightly
                       on hover. */}

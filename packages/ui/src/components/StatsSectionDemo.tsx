@@ -39,7 +39,7 @@ export async function StatsSectionDemo({
         ];
 
   return (
-    <section className="bg-transparent px-5 pb-9 pt-12 xl:pb-14 xl:pt-14">
+    <section className="bg-transparent px-5 pb-8 pt-10 xl:pb-10 xl:pt-12">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <SectionKicker className="text-foreground [&>span:first-child]:bg-accent mb-5">
           {t('statsByNumbers')}
@@ -63,7 +63,7 @@ export async function StatsSectionDemo({
           >
             {stats.map((stat, i) => (
               <ScrollReveal key={stat.label} index={i} className="h-full">
-                <div className="bg-ink-soft shadow-card relative flex h-full flex-col gap-2 overflow-hidden rounded-[18px] p-[26px] ring-1 ring-inset ring-white/[0.04] transition-[transform,box-shadow] duration-300 hover:ring-accent/30 motion-safe:hover:scale-[1.02] dark:bg-[#15171c]">
+                <div className="bg-ink-soft shadow-card hover:ring-accent/30 relative flex h-full flex-col gap-2 overflow-hidden rounded-[18px] p-[26px] ring-1 ring-inset ring-white/[0.04] transition-[transform,box-shadow] duration-300 motion-safe:hover:scale-[1.02] dark:bg-[#15171c]">
                   <span
                     className="bg-accent/70 mb-1 block h-[3px] w-7 rounded-full"
                     aria-hidden="true"
@@ -84,7 +84,7 @@ export async function StatsSectionDemo({
         </CountUpGroup>
 
         {/* Regulated badge */}
-        <div className="border-border bg-surface shadow-card mt-6 flex items-center gap-[14px] rounded-[16px] border px-5 py-[18px] transition-[transform,box-shadow,border-color] duration-300 hover:border-accent/40 hover:shadow-card-lg motion-safe:hover:-translate-y-0.5 dark:bg-[#15171c]">
+        <div className="border-border bg-surface shadow-card hover:border-accent/40 hover:shadow-card-lg mt-6 flex items-center gap-[14px] rounded-[16px] border px-5 py-[18px] transition-[transform,box-shadow,border-color] duration-300 motion-safe:hover:-translate-y-0.5 dark:bg-[#15171c]">
           <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#eef3ef] dark:bg-[#23262d]">
             <Image
               src="/icons/authority.png"

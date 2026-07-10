@@ -219,7 +219,9 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
       <section className="bg-transparent px-5 py-12">
         <div className={WRAP}>
           <SectionKicker className={`mb-4 ${KICKER_TICK}`}>{tAwards('awardsKicker')}</SectionKicker>
-          <h2 className="text-foreground text-headline mb-7 font-sans">{tAwards('awardsHeading')}</h2>
+          <h2 className="text-foreground text-headline mb-7 font-sans">
+            {tAwards('awardsHeading')}
+          </h2>
 
           {/* Filter chips: year, then category */}
           <div className="mb-3 flex flex-wrap gap-2">
@@ -413,7 +415,8 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
                     <ChevronArrow className="text-accent mt-1 flex-shrink-0 transition-transform group-hover:translate-x-0.5" />
                   </>
                 );
-                const rowClass = 'border-border flex items-center justify-between gap-4 border-b py-5';
+                const rowClass =
+                  'border-border flex items-center justify-between gap-4 border-b py-5';
                 return (
                   <ScrollReveal key={item.id} index={i} margin="-40px">
                     {item.url ? (
@@ -471,7 +474,7 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
                 <div className="border-border hover-lift shadow-card dark:shadow-card-dark flex h-full flex-col gap-4 rounded-[18px] border bg-white p-5 dark:bg-[#111316]">
                   <FileIcon color={color} />
                   <div className="flex-1">
-                    <p className="text-foreground font-sans text-body font-semibold">
+                    <p className="text-foreground text-body font-sans font-semibold">
                       {tPress(nameKey as 'logoPack')}
                     </p>
                     <p className="font-body text-muted text-caption font-mono uppercase">
@@ -479,7 +482,7 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
                     </p>
                   </div>
                   <button
-                    className="tap-scale border-border text-foreground/70 hover:border-accent hover:text-accent inline-flex w-fit items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-eyebrow font-mono font-medium uppercase transition-colors"
+                    className="tap-scale border-border text-foreground/70 hover:border-accent hover:text-accent text-eyebrow inline-flex w-fit items-center gap-1.5 rounded-full border px-3.5 py-1.5 font-mono font-medium uppercase transition-colors"
                     aria-label={`${tPress('downloadBtn')} ${tPress(nameKey as 'logoPack')}`}
                   >
                     {tPress('downloadBtn')}

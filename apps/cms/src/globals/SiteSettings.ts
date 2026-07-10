@@ -298,6 +298,139 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
 
+    // ── Homepage Newsletter (Monday Briefing) ────────────────────────────────
+    // The full-bleed briefing teaser on the homepage (client feedback #19).
+    // Editorial copy + the "this week's issue" preview; the 4 category cards keep
+    // their fixed icons (by position) but their copy is editable here. Any field
+    // left blank falls back to the built-in i18n default, so the section always
+    // renders. Columns backfilled by migrate-home-newsletter.ts (push: false).
+    {
+      type: 'collapsible',
+      label: 'Homepage Newsletter (Monday Briefing)',
+      admin: {
+        initCollapsed: true,
+        description:
+          'The homepage newsletter teaser. Leave a field blank to use the built-in default. ' +
+          'Update the "This week\'s issue" fields to keep the preview current.',
+      },
+      fields: [
+        {
+          name: 'nlHeadlineEn',
+          type: 'text',
+          label: 'Headline — EN',
+          maxLength: 80,
+          admin: { description: 'e.g. "Read the market".' },
+        },
+        { name: 'nlHeadlineAr', type: 'text', label: 'Headline — AR', maxLength: 80 },
+        {
+          name: 'nlHeadlineAccentEn',
+          type: 'text',
+          label: 'Headline accent (green) — EN',
+          maxLength: 60,
+          admin: { description: 'The green-highlighted tail, e.g. "before it moves.".' },
+        },
+        {
+          name: 'nlHeadlineAccentAr',
+          type: 'text',
+          label: 'Headline accent (green) — AR',
+          maxLength: 60,
+        },
+        { name: 'nlSubtitleEn', type: 'textarea', label: 'Subtitle — EN' },
+        { name: 'nlSubtitleAr', type: 'textarea', label: 'Subtitle — AR' },
+        {
+          name: 'nlMetricValue',
+          type: 'text',
+          label: 'Subscriber count',
+          maxLength: 20,
+          admin: { description: 'e.g. "47,000+" — counts up on scroll. Same for both locales.' },
+        },
+        {
+          name: 'nlMetricLabelEn',
+          type: 'text',
+          label: 'Count label — EN',
+          maxLength: 80,
+          admin: { description: 'e.g. "traders read it every Monday".' },
+        },
+        { name: 'nlMetricLabelAr', type: 'text', label: 'Count label — AR', maxLength: 80 },
+        {
+          name: 'nlIssueMetaEn',
+          type: 'text',
+          label: "This week's issue — meta — EN",
+          maxLength: 60,
+          admin: { description: 'e.g. "Issue 118 · Mon 7:00am".' },
+        },
+        {
+          name: 'nlIssueMetaAr',
+          type: 'text',
+          label: "This week's issue — meta — AR",
+          maxLength: 60,
+        },
+        {
+          name: 'nlLeadHeadlineEn',
+          type: 'text',
+          label: 'Lead story headline — EN',
+          maxLength: 160,
+          admin: { description: 'The featured story in the issue preview.' },
+        },
+        {
+          name: 'nlLeadHeadlineAr',
+          type: 'text',
+          label: 'Lead story headline — AR',
+          maxLength: 160,
+        },
+        {
+          name: 'nlFxHeadEn',
+          type: 'text',
+          label: 'FX teaser — EN',
+          maxLength: 120,
+        },
+        { name: 'nlFxHeadAr', type: 'text', label: 'FX teaser — AR', maxLength: 120 },
+        { name: 'nlCmdHeadEn', type: 'text', label: 'Commodities teaser — EN', maxLength: 120 },
+        { name: 'nlCmdHeadAr', type: 'text', label: 'Commodities teaser — AR', maxLength: 120 },
+        { name: 'nlMacroHeadEn', type: 'text', label: 'Macro teaser — EN', maxLength: 120 },
+        { name: 'nlMacroHeadAr', type: 'text', label: 'Macro teaser — AR', maxLength: 120 },
+        {
+          name: 'nlCategories',
+          type: 'array',
+          label: 'Content categories (4 cards)',
+          maxRows: 4,
+          labels: { singular: 'Category', plural: 'Categories' },
+          admin: {
+            description:
+              'The 4 "what you get" cards. Icons are fixed by position (pulse, calendar, target, compass) — order matters.',
+          },
+          fields: [
+            {
+              name: 'cadenceEn',
+              type: 'text',
+              maxLength: 40,
+              admin: { description: 'Cadence chip — EN, e.g. "Every morning".' },
+            },
+            {
+              name: 'cadenceAr',
+              type: 'text',
+              maxLength: 40,
+              admin: { description: 'Cadence chip — AR.' },
+            },
+            {
+              name: 'titleEn',
+              type: 'text',
+              maxLength: 60,
+              admin: { description: 'Card title — EN, e.g. "Daily insights".' },
+            },
+            { name: 'titleAr', type: 'text', maxLength: 60 },
+            {
+              name: 'descEn',
+              type: 'text',
+              maxLength: 200,
+              admin: { description: 'One-line description — EN.' },
+            },
+            { name: 'descAr', type: 'text', maxLength: 200 },
+          ],
+        },
+      ],
+    },
+
     // ── Page Stat Callouts ───────────────────────────────────────────────────
     // Single oversized metrics used on individual pages, plus small stat rows.
     {

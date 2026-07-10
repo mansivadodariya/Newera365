@@ -207,93 +207,91 @@ export function FibonacciCalculator() {
   return (
     <div>
       {/* Mode tabs */}
-          <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-[#1c1c1c]">
-            {(['Retracement', 'Extension'] as const).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`font-body flex-1 rounded-[11px] py-2.5 text-[12px] font-medium transition-colors ${
-                  activeTab === tab
-                    ? 'text-foreground bg-white shadow-sm dark:bg-[#2a2a2a] dark:text-white'
-                    : 'text-muted hover:text-foreground'
-                }`}
-              >
-                {tab === 'Retracement' ? t('tabRetracement') : t('tabExtension')}
-              </button>
-            ))}
-          </div>
+      <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-[#1c1c1c]">
+        {(['Retracement', 'Extension'] as const).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`font-body flex-1 rounded-[11px] py-2.5 text-[12px] font-medium transition-colors ${
+              activeTab === tab
+                ? 'text-foreground bg-white shadow-sm dark:bg-[#2a2a2a] dark:text-white'
+                : 'text-muted hover:text-foreground'
+            }`}
+          >
+            {tab === 'Retracement' ? t('tabRetracement') : t('tabExtension')}
+          </button>
+        ))}
+      </div>
 
-          <div className="xl:flex xl:gap-8">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:flex-1">
-              {/* Trend dropdown */}
-              <div className="col-span-full">
-                <CalcSelect
-                  label={t('fieldTrend')}
-                  value={direction}
-                  options={['Uptrend', 'Downtrend']}
-                  labels={[t('trendUp'), t('trendDown')]}
-                  onChange={(v) => {
-                    const d = v as FibDirection;
-                    setDirection(d);
-                    const H = parseFloat(swingHigh);
-                    const L = parseFloat(swingLow);
-                    if (!isNaN(H) && !isNaN(L) && H > L) setLevels(computeFibLevels(H, L, d));
-                  }}
-                />
-              </div>
-              <NumberInput label={t('fieldHigh')} value={swingHigh} onChange={setSwingHigh} />
-              <NumberInput label={t('fieldLow')} value={swingLow} onChange={setSwingLow} />
-
-              {/* Buttons */}
-              <div className="col-span-full flex items-center gap-3">
-                <button
-                  onClick={handleCalculate}
-                  className="font-body flex h-[48px] flex-1 items-center justify-center rounded-full bg-[#00B050] text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90 xl:flex-none xl:px-8"
-                >
-                  {t('calcBtn')}
-                </button>
-                <button
-                  onClick={handleReset}
-                  className="border-border font-body flex h-[48px] flex-1 items-center justify-center rounded-full border text-[14px] font-medium transition-colors xl:flex-none xl:px-8"
-                >
-                  {t('resetBtn')}
-                </button>
-                <p className="font-body text-muted hidden text-[11px] xl:block">
-                  {t('disclaimer')}
-                </p>
-              </div>
-            </div>
-
-            {/* Desktop result panel */}
-            <div className="hidden xl:flex xl:w-[420px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
-              <ResultCard
-                levels={levels}
-                retracementLabel={t('retracementLabel')}
-                extensionLabel={t('extensionLabel')}
-              />
-              <FormulaBox
-                direction={direction}
-                calcKicker={t('calcKicker')}
-                calcFormula={t('calcFormula')}
-                calcDesc={t('calcDesc')}
-              />
-            </div>
-          </div>
-
-          {/* Mobile result panel */}
-          <div className="mt-5 flex flex-col gap-4 xl:hidden">
-            <ResultCard
-              levels={levels}
-              retracementLabel={t('retracementLabel')}
-              extensionLabel={t('extensionLabel')}
-            />
-            <FormulaBox
-              direction={direction}
-              calcKicker={t('calcKicker')}
-              calcFormula={t('calcFormula')}
-              calcDesc={t('calcDesc')}
+      <div className="xl:flex xl:gap-8">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:flex-1">
+          {/* Trend dropdown */}
+          <div className="col-span-full">
+            <CalcSelect
+              label={t('fieldTrend')}
+              value={direction}
+              options={['Uptrend', 'Downtrend']}
+              labels={[t('trendUp'), t('trendDown')]}
+              onChange={(v) => {
+                const d = v as FibDirection;
+                setDirection(d);
+                const H = parseFloat(swingHigh);
+                const L = parseFloat(swingLow);
+                if (!isNaN(H) && !isNaN(L) && H > L) setLevels(computeFibLevels(H, L, d));
+              }}
             />
           </div>
+          <NumberInput label={t('fieldHigh')} value={swingHigh} onChange={setSwingHigh} />
+          <NumberInput label={t('fieldLow')} value={swingLow} onChange={setSwingLow} />
+
+          {/* Buttons */}
+          <div className="col-span-full flex items-center gap-3">
+            <button
+              onClick={handleCalculate}
+              className="font-body flex h-[48px] flex-1 items-center justify-center rounded-full bg-[#00B050] text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90 xl:flex-none xl:px-8"
+            >
+              {t('calcBtn')}
+            </button>
+            <button
+              onClick={handleReset}
+              className="border-border font-body flex h-[48px] flex-1 items-center justify-center rounded-full border text-[14px] font-medium transition-colors xl:flex-none xl:px-8"
+            >
+              {t('resetBtn')}
+            </button>
+            <p className="font-body text-muted hidden text-[11px] xl:block">{t('disclaimer')}</p>
+          </div>
+        </div>
+
+        {/* Desktop result panel */}
+        <div className="hidden xl:flex xl:w-[420px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
+          <ResultCard
+            levels={levels}
+            retracementLabel={t('retracementLabel')}
+            extensionLabel={t('extensionLabel')}
+          />
+          <FormulaBox
+            direction={direction}
+            calcKicker={t('calcKicker')}
+            calcFormula={t('calcFormula')}
+            calcDesc={t('calcDesc')}
+          />
+        </div>
+      </div>
+
+      {/* Mobile result panel */}
+      <div className="mt-5 flex flex-col gap-4 xl:hidden">
+        <ResultCard
+          levels={levels}
+          retracementLabel={t('retracementLabel')}
+          extensionLabel={t('extensionLabel')}
+        />
+        <FormulaBox
+          direction={direction}
+          calcKicker={t('calcKicker')}
+          calcFormula={t('calcFormula')}
+          calcDesc={t('calcDesc')}
+        />
+      </div>
     </div>
   );
 }

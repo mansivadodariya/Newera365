@@ -34,8 +34,13 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
       if (res.ok) {
         setSubmitted(true);
       } else {
-        const data = await res.json().catch(() => ({}));
-        setError((data as { error?: string }).error ?? 'Something went wrong. Please try again.');
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: string;
+          errors?: { message?: string }[];
+        };
+        setError(
+          data.errors?.[0]?.message ?? data.error ?? 'Something went wrong. Please try again.',
+        );
       }
     } catch {
       setError('Something went wrong. Please try again.');
@@ -126,9 +131,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
             <h1 className="text-foreground text-display font-sans">
               {t('heroLine1')} <span className="text-accent">{t('heroAccent')}</span>
             </h1>
-            <p className="font-body text-muted text-lead mt-5 max-w-[440px]">
-              {t('heroSubtitle')}
-            </p>
+            <p className="font-body text-muted text-lead mt-5 max-w-[440px]">{t('heroSubtitle')}</p>
 
             {submitted ? (
               <div className="border-accent/30 bg-accent/[0.06] mt-8 flex items-start gap-4 rounded-[18px] border p-5">
@@ -149,7 +152,10 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
                 </div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="mt-8 flex w-full max-w-[440px] flex-col gap-3">
+              <form
+                onSubmit={handleSubmit}
+                className="mt-8 flex w-full max-w-[440px] flex-col gap-3"
+              >
                 <label
                   htmlFor="nl-email"
                   className="text-eyebrow text-muted font-mono font-medium uppercase"
@@ -170,7 +176,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="bg-accent font-body text-body active:scale-[0.98] hover:bg-accent/90 flex items-center justify-center gap-2 rounded-[14px] px-6 py-[14px] font-medium text-white transition-[background,transform] disabled:opacity-60"
+                    className="bg-accent font-body text-body hover:bg-accent/90 flex items-center justify-center gap-2 rounded-[14px] px-6 py-[14px] font-medium text-white transition-[background,transform] active:scale-[0.98] disabled:opacity-60"
                   >
                     {t('subscribeBtn')}
                     <svg
@@ -199,7 +205,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
 
           {/* Right: the front page of this week's issue */}
           <ScrollReveal delay={0.12} className="w-full">
-            <article className="border-border bg-surface shadow-card relative overflow-hidden rounded-[24px] border p-6 transition-[transform,box-shadow,border-color] duration-300 hover:border-accent/40 hover:shadow-card-lg motion-safe:hover:-translate-y-1 md:p-8">
+            <article className="border-border bg-surface shadow-card hover:border-accent/40 hover:shadow-card-lg relative overflow-hidden rounded-[24px] border p-6 transition-[transform,box-shadow,border-color] duration-300 motion-safe:hover:-translate-y-1 md:p-8">
               {/* Masthead */}
               <div className="pt-2 text-center">
                 <p className="text-eyebrow text-accent font-mono font-medium uppercase">
@@ -330,17 +336,17 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
                 {t('testimonialText')}
               </blockquote>
               <figcaption className="mt-6 flex items-center gap-3">
-                <span className="bg-accent-bright/20 text-accent-bright flex h-10 w-10 items-center justify-center rounded-full font-sans text-caption font-semibold">
+                <span className="bg-accent-bright/20 text-accent-bright text-caption flex h-10 w-10 items-center justify-center rounded-full font-sans font-semibold">
                   {t('testimonialAuthor')
                     .split(' ')
                     .map((w) => w[0])
                     .join('')}
                 </span>
                 <span>
-                  <span className="block font-sans text-caption font-semibold text-white">
+                  <span className="text-caption block font-sans font-semibold text-white">
                     {t('testimonialAuthor')}
                   </span>
-                  <span className="font-body block text-caption text-white/50">
+                  <span className="font-body text-caption block text-white/50">
                     {t('testimonialSince')}
                   </span>
                 </span>

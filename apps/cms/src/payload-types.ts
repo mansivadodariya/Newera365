@@ -721,6 +721,36 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  nlHeadlineEn?: string | null;
+  nlHeadlineAr?: string | null;
+  nlHeadlineAccentEn?: string | null;
+  nlHeadlineAccentAr?: string | null;
+  nlSubtitleEn?: string | null;
+  nlSubtitleAr?: string | null;
+  nlMetricValue?: string | null;
+  nlMetricLabelEn?: string | null;
+  nlMetricLabelAr?: string | null;
+  nlIssueMetaEn?: string | null;
+  nlIssueMetaAr?: string | null;
+  nlLeadHeadlineEn?: string | null;
+  nlLeadHeadlineAr?: string | null;
+  nlFxHeadEn?: string | null;
+  nlFxHeadAr?: string | null;
+  nlCmdHeadEn?: string | null;
+  nlCmdHeadAr?: string | null;
+  nlMacroHeadEn?: string | null;
+  nlMacroHeadAr?: string | null;
+  nlCategories?:
+    | {
+        cadenceEn?: string | null;
+        cadenceAr?: string | null;
+        titleEn?: string | null;
+        titleAr?: string | null;
+        descEn?: string | null;
+        descAr?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   aboutManifestoStatValue?: string | null;
   fundingWithdrawalStatValue?: string | null;
   supportPromiseStats?:
@@ -824,7 +854,6 @@ export interface SiteSetting {
 }
 
 declare module 'payload' {
-  // @ts-ignore — payload's own .d.ts already declares GeneratedTypes; this
-  // generated file re-declares it, which tsc flags as a duplicate identifier.
+  // @ts-ignore - Config type conflicts with Payload's built-in GeneratedTypes; this override is intentional (re-add after `generate:types`, which strips it).
   export interface GeneratedTypes extends Config {}
 }

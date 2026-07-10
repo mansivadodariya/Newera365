@@ -63,8 +63,11 @@ function RegisterModal({ webinar, onClose }: { webinar: WebinarItem; onClose: ()
       if (res.ok) {
         setDone(true);
       } else {
-        const data = await res.json().catch(() => ({}));
-        setError((data as { error?: string }).error ?? t('registerError'));
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: string;
+          errors?: { message?: string }[];
+        };
+        setError(data.errors?.[0]?.message ?? data.error ?? t('registerError'));
       }
     } catch {
       setError(t('registerError'));
@@ -171,7 +174,7 @@ export function WebinarsSection({ webinars = [] }: WebinarsSectionProps) {
               {upcoming.map((w) => (
                 <div
                   key={w.id}
-                  className="bg-surface flex flex-col gap-4 rounded-[20px] border border-transparent p-5 transition-colors duration-200 hover:border-accent/40 md:flex-row md:items-center md:justify-between"
+                  className="bg-surface hover:border-accent/40 flex flex-col gap-4 rounded-[20px] border border-transparent p-5 transition-colors duration-200 md:flex-row md:items-center md:justify-between"
                 >
                   <div className="flex-1">
                     <div className="mb-2 flex items-center gap-2">
@@ -217,7 +220,7 @@ export function WebinarsSection({ webinars = [] }: WebinarsSectionProps) {
               {past.map((w) => (
                 <div
                   key={w.id}
-                  className="flex items-center justify-between rounded-[16px] border border-transparent bg-[#F0F4F1] px-4 py-3 transition-colors duration-200 hover:border-accent/40 dark:bg-[#16181d]"
+                  className="hover:border-accent/40 flex items-center justify-between rounded-[16px] border border-transparent bg-[#F0F4F1] px-4 py-3 transition-colors duration-200 dark:bg-[#16181d]"
                 >
                   <div>
                     <p className="text-foreground font-sans text-[14px] font-semibold">{w.title}</p>

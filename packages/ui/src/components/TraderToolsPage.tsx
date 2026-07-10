@@ -117,7 +117,10 @@ function ResultCard({
               ? labels.resultPip
               : labels.resultSwap}
         </p>
-        <p dir="ltr" className="font-mono text-[42px] font-semibold tabular-nums leading-[1.1] text-white">
+        <p
+          dir="ltr"
+          className="font-mono text-[42px] font-semibold tabular-nums leading-[1.1] text-white"
+        >
           {activeTab === 'SWAP' && swap < 0 ? '-' : ''}
           <CountUp
             value={Math.abs(
@@ -215,7 +218,7 @@ function FormulaBox({
 }) {
   return (
     <div className="rounded-[14px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
-      <p className="font-mono text-muted mb-2.5 text-[10px] uppercase tracking-[0.1em]">
+      <p className="text-muted mb-2.5 font-mono text-[10px] uppercase tracking-[0.1em]">
         {calcKicker}
       </p>
       {activeTab === 'MARGIN' && <FormulaRow formula={marginFormula} desc={marginDesc} />}
@@ -404,134 +407,134 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
             <>
               {/* Inputs */}
               <div className="xl:flex xl:gap-8">
-            {/* Input fields: 2-col grid on xl */}
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:flex-1">
-              <CalcSelect
-                label={t('fieldCurrency')}
-                value={currency}
-                options={['USD', 'EUR', 'GBP']}
-                onChange={setCurrency}
-              />
-              <CalcSelect
-                label={t('fieldInstrument')}
-                value={selectedInstrument?.name ?? ''}
-                options={instrumentNames}
-                onChange={handleInstrumentChange}
-              />
-              <NumberInput
-                label={t('fieldPositionSize')}
-                value={positionSize}
-                onChange={setPositionSize}
-                step="0.01"
-                min="0.01"
-              />
-              <CalcSelect
-                label={t('fieldLeverage')}
-                value={leverage}
-                options={['10', '20', '50', '100', '200', '500']}
-                onChange={setLeverage}
-              />
-              {/* Swap-only fields live INSIDE the input grid so the two-column
-                  rhythm holds (they used to render as stray flex children). */}
-              {activeTab === 'SWAP' && (
-                <>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="font-body text-[11px] uppercase tracking-[0.1em] text-[#6b7280] dark:text-white/40">
-                      {t('fieldDirection')}
-                    </label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {(['long', 'short'] as const).map((d) => (
-                        <button
-                          key={d}
-                          onClick={() => setDirection(d)}
-                          aria-pressed={direction === d}
-                          className={`font-body cursor-pointer rounded-[12px] border py-3 text-[13px] font-medium transition-colors duration-200 ${
-                            direction === d
-                              ? d === 'long'
-                                ? 'border-[#26A69A] bg-[#26A69A]/10 text-[#26A69A]'
-                                : 'border-[#EF4444] bg-[#EF4444]/10 text-[#EF4444]'
-                              : 'border-border text-muted hover:text-foreground'
-                          }`}
-                        >
-                          {d === 'long' ? t('dirBuy') : t('dirSell')}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <NumberInput
-                    label={t('fieldDays')}
-                    value={days}
-                    onChange={setDays}
-                    step="1"
-                    min="1"
+                {/* Input fields: 2-col grid on xl */}
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:flex-1">
+                  <CalcSelect
+                    label={t('fieldCurrency')}
+                    value={currency}
+                    options={['USD', 'EUR', 'GBP']}
+                    onChange={setCurrency}
                   />
-                </>
-              )}
-            </div>
+                  <CalcSelect
+                    label={t('fieldInstrument')}
+                    value={selectedInstrument?.name ?? ''}
+                    options={instrumentNames}
+                    onChange={handleInstrumentChange}
+                  />
+                  <NumberInput
+                    label={t('fieldPositionSize')}
+                    value={positionSize}
+                    onChange={setPositionSize}
+                    step="0.01"
+                    min="0.01"
+                  />
+                  <CalcSelect
+                    label={t('fieldLeverage')}
+                    value={leverage}
+                    options={['10', '20', '50', '100', '200', '500']}
+                    onChange={setLeverage}
+                  />
+                  {/* Swap-only fields live INSIDE the input grid so the two-column
+                  rhythm holds (they used to render as stray flex children). */}
+                  {activeTab === 'SWAP' && (
+                    <>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="font-body text-[11px] uppercase tracking-[0.1em] text-[#6b7280] dark:text-white/40">
+                          {t('fieldDirection')}
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          {(['long', 'short'] as const).map((d) => (
+                            <button
+                              key={d}
+                              onClick={() => setDirection(d)}
+                              aria-pressed={direction === d}
+                              className={`font-body cursor-pointer rounded-[12px] border py-3 text-[13px] font-medium transition-colors duration-200 ${
+                                direction === d
+                                  ? d === 'long'
+                                    ? 'border-[#26A69A] bg-[#26A69A]/10 text-[#26A69A]'
+                                    : 'border-[#EF4444] bg-[#EF4444]/10 text-[#EF4444]'
+                                  : 'border-border text-muted hover:text-foreground'
+                              }`}
+                            >
+                              {d === 'long' ? t('dirBuy') : t('dirSell')}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <NumberInput
+                        label={t('fieldDays')}
+                        value={days}
+                        onChange={setDays}
+                        step="1"
+                        min="1"
+                      />
+                    </>
+                  )}
+                </div>
 
-            {/* Result card + formula — right column on xl */}
-            <div className="hidden xl:flex xl:w-[400px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
-              <ResultCard
-                activeTab={activeTab}
-                margin={margin}
-                pip={pip}
-                swap={swap}
-                currency={currency}
-                lots={lots}
-                contractSize={contractSize}
-                leverage={leverage}
-                positionSize={positionSize}
-                instrument={selectedInstrument?.name ?? ''}
-                swapRate={swapRate}
-                direction={direction}
-                days={days}
-                labels={resultCardLabels}
-              />
-              <FormulaBox
-                activeTab={activeTab}
-                calcKicker={t('calcKicker')}
-                marginFormula={t('calcMarginFormula')}
-                marginDesc={t('calcMarginDesc')}
-                pipFormula={t('calcPipFormula')}
-                pipDesc={t('calcPipDesc')}
-                swapFormula={t('calcSwapFormula')}
-                swapDesc={t('calcSwapDesc')}
-              />
-            </div>
-          </div>
+                {/* Result card + formula — right column on xl */}
+                <div className="hidden xl:flex xl:w-[400px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
+                  <ResultCard
+                    activeTab={activeTab}
+                    margin={margin}
+                    pip={pip}
+                    swap={swap}
+                    currency={currency}
+                    lots={lots}
+                    contractSize={contractSize}
+                    leverage={leverage}
+                    positionSize={positionSize}
+                    instrument={selectedInstrument?.name ?? ''}
+                    swapRate={swapRate}
+                    direction={direction}
+                    days={days}
+                    labels={resultCardLabels}
+                  />
+                  <FormulaBox
+                    activeTab={activeTab}
+                    calcKicker={t('calcKicker')}
+                    marginFormula={t('calcMarginFormula')}
+                    marginDesc={t('calcMarginDesc')}
+                    pipFormula={t('calcPipFormula')}
+                    pipDesc={t('calcPipDesc')}
+                    swapFormula={t('calcSwapFormula')}
+                    swapDesc={t('calcSwapDesc')}
+                  />
+                </div>
+              </div>
 
-          {/* Results render live below the inputs — the old no-op "Calculate"
+              {/* Results render live below the inputs — the old no-op "Calculate"
               button was removed (results always reflect the current inputs). */}
 
-          {/* Result + formula — mobile/tablet only */}
-          <div className="mt-5 flex flex-col gap-4 xl:hidden">
-            <ResultCard
-              activeTab={activeTab}
-              margin={margin}
-              pip={pip}
-              swap={swap}
-              currency={currency}
-              lots={lots}
-              contractSize={contractSize}
-              leverage={leverage}
-              positionSize={positionSize}
-              instrument={selectedInstrument?.name ?? ''}
-              swapRate={swapRate}
-              direction={direction}
-              days={days}
-              labels={resultCardLabels}
-            />
-            <FormulaBox
-              activeTab={activeTab}
-              calcKicker={t('calcKicker')}
-              marginFormula={t('calcMarginFormula')}
-              marginDesc={t('calcMarginDesc')}
-              pipFormula={t('calcPipFormula')}
-              pipDesc={t('calcPipDesc')}
-              swapFormula={t('calcSwapFormula')}
-              swapDesc={t('calcSwapDesc')}
-            />
-          </div>
+              {/* Result + formula — mobile/tablet only */}
+              <div className="mt-5 flex flex-col gap-4 xl:hidden">
+                <ResultCard
+                  activeTab={activeTab}
+                  margin={margin}
+                  pip={pip}
+                  swap={swap}
+                  currency={currency}
+                  lots={lots}
+                  contractSize={contractSize}
+                  leverage={leverage}
+                  positionSize={positionSize}
+                  instrument={selectedInstrument?.name ?? ''}
+                  swapRate={swapRate}
+                  direction={direction}
+                  days={days}
+                  labels={resultCardLabels}
+                />
+                <FormulaBox
+                  activeTab={activeTab}
+                  calcKicker={t('calcKicker')}
+                  marginFormula={t('calcMarginFormula')}
+                  marginDesc={t('calcMarginDesc')}
+                  pipFormula={t('calcPipFormula')}
+                  pipDesc={t('calcPipDesc')}
+                  swapFormula={t('calcSwapFormula')}
+                  swapDesc={t('calcSwapDesc')}
+                />
+              </div>
             </>
           )}
 

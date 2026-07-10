@@ -146,6 +146,12 @@ module.exports = {
           from: { transform: 'translateX(-100%)' },
           to: { transform: 'translateX(450%)' },
         },
+        // Slow left-to-right sheen sweep for the "Most Popular" pricing badge —
+        // draws the eye to the recommendation, then rests between passes.
+        'badge-shine': {
+          '0%': { backgroundPosition: '-150% 0' },
+          '60%,100%': { backgroundPosition: '250% 0' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.2s ease-out',
@@ -171,6 +177,7 @@ module.exports = {
         'flash-down': 'flash-down 0.7s ease-out',
         'loading-bar': 'loading-bar 1.2s ease-out forwards',
         'loading-blip': 'loading-blip 1s ease-in-out infinite',
+        'badge-shine': 'badge-shine 3.6s ease-in-out infinite',
       },
     },
   },

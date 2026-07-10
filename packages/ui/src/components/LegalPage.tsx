@@ -90,9 +90,7 @@ function Section({ id, title, children }: SectionProps) {
       className="flex scroll-mt-[88px] flex-col gap-3 border-t border-black/[0.06] pt-7 first:border-t-0 first:pt-0 dark:border-white/10"
     >
       <div className="flex items-baseline gap-3">
-        {num && (
-          <span className="text-accent/70 font-mono text-caption tabular-nums">{num}</span>
-        )}
+        {num && <span className="text-accent/70 text-caption font-mono tabular-nums">{num}</span>}
         <h2 className="text-foreground text-title font-sans">{heading}</h2>
       </div>
       {children}
@@ -276,8 +274,8 @@ const DOC_CONTENT: Record<DocId, React.ReactNode> = {
       <Section id="section-3" title="3. Market risk">
         <Para>
           Financial markets can be highly volatile. Prices may gap significantly, particularly
-          around major economic announcements, resulting in execution at prices materially
-          different from your order price.
+          around major economic announcements, resulting in execution at prices materially different
+          from your order price.
         </Para>
       </Section>
     </>
@@ -488,7 +486,7 @@ export function LegalPage({ documents }: LegalPageProps) {
             <aside className="motion-safe:animate-rise-in mb-8 xl:mb-0">
               <nav
                 aria-label={t('tocHeading')}
-                className="xl:sticky xl:top-[88px] rounded-[16px] border border-black/[0.06] bg-[#F0F4F1] p-4 xl:p-5 dark:border-white/10 dark:bg-[#1a1c22]"
+                className="rounded-[16px] border border-black/[0.06] bg-[#F0F4F1] p-4 xl:sticky xl:top-[88px] xl:p-5 dark:border-white/10 dark:bg-[#1a1c22]"
               >
                 <SectionKicker className="text-muted mb-4">{t('tocHeading')}</SectionKicker>
                 <ol className="flex flex-col gap-0.5">
@@ -540,7 +538,7 @@ export function LegalPage({ documents }: LegalPageProps) {
                 )}
                 <RichText
                   content={cmsDoc.body}
-                  className="flex flex-col gap-3 [&_a]:link-underline [&_h2]:scroll-mt-[88px] [&_h3]:scroll-mt-[88px]"
+                  className="[&_a]:link-underline flex flex-col gap-3 [&_h2]:scroll-mt-[88px] [&_h3]:scroll-mt-[88px]"
                 />
               </>
             ) : (

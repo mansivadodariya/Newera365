@@ -9,25 +9,34 @@ export type Step = { num: string; title: string; desc: string; meta: string };
 /* One glyph per step, drawn in the house hairline stroke. The trend glyph
    stays unflipped in RTL (charts keep their LTR time axis). */
 const STEP_GLYPHS = [
-  // 01 — open the account
+  // 01 — register (open the account)
   <path
-    key="account"
+    key="register"
     d="M10 9.6a3.1 3.1 0 100-6.2 3.1 3.1 0 000 6.2zM3.8 16.6c.9-2.7 3.3-4.1 6.2-4.1M15.2 12.4v4.8M12.8 14.8h4.8"
     stroke="currentColor"
     strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
   />,
-  // 02 — fund it
+  // 02 — verify (shield + check)
   <path
-    key="fund"
+    key="verify"
+    d="M10 2.6l6 2.2v4.4c0 3.7-2.5 6.1-6 7.2-3.5-1.1-6-3.5-6-7.2V4.8l6-2.2zM7.6 9.9l1.7 1.7 3.2-3.4"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />,
+  // 03 — deposit (fund it)
+  <path
+    key="deposit"
     d="M3.2 9.4h13.6M4.8 5.8h10.4a1.6 1.6 0 011.6 1.6v7.2a1.6 1.6 0 01-1.6 1.6H4.8a1.6 1.6 0 01-1.6-1.6V7.4a1.6 1.6 0 011.6-1.6zM13.4 12.9h.9"
     stroke="currentColor"
     strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
   />,
-  // 03 — trade
+  // 04 — trade
   <path
     key="trade"
     d="M3.2 14.6l4.4-4.4 2.9 2.9 6.3-6.3M12.6 6.8h4.2v4.2"
@@ -36,15 +45,28 @@ const STEP_GLYPHS = [
     strokeLinecap="round"
     strokeLinejoin="round"
   />,
+  // 05 — withdraw (down to tray)
+  <path
+    key="withdraw"
+    d="M10 12.4V3.4M6.6 9l3.4 3.4L13.4 9M4 14.2v1.2a1.6 1.6 0 001.6 1.6h8.8a1.6 1.6 0 001.6-1.6v-1.2"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />,
 ];
 
-/* One distinct plate per step (client asked for relevant, per-step imagery,
-   replacing the single sliced silk artwork): open the account on the terminal,
-   fund it, then trade the markets. All dark cinematic house art. */
+/* One distinct, on-context plate per step (client: images must fit the step and
+   not just reuse whatever was already in the repo): a laptop sign-up, a
+   biometric identity scan, a card deposit, a live candlestick chart, then a
+   payout. All dark cinematic photography, portrait-cropped to sit in the cards
+   without heavy zoom. */
 const STEP_IMAGES = [
-  '/images/hero-terminal-macro.jpg',
-  '/images/fund-dark.jpg',
-  '/images/market-forex-dark.jpg',
+  '/images/register-desk-dark.jpg',
+  '/images/verify-dark.jpg',
+  '/images/deposit-dark.jpg',
+  '/images/trade-dark.jpg',
+  '/images/withdraw-dark.jpg',
 ];
 
 type Geo = {
@@ -90,9 +112,9 @@ function StepCard({
     const r = el.getBoundingClientRect();
     const px = (e.clientX - r.left) / r.width - 0.5;
     const py = (e.clientY - r.top) / r.height - 0.5;
-    const max = 7;
+    const max = 4;
     setTilt(
-      `perspective(900px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg) translateY(-6px) scale(1.015)`,
+      `perspective(1100px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg) translateY(-3px) scale(1.006)`,
     );
   };
 
@@ -102,11 +124,9 @@ function StepCard({
       onMouseMove={handleMove}
       onMouseLeave={() => setTilt(null)}
       style={tilt ? { transform: tilt, transition: 'transform 0.12s ease-out' } : undefined}
-      className={`group relative flex min-h-[400px] min-w-0 flex-1 flex-col justify-end overflow-hidden rounded-[24px] border p-6 shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)] transition-[opacity,transform,border-color,box-shadow] duration-500 [transform-style:preserve-3d] hover:border-accent/70 hover:shadow-[0_40px_72px_-24px_rgba(4,16,10,0.72)] xl:min-h-[460px] xl:p-7 ${
-        on ? 'border-accent/45' : 'border-white/[0.08]'
-      } ${
+      className={`hover:border-accent/70 group relative flex min-h-[380px] min-w-0 flex-1 flex-col justify-end overflow-hidden rounded-[24px] border border-white/[0.08] p-6 shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)] transition-[opacity,transform,border-color,box-shadow] duration-500 [transform-style:preserve-3d] hover:shadow-[0_40px_72px_-24px_rgba(4,16,10,0.72)] xl:min-h-[400px] xl:p-5 ${
         revealActive && !on
-          ? 'opacity-0 [transform:translateX(2rem)_translateZ(-2.5rem)_rotateY(8deg)] rtl:[transform:translateX(-2rem)_translateZ(-2.5rem)_rotateY(-8deg)]'
+          ? 'opacity-0 [transform:translateY(1.5rem)]'
           : 'opacity-100 [transform:none]'
       }`}
     >
@@ -115,7 +135,7 @@ function StepCard({
         alt=""
         fill
         sizes="(min-width: 1280px) 384px, (min-width: 768px) 640px, 100vw"
-        className="object-cover transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.06]"
+        className="object-cover object-center transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.03]"
       />
       {/* Green-black scrim anchors the text zone; hairline ring gives the plate
           its glass edge. */}
@@ -130,22 +150,22 @@ function StepCard({
       {/* Ghost numeral — oversized, bleeding off the top corner */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute -top-4 end-3 select-none font-sans text-[96px] font-semibold leading-none tracking-[-0.04em] text-white/[0.08]"
+        className="pointer-events-none absolute -top-4 end-3 select-none font-sans text-[96px] font-semibold leading-none tracking-[-0.04em] text-[#1fe06e]/50"
       >
         {step.num}
       </span>
       {/* Glass glyph tile */}
-      <span className="group-hover:border-white/[0.3] group-hover:bg-white/[0.16] absolute start-6 top-6 flex h-12 w-12 items-center justify-center rounded-[14px] border border-white/[0.16] bg-white/[0.08] text-white backdrop-blur-md transition-colors duration-500 xl:start-7 xl:top-7">
+      <span className="absolute start-6 top-6 flex h-12 w-12 items-center justify-center rounded-[14px] border border-white/[0.16] bg-white/[0.08] text-white backdrop-blur-md transition-colors duration-500 group-hover:border-white/[0.3] group-hover:bg-white/[0.16] xl:start-5 xl:top-5">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           {STEP_GLYPHS[i]}
         </svg>
       </span>
       <div className="relative">
-        <h3 className="mb-2 font-sans text-[22px] font-semibold leading-snug text-white">
+        <h3 className="mb-2 font-sans text-[22px] font-semibold leading-snug text-white xl:text-[20px]">
           {step.title}
         </h3>
         <p className="font-body text-body text-white/[0.72]">{step.desc}</p>
-        <span className="border-white/[0.14] bg-white/[0.09] text-accent-bright mt-5 inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-[11px] font-semibold tracking-[0.08em] backdrop-blur-sm">
+        <span className="text-accent-bright mt-5 inline-flex items-center gap-1.5 rounded-full border border-white/[0.14] bg-white/[0.09] px-3 py-1.5 font-mono text-[11px] font-semibold tracking-[0.08em] backdrop-blur-sm">
           <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true">
             <path
               d="M2.5 6.4l2.3 2.3L9.5 3.5"
@@ -320,18 +340,30 @@ export function ThreeStepsClient({
         const p = (stickyTop - rect.top) / travel;
         const pc = clamp(p, 0, 1);
         setFill(pc);
-        // Card i reveals as the sweep passes its share; step 1 anchors at p=0.
-        const count = clamp(Math.floor(pc * n) + 1, 1, n);
+        // Reveal card k exactly when the fill reaches node k. Nodes are spaced
+        // across (n-1) intervals, so use (n-1) here — using n revealed each card
+        // a fifth early, before the sweep reached its step.
+        const count = clamp(Math.floor(pc * (n - 1) + 1e-6) + 1, 1, n);
         setActive((prev) => (prev === count ? prev : count));
       } else {
-        // Classic behaviour: fill spans the section's pass through the lower
-        // half of the viewport.
-        const rect = ol.getBoundingClientRect();
-        const center = vh * 0.5;
-        const p = clamp((vh - rect.top) / (rect.height + (vh - center)), 0, 1);
-        setFill(p);
-        const count =
-          p <= 0 ? 0 : steps.reduce((acc, _s, i) => (p >= i / (n - 1) ? i + 1 : acc), 0);
+        // Flow (mobile / tablet / reduced-desktop): a scrollspy on the node
+        // centres. A step activates the instant its node rises past the trigger
+        // line, so the card reveal + rail fill track the scroll exactly — the old
+        // whole-section ratio spanned all five cards, lighting nodes long after
+        // the card was reached.
+        const nodes = nodeRefs.current;
+        const first = nodes[0];
+        const last = nodes[n - 1];
+        if (!first || !last) return;
+        const trigger = vh * 0.72;
+        const firstTop = first.getBoundingClientRect().top;
+        const lastTop = last.getBoundingClientRect().top;
+        setFill(clamp((trigger - firstTop) / (lastTop - firstTop || 1), 0, 1));
+        let count = 0;
+        for (let i = 0; i < n; i++) {
+          const el = nodes[i];
+          if (el && el.getBoundingClientRect().top <= trigger) count++;
+        }
         setActive((prev) => (prev === count ? prev : count));
       }
     };
@@ -368,14 +400,19 @@ export function ThreeStepsClient({
   // The reveal is scroll-coupled both ways — cards hide/show as `active`
   // tracks scroll, so it replays on every pass.
   const pinActive = mode === 'pinned' && armed;
-  const revealActive = pinActive;
+  // Reveal cards in BOTH modes once mounted (flow included), so on mobile a card
+  // rises in as the scroll reaches its step instead of sitting there from the
+  // start. SSR/no-JS keeps armed=false → every card visible; gating on `geo`
+  // means a failed rail measurement also degrades to fully-visible rather than a
+  // blank section.
+  const revealActive = armed && geo !== null;
 
   return (
-    <section className="bg-transparent px-5 pb-9 pt-12 xl:pb-16 xl:pt-14">
+    <section className="bg-transparent px-5 pb-8 pt-10 xl:pb-12 xl:pt-12">
       {/* Runway for the pinned reveal — static content height on mobile,
           reduced motion, and repeat visits. Its height must stay constant for
           the entire page-view (see component doc). */}
-      <div ref={wrapRef} className={pinActive ? 'xl:h-[170vh]' : ''}>
+      <div ref={wrapRef} className={pinActive ? 'xl:h-[120vh]' : ''}>
         {/* Content-height sticky (NOT h-screen — that padded a huge gap above
             the section pre-pin). The computed top parks it mid-viewport. */}
         <div
@@ -392,7 +429,7 @@ export function ThreeStepsClient({
 
             <ol
               ref={olRef}
-              className="relative flex flex-col gap-7 xl:grid xl:grid-cols-3 xl:gap-6"
+              className="relative flex flex-col gap-7 xl:grid xl:grid-cols-5 xl:gap-5"
             >
               {/* Rail track + scroll-coupled fill */}
               {geo && (

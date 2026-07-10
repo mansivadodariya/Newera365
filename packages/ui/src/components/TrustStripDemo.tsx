@@ -90,7 +90,7 @@ export function TrustStripDemo({ logos }: TrustStripDemoProps) {
             className="group relative min-w-0 flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_7%,#000_93%,transparent)]"
             style={{ '--marquee-duration': `${durationS}s` } as CSSProperties}
           >
-            <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] rtl:[animation-direction:reverse]">
+            <div className="animate-marquee flex w-max group-hover:[animation-play-state:paused] rtl:[animation-direction:reverse]">
               {[0, 1].map((copy) => (
                 <div
                   key={copy}

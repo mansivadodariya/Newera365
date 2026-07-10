@@ -10,6 +10,7 @@ import { useTheme } from 'next-themes';
 import { MobileMenuDemo } from './MobileMenuDemo';
 import { LanguageToggle } from './LanguageToggle';
 import { AuthModal, type AuthModalType } from './AuthModal';
+import { NavIcon } from './navIcons';
 
 type DropdownItem = { label: string; sub: string; href: string };
 type DropdownGroup = { heading: string; items: DropdownItem[] };
@@ -293,19 +294,28 @@ function DropdownLink({
     <Link
       href={`/${locale}${d.href}`}
       onClick={onClose}
-      className={`block rounded-[10px] px-3 py-[9px] transition-colors ${
+      className={`group flex items-start gap-2.5 rounded-[10px] px-3 py-[9px] transition-colors ${
         isActive ? 'bg-accent/[0.08]' : 'hover:bg-background dark:hover:bg-white/[0.06]'
       }`}
     >
-      <span
-        className={`font-body block text-[15px] font-medium leading-[1.2] ${
-          isActive ? 'text-accent' : 'dark:text-foreground text-[#1a1a1c]'
+      <NavIcon
+        href={d.href}
+        size={19}
+        className={`mt-[2px] transition-colors ${
+          isActive ? 'text-accent' : 'dark:text-foreground group-hover:text-accent text-[#1a1a1c]'
         }`}
-      >
-        {d.label}
-      </span>
-      <span className="font-body dark:text-muted mt-[2px] block text-[13px] leading-[1.35] text-[#6b6b73]">
-        {d.sub}
+      />
+      <span className="min-w-0 flex-1">
+        <span
+          className={`font-body block text-[15px] font-medium leading-[1.2] transition-colors ${
+            isActive ? 'text-accent' : 'dark:text-foreground group-hover:text-accent text-[#1a1a1c]'
+          }`}
+        >
+          {d.label}
+        </span>
+        <span className="font-body dark:text-muted mt-[2px] block text-[13px] leading-[1.35] text-[#6b6b73]">
+          {d.sub}
+        </span>
       </span>
     </Link>
   );
@@ -441,151 +451,151 @@ function HeaderDemo() {
             aria-label="NewEra365, go to home"
             className="flex-shrink-0 justify-self-start"
           >
-              <Image
-                src="/images/logo-light.png"
-                alt="NewEra365"
-                width={133}
-                height={26}
-                className="block dark:hidden"
-                priority
-              />
-              <Image
-                src="/images/logo-dark.png"
-                alt="NewEra365"
-                width={133}
-                height={26}
-                className="hidden dark:block"
-                priority
-              />
-            </Link>
+            <Image
+              src="/images/logo-light.png"
+              alt="NewEra365"
+              width={133}
+              height={26}
+              className="block dark:hidden"
+              priority
+            />
+            <Image
+              src="/images/logo-dark.png"
+              alt="NewEra365"
+              width={133}
+              height={26}
+              className="hidden dark:block"
+              priority
+            />
+          </Link>
 
-            <nav
-              ref={navRef}
-              className="relative hidden h-full items-center justify-center gap-7 justify-self-center xl:flex"
-              aria-label="Main navigation"
-            >
-              {displayNav.map((item) => (
-                <DesktopNavItem
-                  key={item.label}
-                  item={item}
-                  locale={locale}
-                  pathname={pathname}
-                  isOpen={openNav === item.label}
-                  setRef={(el) => (triggerRefs.current[item.label] = el)}
-                  onOpen={() => openMenu(item.label)}
-                  onScheduleClose={scheduleClose}
-                />
-              ))}
+          <nav
+            ref={navRef}
+            className="relative hidden h-full items-center justify-center gap-7 justify-self-center xl:flex"
+            aria-label="Main navigation"
+          >
+            {displayNav.map((item) => (
+              <DesktopNavItem
+                key={item.label}
+                item={item}
+                locale={locale}
+                pathname={pathname}
+                isOpen={openNav === item.label}
+                setRef={(el) => (triggerRefs.current[item.label] = el)}
+                onOpen={() => openMenu(item.label)}
+                onScheduleClose={scheduleClose}
+              />
+            ))}
 
-              {/* One shared panel that morphs (position + size) between triggers
+            {/* One shared panel that morphs (position + size) between triggers
                   via framer-motion `layout`, instead of a separate panel per
                   item popping in/out at a new spot. */}
-              <MotionConfig reducedMotion="user">
-                <AnimatePresence>
-                  {(activeItem?.dropdown || activeItem?.groups) && (
-                    <motion.div
-                      key="nav-dropdown"
-                      layout
-                      onMouseEnter={() => openMenu(activeItem.label)}
-                      onMouseLeave={scheduleClose}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{
-                        layout: { type: 'spring', stiffness: 500, damping: 40, mass: 0.7 },
-                        opacity: { duration: 0.16, ease: 'easeOut' },
-                      }}
-                      style={{ left: panelX }}
-                      className="absolute top-full z-50 pt-3"
-                    >
-                      <div className="border-border overflow-hidden rounded-[16px] border bg-white/90 p-2 shadow-[0px_16px_40px_-8px_rgba(0,0,0,0.18)] backdrop-blur-md dark:bg-[#07090d]/90 dark:shadow-[0px_16px_40px_-8px_rgba(0,0,0,0.6)]">
-                        <AnimatePresence mode="popLayout" initial={false}>
-                          <motion.div
-                            key={activeItem.label}
-                            layout="position"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.12, ease: 'easeOut' }}
-                            className={
-                              activeItem.groups
-                                ? 'grid w-[720px] grid-cols-3 gap-2'
-                                : twoCol
-                                  ? 'grid w-[460px] grid-cols-2 gap-1'
-                                  : 'w-[264px]'
-                            }
-                          >
-                            {activeItem.groups
-                              ? activeItem.groups.map((g) => (
-                                  <div key={g.heading} className="flex flex-col">
-                                    <span className="font-body text-muted block px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-[0.08em]">
-                                      {g.heading}
-                                    </span>
-                                    {g.items.map((d) => (
-                                      <DropdownLink
-                                        key={d.href}
-                                        d={d}
-                                        isActive={d.href === activeDropdownHref}
-                                        locale={locale}
-                                        onClose={closeNow}
-                                      />
-                                    ))}
-                                  </div>
-                                ))
-                              : activeItem.dropdown?.map((d) => (
-                                  <DropdownLink
-                                    key={d.href}
-                                    d={d}
-                                    isActive={d.href === activeDropdownHref}
-                                    locale={locale}
-                                    onClose={closeNow}
-                                  />
-                                ))}
-                          </motion.div>
-                        </AnimatePresence>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </MotionConfig>
-            </nav>
+            <MotionConfig reducedMotion="user">
+              <AnimatePresence>
+                {(activeItem?.dropdown || activeItem?.groups) && (
+                  <motion.div
+                    key="nav-dropdown"
+                    layout
+                    onMouseEnter={() => openMenu(activeItem.label)}
+                    onMouseLeave={scheduleClose}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                      layout: { type: 'spring', stiffness: 500, damping: 40, mass: 0.7 },
+                      opacity: { duration: 0.16, ease: 'easeOut' },
+                    }}
+                    style={{ left: panelX }}
+                    className="absolute top-full z-50 pt-3"
+                  >
+                    <div className="border-border overflow-hidden rounded-[16px] border bg-white/90 p-2 shadow-[0px_16px_40px_-8px_rgba(0,0,0,0.18)] backdrop-blur-md dark:bg-[#07090d]/90 dark:shadow-[0px_16px_40px_-8px_rgba(0,0,0,0.6)]">
+                      <AnimatePresence mode="popLayout" initial={false}>
+                        <motion.div
+                          key={activeItem.label}
+                          layout="position"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.12, ease: 'easeOut' }}
+                          className={
+                            activeItem.groups
+                              ? 'grid w-[720px] grid-cols-3 gap-2'
+                              : twoCol
+                                ? 'grid w-[460px] grid-cols-2 gap-1'
+                                : 'w-[264px]'
+                          }
+                        >
+                          {activeItem.groups
+                            ? activeItem.groups.map((g) => (
+                                <div key={g.heading} className="flex flex-col">
+                                  <span className="font-body text-muted block px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-[0.08em]">
+                                    {g.heading}
+                                  </span>
+                                  {g.items.map((d) => (
+                                    <DropdownLink
+                                      key={d.href}
+                                      d={d}
+                                      isActive={d.href === activeDropdownHref}
+                                      locale={locale}
+                                      onClose={closeNow}
+                                    />
+                                  ))}
+                                </div>
+                              ))
+                            : activeItem.dropdown?.map((d) => (
+                                <DropdownLink
+                                  key={d.href}
+                                  d={d}
+                                  isActive={d.href === activeDropdownHref}
+                                  locale={locale}
+                                  onClose={closeNow}
+                                />
+                              ))}
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </MotionConfig>
+          </nav>
 
           {/* Right: actions cluster (desktop CTAs / mobile controls) */}
           <div className="flex items-center justify-self-end">
             {/* Desktop right CTAs */}
             <div className="hidden items-center gap-3 xl:flex">
-            <LanguageToggle />
-            <ThemeToggle />
-            <div className="bg-border mx-1 h-5 w-px" />
-            <button
-              onClick={() => setAuthModal('demo')}
-              className="font-body text-foreground flex min-h-[38px] items-center text-[15px] font-medium transition-opacity hover:opacity-70"
-            >
-              {t('signIn')}
-            </button>
-            <button
-              onClick={() => setAuthModal('register')}
-              className="font-body bg-accent hover:bg-accent-hover focus-visible:ring-accent flex items-center rounded-full px-[22px] py-[11px] text-[15px] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(0,176,80,0.8)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-            >
-              {t('getStarted')}
-            </button>
-          </div>
+              <LanguageToggle />
+              <ThemeToggle />
+              <div className="bg-border mx-1 h-5 w-px" />
+              <button
+                onClick={() => setAuthModal('demo')}
+                className="font-body text-foreground flex min-h-[38px] items-center text-[15px] font-medium transition-opacity hover:opacity-70"
+              >
+                {t('signIn')}
+              </button>
+              <button
+                onClick={() => setAuthModal('register')}
+                className="font-body bg-accent hover:bg-accent-hover focus-visible:ring-accent flex items-center rounded-full px-[22px] py-[11px] text-[15px] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(0,176,80,0.8)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              >
+                {t('getStarted')}
+              </button>
+            </div>
 
-          {/* Mobile controls — no CTA here: the logo needs the width, and the
+            {/* Mobile controls — no CTA here: the logo needs the width, and the
               scroll-triggered StickyCtaBar owns the mobile conversion slot. */}
-          <div className="flex items-center gap-2 xl:hidden">
-            <LanguageToggle />
-            <ThemeToggle />
-            <button
-              onClick={() => setMenuOpen(true)}
-              aria-label="Open navigation menu"
-              aria-expanded={menuOpen}
-              aria-controls="mobile-menu-demo"
-              className={`${CHIP} w-[38px]`}
-            >
-              <HamburgerIcon />
-            </button>
-          </div>
+            <div className="flex items-center gap-2 xl:hidden">
+              <LanguageToggle />
+              <ThemeToggle />
+              <button
+                onClick={() => setMenuOpen(true)}
+                aria-label="Open navigation menu"
+                aria-expanded={menuOpen}
+                aria-controls="mobile-menu-demo"
+                className={`${CHIP} w-[38px]`}
+              >
+                <HamburgerIcon />
+              </button>
+            </div>
           </div>
         </div>
       </header>

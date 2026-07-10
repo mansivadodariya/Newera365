@@ -307,8 +307,15 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
       if (res.ok) {
         setSubmitted(true);
       } else {
-        const data = await res.json().catch(() => ({}));
-        setError((data as { error?: string }).error ?? 'Something went wrong. Please try again.');
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: string;
+          errors?: { message?: string }[];
+        };
+        // Endpoint returns validation issues as `errors: [{ message }]` and
+        // server faults as `error: string` — surface whichever is present.
+        setError(
+          data.errors?.[0]?.message ?? data.error ?? 'Something went wrong. Please try again.',
+        );
       }
     } catch {
       setError('Something went wrong. Please try again.');
@@ -337,7 +344,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
 
           {/* Search bar: the first thing every visitor reaches for. */}
           <div
-            className={`flex items-center gap-[12px] rounded-[16px] border px-5 py-4 transition-colors focus-within:border-accent ${CARD}`}
+            className={`focus-within:border-accent flex items-center gap-[12px] rounded-[16px] border px-5 py-4 transition-colors ${CARD}`}
           >
             <svg
               className="text-muted flex-shrink-0"
@@ -422,7 +429,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
                 <button
                   key={item.id}
                   onClick={() => openQuestion(item.id)}
-                  className={`group tap-scale flex items-center gap-[12px] rounded-[14px] border px-4 py-[14px] text-start transition-colors hover:border-accent/50 ${CARD}`}
+                  className={`tap-scale hover:border-accent/50 group flex items-center gap-[12px] rounded-[14px] border px-4 py-[14px] text-start transition-colors ${CARD}`}
                 >
                   <span className="bg-accent/10 text-accent dark:bg-accent/15 flex-shrink-0 rounded-full px-[10px] py-[5px] font-mono text-[9px] uppercase tracking-[1.2px]">
                     {translateCat(item.section)}
@@ -500,12 +507,11 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
           <div className="ink-band overflow-hidden rounded-[32px] p-8 md:p-11 xl:p-14">
             <div className="flex flex-col gap-9 xl:flex-row xl:items-end xl:justify-between">
               <div className="max-w-[560px]">
-                <SectionKicker className="mb-5 [&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright">
+                <SectionKicker className="[&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright mb-5">
                   {ts('seamKicker')}
                 </SectionKicker>
                 <h2 className="text-headline-sm font-sans text-white">
-                  {t('stuckHeading')}{' '}
-                  <span className="text-accent-bright">{ts('seamHuman')}</span>
+                  {t('stuckHeading')} <span className="text-accent-bright">{ts('seamHuman')}</span>
                 </h2>
                 <p className="font-body text-body mt-4 max-w-[44ch] text-white/70">
                   {ts('seamDesc')}
@@ -579,7 +585,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
             <ScrollReveal key={ch.id} index={i}>
               <a
                 href={ch.action}
-                className={`group flex items-center gap-[14px] rounded-[18px] border px-5 py-5 transition-colors hover:border-accent/50 ${CARD}`}
+                className={`hover:border-accent/50 group flex items-center gap-[14px] rounded-[18px] border px-5 py-5 transition-colors ${CARD}`}
               >
                 <div className="bg-accent-subtle text-accent dark:bg-accent/15 dark:text-accent-bright flex h-[46px] w-[46px] flex-shrink-0 items-center justify-center rounded-[14px]">
                   {ch.icon}
@@ -722,6 +728,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
                   <textarea
                     id="contact-message"
                     required
+                    minLength={10}
                     rows={4}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}

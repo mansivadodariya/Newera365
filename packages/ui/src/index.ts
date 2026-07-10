@@ -33,6 +33,8 @@ export type { CmsKpiStat } from './components/StatsSectionDemo';
 export { MarketsSectionDemo } from './components/MarketsSectionDemo';
 export { ThreeStepsSectionDemo } from './components/ThreeStepsSectionDemo';
 export { TwoPathsSection } from './components/TwoPathsSection';
+export { HomeNewsletterSection } from './components/HomeNewsletterSection';
+export type { HomeNewsletterContent } from './components/HomeNewsletterSection';
 export { PartnersSection } from './components/PartnersSection';
 export type { PartnerItem, PartnersSectionProps } from './components/PartnersSection';
 export { CtaBannerDemo } from './components/CtaBannerDemo';
@@ -57,6 +59,8 @@ export { FloatingContactWidget } from './components/FloatingContactWidget';
 export { SecurityTrustBand } from './components/SecurityTrustBand';
 export type { FloatingContactWidgetProps } from './components/FloatingContactWidget';
 export { ArbitrageSection } from './components/ArbitrageSection';
+export { FundingStripSection } from './components/FundingStripSection';
+export { CompareChecklistSection } from './components/CompareChecklistSection';
 
 export { AccountsPage } from './components/AccountsPage';
 export { FundingPage } from './components/FundingPage';

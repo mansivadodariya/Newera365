@@ -422,6 +422,37 @@ export interface CmsSiteSettings {
         id?: string | null;
       }[]
     | null;
+  // Homepage newsletter teaser (Monday Briefing) — feedback #19
+  nlHeadlineEn?: string | null;
+  nlHeadlineAr?: string | null;
+  nlHeadlineAccentEn?: string | null;
+  nlHeadlineAccentAr?: string | null;
+  nlSubtitleEn?: string | null;
+  nlSubtitleAr?: string | null;
+  nlMetricValue?: string | null;
+  nlMetricLabelEn?: string | null;
+  nlMetricLabelAr?: string | null;
+  nlIssueMetaEn?: string | null;
+  nlIssueMetaAr?: string | null;
+  nlLeadHeadlineEn?: string | null;
+  nlLeadHeadlineAr?: string | null;
+  nlFxHeadEn?: string | null;
+  nlFxHeadAr?: string | null;
+  nlCmdHeadEn?: string | null;
+  nlCmdHeadAr?: string | null;
+  nlMacroHeadEn?: string | null;
+  nlMacroHeadAr?: string | null;
+  nlCategories?:
+    | {
+        cadenceEn?: string | null;
+        cadenceAr?: string | null;
+        titleEn?: string | null;
+        titleAr?: string | null;
+        descEn?: string | null;
+        descAr?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   // Page stat callouts
   aboutManifestoStatValue?: string | null;
   fundingWithdrawalStatValue?: string | null;

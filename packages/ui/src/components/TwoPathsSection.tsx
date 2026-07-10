@@ -47,7 +47,7 @@ export function TwoPathsSection() {
   const chips = [t('chipGuides'), t('chipGlossary'), t('chipEbooks'), t('chipWebinars')];
 
   return (
-    <section className="bg-transparent px-5 py-16 xl:py-24">
+    <section className="bg-transparent px-5 py-12 xl:py-16">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <ScrollReveal>
           <SectionKicker className="mb-4">{t('kicker')}</SectionKicker>
@@ -58,9 +58,13 @@ export function TwoPathsSection() {
         </ScrollReveal>
 
         <div className="relative mt-12 xl:mt-16">
-          {/* Switch line — one track forking into the two cards (desktop only). */}
+          {/* Switch line — one track forking into the two cards (desktop only).
+              Centered with inset-x-0 + mx-auto (NOT start-1/2 + -translate-x-1/2:
+              the logical start swaps sides in RTL but translateX is physical, so
+              in RTL the 680px SVG was flung off the left edge and created a
+              horizontal page overflow). inset-x-0 + mx-auto is symmetric. */}
           <svg
-            className="pointer-events-none absolute start-1/2 top-[-30px] hidden h-[46px] w-[min(680px,90%)] -translate-x-1/2 overflow-visible xl:block"
+            className="pointer-events-none absolute inset-x-0 top-[-30px] mx-auto hidden h-[46px] w-[min(680px,90%)] overflow-visible xl:block"
             viewBox="0 0 680 46"
             preserveAspectRatio="none"
             aria-hidden="true"
@@ -68,11 +72,11 @@ export function TwoPathsSection() {
             <circle cx="340" cy="4" r="4" className="fill-accent" />
             <path
               d="M340 6 L340 20 Q340 40 300 42 L172 44"
-              className="fill-none stroke-accent opacity-50 [stroke-width:1.5]"
+              className="stroke-accent fill-none opacity-50 [stroke-width:1.5]"
             />
             <path
               d="M340 6 L340 20 Q340 40 380 42 L508 44"
-              className="fill-none stroke-accent opacity-50 [stroke-width:1.5]"
+              className="stroke-accent fill-none opacity-50 [stroke-width:1.5]"
             />
           </svg>
 
@@ -81,7 +85,7 @@ export function TwoPathsSection() {
             <ScrollReveal index={0}>
               <Link
                 href={`/${locale}/education`}
-                className="group relative flex h-full min-h-[340px] flex-col overflow-hidden rounded-[22px] border border-white/[0.08] p-7 shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)] ring-1 ring-inset ring-white/[0.06] transition-[border-color,box-shadow,transform] duration-300 hover:border-accent/45 hover:shadow-[0_38px_72px_-24px_rgba(4,16,10,0.8)] motion-safe:hover:-translate-y-1.5"
+                className="hover:border-accent/45 group relative flex h-full min-h-[340px] flex-col overflow-hidden rounded-[22px] border border-white/[0.08] p-7 shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)] ring-1 ring-inset ring-white/[0.06] transition-[border-color,box-shadow,transform] duration-300 hover:shadow-[0_38px_72px_-24px_rgba(4,16,10,0.8)] motion-safe:hover:-translate-y-1.5"
                 style={{
                   backgroundColor: '#0A130E',
                   backgroundImage:
@@ -145,7 +149,7 @@ export function TwoPathsSection() {
             <ScrollReveal index={1}>
               <Link
                 href={`/${locale}/trade/accounts`}
-                className="group relative flex h-full min-h-[340px] flex-col overflow-hidden rounded-[22px] border border-white/[0.08] p-7 shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)] ring-1 ring-inset ring-white/[0.06] transition-[border-color,box-shadow,transform] duration-300 hover:border-accent/45 hover:shadow-[0_38px_72px_-24px_rgba(4,16,10,0.8)] motion-safe:hover:-translate-y-1.5"
+                className="hover:border-accent/45 group relative flex h-full min-h-[340px] flex-col overflow-hidden rounded-[22px] border border-white/[0.08] p-7 shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)] ring-1 ring-inset ring-white/[0.06] transition-[border-color,box-shadow,transform] duration-300 hover:shadow-[0_38px_72px_-24px_rgba(4,16,10,0.8)] motion-safe:hover:-translate-y-1.5"
                 style={{
                   backgroundColor: '#0A130E',
                   backgroundImage:

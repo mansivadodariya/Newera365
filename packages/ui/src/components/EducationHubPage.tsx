@@ -169,7 +169,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
       height="12"
       viewBox="0 0 7 12"
       fill="none"
-      className="rtl:-scale-x-100 flex-shrink-0"
+      className="flex-shrink-0 rtl:-scale-x-100"
       aria-hidden="true"
     >
       <path
@@ -219,12 +219,12 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                 <Link
                   key={row.id}
                   href={`/${locale}${row.href}`}
-                  className="group hover:bg-[#F0F4F1] flex items-center gap-4 border-b border-[#E6ECE8] px-5 py-6 transition-colors last:border-b-0 xl:gap-7 xl:px-8 xl:py-7 dark:border-white/[0.05] dark:hover:bg-white/[0.02]"
+                  className="group flex items-center gap-4 border-b border-[#E6ECE8] px-5 py-6 transition-colors last:border-b-0 hover:bg-[#F0F4F1] xl:gap-7 xl:px-8 xl:py-7 dark:border-white/[0.05] dark:hover:bg-white/[0.02]"
                 >
                   {/* Ghost numeral — latin figure, reads LTR in both directions */}
                   <span
                     dir="ltr"
-                    className="text-metric-sm text-foreground/[0.12] w-[42px] flex-shrink-0 font-mono font-semibold leading-none tabular-nums xl:w-[62px] dark:text-white/[0.09]"
+                    className="text-metric-sm text-foreground/[0.12] w-[42px] flex-shrink-0 font-mono font-semibold tabular-nums leading-none xl:w-[62px] dark:text-white/[0.09]"
                   >
                     {String(i + 1).padStart(2, '0')}
                   </span>
@@ -278,7 +278,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
               <ScrollReveal key={row.id} index={j}>
                 <Link
                   href={`/${locale}${row.href}`}
-                  className="group relative block h-[188px] overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#0A130E] shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)] ring-1 ring-inset ring-white/[0.06] transition-colors hover:border-accent/45 xl:h-[212px]"
+                  className="hover:border-accent/45 group relative block h-[188px] overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#0A130E] shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)] ring-1 ring-inset ring-white/[0.06] transition-colors xl:h-[212px]"
                 >
                   <img
                     src="/images/edge-flow.jpg"
@@ -293,7 +293,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                   {/* Ghost numeral bleeding off the top corner (04..06) */}
                   <span
                     dir="ltr"
-                    className="pointer-events-none absolute top-1 end-4 select-none font-mono text-[84px] font-bold leading-none text-white/[0.08]"
+                    className="pointer-events-none absolute end-4 top-1 select-none font-mono text-[84px] font-bold leading-none text-white/[0.08]"
                   >
                     {String(readingTrack.length + j + 1).padStart(2, '0')}
                   </span>
@@ -415,7 +415,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                 />
                 <button
                   type="submit"
-                  className="bg-accent hover:bg-accent-bright font-body text-body active:scale-[0.98] flex-shrink-0 rounded-full px-5 py-3 font-medium text-white transition-all"
+                  className="bg-accent hover:bg-accent-bright font-body text-body flex-shrink-0 rounded-full px-5 py-3 font-medium text-white transition-all active:scale-[0.98]"
                 >
                   {t('inboxBtn')}
                 </button>

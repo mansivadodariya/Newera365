@@ -524,7 +524,12 @@ export function ResearchPage({
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-end p-3 transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.05]">
-                        <svg width="100%" height="44" viewBox="0 0 200 44" preserveAspectRatio="none">
+                        <svg
+                          width="100%"
+                          height="44"
+                          viewBox="0 0 200 44"
+                          preserveAspectRatio="none"
+                        >
                           <polyline
                             points={article.sparkline
                               .map((v, i) => {
@@ -616,7 +621,7 @@ export function ResearchPage({
               {cmsReports.map((report) => (
                 <div
                   key={report.id}
-                  className="flex items-start justify-between gap-4 rounded-[16px] bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-[transform,box-shadow] duration-300 motion-safe:hover:-translate-y-1 hover:shadow-[0_16px_40px_-16px_rgba(8,19,12,0.18)] dark:bg-[#1a1c22]"
+                  className="flex items-start justify-between gap-4 rounded-[16px] bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-[transform,box-shadow] duration-300 hover:shadow-[0_16px_40px_-16px_rgba(8,19,12,0.18)] motion-safe:hover:-translate-y-1 dark:bg-[#1a1c22]"
                 >
                   {report.thumbnailUrl && (
                     <img
@@ -731,8 +736,11 @@ export function ResearchPage({
                       if (res.ok) {
                         setSubscribed(true);
                       } else {
-                        const data = (await res.json().catch(() => ({}))) as { error?: string };
-                        setSubError(data.error ?? t('briefingError'));
+                        const data = (await res.json().catch(() => ({}))) as {
+                          error?: string;
+                          errors?: { message?: string }[];
+                        };
+                        setSubError(data.errors?.[0]?.message ?? data.error ?? t('briefingError'));
                       }
                     } catch {
                       setSubError(t('briefingError'));

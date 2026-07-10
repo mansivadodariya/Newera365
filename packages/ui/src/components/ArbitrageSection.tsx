@@ -160,7 +160,7 @@ export function ArbitrageSection() {
   const locale = useLocale();
 
   return (
-    <section className="bg-transparent px-6 pb-12 pt-12 xl:px-[80px] xl:py-[68px] dark:bg-[#0f0f0f]">
+    <section className="bg-transparent px-6 pb-10 pt-10 xl:px-[80px] xl:py-14 dark:bg-[#0f0f0f]">
       <div className="mx-auto grid max-w-[390px] gap-9 md:max-w-2xl xl:max-w-[1200px] xl:grid-cols-[1.02fr_0.98fr] xl:items-stretch xl:gap-12">
         {/* Left: the claim + the stat ledger + the accounts strip */}
         <div className="flex flex-col">
