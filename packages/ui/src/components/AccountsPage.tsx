@@ -11,7 +11,7 @@ export interface CmsAccountType {
   id: number;
   name: string;
   nameAr?: string | null;
-  badge?: 'free' | 'popular' | 'pro' | 'islamic' | null;
+  badge?: 'free' | 'popular' | 'value' | 'pro' | 'islamic' | null;
   minDeposit: number;
   spreadFrom: string;
   leverage: string;
@@ -49,6 +49,12 @@ const AR_FEATURE_VALUES: Record<string, string> = {
   'Raw spreads from 0.0': 'فروق خام من 0.0',
   'Priority execution': 'تنفيذ ذو أولوية',
   'Dedicated account manager': 'مدير حساب مخصص',
+  'Swap-free available on request': 'خيار بدون فوائد تبييت عند الطلب',
+  'Interbank raw pricing': 'تسعير خام من البنوك مباشرة',
+  'Metals commission $10 per lot': 'عمولة المعادن 10 دولار لكل عقد',
+  'Built for scalpers and EAs': 'مصمم للمضاربة السريعة والأنظمة الآلية',
+  'Zero commission trading': 'تداول بدون عمولة',
+  'Custom spreads and priority execution': 'فروق مخصصة وتنفيذ ذو أولوية',
 };
 
 const MATRIX_ROW_DATA = [
@@ -191,10 +197,12 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
   const [hoverCol, setHoverCol] = useState<number | null>(null);
   const matrixRows = MATRIX_ROW_DATA.map((r) => ({ ...r, feature: t(r.featureKey) }));
 
+  // Badge labels per the client's ask: every live card carries one.
+  // popular -> "Recommended" (crown), value -> "Best Value", pro -> "Professionals Choice".
   function getBadgeLabel(badge: string | null | undefined, isPopular?: boolean | null): string {
     if (badge === 'free') return t('badgeFree');
     if (badge === 'popular' || isPopular) return t('badgePopular');
-    if (badge === 'pro') return t('badgePro');
+    if (badge === 'value') return t('badgeValue');
     if (badge === 'islamic') return t('badgeIslamic');
     return t('badgePro');
   }
@@ -203,7 +211,8 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
     if (badge === 'free') return t('subtitleDemo');
     if (badge === 'popular') return t('subtitleStandard');
     if (badge === 'islamic') return t('subtitleSwapFree');
-    return t('subtitleRaw');
+    if (badge === 'value') return t('subtitleRaw');
+    return t('subtitlePro');
   }
 
   // CMS spread values are often entered as "From 1.2 pip", but the card already
@@ -332,8 +341,9 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="text-foreground text-display font-sans [text-wrap:balance]">
             <p>{t('heroLine1')}</p>
-            <p>{t('heroLine2')}</p>
-            <p className="text-accent">{t('heroAccent')}</p>
+            <p>
+              {t('heroLine2')} <span className="text-accent">{t('heroAccent')}</span>
+            </p>
           </div>
           <div className="h-[18px]" />
           <p className="font-body text-lead text-muted max-w-[720px] dark:text-[#B8BFCC]">
@@ -537,13 +547,18 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
 
           <ScrollReveal delay={0.1}>
             <div className="border-border shadow-card mt-8 overflow-hidden rounded-[24px] border bg-white dark:border-white/[0.06] dark:bg-[#14161c] dark:shadow-none">
-              <div className="grid grid-cols-2 gap-px bg-[rgba(17,17,17,0.07)] md:grid-cols-4 dark:bg-white/[0.06]">
+              <div className="list-dim grid grid-cols-2 gap-px bg-[rgba(17,17,17,0.07)] md:grid-cols-4 dark:bg-white/[0.06]">
                 {TRADING_CONDITIONS.map((c) => (
                   <div
                     key={c.labelKey}
-                    className="flex flex-col gap-2 bg-white px-5 py-5 dark:bg-[#14161c]"
+                    className="group relative flex flex-col gap-2 bg-white px-5 py-5 dark:bg-[#14161c]"
                   >
-                    <span className="text-muted font-mono text-[10px] uppercase tracking-[1.1px] dark:text-white/45">
+                    {/* Accent rule draws across the lit tile — presence, not flight */}
+                    <span
+                      aria-hidden="true"
+                      className="bg-accent absolute inset-x-0 top-0 h-px origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100 rtl:origin-right"
+                    />
+                    <span className="text-muted group-hover:text-accent font-mono text-[10px] uppercase tracking-[1.1px] transition-colors dark:text-white/45">
                       {t(c.labelKey)}
                     </span>
                     {c.kind === 'allow' ? (
@@ -631,7 +646,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
               {matrixValueRows.map((row) => (
                 <div
                   key={row.id}
-                  className="grid border-b border-white/[0.06]"
+                  className="grid border-b border-white/[0.06] transition-colors hover:bg-white/[0.02]"
                   style={matrixGridStyle}
                 >
                   <span className="font-body sticky start-0 z-[1] bg-[#0a1810] px-5 py-4 text-[14px] text-white/80 md:bg-transparent">
@@ -679,7 +694,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
               {matrixRows.map((row, i) => (
                 <div
                   key={row.id}
-                  className={`grid ${i < matrixRows.length - 1 ? 'border-b border-white/[0.06]' : ''}`}
+                  className={`grid transition-colors hover:bg-white/[0.02] ${i < matrixRows.length - 1 ? 'border-b border-white/[0.06]' : ''}`}
                   style={matrixGridStyle}
                 >
                   <span className="font-body sticky start-0 z-[1] bg-[#0a1810] px-5 py-4 text-[14px] text-white/80 md:bg-transparent">

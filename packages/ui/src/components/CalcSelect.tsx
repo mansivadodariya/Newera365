@@ -40,7 +40,7 @@ export function CalcSelect({ label, value, options, labels, onChange }: CalcSele
         <button
           type="button"
           onClick={() => setOpen((o) => !o)}
-          className="border-border font-body text-foreground hover:border-accent/50 flex w-full items-center justify-between rounded-[12px] border bg-white px-4 py-3 text-[14px] transition-colors dark:bg-[#1c1c1c]"
+          className="border-border font-body text-foreground hover:border-accent/50 flex w-full items-center justify-between rounded-[12px] border bg-white px-4 py-3 text-[14px] transition-colors dark:border-white/10 dark:bg-[#1a1c22]"
         >
           <span>{selectedLabel}</span>
           <svg

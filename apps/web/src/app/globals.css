@@ -6,23 +6,23 @@
    read as elevated surfaces instead of white-on-white (client feedback:
    light mode was pale/dull). Brand green #00B050 is unchanged. */
 :root {
-  --background: #F2F5F3;
-  --surface: #FFFFFF;
+  --background: #f2f5f3;
+  --surface: #ffffff;
   --surface-elevated: #ffffff;
-  --foreground: #0B1210;
-  --muted: #4D5A54;
-  --text-secondary: #75837C;
-  --border: #D7E0DA;
-  --section: #E8EFEA;
-  --footer-bg: #04100A;
+  --foreground: #0b1210;
+  --muted: #4d5a54;
+  --text-secondary: #75837c;
+  --border: #d7e0da;
+  --section: #e8efea;
+  --footer-bg: #04100a;
   /* Deep green-black "ink" — dark anchor bands (Why NewEra, comparison matrix)
      that keep their punch in BOTH themes. */
   --ink: #061309;
-  --ink-soft: #0B2013;
+  --ink-soft: #0b2013;
 
-  --gradient-stats: linear-gradient(180deg, #F2F5F3 0%, rgba(6,19,9,0.4) 100%);
-  --gradient-markets: linear-gradient(180deg, rgba(6,19,9,0.4) 0%, #F2F5F3 100%);
-  --gradient-features: linear-gradient(180deg, #E4EEE7 0%, #F2F5F3 100%);
+  --gradient-stats: linear-gradient(180deg, #f2f5f3 0%, rgba(6, 19, 9, 0.4) 100%);
+  --gradient-markets: linear-gradient(180deg, rgba(6, 19, 9, 0.4) 0%, #f2f5f3 100%);
+  --gradient-features: linear-gradient(180deg, #e4eee7 0%, #f2f5f3 100%);
 }
 
 .dark {
@@ -38,8 +38,8 @@
   --ink: #060d08;
   --ink-soft: #0c1b10;
 
-  --gradient-stats: linear-gradient(180deg, #07090d 0%, rgba(17,17,17,0.43) 100%);
-  --gradient-markets: linear-gradient(180deg, rgba(19,19,19,0.43) 0%, #07090d 100%);
+  --gradient-stats: linear-gradient(180deg, #07090d 0%, rgba(17, 17, 17, 0.43) 100%);
+  --gradient-markets: linear-gradient(180deg, rgba(19, 19, 19, 0.43) 0%, #07090d 100%);
   --gradient-features: linear-gradient(180deg, #07090d 0%, #07090d 100%);
 }
 
@@ -78,7 +78,12 @@ body {
 }
 
 /* Headings use Outfit — matches Figma typography scale */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 600;
 }
@@ -87,10 +92,26 @@ h1, h2, h3, h4, h5, h6 {
    (client feedback: "text is so small on desktop"). Components override with
    the semantic text-display/-headline/... tokens from the Tailwind preset;
    this is the floor for prose pages (legal, guides, articles). */
-h1 { font-size: clamp(2.75rem, 2rem + 2.8vw, 4rem); line-height: 1.03; letter-spacing: -0.03em; }
-h2 { font-size: clamp(2rem, 1.6rem + 1.6vw, 2.875rem); line-height: 1.08; letter-spacing: -0.025em; }
-h3 { font-size: clamp(1.375rem, 1.25rem + 0.5vw, 1.625rem); line-height: 1.2; letter-spacing: -0.02em; }
-h4 { font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem); line-height: 1.3; letter-spacing: -0.015em; }
+h1 {
+  font-size: clamp(2.75rem, 2rem + 2.8vw, 4rem);
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+}
+h2 {
+  font-size: clamp(2rem, 1.6rem + 1.6vw, 2.875rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+h3 {
+  font-size: clamp(1.375rem, 1.25rem + 0.5vw, 1.625rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+h4 {
+  font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
 
 ::selection {
   background: rgba(0, 176, 80, 0.22);
@@ -107,7 +128,7 @@ html::-webkit-scrollbar {
 
 /* Focus ring */
 :focus-visible {
-  outline: 2px solid #00B050;
+  outline: 2px solid #00b050;
   outline-offset: 2px;
 }
 
@@ -154,6 +175,32 @@ html::-webkit-scrollbar {
   }
 }
 
+/* Ledger-row hover wash — an INSET, ROUNDED presence layer so the highlight
+   never cuts hard against the row rectangle or its hairline rules (client
+   feedback 2026-07-12: square washes read as sliced slabs). Vertically inset,
+   horizontally outset for breathing room; hover-capable pointers only. */
+.row-hover {
+  position: relative;
+}
+.row-hover::before {
+  content: '';
+  position: absolute;
+  inset: 8px -14px;
+  border-radius: 14px;
+  background: rgba(12, 31, 20, 0.035);
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  pointer-events: none;
+}
+.dark .row-hover::before {
+  background: rgba(255, 255, 255, 0.04);
+}
+@media (hover: hover) {
+  .row-hover:hover::before {
+    opacity: 1;
+  }
+}
+
 /* ── Signature surfaces (design overhaul 2026-07) ─────────────────────────
    .ink-band — the deep green-black anchor band (Why NewEra, comparison
    matrix). Terminal-grid texture + a single soft signal glow; identical in
@@ -170,107 +217,16 @@ html::-webkit-scrollbar {
     56px 56px;
 }
 
-/* .hero-aurora — Stripe-style flowing mesh backdrop for the homepage hero.
-   A faint base tint plus five soft-blurred signal-green blobs, each drifting
-   on its OWN orbit/period, so the field reads as a living mesh rather than one
-   panning wash. The blobs merge through a heavy container blur; per-theme
-   alpha (--blob-a) keeps it a soft tint over paper and a brighter glow over
-   ink. Drift is gated behind no-preference — reduced motion keeps the static
-   mesh (the blobs' offset start positions still read as a designed gradient;
-   visibility is never JS/animation-dependent). Palette stays in the brand
-   green→teal→lime family (no off-brand blues/magentas). */
-.hero-aurora {
-  --blob-a: 0.5;
-  --s: clamp(360px, 58vw, 860px);
-  background: radial-gradient(130% 100% at 50% 0%, rgba(0, 176, 80, 0.12), transparent 60%);
-}
-.dark .hero-aurora {
-  --blob-a: 0.85;
-}
-.hero-aurora__blobs {
-  position: absolute;
-  inset: 0;
-  filter: blur(42px);
-  /* filter isolates the group, so screen only brightens blob-on-blob overlaps
-     (a livelier glow where colours cross) — it never washes the page canvas. */
-}
-.hero-blob {
-  position: absolute;
-  width: var(--s);
-  height: var(--s);
-  top: calc(50% - var(--s) / 2);
-  left: calc(50% - var(--s) / 2);
-  border-radius: 9999px;
-  background: radial-gradient(
-    circle at center,
-    rgba(var(--blob), var(--blob-a)) 0%,
-    rgba(var(--blob), 0) 56%
-  );
-  mix-blend-mode: screen;
-  will-change: transform;
-}
-/* Continuous motion: the circular blobs rotate around a pivot offset from
-   their own centre (transform-origin), so a full 0->360deg turn sweeps them in
-   a wide orbit that never rests — this is what makes it read as a live mesh,
-   not a breathing wash. Mixed speeds + one reversed keep them weaving. */
-.hero-blob-1 {
-  --blob: 0, 176, 80;
-  transform-origin: center center;
-  animation: hero-vert 15s ease-in-out infinite;
-}
-.hero-blob-2 {
-  --blob: 26, 217, 102;
-  transform-origin: calc(50% - 220px) center;
-  animation: hero-circle 18s linear infinite reverse;
-}
-.hero-blob-3 {
-  --blob: 16, 200, 150;
-  transform-origin: calc(50% + 260px) center;
-  animation: hero-circle 24s linear infinite;
-}
-.hero-blob-4 {
-  --blob: 120, 225, 110;
-  width: calc(var(--s) * 0.7);
-  height: calc(var(--s) * 0.7);
-  top: calc(50% - var(--s) * 0.35);
-  left: calc(50% - var(--s) * 0.35);
-  transform-origin: calc(50% - 180px) center;
-  animation: hero-horiz 20s ease-in-out infinite;
-}
-.hero-blob-5 {
-  --blob: 0, 150, 100;
-  transform-origin: calc(50% - 420px) calc(50% + 260px);
-  animation: hero-circle 21s linear infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-blob {
-    animation: none;
+/* .list-dim — terminal focus for ledgers and tile grids: the row under the
+   cursor stays lit while its siblings recede, like the active line on a desk
+   terminal. Pure CSS, hover-capable pointers only, opacity-only (no motion),
+   so it is touch and reduced-motion safe by construction. */
+@media (hover: hover) {
+  .list-dim > * {
+    transition: opacity 0.25s ease;
   }
-}
-@keyframes hero-circle {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes hero-vert {
-  0%,
-  100% {
-    transform: translateY(-16%) scale(1);
-  }
-  50% {
-    transform: translateY(18%) scale(1.12);
-  }
-}
-@keyframes hero-horiz {
-  0%,
-  100% {
-    transform: translateX(-18%) translateY(-6%);
-  }
-  50% {
-    transform: translateX(20%) translateY(10%);
+  .list-dim:hover > *:not(:hover) {
+    opacity: 0.45;
   }
 }
 

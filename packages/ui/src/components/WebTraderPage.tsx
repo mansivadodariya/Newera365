@@ -262,7 +262,9 @@ function TerminalChart({ tf }: { tf: Timeframe }) {
         {/* Volume bars */}
         {candles.map((c, i) => {
           const cx = cLeft + i * slotW + slotW / 2;
-          const vh = (c.vol / maxVol) * (vBot - vTop);
+          // toFixed like py(): Math.sin drifts ~1e-10 between Node and browser libm,
+          // and any unrounded coordinate becomes a hydration mismatch.
+          const vh = parseFloat(((c.vol / maxVol) * (vBot - vTop)).toFixed(2));
           return (
             <rect
               key={i}
@@ -524,9 +526,7 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
                 {t('fallbackTag')}
               </span>
             </div>
-            <p className="text-foreground text-title mb-2 font-sans font-semibold">
-              {t('fallbackHeading')}
-            </p>
+            <p className="text-foreground text-title mb-2 font-sans">{t('fallbackHeading')}</p>
             <p className="font-body text-muted text-body mb-5 leading-relaxed dark:text-white/60">
               {t('fallbackDesc')}
             </p>
@@ -592,7 +592,7 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
                   </span>
                   <span
                     dir="ltr"
-                    className="text-muted group-hover:text-accent font-mono text-[13px] font-semibold tabular-nums transition-colors duration-300"
+                    className="text-muted dark:text-accent-bright/40 group-hover:text-accent dark:group-hover:text-accent-bright font-mono text-[13px] font-semibold tabular-nums transition-colors duration-300"
                   >
                     {String(i + 1).padStart(2, '0')}
                   </span>

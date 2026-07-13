@@ -73,7 +73,7 @@ export function StickyCtaBar() {
       <div
         aria-hidden={!visible}
         className={[
-          'fixed inset-x-0 bottom-4 z-30 flex justify-center px-11 md:px-5',
+          'fixed inset-x-0 bottom-4 z-30 flex justify-center px-4 md:px-5',
           'transition-[transform,opacity] duration-300 ease-out motion-reduce:transform-none',
           visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0',
         ].join(' ')}
@@ -82,9 +82,10 @@ export function StickyCtaBar() {
           <Link
             href={`/${locale}/support`}
             tabIndex={visible ? 0 : -1}
-            className="font-body text-muted hover:text-foreground hidden items-center gap-2 text-[13px] font-medium transition-colors md:flex"
+            aria-label={t('stickyCtaSupport')}
+            className="font-body text-muted hover:text-foreground flex flex-shrink-0 items-center gap-2 text-[13px] font-medium transition-colors"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
               <path
                 d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .8-1 1.7m0 3h.01"
@@ -93,21 +94,21 @@ export function StickyCtaBar() {
                 strokeLinecap="round"
               />
             </svg>
-            {t('stickyCtaSupport')}
+            <span className="hidden md:inline">{t('stickyCtaSupport')}</span>
           </Link>
 
-          <div className="flex flex-1 items-center justify-end gap-4 md:flex-none">
+          <div className="flex items-center justify-end gap-3 md:gap-4">
             <button
               onClick={() => setAuthModal('demo')}
               tabIndex={visible ? 0 : -1}
-              className="font-body text-foreground hidden text-[13px] font-medium transition-opacity hover:opacity-70 md:block"
+              className="font-body text-foreground flex-shrink-0 whitespace-nowrap text-[13px] font-medium transition-opacity hover:opacity-70"
             >
               {t('stickyCtaDemo')}
             </button>
             <button
               onClick={() => setAuthModal('register')}
               tabIndex={visible ? 0 : -1}
-              className="font-body bg-accent hover:bg-accent-hover focus-visible:ring-accent flex h-[42px] flex-1 items-center justify-center rounded-full px-6 text-[13.5px] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(0,176,80,0.8)] transition-colors focus-visible:outline-none focus-visible:ring-2 md:min-w-[180px] md:flex-none"
+              className="font-body bg-accent hover:bg-accent-hover focus-visible:ring-accent flex h-[42px] flex-shrink-0 items-center justify-center whitespace-nowrap rounded-full px-5 text-[13px] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(0,176,80,0.8)] transition-colors focus-visible:outline-none focus-visible:ring-2 md:min-w-[180px] md:px-6 md:text-[13.5px]"
             >
               {t('stickyCtaLive')}
             </button>

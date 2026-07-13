@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { ScrollReveal } from './ScrollReveal';
+import { Spotlight } from './Spotlight';
 
 export interface CmsEbookItem {
   id: number;
@@ -21,17 +22,11 @@ interface EbooksPageProps {
 export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
   const t = useTranslations('ebooks');
   const locale = useLocale();
-  const fallbackEbooks = [
-    { id: 'position', title: t('guide1Title'), desc: t('guide1Desc'), pages: '' },
-    { id: 'psychology', title: t('guide2Title'), desc: t('guide2Desc'), pages: '' },
-    { id: 'technical', title: t('guide3Title'), desc: t('guide3Desc'), pages: '' },
-  ];
-  const displayEbooks =
-    cmsEbooks && cmsEbooks.length > 0
-      ? cmsEbooks
-          .slice(1)
-          .map((e) => ({ id: String(e.id), title: e.title, desc: e.summary ?? '', pages: '' }))
-      : fallbackEbooks;
+  // CMS-managed: the first ebook is the gated hero book, the rest fill the
+  // index below. No static fallback — an empty collection hides the section.
+  const moreEbooks = (cmsEbooks ?? [])
+    .slice(1)
+    .map((e) => ({ id: e.id, title: e.title, summary: e.summary ?? '' }));
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [agreed, setAgreed] = useState(false);
@@ -39,11 +34,32 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
+  // Which book the gate form will send — index rows re-target the same form.
+  const [requested, setRequested] = useState<{
+    id: number;
+    title: string;
+    summary: string;
+  } | null>(
+    cmsEbooks?.[0]
+      ? { id: cmsEbooks[0].id, title: cmsEbooks[0].title, summary: cmsEbooks[0].summary ?? '' }
+      : null,
+  );
+  const gateRef = useRef<HTMLDivElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+
+  function requestEbook(book: { id: number; title: string; summary: string }) {
+    setRequested(book);
+    setSuccess(false);
+    gateRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Focus lands after the smooth scroll so the jump isn't cut short.
+    setTimeout(() => emailRef.current?.focus({ preventScroll: true }), 450);
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const contentId = cmsEbooks?.[0]?.id;
+    const contentId = requested?.id;
     if (!contentId) {
-      setError('Content not available. Please try again later.');
+      setError(t('errorMsg'));
       return;
     }
     setLoading(true);
@@ -64,12 +80,10 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
           error?: string;
           errors?: { message?: string }[];
         };
-        setError(
-          data.errors?.[0]?.message ?? data.error ?? 'Something went wrong. Please try again.',
-        );
+        setError(data.errors?.[0]?.message ?? data.error ?? t('errorMsg'));
       }
     } catch {
-      setError('Something went wrong. Please try again.');
+      setError(t('errorMsg'));
     } finally {
       setLoading(false);
     }
@@ -85,7 +99,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
             <br />
             <span className="text-accent">{t('heroAccent')}</span>
           </h1>
-          <p className="font-body text-muted max-w-[300px] text-[14px] leading-[1.55]">
+          <p className="font-body text-muted max-w-[340px] text-[15px] leading-[1.55]">
             {t('heroDesc')}
           </p>
         </div>
@@ -97,7 +111,10 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
           {/* Two-up on desktop: cover left, gate form right (avoids the full-width stretch). */}
           <div className="xl:grid xl:grid-cols-2 xl:items-stretch xl:gap-8">
             {/* Cover — ink art band (green light column) framing the book card */}
-            <div className="relative mb-6 flex items-center justify-center overflow-hidden rounded-[22px] bg-gradient-to-br from-[#0a2614] via-[#0d1f0d] to-[#111111] px-8 py-10 xl:mb-0">
+            <Spotlight
+              size={420}
+              className="mb-6 flex items-center justify-center overflow-hidden rounded-[22px] bg-gradient-to-br from-[#0a2614] via-[#0d1f0d] to-[#111111] px-8 py-10 xl:mb-0"
+            >
               <img
                 src="/images/edge-flow.jpg"
                 alt=""
@@ -130,25 +147,64 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                 <p className="font-body mb-1 text-[9px] uppercase tracking-[0.14em] text-white/40">
                   {t('heroKicker')}
                 </p>
-                <p className="font-sans text-[22px] font-semibold leading-[1.1] text-white">
-                  {t('heroLine1')}
-                  <br />
-                  <span className="text-accent">{t('heroAccent')}</span>
-                </p>
-                <p className="font-body text-muted max-w-[320px] text-[15px] leading-[1.55]">
-                  {t('heroDesc')}
-                </p>
+                {/* The cover mirrors whichever book the gate will send. */}
+                {requested ? (
+                  <>
+                    <p className="font-sans text-[22px] font-semibold leading-[1.12] text-white">
+                      {requested.title}
+                    </p>
+                    {requested.summary && (
+                      <p className="font-body mt-2 max-w-[320px] text-[13px] leading-[1.55] text-white/55">
+                        {requested.summary}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <p className="font-sans text-[22px] font-semibold leading-[1.1] text-white">
+                      {t('heroLine1')}
+                      <br />
+                      <span className="text-accent">{t('heroAccent')}</span>
+                    </p>
+                    <p className="font-body text-muted max-w-[320px] text-[15px] leading-[1.55]">
+                      {t('heroDesc')}
+                    </p>
+                  </>
+                )}
               </div>
-            </div>
+            </Spotlight>
 
             {/* Gate form */}
-            <div className="rounded-[20px] bg-[#F0F4F1] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:bg-[#1a1c22] dark:shadow-none">
+            <div
+              ref={gateRef}
+              className="rounded-[20px] bg-[#F0F4F1] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:bg-[#1a1c22] dark:shadow-none"
+            >
               <p className="text-foreground mb-1 font-sans text-[18px] font-semibold">
                 {t('gateHeading')}
               </p>
-              <p className="font-body text-muted mb-5 text-[12px] leading-[1.55]">
+              <p className="font-body text-muted mb-3 text-[15px] leading-[1.55]">
                 {t('gateDesc2')}
               </p>
+              {requested && (
+                <span className="border-accent/30 bg-accent/[0.08] text-accent mb-4 inline-flex max-w-full items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.06em]">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                    className="flex-shrink-0"
+                  >
+                    <path
+                      d="M3 3.5A1.5 1.5 0 014.5 2h7A1.5 1.5 0 0113 3.5v10.2a.3.3 0 01-.47.25L8 11.2l-4.53 2.75a.3.3 0 01-.47-.25V3.5z"
+                      stroke="currentColor"
+                      strokeWidth="1.3"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <span className="truncate">{requested.title}</span>
+                </span>
+              )}
 
               {success ? (
                 <div className="flex flex-col items-center gap-3 py-4 text-center">
@@ -166,7 +222,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                   <p className="text-foreground font-sans text-[16px] font-semibold">
                     {t('successHeading')}
                   </p>
-                  <p className="font-body text-muted text-[12px] leading-[1.5]">
+                  <p className="font-body text-muted text-[15px] leading-[1.5]">
                     {t('successMsg')}
                   </p>
                 </div>
@@ -178,17 +234,22 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                     placeholder={t('namePlaceholder')}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="font-body focus:border-accent dark:focus:border-accent w-full rounded-[12px] border border-[#e5e7eb] bg-[#F0F4F1] px-4 py-3 text-[13px] text-[#111] placeholder-[#9ca3af] outline-none dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
+                    className="font-body focus:border-accent dark:focus:border-accent border-border w-full rounded-[12px] border bg-white px-4 py-3 text-[15px] text-[#111] placeholder-[#9ca3af] outline-none transition-colors dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
                   />
                   <input
+                    ref={emailRef}
                     type="email"
                     required
                     placeholder={t('emailPlaceholderFull')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="font-body focus:border-accent dark:focus:border-accent w-full rounded-[12px] border border-[#e5e7eb] bg-[#F0F4F1] px-4 py-3 text-[13px] text-[#111] placeholder-[#9ca3af] outline-none dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
+                    className="font-body focus:border-accent dark:focus:border-accent border-border w-full rounded-[12px] border bg-white px-4 py-3 text-[15px] text-[#111] placeholder-[#9ca3af] outline-none transition-colors dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
                   />
-                  {error && <p className="font-body text-[12px] text-red-500">{error}</p>}
+                  {error && (
+                    <p role="alert" className="font-body text-caption text-red-500">
+                      {error}
+                    </p>
+                  )}
                   <label className="flex cursor-pointer items-start gap-2.5">
                     <input
                       type="checkbox"
@@ -196,7 +257,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                       onChange={(e) => setAgreed(e.target.checked)}
                       className="accent-accent mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer rounded"
                     />
-                    <span className="font-body text-muted text-[11px] leading-[1.5]">
+                    <span className="font-body text-muted text-caption leading-[1.5]">
                       {t('consentCheckbox')}
                     </span>
                   </label>
@@ -233,7 +294,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                           strokeLinejoin="round"
                         />
                       </svg>
-                      <span className="font-body text-muted text-[13px] leading-[1.5]">
+                      <span className="font-body text-muted text-[15px] leading-[1.5]">
                         {t(`feature${i}` as 'feature1')}
                       </span>
                     </div>
@@ -245,56 +306,82 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
         </ScrollReveal>
       </section>
 
-      {/* More ebooks */}
-      <section className="bg-surface px-5 pb-10 pt-8">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">{t('moreGuidesKicker')}</SectionKicker>
-          <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
-            {displayEbooks.map((book, i) => (
-              <ScrollReveal
-                key={book.id}
-                index={i}
-                className="bg-background shadow-card dark:shadow-card-dark hover-lift flex items-center gap-4 rounded-[18px] p-4"
-              >
-                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] bg-[rgba(166,166,166,0.08)] dark:bg-[rgba(255,255,255,0.06)]">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    className="text-accent"
+      {/* More ebooks: editorial index rows (learning content, not a card grid).
+          CMS-managed — education-content ebooks after the hero book; hidden
+          when the collection has none. Each row re-targets the gate form. */}
+      {moreEbooks.length > 0 && (
+        <section className="px-5 pb-12 pt-8">
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <SectionKicker className="mb-3">{t('moreGuidesKicker')}</SectionKicker>
+            <h2 className="text-foreground text-headline-sm mb-6 max-w-[560px] font-sans">
+              {t('moreGuidesHeading')}
+            </h2>
+            <div className="border-border border-t">
+              {moreEbooks.map((book, i) => (
+                <ScrollReveal key={book.id} index={i}>
+                  <button
+                    type="button"
+                    onClick={() => requestEbook(book)}
+                    className="border-border hover:border-s-accent group grid w-full grid-cols-[auto_1fr] items-baseline gap-4 border-b border-s-2 border-s-transparent py-6 ps-3 text-start transition-colors duration-200 xl:gap-6 xl:py-7 xl:ps-4"
                   >
-                    <rect
-                      x="3"
-                      y="2"
-                      width="14"
-                      height="16"
-                      rx="2"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    />
-                    <path
-                      d="M7 7h6M7 10.5h4"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-foreground font-sans text-[13px] font-semibold leading-[1.3]">
-                    {book.title}
-                  </p>
-                  <p className="font-body text-muted mt-0.5 text-[11px] leading-[1.4]">
-                    {book.desc}
-                  </p>
-                </div>
-                <span className="font-body text-muted flex-shrink-0 text-[10px]">{book.pages}</span>
-              </ScrollReveal>
-            ))}
+                    <span
+                      dir="ltr"
+                      aria-hidden="true"
+                      className="text-foreground group-hover:text-accent dark:text-accent-bright w-[46px] shrink-0 font-sans text-[46px] font-semibold tabular-nums leading-none tracking-tight opacity-[0.08] transition-[color,opacity] duration-200 group-hover:opacity-40 xl:w-[64px] xl:text-[60px] dark:opacity-[0.28] dark:group-hover:opacity-70"
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <div className="min-w-0">
+                      <h3 className="text-foreground group-hover:text-accent text-body-lg font-sans font-semibold leading-snug transition-colors duration-200">
+                        {book.title}
+                      </h3>
+                      {book.summary && (
+                        <p className="font-body text-muted mt-1.5 max-w-[62ch] text-[15px] leading-relaxed">
+                          {book.summary}
+                        </p>
+                      )}
+                      <span className="text-accent mt-3 inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.08em]">
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M2 4l6 4.5L14 4M2.5 3h11a1 1 0 011 1v8a1 1 0 01-1 1h-11a1 1 0 01-1-1V4a1 1 0 011-1z"
+                            stroke="currentColor"
+                            strokeWidth="1.3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                        {t('deliveryChip')}
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 14 14"
+                          fill="none"
+                          aria-hidden="true"
+                          className="opacity-0 transition-[opacity,transform] duration-200 group-hover:opacity-100 motion-safe:-translate-x-1 motion-safe:group-hover:translate-x-0 rtl:-scale-x-100"
+                        >
+                          <path
+                            d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                  </button>
+                </ScrollReveal>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
@@ -303,7 +390,9 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
             {t('ctaKicker')}
           </SectionKicker>
           <h2 className="text-headline-sm mb-3 font-sans text-white">{t('ctaHeading')}</h2>
-          <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
+          <p className="font-body mb-7 max-w-[52ch] text-[15px] leading-relaxed text-white/[0.72]">
+            {t('ctaDesc')}
+          </p>
         </ScrollReveal>
       </section>
     </>

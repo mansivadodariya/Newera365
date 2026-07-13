@@ -310,14 +310,14 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                           </span>
                         </header>
 
-                        <dl className="divide-border divide-y">
+                        <dl className="list-dim divide-border divide-y">
                           {group.terms.map((term) => (
                             <div
                               key={term.term}
-                              className="grid gap-x-10 gap-y-2 py-5 xl:grid-cols-[minmax(0,15rem)_minmax(0,1fr)]"
+                              className="group grid gap-x-10 gap-y-2 py-5 xl:grid-cols-[minmax(0,15rem)_minmax(0,1fr)]"
                             >
                               <dt className="flex flex-col gap-1.5">
-                                <span className="text-foreground link-underline text-body-lg w-fit font-sans font-semibold leading-[1.25]">
+                                <span className="text-foreground link-underline text-body-lg group-hover:text-accent w-fit font-sans font-semibold leading-[1.25] transition-colors">
                                   {term.term}
                                 </span>
                                 <span className="text-muted flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em]">

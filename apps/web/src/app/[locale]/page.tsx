@@ -10,16 +10,14 @@ import {
   HomeNewsletterSection,
   CtaBannerDemo,
   TradingViewTicker,
-  TrustStripDemo,
   PartnersSection,
   TestimonialsSection,
   SecurityTrustBand,
   FundingStripSection,
   CompareChecklistSection,
 } from '@newera365/ui';
-import type { TrustLogo, TestimonialItem, HomeNewsletterContent } from '@newera365/ui';
+import type { TestimonialItem, HomeNewsletterContent } from '@newera365/ui';
 import { getSiteSettings } from '@/lib/cms';
-import type { CmsMedia } from '@/lib/cms';
 
 export default async function HomePage({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
@@ -27,16 +25,6 @@ export default async function HomePage({ params }: { params: { locale: string } 
   const siteSettings = await getSiteSettings();
 
   const kpiStats = siteSettings?.kpiStats ?? undefined;
-
-  // Resolve social proof logos — depth=1 returns the media object
-  const trustLogos: TrustLogo[] = (siteSettings?.socialProofLogos ?? []).flatMap((entry) => {
-    const media = entry.logo;
-    if (!media || typeof media === 'number') return [];
-    const url = (media as CmsMedia).url;
-    if (!url) return [];
-    const alt = params.locale === 'ar' ? (entry.altAr ?? entry.altEn ?? '') : (entry.altEn ?? '');
-    return [{ url, alt, href: entry.href ?? null }];
-  });
 
   // Resolve testimonials (client feedback #5) — locale-correct quote/role
   const isAr = params.locale === 'ar';
@@ -113,9 +101,6 @@ export default async function HomePage({ params }: { params: { locale: string } 
         ratingCaption={ratingCaption}
         items={testimonials}
       />
-      {/* Press wordmarks ride directly under the testimonials so the social
-          proof reads as one block: what traders say, then who covered us. */}
-      <TrustStripDemo logos={trustLogos} />
       {/* Infrastructure trust — liquidity, tech, payment & data partners
           (client content brief item 13). */}
       <PartnersSection partners={partners} />

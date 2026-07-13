@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { SectionKicker } from './SectionKicker';
 import { CountUp, CountUpGroup } from './CountUp';
 import { ScrollReveal } from './ScrollReveal';
+import { Spotlight } from './Spotlight';
 
 export interface CmsKpiStat {
   valueEn: string;
@@ -63,9 +64,13 @@ export async function StatsSectionDemo({
           >
             {stats.map((stat, i) => (
               <ScrollReveal key={stat.label} index={i} className="h-full">
-                <div className="bg-ink-soft shadow-card hover:ring-accent/30 relative flex h-full flex-col gap-2 overflow-hidden rounded-[18px] p-[26px] ring-1 ring-inset ring-white/[0.04] transition-[transform,box-shadow] duration-300 motion-safe:hover:scale-[1.02] dark:bg-[#15171c]">
+                <Spotlight
+                  size={260}
+                  className="bg-ink-soft shadow-card hover:ring-accent/30 flex h-full flex-col gap-2 overflow-hidden rounded-[18px] p-[26px] ring-1 ring-inset ring-white/[0.04] transition-[transform,box-shadow] duration-300 motion-safe:hover:scale-[1.02] dark:bg-[#15171c]"
+                >
+                  {/* Accent tick stretches while the tile is read */}
                   <span
-                    className="bg-accent/70 mb-1 block h-[3px] w-7 rounded-full"
+                    className="bg-accent/70 group-hover/spot:bg-accent-bright mb-1 block h-[3px] w-7 rounded-full transition-[width,background-color] duration-300 group-hover/spot:w-11"
                     aria-hidden="true"
                   />
                   <span
@@ -74,10 +79,10 @@ export async function StatsSectionDemo({
                   >
                     <CountUp flat value={stat.value} />
                   </span>
-                  <span className="font-mono text-[11px] font-medium uppercase tracking-[0.13em] text-[#8c949e]">
+                  <span className="font-mono text-[11px] font-medium uppercase tracking-[0.13em] text-[#8c949e] transition-colors duration-300 group-hover/spot:text-white/80">
                     {stat.label}
                   </span>
-                </div>
+                </Spotlight>
               </ScrollReveal>
             ))}
           </div>
@@ -98,9 +103,7 @@ export async function StatsSectionDemo({
             <p className="font-body text-body font-semibold leading-tight text-[#111] dark:text-white">
               {t('statsRegBadgeTitle')}
             </p>
-            <p className="font-body text-caption text-muted mt-0.5 dark:text-[#B8BFCC]">
-              {t('statsRegBadgeDesc')}
-            </p>
+            <p className="font-body text-caption text-muted mt-0.5">{t('statsRegBadgeDesc')}</p>
           </div>
           <svg
             viewBox="0 0 24 24"

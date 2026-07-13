@@ -130,13 +130,13 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                 {t('noSpreads')}
               </p>
             ) : (
-              <div className="divide-border divide-y dark:divide-white/[0.05]">
+              <div className="list-dim divide-border divide-y dark:divide-white/[0.05]">
                 {displaySpreads.map((row) => (
                   <div
                     key={row.instrument}
                     className="group grid grid-cols-[1fr_54px_54px_54px] items-center px-5 py-[13px] transition-colors hover:bg-[#F0F4F1] dark:hover:bg-white/[0.02]"
                   >
-                    <span className="text-foreground font-body text-body font-medium">
+                    <span className="text-foreground font-body text-body group-hover:text-accent font-medium transition-colors">
                       {row.instrument}
                     </span>
                     <span
@@ -168,10 +168,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                 <span className="text-foreground text-eyebrow font-mono uppercase">
                   {t('tightestSpread')}
                 </span>
-                <span
-                  dir="ltr"
-                  className="text-accent text-title text-end font-mono font-semibold tabular-nums"
-                >
+                <span dir="ltr" className="text-accent text-title text-end font-mono tabular-nums">
                   {tightest}
                 </span>
                 <span className="col-span-2" />
@@ -212,7 +209,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
             {t('otherKicker')}
           </SectionKicker>
 
-          <div className="border-border bg-surface shadow-card overflow-hidden rounded-[18px] border dark:border-white/[0.06]">
+          <div className="border-border bg-surface shadow-card list-dim overflow-hidden rounded-[18px] border dark:border-white/[0.06]">
             {OTHER_CHARGES.map((charge, i) => {
               const key = charge.key.charAt(0).toUpperCase() + charge.key.slice(1);
               const display = charge.green ? '$0.00' : translateValue(charge.value);
@@ -224,14 +221,15 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                   direction="up"
                   className={i > 0 ? 'border-border border-t dark:border-white/[0.05]' : ''}
                 >
-                  <div className="px-5 py-[15px] transition-colors hover:bg-[#F0F4F1] dark:hover:bg-white/[0.02]">
+                  <div className="group px-5 py-[15px] transition-colors hover:bg-[#F0F4F1] dark:hover:bg-white/[0.02]">
                     <div className="flex items-baseline gap-3">
                       <span className="text-foreground text-body-lg font-sans font-semibold">
                         {t(`charge${key}` as 'chargeOpening')}
                       </span>
+                      {/* Dotted receipt leader warms to signal on the lit line */}
                       <span
                         aria-hidden="true"
-                        className="border-border min-w-[24px] flex-1 translate-y-[-4px] border-b border-dotted dark:border-white/[0.15]"
+                        className="border-border group-hover:border-accent/50 min-w-[24px] flex-1 translate-y-[-4px] border-b border-dotted transition-colors dark:border-white/[0.15]"
                       />
                       <span
                         {...(isMetric ? { dir: 'ltr' as const } : {})}
@@ -254,10 +252,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                 {t('subtotalLabel')}
               </span>
               <span className="flex-1" />
-              <span
-                dir="ltr"
-                className="text-accent text-title font-mono font-semibold tabular-nums"
-              >
+              <span dir="ltr" className="text-accent text-title font-mono tabular-nums">
                 $0.00
               </span>
             </div>

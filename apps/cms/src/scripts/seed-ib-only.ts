@@ -217,3 +217,5 @@ main().catch((err) => {
   console.error('\n❌ IB seed failed:', err);
   process.exit(1);
 });
+
+export {};

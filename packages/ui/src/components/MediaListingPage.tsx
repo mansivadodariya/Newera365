@@ -155,9 +155,7 @@ export function MediaListingPage({ cmsVideos, webinars }: MediaListingPageProps)
       <section className="bg-transparent px-5 pb-6 pt-9">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground text-display mb-4 font-sans">
-            {t('heroLine1')}
-            <br />
-            {t('heroLine2')}
+            {t('heroLine1')} {t('heroLine2')}
             <br />
             <span className="text-accent">{t('heroAccent')}</span>
           </h1>
@@ -405,7 +403,7 @@ export function MediaListingPage({ cmsVideos, webinars }: MediaListingPageProps)
       {isWebinars && <WebinarsSection webinars={webinars} />}
 
       {/* Bottom CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
+      <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
             {t('ctaKicker')}

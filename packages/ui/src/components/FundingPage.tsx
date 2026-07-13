@@ -430,7 +430,7 @@ function MoneyFlow() {
                   >
                     {beat.n}
                   </span>
-                  <p className="text-title text-foreground font-sans font-semibold">{beat.label}</p>
+                  <p className="text-title text-foreground font-sans">{beat.label}</p>
                 </div>
                 <p className="font-body text-body text-muted max-w-[38ch] leading-[1.6] xl:mx-auto dark:text-white/60">
                   {beat.desc}
@@ -565,7 +565,7 @@ function HeroContent({
 
                   {/* Name + type badge */}
                   <div className="flex items-center gap-2.5">
-                    <span className="bg-accent/[0.08] text-accent flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px]">
+                    <span className="bg-accent/[0.08] text-accent group-hover:bg-accent flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] transition-colors duration-300 group-hover:text-white">
                       {method.icon}
                     </span>
                     <div className="min-w-0 flex-1">
@@ -578,8 +578,10 @@ function HeroContent({
                     </div>
                   </div>
 
-                  {/* Stats 2×2 — deposit / withdraw / min / fee */}
-                  <div className="dark:bg-surface-elevated mt-auto grid grid-cols-2 gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)]">
+                  {/* Spec read-out — terminal ledger rows (hairline rules, mono
+                      tabular values, best values in signal green), not a gray
+                      stat grid. */}
+                  <div className="border-border mt-auto border-t pt-1 dark:border-white/[0.08]">
                     {[
                       {
                         label: t('colDeposit'),
@@ -600,13 +602,14 @@ function HeroContent({
                     ].map((stat) => (
                       <div
                         key={stat.label}
-                        className="dark:bg-surface flex flex-col gap-[2px] bg-[#F0F4F1] px-3 py-[10px]"
+                        className="border-border flex items-center justify-between gap-3 border-b py-[8px] last:border-b-0 dark:border-white/[0.05]"
                       >
-                        <span className="text-muted font-mono text-[10px] tracking-[1.08px]">
+                        <span className="text-muted font-mono text-[10px] uppercase tracking-[0.1em]">
                           {stat.label}
                         </span>
                         <span
-                          className={`font-sans text-[14px] font-semibold ${stat.green ? 'text-accent' : 'text-foreground'}`}
+                          dir="auto"
+                          className={`font-mono text-[13px] font-semibold tabular-nums ${stat.green ? 'text-accent' : 'text-foreground'}`}
                         >
                           {stat.value}
                         </span>
@@ -654,8 +657,8 @@ function HeroContent({
             <div className="grid gap-3 xl:grid-cols-2 xl:gap-5">
               {trustRows.map((row, i) => (
                 <ScrollReveal key={row.key} index={i}>
-                  <div className="flex h-full items-start gap-4 rounded-[14px] border border-white/[0.06] bg-white/[0.03] p-[18px]">
-                    <div className="bg-accent/[0.12] text-accent-bright flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-[11px]">
+                  <div className="hover:border-accent-bright/25 group flex h-full items-start gap-4 rounded-[14px] border border-white/[0.06] bg-white/[0.03] p-[18px] transition-colors duration-300 hover:bg-white/[0.05]">
+                    <div className="bg-accent/[0.12] text-accent-bright group-hover:bg-accent/[0.25] flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-[11px] transition-colors duration-300">
                       {row.icon}
                     </div>
                     <div className="flex-1">

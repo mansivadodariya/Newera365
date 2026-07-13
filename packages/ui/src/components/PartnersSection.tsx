@@ -133,7 +133,7 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
                     <div className="mb-4 flex items-center gap-3">
                       <span
                         aria-hidden
-                        className="text-foreground/10 select-none font-mono text-[1.7rem] font-bold tabular-nums leading-none"
+                        className="dark:text-accent-bright/25 select-none font-mono text-[1.7rem] font-bold tabular-nums leading-none text-[#0C1F14]/10"
                       >
                         {String(gi + 1).padStart(2, '0')}
                       </span>
@@ -174,7 +174,7 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
                           <div className="flex flex-shrink-0 items-center gap-3 pe-4 ps-8">
                             <span
                               aria-hidden
-                              className="text-foreground/[0.09] select-none font-mono text-[2.6rem] font-bold tabular-nums leading-none dark:text-white/[0.08]"
+                              className="dark:text-accent-bright/[0.22] select-none font-mono text-[2.6rem] font-bold tabular-nums leading-none text-[#0C1F14]/[0.09]"
                             >
                               {String(gi + 1).padStart(2, '0')}
                             </span>

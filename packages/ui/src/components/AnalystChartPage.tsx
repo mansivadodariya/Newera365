@@ -296,7 +296,7 @@ function ReadoutLedger({ pair }: { pair: PairCall }) {
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-eyebrow font-mono uppercase text-white/40">{t('featuredKicker')}</p>
-          <p dir="ltr" className="text-title mt-1 font-sans font-semibold text-white">
+          <p dir="ltr" className="text-title mt-1 font-sans text-white">
             {pair.symbol}
           </p>
         </div>
@@ -376,9 +376,7 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
             {t('deskKicker')}
           </SectionKicker>
           <h1 className="text-foreground text-display mb-3 font-sans">
-            {t('heroLine1')}
-            <br />
-            {t('heroLine2')}
+            {t('heroLine1')} {t('heroLine2')}
             <br />
             <span className="text-accent">{t('heroAccent')}</span>
           </h1>

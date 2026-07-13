@@ -4,6 +4,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRef, useEffect } from 'react';
+import { SectionKicker } from './SectionKicker';
+import { Spotlight } from './Spotlight';
 
 const CARDS = [
   { valueKey: 'arbStat1Value', labelKey: 'arbStat1Label', descKey: 'arbStat1Desc' },
@@ -113,7 +115,7 @@ function ArbCard({
     >
       <AnimatedValue value={value} />
       <p className="text-foreground font-body text-[15px] font-semibold leading-tight">{label}</p>
-      <p className="font-body text-caption text-muted leading-snug dark:text-[#B8BFCC]">{desc}</p>
+      <p className="font-body text-caption text-muted leading-snug">{desc}</p>
     </div>
   );
 }
@@ -160,95 +162,99 @@ export function ArbitrageSection() {
   const locale = useLocale();
 
   return (
-    <section className="bg-transparent px-6 pb-10 pt-10 xl:px-[80px] xl:py-14 dark:bg-[#0f0f0f]">
-      <div className="mx-auto grid max-w-[390px] gap-9 md:max-w-2xl xl:max-w-[1200px] xl:grid-cols-[1.02fr_0.98fr] xl:items-stretch xl:gap-12">
-        {/* Left: the claim + the stat ledger + the accounts strip */}
-        <div className="flex flex-col">
-          <div className="flex items-center gap-[6px]">
-            <span className="h-px w-[18px] bg-[#6b7280]" />
-            <span className="text-eyebrow font-mono font-medium uppercase text-[#6b7280]">
-              {t('arbKicker')}
-            </span>
-          </div>
+    <section className="bg-transparent px-5 pb-10 pt-6 xl:px-[80px] xl:pb-14 xl:pt-8">
+      <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        {/* Brand-tinted wash band (never a flat black slab): paper deepens a
+            step in light, a green-black breath over the canvas in dark. */}
+        <div className="rounded-[32px] bg-gradient-to-b from-[#E3EDE7] to-[#F2F5F3] p-6 md:p-8 xl:p-12 dark:from-[#0D1512] dark:to-[#07090D]">
+          <div className="grid gap-9 xl:grid-cols-[1.02fr_0.98fr] xl:items-stretch xl:gap-12">
+            {/* Left: the claim + the stat ledger + the accounts strip */}
+            <div className="flex flex-col">
+              <SectionKicker className="text-muted [&>span:first-child]:bg-accent">
+                {t('arbKicker')}
+              </SectionKicker>
 
-          <div className="text-headline-sm mt-3 flex flex-col font-sans">
-            <span className="text-[#111] dark:text-white">{t('arbHeadingLine1')}</span>
-            <span className="text-accent">{t('arbHeadingAccent')}</span>
-          </div>
+              <div className="text-headline-sm mt-3 flex flex-col font-sans">
+                <span className="text-foreground">{t('arbHeadingLine1')}</span>
+                <span className="text-accent">{t('arbHeadingAccent')}</span>
+              </div>
 
-          <p className="font-body text-body text-muted mt-3 max-w-[52ch] dark:text-[#B8BFCC]">
-            {t('arbDesc')}
-          </p>
+              <p className="font-body text-body text-muted mt-3 max-w-[52ch]">{t('arbDesc')}</p>
 
-          {/* Supporting metrics ledger (the hero latency stat lives in the panel) */}
-          <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-3">
-            {CARDS.slice(1).map((card, i) => (
-              <ArbCard
-                key={card.valueKey}
-                value={t(card.valueKey)}
-                label={t(card.labelKey)}
-                desc={t(card.descKey)}
-                index={i}
-              />
-            ))}
-          </div>
+              {/* Supporting metrics ledger (the hero latency stat lives in the panel) */}
+              <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {CARDS.slice(1).map((card, i) => (
+                  <ArbCard
+                    key={card.valueKey}
+                    value={t(card.valueKey)}
+                    label={t(card.labelKey)}
+                    desc={t(card.descKey)}
+                    index={i}
+                  />
+                ))}
+              </div>
 
-          <Link
-            href={`/${locale}/trade/accounts`}
-            className="mt-6 flex w-full items-center gap-[10px] rounded-[12px] bg-[#111] px-[14px] py-[14px] transition-opacity hover:opacity-90 dark:bg-[#1c1c1c]"
-          >
-            <span className="bg-accent h-[8px] w-[8px] flex-shrink-0 rounded-full" />
-            <p className="font-body flex-1 text-[12px] font-medium text-white">{t('arbStrip')}</p>
-            <svg
-              viewBox="0 0 24 24"
-              className="text-accent h-[14px] w-[14px] flex-shrink-0 rtl:-scale-x-100"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
-          </Link>
-        </div>
-
-        {/* Right: ink-art execution panel — cinematic terminal + live speed */}
-        <div className="relative min-h-[300px] overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#0A130E] shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)]">
-          <Image
-            src="/images/hero-terminal-macro.jpg"
-            alt=""
-            aria-hidden
-            fill
-            sizes="(max-width: 1280px) 100vw, 40vw"
-            className="object-cover object-[42%_30%] opacity-[0.5]"
-          />
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-t from-[#03130B]/[0.95] via-[#03130B]/[0.58] to-[#03130B]/[0.28]"
-          />
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 rounded-[24px] ring-1 ring-inset ring-white/[0.06]"
-          />
-          <div className="relative flex h-full min-h-[300px] flex-col justify-between gap-8 p-7 xl:p-8">
-            <div className="flex items-center gap-2">
-              <span className="bg-accent-bright h-2 w-2 flex-shrink-0 rounded-full" />
-              <span className="text-eyebrow text-accent-bright font-mono uppercase tracking-[0.16em]">
-                {t('arbStat1Label')}
-              </span>
-            </div>
-            <div>
-              <span
-                dir="ltr"
-                className="text-sheen text-metric block w-fit font-sans tabular-nums leading-none"
+              <Link
+                href={`/${locale}/trade/accounts`}
+                className="bg-ink hover:border-accent/40 group mt-6 flex w-full items-center gap-[10px] rounded-[12px] border border-white/[0.08] px-[14px] py-[14px] transition-colors active:scale-[0.99] dark:border-white/[0.1]"
               >
-                {t('arbStat1Value')}
-              </span>
-              <p className="font-body text-body mt-2 text-white/70">{t('arbStat1Desc')}</p>
-              <ExecutionBar />
+                <span className="bg-accent-bright h-[8px] w-[8px] flex-shrink-0 rounded-full" />
+                <p className="font-body flex-1 text-[12px] font-medium text-white">
+                  {t('arbStrip')}
+                </p>
+                <svg
+                  viewBox="0 0 24 24"
+                  className="text-accent-bright h-[14px] w-[14px] flex-shrink-0 motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5 rtl:-scale-x-100"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </Link>
             </div>
+
+            {/* Right: ink-art execution panel — cinematic terminal + live speed,
+                with the signal glow tracking the cursor */}
+            <Spotlight className="min-h-[300px] overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#0A130E] shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)]">
+              <Image
+                src="/images/hero-terminal-macro.jpg"
+                alt=""
+                aria-hidden
+                fill
+                sizes="(max-width: 1280px) 100vw, 40vw"
+                className="object-cover object-[42%_30%] opacity-[0.5]"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 bg-gradient-to-t from-[#03130B]/[0.95] via-[#03130B]/[0.58] to-[#03130B]/[0.28]"
+              />
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 rounded-[24px] ring-1 ring-inset ring-white/[0.06]"
+              />
+              <div className="relative flex h-full min-h-[300px] flex-col justify-between gap-8 p-7 xl:p-8">
+                <div className="flex items-center gap-2">
+                  <span className="bg-accent-bright h-2 w-2 flex-shrink-0 rounded-full" />
+                  <span className="text-eyebrow text-accent-bright font-mono uppercase tracking-[0.16em]">
+                    {t('arbStat1Label')}
+                  </span>
+                </div>
+                <div>
+                  <span
+                    dir="ltr"
+                    className="text-sheen text-metric block w-fit font-sans tabular-nums leading-none"
+                  >
+                    {t('arbStat1Value')}
+                  </span>
+                  <p className="font-body text-body mt-2 text-white/70">{t('arbStat1Desc')}</p>
+                  <ExecutionBar />
+                </div>
+              </div>
+            </Spotlight>
           </div>
         </div>
       </div>

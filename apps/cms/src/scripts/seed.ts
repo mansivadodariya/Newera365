@@ -619,6 +619,10 @@ async function deleteAllDocs(collection: string) {
 async function seedAccountTypes() {
   console.log('💳 Account Types...');
   await deleteAllDocs('account-types');
+  // Lineup and pricing from the client's partner pitch deck
+  // (Newera_IB_Pitch_Deck_Green_V3, p.4): Raw / Standard / Pro. Deck spreads
+  // are quoted in points on FX majors (2-4 / 12-15 / 18-22), i.e. pips /10.
+  // usesMT5Data stays false so the mock bridge never overwrites deck values.
   const types = [
     {
       name: 'Demo',
@@ -627,6 +631,8 @@ async function seedAccountTypes() {
       spreadFrom: '1.2',
       leverage: 'Up to 1:500',
       platforms: ['mt5', 'web-trader', 'mobile'],
+      usesMT5Data: false,
+      spreadFromNumeric: 1.2,
       commission: '$0',
       features: [
         { value: 'Full platform access' },
@@ -644,45 +650,51 @@ async function seedAccountTypes() {
       spreadFrom: '1.2',
       leverage: 'Up to 1:500',
       platforms: ['mt5', 'web-trader', 'mobile'],
+      usesMT5Data: false,
+      spreadFromNumeric: 1.2,
       commission: '$0',
       features: [
         { value: 'All 2000+ instruments' },
         { value: 'Zero commission' },
-        { value: '24/7 expert support' },
+        { value: 'Swap-free available on request' },
       ],
       isPopular: true,
       sortOrder: 2,
       status: 'active',
     },
     {
-      name: 'Swap-Free',
-      badge: 'islamic',
+      name: 'Raw',
+      badge: 'value',
       minDeposit: 50,
-      spreadFrom: '1.4',
+      spreadFrom: '0.2',
       leverage: 'Up to 1:500',
       platforms: ['mt5', 'web-trader', 'mobile'],
-      commission: '$0',
+      usesMT5Data: false,
+      spreadFromNumeric: 0.2,
+      commission: '$7',
       features: [
-        { value: 'No overnight swaps' },
-        { value: 'Sharia-compliant structure' },
-        { value: 'Full market access' },
+        { value: 'Interbank raw pricing' },
+        { value: 'Metals commission $10 per lot' },
+        { value: 'Built for scalpers and EAs' },
       ],
       isPopular: false,
       sortOrder: 3,
       status: 'active',
     },
     {
-      name: 'Professional',
+      name: 'Pro',
       badge: 'pro',
       minDeposit: 2500,
-      spreadFrom: '0.0',
+      spreadFrom: '1.8',
       leverage: 'Up to 1:500',
       platforms: ['mt5', 'web-trader', 'mobile'],
-      commission: '$1.5',
+      usesMT5Data: false,
+      spreadFromNumeric: 1.8,
+      commission: '$0',
       features: [
-        { value: 'Raw spreads from 0.0' },
-        { value: 'Priority execution' },
+        { value: 'Zero commission trading' },
         { value: 'Dedicated account manager' },
+        { value: 'Custom spreads and priority execution' },
       ],
       isPopular: false,
       sortOrder: 4,
@@ -691,12 +703,16 @@ async function seedAccountTypes() {
   ];
   const arContent = [
     { nameAr: 'تجريبي', featuresAr: 'وصول كامل للمنصة\nبيانات السوق الفعلية\nلا يلزم إيداع' },
-    { nameAr: 'قياسي', featuresAr: 'جميع الأدوات الـ 2000+\nصفر عمولة\nدعم خبراء 24/7' },
     {
-      nameAr: 'إسلامي',
-      featuresAr: 'بدون فوائد بيعية\nبنية متوافقة مع الشريعة الإسلامية\nوصول كامل للسوق',
+      nameAr: 'قياسي',
+      featuresAr: 'جميع الأدوات الـ 2000+\nصفر عمولة\nخيار بدون فوائد تبييت عند الطلب',
     },
-    { nameAr: 'احترافي', featuresAr: 'فروق خام من 0.0\nتنفيذ ذو أولوية\nمدير حساب مخصص' },
+    {
+      nameAr: 'خام',
+      featuresAr:
+        'تسعير خام من البنوك مباشرة\nعمولة المعادن 10 دولار لكل عقد\nمصمم للمضاربة السريعة والأنظمة الآلية',
+    },
+    { nameAr: 'برو', featuresAr: 'تداول بدون عمولة\nمدير حساب مخصص\nفروق مخصصة وتنفيذ ذو أولوية' },
   ];
   for (let i = 0; i < types.length; i++) {
     const doc = await post<{ id: number }>('account-types', types[i]);

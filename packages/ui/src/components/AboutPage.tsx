@@ -7,11 +7,14 @@ import { JourneyTimeline } from './JourneyTimelineClient';
 import { ScrollReveal } from './ScrollReveal';
 import { SectionKicker } from './SectionKicker';
 
-const TEAM = [
-  { initials: 'AM', name: 'Alex M.', title: 'Head of Trading' },
-  { initials: 'SG', name: 'Sara G.', title: 'Co-Founder' },
-  { initials: 'DR', name: 'Diego R.', title: 'Chief Compliance' },
-  { initials: 'MK', name: 'Maya K.', title: 'Chief Dealer' },
+// Focus regions from the client's partner deck (2026-07): the four
+// high-growth markets the desk is built around. Replaced the placeholder
+// team grid (client feedback 2026-07-13).
+const REGIONS = [
+  { id: 'india', nameKey: 'regionIndiaName', descKey: 'regionIndiaDesc' },
+  { id: 'mena', nameKey: 'regionMenaName', descKey: 'regionMenaDesc' },
+  { id: 'indonesia', nameKey: 'regionIndonesiaName', descKey: 'regionIndonesiaDesc' },
+  { id: 'vietnam', nameKey: 'regionVietnamName', descKey: 'regionVietnamDesc' },
 ] as const;
 
 const EXPLORE_LINKS = [
@@ -50,15 +53,6 @@ const EXPLORE_LINKS = [
   },
 ];
 
-export interface CmsTeamMemberItem {
-  id: number;
-  name: string;
-  role: string;
-  bio?: string | null;
-  photoUrl?: string | null;
-  photoAlt?: string | null;
-}
-
 export interface CmsAwardItem {
   id: number;
   title: string;
@@ -76,16 +70,11 @@ export interface CmsMilestoneItem {
 }
 
 interface AboutPageProps {
-  team?: CmsTeamMemberItem[];
   milestones?: CmsMilestoneItem[];
   manifestoStatValue?: string | null;
 }
 
-export function AboutPage({
-  team: cmsTeam,
-  milestones: cmsMilestones,
-  manifestoStatValue,
-}: AboutPageProps) {
+export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: AboutPageProps) {
   const locale = useLocale();
   const t = useTranslations('about');
 
@@ -101,31 +90,6 @@ export function AboutPage({
           { year: '2022', label: t('milestone2022Label'), desc: t('milestone2022Desc') },
           { year: '2024', label: t('milestone2024Label'), desc: t('milestone2024Desc') },
         ];
-
-  // Use CMS team members when available; fall back to the static design roster.
-  // Normalise both shapes to { initials, name, title, photoUrl } so the grid
-  // renders identically regardless of source.
-  const displayTeam =
-    cmsTeam && cmsTeam.length > 0
-      ? cmsTeam.map((m) => ({
-          name: m.name,
-          title: m.role,
-          initials: (m.name ?? '')
-            .split(/\s+/)
-            .map((w) => w[0])
-            .slice(0, 2)
-            .join('')
-            .toUpperCase(),
-          photoUrl: m.photoUrl ?? null,
-          photoAlt: m.photoAlt ?? m.name,
-        }))
-      : TEAM.map((m) => ({
-          name: m.name,
-          title: m.title,
-          initials: m.initials,
-          photoUrl: null as string | null,
-          photoAlt: m.name,
-        }));
 
   const creed = [t('creed1'), t('creed2'), t('creed3')];
 
@@ -145,7 +109,7 @@ export function AboutPage({
           <p className="font-body text-muted text-lead mt-5 max-w-[520px]">{t('heroDesc')}</p>
 
           {/* Conviction creed — a small terminal ledger of tenets */}
-          <ul className="border-border shadow-card mt-9 grid overflow-hidden rounded-[16px] border bg-white sm:grid-cols-3 dark:border-white/[0.06] dark:bg-[#1a1c22] dark:shadow-none">
+          <ul className="border-border shadow-card list-dim mt-9 grid overflow-hidden rounded-[16px] border bg-white sm:grid-cols-3 dark:border-white/[0.06] dark:bg-[#1a1c22] dark:shadow-none">
             {creed.map((line, i) => (
               <li
                 key={i}
@@ -193,7 +157,7 @@ export function AboutPage({
           <div className="flex flex-col gap-9 sm:flex-row sm:items-end sm:justify-between">
             <ScrollReveal direction="none">
               <div>
-                <p className="text-title font-sans font-semibold text-white">Alex M.</p>
+                <p className="text-title font-sans text-white">Alex M.</p>
                 <p className="font-body text-caption mt-1 text-white/60">{t('ceoTitle')}</p>
                 <p className="text-accent-bright mt-4 font-mono text-[11px] font-medium uppercase tracking-[0.14em]">
                   {t('founderLetterLabel')}
@@ -227,7 +191,7 @@ export function AboutPage({
         milestones={milestones}
       />
 
-      {/* Team — a light, tasteful grid of the operators behind the desk */}
+      {/* Focus markets — the regions the desk is built for, as a bare ledger */}
       <section
         className="rounded-[32px] px-5 pb-12 pt-12 xl:pb-16 xl:pt-16"
         style={{ background: 'var(--gradient-features)' }}
@@ -235,41 +199,32 @@ export function AboutPage({
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
             <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-              {t('teamKicker')}
+              {t('regionsKicker')}
             </SectionKicker>
-            <h2 className="text-foreground text-headline mb-8 font-sans">{t('teamHeading')}</h2>
+            <div className="xl:flex xl:items-end xl:justify-between xl:gap-10">
+              <h2 className="text-foreground text-headline font-sans [text-wrap:balance]">
+                {t('regionsHeading')}
+              </h2>
+              <p className="font-body text-body text-muted mt-3 max-w-[46ch] xl:mt-0">
+                {t('regionsSubtitle')}
+              </p>
+            </div>
           </ScrollReveal>
-          <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-4 xl:gap-4">
-            {displayTeam.map((member, i) => (
-              <ScrollReveal key={`team-${i}-${member.name}`} index={i} className="h-full">
-                <div className="border-border shadow-card hover:border-accent/40 dark:hover:border-accent/40 flex h-full min-h-[145px] flex-col gap-[14px] rounded-[18px] border bg-white p-[18px] transition-[transform,border-color] duration-300 motion-safe:hover:scale-[1.02] dark:border-white/[0.06] dark:bg-[#1a1c22] dark:shadow-none">
-                  {/* Avatar — CMS photo when present, else initials on the Figma gradient */}
-                  <div
-                    className="flex h-[56px] w-[56px] flex-shrink-0 items-center justify-center overflow-hidden rounded-[16px]"
-                    style={{ background: 'linear-gradient(135deg, #111111 0%, #333333 71.43%)' }}
-                  >
-                    {member.photoUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={member.photoUrl}
-                        alt={member.photoAlt}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <span className="font-sans text-[16px] font-semibold tracking-[-0.16px] text-white">
-                        {member.initials}
-                      </span>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-foreground text-body-lg font-sans font-semibold">
-                      {member.name}
-                    </p>
-                    <p className="font-body text-muted text-caption mt-[2px]">{member.title}</p>
-                  </div>
+          <div className="list-dim mt-9">
+            {REGIONS.map((region, i) => (
+              <ScrollReveal key={region.id} index={i}>
+                <div className="border-border hover:bg-accent/[0.03] grid grid-cols-[44px_1fr] items-baseline gap-x-4 border-t py-5 transition-colors md:grid-cols-[64px_260px_1fr] md:gap-x-6 dark:border-white/[0.08]">
+                  <span className="text-accent font-mono text-[11px] font-bold tabular-nums tracking-[0.12em]">
+                    0{i + 1}
+                  </span>
+                  <p className="text-foreground text-title font-sans">{t(region.nameKey)}</p>
+                  <p className="font-body text-body text-muted col-span-2 mt-2 ps-[60px] md:col-span-1 md:mt-0 md:ps-0">
+                    {t(region.descKey)}
+                  </p>
                 </div>
               </ScrollReveal>
             ))}
+            <div className="border-border border-t dark:border-white/[0.08]" />
           </div>
         </div>
       </section>

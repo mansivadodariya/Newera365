@@ -806,15 +806,15 @@ export function MarketCategoryPage({
           <div className="border-border/70 border-t dark:border-white/[0.08]">
             {WHY_ITEMS.map((n, i) => (
               <ScrollReveal key={n} index={i}>
-                <div className="border-border/70 flex items-start gap-5 border-b py-6 dark:border-white/[0.08]">
+                <div className="border-border/70 row-hover group flex items-start gap-5 border-b py-6 dark:border-white/[0.08]">
                   <span
-                    className="font-mono text-[28px] font-semibold tabular-nums leading-none text-[#0C1F14]/[0.14] xl:text-[36px] dark:text-white/[0.12]"
+                    className="group-hover:text-accent/40 dark:group-hover:text-accent-bright/60 dark:text-accent-bright/[0.32] font-mono text-[28px] font-semibold tabular-nums leading-none text-[#0C1F14]/[0.14] transition-colors duration-300 xl:text-[36px]"
                     dir="ltr"
                   >
                     {`0${n}`}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-foreground text-title font-sans font-semibold">
+                    <h3 className="text-foreground text-title font-sans">
                       {t(`why${cap}${n}Title`)}
                     </h3>
                     <p className="font-body text-muted text-body mt-2 max-w-[62ch]">

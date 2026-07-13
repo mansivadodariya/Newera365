@@ -35,25 +35,31 @@ module.exports = {
       // Semantic fluid type scale — one place to retune the whole site.
       // Every role scales with the viewport (clamp), so desktop gets the
       // larger cut automatically without per-breakpoint classes.
+      // Heading roles carry the house cut (extrabold, tight tracking — Brdge
+      // reference, client direction 2026-07-12): the weight/tracking live HERE,
+      // never as per-component font-* overrides, so every page stays uniform.
       fontSize: {
+        // Sizes are cut for Montserrat 800, which runs ~7% wider than the old
+        // face: caps match the Brdge reference (h1 69px, h2 46px) so headings
+        // fit the containers they were designed in instead of orphan-wrapping.
         display: [
-          'clamp(2.75rem, 1.9rem + 3.6vw, 4.625rem)',
-          { lineHeight: '1.02', letterSpacing: '-0.03em', fontWeight: '600' },
+          'clamp(2.625rem, 1.85rem + 3.3vw, 4.3125rem)',
+          { lineHeight: '1.04', letterSpacing: '-0.04em', fontWeight: '600' },
         ],
         headline: [
-          'clamp(2.125rem, 1.55rem + 2.4vw, 3.375rem)',
-          { lineHeight: '1.06', letterSpacing: '-0.025em', fontWeight: '600' },
+          'clamp(2rem, 1.5rem + 2.1vw, 2.875rem)',
+          { lineHeight: '1.08', letterSpacing: '-0.04em', fontWeight: '600' },
         ],
         'headline-sm': [
-          'clamp(1.75rem, 1.45rem + 1.3vw, 2.5rem)',
-          { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '600' },
+          'clamp(1.625rem, 1.4rem + 1.2vw, 2.25rem)',
+          { lineHeight: '1.12', letterSpacing: '-0.035em', fontWeight: '600' },
         ],
         title: [
           'clamp(1.375rem, 1.28rem + 0.5vw, 1.75rem)',
-          { lineHeight: '1.2', letterSpacing: '-0.015em' },
+          { lineHeight: '1.2', letterSpacing: '-0.03em', fontWeight: '600' },
         ],
         lead: ['clamp(1.0625rem, 1rem + 0.3vw, 1.25rem)', { lineHeight: '1.55' }],
-        'body-lg': ['1.0625rem', { lineHeight: '1.6' }],
+        'body-lg': ['1.0625rem', { lineHeight: '1.7' }],
         body: ['0.9375rem', { lineHeight: '1.6' }],
         caption: ['0.8125rem', { lineHeight: '1.5' }],
         eyebrow: ['0.75rem', { lineHeight: '1', letterSpacing: '0.16em' }],
@@ -66,9 +72,12 @@ module.exports = {
           { lineHeight: '1', letterSpacing: '-0.03em', fontWeight: '600' },
         ],
       },
+      // Headings use Outfit (--font-sans, the original display face); body uses
+      // Montserrat (--font-body). Cairo (--font-arabic) sits next in both stacks
+      // so Arabic glyphs resolve to it whichever Latin face leads.
       fontFamily: {
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
-        body: ['var(--font-body)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-sans)', 'var(--font-arabic)', 'system-ui', 'sans-serif'],
+        body: ['var(--font-body)', 'var(--font-arabic)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-mono)', 'monospace'],
         arabic: ['var(--font-arabic)', 'sans-serif'],
       },

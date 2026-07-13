@@ -1,77 +1,62 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
+import { ScrollReveal } from './ScrollReveal';
+import { Spotlight } from './Spotlight';
 import { ChartWidget } from './ChartWidget';
 import { MARKET_OVERVIEW_CONFIG } from './marketOverviewConfig';
+import { MarketSessionStrip } from './MarketSessionStrip';
 
-// Standard forex session windows in UTC hours (start inclusive, end exclusive).
-// Sydney wraps past midnight, so its window is handled by the wrap branch below.
-const SESSIONS = [
-  { key: 'Sydney', start: 22, end: 7 },
-  { key: 'Tokyo', start: 0, end: 9 },
-  { key: 'London', start: 8, end: 17 },
-  { key: 'NewYork', start: 13, end: 22 },
-] as const;
-
-function sessionOpen(hour: number, day: number, start: number, end: number): boolean {
-  // The FX week is closed from Fri 22:00 UTC through Sun ~21:00 UTC.
-  const weekendClosed = day === 6 || (day === 0 && hour < 21);
-  if (weekendClosed) return false;
-  return start < end ? hour >= start && hour < end : hour >= start || hour < end;
+/** CMS products-instruments row (subset the sheet needs). */
+export interface WatchlistInstrument {
+  id: number;
+  symbol: string;
+  name: string;
+  assetClass: string;
+  spread?: number | null;
+  leverage?: string | null;
+  minTradeSize?: number | null;
+  tradingHours?: string | null;
 }
 
-/** A row of the four major FX sessions with a live open/closed dot. Time is read
-    client-side in an effect so SSR and the first client render match (status
-    stays null until mount), then it refreshes each minute. Static styling only. */
-function MarketSessionStrip() {
+interface LiveWatchlistPageProps {
+  instruments?: WatchlistInstrument[];
+}
+
+const CLASS_ORDER = ['forex', 'indices', 'commodities', 'stocks', 'etfs', 'crypto'] as const;
+
+const CLASS_I18N: Record<string, string> = {
+  forex: 'catForex',
+  indices: 'catIndices',
+  commodities: 'catCommodities',
+  stocks: 'catStocks',
+  etfs: 'catEtfs',
+  crypto: 'catCrypto',
+};
+
+export function LiveWatchlistPage({ instruments }: LiveWatchlistPageProps) {
   const t = useTranslations('watchlist');
-  const [now, setNow] = useState<{ hour: number; day: number } | null>(null);
+  const all = useMemo(() => instruments ?? [], [instruments]);
 
-  useEffect(() => {
-    const update = () => {
-      const d = new Date();
-      setNow({ hour: d.getUTCHours(), day: d.getUTCDay() });
-    };
-    update();
-    const id = setInterval(update, 60_000);
-    return () => clearInterval(id);
-  }, []);
+  const [activeClass, setActiveClass] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
 
-  return (
-    <div className="flex flex-wrap gap-2" role="list" aria-label={t('sessionsLabel')}>
-      {SESSIONS.map((s) => {
-        const open = now ? sessionOpen(now.hour, now.day, s.start, s.end) : null;
-        return (
-          <div
-            key={s.key}
-            role="listitem"
-            className="border-border inline-flex items-center gap-2 rounded-full border bg-white px-3 py-1.5 dark:border-white/10 dark:bg-[#111]"
-          >
-            <span
-              aria-hidden="true"
-              className={`h-2 w-2 flex-shrink-0 rounded-full ${
-                open === null ? 'bg-foreground/20' : open ? 'bg-accent' : 'bg-foreground/20'
-              }`}
-            />
-            <span className="text-foreground font-mono text-[12px] uppercase tracking-[0.06em]">
-              {t(`session${s.key}` as 'sessionSydney')}
-            </span>
-            {open !== null && (
-              <span className="text-muted font-mono text-[11px] uppercase tracking-[0.04em]">
-                {open ? t('sessionOpen') : t('sessionClosed')}
-              </span>
-            )}
-          </div>
-        );
-      })}
-    </div>
+  // Tabs derive from the data actually seeded in the CMS, in the house order.
+  const classes = useMemo(
+    () => CLASS_ORDER.filter((c) => all.some((i) => i.assetClass === c)),
+    [all],
   );
-}
 
-export function LiveWatchlistPage() {
-  const t = useTranslations('watchlist');
+  const rows = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return all.filter(
+      (i) =>
+        (!activeClass || i.assetClass === activeClass) &&
+        (!q || i.symbol.toLowerCase().includes(q) || i.name.toLowerCase().includes(q)),
+    );
+  }, [all, activeClass, query]);
 
   return (
     <>
@@ -90,28 +75,204 @@ export function LiveWatchlistPage() {
         </div>
       </section>
 
-      {/* Global sessions — live open/closed, computed client-side from UTC */}
+      {/* Global sessions + the UTC clock they run on, live client-side */}
       <section className="px-5 pb-4">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <MarketSessionStrip />
+          <MarketSessionStrip showClock />
         </div>
       </section>
 
-      {/* TradingView market-overview widget — handles tabs natively */}
+      {/* TradingView market-overview widget in terminal chrome */}
       <section className="px-5 pb-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="h-[500px] overflow-hidden rounded-[22px] bg-black md:h-[600px] xl:h-[660px] xl:rounded-[28px]">
-            <ChartWidget
-              type="market-overview"
-              theme="dark"
-              width="100%"
-              height="100%"
-              config={MARKET_OVERVIEW_CONFIG}
-            />
-          </div>
-          <p className="font-body text-muted mt-3 text-[11px]">{t('disclaimer')}</p>
+          <Spotlight className="overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#0A130E] shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)] xl:rounded-[28px]">
+            <div className="flex items-center gap-2 border-b border-white/[0.08] px-4 py-3 md:px-5">
+              <span className="relative flex h-2 w-2" aria-hidden="true">
+                <span className="bg-accent-bright absolute inline-flex h-full w-full rounded-full opacity-60 motion-safe:animate-ping" />
+                <span className="bg-accent-bright relative inline-flex h-2 w-2 rounded-full" />
+              </span>
+              <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-white/[0.65]">
+                {t('kicker')}
+              </span>
+            </div>
+            <div className="h-[500px] md:h-[600px] xl:h-[660px]">
+              <ChartWidget
+                type="market-overview"
+                theme="dark"
+                width="100%"
+                height="100%"
+                config={MARKET_OVERVIEW_CONFIG}
+              />
+            </div>
+          </Spotlight>
+          <p className="font-body text-caption text-muted mt-3">{t('disclaimer')}</p>
         </div>
       </section>
+
+      {/* The desk sheet — CMS contract terms behind the live prices above.
+          Hidden entirely when the collection is empty (no static fallback). */}
+      {all.length > 0 && (
+        <section className="px-5 pb-12">
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <ScrollReveal>
+              <SectionKicker className="[&>span:first-child]:bg-accent text-muted mb-4">
+                {t('sheetKicker')}
+              </SectionKicker>
+              <h2 className="text-foreground text-headline mb-6 max-w-[560px] font-sans">
+                {t('sheetHeading')}
+              </h2>
+            </ScrollReveal>
+
+            {/* Filters: class tabs + symbol search */}
+            <ScrollReveal delay={0.08}>
+              <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div
+                  className="scrollbar-hide -mx-5 flex gap-2 overflow-x-auto px-5 md:mx-0 md:px-0"
+                  style={{ scrollbarWidth: 'none' }}
+                >
+                  {[null, ...classes].map((cls) => {
+                    const isActive = activeClass === cls;
+                    return (
+                      <button
+                        key={cls ?? 'all'}
+                        onClick={() => setActiveClass(cls)}
+                        aria-pressed={isActive}
+                        className={`tap-scale flex-shrink-0 rounded-full border px-4 py-[7px] font-mono text-[12px] uppercase tracking-[0.06em] transition-colors ${
+                          isActive
+                            ? 'bg-accent border-accent text-white'
+                            : 'border-border text-muted hover:border-accent/50 hover:text-foreground bg-white dark:border-white/[0.1] dark:bg-transparent'
+                        }`}
+                      >
+                        {cls ? t(CLASS_I18N[cls] as 'catForex') : t('filterAll')}
+                      </button>
+                    );
+                  })}
+                </div>
+                <label className="border-border focus-within:border-accent flex items-center gap-2 rounded-full border bg-white px-4 py-[7px] transition-colors md:w-[240px] dark:border-white/[0.1] dark:bg-transparent">
+                  <svg
+                    className="text-muted flex-shrink-0"
+                    width="13"
+                    height="13"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
+                    <path
+                      d="M11 11l3 3"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <input
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder={t('sheetSearch')}
+                    aria-label={t('sheetSearch')}
+                    className="text-foreground placeholder:text-muted w-full bg-transparent font-mono text-[12px] outline-none"
+                  />
+                </label>
+              </div>
+            </ScrollReveal>
+
+            {/* Terminal ledger — same chrome as the live panel above */}
+            <ScrollReveal delay={0.12}>
+              <Spotlight
+                size={460}
+                className="overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#0A130E] shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)]"
+              >
+                <div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-3 md:px-5">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-white/[0.65]">
+                    {t('sheetKicker')}
+                  </span>
+                  <span dir="ltr" className="text-accent-bright font-mono text-[11px] tabular-nums">
+                    {t('sheetCount', { count: rows.length })}
+                  </span>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[560px] border-collapse">
+                    <thead>
+                      <tr className="border-b border-white/[0.08]">
+                        {[
+                          t('colSymbol'),
+                          t('colInstrument'),
+                          t('colSpread'),
+                          t('colLeverage'),
+                          t('colMinLot'),
+                          t('colHours'),
+                        ].map((col, ci) => (
+                          <th
+                            key={col}
+                            className={`px-4 py-3 text-start font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-white/40 md:px-5 ${
+                              ci >= 4 ? 'hidden lg:table-cell' : ''
+                            }`}
+                          >
+                            {col}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows.map((row) => (
+                        <tr
+                          key={row.id}
+                          className="border-b border-white/[0.05] transition-colors last:border-b-0 hover:bg-white/[0.03]"
+                        >
+                          <td
+                            dir="ltr"
+                            className="text-accent-bright px-4 py-[13px] text-start font-mono text-[13px] font-semibold tabular-nums md:px-5"
+                          >
+                            {row.symbol}
+                          </td>
+                          <td className="font-body px-4 py-[13px] text-[13px] text-white/[0.72] md:px-5">
+                            {row.name}
+                          </td>
+                          <td
+                            dir="ltr"
+                            className="px-4 py-[13px] text-start font-mono text-[13px] tabular-nums text-white md:px-5"
+                          >
+                            {row.spread != null ? row.spread : '-'}
+                          </td>
+                          <td
+                            dir="ltr"
+                            className="px-4 py-[13px] text-start font-mono text-[13px] tabular-nums text-white md:px-5"
+                          >
+                            {row.leverage ?? '-'}
+                          </td>
+                          <td
+                            dir="ltr"
+                            className="hidden px-4 py-[13px] text-start font-mono text-[13px] tabular-nums text-white/[0.72] md:px-5 lg:table-cell"
+                          >
+                            {row.minTradeSize != null ? row.minTradeSize : '-'}
+                          </td>
+                          <td
+                            dir="ltr"
+                            className="hidden px-4 py-[13px] text-start font-mono text-[13px] tabular-nums text-white/[0.72] md:px-5 lg:table-cell"
+                          >
+                            {row.tradingHours ?? '-'}
+                          </td>
+                        </tr>
+                      ))}
+                      {rows.length === 0 && (
+                        <tr>
+                          <td
+                            colSpan={6}
+                            className="font-body px-5 py-10 text-center text-[13px] text-white/50"
+                          >
+                            {t('sheetEmpty')}
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </Spotlight>
+            </ScrollReveal>
+          </div>
+        </section>
+      )}
     </>
   );
 }

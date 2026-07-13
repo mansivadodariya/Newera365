@@ -205,7 +205,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
 
           {/* Right: the front page of this week's issue */}
           <ScrollReveal delay={0.12} className="w-full">
-            <article className="border-border bg-surface shadow-card hover:border-accent/40 hover:shadow-card-lg relative overflow-hidden rounded-[24px] border p-6 transition-[transform,box-shadow,border-color] duration-300 motion-safe:hover:-translate-y-1 md:p-8">
+            <article className="border-border bg-surface shadow-card hover:border-accent/40 hover:shadow-card-lg relative overflow-hidden rounded-[24px] border p-6 transition-[box-shadow,border-color] duration-300 md:p-8">
               {/* Masthead */}
               <div className="pt-2 text-center">
                 <p className="text-eyebrow text-accent font-mono font-medium uppercase">
@@ -291,20 +291,22 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
             {contents.map((item, idx) => (
               <li key={item.i} className="border-border border-b">
                 <ScrollReveal index={idx}>
-                  <div className="flex flex-col gap-2 py-6 sm:flex-row sm:items-baseline sm:gap-8">
-                    <div className="flex items-baseline gap-4 sm:w-[220px] sm:flex-shrink-0">
-                      <span
-                        className="text-metric-sm text-accent/40 font-sans tabular-nums"
-                        dir="ltr"
-                      >
-                        {item.i}
-                      </span>
-                      <span className="text-eyebrow text-muted mt-1 font-mono font-medium uppercase">
-                        {item.label}
-                      </span>
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-foreground text-title font-sans">{item.title}</p>
+                  {/* Strict columns keep every row on the same rails: numeral,
+                      then label, then content (content drops below on mobile). */}
+                  <div className="row-hover group grid grid-cols-[56px_1fr] items-start gap-x-4 py-6 sm:grid-cols-[72px_190px_1fr] sm:gap-x-8">
+                    <span
+                      className="text-metric-sm text-accent/40 dark:text-accent-bright/50 group-hover:text-accent/70 dark:group-hover:text-accent-bright/80 font-sans tabular-nums leading-none transition-colors duration-300"
+                      dir="ltr"
+                    >
+                      {item.i}
+                    </span>
+                    <span className="text-eyebrow text-muted pt-2 font-mono font-medium uppercase">
+                      {item.label}
+                    </span>
+                    <div className="col-span-2 mt-3 sm:col-span-1 sm:mt-0">
+                      <p className="text-foreground text-title font-sans leading-tight">
+                        {item.title}
+                      </p>
                       <p className="font-body text-muted text-body-lg mt-1.5 max-w-[560px]">
                         {item.desc}
                       </p>

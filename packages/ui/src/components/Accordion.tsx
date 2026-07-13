@@ -17,6 +17,9 @@ export interface AccordionProps {
   /** Optional leading chip, e.g. a category badge. */
   badge?: ReactNode;
   className?: string;
+  /** 'card' = floating bordered card (default). 'row' = ledger row for grouped
+      lists: hairline rule, accent start-edge + faint wash while open. */
+  variant?: 'card' | 'row';
 }
 
 /**
@@ -32,23 +35,32 @@ export function Accordion({
   onToggle,
   badge,
   className,
+  variant = 'card',
 }: AccordionProps) {
+  const shell =
+    variant === 'card'
+      ? `rounded-[16px] border ${CARD} ${isOpen ? 'border-accent/50' : 'hover:border-accent/40'}`
+      : `border-border border-b border-s-2 dark:border-b-white/[0.07] ${
+          isOpen
+            ? 'border-s-accent bg-[#F7FAF8] dark:bg-white/[0.02]'
+            : 'hover:border-s-accent/40 border-s-transparent'
+        }`;
   return (
     <div
       id={id}
-      className={`scroll-mt-24 overflow-hidden rounded-[16px] border transition-colors ${CARD} ${
-        isOpen ? 'border-accent/50' : 'hover:border-accent/40'
-      } ${className ?? ''}`}
+      className={`scroll-mt-24 overflow-hidden transition-colors ${shell} ${className ?? ''}`}
     >
       <button
         id={`${id}-btn`}
         onClick={onToggle}
-        className="tap-scale flex w-full items-center gap-[14px] px-5 py-[18px] text-start"
+        className={`tap-scale group flex w-full items-center gap-[14px] py-[18px] text-start ${
+          variant === 'card' ? 'px-5' : 'px-4'
+        }`}
         aria-expanded={isOpen}
         aria-controls={`${id}-panel`}
       >
         {badge}
-        <span className="text-foreground text-body flex-1 font-sans font-semibold leading-snug tracking-[-0.15px]">
+        <span className="text-foreground text-body group-hover:text-accent flex-1 font-sans font-semibold leading-snug tracking-[-0.15px] transition-colors">
           {question}
         </span>
         <svg
@@ -80,7 +92,11 @@ export function Accordion({
         }`}
       >
         <div className="overflow-hidden">
-          <div className="border-border/70 mx-5 border-t pb-5 pt-4 dark:border-white/[0.06]">
+          <div
+            className={`border-border border-t pb-5 pt-4 dark:border-white/[0.06] ${
+              variant === 'card' ? 'mx-5' : 'mx-4'
+            }`}
+          >
             {typeof answer === 'string' ? (
               <p className="font-body text-muted text-body">{answer}</p>
             ) : (

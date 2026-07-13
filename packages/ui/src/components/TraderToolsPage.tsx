@@ -9,6 +9,7 @@ import { CalcSelect } from './CalcSelect';
 import { PivotCalculator } from './PivotCalculatorPage';
 import { ProfitCalculator } from './ProfitCalculatorPage';
 import { FibonacciCalculator } from './FibonacciCalculatorPage';
+import { FormulaChips, NumberInput, ResultPanel } from './CalcKit';
 
 type ToolTab = 'MARGIN' | 'PIP' | 'SWAP' | 'PIVOT' | 'PROFIT' | 'FIBONACCI';
 
@@ -31,36 +32,6 @@ export interface CmsCalculatorInstrument {
 interface TraderToolsPageProps {
   /** Live instrument data from the CMS ProductsInstruments collection */
   instruments?: CmsCalculatorInstrument[];
-}
-
-function NumberInput({
-  label,
-  value,
-  onChange,
-  step = '0.01',
-  min = '0',
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  step?: string;
-  min?: string;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="font-body text-[11px] uppercase tracking-[0.1em] text-[#6b7280] dark:text-white/40">
-        {label}
-      </label>
-      <input
-        type="number"
-        value={value}
-        min={min}
-        step={step}
-        onChange={(e) => onChange(e.target.value)}
-        className="font-body focus:border-accent w-full rounded-[12px] border border-[#e5e7eb] bg-white px-4 py-3 text-[14px] text-[#111] outline-none transition-colors dark:border-white/10 dark:bg-[#1a1c22] dark:text-white"
-      />
-    </div>
-  );
 }
 
 function ResultCard({
@@ -108,7 +79,7 @@ function ResultCard({
   };
 }) {
   return (
-    <div className="shadow-card-dark overflow-hidden rounded-[18px] border border-transparent bg-[#111111] dark:border-white/[0.08]">
+    <ResultPanel>
       <div className="px-5 pb-5 pt-5">
         <p className="font-body mb-1 text-[10px] uppercase tracking-[0.12em] text-white/40">
           {activeTab === 'MARGIN'
@@ -193,7 +164,7 @@ function ResultCard({
             </div>
           ))}
       </div>
-    </div>
+    </ResultPanel>
   );
 }
 
@@ -216,38 +187,13 @@ function FormulaBox({
   swapFormula: string;
   swapDesc: string;
 }) {
-  return (
-    <div className="rounded-[14px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
-      <p className="text-muted mb-2.5 font-mono text-[10px] uppercase tracking-[0.1em]">
-        {calcKicker}
-      </p>
-      {activeTab === 'MARGIN' && <FormulaRow formula={marginFormula} desc={marginDesc} />}
-      {activeTab === 'PIP' && <FormulaRow formula={pipFormula} desc={pipDesc} />}
-      {activeTab === 'SWAP' && <FormulaRow formula={swapFormula} desc={swapDesc} />}
-    </div>
-  );
-}
-
-/** Renders a formula as discrete mono "chips" (each whitespace-separated token —
-    variable or operator — a small bordered pill) so it reads like a terminal
-    expression: lots × contract × price. The strings themselves are unchanged. */
-function FormulaRow({ formula, desc }: { formula: string; desc: string }) {
-  const tokens = formula.split(/\s+/).filter(Boolean);
-  return (
-    <div>
-      <div className="flex flex-wrap items-center gap-1.5">
-        {tokens.map((tok, i) => (
-          <span
-            key={`${tok}-${i}`}
-            className="border-border text-foreground inline-flex items-center rounded-[7px] border bg-white px-2 py-[3px] font-mono text-[11px] tabular-nums dark:border-white/10 dark:bg-[#111]"
-          >
-            {tok}
-          </span>
-        ))}
-      </div>
-      <p className="font-body text-muted mt-2.5 text-[12px] leading-[1.6]">{desc}</p>
-    </div>
-  );
+  const [formula, desc] =
+    activeTab === 'MARGIN'
+      ? [marginFormula, marginDesc]
+      : activeTab === 'PIP'
+        ? [pipFormula, pipDesc]
+        : [swapFormula, swapDesc];
+  return <FormulaChips kicker={calcKicker} formula={formula} desc={desc} />;
 }
 
 export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPageProps) {
@@ -387,7 +333,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
       <section className="px-5 pb-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* Tab switcher */}
-          <div className="border-border mb-5 flex gap-1 overflow-x-auto rounded-[14px] border bg-[#f2f2f4] p-1 [-ms-overflow-style:none] [scrollbar-width:none] dark:border-white/[0.08] dark:bg-[#1a1c22] [&::-webkit-scrollbar]:hidden">
+          <div className="border-border mb-5 flex gap-1 overflow-x-auto rounded-[14px] border bg-[#EDF2EF] p-1 [-ms-overflow-style:none] [scrollbar-width:none] dark:border-white/[0.08] dark:bg-[#1a1c22] [&::-webkit-scrollbar]:hidden">
             {TABS.map((tab) => (
               <button
                 key={tab.id}
@@ -439,7 +385,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
                   {activeTab === 'SWAP' && (
                     <>
                       <div className="flex flex-col gap-1.5">
-                        <label className="font-body text-[11px] uppercase tracking-[0.1em] text-[#6b7280] dark:text-white/40">
+                        <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">
                           {t('fieldDirection')}
                         </label>
                         <div className="grid grid-cols-2 gap-2">

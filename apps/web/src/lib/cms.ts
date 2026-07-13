@@ -91,7 +91,7 @@ export interface CmsAccountType {
   id: number;
   name: string;
   nameAr?: string | null;
-  badge?: 'free' | 'popular' | 'pro' | 'islamic' | null;
+  badge?: 'free' | 'popular' | 'value' | 'pro' | 'islamic' | null;
   minDeposit: number;
   spreadFrom: string;
   spreadFromNumeric?: number | null;

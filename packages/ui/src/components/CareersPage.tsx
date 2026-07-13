@@ -253,7 +253,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
 
                   const inner = (
                     <>
-                      <span className="text-muted group-hover:text-accent text-eyebrow font-mono tabular-nums transition-colors">
+                      <span className="text-muted dark:text-accent-bright/40 group-hover:text-accent dark:group-hover:text-accent-bright text-eyebrow font-mono tabular-nums transition-colors">
                         {String(index).padStart(2, '0')}
                       </span>
                       <div className="min-w-0">

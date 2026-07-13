@@ -94,7 +94,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
                   <SectionKicker className="[&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright mb-4">
                     {t('featuredLabel')}
                   </SectionKicker>
-                  <h2 className="text-title xl:text-headline-sm group-hover:text-accent-bright max-w-[26ch] font-sans font-semibold leading-[1.12] text-white transition-colors duration-200">
+                  <h2 className="text-title xl:text-headline-sm group-hover:text-accent-bright max-w-[26ch] font-sans leading-[1.12] text-white transition-colors duration-200">
                     {featured.title}
                   </h2>
                   {featured.summary && (
@@ -149,7 +149,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
                     <span
                       dir="ltr"
                       aria-hidden="true"
-                      className="text-foreground/[0.08] group-hover:text-accent/30 w-[46px] shrink-0 font-sans text-[46px] font-semibold tabular-nums leading-none tracking-tight transition-colors duration-200 xl:w-[64px] xl:text-[60px]"
+                      className="text-foreground group-hover:text-accent dark:text-accent-bright w-[46px] shrink-0 font-sans text-[46px] font-semibold tabular-nums leading-none tracking-tight opacity-[0.08] transition-[color,opacity] duration-200 group-hover:opacity-40 xl:w-[64px] xl:text-[60px] dark:opacity-[0.28] dark:group-hover:opacity-70"
                     >
                       {String(index).padStart(2, '0')}
                     </span>

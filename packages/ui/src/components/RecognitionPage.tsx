@@ -256,7 +256,7 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
                     {/* Year spine */}
                     <span
                       dir="ltr"
-                      className="text-accent text-title w-[58px] flex-shrink-0 font-mono font-semibold tabular-nums md:w-[76px]"
+                      className="text-accent text-title w-[58px] flex-shrink-0 font-mono tabular-nums md:w-[76px]"
                     >
                       {award.year ?? ''}
                     </span>
@@ -514,7 +514,7 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
               <a
                 href={`mailto:${tPress('inquiriesEmail')}`}
                 dir="ltr"
-                className="text-accent link-underline text-title inline-block font-sans font-semibold"
+                className="text-accent link-underline text-title inline-block font-sans"
               >
                 {tPress('inquiriesEmail')}
               </a>

@@ -117,7 +117,7 @@ function CheckPromise() {
       viewBox="0 0 16 16"
       fill="none"
       aria-hidden="true"
-      className="text-accent"
+      className="text-accent transition-colors duration-300 group-hover:text-white"
     >
       <path
         d="M3 8.2l3.2 3.2L13 4.6"
@@ -172,9 +172,10 @@ export function FundingStripSection() {
               {PROMISES.map((key) => (
                 <div
                   key={key}
-                  className="flex items-center gap-3 bg-white px-6 py-5 dark:bg-[#14161c]"
+                  className="group flex items-center gap-3 bg-white px-6 py-5 transition-colors duration-300 hover:bg-[#F7FAF8] dark:bg-[#14161c] dark:hover:bg-[#171a21]"
                 >
-                  <span className="bg-accent/[0.1] flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full">
+                  {/* Check tile inverts to solid signal on hover */}
+                  <span className="bg-accent/[0.1] group-hover:bg-accent flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-colors duration-300">
                     <CheckPromise />
                   </span>
                   <span className="text-foreground text-body-lg font-sans font-semibold">
@@ -194,7 +195,7 @@ export function FundingStripSection() {
                   {BRANDS.map((brand) => (
                     <li
                       key={brand.key}
-                      className="border-border flex h-[46px] min-w-[62px] items-center justify-center rounded-[11px] border bg-white px-3.5 dark:border-white/[0.08] dark:bg-[#1a1c22]"
+                      className="border-border hover:border-accent/40 flex h-[46px] min-w-[62px] items-center justify-center rounded-[11px] border bg-white px-3.5 transition-[border-color,box-shadow,transform] duration-300 hover:shadow-[0_10px_24px_-12px_rgba(0,176,80,0.35)] motion-safe:hover:-translate-y-0.5 dark:border-white/[0.08] dark:bg-[#1a1c22]"
                       title={t(brand.key)}
                     >
                       {brand.mark}

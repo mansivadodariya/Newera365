@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { ScrollReveal } from './ScrollReveal';
@@ -180,6 +181,40 @@ const TOOLS = [
   { id: 'hedging', Icon: IconHedging },
 ];
 
+// MT5 surface comparison (client feedback: Mobile vs Desktop vs Web matrix).
+// Cells: true = included, false = not available, 'ltd' = limited, any other
+// string = a count. Counts are MetaQuotes' published MT5 built-ins; the honest
+// gaps stay visible (EAs and MQL5 are desktop-only, push alerts mobile-only).
+type CompareCell = boolean | string;
+const COMPARE_ROWS: {
+  id: string;
+  labelKey: string;
+  cells: [CompareCell, CompareCell, CompareCell];
+}[] = [
+  { id: 'charts', labelKey: 'compareRowCharts', cells: [true, true, true] },
+  { id: 'indicators', labelKey: 'compareRowIndicators', cells: ['30', '38', '30'] },
+  { id: 'drawing', labelKey: 'compareRowDrawing', cells: ['24', '44', '24'] },
+  { id: 'oneclick', labelKey: 'compareRowOneClick', cells: [true, true, true] },
+  { id: 'alerts', labelKey: 'compareRowAlerts', cells: [true, true, true] },
+  { id: 'push', labelKey: 'compareRowPush', cells: [true, false, false] },
+  { id: 'ea', labelKey: 'compareRowEa', cells: [false, true, false] },
+  { id: 'mql5', labelKey: 'compareRowMql5', cells: [false, true, false] },
+  { id: 'dom', labelKey: 'compareRowDom', cells: ['ltd', true, 'ltd'] },
+  { id: 'accounts', labelKey: 'compareRowAccounts', cells: [true, true, true] },
+  { id: 'history', labelKey: 'compareRowHistory', cells: [true, true, true] },
+];
+
+// Column order matches the client doc: Mobile | Desktop | Web.
+const COMPARE_COLS = [
+  { key: 'compareColMobile', subKey: 'compareColMobileSub', Icon: IconMobile },
+  { key: 'compareColDesktop', subKey: 'compareColDesktopSub', Icon: IconWindows },
+  { key: 'compareColWeb', subKey: 'compareColWebSub', Icon: IconWeb },
+] as const;
+
+const COMPARE_GRID = {
+  gridTemplateColumns: 'minmax(170px, 1.3fr) repeat(3, minmax(122px, 1fr))',
+};
+
 // Full device matrix for the "Works Everywhere" band (matches the reference
 // 6-tile grid). Linux has no dedicated MT5 build in CMS, so it points at the
 // browser Web Trader, which runs on Linux.
@@ -207,6 +242,59 @@ interface PlatformPageProps {
 export function PlatformPage({ downloads }: PlatformPageProps) {
   const locale = useLocale();
   const t = useTranslations('platform');
+  // Comparison emphasis is interactive, not fixed: hovering a matrix column
+  // lights it up (same behaviour as the accounts feature matrix).
+  const [hoverCol, setHoverCol] = useState<number | null>(null);
+
+  // Ink-ledger cell treatment (mirrors the accounts matrix): included = accent
+  // check chip, missing = quiet dash, limited = mono chip, counts = tabular
+  // figures (desktop carries the highest built-in counts, so it reads accent).
+  const renderCompareCell = (cell: CompareCell, isDesktopCol: boolean) => {
+    if (cell === true)
+      return (
+        <span
+          className="bg-accent/[0.16] flex h-6 w-6 items-center justify-center rounded-full"
+          role="img"
+          aria-label={t('compareYes')}
+        >
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none" className="text-accent">
+            <path
+              d="M2.5 7l3 3 6-6"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+      );
+    if (cell === false)
+      return (
+        <span
+          className="font-body text-[15px] text-white/25"
+          role="img"
+          aria-label={t('compareNo')}
+        >
+          —
+        </span>
+      );
+    if (cell === 'ltd')
+      return (
+        <span className="rounded-full border border-white/15 px-2 py-[3px] font-mono text-[10px] uppercase tracking-[0.08em] text-white/50">
+          {t('compareLimited')}
+        </span>
+      );
+    return (
+      <span
+        dir="ltr"
+        className={`font-sans text-[15px] font-semibold tabular-nums ${
+          isDesktopCol ? 'text-accent-bright' : 'text-white'
+        }`}
+      >
+        {cell}
+      </span>
+    );
+  };
 
   return (
     <>
@@ -329,7 +417,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
 
                   {/* Name + desc */}
                   <div className="relative">
-                    <p className="text-title mb-2 font-sans font-semibold text-[#111] transition-colors duration-300 group-hover:text-white dark:text-white">
+                    <p className="text-title mb-2 font-sans text-[#111] transition-colors duration-300 group-hover:text-white dark:text-white">
                       {t(card.titleKey as 'winTitle')}
                     </p>
                     <p className="font-body text-body text-muted transition-colors duration-300 group-hover:text-white/60 dark:text-white/60">
@@ -372,13 +460,13 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
           </SectionKicker>
           <h2 className="text-foreground text-headline mb-8 font-sans">{t('featuresHeading')}</h2>
 
-          <div className="grid grid-cols-2 gap-[12px] xl:gap-[16px]">
+          <div className="list-dim grid grid-cols-2 gap-[12px] xl:gap-[16px]">
             {TOOLS.map((tool, i) => (
               <div
                 key={tool.id}
-                className="border-border hover-lift hover:border-accent/40 shadow-card flex flex-col gap-3 rounded-[18px] border bg-white p-5 xl:p-6 dark:border-white/[0.06] dark:bg-[#111111]"
+                className="border-border shadow-card hover:border-accent/35 group flex flex-col gap-3 rounded-[18px] border bg-white p-5 transition-colors xl:p-6 dark:border-white/[0.06] dark:bg-[#111111]"
               >
-                <div className="bg-accent/10 text-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[14px]">
+                <div className="bg-accent/10 text-accent group-hover:bg-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300 group-hover:text-white">
                   <tool.Icon />
                 </div>
                 <div>
@@ -395,71 +483,158 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
         </ScrollReveal>
       </section>
 
-      {/* Works Everywhere */}
-      <section className="ink-band rounded-t-[32px] px-5 pb-14 pt-12 xl:pb-16">
-        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="text-accent-bright [&>span:first-child]:bg-accent-bright mb-4">
-            {t('devicesKicker')}
-          </SectionKicker>
-          <h2 className="text-headline font-sans text-white">{t('devicesLine1')}</h2>
-          <h2 className="text-headline mb-8 font-sans text-white">{t('devicesLine2')}</h2>
+      {/* Dark closer — the MT5 surface matrix (styled like the accounts
+          feature matrix) plus the Works Everywhere device band, one ink chapter. */}
+      <section className="ink-band rounded-t-[32px] px-5 pb-14 pt-12 xl:pb-16 xl:pt-16">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal>
+            <SectionKicker className="text-accent-bright [&>span:first-child]:bg-accent-bright mb-4">
+              {t('compareKicker')}
+            </SectionKicker>
+            <div className="mb-9 xl:flex xl:items-end xl:justify-between xl:gap-10">
+              <h2 className="text-headline max-w-[24ch] font-sans text-white [text-wrap:balance]">
+                {t('compareHeading')}
+              </h2>
+              <p className="font-body text-body mt-3 max-w-[42ch] text-white/60 xl:mt-0">
+                {t('compareSubtitle')}
+              </p>
+            </div>
+          </ScrollReveal>
 
-          {/* Device tiles — informational, not links or buttons. MT5 runs on
+          {/* Horizontal scroll on mobile with a sticky first column; fits
+              without scrolling from md up (same rig as the accounts matrix). */}
+          <ScrollReveal className="overflow-x-auto rounded-[20px] border border-white/[0.08]">
+            <div className="min-w-[640px] bg-white/[0.03] md:min-w-0">
+              {/* Header row — device surfaces, hovered column lights up */}
+              <div className="grid border-b border-white/[0.08]" style={COMPARE_GRID}>
+                <span className="sticky start-0 z-[1] flex items-end bg-[#0b1c11] px-5 pb-5 pt-6 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45 md:bg-transparent">
+                  {t('compareColFeature')}
+                </span>
+                {COMPARE_COLS.map((col, j) => (
+                  <div
+                    key={col.key}
+                    onMouseEnter={() => setHoverCol(j)}
+                    onMouseLeave={() => setHoverCol(null)}
+                    className={`flex flex-col items-center justify-end gap-1 px-2 pb-5 pt-6 text-center transition-colors ${
+                      j === hoverCol ? 'bg-accent/[0.10]' : ''
+                    }`}
+                  >
+                    <span
+                      className={`transition-colors [&>svg]:h-4 [&>svg]:w-4 ${
+                        j === hoverCol ? 'text-accent-bright' : 'text-white/55'
+                      }`}
+                    >
+                      <col.Icon />
+                    </span>
+                    <span
+                      className={`font-sans text-[16px] font-semibold ${
+                        j === hoverCol ? 'text-accent-bright' : 'text-white'
+                      }`}
+                    >
+                      {t(col.key as 'compareColMobile')}
+                    </span>
+                    <span className="font-body text-[11px] text-white/45">
+                      {t(col.subKey as 'compareColMobileSub')}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Feature rows */}
+              {COMPARE_ROWS.map((row, i) => (
+                <div
+                  key={row.id}
+                  className={`grid transition-colors hover:bg-white/[0.02] ${
+                    i < COMPARE_ROWS.length - 1 ? 'border-b border-white/[0.06]' : ''
+                  }`}
+                  style={COMPARE_GRID}
+                >
+                  <span className="font-body sticky start-0 z-[1] bg-[#0a1810] px-5 py-4 text-[14px] text-white/80 md:bg-transparent">
+                    {t(row.labelKey as 'compareRowCharts')}
+                  </span>
+                  {row.cells.map((cell, j) => (
+                    <div
+                      key={j}
+                      onMouseEnter={() => setHoverCol(j)}
+                      onMouseLeave={() => setHoverCol(null)}
+                      className={`flex items-center justify-center px-2 py-4 transition-colors ${
+                        j === hoverCol ? 'bg-accent/[0.06]' : ''
+                      }`}
+                    >
+                      {renderCompareCell(cell, j === 1)}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </ScrollReveal>
+          <p className="font-body text-caption mt-4 text-white/45">{t('compareNote')}</p>
+
+          {/* Works everywhere — device band continues the same ink chapter */}
+          <ScrollReveal className="mt-14">
+            <SectionKicker className="text-accent-bright [&>span:first-child]:bg-accent-bright mb-4">
+              {t('devicesKicker')}
+            </SectionKicker>
+            <h2 className="text-headline font-sans text-white">{t('devicesLine1')}</h2>
+            <h2 className="text-headline mb-8 font-sans text-white">{t('devicesLine2')}</h2>
+
+            {/* Device tiles — informational, not links or buttons. MT5 runs on
               every surface; the actual downloads live in the terminal cards
               above and the CTA below. Icons sit in glass badges (larger, house
               set); the whole tile only warms its tint on hover. */}
-          <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {DEVICE_KEYS.map((dev) => (
-              <div
-                key={dev.key}
-                className="hover:border-accent/40 group flex min-w-0 items-center gap-[14px] rounded-[16px] border border-white/[0.08] bg-white/[0.05] px-[18px] py-[14px] text-white transition-colors hover:bg-white/[0.10]"
-              >
-                <span className="group-hover:border-accent/40 group-hover:bg-accent/[0.15] group-hover:text-accent-bright flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[12px] border border-white/[0.10] bg-white/[0.06] text-white transition-colors [&>svg]:h-[22px] [&>svg]:w-[22px]">
-                  <dev.Icon />
-                </span>
-                <span className="font-body truncate text-[15px] font-medium">
-                  {t(dev.key as 'winTitle')}
-                </span>
-              </div>
-            ))}
-          </div>
+            <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {DEVICE_KEYS.map((dev) => (
+                <div
+                  key={dev.key}
+                  className="hover:border-accent/40 group flex min-w-0 items-center gap-[14px] rounded-[16px] border border-white/[0.08] bg-white/[0.05] px-[18px] py-[14px] text-white transition-colors hover:bg-white/[0.10]"
+                >
+                  <span className="group-hover:border-accent/40 group-hover:bg-accent/[0.15] group-hover:text-accent-bright flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[12px] border border-white/[0.10] bg-white/[0.06] text-white transition-colors [&>svg]:h-[22px] [&>svg]:w-[22px]">
+                    <dev.Icon />
+                  </span>
+                  <span className="font-body truncate text-[15px] font-medium">
+                    {t(dev.key as 'winTitle')}
+                  </span>
+                </div>
+              ))}
+            </div>
 
-          {/* CTA */}
-          <a
-            href={downloads?.windows ?? '#'}
-            target={downloads?.windows ? '_blank' : undefined}
-            rel={downloads?.windows ? 'noopener noreferrer' : undefined}
-            className="from-accent to-accent-bright font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r text-[15px] font-semibold text-white shadow-[0_16px_44px_-12px_rgba(0,176,80,0.85)] transition-all duration-300 hover:shadow-[0_22px_52px_-12px_rgba(26,217,102,0.95)] xl:w-auto xl:px-9"
-          >
-            {t('downloadMT5Btn')}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="15"
-              height="15"
-              viewBox="0 0 15 15"
-              fill="none"
+            {/* CTA */}
+            <a
+              href={downloads?.windows ?? '#'}
+              target={downloads?.windows ? '_blank' : undefined}
+              rel={downloads?.windows ? 'noopener noreferrer' : undefined}
+              className="from-accent to-accent-bright font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r text-[15px] font-semibold text-white shadow-[0_16px_44px_-12px_rgba(0,176,80,0.85)] transition-all duration-300 hover:shadow-[0_22px_52px_-12px_rgba(26,217,102,0.95)] xl:w-auto xl:px-9"
             >
-              <path
-                d="M13.125 9.375V11.875C13.125 12.2065 12.9933 12.5245 12.7589 12.7589C12.5245 12.9933 12.2065 13.125 11.875 13.125H3.125C2.79348 13.125 2.47554 12.9933 2.24112 12.7589C2.0067 12.5245 1.875 12.2065 1.875 11.875V9.375"
-                stroke="white"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M4.375 6.25L7.5 9.375L10.625 6.25"
-                stroke="white"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M7.5 9.375V1.875"
-                stroke="white"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </a>
-        </ScrollReveal>
+              {t('downloadMT5Btn')}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="15"
+                viewBox="0 0 15 15"
+                fill="none"
+              >
+                <path
+                  d="M13.125 9.375V11.875C13.125 12.2065 12.9933 12.5245 12.7589 12.7589C12.5245 12.9933 12.2065 13.125 11.875 13.125H3.125C2.79348 13.125 2.47554 12.9933 2.24112 12.7589C2.0067 12.5245 1.875 12.2065 1.875 11.875V9.375"
+                  stroke="white"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M4.375 6.25L7.5 9.375L10.625 6.25"
+                  stroke="white"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M7.5 9.375V1.875"
+                  stroke="white"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </a>
+          </ScrollReveal>
+        </div>
       </section>
     </>
   );

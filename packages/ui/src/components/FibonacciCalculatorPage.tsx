@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { CalcSelect } from './CalcSelect';
+import { FormulaChips, LevelRow, NumberInput, ResultPanel, type LevelTone } from './CalcKit';
 
 type FibDirection = 'Uptrend' | 'Downtrend';
 
@@ -11,25 +12,28 @@ interface FibLevel {
   ratio: number;
   price: number;
   type: 'retracement' | 'extension';
-  color: string;
+  tone: LevelTone;
 }
 
-const RETRACEMENT_RATIOS = [
-  { label: '0.0%', ratio: 0, color: '#9CA3AF' },
-  { label: '23.6%', ratio: 0.236, color: '#60A5FA' },
-  { label: '38.2%', ratio: 0.382, color: '#818CF8' },
-  { label: '50.0%', ratio: 0.5, color: '#A78BFA' },
-  { label: '61.8%', ratio: 0.618, color: '#C084FC' },
-  { label: '78.6%', ratio: 0.786, color: '#E879F9' },
-  { label: '100.0%', ratio: 1, color: '#9CA3AF' },
-] as const;
+/* The golden-ratio zone (38.2 / 50 / 61.8 retracement, 161.8 extension) is
+   what traders actually watch — those rows carry the signal color; the 0/100
+   anchors stay muted. Terminal palette only, no rainbow. */
+const RETRACEMENT_RATIOS: { label: string; ratio: number; tone: LevelTone }[] = [
+  { label: '0.0%', ratio: 0, tone: 'muted' },
+  { label: '23.6%', ratio: 0.236, tone: 'default' },
+  { label: '38.2%', ratio: 0.382, tone: 'accent' },
+  { label: '50.0%', ratio: 0.5, tone: 'accent' },
+  { label: '61.8%', ratio: 0.618, tone: 'accent' },
+  { label: '78.6%', ratio: 0.786, tone: 'default' },
+  { label: '100.0%', ratio: 1, tone: 'muted' },
+];
 
-const EXTENSION_RATIOS = [
-  { label: '127.2%', ratio: 1.272, color: '#34D399' },
-  { label: '161.8%', ratio: 1.618, color: '#00B050' },
-  { label: '200.0%', ratio: 2.0, color: '#059669' },
-  { label: '261.8%', ratio: 2.618, color: '#047857' },
-] as const;
+const EXTENSION_RATIOS: { label: string; ratio: number; tone: LevelTone }[] = [
+  { label: '127.2%', ratio: 1.272, tone: 'default' },
+  { label: '161.8%', ratio: 1.618, tone: 'accent' },
+  { label: '200.0%', ratio: 2.0, tone: 'default' },
+  { label: '261.8%', ratio: 2.618, tone: 'default' },
+];
 
 function computeFibLevels(
   swingHigh: number,
@@ -39,42 +43,17 @@ function computeFibLevels(
   const range = swingHigh - swingLow;
   const levels: FibLevel[] = [];
 
-  RETRACEMENT_RATIOS.forEach(({ label, ratio, color }) => {
+  RETRACEMENT_RATIOS.forEach(({ label, ratio, tone }) => {
     const price = direction === 'Uptrend' ? swingHigh - ratio * range : swingLow + ratio * range;
-    levels.push({ label, ratio, price, type: 'retracement', color });
+    levels.push({ label, ratio, price, type: 'retracement', tone });
   });
 
-  EXTENSION_RATIOS.forEach(({ label, ratio, color }) => {
+  EXTENSION_RATIOS.forEach(({ label, ratio, tone }) => {
     const price = direction === 'Uptrend' ? swingLow + ratio * range : swingHigh - ratio * range;
-    levels.push({ label, ratio, price, type: 'extension', color });
+    levels.push({ label, ratio, price, type: 'extension', tone });
   });
 
   return levels;
-}
-
-function NumberInput({
-  label,
-  value,
-  onChange,
-  step = '0.0001',
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  step?: string;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">{label}</label>
-      <input
-        type="number"
-        value={value}
-        step={step}
-        onChange={(e) => onChange(e.target.value)}
-        className="border-border font-body text-foreground focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[14px] outline-none dark:bg-[#1c1c1c]"
-      />
-    </div>
-  );
 }
 
 function ResultCard({
@@ -90,93 +69,41 @@ function ResultCard({
   const extensions = levels.filter((l) => l.type === 'extension');
 
   return (
-    <div
-      className="overflow-hidden rounded-[18px] bg-[#111111]"
-      style={{ boxShadow: '0 4px 24px rgba(0,176,80,0.15)' }}
-    >
-      {/* Retracements */}
+    <ResultPanel>
       <div className="px-5 pb-3 pt-5">
-        <p className="font-body mb-3 text-[10px] uppercase tracking-[0.12em] text-white/40">
+        <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-white/40">
           {retracementLabel}
         </p>
-        <div className="flex flex-col gap-0">
+        <div className="flex flex-col">
           {retracements.map((lvl) => (
-            <div
+            <LevelRow
               key={lvl.label}
-              className="flex items-center justify-between border-b border-white/5 py-2 last:border-0"
-            >
-              <div className="flex items-center gap-2">
-                <span
-                  className="block h-2 w-2 flex-shrink-0 rounded-full"
-                  style={{ backgroundColor: lvl.color }}
-                />
-                <span className="font-body text-[12px] font-semibold" style={{ color: lvl.color }}>
-                  {lvl.label}
-                </span>
-              </div>
-              <span className="font-body text-[14px] font-medium text-white">
-                {lvl.price.toFixed(4)}
-              </span>
-            </div>
+              label={lvl.label}
+              value={lvl.price.toFixed(4)}
+              tone={lvl.tone}
+            />
           ))}
         </div>
       </div>
 
       <div className="mx-5 border-t border-white/10" />
 
-      {/* Extensions */}
       <div className="px-5 pb-5 pt-3">
-        <p className="font-body mb-3 text-[10px] uppercase tracking-[0.12em] text-white/40">
+        <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-white/40">
           {extensionLabel}
         </p>
-        <div className="flex flex-col gap-0">
+        <div className="flex flex-col">
           {extensions.map((lvl) => (
-            <div
+            <LevelRow
               key={lvl.label}
-              className="flex items-center justify-between border-b border-white/5 py-2 last:border-0"
-            >
-              <div className="flex items-center gap-2">
-                <span
-                  className="block h-2 w-2 flex-shrink-0 rounded-full"
-                  style={{ backgroundColor: lvl.color }}
-                />
-                <span className="font-body text-[12px] font-semibold" style={{ color: lvl.color }}>
-                  {lvl.label}
-                </span>
-              </div>
-              <span className="font-body text-[14px] font-medium text-white">
-                {lvl.price.toFixed(4)}
-              </span>
-            </div>
+              label={lvl.label}
+              value={lvl.price.toFixed(4)}
+              tone={lvl.tone}
+            />
           ))}
         </div>
       </div>
-    </div>
-  );
-}
-
-function FormulaBox({
-  direction: _direction,
-  calcKicker,
-  calcFormula,
-  calcDesc,
-}: {
-  direction: FibDirection;
-  calcKicker: string;
-  calcFormula: string;
-  calcDesc: string;
-}) {
-  return (
-    <div className="rounded-[14px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
-      <p className="font-body text-muted mb-2 text-[10px] uppercase tracking-[0.1em]">
-        {calcKicker}
-      </p>
-      <p className="font-body text-foreground text-[13px] leading-[1.6]">
-        <span className="font-medium">{calcFormula}</span>
-        <br />
-        <span className="text-muted">{calcDesc}</span>
-      </p>
-    </div>
+    </ResultPanel>
   );
 }
 
@@ -186,95 +113,45 @@ export function FibonacciCalculator() {
   const [swingHigh, setSwingHigh] = useState('1.1050');
   const [swingLow, setSwingLow] = useState('1.0800');
   const [direction, setDirection] = useState<FibDirection>('Uptrend');
-  const [levels, setLevels] = useState<FibLevel[]>(() => computeFibLevels(1.105, 1.08, 'Uptrend'));
 
-  const handleCalculate = useCallback(() => {
+  // Live recompute on every valid input; hold the last valid read-out while
+  // the user is mid-edit (H <= L or an empty field never blanks the panel).
+  const computed = useMemo(() => {
     const H = parseFloat(swingHigh);
     const L = parseFloat(swingLow);
-    if (isNaN(H) || isNaN(L) || H <= L) return;
-    setLevels(computeFibLevels(H, L, direction));
+    if (isNaN(H) || isNaN(L) || H <= L) return null;
+    return computeFibLevels(H, L, direction);
   }, [swingHigh, swingLow, direction]);
-
-  const handleReset = useCallback(() => {
-    setSwingHigh('1.1050');
-    setSwingLow('1.0800');
-    setDirection('Uptrend');
-    setLevels(computeFibLevels(1.105, 1.08, 'Uptrend'));
-  }, []);
-
-  const [activeTab, setActiveTab] = useState<'Retracement' | 'Extension'>('Retracement');
+  const lastValid = useRef(computed ?? computeFibLevels(1.105, 1.08, 'Uptrend'));
+  if (computed) lastValid.current = computed;
+  const levels = computed ?? lastValid.current;
 
   return (
     <div>
-      {/* Mode tabs */}
-      <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-[#1c1c1c]">
-        {(['Retracement', 'Extension'] as const).map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`font-body flex-1 rounded-[11px] py-2.5 text-[12px] font-medium transition-colors ${
-              activeTab === tab
-                ? 'text-foreground bg-white shadow-sm dark:bg-[#2a2a2a] dark:text-white'
-                : 'text-muted hover:text-foreground'
-            }`}
-          >
-            {tab === 'Retracement' ? t('tabRetracement') : t('tabExtension')}
-          </button>
-        ))}
-      </div>
-
       <div className="xl:flex xl:gap-8">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:flex-1">
-          {/* Trend dropdown */}
-          <div className="col-span-full">
+        <div className="xl:flex-1">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <CalcSelect
               label={t('fieldTrend')}
               value={direction}
               options={['Uptrend', 'Downtrend']}
               labels={[t('trendUp'), t('trendDown')]}
-              onChange={(v) => {
-                const d = v as FibDirection;
-                setDirection(d);
-                const H = parseFloat(swingHigh);
-                const L = parseFloat(swingLow);
-                if (!isNaN(H) && !isNaN(L) && H > L) setLevels(computeFibLevels(H, L, d));
-              }}
+              onChange={(v) => setDirection(v as FibDirection)}
             />
+            <NumberInput label={t('fieldHigh')} value={swingHigh} onChange={setSwingHigh} />
+            <NumberInput label={t('fieldLow')} value={swingLow} onChange={setSwingLow} />
           </div>
-          <NumberInput label={t('fieldHigh')} value={swingHigh} onChange={setSwingHigh} />
-          <NumberInput label={t('fieldLow')} value={swingLow} onChange={setSwingLow} />
-
-          {/* Buttons */}
-          <div className="col-span-full flex items-center gap-3">
-            <button
-              onClick={handleCalculate}
-              className="font-body flex h-[48px] flex-1 items-center justify-center rounded-full bg-[#00B050] text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90 xl:flex-none xl:px-8"
-            >
-              {t('calcBtn')}
-            </button>
-            <button
-              onClick={handleReset}
-              className="border-border font-body flex h-[48px] flex-1 items-center justify-center rounded-full border text-[14px] font-medium transition-colors xl:flex-none xl:px-8"
-            >
-              {t('resetBtn')}
-            </button>
-            <p className="font-body text-muted hidden text-[11px] xl:block">{t('disclaimer')}</p>
-          </div>
+          <p className="font-body text-muted mt-3 text-[11px]">{t('disclaimer')}</p>
         </div>
 
         {/* Desktop result panel */}
-        <div className="hidden xl:flex xl:w-[420px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
+        <div className="hidden xl:flex xl:w-[400px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
           <ResultCard
             levels={levels}
             retracementLabel={t('retracementLabel')}
             extensionLabel={t('extensionLabel')}
           />
-          <FormulaBox
-            direction={direction}
-            calcKicker={t('calcKicker')}
-            calcFormula={t('calcFormula')}
-            calcDesc={t('calcDesc')}
-          />
+          <FormulaChips kicker={t('calcKicker')} formula={t('calcFormula')} desc={t('calcDesc')} />
         </div>
       </div>
 
@@ -285,12 +162,7 @@ export function FibonacciCalculator() {
           retracementLabel={t('retracementLabel')}
           extensionLabel={t('extensionLabel')}
         />
-        <FormulaBox
-          direction={direction}
-          calcKicker={t('calcKicker')}
-          calcFormula={t('calcFormula')}
-          calcDesc={t('calcDesc')}
-        />
+        <FormulaChips kicker={t('calcKicker')} formula={t('calcFormula')} desc={t('calcDesc')} />
       </div>
     </div>
   );

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { CalcSelect } from './CalcSelect';
+import { CountUp } from './CountUp';
+import { FormulaChips, LevelRow, NumberInput, ResultPanel, TAB_WELL_CLASS } from './CalcKit';
 
 type PivotMethod = 'Classical' | 'Camarilla' | 'Woodie' | 'Fibonacci';
 
@@ -79,107 +80,39 @@ function fmt(n: number) {
   return n.toFixed(4);
 }
 
-function NumberInput({
-  label,
-  value,
-  onChange,
-  step = '0.0001',
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  step?: string;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="font-body text-muted text-[11px] uppercase tracking-[0.1em]">{label}</label>
-      <input
-        type="number"
-        value={value}
-        step={step}
-        onChange={(e) => onChange(e.target.value)}
-        className="border-border font-body text-foreground focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-[14px] outline-none dark:bg-[#1c1c1c]"
-      />
-    </div>
-  );
-}
-
-function FormulaBox({ method, calcKicker }: { method: PivotMethod; calcKicker: string }) {
-  const formulas: Record<PivotMethod, { formula: string; desc: string }> = {
-    Classical: {
-      formula: 'P = (High + Low + Close) ÷ 3 · R1 = 2P - Low · S1 = 2P - High',
-      desc: 'The classical pivot is the benchmark for intraday support and resistance. Resistance and support levels fan out symmetrically around P using the prior session range.',
-    },
-    Camarilla: {
-      formula: 'P = (H+L+C) ÷ 3 · R1 = C + Range × 1.1/12 · R3 = C + Range × 1.1/4',
-      desc: 'Camarilla levels use the close as the anchor. Prices tend to revert to the centre; breaches of R3/S3 signal momentum breakouts.',
-    },
-    Woodie: {
-      formula: 'P = (High + Low + 2×Close) ÷ 4 · R1 = 2P - Low · R2 = P + Range',
-      desc: 'Woodie pivots weight the close twice, making P closer to the closing price and giving more significance to where the session ended.',
-    },
-    Fibonacci: {
-      formula: 'P = (H+L+C) ÷ 3 · R1 = P + 0.382×Range · R2 = P + 0.618×Range · R3 = P + Range',
-      desc: 'Fibonacci pivots apply the golden-ratio retracement levels (38.2%, 61.8%, 100%) to the session range, useful for identifying high-probability turning points.',
-    },
-  };
-  const { formula, desc } = formulas[method];
-  return (
-    <div className="rounded-[14px] bg-[#f9f9f9] p-4 dark:bg-[#1c1c1c]">
-      <p className="font-body text-muted mb-2 text-[10px] uppercase tracking-[0.1em]">
-        {calcKicker}
-      </p>
-      <p className="font-body text-foreground text-[13px] leading-[1.6]">
-        <span className="font-medium">{formula}</span>
-        <br />
-        <span className="text-muted">{desc}</span>
-      </p>
-    </div>
-  );
-}
-
+/* Resistance rows carry the down tick color, support rows the up tick color
+   (sell zone above price, buy zone below): the chart palette, not a rainbow. */
 function ResultCard({ levels, resultLabel }: { levels: PivotLevels; resultLabel: string }) {
-  const rows: { label: string; value: number; color: string }[] = [
-    { label: 'R3', value: levels.R3, color: '#EF4444' },
-    { label: 'R2', value: levels.R2, color: '#F97316' },
-    { label: 'R1', value: levels.R1, color: '#EAB308' },
-    { label: 'P', value: levels.P, color: '#00B050' },
-    { label: 'S1', value: levels.S1, color: '#EAB308' },
-    { label: 'S2', value: levels.S2, color: '#F97316' },
-    { label: 'S3', value: levels.S3, color: '#EF4444' },
+  const rows = [
+    { label: 'R3', value: levels.R3, tone: 'down' as const },
+    { label: 'R2', value: levels.R2, tone: 'down' as const },
+    { label: 'R1', value: levels.R1, tone: 'down' as const },
+    { label: 'P', value: levels.P, tone: 'accent' as const },
+    { label: 'S1', value: levels.S1, tone: 'up' as const },
+    { label: 'S2', value: levels.S2, tone: 'up' as const },
+    { label: 'S3', value: levels.S3, tone: 'up' as const },
   ];
 
   return (
-    <div
-      className="overflow-hidden rounded-[18px] bg-[#111111]"
-      style={{ boxShadow: '0 4px 24px rgba(0,176,80,0.15)' }}
-    >
+    <ResultPanel>
       <div className="px-5 pb-4 pt-5">
-        <p className="font-body mb-1 text-[10px] uppercase tracking-[0.12em] text-white/40">
+        <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.12em] text-white/40">
           {resultLabel}
         </p>
-        <p className="font-sans text-[42px] font-semibold leading-[1.1] text-[#00B050]">
-          {fmt(levels.P)}
+        <p
+          dir="ltr"
+          className="text-accent-bright font-mono text-[42px] font-semibold tabular-nums leading-[1.1]"
+        >
+          <CountUp value={fmt(levels.P)} />
         </p>
       </div>
       <div className="mx-5 border-t border-white/10" />
-      <div className="flex flex-col gap-0 px-5 py-4">
+      <div className="flex flex-col px-5 py-4">
         {rows.map((row) => (
-          <div
-            key={row.label}
-            className="flex items-center justify-between border-b border-white/5 py-2 last:border-0"
-          >
-            <span
-              className="font-body text-[11px] font-semibold uppercase tracking-[0.1em]"
-              style={{ color: row.color }}
-            >
-              {row.label}
-            </span>
-            <span className="font-body text-[14px] font-medium text-white">{fmt(row.value)}</span>
-          </div>
+          <LevelRow key={row.label} label={row.label} value={fmt(row.value)} tone={row.tone} />
         ))}
       </div>
-    </div>
+    </ResultPanel>
   );
 }
 
@@ -190,9 +123,18 @@ export function PivotCalculator() {
   const [high, setHigh] = useState('1.0925');
   const [low, setLow] = useState('1.0830');
   const [close, setClose] = useState('1.0892');
-  const [levels, setLevels] = useState<PivotLevels>(() =>
-    computePivots('Classical', 1.0925, 1.083, 1.0892),
-  );
+
+  // Live recompute; the panel holds the last valid read-out mid-edit.
+  const computed = useMemo(() => {
+    const H = parseFloat(high);
+    const L = parseFloat(low);
+    const C = parseFloat(close);
+    if (isNaN(H) || isNaN(L) || isNaN(C) || H < L) return null;
+    return computePivots(method, H, L, C);
+  }, [method, high, low, close]);
+  const lastValid = useRef(computed ?? computePivots('Classical', 1.0925, 1.083, 1.0892));
+  if (computed) lastValid.current = computed;
+  const levels = computed ?? lastValid.current;
 
   const METHODS: PivotMethod[] = ['Classical', 'Camarilla', 'Woodie', 'Fibonacci'];
 
@@ -203,41 +145,25 @@ export function PivotCalculator() {
     Fibonacci: t('tabFib'),
   };
 
-  const handleCalculate = useCallback(() => {
-    const H = parseFloat(high);
-    const L = parseFloat(low);
-    const C = parseFloat(close);
-    if (isNaN(H) || isNaN(L) || isNaN(C)) return;
-    setLevels(computePivots(method, H, L, C));
-  }, [method, high, low, close]);
-
-  const handleReset = useCallback(() => {
-    setMethod('Classical');
-    setHigh('1.0925');
-    setLow('1.0830');
-    setClose('1.0892');
-    setLevels(computePivots('Classical', 1.0925, 1.083, 1.0892));
-  }, []);
+  const FORMULA_KEYS: Record<PivotMethod, { formula: string; desc: string }> = {
+    Classical: { formula: t('formulaClassical'), desc: t('formulaClassicalDesc') },
+    Camarilla: { formula: t('formulaCamarilla'), desc: t('formulaCamarillaDesc') },
+    Woodie: { formula: t('formulaWoodie'), desc: t('formulaWoodieDesc') },
+    Fibonacci: { formula: t('formulaFib'), desc: t('formulaFibDesc') },
+  };
 
   return (
     <div>
-      {/* Method tabs */}
-      <div className="mb-5 flex rounded-[14px] bg-[#f2f2f4] p-1 dark:bg-[#1c1c1c]">
+      {/* Method tabs — the one switch that changes the math */}
+      <div className={`mb-5 ${TAB_WELL_CLASS}`}>
         {METHODS.map((m) => (
           <button
             key={m}
-            onClick={() => {
-              setMethod(m);
-              const H = parseFloat(high);
-              const L = parseFloat(low);
-              const C = parseFloat(close);
-              if (!isNaN(H) && !isNaN(L) && !isNaN(C)) {
-                setLevels(computePivots(m, H, L, C));
-              }
-            }}
+            onClick={() => setMethod(m)}
+            aria-pressed={method === m}
             className={`font-body flex-1 rounded-[11px] py-2.5 text-[12px] font-medium transition-colors ${
               method === m
-                ? 'text-foreground bg-white shadow-sm dark:bg-[#2a2a2a] dark:text-white'
+                ? 'text-foreground bg-white shadow-sm dark:bg-[#2a2d36] dark:text-white'
                 : 'text-muted hover:text-foreground'
             }`}
           >
@@ -246,57 +172,35 @@ export function PivotCalculator() {
         ))}
       </div>
 
-      {/* Inputs + results */}
       <div className="xl:flex xl:gap-8">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:flex-1">
-          <CalcSelect
-            label={t('fieldMethod')}
-            value={method}
-            options={METHODS}
-            onChange={(v) => {
-              const m = v as PivotMethod;
-              setMethod(m);
-              const H = parseFloat(high);
-              const L = parseFloat(low);
-              const C = parseFloat(close);
-              if (!isNaN(H) && !isNaN(L) && !isNaN(C)) {
-                setLevels(computePivots(m, H, L, C));
-              }
-            }}
-          />
-          <NumberInput label={t('fieldHigh')} value={high} onChange={setHigh} />
-          <NumberInput label={t('fieldLow')} value={low} onChange={setLow} />
-          <NumberInput label={t('fieldClose')} value={close} onChange={setClose} />
-
-          {/* Buttons */}
-          <div className="col-span-full flex items-center gap-3">
-            <button
-              onClick={handleCalculate}
-              className="font-body flex h-[48px] flex-1 items-center justify-center rounded-full bg-[#00B050] text-[14px] font-medium text-white transition-colors hover:bg-[#00B050]/90 xl:flex-none xl:px-8"
-            >
-              {t('calcBtn')}
-            </button>
-            <button
-              onClick={handleReset}
-              className="border-border font-body flex h-[48px] flex-1 items-center justify-center rounded-full border text-[14px] font-medium transition-colors xl:flex-none xl:px-8"
-            >
-              {t('resetBtn')}
-            </button>
-            <p className="font-body text-muted hidden text-[11px] xl:block">{t('disclaimer')}</p>
+        <div className="xl:flex-1">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <NumberInput label={t('fieldHigh')} value={high} onChange={setHigh} />
+            <NumberInput label={t('fieldLow')} value={low} onChange={setLow} />
+            <NumberInput label={t('fieldClose')} value={close} onChange={setClose} />
           </div>
+          <p className="font-body text-muted mt-3 text-[11px]">{t('disclaimer')}</p>
         </div>
 
         {/* Desktop result panel */}
         <div className="hidden xl:flex xl:w-[400px] xl:flex-shrink-0 xl:flex-col xl:gap-4">
           <ResultCard levels={levels} resultLabel={t('resultLabel')} />
-          <FormulaBox method={method} calcKicker={t('calcKicker')} />
+          <FormulaChips
+            kicker={t('calcKicker')}
+            formula={FORMULA_KEYS[method].formula}
+            desc={FORMULA_KEYS[method].desc}
+          />
         </div>
       </div>
 
       {/* Mobile result panel */}
       <div className="mt-5 flex flex-col gap-4 xl:hidden">
         <ResultCard levels={levels} resultLabel={t('resultLabel')} />
-        <FormulaBox method={method} calcKicker={t('calcKicker')} />
+        <FormulaChips
+          kicker={t('calcKicker')}
+          formula={FORMULA_KEYS[method].formula}
+          desc={FORMULA_KEYS[method].desc}
+        />
       </div>
     </div>
   );

@@ -138,15 +138,25 @@ export function FloatingContactWidget({ email, phone, whatsapp }: FloatingContac
         liftAboveBar && barOnThisRoute ? 'bottom-[84px]' : 'bottom-4'
       }`}
     >
-      {/* Gentle attention nudge until first interaction — motion-gated. */}
+      {/* Soft mount entrance (the FAB must never pop in), then a gentle
+          attention nudge until first interaction — both motion-gated. */}
       <style>{`
         @media (prefers-reduced-motion: no-preference) {
-          @keyframes ne-fab-nudge {
-            0%, 88%, 100% { transform: scale(1); }
-            92% { transform: scale(1.08); }
-            96% { transform: scale(0.98); }
+          @keyframes ne-fab-in {
+            from { opacity: 0; transform: scale(0.6) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
           }
-          .ne-fab-nudge { animation: ne-fab-nudge 8s ease-in-out infinite; }
+          @keyframes ne-fab-nudge {
+            0%, 90%, 100% { transform: scale(1); }
+            94% { transform: scale(1.05); }
+            98% { transform: scale(0.99); }
+          }
+          .ne-fab-enter { animation: ne-fab-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both; }
+          .ne-fab-enter.ne-fab-nudge {
+            animation:
+              ne-fab-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both,
+              ne-fab-nudge 9s ease-in-out 5s infinite;
+          }
         }
       `}</style>
 
@@ -246,7 +256,7 @@ export function FloatingContactWidget({ email, phone, whatsapp }: FloatingContac
         aria-expanded={open}
         aria-controls="contact-widget-panel"
         aria-label={open ? t('close') : t('open')}
-        className={`bg-accent hover:bg-accent-hover focus-visible:ring-accent ms-auto flex h-14 w-14 items-center justify-center rounded-full text-white shadow-[0_10px_24px_-10px_rgba(0,176,80,0.8)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+        className={`bg-accent hover:bg-accent-hover focus-visible:ring-accent ne-fab-enter ms-auto flex h-14 w-14 items-center justify-center rounded-full text-white shadow-[0_10px_24px_-10px_rgba(0,176,80,0.8)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.96] ${
           !everOpened && !open ? 'ne-fab-nudge' : ''
         }`}
       >

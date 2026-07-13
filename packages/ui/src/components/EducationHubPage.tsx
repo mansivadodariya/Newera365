@@ -191,9 +191,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
             {t('heroKicker')}
           </SectionKicker>
           <h1 className="text-foreground text-display font-sans">
-            {t('heroLine1')}
-            <br />
-            {t('heroLine2')}
+            {t('heroLine1')} {t('heroLine2')}
             <br />
             <span className="text-accent">{t('heroAccent')}</span>
           </h1>
@@ -224,7 +222,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                   {/* Ghost numeral — latin figure, reads LTR in both directions */}
                   <span
                     dir="ltr"
-                    className="text-metric-sm text-foreground/[0.12] w-[42px] flex-shrink-0 font-mono font-semibold tabular-nums leading-none xl:w-[62px] dark:text-white/[0.09]"
+                    className="text-metric-sm group-hover:text-accent/50 dark:text-accent-bright/25 dark:group-hover:text-accent-bright/70 w-[42px] flex-shrink-0 font-mono font-semibold tabular-nums leading-none text-[#0C1F14]/[0.14] transition-colors duration-300 xl:w-[62px]"
                   >
                     {String(i + 1).padStart(2, '0')}
                   </span>
@@ -245,7 +243,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                         {row.count}
                       </span>
                     </div>
-                    <p className="link-underline text-title group-hover:text-accent text-foreground w-fit font-sans font-semibold transition-colors">
+                    <p className="link-underline text-title group-hover:text-accent text-foreground w-fit font-sans transition-colors">
                       {row.title}
                     </p>
                     <p className="font-body text-body text-muted line-clamp-1 max-w-[560px]">
@@ -293,7 +291,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                   {/* Ghost numeral bleeding off the top corner (04..06) */}
                   <span
                     dir="ltr"
-                    className="pointer-events-none absolute end-4 top-1 select-none font-mono text-[84px] font-bold leading-none text-white/[0.08]"
+                    className="text-accent-bright/[0.14] group-hover:text-accent-bright/30 pointer-events-none absolute end-4 top-1 select-none font-mono text-[84px] font-bold leading-none transition-colors duration-300"
                   >
                     {String(readingTrack.length + j + 1).padStart(2, '0')}
                   </span>
@@ -356,7 +354,7 @@ export function EducationHubPage({ content: cmsContent }: EducationHubPageProps)
                         </span>
                       )}
                     </div>
-                    <p className="link-underline text-title group-hover:text-accent text-foreground w-fit font-sans font-semibold transition-colors">
+                    <p className="link-underline text-title group-hover:text-accent text-foreground w-fit font-sans transition-colors">
                       {article.title}
                     </p>
                     <p className="font-body text-body text-muted line-clamp-2 max-w-[640px]">

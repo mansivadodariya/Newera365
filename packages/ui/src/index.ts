@@ -9,6 +9,7 @@ export { Button } from './components/Button';
 export type { ButtonProps, ButtonVariant } from './components/Button';
 
 export { SectionKicker } from './components/SectionKicker';
+export { Spotlight } from './components/Spotlight';
 
 export { ToastProvider, useToast } from './components/ToastProvider';
 
@@ -78,7 +79,7 @@ export type { MarketCategoryPageProps } from './components/MarketCategoryPage';
 export { SupportPage } from './components/SupportPage';
 export type { CmsFaqItem, CmsContactDetails, CmsPromiseStat } from './components/SupportPage';
 export { AboutPage } from './components/AboutPage';
-export type { CmsTeamMemberItem, CmsAwardItem, CmsMilestoneItem } from './components/AboutPage';
+export type { CmsAwardItem, CmsMilestoneItem } from './components/AboutPage';
 export { LegalPage } from './components/LegalPage';
 export type { CmsLegalDocument } from './components/LegalPage';
 

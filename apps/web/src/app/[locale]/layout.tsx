@@ -5,7 +5,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { Analytics } from '@/components/Analytics';
 import { CookieConsent } from '@/components/CookieConsent';
 import { getMessages, setRequestLocale } from 'next-intl/server';
-import { Outfit, Inter, JetBrains_Mono } from 'next/font/google';
+import { Outfit, Montserrat, Cairo, JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import {
   ToastProvider,
@@ -25,17 +25,28 @@ import '../globals.css';
 // served from 'self', so the hardened CSP (font-src 'self') needs no changes.
 import '@flaticon/flaticon-uicons/css/brands/all.css';
 
+// Headings/titles use Outfit — the site's original display face (client
+// 2026-07-13: Montserrat didn't suit the trading vibe; reverted headings only).
+// Body keeps Montserrat. Cairo covers Arabic glyph-by-glyph for both. Both Latin
+// faces set adjustFontFallback:false so their synthetic Arial fallback can't
+// intercept Arabic glyphs before Cairo (next in the family stack).
 const outfit = Outfit({
   subsets: ['latin'],
   variable: '--font-sans',
-  weight: ['400', '500', '600', '700'],
   display: 'swap',
+  adjustFontFallback: false,
 });
 
-const inter = Inter({
+const montserrat = Montserrat({
   subsets: ['latin'],
   variable: '--font-body',
-  weight: ['400', '500', '600'],
+  display: 'swap',
+  adjustFontFallback: false,
+});
+
+const cairo = Cairo({
+  subsets: ['arabic'],
+  variable: '--font-arabic',
   display: 'swap',
 });
 
@@ -161,7 +172,7 @@ export default async function LocaleLayout({
       lang={locale}
       dir={dir(locale)}
       suppressHydrationWarning
-      className={`${outfit.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${outfit.variable} ${montserrat.variable} ${cairo.variable} ${jetbrainsMono.variable}`}
     >
       <head>
         {/* TradingView embeds: loader script from s3, widget iframe from

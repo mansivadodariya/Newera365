@@ -293,7 +293,9 @@ export function AiCrmPage() {
                         <span
                           dir="ltr"
                           className={`font-mono text-[13px] font-medium tabular-nums transition-colors ${
-                            on ? 'text-accent' : 'text-foreground/30'
+                            on
+                              ? 'text-accent'
+                              : 'text-muted dark:text-accent-bright/35 group-hover/idx:text-accent/70'
                           }`}
                         >
                           {num(i)}
@@ -339,7 +341,7 @@ export function AiCrmPage() {
                           className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border font-mono text-[13px] font-semibold tabular-nums transition-colors duration-300 ${
                             on
                               ? 'border-accent bg-accent/10 text-accent'
-                              : 'border-border bg-background text-foreground/40'
+                              : 'border-border bg-background text-muted dark:text-accent-bright/40'
                           }`}
                         >
                           {num(i)}
@@ -352,9 +354,7 @@ export function AiCrmPage() {
                         <span className="text-eyebrow bg-accent-subtle text-accent inline-block rounded-[8px] px-2.5 py-1 font-mono font-medium uppercase">
                           {f.category}
                         </span>
-                        <p className="text-title text-foreground mt-4 font-sans font-semibold">
-                          {f.title}
-                        </p>
+                        <p className="text-title text-foreground mt-4 font-sans">{f.title}</p>
                         <p className="text-body-lg font-body text-muted mt-2">{f.desc}</p>
                       </div>
                     </div>
@@ -388,9 +388,7 @@ export function AiCrmPage() {
                   </span>
                   <div className="flex items-center gap-2">
                     <span className="bg-accent h-1.5 w-1.5 rounded-full" />
-                    <p className="text-title text-foreground font-sans font-semibold">
-                      {item.title}
-                    </p>
+                    <p className="text-title text-foreground font-sans">{item.title}</p>
                   </div>
                   <p className="text-body font-body text-muted">{item.desc}</p>
                 </div>

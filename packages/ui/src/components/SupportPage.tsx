@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { ScrollReveal } from './ScrollReveal';
+import { Spotlight } from './Spotlight';
 import { Accordion } from './Accordion';
 import type { SlateNode } from './RichText';
 import { norm, humanize } from './filterUtils';
@@ -91,25 +92,22 @@ function extractPlainText(node: SlateNode): string {
   return node.children?.map(extractPlainText).join('') ?? '';
 }
 
-/* FAQ accordion row: wraps the shared Accordion primitive with a category chip. */
+/* FAQ ledger row: the category context lives in the group header above the
+   list, so rows carry only the question (no per-row chip = one clean rail). */
 function AccordionItem({
   question,
   answer,
   id,
-  section,
   openIdx,
   setOpenIdx,
 }: {
   question: string;
   answer: string;
   id: string;
-  section: string;
   openIdx: string | null;
   setOpenIdx: (v: string | null) => void;
 }) {
-  const t = useTranslations('faq');
   const isOpen = openIdx === id;
-  const displaySection = CAT_I18N[section] ? t(CAT_I18N[section]!) : section;
   return (
     <Accordion
       id={id}
@@ -117,11 +115,7 @@ function AccordionItem({
       answer={answer}
       isOpen={isOpen}
       onToggle={() => setOpenIdx(isOpen ? null : id)}
-      badge={
-        <span className="bg-accent/10 text-accent dark:bg-accent/15 flex-shrink-0 rounded-full px-[10px] py-[5px] font-mono text-[10px] uppercase tracking-[1.2px]">
-          {displaySection}
-        </span>
-      }
+      variant="row"
     />
   );
 }
@@ -480,20 +474,34 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
             {t('sectionAll')}
           </SectionKicker>
           {filteredGroups.length > 0 ? (
-            <div className="flex flex-col gap-[10px]">
-              {filteredGroups.flatMap((group) =>
-                group.items.map((item) => (
-                  <AccordionItem
-                    key={item.id}
-                    id={item.id}
-                    question={item.q}
-                    answer={item.a}
-                    section={group.section}
-                    openIdx={openIdx}
-                    setOpenIdx={setOpenIdx}
-                  />
-                )),
-              )}
+            <div className="flex flex-col gap-9">
+              {filteredGroups.map((group) => (
+                <div key={group.section}>
+                  {/* Group header: mono chapter label + rule + count */}
+                  <div className="mb-1 flex items-center gap-3">
+                    <span className="text-eyebrow text-muted font-mono font-semibold uppercase tracking-[0.16em]">
+                      {translateCat(group.section)}
+                    </span>
+                    <span className="bg-border h-px flex-1 dark:bg-white/[0.08]" />
+                    <span
+                      dir="ltr"
+                      className="text-muted dark:text-accent-bright/50 font-mono text-[11px] tabular-nums"
+                    >
+                      {String(group.items.length).padStart(2, '0')}
+                    </span>
+                  </div>
+                  {group.items.map((item) => (
+                    <AccordionItem
+                      key={item.id}
+                      id={item.id}
+                      question={item.q}
+                      answer={item.a}
+                      openIdx={openIdx}
+                      setOpenIdx={setOpenIdx}
+                    />
+                  ))}
+                </div>
+              ))}
             </div>
           ) : (
             <p className="font-body text-muted text-body py-10 text-center">{t('noResults')}</p>
@@ -504,7 +512,10 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
       {/* ===== ACT 2 · The seam: escalate to a human (ink anchor) ===== */}
       <section className="px-5 py-6">
         <ScrollReveal className={WRAP}>
-          <div className="ink-band overflow-hidden rounded-[32px] p-8 md:p-11 xl:p-14">
+          <Spotlight
+            size={520}
+            className="ink-band overflow-hidden rounded-[32px] p-8 md:p-11 xl:p-14"
+          >
             <div className="flex flex-col gap-9 xl:flex-row xl:items-end xl:justify-between">
               <div className="max-w-[560px]">
                 <SectionKicker className="[&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright mb-5">
@@ -566,7 +577,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
                 ))}
               </div>
             </div>
-          </div>
+          </Spotlight>
         </ScrollReveal>
       </section>
 
@@ -643,9 +654,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
                     />
                   </svg>
                 </div>
-                <h3 className="text-foreground text-title font-sans font-semibold">
-                  {tc('successHeading')}
-                </h3>
+                <h3 className="text-foreground text-title font-sans">{tc('successHeading')}</h3>
                 <p className="font-body text-muted text-body max-w-[280px] leading-relaxed">
                   {tc('successDesc')}
                 </p>
@@ -768,77 +777,6 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
                 </p>
               </form>
             )}
-          </div>
-        </ScrollReveal>
-      </section>
-
-      {/* Offices: ink closer (was bg-black; canon: closers use .ink-band). */}
-      <section className="px-5 pb-16 pt-4">
-        <ScrollReveal className={WRAP}>
-          <div className="ink-band overflow-hidden rounded-[32px] p-8 md:p-12">
-            <SectionKicker className="mb-4 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/60">
-              {tc('officesKicker')}
-            </SectionKicker>
-            <h2 className="text-headline-sm mb-8 font-sans text-white">
-              {tc('officesLine1')}
-              <br />
-              {tc('officesLine2')}
-            </h2>
-            {/* TODO(NE-0xx): SiteSettings only models one office address; these 3 cities are still hardcoded pending a dedicated CMS offices array. */}
-            <div className="grid gap-[10px] md:grid-cols-3">
-              {[
-                {
-                  city: tc('officeLondon'),
-                  tag: tc('officeLondonTag'),
-                  address: '1 Finsbury Avenue, EC2M',
-                },
-                {
-                  city: tc('officeSingapore'),
-                  tag: tc('officeSingaporeTag'),
-                  address: '8 Marina View, #43-01',
-                },
-                {
-                  city: tc('officeDubai'),
-                  tag: tc('officeDubaiTag'),
-                  address: 'DIFC Gate Village, Tower 4',
-                },
-              ].map((office) => (
-                <div
-                  key={office.city}
-                  className="flex items-center gap-[14px] rounded-[18px] border border-white/[0.1] bg-white/[0.05] p-5 transition-colors hover:border-white/20 hover:bg-white/[0.08]"
-                >
-                  <div className="bg-accent/15 text-accent-bright flex h-[44px] w-[44px] flex-shrink-0 items-center justify-center rounded-[14px]">
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-                      <path
-                        d="M9 9.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
-                        stroke="currentColor"
-                        strokeWidth="1.3"
-                      />
-                      <path
-                        d="M9 1C5.69 1 3 3.69 3 7c0 4.5 6 10 6 10s6-5.5 6-10c0-3.31-2.69-6-6-6z"
-                        stroke="currentColor"
-                        strokeWidth="1.3"
-                      />
-                    </svg>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-sans text-[17px] font-semibold text-white">
-                        {office.city}
-                      </span>
-                      <span className="rounded-full bg-white/[0.08] px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px] text-white">
-                        {office.tag}
-                      </span>
-                    </div>
-                    <p className="font-body text-caption mt-1 text-white/50">{office.address}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 flex items-center gap-2 border-t border-white/10 pt-5">
-              <span className="bg-accent-bright h-1.5 w-1.5 flex-shrink-0 rounded-full" />
-              <span className="font-body text-caption text-white/55">{ts('seamStatus')}</span>
-            </div>
           </div>
         </ScrollReveal>
       </section>

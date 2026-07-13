@@ -59,7 +59,7 @@ function renderNode(node: SlateNode, i: number): ReactNode {
         <h2
           key={i}
           id={h2id}
-          className="text-foreground mb-3 mt-7 font-sans text-[22px] font-semibold leading-[1.25] first:mt-0"
+          className="text-foreground mb-3 mt-7 scroll-mt-28 font-sans text-[22px] font-semibold leading-[1.25] first:mt-0"
         >
           {children}
         </h2>
@@ -75,7 +75,7 @@ function renderNode(node: SlateNode, i: number): ReactNode {
         <h3
           key={i}
           id={h3id}
-          className="text-foreground mb-3 mt-6 font-sans text-[18px] font-semibold leading-[1.3] first:mt-0"
+          className="text-foreground mb-3 mt-6 scroll-mt-28 font-sans text-[18px] font-semibold leading-[1.3] first:mt-0"
         >
           {children}
         </h3>

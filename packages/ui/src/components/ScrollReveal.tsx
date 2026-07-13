@@ -35,8 +35,8 @@ export function ScrollReveal({
 
   const initial = {
     opacity: 0,
-    y: direction === 'up' ? 36 : 0,
-    x: direction === 'left' ? 40 : direction === 'right' ? -40 : 0,
+    y: direction === 'up' ? 24 : 0,
+    x: direction === 'left' ? 32 : direction === 'right' ? -32 : 0,
   };
 
   return (
@@ -45,7 +45,9 @@ export function ScrollReveal({
       initial={initial}
       whileInView={{ opacity: 1, y: 0, x: 0 }}
       viewport={{ once: true, margin }}
-      transition={{ duration: 0.6, delay: delay || index * 0.06, ease: EASE }}
+      // Stagger is capped: an item that scrolls into view on its own must not
+      // sit invisible for index x 60ms (long lists felt lazy-loaded).
+      transition={{ duration: 0.45, delay: delay || Math.min(index, 4) * 0.05, ease: EASE }}
     >
       {children}
     </motion.div>
