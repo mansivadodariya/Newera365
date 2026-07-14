@@ -73,10 +73,11 @@ export function TradingViewTicker() {
       className="relative w-full overflow-hidden border-b border-[#16181d] bg-black"
       aria-label="Live market prices"
     >
-      {/* Fixed height reserves space to avoid layout shift while the iframe loads. */}
+      {/* Reserve exactly the tape's rendered height (46px, measured) so the
+          strip doesn't collapse thick→thin when the iframe swaps in. */}
       <div
         ref={containerRef}
-        className="tradingview-widget-container h-[92px]"
+        className="tradingview-widget-container h-[46px]"
         suppressHydrationWarning
       >
         <div className="tradingview-widget-container__widget" />

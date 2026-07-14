@@ -117,13 +117,15 @@ h4 {
   background: rgba(0, 176, 80, 0.22);
 }
 
-/* Hide scrollbar globally */
-html {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+/* Hide scrollbars everywhere scroll is available — the page plus every overflow
+   container (comparison tables, carousels, code blocks, etc.). Scroll itself
+   still works (wheel/trackpad/touch/keyboard); only the visible bar is removed. */
+* {
+  scrollbar-width: none; /* Firefox / standard */
+  -ms-overflow-style: none; /* legacy Edge/IE */
 }
-html::-webkit-scrollbar {
-  display: none;
+*::-webkit-scrollbar {
+  display: none; /* Chrome / Safari */
 }
 
 /* Focus ring */

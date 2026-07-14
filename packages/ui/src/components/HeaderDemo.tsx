@@ -363,7 +363,10 @@ function HeaderDemo() {
     setOpenNav(null);
   }, [pathname]);
 
-  // Shrink + glassify the header once the user scrolls past the top.
+  // Glassify the header (deeper shadow + more translucent bar) once the user
+  // scrolls past the top. Height stays constant at 72px on purpose: this header
+  // is sticky/in-flow, so animating its height reflowed everything below it (the
+  // ticker + hero jumped up), which read as a glitch. Shadow/bg only = no jump.
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -424,10 +427,10 @@ function HeaderDemo() {
   return (
     <>
       <header
-        className={`border-border sticky top-0 z-40 w-full border-b transition-[height,box-shadow] duration-300 ${
+        className={`border-border sticky top-0 z-40 h-[72px] w-full border-b transition-shadow duration-300 ${
           scrolled
-            ? 'h-[60px] shadow-[0px_8px_24px_-6px_rgba(0,0,0,0.12)]'
-            : 'h-[72px] shadow-[0px_2px_4px_rgba(0,0,0,0.05)]'
+            ? 'shadow-[0px_8px_24px_-6px_rgba(0,0,0,0.12)]'
+            : 'shadow-[0px_2px_4px_rgba(0,0,0,0.05)]'
         }`}
       >
         {/* Blur + tint live on a layer confined to the bar — NOT on the <header>

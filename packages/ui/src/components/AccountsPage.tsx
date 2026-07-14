@@ -610,7 +610,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
 
           {/* Horizontal scroll on mobile with a sticky first column; fits
               without scrolling from md up. */}
-          <ScrollReveal className="overflow-x-auto rounded-[20px] border border-white/[0.08]">
+          <ScrollReveal className="scrollbar-hide overflow-x-auto rounded-[20px] border border-white/[0.08]">
             <div className="min-w-[640px] bg-white/[0.03] md:min-w-0">
               {/* Header row — real account names with the popular column flagged */}
               <div className="grid border-b border-white/[0.08]" style={matrixGridStyle}>

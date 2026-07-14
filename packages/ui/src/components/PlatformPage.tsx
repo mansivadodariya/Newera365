@@ -357,8 +357,11 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
               const rawUrl = downloads?.[card.urlKey] ?? null;
               const url = rawUrl ?? (card.webFallback ? `/${locale}/web-trader` : null);
               const isInternal = url?.startsWith('/') ?? false;
+              // min-h (not fixed h) + tight leading so a long label like
+              // "Open web trader" wraps to two tidy lines inside the pill on the
+              // narrow 2-col mobile grid instead of cramping/overflowing.
               const ctaClass =
-                'font-body group-hover:bg-accent relative flex h-[48px] items-center justify-center gap-2 rounded-full bg-[#111] text-[14px] font-semibold text-white transition-all duration-200 group-hover:shadow-[0_6px_20px_rgba(0,176,80,0.4)] dark:bg-white/10';
+                'font-body group-hover:bg-accent relative mt-auto flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-[#111] py-2 text-center text-[13px] font-semibold leading-tight text-white transition-all duration-200 group-hover:shadow-[0_6px_20px_rgba(0,176,80,0.4)] xl:text-[14px] dark:bg-white/10';
               const arrow =
                 card.cta === 'download' ? (
                   <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
@@ -405,8 +408,9 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                     aria-hidden="true"
                   />
 
-                  {/* Icon + tag */}
-                  <div className="relative flex items-center justify-between gap-2">
+                  {/* Icon + tag — stacked on the 2-col mobile grid (icon + badge
+                      won't fit side by side in ~117px), side by side from md up. */}
+                  <div className="relative flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-2">
                     <div className="bg-accent/10 text-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white">
                       <card.Icon />
                     </div>
@@ -591,7 +595,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                   <span className="group-hover:border-accent/40 group-hover:bg-accent/[0.15] group-hover:text-accent-bright flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[12px] border border-white/[0.10] bg-white/[0.06] text-white transition-colors [&>svg]:h-[22px] [&>svg]:w-[22px]">
                     <dev.Icon />
                   </span>
-                  <span className="font-body truncate text-[15px] font-medium">
+                  <span className="font-body text-[15px] font-medium leading-tight">
                     {t(dev.key as 'winTitle')}
                   </span>
                 </div>

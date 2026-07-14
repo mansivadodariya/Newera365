@@ -138,6 +138,32 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
     };
   }, [open]);
 
+  // On open, expand the section holding the current page and scroll that page's
+  // row into view — so the menu always shows "you are here". This menu persists
+  // across client-side navigation, so the initial auto-open state can be stale
+  // (it reflects the first page loaded); re-sync the active section here.
+  useEffect(() => {
+    if (!open) return;
+    const activeSection = navGroups.find(
+      (g) => g.section && g.items.some((i) => isActive(i.href)),
+    )?.section;
+    if (activeSection) {
+      setOpenSections((prev) => (prev[activeSection] ? prev : { ...prev, [activeSection]: true }));
+    }
+    // Wait for the open slide + any section expand (both 300ms) to settle — the
+    // nav remounts on open and isn't scrollable until laid out — then glide the
+    // current page's row to the centre. Query the row from the DOM at fire time
+    // (a ref shared across the nav's key-remount can resolve to null).
+    const id = window.setTimeout(() => {
+      document
+        .getElementById('mobile-menu-demo')
+        ?.querySelector('[data-active-row="true"]')
+        ?.scrollIntoView({ block: 'center' });
+    }, 320);
+    return () => window.clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, pathname]);
+
   function go(modal: AuthModalType) {
     onClose();
     setAuthModal(modal);
@@ -312,20 +338,22 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
                   </svg>
                 </button>
 
-                {/* Collapsible body (max-height transition — reliable in an
-                    auto-height flex/grid context) */}
+                {/* Collapsible body — grid-rows 0fr→1fr animates to the section's
+                    NATURAL height, so tall sections (Education, 11 rows) never
+                    clip. A fixed max-height used to cut off the Tools group. */}
                 <div
-                  className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-out ${
-                    sectionOpen ? 'max-h-[320px] opacity-100' : 'max-h-0 opacity-0'
+                  className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
+                    sectionOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
                   }`}
                 >
-                  <div className="min-h-0">
+                  <div className="min-h-0 overflow-hidden">
                     <div className="pb-2">
                       {group.items.map(({ label, href }) => {
                         const active = isActive(href);
                         return (
                           <Link
                             key={href}
+                            data-active-row={active ? 'true' : undefined}
                             href={`/${locale}${href === '/' ? '' : href}`}
                             onClick={onClose}
                             className={`group flex items-center justify-between rounded-[12px] px-3 py-[11px] transition-colors ${
