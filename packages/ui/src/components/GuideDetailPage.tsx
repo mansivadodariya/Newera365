@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
-import { RichText, extractHeadings } from './RichText';
+import { RichText, extractHeadings, readingMinutes } from './RichText';
 import type { SlateNode } from './RichText';
 import { ReadingProgress } from './ReadingProgress';
 
@@ -19,27 +19,29 @@ export type GuideDetailProps = {
   guide?: CmsGuideDetail | null;
 };
 
-function countWords(nodes: SlateNode[]): number {
-  let text = '';
-  const walk = (n: SlateNode) => {
-    if (n.text) text += ' ' + n.text;
-    n.children?.forEach(walk);
-  };
-  nodes.forEach(walk);
-  return text.split(/\s+/).filter(Boolean).length;
-}
-
-/** Page read percentage, mirrors the ReadingProgress bar as a mono readout. */
-function useReadPercent() {
+/**
+ * Read percentage through the guide body (the `ref`'d article), mirroring the
+ * ReadingProgress bar as a mono readout. Tracks the content region, not the
+ * whole page, so the breadcrumb, header and CTA don't count as reading.
+ */
+function useReadPercent(ref: RefObject<HTMLElement | null>) {
   const [pct, setPct] = useState(0);
   useEffect(() => {
     let raf = 0;
     const measure = () => {
-      const doc = document.documentElement;
-      const total = doc.scrollHeight - window.innerHeight;
-      setPct(
-        total > 0 ? Math.min(100, Math.max(0, Math.round((window.scrollY / total) * 100))) : 0,
-      );
+      const el = ref.current;
+      if (!el) {
+        setPct(0);
+        return;
+      }
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const total = rect.height - vh;
+      if (total <= 0) {
+        setPct(rect.top <= 0 ? 100 : 0);
+        return;
+      }
+      setPct(Math.min(100, Math.max(0, Math.round((-rect.top / total) * 100))));
     };
     const onScroll = () => {
       cancelAnimationFrame(raf);
@@ -53,7 +55,7 @@ function useReadPercent() {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
     };
-  }, []);
+  }, [ref]);
   return pct;
 }
 
@@ -106,7 +108,8 @@ export function GuideDetailPage({ slug: _slug, guide: cmsGuide }: GuideDetailPro
   const locale = useLocale();
   const t = useTranslations('guideDetail');
   const [activeId, setActiveId] = useState('');
-  const readPct = useReadPercent();
+  const contentRef = useRef<HTMLElement>(null);
+  const readPct = useReadPercent(contentRef);
 
   const guide: CmsGuideDetail | null =
     cmsGuide && cmsGuide.body && cmsGuide.body.length > 0 ? cmsGuide : null;
@@ -120,7 +123,7 @@ export function GuideDetailPage({ slug: _slug, guide: cmsGuide }: GuideDetailPro
   const displayTitle = hasCmsGuide ? guide!.title : t('notFoundTitle');
   const displayAuthor = guide?.author ?? null;
   const readMinutes = useMemo(
-    () => (hasCmsGuide ? Math.max(1, Math.round(countWords(guide!.body) / 200)) : 0),
+    () => (hasCmsGuide ? (readingMinutes(guide!.body) ?? 1) : 0),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [hasCmsGuide, guide?.body],
   );
@@ -156,7 +159,7 @@ export function GuideDetailPage({ slug: _slug, guide: cmsGuide }: GuideDetailPro
 
   return (
     <>
-      <ReadingProgress />
+      <ReadingProgress targetRef={contentRef} />
       {/* Top breadcrumb */}
       <section className="bg-transparent px-5 pb-0 pt-6">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
@@ -301,6 +304,7 @@ export function GuideDetailPage({ slug: _slug, guide: cmsGuide }: GuideDetailPro
 
             {/* Body at a reading measure, not full page width */}
             <article
+              ref={contentRef}
               className={`motion-safe:animate-rise-in max-w-[720px] ${cmsHeadings.length === 0 ? 'xl:col-span-2' : ''}`}
             >
               <RichText content={guide!.body} />

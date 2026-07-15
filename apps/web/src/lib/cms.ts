@@ -303,6 +303,8 @@ export interface CmsArticle {
   status: 'draft' | 'published';
   thumbnailUrl?: string | null;
   summary?: string | null;
+  /** Rich-text body — carried so listings can compute a real reading time. */
+  body?: SlateNode[] | null;
   /** When set, the listing card links to this external URL instead of an internal detail page. */
   externalUrl?: string | null;
 }
@@ -723,6 +725,7 @@ export async function getResearchArticles(locale: string, limit = 10): Promise<C
       status: a.status,
       thumbnailUrl,
       summary: null,
+      body: a.body ?? null,
     };
   });
 }
@@ -765,6 +768,7 @@ export async function getBlogPosts(locale: string, limit = 10): Promise<CmsArtic
       status: post.status,
       thumbnailUrl,
       summary: post.excerpt ?? null,
+      body: post.body ?? null,
     };
   });
 }
@@ -818,6 +822,7 @@ export async function getNews(locale: string, limit = 20): Promise<CmsArticle[]>
       status: n.status,
       thumbnailUrl,
       summary: null,
+      body: n.body ?? null,
       externalUrl,
     };
   });

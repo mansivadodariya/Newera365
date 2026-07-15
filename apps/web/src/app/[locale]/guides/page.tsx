@@ -17,6 +17,7 @@ function mapToGuide(item: CmsEducationContent): CmsGuide {
     title: item.title,
     summary: item.seoDescription,
     featured: item.isFeatured ?? false,
+    body: item.body ?? null,
   };
 }
 

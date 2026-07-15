@@ -6,6 +6,8 @@ import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { ScrollReveal } from './ScrollReveal';
 import { Pagination } from './Pagination';
+import { readingMinutes } from './RichText';
+import type { SlateNode } from './RichText';
 
 const GUIDES_PER_PAGE = 9;
 
@@ -16,6 +18,8 @@ export interface CmsGuide {
   summary?: string | null;
   author?: string | null;
   featured?: boolean;
+  /** Rich-text body — used to compute the same reading time the detail page shows. */
+  body?: SlateNode[] | null;
 }
 
 interface GuidesPageProps {
@@ -42,15 +46,6 @@ function ReadArrow({ className = '' }: { className?: string }) {
       />
     </svg>
   );
-}
-
-/** Estimated reading time for an index row. The CMS list ships only title +
-    excerpt (no body/word count), so we derive a stable estimate from the
-    available text length and clamp it to a sensible guide range. Deterministic
-    for a given guide — never random. */
-function readingMinutes(guide: CmsGuide): number {
-  const chars = guide.title.length + (guide.summary?.length ?? 0);
-  return Math.min(14, Math.max(4, Math.round(chars / 20)));
 }
 
 export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
@@ -167,7 +162,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
                           {t('rowTag')}
                         </span>
                         <span className="text-eyebrow text-muted inline-flex items-center font-mono uppercase tabular-nums">
-                          {t('minRead', { minutes: readingMinutes(guide) })}
+                          {t('minRead', { minutes: readingMinutes(guide.body) ?? 1 })}
                         </span>
                         {guide.author && (
                           <span className="text-caption text-muted inline-flex items-center gap-1.5 font-sans">

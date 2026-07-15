@@ -9,10 +9,24 @@ interface PaginationProps {
   listRef?: RefObject<HTMLElement>;
 }
 
+// Sticky site header height (~72px) plus a little breathing room, so the first
+// row of the new page lands just below the header instead of behind it.
+// ponytail: constant header offset; read the header height live only if it ever
+// stops being a fixed 72px.
+const HEADER_OFFSET = 88;
+
 export function Pagination({ page, totalPages, onPageChange, listRef }: PaginationProps) {
   function handleChange(newPage: number) {
-    listRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (newPage === page || newPage < 1 || newPage > totalPages) return;
     onPageChange(newPage);
+    const el = listRef?.current;
+    if (!el) return;
+    // Scroll AFTER the new page has painted (rAF), to the list's real top — not
+    // the stale pre-render position. Landing on the first item of the new page.
+    requestAnimationFrame(() => {
+      const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    });
   }
   if (totalPages <= 1) return null;
 

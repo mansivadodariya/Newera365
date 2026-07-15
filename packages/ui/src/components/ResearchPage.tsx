@@ -7,6 +7,8 @@ import { SectionKicker } from './SectionKicker';
 import { Pagination } from './Pagination';
 import { ScrollReveal } from './ScrollReveal';
 import { norm, humanize, distinctCategories } from './filterUtils';
+import { readingMinutes } from './RichText';
+import type { SlateNode } from './RichText';
 
 const RESEARCH_PER_PAGE = 6;
 
@@ -34,6 +36,8 @@ interface CmsResearchArticle {
   publishedDate: string;
   thumbnailUrl?: string | null;
   summary?: string | null;
+  /** Rich-text body — used to compute a real reading time for the card. */
+  body?: SlateNode[] | null;
   /** When set, the card links to this external URL instead of an internal detail page. */
   externalUrl?: string | null;
 }
@@ -113,7 +117,8 @@ type ArticleDisplay = {
   title: string;
   summary: string;
   date: string;
-  readTime: string;
+  /** Estimated reading minutes from the body; null when the doc has no body (e.g. external news). */
+  readMinutes: number | null;
   featured: boolean;
   sparkline: readonly number[];
   thumbnailUrl?: string | null;
@@ -137,7 +142,7 @@ function toDisplayArticles(cmsArticles?: CmsResearchArticle[]): ArticleDisplay[]
     title: a.title,
     summary: a.summary ?? '',
     date: formatArticleDate(a.publishedDate),
-    readTime: '5 min',
+    readMinutes: readingMinutes(a.body),
     featured: i === 0,
     sparkline: SPARKLINES[i % SPARKLINES.length] as readonly number[],
     thumbnailUrl: a.thumbnailUrl ?? null,
@@ -428,8 +433,14 @@ export function ResearchPage({
                 )}
                 <div className="mt-5 flex items-center justify-between gap-4 border-t border-white/[0.08] pt-4 xl:mt-auto">
                   <span className="font-body text-[11px] leading-none text-white/40">
-                    {featured.date} ·{' '}
-                    {t('readTimeLabel', { minutes: parseInt(featured.readTime, 10) || 5 })}
+                    {[
+                      featured.date,
+                      featured.readMinutes != null
+                        ? t('readTimeLabel', { minutes: featured.readMinutes })
+                        : null,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}
                   </span>
                   <span className="font-body text-accent-bright flex items-center gap-1.5 text-[12px] font-medium leading-none">
                     {t('readArticle')}
@@ -492,9 +503,11 @@ export function ResearchPage({
                     >
                       {translateResearchCat(article.category)}
                     </span>
-                    <span className="font-mono text-[9px] text-[#9ca3af]">
-                      · {t('readTimeLabel', { minutes: parseInt(article.readTime, 10) || 5 })}
-                    </span>
+                    {article.readMinutes != null && (
+                      <span className="font-mono text-[9px] text-[#9ca3af]">
+                        · {t('readTimeLabel', { minutes: article.readMinutes })}
+                      </span>
+                    )}
                   </div>
                   <p className="group-hover:text-accent mb-1 font-sans text-[14px] font-semibold leading-[1.25] tracking-[-0.21px] text-[#111] transition-colors dark:text-white">
                     {article.title}
@@ -568,8 +581,14 @@ export function ResearchPage({
                     )}
                     <div className="mt-auto flex items-center justify-between pt-3">
                       <span className="font-mono text-[10px] text-white/30">
-                        {article.date} ·{' '}
-                        {t('readTimeLabel', { minutes: parseInt(article.readTime, 10) || 5 })}
+                        {[
+                          article.date,
+                          article.readMinutes != null
+                            ? t('readTimeLabel', { minutes: article.readMinutes })
+                            : null,
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')}
                       </span>
                       <svg
                         width="11"

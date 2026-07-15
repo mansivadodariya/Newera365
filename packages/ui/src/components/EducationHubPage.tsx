@@ -50,18 +50,25 @@ interface CatDef {
   href: string;
   /** objectPosition slice for the shared ink plate (media track only). */
   crop?: string;
+  /**
+   * Matching CMS education-content `contentType` (singular), used for the live
+   * count. The plural `id` still drives the type and count i18n keys, so the two
+   * must not be conflated. `webinars` has no education-content type (separate
+   * collection), so it has no live count and keeps the static fallback.
+   */
+  cmsType?: 'guide' | 'glossary' | 'ebook' | 'video' | 'audio';
 }
 
 // The curriculum path: three reading chapters climbing Beginner -> Advanced,
-// then three media formats. Order IS the syllabus. `id` still drives the CMS
-// count filter and the existing type*/count* i18n keys.
+// then three media formats. Order IS the syllabus. `id` drives the type and
+// count i18n keys; `cmsType` drives the live CMS count filter.
 const CATEGORIES: CatDef[] = [
-  { id: 'glossary', track: 'read', level: 'levelBeginner', href: '/glossary' },
-  { id: 'guides', track: 'read', level: 'levelIntermediate', href: '/guides' },
-  { id: 'ebooks', track: 'read', level: 'levelAdvanced', href: '/ebooks' },
-  { id: 'videos', track: 'media', href: '/education/media', crop: '20% 40%' },
+  { id: 'glossary', track: 'read', level: 'levelBeginner', href: '/glossary', cmsType: 'glossary' },
+  { id: 'guides', track: 'read', level: 'levelIntermediate', href: '/guides', cmsType: 'guide' },
+  { id: 'ebooks', track: 'read', level: 'levelAdvanced', href: '/ebooks', cmsType: 'ebook' },
+  { id: 'videos', track: 'media', href: '/education/media', crop: '20% 40%', cmsType: 'video' },
   { id: 'webinars', track: 'media', href: '/education/media', crop: '50% 30%' },
-  { id: 'audio', track: 'media', href: '/education/media', crop: '82% 45%' },
+  { id: 'audio', track: 'media', href: '/education/media', crop: '82% 45%', cmsType: 'audio' },
 ];
 
 const LEVEL_DOT: Record<LevelKey, string> = {
@@ -109,25 +116,35 @@ export interface CmsEducationItem {
 
 interface EducationHubPageProps {
   content?: CmsEducationItem[];
+  /** Live count from the separate `webinars` collection (webinars aren't education-content). */
+  webinarCount?: number;
 }
 
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 
-export function EducationHubPage({ content: cmsContent }: EducationHubPageProps) {
+export function EducationHubPage({ content: cmsContent, webinarCount }: EducationHubPageProps) {
   const locale = useLocale();
   const t = useTranslations('education');
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  // Live CMS count when available, else a localized fallback (the static
-  // count keys are per-type, so they must never render raw English in AR).
+  // Real CMS count whenever the source is reachable (shown even when it's 0, so
+  // the card never lies). Falls back to the localized static count only when the
+  // data source is entirely absent (CMS unreachable) — the static keys are
+  // per-type so they never render raw English in AR. Webinars live in their own
+  // collection, so their count comes in via the `webinarCount` prop.
   const cats = CATEGORIES.map((cat) => {
-    const count = cmsContent ? cmsContent.filter((c) => c.contentType === cat.id).length : 0;
+    let count: number | null = null;
+    if (cat.id === 'webinars') {
+      count = webinarCount ?? null;
+    } else if (cmsContent && cat.cmsType) {
+      count = cmsContent.filter((c) => c.contentType === cat.cmsType).length;
+    }
     return {
       ...cat,
       title: t(`type${cap(cat.id)}Title` as 'typeGuidesTitle'),
       desc: t(`type${cap(cat.id)}Desc` as 'typeGuidesDesc'),
-      count: count > 0 ? `${count}` : t(`count${cap(cat.id)}` as 'countGuides'),
+      count: count != null ? `${count}` : t(`count${cap(cat.id)}` as 'countGuides'),
     };
   });
 

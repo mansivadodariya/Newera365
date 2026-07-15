@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { useRef } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { RichText } from './RichText';
+import { RichText, readingMinutes } from './RichText';
 import type { SlateNode } from './RichText';
 import { ReadingProgress } from './ReadingProgress';
 
@@ -52,20 +53,6 @@ const CAT_COLORS: Record<string, string> = {
   REGULATION: 'bg-[#EF4444]/15 text-[#EF4444]',
 };
 
-/** Estimate reading time from the CMS body (≈200 wpm). Null when there's no body. */
-function readingMinutes(body?: SlateNode[] | null): number | null {
-  if (!Array.isArray(body) || body.length === 0) return null;
-  let words = 0;
-  const walk = (node: SlateNode) => {
-    if (typeof node.text === 'string') {
-      words += node.text.trim().split(/\s+/).filter(Boolean).length;
-    }
-    if (Array.isArray(node.children)) node.children.forEach(walk);
-  };
-  body.forEach(walk);
-  return words > 0 ? Math.max(1, Math.round(words / 200)) : null;
-}
-
 interface ResearchDetailPageProps {
   slug?: string;
   article: ArticleDetailData;
@@ -82,6 +69,7 @@ export function ResearchDetailPage({
   const locale = useLocale();
   const t = useTranslations('researchDetail');
   const isAr = locale === 'ar';
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const related = relatedArticles ?? [];
   const hasBody = Boolean(article.body && article.body.length > 0);
@@ -100,7 +88,7 @@ export function ResearchDetailPage({
 
   return (
     <>
-      <ReadingProgress />
+      <ReadingProgress targetRef={contentRef} />
       {/* Breadcrumb */}
       <section className="bg-transparent px-5 pb-0 pt-6">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
@@ -127,74 +115,78 @@ export function ResearchDetailPage({
         </div>
       </section>
 
-      {/* Hero */}
-      <section className="px-5 pb-6 pt-4">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="mb-3 flex items-center gap-2">
-            {category && (
-              <span
-                className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${catColor}`}
-              >
-                {category}
-              </span>
-            )}
-            {(date || readTime) && (
-              <span className="font-body text-muted text-[11px]">
-                {[date, readTime].filter(Boolean).join(' · ')}
-              </span>
-            )}
-          </div>
-          <h1 className="text-foreground mb-3 font-sans text-[28px] font-semibold leading-[1.15] tracking-[-0.56px]">
-            {article.title}
-          </h1>
-          {article.author && (
-            <p className="font-body text-muted text-[13px]">
-              {isAr ? 'بقلم' : 'By'}{' '}
-              <span className="text-foreground font-medium">{article.author}</span>
-              {article.authorRole ? ` · ${article.authorRole}` : ''}
-            </p>
-          )}
-        </div>
-      </section>
-
-      {/* Hero image (CMS featured image only — no placeholder graphic) */}
-      {article.image && (
-        <section className="px-5 pb-8">
+      {/* Readable content region — the reading-progress bar tracks from the article
+          title through the end of the body (breadcrumb, related and CTA excluded). */}
+      <div ref={contentRef}>
+        {/* Hero */}
+        <section className="px-5 pb-6 pt-4">
           <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <div className="aspect-[16/9] overflow-hidden rounded-[18px] md:aspect-[2/1]">
-              <img
-                src={article.image}
-                alt={article.imageAlt ?? article.title}
-                className="h-full w-full object-cover"
-              />
+            <div className="mb-3 flex items-center gap-2">
+              {category && (
+                <span
+                  className={`font-body rounded-full px-2.5 py-[3px] text-[9px] font-semibold uppercase tracking-[0.1em] ${catColor}`}
+                >
+                  {category}
+                </span>
+              )}
+              {(date || readTime) && (
+                <span className="font-body text-muted text-[11px]">
+                  {[date, readTime].filter(Boolean).join(' · ')}
+                </span>
+              )}
             </div>
+            <h1 className="text-foreground mb-3 font-sans text-[28px] font-semibold leading-[1.15] tracking-[-0.56px]">
+              {article.title}
+            </h1>
+            {article.author && (
+              <p className="font-body text-muted text-[13px]">
+                {isAr ? 'بقلم' : 'By'}{' '}
+                <span className="text-foreground font-medium">{article.author}</span>
+                {article.authorRole ? ` · ${article.authorRole}` : ''}
+              </p>
+            )}
           </div>
         </section>
-      )}
 
-      {/* Article body (CMS rich text only) */}
-      {hasBody && (
-        <section className="px-5 pb-10">
-          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <RichText content={article.body} />
-
-            {/* Share */}
-            <div className="dark:border-border mt-8 flex items-center justify-between border-t border-[#e5e7eb] pt-5">
-              <span className="font-body text-muted text-[12px]">{t('shareLabel')}</span>
-              <div className="flex gap-3">
-                {['X', 'in', 'link'].map((s) => (
-                  <button
-                    key={s}
-                    className="border-border text-muted hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full border text-[11px] font-medium transition-colors"
-                  >
-                    {s}
-                  </button>
-                ))}
+        {/* Hero image (CMS featured image only — no placeholder graphic) */}
+        {article.image && (
+          <section className="px-5 pb-8">
+            <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+              <div className="aspect-[16/9] overflow-hidden rounded-[18px] md:aspect-[2/1]">
+                <img
+                  src={article.image}
+                  alt={article.imageAlt ?? article.title}
+                  className="h-full w-full object-cover"
+                />
               </div>
             </div>
-          </div>
-        </section>
-      )}
+          </section>
+        )}
+
+        {/* Article body (CMS rich text only) */}
+        {hasBody && (
+          <section className="px-5 pb-10">
+            <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+              <RichText content={article.body} />
+
+              {/* Share */}
+              <div className="dark:border-border mt-8 flex items-center justify-between border-t border-[#e5e7eb] pt-5">
+                <span className="font-body text-muted text-[12px]">{t('shareLabel')}</span>
+                <div className="flex gap-3">
+                  {['X', 'in', 'link'].map((s) => (
+                    <button
+                      key={s}
+                      className="border-border text-muted hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full border text-[11px] font-medium transition-colors"
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+      </div>
 
       {/* Related instruments — shown when the article has relatedInstruments from CMS */}
       {article.relatedInstruments && article.relatedInstruments.length > 0 && (

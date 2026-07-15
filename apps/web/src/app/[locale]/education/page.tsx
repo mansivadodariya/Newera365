@@ -1,7 +1,7 @@
 import { setRequestLocale } from 'next-intl/server';
 import { EducationHubPage, CtaBanner } from '@newera365/ui';
 import type { CmsEducationItem } from '@newera365/ui';
-import { getEducationContent } from '@/lib/cms';
+import { getEducationContent, getWebinars } from '@/lib/cms';
 import type { CmsEducationContent, CmsMedia } from '@/lib/cms';
 import type { Metadata } from 'next';
 
@@ -26,10 +26,16 @@ function mapItem(item: CmsEducationContent): CmsEducationItem {
 
 export default async function EducationRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  const items = await getEducationContent(undefined, params.locale);
+  const [items, webinars] = await Promise.all([
+    getEducationContent(undefined, params.locale),
+    getWebinars(params.locale),
+  ]);
   return (
     <>
-      <EducationHubPage content={items.length > 0 ? items.map(mapItem) : undefined} />
+      <EducationHubPage
+        content={items.length > 0 ? items.map(mapItem) : undefined}
+        webinarCount={webinars.length}
+      />
       <CtaBanner />
     </>
   );

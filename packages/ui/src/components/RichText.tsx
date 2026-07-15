@@ -18,6 +18,20 @@ export interface SlateNode {
   relationTo?: string;
 }
 
+/** Estimate reading time from a Slate rich-text body (≈200 wpm). Null when empty. */
+export function readingMinutes(body?: SlateNode[] | null): number | null {
+  if (!Array.isArray(body) || body.length === 0) return null;
+  let words = 0;
+  const walk = (node: SlateNode) => {
+    if (typeof node.text === 'string') {
+      words += node.text.trim().split(/\s+/).filter(Boolean).length;
+    }
+    if (Array.isArray(node.children)) node.children.forEach(walk);
+  };
+  body.forEach(walk);
+  return words > 0 ? Math.max(1, Math.round(words / 200)) : null;
+}
+
 function renderLeaf(node: SlateNode, i: number): ReactNode {
   let el: ReactNode = node.text ?? '';
   if (!node.text) return el;
