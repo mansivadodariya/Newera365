@@ -171,7 +171,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={t('fieldEmailPlaceholder')}
                     aria-label={t('fieldEmailLabel')}
-                    className="font-body text-foreground text-body focus:border-accent border-border bg-surface placeholder:text-muted w-full rounded-[14px] border px-4 py-[14px] outline-none transition-colors sm:flex-1"
+                    className="font-body text-foreground text-body border-border bg-surface placeholder:text-muted w-full rounded-[14px] border px-4 py-[14px] outline-none transition-colors sm:flex-1"
                   />
                   <button
                     type="submit"

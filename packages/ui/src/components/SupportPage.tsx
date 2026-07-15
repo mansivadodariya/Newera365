@@ -319,7 +319,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
   }
 
   const tinted =
-    'bg-[#F0F4F1] dark:bg-[#1a1c22] border border-transparent focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-colors';
+    'bg-[#F0F4F1] dark:bg-[#1a1c22] border border-transparent focus:ring-2 focus:ring-accent/20 outline-none transition-colors';
 
   return (
     <>
@@ -338,7 +338,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
 
           {/* Search bar: the first thing every visitor reaches for. */}
           <div
-            className={`focus-within:border-accent flex items-center gap-[12px] rounded-[16px] border px-5 py-4 transition-colors ${CARD}`}
+            className={`flex items-center gap-[12px] rounded-[16px] border px-5 py-4 transition-colors ${CARD}`}
           >
             <svg
               className="text-muted flex-shrink-0"

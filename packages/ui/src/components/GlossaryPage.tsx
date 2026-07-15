@@ -177,7 +177,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                   setSearch(e.target.value);
                   setActiveLetter(null);
                 }}
-                className="font-body text-body border-border text-foreground placeholder:text-muted focus:border-accent focus:ring-accent/40 w-full rounded-full border bg-white py-3.5 pe-11 ps-11 outline-none transition-colors focus:ring-1 dark:border-white/[0.1] dark:bg-[#111318] dark:text-white dark:placeholder:text-white/30"
+                className="font-body text-body border-border text-foreground placeholder:text-muted focus:ring-accent/40 w-full rounded-full border bg-white py-3.5 pe-11 ps-11 outline-none transition-colors focus:ring-1 dark:border-white/[0.1] dark:bg-[#111318] dark:text-white dark:placeholder:text-white/30"
               />
               {search && (
                 <button

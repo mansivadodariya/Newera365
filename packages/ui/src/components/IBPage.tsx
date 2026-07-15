@@ -292,7 +292,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
     }
   }
   const inputCls =
-    'font-body text-foreground focus:border-accent border-border w-full rounded-[12px] border bg-[#F4F7F5] px-4 py-3 text-[15px] outline-none dark:border-white/10 dark:bg-[#1a1c22]';
+    'font-body text-foreground border-border w-full rounded-[12px] border bg-[#F4F7F5] px-4 py-3 text-[15px] outline-none dark:border-white/10 dark:bg-[#1a1c22]';
 
   // Income ladder — CMS-driven (falls back to the same defaults shown in the
   // table below), single source of truth for both the display and the estimator.

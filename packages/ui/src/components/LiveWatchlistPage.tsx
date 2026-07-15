@@ -148,7 +148,7 @@ export function LiveWatchlistPage({ instruments }: LiveWatchlistPageProps) {
                     );
                   })}
                 </div>
-                <label className="border-border focus-within:border-accent flex items-center gap-2 rounded-full border bg-white px-4 py-[7px] transition-colors md:w-[240px] dark:border-white/[0.1] dark:bg-transparent">
+                <label className="border-border flex items-center gap-2 rounded-full border bg-white px-4 py-[7px] transition-colors md:w-[240px] dark:border-white/[0.1] dark:bg-transparent">
                   <svg
                     className="text-muted flex-shrink-0"
                     width="13"

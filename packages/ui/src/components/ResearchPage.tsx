@@ -776,7 +776,7 @@ export function ResearchPage({
                       placeholder={t('briefingPlaceholder')}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="font-body focus:border-accent flex-1 rounded-full border border-white/20 bg-white/[0.07] px-4 py-3 text-[13px] text-white placeholder-white/40 outline-none"
+                      className="font-body flex-1 rounded-full border border-white/20 bg-white/[0.07] px-4 py-3 text-[13px] text-white placeholder-white/40 outline-none"
                     />
                     <button
                       type="submit"

@@ -413,7 +413,7 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder={t('emailPlaceholder')}
                         aria-label={t('emailLabel')}
-                        className="focus:border-accent-bright font-body text-body w-full rounded-[13px] border border-white/[0.14] bg-white/[0.06] px-4 py-3 text-white outline-none transition-colors placeholder:text-white/40 sm:flex-1"
+                        className="font-body text-body w-full rounded-[13px] border border-white/[0.14] bg-white/[0.06] px-4 py-3 text-white outline-none transition-colors placeholder:text-white/40 sm:flex-1"
                       />
                       <button
                         type="submit"

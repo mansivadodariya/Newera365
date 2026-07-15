@@ -51,7 +51,7 @@ export function NumberInput({
         step={step}
         dir="ltr"
         onChange={(e) => onChange(e.target.value)}
-        className="border-border focus:border-accent w-full rounded-[12px] border bg-white px-4 py-3 text-start font-mono text-[14px] tabular-nums text-[#111] outline-none transition-[border-color,box-shadow] duration-200 focus:shadow-[0_0_0_3px_rgba(0,176,80,0.12)] dark:border-white/10 dark:bg-[#1a1c22] dark:text-white"
+        className="border-border w-full rounded-[12px] border bg-white px-4 py-3 text-start font-mono text-[14px] tabular-nums text-[#111] outline-none transition-[border-color,box-shadow] duration-200 focus:shadow-[0_0_0_3px_rgba(0,176,80,0.12)] dark:border-white/10 dark:bg-[#1a1c22] dark:text-white"
       />
     </div>
   );

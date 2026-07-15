@@ -426,7 +426,7 @@ export function EducationHubPage({ content: cmsContent, webinarCount }: Educatio
                   placeholder={t('inboxPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="font-body text-body focus:border-accent-bright flex-1 rounded-full border border-white/20 bg-white/[0.07] px-4 py-3 text-white placeholder-white/40 outline-none transition-colors"
+                  className="font-body text-body flex-1 rounded-full border border-white/20 bg-white/[0.07] px-4 py-3 text-white placeholder-white/40 outline-none transition-colors"
                 />
                 <button
                   type="submit"

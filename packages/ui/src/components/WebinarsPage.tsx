@@ -141,7 +141,7 @@ function RegisterModal({ webinar, onClose }: { webinar: WebinarItem; onClose: ()
   }
 
   const inputClass =
-    'font-body w-full rounded-[12px] border border-white/[0.12] bg-white/[0.06] px-4 py-3 text-[15px] text-white placeholder:text-white/[0.35] outline-none transition-colors focus:border-accent-bright';
+    'font-body w-full rounded-[12px] border border-white/[0.12] bg-white/[0.06] px-4 py-3 text-[15px] text-white placeholder:text-white/[0.35] outline-none transition-colors';
 
   return (
     <div

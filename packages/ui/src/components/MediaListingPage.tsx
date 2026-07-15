@@ -186,7 +186,7 @@ export function MediaListingPage({ cmsVideos, webinars }: MediaListingPageProps)
                 placeholder={t('searchPlaceholder')}
                 value={search}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="border-border font-body text-foreground placeholder-muted focus:border-accent bg-surface w-full rounded-xl py-3 pe-4 ps-10 text-[14px] font-medium outline-none"
+                className="border-border font-body text-foreground placeholder-muted bg-surface w-full rounded-xl py-3 pe-4 ps-10 text-[14px] font-medium outline-none"
               />
             </div>
           )}

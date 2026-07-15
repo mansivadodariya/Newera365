@@ -128,10 +128,18 @@ h4 {
   display: none; /* Chrome / Safari */
 }
 
-/* Focus ring */
+/* Focus: no visible outline or ring anywhere (per client request).
+   a11y note: keyboard focus is no longer visually indicated. The `!important`
+   flags override element outlines and Tailwind `focus:ring-*` (which composes
+   into box-shadow via the --tw-ring-* vars); zeroing the ring vars leaves real
+   element shadows (--tw-shadow) untouched. Border-color focus affordances
+   (focus:border-accent / focus-within:border-accent) are removed at the
+   component level, since they can't be reverted generically here. */
+:focus,
 :focus-visible {
-  outline: 2px solid #00b050;
-  outline-offset: 2px;
+  outline: none !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
 }
 
 /* Hide scrollbar but keep scroll functionality */
