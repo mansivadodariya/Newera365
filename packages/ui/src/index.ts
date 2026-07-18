@@ -2,122 +2,135 @@
 // here forces EVERY re-exported component into the client bundle, even pure
 // server/presentational ones — which is what inflated First Load JS. Each
 // component declares its own `'use client'` when it needs one.
+//
+// Layout mirrors the folder taxonomy (see packages/ui/README.md):
+//   lib/        non-component helpers and data modules
+//   motion/     the "Life" motion primitives (DESIGN.md §8)
+//   primitives/ small reusable UI building blocks
+//   chrome/     site shell: header, footer, banners, overlays
+//   sections/   homepage and reusable page sections
+//   market/     live-market data widgets (TradingView, MT5 spark)
+//   pages/      full route-level page components
 
+// ── lib ──────────────────────────────────────────────────────────────────────
 export { safeUrl } from './lib/safeUrl';
 
-export { SectionKicker } from './components/SectionKicker';
-export { Spotlight } from './components/Spotlight';
+// ── motion ───────────────────────────────────────────────────────────────────
+export { CountUp } from './components/motion/CountUp';
+export { RevealDemo } from './components/motion/RevealDemo';
 
-export { ToastProvider, useToast } from './components/ToastProvider';
+// ── primitives ───────────────────────────────────────────────────────────────
+export { SectionKicker } from './components/primitives/SectionKicker';
+export { Spotlight } from './components/primitives/Spotlight';
+export { Pagination } from './components/primitives/Pagination';
+export { RichText, extractHeadings } from './components/primitives/RichText';
+export type { SlateNode } from './components/primitives/RichText';
 
-export { AuthModal } from './components/AuthModal';
-export type { AuthModalType } from './components/AuthModal';
-export { LanguageToggle } from './components/LanguageToggle';
-export { RiskBanner } from './components/RiskBanner';
-export { TopLoadingBar } from './components/TopLoadingBar';
+// ── chrome (site shell) ──────────────────────────────────────────────────────
+export { HeaderDemo } from './components/chrome/HeaderDemo';
+export { MobileMenuDemo } from './components/chrome/MobileMenuDemo';
+export { Footer } from './components/chrome/Footer';
+export type { CmsFooterColumn, CmsSocialLinks } from './components/chrome/Footer';
+export { ToastProvider, useToast } from './components/chrome/ToastProvider';
+export { AuthModal } from './components/chrome/AuthModal';
+export type { AuthModalType } from './components/chrome/AuthModal';
+export { LanguageToggle } from './components/chrome/LanguageToggle';
+export { RiskBanner } from './components/chrome/RiskBanner';
+export { TopLoadingBar } from './components/chrome/TopLoadingBar';
+export { StickyCtaBar } from './components/chrome/StickyCtaBar';
+export { FloatingContactWidget } from './components/chrome/FloatingContactWidget';
+export type { FloatingContactWidgetProps } from './components/chrome/FloatingContactWidget';
 
-// ── Site chrome + homepage/landing sections (live; the "Demo" suffix is
-// historical — these were promoted from the landing redesign to the live site) ──
-export { HeaderDemo } from './components/HeaderDemo';
-export { MobileMenuDemo } from './components/MobileMenuDemo';
-export { HeroSectionDemo } from './components/HeroSectionDemo';
-export { RevealDemo } from './components/RevealDemo';
-export { TestimonialsSection } from './components/TestimonialsSection';
-export type { TestimonialItem, TestimonialsSectionProps } from './components/TestimonialsSection';
-export { StatsSectionDemo } from './components/StatsSectionDemo';
-export type { CmsKpiStat } from './components/StatsSectionDemo';
-export { MarketsSectionDemo } from './components/MarketsSectionDemo';
-export { ThreeStepsSectionDemo } from './components/ThreeStepsSectionDemo';
-export { TwoPathsSection } from './components/TwoPathsSection';
-export { HomeNewsletterSection } from './components/HomeNewsletterSection';
-export type { HomeNewsletterContent } from './components/HomeNewsletterSection';
-export { PartnersSection } from './components/PartnersSection';
-export type { PartnerItem, PartnersSectionProps } from './components/PartnersSection';
-export { CtaBannerDemo } from './components/CtaBannerDemo';
-export { TradingViewTicker } from './components/TradingViewTicker';
-export { Footer } from './components/Footer';
-export type { CmsFooterColumn, CmsSocialLinks } from './components/Footer';
+// ── sections (homepage + reusable bands; the "Demo" suffix is historical —
+//    these were promoted from the landing redesign to the live site) ──────────
+export { HeroSectionDemo } from './components/sections/HeroSectionDemo';
+export { TestimonialsSection } from './components/sections/TestimonialsSection';
+export type {
+  TestimonialItem,
+  TestimonialsSectionProps,
+} from './components/sections/TestimonialsSection';
+export { StatsSectionDemo } from './components/sections/StatsSectionDemo';
+export type { CmsKpiStat } from './components/sections/StatsSectionDemo';
+export { MarketsSectionDemo } from './components/sections/MarketsSectionDemo';
+export { MarketsSectionGrid } from './components/sections/MarketsSectionGrid';
+export type { MarketItem } from './components/sections/MarketsSectionGrid';
+export { ThreeStepsSectionDemo } from './components/sections/ThreeStepsSectionDemo';
+export { TwoPathsSection } from './components/sections/TwoPathsSection';
+export { HomeNewsletterSection } from './components/sections/HomeNewsletterSection';
+export type { HomeNewsletterContent } from './components/sections/HomeNewsletterSection';
+export { PartnersSection } from './components/sections/PartnersSection';
+export type { PartnerItem, PartnersSectionProps } from './components/sections/PartnersSection';
+export { FeaturesSection } from './components/sections/FeaturesSection';
+export type { CmsUspMetric, FeaturesSectionProps } from './components/sections/FeaturesSection';
+export { ArbitrageSection } from './components/sections/ArbitrageSection';
+export { FundingStripSection } from './components/sections/FundingStripSection';
+export { CompareChecklistSection } from './components/sections/CompareChecklistSection';
+export { SecurityTrustBand } from './components/sections/SecurityTrustBand';
+export { CtaBanner } from './components/sections/CtaBanner';
+export { CtaBannerDemo } from './components/sections/CtaBannerDemo';
+export { SmartCtaBanner, NO_CTA_SUFFIXES } from './components/sections/SmartCtaBanner';
+export type { WebinarItem } from './components/sections/WebinarsSection';
 
-export { CountUp } from './components/CountUp';
-export { MarketsSectionGrid } from './components/MarketsSectionGrid';
-export type { MarketItem } from './components/MarketsSectionGrid';
-export { LiveSpark } from './components/LiveSpark';
-export type { LiveSparkProps } from './components/LiveSpark';
-export { FeaturesSection } from './components/FeaturesSection';
-export type { CmsUspMetric, FeaturesSectionProps } from './components/FeaturesSection';
-export { CtaBanner } from './components/CtaBanner';
-export { SmartCtaBanner, NO_CTA_SUFFIXES } from './components/SmartCtaBanner';
-export { StickyCtaBar } from './components/StickyCtaBar';
-export { FloatingContactWidget } from './components/FloatingContactWidget';
-export { SecurityTrustBand } from './components/SecurityTrustBand';
-export type { FloatingContactWidgetProps } from './components/FloatingContactWidget';
-export { ArbitrageSection } from './components/ArbitrageSection';
-export { FundingStripSection } from './components/FundingStripSection';
-export { CompareChecklistSection } from './components/CompareChecklistSection';
+// ── market (live-data widgets) ───────────────────────────────────────────────
+export { TradingViewTicker } from './components/market/TradingViewTicker';
+export { TradingViewWidget } from './components/market/TradingViewWidget';
+export type { WidgetType, TradingViewWidgetProps } from './components/market/TradingViewWidget';
+export { LiveSpark } from './components/market/LiveSpark';
+export type { LiveSparkProps } from './components/market/LiveSpark';
 
-export { AccountsPage } from './components/AccountsPage';
-export { FundingPage } from './components/FundingPage';
-export type { CmsPaymentMethodItem } from './components/FundingPage';
-export { FeesPage } from './components/FeesPage';
-export type { CmsSpreadRow } from './components/FeesPage';
-export { PlatformPage } from './components/PlatformPage';
-export type { CmsPlatformDownloads } from './components/PlatformPage';
-export { WebTraderPage } from './components/WebTraderPage';
-export type { CmsWebTraderSpec } from './components/WebTraderPage';
-export { PromoPage } from './components/PromoPage';
-export type { CmsPromoItem } from './components/PromoPage';
-export { MarketCategoryPage } from './components/MarketCategoryPage';
-export type { MarketCategoryPageProps } from './components/MarketCategoryPage';
-export { SupportPage } from './components/SupportPage';
-export type { CmsFaqItem, CmsContactDetails, CmsPromiseStat } from './components/SupportPage';
-export { AboutPage } from './components/AboutPage';
-export type { CmsAwardItem, CmsMilestoneItem } from './components/AboutPage';
-export { LegalPage } from './components/LegalPage';
-export type { CmsLegalDocument } from './components/LegalPage';
-
-export { IBPage } from './components/IBPage';
-export type { IBCmsContent } from './components/IBPage';
-export { EducationHubPage } from './components/EducationHubPage';
-export type { CmsEducationItem } from './components/EducationHubPage';
-export { MediaListingPage } from './components/MediaListingPage';
-export type { CmsVideoItem } from './components/MediaListingPage';
-export type { WebinarItem } from './components/WebinarsSection';
-export { EbooksPage } from './components/EbooksPage';
-export type { CmsEbookItem } from './components/EbooksPage';
-export { GlossaryPage } from './components/GlossaryPage';
-export type { CmsGlossaryTerm } from './components/GlossaryPage';
-export { GuidesPage } from './components/GuidesPage';
-export type { CmsGuide } from './components/GuidesPage';
-export { GuideDetailPage } from './components/GuideDetailPage';
-export type { GuideDetailProps, CmsGuideDetail } from './components/GuideDetailPage';
-
-export { ResearchPage } from './components/ResearchPage';
-export type { ArticleItem, CmsResearchReportItem } from './components/ResearchPage';
-export { ResearchDetailPage } from './components/ResearchDetailPage';
+// ── pages (route-level components; routes in apps/web are thin wrappers) ─────
+export { AccountsPage } from './components/pages/AccountsPage';
+export { FundingPage } from './components/pages/FundingPage';
+export type { CmsPaymentMethodItem } from './components/pages/FundingPage';
+export { FeesPage } from './components/pages/FeesPage';
+export type { CmsSpreadRow } from './components/pages/FeesPage';
+export { PromoPage } from './components/pages/PromoPage';
+export type { CmsPromoItem } from './components/pages/PromoPage';
+export { IBPage } from './components/pages/IBPage';
+export type { IBCmsContent } from './components/pages/IBPage';
+export { MarketCategoryPage } from './components/pages/MarketCategoryPage';
+export type { MarketCategoryPageProps } from './components/pages/MarketCategoryPage';
+export { PlatformPage } from './components/pages/PlatformPage';
+export type { CmsPlatformDownloads } from './components/pages/PlatformPage';
+export { WebTraderPage } from './components/pages/WebTraderPage';
+export type { CmsWebTraderSpec } from './components/pages/WebTraderPage';
+export { EducationHubPage } from './components/pages/EducationHubPage';
+export type { CmsEducationItem } from './components/pages/EducationHubPage';
+export { MediaListingPage } from './components/pages/MediaListingPage';
+export type { CmsVideoItem } from './components/pages/MediaListingPage';
+export { EbooksPage } from './components/pages/EbooksPage';
+export type { CmsEbookItem } from './components/pages/EbooksPage';
+export { GlossaryPage } from './components/pages/GlossaryPage';
+export type { CmsGlossaryTerm } from './components/pages/GlossaryPage';
+export { GuidesPage } from './components/pages/GuidesPage';
+export type { CmsGuide } from './components/pages/GuidesPage';
+export { GuideDetailPage } from './components/pages/GuideDetailPage';
+export type { GuideDetailProps, CmsGuideDetail } from './components/pages/GuideDetailPage';
+export { ResearchPage } from './components/pages/ResearchPage';
+export type { ArticleItem, CmsResearchReportItem } from './components/pages/ResearchPage';
+export { ResearchDetailPage } from './components/pages/ResearchDetailPage';
 export type {
   ArticleDetailData,
   RelatedArticle,
   RelatedInstrument,
-} from './components/ResearchDetailPage';
-export { TraderToolsPage } from './components/TraderToolsPage';
-export type { CmsCalculatorInstrument } from './components/TraderToolsPage';
-export { SpreadComparatorPage } from './components/SpreadComparatorPage';
-export type { CmsSpreadInstrument } from './components/SpreadComparatorPage';
-export { EconomicCalendarPage } from './components/EconomicCalendarPage';
-export { AnalystChartPage } from './components/AnalystChartPage';
-export type { CmsAnalystCallItem, CmsAnalystProfile } from './components/AnalystChartPage';
-export { LiveWatchlistPage } from './components/LiveWatchlistPage';
-export { NewsletterPage } from './components/NewsletterPage';
-export { CareersPage } from './components/CareersPage';
-export type { CmsJobItem } from './components/CareersPage';
-export { Pagination } from './components/Pagination';
-
-export { RichText, extractHeadings } from './components/RichText';
-export type { SlateNode } from './components/RichText';
-
-export { TradingViewWidget } from './components/TradingViewWidget';
-export type { WidgetType, TradingViewWidgetProps } from './components/TradingViewWidget';
-
-export { AiCrmPage } from './components/AiCrmPage';
-export { RecognitionPage } from './components/RecognitionPage';
-export type { AwardCardItem, MediaPressItem } from './components/RecognitionPage';
+} from './components/pages/ResearchDetailPage';
+export { TraderToolsPage } from './components/pages/TraderToolsPage';
+export type { CmsCalculatorInstrument } from './components/pages/TraderToolsPage';
+export { SpreadComparatorPage } from './components/pages/SpreadComparatorPage';
+export type { CmsSpreadInstrument } from './components/pages/SpreadComparatorPage';
+export { EconomicCalendarPage } from './components/pages/EconomicCalendarPage';
+export { AnalystChartPage } from './components/pages/AnalystChartPage';
+export type { CmsAnalystCallItem, CmsAnalystProfile } from './components/pages/AnalystChartPage';
+export { LiveWatchlistPage } from './components/pages/LiveWatchlistPage';
+export { NewsletterPage } from './components/pages/NewsletterPage';
+export { SupportPage } from './components/pages/SupportPage';
+export type { CmsFaqItem, CmsContactDetails, CmsPromiseStat } from './components/pages/SupportPage';
+export { LegalPage } from './components/pages/LegalPage';
+export type { CmsLegalDocument } from './components/pages/LegalPage';
+export { AboutPage } from './components/pages/AboutPage';
+export type { CmsAwardItem, CmsMilestoneItem } from './components/pages/AboutPage';
+export { CareersPage } from './components/pages/CareersPage';
+export type { CmsJobItem } from './components/pages/CareersPage';
+export { RecognitionPage } from './components/pages/RecognitionPage';
+export type { AwardCardItem, MediaPressItem } from './components/pages/RecognitionPage';
+export { AiCrmPage } from './components/pages/AiCrmPage';
