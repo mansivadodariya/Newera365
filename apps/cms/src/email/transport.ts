@@ -152,7 +152,7 @@ export async function sendMail(opts: {
   replyTo?: string;
   attachments?: MailAttachment[];
 }): Promise<void> {
-  await transport.sendMail({
+  const info = await transport.sendMail({
     from: `${FROM_NAME} <${FROM}>`,
     to: opts.to,
     subject: opts.subject,
@@ -160,4 +160,10 @@ export async function sendMail(opts: {
     replyTo: opts.replyTo,
     attachments: opts.attachments,
   });
+  // jsonTransport resolves with the message as JSON instead of sending it;
+  // surface it so dev form-testing can actually see the would-be email.
+  if (useJsonTransport) {
+    console.log(`[email:json] to=${opts.to} subject="${opts.subject}"`);
+    console.log((info as { message?: string }).message ?? '');
+  }
 }
