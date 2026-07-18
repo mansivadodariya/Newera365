@@ -49,7 +49,8 @@ code-review/
 apps/cms/_e2e/
 
 # business/source documents kept out of the code repo (shared separately)
-archive/
+# (root-anchored: docs/archive/ and src/scripts/archive/ ARE tracked)
+/archive/
 
 .claude
 *.claude
