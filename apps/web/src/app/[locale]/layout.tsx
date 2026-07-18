@@ -95,6 +95,20 @@ export async function generateMetadata({
       type: 'website',
       locale: locale === 'ar' ? 'ar_AE' : 'en_US',
       alternateLocale: locale === 'ar' ? ['en_US'] : ['ar_AE'],
+      images: [
+        {
+          url: '/og-image.jpg',
+          width: 1200,
+          height: 630,
+          alt: isAr
+            ? 'نيو إيرا 365: تداول الفوركس والعقود مقابل الفروقات'
+            : 'Newera365: Forex and CFD Trading',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      images: ['/og-image.jpg'],
     },
     icons: {
       icon: [
@@ -126,9 +140,10 @@ export default async function LocaleLayout({
   const messages = await getMessages();
   const s = await getSiteSettings();
 
-  const riskDisclaimer = s
-    ? ((locale === 'ar' ? s.riskDisclaimerAr : s.riskDisclaimerEn) ?? undefined)
-    : undefined;
+  // Compliance text: treat a blank/whitespace-only CMS value as absent so the
+  // Footer's i18n fallback engages. Never render an empty risk paragraph.
+  const riskDisclaimerRaw = s ? (locale === 'ar' ? s.riskDisclaimerAr : s.riskDisclaimerEn) : null;
+  const riskDisclaimer = riskDisclaimerRaw?.trim() ? riskDisclaimerRaw : undefined;
 
   const riskBannerEnabled = s?.riskBannerEnabled ?? false;
   const riskBannerMessage = s
