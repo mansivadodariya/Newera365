@@ -43,14 +43,13 @@ graphify-out/
 # CMS seed source images (uploaded into the CMS by seed scripts; prod already seeded)
 apps/cms/seed-assets/
 
-# ad-hoc review / working docs (kept local, not pushed)
-UAT-REVIEW-2026-07-03.md
-PRODUCTION_CHECKLIST.md
-UAT-CONTENT-CHECKLIST.md
-SECURITY.md
+# local review scratch (not part of the handoff)
 code-review/
-docs/
 .audit/
+apps/cms/_e2e/
+
+# business/source documents kept out of the code repo (shared separately)
+archive/
 
 .claude
 *.claude
