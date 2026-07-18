@@ -240,17 +240,6 @@ export interface CmsCareer {
   seoDescription?: string | null;
 }
 
-export interface CmsTeamMember {
-  id: number;
-  name: string;
-  slug: string;
-  role: string;
-  bio?: string | null;
-  photo?: CmsMedia | number | null;
-  sortOrder?: number | null;
-  status: 'active' | 'inactive';
-}
-
 export interface CmsAward {
   id: number;
   title: string;
@@ -844,21 +833,8 @@ export async function getMarketAnalysisBySlug(
 }
 
 // ---------------------------------------------------------------------------
-// Team Members & Awards
+// Awards
 // ---------------------------------------------------------------------------
-
-export async function getTeamMembers(locale: string): Promise<CmsTeamMember[]> {
-  const data = await fetchCollection<CmsTeamMember>(
-    'team-members',
-    {
-      'where[status][equals]': 'active',
-      sort: 'sortOrder',
-      limit: '50',
-    },
-    locale,
-  );
-  return data.docs;
-}
 
 export async function getAwards(locale: string): Promise<CmsAward[]> {
   const data = await fetchCollection<CmsAward>(

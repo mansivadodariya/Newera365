@@ -114,6 +114,12 @@ const nextConfig = {
         destination: '/:locale/research',
         permanent: true,
       },
+      // Landing redesign was promoted to the live homepage; the demo route is gone.
+      {
+        source: '/:locale(en|ar)/landing-demo',
+        destination: '/:locale',
+        permanent: true,
+      },
       // Careers + Recognition temporarily hidden (client request, 2026-07-09).
       // permanent:false so they can be re-enabled later without cached 308s.
       {
