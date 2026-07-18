@@ -10,9 +10,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const isAr = params.locale === 'ar';
   return {
-    title: isAr
-      ? 'الشركاء والمعرّفون (IB) | نيو إيرا 365'
-      : 'Introducing Brokers & Partners | NewEra365',
+    title: isAr ? 'الشركاء والمعرّفون (IB)' : 'Introducing Brokers & Partners',
     description: isAr
       ? 'انضم إلى برنامج الشركاء واكسب عمولات على كل صفقة. خطط IB والتابعين والعلامات البيضاء متاحة.'
       : 'Join our partner programme and earn commissions on every trade. IB, affiliate, and white-label plans available.',

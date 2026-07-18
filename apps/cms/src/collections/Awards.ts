@@ -18,7 +18,7 @@ export const Awards: CollectionConfig = {
     group: 'Company',
     useAsTitle: 'title',
     defaultColumns: ['title', 'date', 'status'],
-    description: 'Industry awards and recognition received by NewEra365.',
+    description: 'Industry awards and recognition received by Newera365.',
   },
   access: { read: publicReadWhere({ status: { equals: 'published' } }) },
   fields: [

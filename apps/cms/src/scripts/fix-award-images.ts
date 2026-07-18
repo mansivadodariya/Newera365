@@ -2,7 +2,7 @@
  * fix-award-images.ts
  *
  * Client feedback round 3 (awards cards): the award media docs pointed at
- * placeholder "NewEra365" text-banner PNGs. Real photographs (Unsplash,
+ * placeholder "Newera365" text-banner PNGs. Real photographs (Unsplash,
  * processed to 900x600 JPEG + 400x300 card variant in src/media) replace
  * them — this script repoints each media doc's filename/mime/dimensions at
  * the new .jpg files. The awards' `logo` relationships are untouched (they

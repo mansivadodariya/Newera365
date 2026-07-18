@@ -18,7 +18,7 @@ export function EconomicCalendarPage() {
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-accent text-muted mb-4">
+          <SectionKicker className="mb-4">
             {t('kicker')}
           </SectionKicker>
           <h1 className="text-foreground text-display mb-3 font-sans">
@@ -101,7 +101,7 @@ export function EconomicCalendarPage() {
       <section className="px-5 pb-14">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="[&>span:first-child]:bg-accent text-muted mb-2">
+            <SectionKicker className="mb-2">
               {t('storyKicker')}
             </SectionKicker>
           </ScrollReveal>
@@ -110,7 +110,7 @@ export function EconomicCalendarPage() {
               <ScrollReveal key={key} index={i}>
                 <div className="row-hover group grid gap-2 py-6 md:grid-cols-[120px_260px_1fr] md:gap-6">
                   <span
-                    className="text-accent/60 dark:text-accent-bright/50 group-hover:text-accent dark:group-hover:text-accent-bright select-none font-mono text-[32px] font-bold tabular-nums leading-none transition-colors duration-300 md:text-[40px]"
+                    className="text-foreground group-hover:text-accent dark:text-accent-bright select-none font-sans text-[32px] font-semibold tabular-nums leading-none tracking-tight opacity-[0.08] transition-[color,opacity] duration-200 group-hover:opacity-40 md:text-[40px] dark:opacity-[0.28] dark:group-hover:opacity-70"
                     aria-hidden="true"
                   >
                     {String(i + 1).padStart(2, '0')}

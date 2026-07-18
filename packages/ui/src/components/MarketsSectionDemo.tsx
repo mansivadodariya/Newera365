@@ -70,12 +70,12 @@ export async function MarketsSectionDemo() {
   return (
     <section className="rounded-s-[32px] bg-gradient-to-r from-[#DCEAE1] to-[#F2F5F3] px-5 pb-8 pt-10 xl:pb-12 xl:pt-12 rtl:bg-gradient-to-l dark:from-[#1F262E] dark:to-[#000000]">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-        <SectionKicker className="text-foreground [&>span:first-child]:bg-accent mb-[14px]">
+        <SectionKicker className="mb-[14px]">
           {t('marketsKicker')}
         </SectionKicker>
 
         <h2 className="text-foreground text-headline mb-3 font-sans">{t('marketsHeading')}</h2>
-        <p className="font-body text-muted text-lead mb-6 max-w-[560px] dark:text-[#FFFFFF]">
+        <p className="font-body text-muted text-lead mb-6 max-w-[560px] dark:text-white">
           {t('marketsSubheading')}
         </p>
 

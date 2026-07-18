@@ -145,7 +145,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="mb-4">{t('kickerLabel')}</SectionKicker>
             <h1 className="text-foreground text-display mb-3 font-sans">
-              {t('heroLine1')} <span className="text-accent">{t('heroAccent')}</span>
+              {t('heroLine1')} <span>{t('heroAccent')}</span>
             </h1>
             <p className="font-body text-muted text-body-lg mb-7 max-w-[46ch] leading-[1.55]">
               {t('heroSubtitle')}
@@ -222,7 +222,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
               className={`text-caption flex-shrink-0 rounded-full border px-3.5 py-1.5 font-mono uppercase tracking-[0.1em] transition-colors ${
                 !activeCategory
                   ? 'border-accent bg-accent/[0.08] text-accent'
-                  : 'border-border text-muted hover:text-foreground hover:border-foreground/25 dark:border-white/[0.12] dark:text-white/55 dark:hover:text-white'
+                  : 'border-border text-muted hover:text-foreground hover:border-accent/50 dark:border-white/[0.12] dark:text-white/55 dark:hover:text-white'
               }`}
             >
               {t('filterAll')}
@@ -237,7 +237,7 @@ export function GlossaryPage({ terms: cmsTerms }: GlossaryPageProps) {
                   className={`text-caption flex-shrink-0 rounded-full border px-3.5 py-1.5 font-mono uppercase tracking-[0.1em] transition-colors ${
                     active
                       ? 'border-accent bg-accent/[0.08] text-accent'
-                      : 'border-border text-muted hover:text-foreground hover:border-foreground/25 dark:border-white/[0.12] dark:text-white/55 dark:hover:text-white'
+                      : 'border-border text-muted hover:text-foreground hover:border-accent/50 dark:border-white/[0.12] dark:text-white/55 dark:hover:text-white'
                   }`}
                 >
                   {translateGlossCat(cat)}

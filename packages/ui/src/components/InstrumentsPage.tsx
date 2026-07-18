@@ -107,7 +107,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
             <h1 className="text-foreground text-display whitespace-pre-line font-sans">
               {t('heroLine1')}
             </h1>
-            <h1 className="text-accent text-display whitespace-pre-line font-sans">
+            <h1 className="text-foreground text-display whitespace-pre-line font-sans">
               {t('heroLine2')}
             </h1>
           </span>
@@ -174,8 +174,8 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
                 }}
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[10px] text-[13px] font-medium transition-colors ${
                   activeCategory === cat
-                    ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                    : 'bg-[#f2f2f4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e] dark:hover:text-white/80'
+                    ? 'bg-accent text-white'
+                    : 'bg-[#f2f2f4] text-muted hover:bg-accent/[0.10] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-accent/[0.15] dark:hover:text-white/80'
                 }`}
               >
                 {cat}
@@ -189,12 +189,12 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
       <section className="bg-transparent px-5 pb-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="mb-4 flex items-center justify-between">
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted">
+            <SectionKicker>
               {hasCmsData
                 ? `${activeCategory.toUpperCase()} · ${filteredRows.length}${searchQuery ? ` OF ${cmsRows.length}` : ''} INSTRUMENTS`
                 : 'LIVE SPREADS · 8 OF 70'}
             </SectionKicker>
-            <button className="font-body flex items-center gap-1 text-[10px] uppercase tracking-[0.1em] text-[#6B7280]">
+            <button className="font-body flex items-center gap-1 text-[10px] uppercase tracking-[0.1em] text-muted">
               {t('sortLabel')}
               <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
                 <path
@@ -211,7 +211,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
           {/* View all — navigates to the per-category page */}
           <Link
             href={`/${locale}/markets/${activeCategory.toLowerCase()}`}
-            className="bg-surface dark:hover:bg-surface-elevated mt-3 flex w-full items-center justify-between rounded-[14px] px-4 py-[13px] transition-colors hover:bg-[#E9F0EB]"
+            className="bg-surface hover:bg-accent/[0.06] dark:hover:bg-accent/[0.10] mt-3 flex w-full items-center justify-between rounded-[14px] px-4 py-[13px] transition-colors"
           >
             <span className="font-body text-foreground text-[13px] font-medium">
               {hasCmsData
@@ -259,8 +259,8 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
                         onClick={() => setChartPeriod(p)}
                         className={`rounded-[6px] px-[9px] py-[5px] font-mono text-[11px] transition-colors ${
                           chartPeriod === p
-                            ? 'bg-[#1f2937] font-semibold text-white'
-                            : 'text-[#6b7280] hover:text-white'
+                            ? 'bg-accent font-semibold text-white'
+                            : 'text-white/45 hover:text-white'
                         }`}
                       >
                         {p}
@@ -316,7 +316,7 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
                     onClick={() => setSelectedRowIdx(i)}
                     className={`grid w-full grid-cols-[1fr_80px_80px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_120px_120px] xl:px-6 ${
                       i < Math.min(filteredRows.length, 8) - 1 ? 'border-b border-white/[0.06]' : ''
-                    } ${selectedRowIdx === i ? 'bg-[#161d27]' : 'hover:bg-white/[0.03]'}`}
+                    } ${selectedRowIdx === i ? 'bg-accent/[0.14]' : 'hover:bg-accent/[0.06]'}`}
                   >
                     <div className="flex min-w-0 items-center gap-3">
                       <span
@@ -348,11 +348,11 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
       {/* Specs section */}
       <section className="rounded-t-[32px] bg-gradient-to-r from-[#FFFFFF] to-[#E2E2E2] px-5 pb-10 pt-10 dark:bg-gradient-to-r dark:from-[#000000] dark:to-[#1F262E]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          {/* <SectionKicker className="mb-4 [&>span]:bg-white/40 [&>span:last-child]:text-white/50"> */}
-          <SectionKicker className="[&>span:first-child]:bg-foreground [&>span:last-child]:text-foreground mb-4">
+          {/* <SectionKicker className="mb-4"> */}
+          <SectionKicker className="mb-4">
             {t('specsKicker')}
           </SectionKicker>
-          <h2 className="text-foreground text-headline-sm mb-6 font-sans">{t('specsHeading')}</h2>
+          <h2 className="text-foreground text-headline mb-6 font-sans">{t('specsHeading')}</h2>
 
           <div className="mb-5 overflow-hidden rounded-[18px] bg-[#111111]">
             {SPEC_ROWS.map((row, i) => (
@@ -360,12 +360,12 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
                 key={row.key}
                 className={`flex items-center justify-between px-5 py-[13px] ${i < SPEC_ROWS.length - 1 ? 'border-b border-[#1f1c1c]' : ''}`}
               >
-                <span className="font-body text-[13px] text-[#FFFFFFB2]">
+                <span className="font-body text-[13px] text-white/70">
                   {t(
                     `spec${row.key.charAt(0).toUpperCase() + row.key.slice(1)}` as 'specMinSpread',
                   )}
                 </span>
-                <span className="font-body text-[14px] font-semibold text-[#FFFFFF]">
+                <span className="font-body text-[14px] font-semibold text-white">
                   {row.value}
                 </span>
               </div>
@@ -399,20 +399,20 @@ export function InstrumentsPage({ instruments }: InstrumentsPageProps) {
       {/* Other markets */}
       <section className="bg-gradient-to-r from-[#FFFFFF] to-[#E2E2E2] px-5 pb-12 pt-10 dark:bg-gradient-to-r dark:from-[#000000] dark:to-[#1F262E]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-foreground [&>span:last-child]:text-foreground mb-4 font-mono text-[10px] font-medium leading-[100%] tracking-[0.18em]">
+          <SectionKicker className="mb-4 text-[10px] leading-[100%] tracking-[0.18em]">
             {t('otherKicker')}
           </SectionKicker>
-          <h2 className="text-foreground text-headline-sm mb-6 font-sans">{t('otherHeading')}</h2>
+          <h2 className="text-foreground text-headline mb-6 font-sans">{t('otherHeading')}</h2>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
             {OTHER_MARKETS.map((market) => (
               <Link
                 key={market}
                 href={`/${locale}/markets/${market.toLowerCase()}`}
-                className="hover:border-accent/30 group flex items-center justify-between rounded-[18px] border border-white/[0.12] bg-[#F0F4F1] px-5 py-4 transition-all duration-200 hover:bg-white/[0.10] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] dark:bg-[#000000]"
+                className="hover:border-accent/30 group flex items-center justify-between rounded-[18px] border border-white/[0.12] bg-[#F0F4F1] px-5 py-4 transition-all duration-200 hover:bg-accent/[0.12] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] dark:bg-[#000000]"
               >
                 <div>
                   <p className="text-foreground font-sans text-[15px] font-semibold">{market}</p>
-                  <p className="font-body mt-[3px] text-[11px] text-[#5D6067] dark:text-[#B8BFCC]">
+                  <p className="font-body mt-[3px] text-[11px] text-muted dark:text-white/60">
                     {t('liveTag')}
                   </p>
                 </div>

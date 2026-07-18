@@ -58,7 +58,6 @@ const STATS = [
 // One container width, shared by every section so the ledger stays on a rail.
 const WRAP = 'mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]';
 // Accent tick on the section kicker (the page's chapter marker), per DESIGN.md.
-const KICKER_TICK = '[&>span:first-child]:!bg-accent';
 
 function formatDate(dateStr: string, locale: string) {
   try {
@@ -197,7 +196,7 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
     `tap-scale flex-shrink-0 rounded-full border px-3.5 py-1.5 text-eyebrow font-mono font-medium uppercase transition-colors ${
       active
         ? 'border-accent bg-accent/[0.06] text-accent'
-        : 'border-border text-muted hover:border-foreground/30 hover:text-foreground'
+        : 'border-border text-muted hover:border-accent/50 hover:text-foreground'
     }`;
 
   return (
@@ -205,11 +204,11 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
       {/* Hero: the claim, on the record */}
       <section className="bg-transparent px-5 pb-6 pt-9">
         <div className={`motion-safe:animate-rise-in ${WRAP}`}>
-          <SectionKicker className={`mb-5 ${KICKER_TICK}`}>{tAwards('kicker')}</SectionKicker>
+          <SectionKicker className="mb-5">{tAwards('kicker')}</SectionKicker>
           <h1 className="text-foreground text-display font-sans">
             {t('heroLine1')}
             <br />
-            <span className="text-accent">{t('heroLine2')}</span>
+            <span>{t('heroLine2')}</span>
           </h1>
           <p className="font-body text-muted text-lead mt-4 max-w-xl">{t('heroSubtitle')}</p>
         </div>
@@ -218,7 +217,7 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
       {/* Award ledger */}
       <section className="bg-transparent px-5 py-12">
         <div className={WRAP}>
-          <SectionKicker className={`mb-4 ${KICKER_TICK}`}>{tAwards('awardsKicker')}</SectionKicker>
+          <SectionKicker className="mb-4">{tAwards('awardsKicker')}</SectionKicker>
           <h2 className="text-foreground text-headline mb-7 font-sans">
             {tAwards('awardsHeading')}
           </h2>
@@ -313,7 +312,7 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
       {/* Press coverage ledger */}
       <section className="bg-transparent px-5 py-12">
         <div className={WRAP}>
-          <SectionKicker className={`mb-4 ${KICKER_TICK}`}>{tPress('pressKicker')}</SectionKicker>
+          <SectionKicker className="mb-4">{tPress('pressKicker')}</SectionKicker>
           <h2 className="text-foreground text-headline mb-7 font-sans">{tPress('pressHeading')}</h2>
 
           {coverageItems.length === 0 ? (
@@ -394,7 +393,7 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
       {newsroomItems.length > 0 && (
         <section className="bg-transparent px-5 py-12">
           <div className={WRAP}>
-            <SectionKicker className={`mb-4 ${KICKER_TICK}`}>
+            <SectionKicker className="mb-4">
               {tPress('newsroomKicker')}
             </SectionKicker>
             <h2 className="text-foreground text-title mb-6 font-sans">
@@ -442,7 +441,7 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
       {/* By the numbers: fact strip */}
       <section className="bg-transparent px-5 py-12">
         <div className={WRAP}>
-          <SectionKicker className={`mb-7 ${KICKER_TICK}`}>{tPress('statsLabel')}</SectionKicker>
+          <SectionKicker className="mb-7">{tPress('statsLabel')}</SectionKicker>
           <div className="border-border grid grid-cols-2 gap-x-6 gap-y-9 border-y py-10 md:grid-cols-3 md:gap-y-11">
             {STATS.map(({ valueKey, labelKey }, i) => (
               <ScrollReveal key={valueKey} index={i} margin="-40px">
@@ -466,7 +465,7 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
       {/* Media kit: newsroom assets as clean bordered tiles */}
       <section className="bg-transparent px-5 py-12">
         <div className={WRAP}>
-          <SectionKicker className={`mb-4 ${KICKER_TICK}`}>{tPress('assetsKicker')}</SectionKicker>
+          <SectionKicker className="mb-4">{tPress('assetsKicker')}</SectionKicker>
           <h2 className="text-foreground text-title mb-7 font-sans">{tPress('assetsHeading')}</h2>
           <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
             {BRAND_ASSETS.map(({ nameKey, formatKey, color }, i) => (
@@ -500,7 +499,7 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
         <div className={WRAP}>
           <div className="border-border shadow-card dark:shadow-card-dark rounded-[24px] border bg-white p-7 md:flex md:items-center md:justify-between md:gap-10 md:p-9 dark:bg-[#111316]">
             <div className="max-w-md">
-              <SectionKicker className={`mb-4 ${KICKER_TICK}`}>
+              <SectionKicker className="mb-4">
                 {tPress('inquiriesKicker')}
               </SectionKicker>
               <h2 className="text-foreground text-title mb-3 font-sans">

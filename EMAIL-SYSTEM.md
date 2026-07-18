@@ -1,4 +1,4 @@
-# Email System — NewEra365
+# Email System — Newera365
 
 How every email on the site is sent, where it's wired in, and what to change for production.
 
@@ -51,7 +51,7 @@ All eight paths share the single `sendMail` → ZeptoMail transport. **If one de
 5. **`sendContactNotification`** builds the HTML and calls `sendMail({ to: CONTACT_NOTIFY_EMAIL, replyTo: <visitor>, subject: "[Contact Form] …", html })`.
 6. **`sendMail`** → transport → POST to ZeptoMail HTTP API. Non-2xx throws (caught by step 4's best-effort wrapper).
 
-The **From** address is always `NewEra365 <EMAIL_FROM>` (`no-reply@newera365.com`). It never sends _as_ the visitor — that would fail SPF/DKIM. The visitor is set as **Reply-To** so staff can reply directly.
+The **From** address is always `Newera365 <EMAIL_FROM>` (`no-reply@newera365.com`). It never sends _as_ the visitor — that would fail SPF/DKIM. The visitor is set as **Reply-To** so staff can reply directly.
 
 Newsletter (double opt-in), ebook (PDF attachment), and webinar (two emails) follow the same shape with their own validation and senders.
 

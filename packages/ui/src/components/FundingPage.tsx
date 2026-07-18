@@ -505,7 +505,7 @@ function HeroContent({
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
             <h1 className="text-display text-foreground font-sans [text-wrap:balance]">
-              {t('heroLine1')} <span className="text-accent">{t('heroAccent')}</span>
+              {t('heroLine1')} <span>{t('heroAccent')}</span>
             </h1>
             <p className="font-body text-lead text-muted mt-4 max-w-[540px] dark:text-white/70">
               {t('heroSubtitle')}
@@ -518,7 +518,7 @@ function HeroContent({
       <section className="bg-transparent px-5 py-10 xl:px-[120px] xl:py-14">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="text-muted [&>span:first-child]:bg-accent mb-3 dark:text-white/60">
+            <SectionKicker className="mb-3">
               {t('flowKicker')}
             </SectionKicker>
             <h2 className="text-headline text-foreground font-sans [text-wrap:balance]">
@@ -537,7 +537,7 @@ function HeroContent({
       <section className="bg-transparent px-5 pb-12 xl:px-[120px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="text-muted [&>span:first-child]:bg-accent mb-5 dark:text-white/60">
+            <SectionKicker className="mb-5">
               {t('methodsKicker')}
             </SectionKicker>
           </ScrollReveal>
@@ -630,7 +630,7 @@ function HeroContent({
           <ScrollReveal>
             <div className="xl:flex xl:items-end xl:justify-between xl:gap-12">
               <div>
-                <SectionKicker className="text-accent-bright [&>span:first-child]:bg-accent-bright mb-5">
+                <SectionKicker className="mb-5">
                   {t('withdrawMetricEyebrow')}
                 </SectionKicker>
                 <span
@@ -649,15 +649,15 @@ function HeroContent({
           {/* Why it's safe — static trust ledger (no hover: static info) */}
           <div className="mt-12 border-t border-white/10 pt-10 xl:mt-16 xl:pt-14">
             <ScrollReveal>
-              <SectionKicker className="mb-3 [&>span:first-child]:bg-white/40 [&>span:last-child]:text-white/60">
+              <SectionKicker className="mb-3">
                 {t('safetyKicker')}
               </SectionKicker>
-              <h2 className="text-headline-sm mb-7 font-sans text-white">{t('safetyHeading')}</h2>
+              <h2 className="text-headline mb-7 font-sans text-white">{t('safetyHeading')}</h2>
             </ScrollReveal>
             <div className="grid gap-3 xl:grid-cols-2 xl:gap-5">
               {trustRows.map((row, i) => (
                 <ScrollReveal key={row.key} index={i}>
-                  <div className="hover:border-accent-bright/25 group flex h-full items-start gap-4 rounded-[14px] border border-white/[0.06] bg-white/[0.03] p-[18px] transition-colors duration-300 hover:bg-white/[0.05]">
+                  <div className="hover:border-accent-bright/25 group flex h-full items-start gap-4 rounded-[14px] border border-white/[0.06] bg-white/[0.03] p-[18px] transition-colors duration-300 hover:bg-accent/[0.08]">
                     <div className="bg-accent/[0.12] text-accent-bright group-hover:bg-accent/[0.25] flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-[11px] transition-colors duration-300">
                       {row.icon}
                     </div>

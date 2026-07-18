@@ -156,7 +156,7 @@ function RegisterModal({ webinar, onClose }: { webinar: WebinarItem; onClose: ()
           type="button"
           onClick={onClose}
           aria-label={t('close')}
-          className="absolute end-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.06] text-white/[0.7] transition-colors hover:border-white/[0.3] hover:text-white"
+          className="absolute end-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.06] text-white/[0.7] transition-colors hover:border-accent-bright/50 hover:text-white"
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path
@@ -194,7 +194,7 @@ function RegisterModal({ webinar, onClose }: { webinar: WebinarItem; onClose: ()
           </div>
         ) : (
           <>
-            <p className="text-eyebrow text-accent-bright font-mono uppercase">
+            <p className="text-eyebrow text-accent font-mono uppercase">
               {t('statusUpcoming')}
             </p>
             <h3 className="text-title mt-2 font-sans leading-snug text-white">
@@ -286,7 +286,7 @@ function UpcomingCard({
         <span
           aria-hidden="true"
           dir="ltr"
-          className="text-accent-bright/[0.14] absolute -top-6 end-4 select-none font-mono text-[96px] font-bold tabular-nums leading-none"
+          className="text-accent-bright/[0.22] absolute -top-6 end-4 select-none font-sans text-[96px] font-semibold tabular-nums leading-none tracking-tight"
         >
           {ghostDay}
         </span>
@@ -436,7 +436,7 @@ export function WebinarsSection({ webinars = [] }: WebinarsSectionProps) {
       {upcoming.length > 0 && (
         <section className="px-5 pb-10">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+            <SectionKicker className="mb-5">
               {t('upcomingKicker')}
             </SectionKicker>
             <div className={`grid gap-5 ${upcoming.length > 1 ? 'md:grid-cols-2' : ''}`}>
@@ -452,7 +452,7 @@ export function WebinarsSection({ webinars = [] }: WebinarsSectionProps) {
       {past.length > 0 && (
         <section className="px-5 pb-12">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
+            <SectionKicker className="mb-3">
               {t('pastKicker')}
             </SectionKicker>
             <div className="divide-border border-border divide-y border-y">

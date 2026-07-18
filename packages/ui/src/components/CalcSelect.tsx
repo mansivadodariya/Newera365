@@ -74,7 +74,7 @@ export function CalcSelect({ label, value, options, labels, onChange }: CalcSele
                     onChange(o);
                     setOpen(false);
                   }}
-                  className={`font-body hover:bg-surface flex w-full items-center justify-between rounded-[9px] px-3 py-[9px] text-start text-[14px] transition-colors ${
+                  className={`font-body hover:bg-accent/[0.06] dark:hover:bg-accent/[0.10] flex w-full items-center justify-between rounded-[9px] px-3 py-[9px] text-start text-[14px] transition-colors ${
                     isSelected ? 'text-accent font-semibold' : 'text-foreground'
                   }`}
                 >

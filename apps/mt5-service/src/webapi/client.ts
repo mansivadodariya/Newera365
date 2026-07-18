@@ -58,7 +58,7 @@ export class Mt5WebApiClient {
       login: opts.login,
       password: opts.password,
       version: opts.version ?? '5830',
-      agent: opts.agent ?? 'NewEra365',
+      agent: opts.agent ?? 'Newera365',
       passwordEncoding: opts.passwordEncoding ?? 'utf16le',
       certSha256: opts.certSha256,
       timeoutMs: opts.timeoutMs ?? 8_000,

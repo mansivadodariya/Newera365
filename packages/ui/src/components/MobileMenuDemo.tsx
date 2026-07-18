@@ -191,7 +191,7 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
           <Link href={`/${locale}`} onClick={onClose} aria-label="Go to home">
             <Image
               src="/images/logo-light.png"
-              alt="NewEra365"
+              alt="Newera365"
               width={133}
               height={26}
               className="block dark:hidden"
@@ -199,7 +199,7 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
             />
             <Image
               src="/images/logo-dark.png"
-              alt="NewEra365"
+              alt="Newera365"
               width={133}
               height={26}
               className="hidden dark:block"
@@ -250,7 +250,7 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
             <button
               onClick={onClose}
               aria-label="Close menu"
-              className="flex h-[38px] w-[38px] items-center justify-center rounded-xl bg-black/10 text-black transition-colors hover:bg-black/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
+              className="flex h-[38px] w-[38px] items-center justify-center rounded-xl bg-black/10 text-black transition-colors hover:bg-accent/20 dark:bg-white/10 dark:text-white dark:hover:bg-accent/30"
             >
               <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                 <path
@@ -283,7 +283,7 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
                   className={`${
                     open ? 'motion-safe:animate-rise-in' : ''
                   } -mx-3 mt-1 flex items-center justify-between rounded-[12px] px-3 py-[14px] transition-colors ${
-                    active ? 'bg-accent/[0.08]' : 'hover:bg-black/[0.04] dark:hover:bg-white/[0.06]'
+                    active ? 'bg-accent/[0.08]' : 'hover:bg-accent/[0.06] dark:hover:bg-accent/[0.10]'
                   }`}
                 >
                   <span
@@ -359,7 +359,7 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
                             className={`group flex items-center justify-between rounded-[12px] px-3 py-[11px] transition-colors ${
                               active
                                 ? 'bg-accent/10 dark:bg-accent/[0.11]'
-                                : 'hover:bg-black/[0.04] dark:hover:bg-white/[0.06]'
+                                : 'hover:bg-accent/[0.06] dark:hover:bg-accent/[0.10]'
                             }`}
                           >
                             <span className="flex min-w-0 items-center gap-3">

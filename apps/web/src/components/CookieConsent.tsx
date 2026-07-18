@@ -28,7 +28,7 @@ export function CookieConsent() {
       className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#e5e7eb] bg-white px-4 py-4 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] dark:border-[#1a1c22] dark:bg-[#0f0f14]"
     >
       <div className="mx-auto flex max-w-[1200px] flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <p className="font-body text-[13px] leading-relaxed text-[#374151] dark:text-white/70">
+        <p className="hyphens-auto text-justify font-body text-[13px] leading-relaxed text-muted dark:text-white/70">
           {isAr
             ? 'نستخدم ملفات تعريف الارتباط لتحسين تجربتك وتحليل حركة الموقع. يمكنك اختيار قبولها أو الاكتفاء بالضروري منها فقط.'
             : 'We use cookies to improve your experience and analyse site traffic. You can accept all or use only necessary cookies.'}{' '}
@@ -42,7 +42,7 @@ export function CookieConsent() {
         <div className="flex flex-shrink-0 gap-2">
           <button
             onClick={() => accept('necessary')}
-            className="rounded-full border border-[#d1d5db] bg-transparent px-4 py-2 font-body text-[13px] text-[#374151] transition-colors hover:bg-[#f3f4f6] dark:border-[#2a2d36] dark:text-white/70 dark:hover:bg-[#1a1c22]"
+            className="rounded-full border border-[#d1d5db] bg-transparent px-4 py-2 font-body text-[13px] text-muted transition-colors hover:bg-accent/[0.08] dark:border-[#2a2d36] dark:text-white/70 dark:hover:bg-accent/[0.12]"
           >
             {isAr ? 'الضروري فقط' : 'Necessary only'}
           </button>

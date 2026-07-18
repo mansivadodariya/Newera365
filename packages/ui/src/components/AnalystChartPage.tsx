@@ -222,7 +222,7 @@ const DARK_SENTIMENT: Record<Sentiment, string> = {
 const SENTIMENT_STYLES: Record<Sentiment, string> = {
   BULLISH: 'bg-[#00B050]/10 text-[#00B050]',
   BEARISH: 'bg-[#EF4444]/10 text-[#EF4444]',
-  NEUTRAL: 'bg-[#6B7280]/10 text-[#6B7280]',
+  NEUTRAL: 'bg-[#6B7280]/10 text-muted',
 };
 
 function FeaturedChart({ pair }: { pair: PairCall }) {
@@ -239,7 +239,7 @@ function FeaturedChart({ pair }: { pair: PairCall }) {
           dir="ltr"
           className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.1em] text-white/50"
         >
-          <span className="inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#00B050]" />
+          <span className="bg-accent inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full" />
           {pair.symbol} <span className="text-white/30">/</span> {tf}
         </p>
         <div className="flex gap-1">
@@ -372,13 +372,13 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
       {/* Desk masthead */}
       <section className="bg-transparent px-5 pb-6 pt-9">
         <ScrollReveal className={DESK}>
-          <SectionKicker className="[&>span:first-child]:bg-accent text-accent mb-4">
+          <SectionKicker className="mb-4">
             {t('deskKicker')}
           </SectionKicker>
           <h1 className="text-foreground text-display mb-3 font-sans">
             {t('heroLine1')} {t('heroLine2')}
             <br />
-            <span className="text-accent">{t('heroAccent')}</span>
+            <span>{t('heroAccent')}</span>
           </h1>
           <p className="text-body-lg text-muted max-w-[440px]">{t('heroSubtitle')}</p>
 
@@ -398,7 +398,7 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
       {/* Featured call - chart terminal + readout ledger */}
       <section className="px-5 pb-8">
         <ScrollReveal className={DESK}>
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+          <SectionKicker className="mb-4">
             {t('featuredKicker')}
           </SectionKicker>
           <div className="grid gap-4 xl:grid-cols-[1.9fr_1fr]">
@@ -412,7 +412,7 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
       <section className="px-5 pb-8">
         <ScrollReveal className={DESK}>
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted">
+            <SectionKicker>
               {t('callsKicker')}
             </SectionKicker>
             <div className="flex flex-wrap gap-2">
@@ -422,7 +422,7 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
                   onClick={() => setTab(tabItem)}
                   className={`rounded-full px-3.5 py-[6px] font-mono text-[11px] font-semibold uppercase tracking-[0.06em] transition-colors ${
                     tab === tabItem
-                      ? 'bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
+                      ? 'bg-accent text-white'
                       : 'text-muted hover:text-foreground bg-[#F0F4F1] dark:bg-[#16181d] dark:hover:text-white'
                   }`}
                 >
@@ -512,7 +512,7 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
       {/* Analyst commentary - the research note */}
       <section className="px-5 pb-14">
         <ScrollReveal className={DESK}>
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+          <SectionKicker className="mb-4">
             {t('commentaryLabel')}
           </SectionKicker>
           <div className="border-border shadow-card rounded-[20px] border bg-white p-6 md:p-8 xl:p-10 dark:border-white/[0.08] dark:bg-[#111318] dark:shadow-none">

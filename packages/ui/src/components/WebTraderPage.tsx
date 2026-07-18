@@ -366,14 +366,14 @@ function BidAskPanel() {
           </span>
           <button
             onClick={() => setVol((v) => Math.max(0.01, parseFloat((v - 0.01).toFixed(2))))}
-            className="flex h-6 w-6 items-center justify-center rounded-[6px] bg-white/10 text-[14px] text-white/70 transition-colors hover:bg-white/20 active:scale-[0.94]"
+            className="flex h-6 w-6 items-center justify-center rounded-[6px] bg-white/10 text-[14px] text-white/70 transition-colors hover:bg-accent/30 active:scale-[0.94]"
             aria-label="Decrease volume"
           >
             −
           </button>
           <button
             onClick={() => setVol((v) => parseFloat((v + 0.01).toFixed(2)))}
-            className="flex h-6 w-6 items-center justify-center rounded-[6px] bg-white/10 text-[14px] text-white/70 transition-colors hover:bg-white/20 active:scale-[0.94]"
+            className="flex h-6 w-6 items-center justify-center rounded-[6px] bg-white/10 text-[14px] text-white/70 transition-colors hover:bg-accent/30 active:scale-[0.94]"
             aria-label="Increase volume"
           >
             +
@@ -434,7 +434,7 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <section className="px-5 pb-6 pt-9">
         <ScrollReveal className={CONTAINER}>
-          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
+          <SectionKicker className="mb-4">
             {t('kicker')}
           </SectionKicker>
           <h1 className="text-foreground text-display mb-4 font-sans [text-wrap:balance]">
@@ -453,7 +453,7 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
             {/* Ticker bar */}
             <div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-3">
               <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-[#1AD966]" />
+                <span className="bg-accent-bright h-2 w-2 rounded-full" />
                 <span className="font-sans text-[13px] font-semibold text-white">EURUSD</span>
                 <span
                   dir="ltr"
@@ -472,7 +472,7 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
                     onClick={() => setTf(t_)}
                     className={`rounded-[6px] px-2 py-1 font-mono text-[10px] font-semibold transition-colors ${
                       tf === t_
-                        ? 'bg-accent-bright text-[#111]'
+                        ? 'bg-accent-bright text-[#04120a]'
                         : 'text-white/50 hover:text-white/80'
                     }`}
                   >
@@ -531,10 +531,10 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
               {t('fallbackDesc')}
             </p>
             <div className="flex flex-wrap gap-2.5">
-              <button className="bg-foreground text-background hover:bg-accent dark:hover:bg-accent inline-flex h-11 items-center justify-center rounded-full px-5 font-sans text-[13px] font-semibold transition-colors duration-200 active:scale-[0.98] dark:bg-white/10 dark:text-white">
+              <button className="bg-foreground text-background hover:bg-accent hover:text-white inline-flex h-11 items-center justify-center rounded-full px-5 font-sans text-[13px] font-semibold transition-colors duration-200 active:scale-[0.98]">
                 {t('fallbackDesktopBtn')}
               </button>
-              <button className="border-border text-foreground hover:text-accent hover:border-accent/40 inline-flex h-11 items-center justify-center rounded-full border px-5 font-sans text-[13px] font-medium transition-colors duration-200 active:scale-[0.98] dark:border-white/10 dark:text-white/70">
+              <button className="bg-foreground text-background hover:bg-accent hover:text-white inline-flex h-11 items-center justify-center rounded-full px-5 font-sans text-[13px] font-semibold transition-colors duration-200 active:scale-[0.98]">
                 {t('fallbackMobileBtn')}
               </button>
             </div>
@@ -545,7 +545,7 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
       {/* ── Terminal specs ledger ─────────────────────────────────── */}
       <section className="px-5 pb-12">
         <ScrollReveal className={CONTAINER}>
-          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
+          <SectionKicker className="mb-4">
             {t('specsKicker')}
           </SectionKicker>
           <h2 className="text-foreground text-headline mb-8 font-sans">{t('specsHeading')}</h2>
@@ -572,11 +572,11 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
       {/* ── Capabilities ──────────────────────────────────────────── */}
       <section className="px-5 pb-12">
         <ScrollReveal className={CONTAINER}>
-          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
+          <SectionKicker className="mb-4">
             {t('capabilitiesKicker')}
           </SectionKicker>
           <h2 className="text-foreground text-headline mb-8 font-sans">
-            {t('featuresHeading')} <span className="text-accent">{t('featuresHeadingAccent')}</span>
+            {t('featuresHeading')} <span>{t('featuresHeadingAccent')}</span>
           </h2>
         </ScrollReveal>
 
@@ -592,7 +592,7 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
                   </span>
                   <span
                     dir="ltr"
-                    className="text-muted dark:text-accent-bright/40 group-hover:text-accent dark:group-hover:text-accent-bright font-mono text-[13px] font-semibold tabular-nums transition-colors duration-300"
+                    className="text-muted text-eyebrow font-mono tabular-nums"
                   >
                     {String(i + 1).padStart(2, '0')}
                   </span>

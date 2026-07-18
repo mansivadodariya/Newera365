@@ -1,4 +1,4 @@
-# NewEra365 — Developer Setup & Run Guide
+# Newera365 — Developer Setup & Run Guide
 
 Project reference: **CSL-NE365-2026-Q2** | Target launch: July 2026
 

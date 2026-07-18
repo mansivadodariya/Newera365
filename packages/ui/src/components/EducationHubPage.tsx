@@ -204,13 +204,13 @@ export function EducationHubPage({ content: cmsContent, webinarCount }: Educatio
       {/* Hero — the curriculum framing */}
       <section className="px-5 pb-9 pt-9 xl:pt-14">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+          <SectionKicker className="mb-5">
             {t('heroKicker')}
           </SectionKicker>
           <h1 className="text-foreground text-display font-sans">
             {t('heroLine1')} {t('heroLine2')}
             <br />
-            <span className="text-accent">{t('heroAccent')}</span>
+            <span>{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-lead text-muted mt-5 max-w-[520px]">{t('heroDesc')}</p>
         </div>
@@ -220,7 +220,7 @@ export function EducationHubPage({ content: cmsContent, webinarCount }: Educatio
       <section className="px-5 pb-12">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            <SectionKicker className="mb-4">
               {t('readingKicker')}
             </SectionKicker>
             <h2 className="text-foreground text-headline mb-6 max-w-[640px] font-sans">
@@ -234,12 +234,12 @@ export function EducationHubPage({ content: cmsContent, webinarCount }: Educatio
                 <Link
                   key={row.id}
                   href={`/${locale}${row.href}`}
-                  className="group flex items-center gap-4 border-b border-[#E6ECE8] px-5 py-6 transition-colors last:border-b-0 hover:bg-[#F0F4F1] xl:gap-7 xl:px-8 xl:py-7 dark:border-white/[0.05] dark:hover:bg-white/[0.02]"
+                  className="group flex items-center gap-4 border-b border-[#E6ECE8] px-5 py-6 transition-colors last:border-b-0 hover:bg-accent/[0.05] xl:gap-7 xl:px-8 xl:py-7 dark:border-white/[0.05] dark:hover:bg-accent/[0.06]"
                 >
                   {/* Ghost numeral — latin figure, reads LTR in both directions */}
                   <span
                     dir="ltr"
-                    className="text-metric-sm group-hover:text-accent/50 dark:text-accent-bright/25 dark:group-hover:text-accent-bright/70 w-[42px] flex-shrink-0 font-mono font-semibold tabular-nums leading-none text-[#0C1F14]/[0.14] transition-colors duration-300 xl:w-[62px]"
+                    className="text-metric-sm text-foreground group-hover:text-accent dark:text-accent-bright w-[42px] flex-shrink-0 font-sans font-semibold tabular-nums leading-none tracking-tight opacity-[0.08] transition-[color,opacity] duration-200 group-hover:opacity-40 xl:w-[62px] dark:opacity-[0.28] dark:group-hover:opacity-70"
                   >
                     {String(i + 1).padStart(2, '0')}
                   </span>
@@ -282,7 +282,7 @@ export function EducationHubPage({ content: cmsContent, webinarCount }: Educatio
       <section className="px-5 pb-12">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            <SectionKicker className="mb-4">
               {t('mediaKicker')}
             </SectionKicker>
             <h2 className="text-foreground text-headline mb-6 font-sans">{t('mediaHeading')}</h2>
@@ -340,7 +340,7 @@ export function EducationHubPage({ content: cmsContent, webinarCount }: Educatio
       <section className="px-5 pb-12 pt-2">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+            <SectionKicker className="mb-5">
               {t('featuredKicker')}
             </SectionKicker>
           </ScrollReveal>
@@ -393,10 +393,10 @@ export function EducationHubPage({ content: cmsContent, webinarCount }: Educatio
       <section className="ink-band relative overflow-hidden rounded-t-[32px] px-5 pb-12 pt-10 xl:pb-16 xl:pt-14">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="[&>span:first-child]:bg-accent-bright text-accent-bright mb-4">
+            <SectionKicker className="mb-4">
               {t('inboxKicker')}
             </SectionKicker>
-            <h2 className="text-headline-sm mb-2 font-sans text-white">{t('inboxHeading')}</h2>
+            <h2 className="text-headline mb-2 font-sans text-white">{t('inboxHeading')}</h2>
             <p className="font-body text-body mb-6 text-white/60">{t('inboxDesc')}</p>
             {submitted ? (
               <div className="bg-accent/20 flex max-w-[560px] items-center gap-3 rounded-[14px] px-4 py-4">

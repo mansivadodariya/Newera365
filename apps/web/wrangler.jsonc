@@ -1,0 +1,26 @@
+// Cloudflare Workers config for the Next.js frontend (OpenNext adapter).
+// See PRODUCTION_CHECKLIST.md §6. Deploy: `npm run deploy` from apps/web.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "newera365-web",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-12-01",
+  // nodejs_compat: OpenNext runs the Node.js runtime so next-intl middleware
+  // and headers() keep working (the reason we chose this adapter over next-on-pages).
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  // ISR incremental cache (revalidate:60 pages). KV because R2 isn't enabled on
+  // this account yet — switch to r2IncrementalCache once R2 is enabled in the dashboard.
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_INC_CACHE_KV",
+      "id": "fd296d40773f4812ac65c7cb1a41f768"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

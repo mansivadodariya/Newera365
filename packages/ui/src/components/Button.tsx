@@ -14,8 +14,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const variantClasses: Record<ButtonVariant, string> = {
   accent: 'bg-accent hover:bg-accent-hover text-white border-transparent',
   dark: 'bg-foreground hover:bg-foreground/80 text-white border-transparent',
-  ghost: 'bg-transparent hover:bg-foreground/5 text-foreground border-foreground',
-  'ghost-white': 'bg-transparent hover:bg-white/10 text-white border-white',
+  ghost: 'bg-transparent hover:bg-accent/[0.06] text-foreground border-foreground',
+  'ghost-white': 'bg-transparent hover:bg-accent/20 text-white border-white',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

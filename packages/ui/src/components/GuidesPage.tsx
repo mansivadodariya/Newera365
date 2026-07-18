@@ -70,7 +70,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
           <h1 className="text-foreground text-display mb-4 font-sans">
             {t('heroLine1')}
             <br />
-            <span className="text-accent">{t('heroAccent')}</span>
+            <span>{t('heroAccent')}</span>
           </h1>
           <p className="text-muted text-lead max-w-[46ch] font-sans">{t('heroSubtitle')}</p>
         </div>
@@ -86,10 +86,10 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
                 className="ink-band hover:border-accent/40 group block overflow-hidden rounded-[24px] border border-white/[0.08] ring-1 ring-inset ring-white/[0.05] transition-colors duration-200"
               >
                 <div className="p-6 xl:p-9">
-                  <SectionKicker className="[&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright mb-4">
+                  <SectionKicker className="mb-4">
                     {t('featuredLabel')}
                   </SectionKicker>
-                  <h2 className="text-title xl:text-headline-sm group-hover:text-accent-bright max-w-[26ch] font-sans leading-[1.12] text-white transition-colors duration-200">
+                  <h2 className="text-title group-hover:text-accent-bright max-w-[26ch] font-sans leading-[1.12] text-white transition-colors duration-200">
                     {featured.title}
                   </h2>
                   {featured.summary && (
@@ -197,10 +197,10 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
       {/* CTA */}
       <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright mb-4">
+          <SectionKicker className="mb-4">
             {t('ctaKicker')}
           </SectionKicker>
-          <h2 className="text-headline-sm mb-3 font-sans text-white">{t('ctaHeading')}</h2>
+          <h2 className="text-headline mb-3 font-sans text-white">{t('ctaHeading')}</h2>
           <p className="text-body mb-7 font-sans leading-relaxed text-white/60">{t('ctaDesc')}</p>
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
@@ -212,7 +212,7 @@ export function GuidesPage({ guides: cmsGuides }: GuidesPageProps) {
             </Link>
             <Link
               href={`/${locale}/glossary`}
-              className="text-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full border border-white/20 px-6 font-sans font-medium text-white transition-colors hover:border-white/40 active:scale-[0.98] sm:w-auto sm:px-8"
+              className="text-body flex h-[50px] w-full items-center justify-center gap-2 rounded-full border border-white/20 px-6 font-sans font-medium text-white transition-colors hover:border-accent-bright/60 active:scale-[0.98] sm:w-auto sm:px-8"
             >
               {t('ctaGlossary')}
             </Link>

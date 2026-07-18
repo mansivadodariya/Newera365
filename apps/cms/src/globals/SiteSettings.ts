@@ -171,14 +171,14 @@ export const SiteSettings: GlobalConfig = {
     },
 
     // ── Homepage USP Metrics ─────────────────────────────────────────────────
-    // The "Why NewEra" proof band — 6 oversized headline metrics (FeaturesSection).
+    // The "Why Newera" proof band — 6 oversized headline metrics (FeaturesSection).
     {
       type: 'collapsible',
       label: 'Homepage USP Metrics',
       admin: {
         initCollapsed: true,
         description:
-          'The 6 headline metrics on the homepage "Why NewEra" band (e.g. "< 15 ms" execution). ' +
+          'The 6 headline metrics on the homepage "Why Newera" band (e.g. "< 15 ms" execution). ' +
           'Value only — title/description stay bilingual per row.',
       },
       fields: [

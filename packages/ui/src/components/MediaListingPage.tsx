@@ -157,7 +157,7 @@ export function MediaListingPage({ cmsVideos, webinars }: MediaListingPageProps)
           <h1 className="text-foreground text-display mb-4 font-sans">
             {t('heroLine1')} {t('heroLine2')}
             <br />
-            <span className="text-accent">{t('heroAccent')}</span>
+            <span>{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted mb-6 max-w-[320px] text-[14px] leading-[1.55]">
             {t('heroDesc')}
@@ -204,7 +204,7 @@ export function MediaListingPage({ cmsVideos, webinars }: MediaListingPageProps)
                 className={`font-body flex-shrink-0 rounded-full px-4 py-[7px] text-[12px] font-medium transition-colors ${
                   activeTab === tab
                     ? 'bg-accent text-white'
-                    : 'bg-[#F2F2F4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e]'
+                    : 'bg-[#F2F2F4] text-muted hover:bg-accent/[0.10] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-accent/[0.15]'
                 }`}
               >
                 {translateMediaCat(tab)}
@@ -311,7 +311,7 @@ export function MediaListingPage({ cmsVideos, webinars }: MediaListingPageProps)
             ref={listRef}
             className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]"
           >
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mx-auto mb-5 mt-2">
+            <SectionKicker className="mx-auto mb-5 mt-2">
               {t('latestEpisodes')}
             </SectionKicker>
             {filtered.length === 0 ? (
@@ -405,15 +405,15 @@ export function MediaListingPage({ cmsVideos, webinars }: MediaListingPageProps)
       {/* Bottom CTA */}
       <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
+          <SectionKicker className="mb-4">
             {t('ctaKicker')}
           </SectionKicker>
-          <h2 className="text-headline-sm mb-3 font-sans text-white">{t('ctaHeading')}</h2>
+          <h2 className="text-headline mb-3 font-sans text-white">{t('ctaHeading')}</h2>
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">{t('ctaDesc')}</p>
           <div className="flex flex-col gap-3">
             <a
               href={`/${locale}/guides`}
-              className="font-body flex h-[50px] items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"
+              className="font-body flex h-[50px] items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-accent-bright/60"
             >
               {t('ctaGuides')}
               <svg
@@ -434,7 +434,7 @@ export function MediaListingPage({ cmsVideos, webinars }: MediaListingPageProps)
             </a>
             <a
               href={`/${locale}/glossary`}
-              className="font-body flex h-[50px] items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/40"
+              className="font-body flex h-[50px] items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-accent-bright/60"
             >
               {t('ctaGlossary')}
               <svg

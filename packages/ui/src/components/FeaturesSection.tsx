@@ -9,10 +9,10 @@ import { CountUp, CountUpGroup } from './CountUp';
 import { AuthModal, type AuthModalType } from './AuthModal';
 import { Spotlight } from './Spotlight';
 
-/* ─── "Why NewEra" proof band ────────────────────────────────────────────────
+/* ─── "Why Newera" proof band ────────────────────────────────────────────────
    The site's signature section (client feedback: the USPs existed but were
    invisible). A full-bleed ink band — identical in light and dark mode — that
-   states the reasons to choose NewEra365 as four oversized, verifiable
+   states the reasons to choose Newera365 as four oversized, verifiable
    numbers instead of four small feature cards. Numbers are the product;
    numbers get the stage. */
 
@@ -89,7 +89,7 @@ export function FeaturesSection({ metrics }: FeaturesSectionProps) {
             {/* Header row */}
             <div className="xl:flex xl:items-end xl:justify-between xl:gap-16">
               <div>
-                <SectionKicker className="text-accent-bright [&>span:first-child]:bg-accent-bright mb-5">
+                <SectionKicker className="mb-5">
                   {t('whyKicker')}
                 </SectionKicker>
                 <h2 className="text-headline font-sans text-white [text-wrap:balance]">
@@ -108,7 +108,7 @@ export function FeaturesSection({ metrics }: FeaturesSectionProps) {
                   {resolvedMetrics.map(({ key, value, title, desc }, i) => (
                     <div
                       key={key}
-                      className={`group relative flex flex-col gap-4 px-1 py-8 transition-colors duration-300 hover:bg-white/[0.05] sm:px-8 sm:py-9 xl:px-10 ${TILE_BORDERS[i]}`}
+                      className={`group relative flex flex-col gap-4 px-1 py-8 transition-colors duration-300 hover:bg-accent/[0.08] sm:px-8 sm:py-9 xl:px-10 ${TILE_BORDERS[i]}`}
                     >
                       {/* Accent rule draws across the hovered tile: the lattice
                         marks which metric you are reading. */}

@@ -122,7 +122,7 @@ export function LegalPage({ documents }: LegalPageProps) {
           <h1 className="text-foreground text-display font-sans">
             {t('heroLine1')}
             <br />
-            <span className="text-accent">{t('heroLine2')}</span>
+            <span>{t('heroLine2')}</span>
           </h1>
           <p className="font-body text-muted max-w-[340px] text-[15px] leading-[1.55]">
             {t('heroSubtitle')}
@@ -141,8 +141,8 @@ export function LegalPage({ documents }: LegalPageProps) {
                   onClick={() => setActiveDoc(doc.id)}
                   className={`flex-shrink-0 rounded-full border px-4 py-[7px] font-mono text-[12px] uppercase tracking-[0.06em] transition-colors active:scale-[0.98] ${
                     activeDoc === doc.id
-                      ? 'border-transparent bg-[#111111] text-white dark:bg-white dark:text-[#111111]'
-                      : 'border-border text-muted hover:border-accent/50 hover:text-foreground bg-white dark:border-white/10 dark:bg-[#111318] dark:text-white/55 dark:hover:border-white/30 dark:hover:text-white'
+                      ? 'bg-accent border-transparent text-white'
+                      : 'border-border text-muted hover:border-accent/50 hover:text-foreground dark:hover:border-accent/50 bg-white dark:border-white/10 dark:bg-[#111318] dark:text-white/55 dark:hover:text-white'
                   }`}
                 >
                   {doc.label}
@@ -167,7 +167,7 @@ export function LegalPage({ documents }: LegalPageProps) {
                 aria-label={t('tocHeading')}
                 className="border-border rounded-[16px] border bg-white p-4 xl:sticky xl:top-[88px] xl:p-5 dark:border-white/10 dark:bg-[#1a1c22]"
               >
-                <SectionKicker className="text-muted mb-4">{t('tocHeading')}</SectionKicker>
+                <SectionKicker className="mb-4">{t('tocHeading')}</SectionKicker>
                 <ol className="flex flex-col gap-0.5">
                   {tocItems.map((item) => {
                     const active = item.id === activeId;
@@ -184,9 +184,7 @@ export function LegalPage({ documents }: LegalPageProps) {
                         >
                           <span
                             className={`font-mono text-[11px] tabular-nums transition-colors ${
-                              active
-                                ? 'text-accent'
-                                : 'text-muted dark:text-accent-bright/40 group-hover:text-accent/70 dark:group-hover:text-accent-bright/80'
+                              active ? 'text-accent' : 'text-muted'
                             }`}
                           >
                             {item.num.padStart(2, '0')}
@@ -234,7 +232,7 @@ export function LegalPage({ documents }: LegalPageProps) {
       {/* Footer note */}
       <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <p className="font-body text-caption mb-5 leading-[1.7] text-white/60">
+          <p className="font-body text-caption mb-5 hyphens-auto text-justify leading-[1.7] text-white/60">
             {t('footerDisclaimer')}
           </p>
           {hasCms && (
@@ -245,7 +243,7 @@ export function LegalPage({ documents }: LegalPageProps) {
                   <button
                     key={doc.id}
                     onClick={() => setActiveDoc(doc.id)}
-                    className="rounded-full border border-white/20 px-4 py-2 font-mono text-[12px] uppercase tracking-[0.06em] text-white/70 transition-colors hover:border-white/45 hover:text-white active:scale-[0.98]"
+                    className="hover:border-accent-bright/60 rounded-full border border-white/20 px-4 py-2 font-mono text-[12px] uppercase tracking-[0.06em] text-white/70 transition-colors hover:text-white active:scale-[0.98]"
                   >
                     {doc.label}
                   </button>

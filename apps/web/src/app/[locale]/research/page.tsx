@@ -14,8 +14,8 @@ export async function generateMetadata({
   return {
     title: isAr ? 'الأبحاث' : 'Research',
     description: isAr
-      ? 'التحليلات والأخبار اليومية والمدونة من مكتب NewEra365 في مكان واحد.'
-      : 'Market analysis, daily news and blog from the NewEra365 desk, all in one place.',
+      ? 'التحليلات والأخبار اليومية والمدونة من مكتب Newera365 في مكان واحد.'
+      : 'Market analysis, daily news and blog from the Newera365 desk, all in one place.',
   };
 }
 

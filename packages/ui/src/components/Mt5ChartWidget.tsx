@@ -32,8 +32,8 @@ export function Mt5ChartWidget({
       className="flex flex-col items-center justify-center gap-1 rounded-[inherit] bg-black/[0.03] px-4 text-center dark:bg-white/[0.04]"
       style={{ width, height, minHeight: typeof height === 'number' ? height : 180 }}
     >
-      <span className="text-[12px] font-medium text-[#111] dark:text-white">MT5 chart</span>
-      <span className="text-[10px] text-[#6b7280] dark:text-white/50">
+      <span className="text-[12px] font-medium text-foreground dark:text-white">MT5 chart</span>
+      <span className="text-[10px] text-muted dark:text-white/50">
         Set NEXT_PUBLIC_MT5_WEBTERMINAL_URL to enable
       </span>
     </div>

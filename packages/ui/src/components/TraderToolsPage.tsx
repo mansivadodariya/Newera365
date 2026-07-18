@@ -302,7 +302,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
             <h1 className="text-foreground text-display mb-3 font-sans">
               {t('heroLine1')}
               <br />
-              <span className="text-accent">{t('heroLine2')}</span>
+              <span>{t('heroLine2')}</span>
             </h1>
             <p className="font-body text-muted mt-8 text-center text-[14px]">
               {t('noInstruments')}
@@ -321,7 +321,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
           <h1 className="text-foreground text-display mb-3 font-sans">
             {t('heroLine1')}
             <br />
-            <span className="text-accent">{t('heroLine2')}</span>
+            <span>{t('heroLine2')}</span>
           </h1>
           <p className="font-body text-muted max-w-[300px] text-[14px] leading-[1.55]">
             {t('heroSubtitle')}
@@ -340,8 +340,8 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-shrink-0 whitespace-nowrap rounded-[11px] px-4 py-2.5 font-mono text-[13px] font-medium uppercase tracking-[0.06em] transition-all xl:flex-1 ${
                   activeTab === tab.id
-                    ? 'bg-white text-[#111] shadow-sm dark:bg-[#2a2d36] dark:text-white'
-                    : 'text-[#6b7280] hover:text-[#111] dark:text-white/40 dark:hover:text-white/80'
+                    ? 'bg-accent text-white shadow-sm'
+                    : 'text-muted hover:text-foreground dark:text-white/40 dark:hover:text-white/80'
                 }`}
               >
                 {tab.label}
@@ -493,12 +493,8 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
       {/* Other tools */}
       <section className="bg-transparent px-5 pb-10 pt-8">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-3">
-            {t('moreKicker')}
-          </SectionKicker>
-          <h2 className="text-foreground mb-5 font-sans text-[24px] font-semibold leading-[1.15] tracking-[-0.48px]">
-            {t('moreHeading')}
-          </h2>
+          <SectionKicker className="mb-3">{t('moreKicker')}</SectionKicker>
+          <h2 className="text-foreground text-headline mb-5 font-sans">{t('moreHeading')}</h2>
           {/* Other tools */}
           <div className="mt-6 flex flex-col gap-[10px] xl:flex-row xl:gap-4">
             {OTHER_TOOLS.map((tool) => (
@@ -508,10 +504,10 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
                 className="hover:border-accent/30 dark:hover:border-accent/25 group flex items-center justify-between rounded-[16px] border border-[#e5e7eb] bg-white p-4 transition-all duration-200 hover:shadow-[0_4px_16px_rgba(0,176,80,0.08)] xl:flex-1 dark:border-white/[0.07] dark:bg-[#1a1c22]"
               >
                 <div>
-                  <p className="font-sans text-[14px] font-semibold text-[#111] dark:text-white">
+                  <p className="text-foreground font-sans text-[14px] font-semibold dark:text-white">
                     {tool.label}
                   </p>
-                  <p className="font-body mt-0.5 text-[12px] text-[#6b7280] dark:text-white/50">
+                  <p className="font-body text-muted mt-0.5 text-[12px] dark:text-white/50">
                     {tool.desc}
                   </p>
                 </div>
@@ -521,7 +517,7 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
                   viewBox="0 0 7 12"
                   fill="none"
                   aria-hidden="true"
-                  className="group-hover:text-accent flex-shrink-0 text-[#6b7280] transition-colors rtl:-scale-x-100 dark:text-white/30"
+                  className="group-hover:text-accent text-muted flex-shrink-0 transition-colors rtl:-scale-x-100 dark:text-white/30"
                 >
                   <path
                     d="M1 1L6 6L1 11"

@@ -7,7 +7,7 @@
  * site renders valid-looking image URLs that 404:
  *
  *   • blog-posts        slug = "ai-blog"   (featuredImage "newera dark theme logo.jpg")
- *   • education-content slug = "ai-class"  (thumbnail "NewEra365 logo.pdf")
+ *   • education-content slug = "ai-class"  (thumbnail "Newera365 logo.pdf")
  *
  * Payload v2's drizzle schema makes child tables (`*_locales`, array tables)
  * FK to their parent ON DELETE CASCADE, so deleting the main row removes its

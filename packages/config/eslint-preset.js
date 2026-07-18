@@ -1,4 +1,4 @@
-/** Shared ESLint config for NewEra365 workspaces. */
+/** Shared ESLint config for Newera365 workspaces. */
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',

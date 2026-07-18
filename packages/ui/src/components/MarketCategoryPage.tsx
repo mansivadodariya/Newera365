@@ -586,8 +586,8 @@ export function MarketCategoryPage({
                         onClick={() => setChartPeriod(p)}
                         className={`rounded-[6px] px-[9px] py-[5px] font-mono text-[11px] transition-colors ${
                           chartPeriod === p
-                            ? 'bg-[#1f2937] font-semibold text-white'
-                            : 'text-[#6b7280] hover:text-white'
+                            ? 'bg-accent font-semibold text-white'
+                            : 'text-white/45 hover:text-white'
                         }`}
                       >
                         {p}
@@ -675,7 +675,7 @@ export function MarketCategoryPage({
                         type="button"
                         key={item.id}
                         onClick={() => setSelectedIdx(i)}
-                        className={`grid w-full grid-cols-[minmax(0,1fr)_72px_56px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_100px_110px_110px_110px] xl:px-6 xl:py-[14px] ${i < cmsRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-[#161d27]' : 'hover:bg-white/[0.03]'}`}
+                        className={`grid w-full grid-cols-[minmax(0,1fr)_72px_56px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_100px_110px_110px_110px] xl:px-6 xl:py-[14px] ${i < cmsRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-accent/[0.14]' : 'hover:bg-accent/[0.06]'}`}
                       >
                         <div className="flex min-w-0 items-center gap-3">
                           <span
@@ -722,7 +722,7 @@ export function MarketCategoryPage({
                         type="button"
                         key={row.symbol}
                         onClick={() => setSelectedIdx(i)}
-                        className={`grid w-full grid-cols-[minmax(0,1fr)_72px_56px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_100px_110px_110px_110px] xl:px-6 xl:py-[14px] ${i < meta.staticRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-[#161d27]' : 'hover:bg-white/[0.03]'}`}
+                        className={`grid w-full grid-cols-[minmax(0,1fr)_72px_56px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_100px_110px_110px_110px] xl:px-6 xl:py-[14px] ${i < meta.staticRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-accent/[0.14]' : 'hover:bg-accent/[0.06]'}`}
                       >
                         <div className="flex min-w-0 items-center gap-3">
                           <span
@@ -766,7 +766,7 @@ export function MarketCategoryPage({
 
               <Link
                 href={`/${locale}/trade/accounts`}
-                className="dark:bg-surface dark:hover:bg-surface-elevated mt-3 flex w-full items-center justify-between rounded-[14px] bg-[#F0F4F1] px-4 py-[13px] transition-colors hover:bg-[#E9F0EB]"
+                className="dark:bg-surface hover:bg-accent/[0.06] dark:hover:bg-accent/[0.10] mt-3 flex w-full items-center justify-between rounded-[14px] bg-[#F0F4F1] px-4 py-[13px] transition-colors"
               >
                 <span className="font-body text-foreground text-[13px] font-medium">
                   {t('openAccountLabel', { category: label.toLowerCase() })}
@@ -800,7 +800,7 @@ export function MarketCategoryPage({
           <SectionKicker className="mb-4">
             {`${label.toUpperCase()} · ${t('whyKickerLabel').toUpperCase()}`}
           </SectionKicker>
-          <h2 className="text-foreground text-headline-sm mb-6 font-sans">
+          <h2 className="text-foreground text-headline mb-6 font-sans">
             {t('whyHeading', { category: label })}
           </h2>
           <div className="border-border/70 border-t dark:border-white/[0.08]">
@@ -834,7 +834,7 @@ export function MarketCategoryPage({
           <SectionKicker className="mb-4">
             {`${label.toUpperCase()} · ${t('faqKickerLabel').toUpperCase()}`}
           </SectionKicker>
-          <h2 className="text-foreground text-headline-sm mb-6 font-sans">{t('faqHeading')}</h2>
+          <h2 className="text-foreground text-headline mb-6 font-sans">{t('faqHeading')}</h2>
           <div className="flex flex-col gap-[10px]">
             {FAQ_ITEMS.map((n, i) => {
               const id = `market-faq-${n}`;
@@ -857,11 +857,11 @@ export function MarketCategoryPage({
       {/* Specs section */}
       <section className="rounded-t-[32px] bg-gradient-to-r from-[#DCEAE1] to-[#F2F5F3] px-5 pb-10 pt-10 rtl:bg-gradient-to-l dark:from-[#0C1F14] dark:to-[#07090D]">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          {/* <SectionKicker className="mb-4 [&>span]:bg-white/40 [&>span:last-child]:text-white/50"> */}
-          <SectionKicker className="[&>span:first-child]:bg-foreground [&>span:last-child]:text-foreground mb-4">
+          {/* <SectionKicker className="mb-4"> */}
+          <SectionKicker className="mb-4">
             {t('specsKicker')}
           </SectionKicker>
-          <h2 className="text-foreground text-headline-sm mb-6 font-sans">{t('specsHeading')}</h2>
+          <h2 className="text-foreground text-headline mb-6 font-sans">{t('specsHeading')}</h2>
 
           <div className="mb-5 overflow-hidden rounded-[18px] bg-[#111111]">
             {SPEC_ROWS.map((row, i) => (
@@ -869,12 +869,12 @@ export function MarketCategoryPage({
                 key={row.key}
                 className={`flex items-center justify-between px-5 py-[13px] ${i < SPEC_ROWS.length - 1 ? 'border-b border-[#1f1c1c]' : ''}`}
               >
-                <span className="font-body text-[13px] text-[#FFFFFFB2]">
+                <span className="font-body text-[13px] text-white/70">
                   {t(
                     `spec${row.key.charAt(0).toUpperCase() + row.key.slice(1)}` as 'specMinSpread',
                   )}
                 </span>
-                <span className="font-body text-[14px] font-semibold text-[#FFFFFF]">
+                <span className="font-body text-[14px] font-semibold text-white">
                   {row.value}
                 </span>
               </div>
@@ -908,22 +908,22 @@ export function MarketCategoryPage({
       {/* Other markets */}
       <section className="bg-gradient-to-r from-[#DCEAE1] to-[#F2F5F3] px-5 pb-12 pt-10 rtl:bg-gradient-to-l dark:from-[#0C1F14] dark:to-[#07090D]">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-foreground [&>span:last-child]:text-foreground mb-4 font-mono text-[10px] font-medium leading-[100%] tracking-[0.18em]">
+          <SectionKicker className="mb-4 text-[10px] leading-[100%] tracking-[0.18em]">
             {t('otherKicker')}
           </SectionKicker>
-          <h2 className="text-foreground text-headline-sm mb-6 font-sans">{t('otherHeading')}</h2>
+          <h2 className="text-foreground text-headline mb-6 font-sans">{t('otherHeading')}</h2>
           <div className="flex flex-col gap-[10px] xl:grid xl:grid-cols-3">
             {ALL_MARKETS.filter((m) => m.toLowerCase() !== validKey).map((market, i) => (
               <ScrollReveal key={market} index={i}>
                 <Link
                   href={`/${locale}/markets/${market.toLowerCase()}`}
-                  className="hover:border-accent/30 group flex items-center justify-between rounded-[18px] border border-white/[0.12] bg-[#F0F4F1] px-5 py-4 transition-all duration-200 hover:bg-white/[0.10] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] dark:bg-[#000000]"
+                  className="hover:border-accent/30 group flex items-center justify-between rounded-[18px] border border-white/[0.12] bg-[#F0F4F1] px-5 py-4 transition-all duration-200 hover:bg-accent/[0.12] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] dark:bg-[#000000]"
                 >
                   <div>
                     <p className="text-foreground font-sans text-[15px] font-semibold">
                       {catText[market.toLowerCase() as keyof typeof catText]?.label ?? market}
                     </p>
-                    <p className="font-body mt-[3px] text-[11px] text-[#5D6067] dark:text-[#B8BFCC]">
+                    <p className="font-body mt-[3px] text-[11px] text-muted dark:text-white/60">
                       {t('liveTag')}
                     </p>
                   </div>

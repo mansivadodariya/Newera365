@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { CountUp, CountUpGroup } from './CountUp';
+import { FocusMarkets } from './FocusMap';
 import { JourneyTimeline } from './JourneyTimelineClient';
 import { ScrollReveal } from './ScrollReveal';
 import { SectionKicker } from './SectionKicker';
@@ -98,13 +99,13 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
       {/* Hero — the claim, then a hairline creed of what we hold to */}
       <section className="rounded-b-[32px] px-5 pb-10 pt-9 xl:pb-14 xl:pt-14">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+          <SectionKicker className="mb-5">
             {t('heroKicker')}
           </SectionKicker>
           <h1 className="text-display font-sans">
             <span className="text-foreground">{t('heroLine1')}</span>
             <br />
-            <span className="text-accent">{t('heroAccent')}</span>
+            <span>{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted text-lead mt-5 max-w-[520px]">{t('heroDesc')}</p>
 
@@ -115,7 +116,7 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
                 key={i}
                 className="border-border hover:bg-accent/[0.03] flex items-start gap-3 px-[18px] py-4 transition-colors [&:not(:last-child)]:border-b sm:[&:not(:last-child)]:border-b-0 sm:[&:not(:last-child)]:border-e"
               >
-                <span className="text-accent mt-px font-mono text-[11px] font-bold tabular-nums tracking-[0.12em]">
+                <span className="text-muted mt-px text-eyebrow font-mono tabular-nums">
                   0{i + 1}
                 </span>
                 <span className="font-body text-foreground/85 text-caption leading-snug">
@@ -131,7 +132,7 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
       <section className="ink-band rounded-t-[32px] px-5 pb-14 pt-14 xl:pb-20 xl:pt-20">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="[&>span:first-child]:bg-accent-bright text-accent-bright mb-7">
+            <SectionKicker className="mb-7">
               {t('missionKicker')}
             </SectionKicker>
           </ScrollReveal>
@@ -159,7 +160,7 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
               <div>
                 <p className="text-title font-sans text-white">Alex M.</p>
                 <p className="font-body text-caption mt-1 text-white/60">{t('ceoTitle')}</p>
-                <p className="text-accent-bright mt-4 font-mono text-[11px] font-medium uppercase tracking-[0.14em]">
+                <p className="text-accent mt-4 font-mono text-[11px] font-medium uppercase tracking-[0.14em]">
                   {t('founderLetterLabel')}
                 </p>
               </div>
@@ -198,7 +199,7 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
       >
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            <SectionKicker className="mb-4">
               {t('regionsKicker')}
             </SectionKicker>
             <div className="xl:flex xl:items-end xl:justify-between xl:gap-10">
@@ -210,22 +211,15 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
               </p>
             </div>
           </ScrollReveal>
-          <div className="list-dim mt-9">
-            {REGIONS.map((region, i) => (
-              <ScrollReveal key={region.id} index={i}>
-                <div className="border-border hover:bg-accent/[0.03] grid grid-cols-[44px_1fr] items-baseline gap-x-4 border-t py-5 transition-colors md:grid-cols-[64px_260px_1fr] md:gap-x-6 dark:border-white/[0.08]">
-                  <span className="text-accent font-mono text-[11px] font-bold tabular-nums tracking-[0.12em]">
-                    0{i + 1}
-                  </span>
-                  <p className="text-foreground text-title font-sans">{t(region.nameKey)}</p>
-                  <p className="font-body text-body text-muted col-span-2 mt-2 ps-[60px] md:col-span-1 md:mt-0 md:ps-0">
-                    {t(region.descKey)}
-                  </p>
-                </div>
-              </ScrollReveal>
-            ))}
-            <div className="border-border border-t dark:border-white/[0.08]" />
-          </div>
+          <ScrollReveal delay={0.05}>
+            <FocusMarkets
+              regions={REGIONS.map((region) => ({
+                id: region.id,
+                name: t(region.nameKey),
+              }))}
+              mapAriaLabel={t('regionsMapAria')}
+            />
+          </ScrollReveal>
         </div>
       </section>
 
@@ -233,7 +227,7 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
       <section className="rounded-t-[32px] px-5 pb-12 pt-12 xl:pb-16 xl:pt-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            <SectionKicker className="mb-4">
               {t('exploreKicker')}
             </SectionKicker>
             <h2 className="text-foreground text-headline mb-8 font-sans">{t('exploreHeading')}</h2>
@@ -243,9 +237,9 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
               <ScrollReveal key={link.label} index={i} className="h-full">
                 <Link
                   href={`/${locale}${link.href}`}
-                  className="border-border shadow-card hover:border-accent/45 hover:shadow-card-lg dark:hover:border-accent/40 group flex h-full items-center gap-[14px] rounded-[18px] border bg-white px-[18px] py-[18px] transition-[border-color,box-shadow] duration-200 dark:border-white/[0.06] dark:bg-[#1a1c22] dark:shadow-none dark:hover:bg-[#22252e]"
+                  className="border-border shadow-card hover:border-accent/45 hover:shadow-card-lg dark:hover:border-accent/40 group flex h-full items-center gap-[14px] rounded-[18px] border bg-white px-[18px] py-[18px] transition-[border-color,box-shadow] duration-200 dark:border-white/[0.06] dark:bg-[#1a1c22] dark:shadow-none dark:hover:bg-accent/[0.15]"
                 >
-                  <div className="group-hover:bg-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[12px] bg-[#F0F4F1] text-[#111] transition-colors duration-200 group-hover:text-white dark:bg-[#22252e] dark:text-white">
+                  <div className="group-hover:bg-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[12px] bg-[#F0F4F1] text-foreground transition-colors duration-200 group-hover:text-white dark:bg-[#22252e] dark:text-white">
                     {link.icon}
                   </div>
                   <div className="min-w-0 flex-1">

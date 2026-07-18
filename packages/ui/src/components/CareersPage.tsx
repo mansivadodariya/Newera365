@@ -112,13 +112,13 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       {/* Hero - Join the desk */}
       <section className="px-5 pb-10 pt-9 xl:pt-12">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-accent text-accent mb-5">
+          <SectionKicker className="mb-5">
             {t('heroKicker')}
           </SectionKicker>
           <h1 className="text-foreground text-display font-sans">
             {t('heroLine1')}
             <br />
-            <span className="text-accent">{t('heroAccent')}</span>
+            <span>{t('heroAccent')}</span>
           </h1>
           <p className="text-muted text-lead mt-5 max-w-[48ch]">{t('heroDesc')}</p>
         </ScrollReveal>
@@ -127,7 +127,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       {/* Stats - the desk by the numbers (metric ledger) */}
       <section className="px-5 pb-12">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+          <SectionKicker className="mb-5">
             {t('statsKicker')}
           </SectionKicker>
           <div className="border-border bg-surface shadow-card overflow-hidden rounded-[20px] border dark:shadow-none">
@@ -154,10 +154,10 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       <section className="px-5 pb-14">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            <SectionKicker className="mb-4">
               {t('valuesKicker')}
             </SectionKicker>
-            <h2 className="text-foreground text-headline-sm mb-8 max-w-[18ch] font-sans">
+            <h2 className="text-foreground text-headline mb-8 max-w-[18ch] font-sans">
               {t('valuesHeading')}
             </h2>
           </ScrollReveal>
@@ -165,7 +165,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
             {([1, 2, 3, 4] as const).map((i, idx) => (
               <ScrollReveal key={i} index={idx}>
                 <div className="border-border grid grid-cols-[auto_1fr] gap-x-5 gap-y-2 border-b py-6 md:grid-cols-[3.5rem_minmax(0,15rem)_1fr] md:gap-x-8 md:py-7">
-                  <span className="text-accent text-eyebrow pt-1.5 font-mono tabular-nums">
+                  <span className="text-muted text-eyebrow pt-1.5 font-mono tabular-nums">
                     {String(i).padStart(2, '0')}
                   </span>
                   <p className="text-foreground text-title font-sans">
@@ -185,11 +185,11 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       <section className="px-5 pb-14">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            <SectionKicker className="mb-4">
               {t('rolesHeading')}
             </SectionKicker>
             <div className="mb-6 flex items-end justify-between gap-4">
-              <h2 className="text-foreground text-headline-sm font-sans">{t('rolesTitle')}</h2>
+              <h2 className="text-foreground text-headline font-sans">{t('rolesTitle')}</h2>
               <span
                 dir="ltr"
                 className="text-muted text-eyebrow whitespace-nowrap font-mono uppercase tabular-nums"
@@ -210,8 +210,8 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
                   aria-pressed={active}
                   className={`text-eyebrow flex-shrink-0 rounded-full border px-4 py-2 font-mono uppercase transition-colors active:scale-[0.98] ${
                     active
-                      ? 'border-foreground bg-foreground text-background'
-                      : 'border-border text-muted hover:border-foreground/40 hover:text-foreground'
+                      ? 'border-accent bg-accent text-white'
+                      : 'border-border text-muted hover:border-accent/50 hover:text-foreground'
                   }`}
                 >
                   {getDeptLabel(id)}
@@ -245,7 +245,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
                   const href = url ? url : `/${locale}/support`;
 
                   const rowClass =
-                    'group grid grid-cols-[2rem_1fr_auto] items-center gap-x-4 gap-y-1 px-5 py-5 transition-colors hover:bg-[#F0F4F1] md:grid-cols-[3rem_minmax(0,1fr)_10rem_7rem_1.75rem] md:gap-4 md:px-6 dark:hover:bg-white/[0.03]';
+                    'group grid grid-cols-[2rem_1fr_auto] items-center gap-x-4 gap-y-1 px-5 py-5 transition-colors hover:bg-accent/[0.05] md:grid-cols-[3rem_minmax(0,1fr)_10rem_7rem_1.75rem] md:gap-4 md:px-6 dark:hover:bg-accent/[0.06]';
 
                   const typeLabel = translateType(job.employmentType);
                   const typeStyle =
@@ -253,7 +253,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
 
                   const inner = (
                     <>
-                      <span className="text-muted dark:text-accent-bright/40 group-hover:text-accent dark:group-hover:text-accent-bright text-eyebrow font-mono tabular-nums transition-colors">
+                      <span className="text-muted text-eyebrow font-mono tabular-nums">
                         {String(index).padStart(2, '0')}
                       </span>
                       <div className="min-w-0">
@@ -332,7 +332,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
           <div className="xl:flex xl:flex-row xl:items-center xl:gap-10">
             {/* Left: text */}
             <div className="xl:flex-1">
-              <SectionKicker className="[&>span:first-child]:bg-accent-bright text-accent-bright mb-4">
+              <SectionKicker className="mb-4">
                 {t('openAppKicker')}
               </SectionKicker>
               <h2 className="text-headline mb-3 font-sans text-white">

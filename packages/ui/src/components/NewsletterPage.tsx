@@ -92,7 +92,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
                 </svg>
               )}
             </div>
-            <h1 className="text-foreground text-headline-sm mb-3 font-sans">
+            <h1 className="text-foreground text-headline mb-3 font-sans">
               {isConfirmed ? t('confirmedHeading') : t('unsubscribedHeading')}
             </h1>
             <p className="font-body text-muted text-body mb-8">
@@ -125,11 +125,11 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
         <div className="mx-auto grid max-w-[390px] items-center gap-10 md:max-w-2xl xl:max-w-[1200px] xl:grid-cols-[1.05fr_0.95fr] xl:gap-16">
           {/* Left: the pitch and the form */}
           <ScrollReveal className="w-full">
-            <SectionKicker className="text-accent [&>span:first-child]:bg-accent mb-6">
+            <SectionKicker className="mb-6">
               {t('heroKicker')}
             </SectionKicker>
             <h1 className="text-foreground text-display font-sans">
-              {t('heroLine1')} <span className="text-accent">{t('heroAccent')}</span>
+              {t('heroLine1')} <span>{t('heroAccent')}</span>
             </h1>
             <p className="font-body text-muted text-lead mt-5 max-w-[440px]">{t('heroSubtitle')}</p>
 
@@ -211,7 +211,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
                 <p className="text-eyebrow text-accent font-mono font-medium uppercase">
                   {t('issueTag')}
                 </p>
-                <h2 className="text-foreground text-headline-sm mt-2 font-sans uppercase leading-[1.02] tracking-tight">
+                <h2 className="text-foreground text-headline mt-2 font-sans uppercase leading-[1.02] tracking-tight">
                   {t('masthead')}
                 </h2>
                 <p className="border-border text-caption text-muted mt-4 border-y py-2 font-mono uppercase tracking-[0.1em]">
@@ -283,7 +283,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
       <section className="px-5 pb-16 md:pb-20 xl:px-[80px]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="text-muted [&>span:first-child]:bg-muted mb-8">
+            <SectionKicker className="mb-8">
               {t('whatKicker')}
             </SectionKicker>
           </ScrollReveal>
@@ -323,7 +323,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
       <section className="ink-band rounded-t-[32px] px-5 py-16 md:py-20 xl:px-[80px]">
         <div className="mx-auto grid max-w-[390px] items-center gap-12 md:max-w-2xl xl:max-w-[1200px] xl:grid-cols-2 xl:gap-20">
           <ScrollReveal className="w-full">
-            <SectionKicker className="text-accent-bright [&>span:first-child]:bg-accent-bright mb-6">
+            <SectionKicker className="mb-6">
               {t('socialKicker')}
             </SectionKicker>
             <div className="text-sheen text-metric w-fit font-sans tabular-nums" dir="ltr">
@@ -333,7 +333,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
           </ScrollReveal>
 
           <ScrollReveal delay={0.12} className="w-full">
-            <figure className="rounded-[20px] border border-white/[0.1] bg-white/[0.05] p-6 transition-colors hover:border-white/20 hover:bg-white/[0.08] md:p-8">
+            <figure className="rounded-[20px] border border-white/[0.1] bg-white/[0.05] p-6 transition-colors hover:border-accent-bright/40 hover:bg-accent/[0.10] md:p-8">
               <blockquote className="font-body text-body-lg leading-[1.7] text-white/85">
                 {t('testimonialText')}
               </blockquote>

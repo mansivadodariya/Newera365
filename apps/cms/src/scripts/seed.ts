@@ -1,5 +1,5 @@
 /**
- * Demo data seed script for NewEra365 CMS.
+ * Demo data seed script for Newera365 CMS.
  *
  * Uses Payload's REST API. The CMS must be running on port 3001.
  * An admin user must already exist (create one via /admin on first boot).
@@ -208,7 +208,7 @@ async function makeImage(
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
     <rect width="100%" height="100%" fill="${bg}"/>
     <rect x="0" y="0" width="100%" height="10" fill="#C9A227"/>
-    <text x="50%" y="46%" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" fill="#ffffff" text-anchor="middle">NewEra365</text>
+    <text x="50%" y="46%" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" fill="#ffffff" text-anchor="middle">Newera365</text>
     <text x="50%" y="53%" font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#cfe3d8" text-anchor="middle">${safe}</text>
   </svg>`;
   await sharp(Buffer.from(svg)).png().toFile(file);
@@ -294,13 +294,28 @@ function bodyBlocks(...paragraphs: string[]) {
 
 // Legal docs need real h2 headings so the on-page Table of Contents has anchors
 // to link to. A lead paragraph followed by { heading, body } sections.
+function legalSections(sections: { heading: string; body: string }[]) {
+  return sections.flatMap((s) => [
+    { type: 'h2', children: [{ text: s.heading }] },
+    ...paragraph(s.body),
+  ]);
+}
+
 function legalBody(intro: string, sections: { heading: string; body: string }[]) {
+  return [...paragraph(intro), ...legalSections(sections)];
+}
+
+// Same, but the lead renders as a bold standalone line above its own paragraph
+// (Risk Disclosure: "IMPORTANT RISK WARNING" heading, warning text on the next line).
+function legalBodyWithLead(
+  lead: string,
+  rest: string,
+  sections: { heading: string; body: string }[],
+) {
   return [
-    ...paragraph(intro),
-    ...sections.flatMap((s) => [
-      { type: 'h2', children: [{ text: s.heading }] },
-      ...paragraph(s.body),
-    ]),
+    { children: [{ text: lead, bold: true }] },
+    ...paragraph(rest),
+    ...legalSections(sections),
   ];
 }
 
@@ -364,7 +379,7 @@ async function seedSiteSettings() {
     riskBannerAr:
       'عقود الفروقات أدوات مالية معقدة. 74% من حسابات المستثمرين الأفراد تخسر أموالها عند تداول عقود الفروقات مع هذا المزود.',
     riskDisclaimerEn:
-      'NewEra365 is authorised and regulated by the FCA (UK), ASIC (Australia), and CySEC (Cyprus). Trading leveraged products carries significant risk. Not suitable for all investors.',
+      'Newera365 is authorised and regulated by the FCA (UK), ASIC (Australia), and CySEC (Cyprus). Trading leveraged products carries significant risk. Not suitable for all investors.',
     riskDisclaimerAr:
       'نيو إيرا 365 مرخصة ومنظمة من قبل FCA وASIC وCySEC. التداول بالمنتجات ذات الرافعة المالية ينطوي على مخاطر عالية.',
     // Analyst Chart — Featured Analyst
@@ -453,7 +468,7 @@ async function seedSiteSettings() {
         ],
       },
     ],
-    // Homepage USP metrics ("Why NewEra" band) — client USP pitch deck.
+    // Homepage USP metrics ("Why Newera" band) — client USP pitch deck.
     uspMetrics: [
       {
         valueEn: '< 15 ms',
@@ -1231,7 +1246,7 @@ async function seedFaqs() {
     },
     {
       en: {
-        question: 'What leverage does NewEra365 offer?',
+        question: 'What leverage does Newera365 offer?',
         answer: richText(
           'We offer leverage up to 1:500 on forex and major commodity pairs, 1:200 on metals, 1:100 on indices, and 1:20 on stocks, ETFs and crypto.',
         ),
@@ -1263,9 +1278,9 @@ async function seedFaqs() {
     },
     {
       en: {
-        question: 'Is my money safe with NewEra365?',
+        question: 'Is my money safe with Newera365?',
         answer: richText(
-          'Yes. Client funds are held in segregated accounts with tier-1 banks, completely separate from our operating capital. NewEra365 is regulated by the FCA, ASIC, and CySEC.',
+          'Yes. Client funds are held in segregated accounts with tier-1 banks, completely separate from our operating capital. Newera365 is regulated by the FCA, ASIC, and CySEC.',
         ),
       },
       ar: {
@@ -1404,7 +1419,7 @@ async function seedBlogPosts() {
           'Key resistance sits at 1.0920, a level that has capped multiple rally attempts over the past three weeks. Support is found at 1.0800, which aligns with the 50-day moving average.',
           "The ECB is expected to hold rates at Thursday's meeting, but any dovish language from President Lagarde could send the pair lower. Watch for a break below 1.0780 as a bearish confirmation signal.",
         ),
-        author: 'NewEra365 Research Desk',
+        author: 'Newera365 Research Desk',
       },
       ar: {
         title: 'التوقعات الأسبوعية لـ EUR/USD: تصريحات الفيدرالي تحدّ من المكاسب',
@@ -1538,7 +1553,7 @@ async function seedBlogPosts() {
           "Key data this week: Tuesday's CPI print is the most important near-term catalyst. A reading above 3.3% would validate further dollar strength and likely push EUR/USD below 1.0750.",
           'Trading the dollar: The DXY has historically struggled to sustain above 105 without explicit hawkish Fed guidance. Watch for profit-taking if the level is reached without a data catalyst.',
         ),
-        author: 'NewEra365 Research Desk',
+        author: 'Newera365 Research Desk',
       },
       ar: {
         title: 'مؤشر الدولار الأمريكي يختبر 105 — المحركات الكلية الرئيسية هذا الأسبوع',
@@ -1591,7 +1606,7 @@ async function seedBlogPosts() {
           'Risk-on dynamics: Sustained equity gains typically weaken the Japanese yen (a safe haven), support AUD and NZD (commodity currencies) and pressure USD/CHF higher.',
           'The divergence to watch: If equities are rising on rate-cut hopes while the dollar is also strong, something has to give. Historically, one of these correlations breaks — and identifying which is the key trade.',
         ),
-        author: 'NewEra365 Research Desk',
+        author: 'Newera365 Research Desk',
       },
       ar: {
         title: 'S&P 500 عند مستويات قياسية: ماذا يعني الارتفاع للفوركس؟',
@@ -1672,7 +1687,7 @@ async function seedBlogPosts() {
           "THEME 4 — DOLLAR FLOWS: Month-end rebalancing added noise to last week's dollar move. The underlying trend is still dollar-positive pending a sustained inflation rollover.",
           'THEME 5 — UK ELECTIONS: Political uncertainty is creating volatility in GBP pairs. Traders are treating this as a binary event and positioning accordingly — reduced exposure, wider stops.',
         ),
-        author: 'NewEra365 Research Desk',
+        author: 'Newera365 Research Desk',
       },
       ar: {
         title: 'إحاطة يوم الاثنين: الموضوعات الكلية التي تقود الأسواق هذا الأسبوع',
@@ -2013,7 +2028,7 @@ async function seedLegalPages() {
         title: 'Terms and Conditions',
         slug: 'terms-and-conditions',
         body: legalBody(
-          'These Terms and Conditions govern your use of the NewEra365 trading platform and services. By opening an account, you agree to be bound by these terms.',
+          'These Terms and Conditions govern your use of the Newera365 trading platform and services. By opening an account, you agree to be bound by these terms.',
           [
             {
               heading: 'Eligibility',
@@ -2029,7 +2044,7 @@ async function seedLegalPages() {
             },
             {
               heading: 'Intellectual Property',
-              body: 'All content, data, and software provided by NewEra365 is proprietary and protected by intellectual property laws.',
+              body: 'All content, data, and software provided by Newera365 is proprietary and protected by intellectual property laws.',
             },
             {
               heading: 'Governing Law',
@@ -2075,7 +2090,7 @@ async function seedLegalPages() {
         title: 'Privacy Policy',
         slug: 'privacy-policy',
         body: legalBody(
-          'NewEra365 is committed to protecting your personal data. This Privacy Policy explains how we collect, use, and protect your information.',
+          'Newera365 is committed to protecting your personal data. This Privacy Policy explains how we collect, use, and protect your information.',
           [
             {
               heading: 'Data We Collect',
@@ -2128,8 +2143,9 @@ async function seedLegalPages() {
       en: {
         title: 'Risk Disclosure',
         slug: 'risk-disclosure',
-        body: legalBody(
-          'IMPORTANT RISK WARNING: Trading in Contracts for Difference (CFDs) and other leveraged instruments carries a high level of risk to your capital.',
+        body: legalBodyWithLead(
+          'IMPORTANT RISK WARNING',
+          'Trading in Contracts for Difference (CFDs) and other leveraged instruments carries a high level of risk to your capital.',
           [
             {
               heading: 'Nature of CFDs',
@@ -2152,8 +2168,9 @@ async function seedLegalPages() {
       },
       ar: {
         title: 'إفصاح المخاطر',
-        body: legalBody(
-          'تحذير مهم من المخاطر: التداول في عقود الفروقات والأدوات ذات الرافعة المالية ينطوي على مخاطر عالية لرأس مالك.',
+        body: legalBodyWithLead(
+          'تحذير مهم من المخاطر',
+          'التداول في عقود الفروقات والأدوات ذات الرافعة المالية ينطوي على مخاطر عالية لرأس مالك.',
           [
             {
               heading: 'طبيعة عقود الفروقات',
@@ -2183,11 +2200,11 @@ async function seedLegalPages() {
         title: 'AML Policy',
         slug: 'aml-policy',
         body: legalBody(
-          'NewEra365 maintains a comprehensive Anti-Money Laundering (AML) programme to detect and prevent financial crime across all client accounts and transactions.',
+          'Newera365 maintains a comprehensive Anti-Money Laundering (AML) programme to detect and prevent financial crime across all client accounts and transactions.',
           [
             {
               heading: 'Policy Scope',
-              body: 'This policy applies to all clients and transactions processed through NewEra365 Ltd. We are committed to the highest standards of anti-money laundering and counter-terrorist financing compliance.',
+              body: 'This policy applies to all clients and transactions processed through Newera365 Ltd. We are committed to the highest standards of anti-money laundering and counter-terrorist financing compliance.',
             },
             {
               heading: 'Customer Due Diligence',
@@ -2237,7 +2254,7 @@ async function seedLegalPages() {
         title: 'Cookie Policy',
         slug: 'cookie-policy',
         body: legalBody(
-          'This Cookie Policy explains how NewEra365 uses cookies and similar technologies when you visit our website.',
+          'This Cookie Policy explains how Newera365 uses cookies and similar technologies when you visit our website.',
           [
             {
               heading: 'What Are Cookies',
@@ -2313,7 +2330,7 @@ async function seedTeamMembers() {
         name: 'James Hartley',
         slug: 'james-hartley',
         role: 'Chief Executive Officer',
-        bio: 'James has 20+ years of financial markets experience, previously serving as Head of FX at two tier-1 investment banks before co-founding NewEra365.',
+        bio: 'James has 20+ years of financial markets experience, previously serving as Head of FX at two tier-1 investment banks before co-founding Newera365.',
       },
       ar: {
         name: 'جيمس هارتلي',
@@ -3149,7 +3166,7 @@ async function seedCareers() {
         title: 'Senior Backend Engineer — Trading Infrastructure',
         slug: 'senior-backend-engineer-trading',
         summary:
-          'Build and maintain the low-latency execution engine and real-time data pipelines powering NewEra365.',
+          'Build and maintain the low-latency execution engine and real-time data pipelines powering Newera365.',
         body: bodyBlocks(
           'ROLE: You will work on the core trading infrastructure — order routing, position management, P&L calculation — serving 180,000+ active accounts.',
           'REQUIREMENTS: 5+ years with Go or Rust in high-throughput environments. Experience with FIX protocol, WebSocket streams, and time-series databases (TimescaleDB/InfluxDB). Strong knowledge of TCP/IP and systems programming.',
@@ -3175,7 +3192,7 @@ async function seedCareers() {
         title: 'Institutional Sales Manager — GCC',
         slug: 'institutional-sales-manager-gcc',
         summary:
-          "Grow NewEra365's institutional client base across the Gulf Cooperation Council region.",
+          "Grow Newera365's institutional client base across the Gulf Cooperation Council region.",
         body: bodyBlocks(
           'You will identify and onboard institutional clients (hedge funds, family offices, money managers) across the UAE, Saudi Arabia, and Kuwait.',
           'REQUIREMENTS: 5+ years in FX/CFD institutional sales. Existing network of GCC-based fund managers. Fluent in English and Arabic. Experience with Salesforce or similar CRM.',
@@ -3224,9 +3241,9 @@ async function seedCareers() {
         title: 'FX Market Analyst',
         slug: 'fx-market-analyst',
         summary:
-          'Produce daily and weekly market commentary, trade setups and research reports for NewEra365 clients.',
+          'Produce daily and weekly market commentary, trade setups and research reports for Newera365 clients.',
         body: bodyBlocks(
-          'You will write market analysis across forex, indices and commodities — published daily on the NewEra365 research hub.',
+          'You will write market analysis across forex, indices and commodities — published daily on the Newera365 research hub.',
           'REQUIREMENTS: 3+ years trading or analyzing FX markets. Strong technical analysis skills (Elliott Wave, Fibonacci, price action). Proven writing ability — samples required.',
         ),
       },
@@ -3248,7 +3265,7 @@ async function seedCareers() {
         title: 'Compliance Officer — MENA',
         slug: 'compliance-officer-mena',
         summary:
-          'Ensure NewEra365 operations comply with FSRA regulations and international AML/KYC standards.',
+          'Ensure Newera365 operations comply with FSRA regulations and international AML/KYC standards.',
         body: bodyBlocks(
           "You will be responsible for regulatory compliance across all MENA jurisdictions, maintaining the firm's FSRA licence, and managing AML/KYC policy and training.",
           'REQUIREMENTS: 4+ years compliance experience at an FCA, FSRA or DFSA regulated firm. Strong knowledge of AML/KYC regulations. Law or finance degree preferred.',
@@ -3272,7 +3289,7 @@ async function seedCareers() {
         title: 'Performance Marketing Manager',
         slug: 'performance-marketing-manager',
         summary:
-          "Own paid acquisition across Google, Meta, and programmatic channels to grow NewEra365's client base.",
+          "Own paid acquisition across Google, Meta, and programmatic channels to grow Newera365's client base.",
         body: bodyBlocks(
           'You will manage a significant monthly performance marketing budget, running campaigns across paid search, paid social and programmatic display targeting retail traders in the MENA region.',
           'REQUIREMENTS: 4+ years performance marketing experience with budgets of $500k+ per month. Strong analytical skills, proficiency in Google Ads, Meta Ads, and attribution tools.',
@@ -3296,7 +3313,7 @@ async function seedCareers() {
       en: {
         title: 'Senior Product Designer',
         slug: 'senior-product-designer',
-        summary: "Lead the design of NewEra365's web and mobile trading experience.",
+        summary: "Lead the design of Newera365's web and mobile trading experience.",
         body: bodyBlocks(
           'You will own the design process end-to-end — from user research to final component specs — across our web platform, mobile apps, and client-facing tools.',
           'REQUIREMENTS: 5+ years product design experience. Proficiency in Figma. Experience designing for complex, data-rich products. Portfolio of shipped work required.',
@@ -3320,9 +3337,9 @@ async function seedCareers() {
         title: 'Introducing Broker Partnership Manager',
         slug: 'ib-partnership-manager',
         summary:
-          "Build and manage NewEra365's global network of introducing brokers and affiliate partners.",
+          "Build and manage Newera365's global network of introducing brokers and affiliate partners.",
         body: bodyBlocks(
-          'You will recruit, onboard and grow a portfolio of IB partners — individuals and small businesses who refer clients to NewEra365 in exchange for commission rebates.',
+          'You will recruit, onboard and grow a portfolio of IB partners — individuals and small businesses who refer clients to Newera365 in exchange for commission rebates.',
           'REQUIREMENTS: 3+ years in FX/CFD broker partnerships. Existing network of IB relationships. Strong commercial negotiation skills. Experience with IB portal management.',
         ),
       },
@@ -3436,7 +3453,7 @@ async function seedWebinars() {
         slug: 'risk-management-masterclass-volatile-markets',
         speaker: 'Claire Deschamps',
         speakerBio:
-          'Chief Compliance Officer at NewEra365. Covers position sizing, drawdown protection, and psychological discipline.',
+          'Chief Compliance Officer at Newera365. Covers position sizing, drawdown protection, and psychological discipline.',
       },
       ar: {
         title: 'دورة متخصصة في إدارة المخاطر: حماية رأس المال في الأسواق المتقلبة',
@@ -3865,12 +3882,12 @@ async function seedMediaPress() {
   const items = [
     {
       en: {
-        headline: 'NewEra365 launches raw-spread accounts for MENA retail traders',
+        headline: 'Newera365 launches raw-spread accounts for MENA retail traders',
         excerpt:
           'The broker expands its product line with institutional-grade pricing aimed at the region’s fast-growing retail base.',
       },
       ar: {
-        headline: 'NewEra365 تطلق حسابات السبريد الخام لمتداولي التجزئة في الشرق الأوسط',
+        headline: 'Newera365 تطلق حسابات السبريد الخام لمتداولي التجزئة في الشرق الأوسط',
         excerpt:
           'الوسيط يوسّع خط منتجاته بتسعير بمستوى مؤسسي يستهدف قاعدة التجزئة سريعة النمو في المنطقة.',
       },
@@ -3882,12 +3899,12 @@ async function seedMediaPress() {
     },
     {
       en: {
-        headline: 'Interview: How NewEra365 is approaching MT5 connectivity and execution',
+        headline: 'Interview: How Newera365 is approaching MT5 connectivity and execution',
         excerpt:
           'A sit-down with the trading desk on latency, liquidity routing, and what transparent execution means for clients.',
       },
       ar: {
-        headline: 'مقابلة: كيف تتعامل NewEra365 مع اتصال MT5 والتنفيذ',
+        headline: 'مقابلة: كيف تتعامل Newera365 مع اتصال MT5 والتنفيذ',
         excerpt:
           'جلسة مع مكتب التداول حول زمن الاستجابة وتوجيه السيولة ومعنى التنفيذ الشفاف للعملاء.',
       },
@@ -3899,12 +3916,12 @@ async function seedMediaPress() {
     },
     {
       en: {
-        headline: 'NewEra365 named among the fastest-growing brokers in the Gulf',
+        headline: 'Newera365 named among the fastest-growing brokers in the Gulf',
         excerpt:
           'Independent analysis highlights the firm’s client growth, regulatory posture and education-first approach.',
       },
       ar: {
-        headline: 'NewEra365 تُصنَّف بين أسرع الوسطاء نمواً في الخليج',
+        headline: 'Newera365 تُصنَّف بين أسرع الوسطاء نمواً في الخليج',
         excerpt:
           'تحليل مستقل يسلّط الضوء على نمو العملاء والموقف التنظيمي ونهج التعليم أولاً لدى الشركة.',
       },
@@ -3918,11 +3935,11 @@ async function seedMediaPress() {
       en: {
         headline: 'Opinion: Why transparent fee structures matter for retail FX',
         excerpt:
-          'A guest column from the NewEra365 research team on the long-term value of clear, all-in pricing.',
+          'A guest column from the Newera365 research team on the long-term value of clear, all-in pricing.',
       },
       ar: {
         headline: 'رأي: لماذا تهمّ هياكل الرسوم الشفافة لتداول الفوركس بالتجزئة',
-        excerpt: 'مقال ضيف من فريق أبحاث NewEra365 حول القيمة طويلة الأجل للتسعير الواضح والشامل.',
+        excerpt: 'مقال ضيف من فريق أبحاث Newera365 حول القيمة طويلة الأجل للتسعير الواضح والشامل.',
       },
       publication: 'The National',
       date: '2026-02-14',
@@ -3991,7 +4008,7 @@ const SEED_TARGETS: Record<string, () => Promise<void>> = {
 };
 
 async function main() {
-  console.log('\n🌱 NewEra365 Demo Data Seed\n');
+  console.log('\n🌱 Newera365 Demo Data Seed\n');
   const only = process.argv[2];
   try {
     await login();

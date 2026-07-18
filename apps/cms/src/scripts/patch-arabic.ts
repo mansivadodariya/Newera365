@@ -119,7 +119,7 @@ async function patchAccountTypes() {
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🔧 NewEra365 Arabic patch script\n');
+  console.log('🔧 Newera365 Arabic patch script\n');
   await login();
   await patchPaymentMethods();
   await patchAccountTypes();

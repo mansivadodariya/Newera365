@@ -342,11 +342,11 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
           <div className="text-foreground text-display font-sans [text-wrap:balance]">
             <p>{t('heroLine1')}</p>
             <p>
-              {t('heroLine2')} <span className="text-accent">{t('heroAccent')}</span>
+              {t('heroLine2')} <span>{t('heroAccent')}</span>
             </p>
           </div>
           <div className="h-[18px]" />
-          <p className="font-body text-lead text-muted max-w-[720px] dark:text-[#B8BFCC]">
+          <p className="font-body text-lead text-muted max-w-[720px] dark:text-white/60">
             {t('heroSubtitle')}
           </p>
         </div>
@@ -385,7 +385,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                     {account.badge && (
                       <span
                         className={`font-body rounded-[20px] px-[13px] py-[5px] text-[12px] font-bold tracking-[0.6px] ${
-                          account.isPopular ? 'invisible' : 'bg-[#00b050] text-[#111]'
+                          account.isPopular ? 'invisible' : 'bg-[#00b050] text-foreground'
                         }`}
                       >
                         {account.badge}
@@ -394,7 +394,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                     <p className="font-body text-[15px] font-normal text-white/75">
                       {t('cardAccountLabel')}
                     </p>
-                    <p className="font-body text-[32px] font-bold text-[#f0f0f0]">{account.name}</p>
+                    <p className="font-body text-[32px] font-bold text-white">{account.name}</p>
                     <p className="font-body text-[14px] text-white/70">{account.subtitle}</p>
                   </div>
                 </div>
@@ -404,10 +404,10 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                 <div className="flex flex-1 flex-col gap-[18px] px-[22px] py-[28px]">
                   {/* Trading Platform row */}
                   <div className="flex items-center justify-between">
-                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                    <span className="font-body text-[15px] font-medium text-foreground dark:text-white">
                       {t('tradingPlatform')}
                     </span>
-                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                    <span className="font-body text-[15px] font-medium text-foreground dark:text-white">
                       MetaTrader 5
                     </span>
                   </div>
@@ -416,10 +416,10 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                   {/* Commission */}
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col gap-px">
-                      <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                      <span className="font-body text-[15px] font-medium text-foreground dark:text-white">
                         {t('commission')}
                       </span>
-                      <span className="font-body text-caption text-[#6b7380]">
+                      <span className="font-body text-caption text-muted">
                         {account.commissionSub}
                       </span>
                     </div>
@@ -428,7 +428,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                       className={`font-sans text-[28px] font-bold tabular-nums ${
                         isZeroNumeric(account.commission)
                           ? 'text-accent'
-                          : 'text-[#111] dark:text-white'
+                          : 'text-foreground dark:text-white'
                       }`}
                     >
                       {account.commission}
@@ -439,10 +439,10 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                   {/* Spreads from */}
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col gap-px">
-                      <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                      <span className="font-body text-[15px] font-medium text-foreground dark:text-white">
                         {t('spreadsFrom')}
                       </span>
-                      <span className="font-body text-caption text-[#6b7380]">
+                      <span className="font-body text-caption text-muted">
                         {account.spreadsSub}
                       </span>
                     </div>
@@ -451,7 +451,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                       className={`whitespace-nowrap font-sans text-[28px] font-bold tabular-nums ${
                         isZeroNumeric(account.spreadsFrom)
                           ? 'text-accent'
-                          : 'text-[#111] dark:text-white'
+                          : 'text-foreground dark:text-white'
                       }`}
                     >
                       {account.spreadsFrom}
@@ -461,12 +461,12 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
 
                   {/* Min deposit — 20px per Figma (smaller than commission/spread) */}
                   <div className="flex items-center justify-between">
-                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                    <span className="font-body text-[15px] font-medium text-foreground dark:text-white">
                       {t('minDeposit')}
                     </span>
                     <span
                       dir="ltr"
-                      className="whitespace-nowrap font-sans text-[22px] font-bold tabular-nums text-[#111] dark:text-white"
+                      className="whitespace-nowrap font-sans text-[22px] font-bold tabular-nums text-foreground dark:text-white"
                     >
                       {account.minDeposit}
                     </span>
@@ -475,12 +475,12 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
 
                   {/* Max leverage — reuses the matrix "Max leverage" label + CMS leverage */}
                   <div className="flex items-center justify-between">
-                    <span className="font-body text-[15px] font-medium text-[#111] dark:text-white">
+                    <span className="font-body text-[15px] font-medium text-foreground dark:text-white">
                       {t('matrixLeverage')}
                     </span>
                     <span
                       dir="ltr"
-                      className="whitespace-nowrap font-sans text-[22px] font-bold tabular-nums text-[#111] dark:text-white"
+                      className="whitespace-nowrap font-sans text-[22px] font-bold tabular-nums text-foreground dark:text-white"
                     >
                       {account.leverage}
                     </span>
@@ -507,7 +507,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                             strokeLinejoin="round"
                           />
                         </svg>
-                        <span className="font-body text-body text-muted dark:text-[#9aa3ad]">
+                        <span className="font-body text-body text-muted dark:text-white/60">
                           {feat}
                         </span>
                       </div>
@@ -517,7 +517,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                   {/* CTA button — deep-links to the feature matrix (signup handled by CRM) */}
                   <a
                     href="#feature-matrix"
-                    className="font-body border-border group-hover:border-accent group-hover:bg-accent inline-flex items-center justify-center rounded-full border px-5 py-3 text-[13px] font-bold uppercase tracking-[0.5px] text-[#111] transition-colors active:scale-[0.98] group-hover:text-[#04120a] dark:border-white/15 dark:text-white dark:group-hover:text-[#04120a]"
+                    className="font-body border-border group-hover:border-accent group-hover:bg-accent inline-flex items-center justify-center rounded-full border px-5 py-3 text-[13px] font-bold uppercase tracking-[0.5px] text-foreground transition-colors active:scale-[0.98] group-hover:text-[#04120a] dark:border-white/15 dark:text-white dark:group-hover:text-[#04120a]"
                   >
                     {account.isDemo ? t('exploreFeatures') : t('tryFreeDemo')}
                   </a>
@@ -532,7 +532,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
       <section className="bg-transparent px-5 pb-10">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="text-muted [&>span:first-child]:bg-accent mb-3 dark:text-white/60">
+            <SectionKicker className="mb-3">
               {t('condKicker')}
             </SectionKicker>
             <div className="xl:flex xl:items-end xl:justify-between xl:gap-10">
@@ -597,12 +597,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
         className="ink-band rounded-t-[32px] px-5 pb-14 pt-12 xl:pb-20 xl:pt-16"
       >
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="mb-4 flex items-center gap-2">
-            <span className="bg-accent-bright h-px w-[22px]" />
-            <span className="text-accent-bright text-eyebrow font-mono font-medium uppercase">
-              {t('featureMatrixKicker')}
-            </span>
-          </div>
+          <SectionKicker className="mb-4">{t('featureMatrixKicker')}</SectionKicker>
 
           <h2 className="text-headline mb-9 max-w-[24ch] font-sans text-white">
             {t('featureMatrixHeading')}
@@ -646,7 +641,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
               {matrixValueRows.map((row) => (
                 <div
                   key={row.id}
-                  className="grid border-b border-white/[0.06] transition-colors hover:bg-white/[0.02]"
+                  className="grid border-b border-white/[0.06] transition-colors hover:bg-accent/[0.06]"
                   style={matrixGridStyle}
                 >
                   <span className="font-body sticky start-0 z-[1] bg-[#0a1810] px-5 py-4 text-[14px] text-white/80 md:bg-transparent">
@@ -694,7 +689,7 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
               {matrixRows.map((row, i) => (
                 <div
                   key={row.id}
-                  className={`grid transition-colors hover:bg-white/[0.02] ${i < matrixRows.length - 1 ? 'border-b border-white/[0.06]' : ''}`}
+                  className={`grid transition-colors hover:bg-accent/[0.06] ${i < matrixRows.length - 1 ? 'border-b border-white/[0.06]' : ''}`}
                   style={matrixGridStyle}
                 >
                   <span className="font-body sticky start-0 z-[1] bg-[#0a1810] px-5 py-4 text-[14px] text-white/80 md:bg-transparent">

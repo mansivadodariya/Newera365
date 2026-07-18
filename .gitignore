@@ -56,3 +56,7 @@ docs/
 *.claude
 .vercel
 .figmacache/
+
+# OpenNext / Cloudflare build output
+.open-next
+.wrangler

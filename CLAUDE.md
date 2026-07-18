@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-NewEra365.com — website for a forex/CFD broker. Reference **CSL-NE365-2026-Q2** (CodeSquareLabs), target launch July 2026. Bilingual: English (LTR, default) + Arabic (RTL).
+Newera365.com — website for a forex/CFD broker. Reference **CSL-NE365-2026-Q2** (CodeSquareLabs), target launch July 2026. Bilingual: English (LTR, default) + Arabic (RTL).
 
 ## Commands
 

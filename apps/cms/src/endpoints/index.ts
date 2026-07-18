@@ -1182,7 +1182,7 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
         depth: 0,
       });
 
-      const webinarTitle = (webinar.title as string | undefined) ?? 'NewEra365 Webinar';
+      const webinarTitle = (webinar.title as string | undefined) ?? 'Newera365 Webinar';
       const scheduledAt = webinar.scheduledAt as string | undefined;
 
       try {

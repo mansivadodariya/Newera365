@@ -127,7 +127,7 @@ export function FloatingContactWidget({ email, phone, whatsapp }: FloatingContac
   const waDigits = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : null;
 
   const rowClass =
-    'focus-visible:ring-accent flex items-center gap-3 rounded-[12px] px-3 py-[10px] transition-colors hover:bg-black/[0.04] focus-visible:outline-none focus-visible:ring-2 dark:hover:bg-white/[0.06]';
+    'focus-visible:ring-accent flex items-center gap-3 rounded-[12px] px-3 py-[10px] transition-colors hover:bg-accent/[0.06] focus-visible:outline-none focus-visible:ring-2 dark:hover:bg-accent/[0.10]';
   const iconWrap =
     'flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent';
 

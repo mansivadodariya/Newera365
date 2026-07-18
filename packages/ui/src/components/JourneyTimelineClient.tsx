@@ -141,7 +141,7 @@ export function JourneyTimeline({
   return (
     <section className="rounded-t-[32px] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-        <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+        <SectionKicker className="mb-4">
           {kicker}
         </SectionKicker>
         <h2 className="text-foreground text-headline mb-8 font-sans">{heading}</h2>

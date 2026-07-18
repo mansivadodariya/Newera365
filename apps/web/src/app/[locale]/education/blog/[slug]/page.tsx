@@ -26,8 +26,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: slugToTitle(params.slug),
       description: isAr
-        ? 'رؤى وتحليلات وتحديثات من فريق NewEra365.'
-        : 'Insights, analysis, and updates from the NewEra365 team.',
+        ? 'رؤى وتحليلات وتحديثات من فريق Newera365.'
+        : 'Insights, analysis, and updates from the Newera365 team.',
       // notFound() on ISR-filled dynamic routes responds 200 (soft-404), so keep
       // deleted/unknown slugs out of search indexes explicitly.
       robots: { index: false, follow: false },

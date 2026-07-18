@@ -176,7 +176,7 @@ function HamburgerIcon() {
 // Shared square-chip styling for the header utility buttons (theme toggle,
 // hamburger) and the language toggle. Keep in sync with LanguageToggle.tsx.
 const CHIP =
-  'flex h-[38px] items-center justify-center rounded-xl bg-[#f4f4f5] text-foreground transition-[background-color,transform] hover:bg-[#e9e9ec] active:scale-[0.94] dark:bg-surface dark:hover:bg-white/[0.06]';
+  'flex h-[38px] items-center justify-center rounded-xl bg-[#f4f4f5] text-foreground transition-[background-color,transform] hover:bg-accent/[0.10] active:scale-[0.94] dark:bg-surface dark:hover:bg-accent/[0.10]';
 
 function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -295,25 +295,25 @@ function DropdownLink({
       href={`/${locale}${d.href}`}
       onClick={onClose}
       className={`group flex items-start gap-2.5 rounded-[10px] px-3 py-[9px] transition-colors ${
-        isActive ? 'bg-accent/[0.08]' : 'hover:bg-background dark:hover:bg-white/[0.06]'
+        isActive ? 'bg-accent/[0.08]' : 'hover:bg-accent/[0.06] dark:hover:bg-accent/[0.10]'
       }`}
     >
       <NavIcon
         href={d.href}
         size={19}
         className={`mt-[2px] transition-colors ${
-          isActive ? 'text-accent' : 'dark:text-foreground group-hover:text-accent text-[#1a1a1c]'
+          isActive ? 'text-accent' : 'dark:text-foreground group-hover:text-accent text-foreground'
         }`}
       />
       <span className="min-w-0 flex-1">
         <span
           className={`font-body block text-[15px] font-medium leading-[1.2] transition-colors ${
-            isActive ? 'text-accent' : 'dark:text-foreground group-hover:text-accent text-[#1a1a1c]'
+            isActive ? 'text-accent' : 'dark:text-foreground group-hover:text-accent text-foreground'
           }`}
         >
           {d.label}
         </span>
-        <span className="font-body dark:text-muted mt-[2px] block text-[13px] leading-[1.35] text-[#6b6b73]">
+        <span className="font-body dark:text-muted mt-[2px] block text-[13px] leading-[1.35] text-muted">
           {d.sub}
         </span>
       </span>
@@ -446,17 +446,22 @@ function HeaderDemo() {
         />
         {/* Mobile: flex row (logo left, controls right). The 3-column grid only
             engages at xl — on mobile the middle nav is display:none, which under
-            grid auto-placement pulled the right-hand controls into the centre. */}
-        <div className="flex h-full items-center justify-between px-5 xl:grid xl:grid-cols-[1fr_auto_1fr] xl:px-[80px]">
+            grid auto-placement pulled the right-hand controls into the centre.
+            gap-x-6: a guaranteed column gap so the centered nav can never collide
+            with the logo / control chips (fr slack alone vanished on devices that
+            render the nav wider, letting "Company" touch the language toggle).
+            px trims to 40px in the tight 1280-1535 band so that gap survives;
+            the roomy 80px is restored at 2xl where collisions can't happen. */}
+        <div className="flex h-full items-center justify-between px-5 xl:grid xl:grid-cols-[1fr_auto_1fr] xl:gap-x-6 xl:px-10 2xl:px-[80px]">
           {/* Left: Logo */}
           <Link
             href={`/${locale}`}
-            aria-label="NewEra365, go to home"
+            aria-label="Newera365, go to home"
             className="flex-shrink-0 justify-self-start"
           >
             <Image
               src="/images/logo-light.png"
-              alt="NewEra365"
+              alt="Newera365"
               width={133}
               height={26}
               className="block dark:hidden"
@@ -464,7 +469,7 @@ function HeaderDemo() {
             />
             <Image
               src="/images/logo-dark.png"
-              alt="NewEra365"
+              alt="Newera365"
               width={133}
               height={26}
               className="hidden dark:block"
@@ -565,8 +570,12 @@ function HeaderDemo() {
 
           {/* Right: actions cluster (desktop CTAs / mobile controls) */}
           <div className="flex items-center justify-self-end">
-            {/* Desktop right CTAs */}
-            <div className="hidden items-center gap-3 xl:flex">
+            {/* Desktop right CTAs. whitespace-nowrap: the symmetric 1fr_auto_1fr
+                grid splits side-space equally, so at the xl breakpoint (~1280px)
+                the right track is capped at the left track's width and starves
+                this cluster — without nowrap "Sign in" / "Open Account" wrap to
+                two lines. nowrap makes the track claim its content width instead. */}
+            <div className="hidden items-center gap-3 whitespace-nowrap xl:flex">
               <LanguageToggle />
               <ThemeToggle />
               <div className="bg-border mx-1 h-5 w-px" />

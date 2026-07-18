@@ -326,13 +326,13 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
       {/* ===== ACT 1 · Search-first FAQ ===== */}
       <section className="bg-transparent px-5 pb-6 pt-10 xl:pt-14">
         <ScrollReveal className={WRAP}>
-          <SectionKicker className="text-muted [&>span:first-child]:bg-accent mb-5">
+          <SectionKicker className="mb-5">
             {ts('heroKicker')}
           </SectionKicker>
           <h1 className="text-foreground text-display mb-4 font-sans">
             {ts('heroLine1')}
             <br />
-            <span className="text-accent">{ts('heroLine2')}</span>
+            <span>{ts('heroLine2')}</span>
           </h1>
           <p className="font-body text-muted text-lead mb-8 max-w-[46ch]">{ts('heroSubtitle')}</p>
 
@@ -415,7 +415,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
       {showPopular && (
         <section className="px-5 pb-4 pt-2">
           <ScrollReveal className={WRAP}>
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            <SectionKicker className="mb-4">
               {t('sectionPopular')}
             </SectionKicker>
             <div className="grid gap-[10px] md:grid-cols-2">
@@ -470,7 +470,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
       {/* All FAQs: animated accordion */}
       <section className="px-5 pb-8 pt-2">
         <ScrollReveal className={WRAP}>
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+          <SectionKicker className="mb-4">
             {t('sectionAll')}
           </SectionKicker>
           {filteredGroups.length > 0 ? (
@@ -485,7 +485,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
                     <span className="bg-border h-px flex-1 dark:bg-white/[0.08]" />
                     <span
                       dir="ltr"
-                      className="text-muted dark:text-accent-bright/50 font-mono text-[11px] tabular-nums"
+                      className="text-muted text-eyebrow font-mono tabular-nums"
                     >
                       {String(group.items.length).padStart(2, '0')}
                     </span>
@@ -518,11 +518,11 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
           >
             <div className="flex flex-col gap-9 xl:flex-row xl:items-end xl:justify-between">
               <div className="max-w-[560px]">
-                <SectionKicker className="[&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright mb-5">
+                <SectionKicker className="mb-5">
                   {ts('seamKicker')}
                 </SectionKicker>
-                <h2 className="text-headline-sm font-sans text-white">
-                  {t('stuckHeading')} <span className="text-accent-bright">{ts('seamHuman')}</span>
+                <h2 className="text-headline font-sans text-white">
+                  {t('stuckHeading')} <span>{ts('seamHuman')}</span>
                 </h2>
                 <p className="font-body text-body mt-4 max-w-[44ch] text-white/70">
                   {ts('seamDesc')}
@@ -562,7 +562,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
                 {promiseStatTiles.map((s) => (
                   <div
                     key={s.l}
-                    className="rounded-[16px] border border-white/[0.1] bg-white/[0.05] p-4 transition-colors hover:border-white/20 hover:bg-white/[0.08]"
+                    className="rounded-[16px] border border-white/[0.1] bg-white/[0.05] p-4 transition-colors hover:border-accent-bright/40 hover:bg-accent/[0.10]"
                   >
                     <span
                       className="text-accent-bright block font-sans text-[22px] font-semibold tabular-nums"
@@ -586,7 +586,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
       {/* Channels. id="contact" is the seam anchor target (do not rename). */}
       <section id="contact" className="scroll-mt-20 px-5 pb-8 pt-6">
         <ScrollReveal className={WRAP}>
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+          <SectionKicker className="mb-4">
             {tc('channelsKicker')}
           </SectionKicker>
           <h2 className="text-foreground text-headline mb-8 font-sans">{tc('channelsHeading')}</h2>
@@ -636,7 +636,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
       <section className="px-5 pb-10 pt-4">
         <ScrollReveal className={WRAP}>
           <div className={`rounded-[24px] border p-6 md:p-9 ${CARD}`}>
-            <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
+            <SectionKicker className="mb-4">
               {tc('formKicker')}
             </SectionKicker>
             <h2 className="text-foreground text-headline mb-8 font-sans">{tc('formHeading')}</h2>
@@ -675,7 +675,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder={tc('fieldNamePlaceholder')}
-                    className={`font-body text-body w-full rounded-[14px] px-4 py-[14px] text-[#111] placeholder-[#9ca3af] dark:text-white dark:placeholder-white/30 ${tinted}`}
+                    className={`font-body text-body w-full rounded-[14px] px-4 py-[14px] text-foreground placeholder-[#9ca3af] dark:text-white dark:placeholder-white/30 ${tinted}`}
                   />
                 </div>
 
@@ -693,7 +693,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={tc('fieldEmailPlaceholder')}
-                    className={`font-body text-body w-full rounded-[14px] px-4 py-[14px] text-[#111] placeholder-[#9ca3af] dark:text-white dark:placeholder-white/30 ${tinted}`}
+                    className={`font-body text-body w-full rounded-[14px] px-4 py-[14px] text-foreground placeholder-[#9ca3af] dark:text-white dark:placeholder-white/30 ${tinted}`}
                   />
                 </div>
 
@@ -742,7 +742,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder={tc('fieldMessagePlaceholder')}
-                    className={`font-body text-body w-full resize-none rounded-[14px] px-4 py-[14px] text-[#111] placeholder-[#9ca3af] dark:text-white dark:placeholder-white/30 ${tinted}`}
+                    className={`font-body text-body w-full resize-none rounded-[14px] px-4 py-[14px] text-foreground placeholder-[#9ca3af] dark:text-white dark:placeholder-white/30 ${tinted}`}
                   />
                 </div>
 

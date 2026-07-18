@@ -1,0 +1,82 @@
+# Dormant CD — manual dispatch only. Nothing here runs on push.
+#
+# Deploy now (manual):  GitHub → Actions → Deploy → Run workflow → pick target.
+# Enable auto-CD later: uncomment the workflow_run block below — web then
+#                       auto-deploys after the CI workflow goes green on main.
+#                       CMS stays manual-only by design (stateful; drizzle
+#                       schema push runs against Neon on every boot).
+#
+# Required repo secrets (Settings → Secrets and variables → Actions):
+#   VERCEL_TOKEN    vercel.com → Account Settings → Tokens
+#   RAILWAY_TOKEN   Railway project → Settings → Tokens (project token, production env)
+#
+# The canonical Vercel project is "newera365-app", deployed from the REPO ROOT
+# (vercel.json: npm ci + turbo filter). apps/web/.vercel is a stale link — do not
+# deploy from there.
+
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: What to deploy
+        type: choice
+        default: web
+        options: [web, cms, both]
+  # workflow_run:              # ← uncomment these 4 lines to enable auto-CD for web
+  #   workflows: [CI]
+  #   types: [completed]
+  #   branches: [main]
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  web:
+    name: Web → Vercel (production)
+    if: >-
+      (github.event_name == 'workflow_dispatch' && inputs.target != 'cms') ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    env:
+      # IDs, not credentials — mirror .vercel/project.json at the repo root.
+      VERCEL_ORG_ID: team_uaa5O7iYKEZtEHHMKVVv2oSU
+      VERCEL_PROJECT_ID: prj_0xcZ5XL2vuOufPbopBfAjwO3qFNb
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      # Remote build on Vercel — identical to the manual `vercel --prod` flow;
+      # uses vercel.json build settings and the dashboard's production env vars.
+      - name: Deploy
+        run: vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+
+  cms:
+    name: CMS → Railway
+    if: github.event_name == 'workflow_dispatch' && inputs.target != 'web'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      # Uses railway.toml (Dockerfile build at apps/cms/Dockerfile). --ci streams
+      # build logs and fails the job if the Railway build fails. Adjust --service
+      # if the Railway service is not named "cms".
+      - name: Deploy
+        run: railway up --service cms --ci
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

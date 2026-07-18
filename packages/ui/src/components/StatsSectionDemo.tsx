@@ -42,7 +42,7 @@ export async function StatsSectionDemo({
   return (
     <section className="bg-transparent px-5 pb-8 pt-10 xl:pb-10 xl:pt-12">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-        <SectionKicker className="text-foreground [&>span:first-child]:bg-accent mb-5">
+        <SectionKicker className="mb-5">
           {t('statsByNumbers')}
         </SectionKicker>
 
@@ -79,7 +79,7 @@ export async function StatsSectionDemo({
                   >
                     <CountUp flat value={stat.value} />
                   </span>
-                  <span className="font-mono text-[11px] font-medium uppercase tracking-[0.13em] text-[#8c949e] transition-colors duration-300 group-hover/spot:text-white/80">
+                  <span className="font-mono text-[11px] font-medium uppercase tracking-[0.13em] text-white/55 transition-colors duration-300 group-hover/spot:text-white/80">
                     {stat.label}
                   </span>
                 </Spotlight>
@@ -100,7 +100,7 @@ export async function StatsSectionDemo({
             />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="font-body text-body font-semibold leading-tight text-[#111] dark:text-white">
+            <p className="font-body text-body font-semibold leading-tight text-foreground dark:text-white">
               {t('statsRegBadgeTitle')}
             </p>
             <p className="font-body text-caption text-muted mt-0.5">{t('statsRegBadgeDesc')}</p>

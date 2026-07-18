@@ -170,14 +170,14 @@ export function ArbitrageSection() {
           <div className="grid gap-9 xl:grid-cols-[1.02fr_0.98fr] xl:items-stretch xl:gap-12">
             {/* Left: the claim + the stat ledger + the accounts strip */}
             <div className="flex flex-col">
-              <SectionKicker className="text-muted [&>span:first-child]:bg-accent">
+              <SectionKicker>
                 {t('arbKicker')}
               </SectionKicker>
 
-              <div className="text-headline-sm mt-3 flex flex-col font-sans">
-                <span className="text-foreground">{t('arbHeadingLine1')}</span>
-                <span className="text-accent">{t('arbHeadingAccent')}</span>
-              </div>
+              <h2 className="text-headline text-foreground mt-3 flex flex-col font-sans">
+                <span>{t('arbHeadingLine1')}</span>
+                <span>{t('arbHeadingAccent')}</span>
+              </h2>
 
               <p className="font-body text-body text-muted mt-3 max-w-[52ch]">{t('arbDesc')}</p>
 
@@ -237,12 +237,9 @@ export function ArbitrageSection() {
                 className="pointer-events-none absolute inset-0 rounded-[24px] ring-1 ring-inset ring-white/[0.06]"
               />
               <div className="relative flex h-full min-h-[300px] flex-col justify-between gap-8 p-7 xl:p-8">
-                <div className="flex items-center gap-2">
-                  <span className="bg-accent-bright h-2 w-2 flex-shrink-0 rounded-full" />
-                  <span className="text-eyebrow text-accent-bright font-mono uppercase tracking-[0.16em]">
-                    {t('arbStat1Label')}
-                  </span>
-                </div>
+                <span className="text-eyebrow font-mono font-medium uppercase text-white/45">
+                  {t('arbStat1Label')}
+                </span>
                 <div>
                   <span
                     dir="ltr"

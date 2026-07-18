@@ -20,7 +20,7 @@ export function LiveMarketsSection() {
     <section className="px-5 py-12 xl:py-16">
       <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <SectionKicker className="mb-4">{t('liveMarketsKicker')}</SectionKicker>
-        <h2 className="text-foreground mb-3 font-sans text-[28px] font-semibold leading-[1.1] tracking-[-0.8px] xl:text-[34px]">
+        <h2 className="text-foreground text-headline mb-3 font-sans">
           {t('liveMarketsHeading')}
         </h2>
         <p className="font-body text-muted mb-6 max-w-[480px] text-[14px] leading-[155%]">

@@ -126,7 +126,7 @@ function renderNode(node: SlateNode, i: number): ReactNode {
       return (
         <ul
           key={i}
-          className="font-body text-foreground mb-4 list-disc space-y-1 ps-6 text-[15px] leading-[1.7]"
+          className="font-body text-foreground mb-4 list-disc space-y-1 hyphens-auto ps-6 text-justify text-[15px] leading-[1.7]"
         >
           {children}
         </ul>
@@ -135,7 +135,7 @@ function renderNode(node: SlateNode, i: number): ReactNode {
       return (
         <ol
           key={i}
-          className="font-body text-foreground mb-4 list-decimal space-y-1 ps-6 text-[15px] leading-[1.7]"
+          className="font-body text-foreground mb-4 list-decimal space-y-1 hyphens-auto ps-6 text-justify text-[15px] leading-[1.7]"
         >
           {children}
         </ol>
@@ -177,7 +177,10 @@ function renderNode(node: SlateNode, i: number): ReactNode {
     }
     default:
       return (
-        <p key={i} className="font-body text-foreground mb-4 text-[15px] leading-[1.7]">
+        <p
+          key={i}
+          className="font-body text-foreground mb-4 hyphens-auto text-justify text-[15px] leading-[1.7]"
+        >
           {children}
         </p>
       );

@@ -76,9 +76,7 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
         {isRegister ? (
           /* ── Register ── */
           <>
-            <h2 className="text-foreground mb-1 font-sans text-[20px] font-semibold">
-              Open your account
-            </h2>
+            <h2 className="text-foreground text-title mb-1 font-sans">Open your account</h2>
             <p className="font-body text-muted mb-5 text-[13px] leading-[1.5]">
               Enjoy 0% hidden fees, backed by regulators, supporting your growth.
             </p>
@@ -120,7 +118,7 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
 
               <button
                 type="submit"
-                className="font-body mt-1 flex h-[48px] w-full items-center justify-center rounded-full bg-[#00b050] text-[14px] font-semibold text-white transition-colors hover:bg-[#009944]"
+                className="font-body bg-accent hover:bg-accent-hover mt-1 flex h-[48px] w-full items-center justify-center rounded-full text-[14px] font-semibold text-white transition-colors"
               >
                 Create account
               </button>
@@ -129,9 +127,7 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
         ) : (
           /* ── Demo ── */
           <>
-            <h2 className="text-foreground mb-1 font-sans text-[20px] font-semibold">
-              Start a free demo
-            </h2>
+            <h2 className="text-foreground text-title mb-1 font-sans">Start a free demo</h2>
             <p className="font-body text-muted mb-5 text-[13px] leading-[1.5]">
               $50,000 virtual funds for demo, no deposit, no pressure.
             </p>
@@ -151,7 +147,7 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
 
               <button
                 type="submit"
-                className="font-body mt-1 flex h-[48px] w-full items-center justify-center rounded-full bg-[#00b050] text-[14px] font-semibold text-white transition-colors hover:bg-[#009944]"
+                className="font-body bg-accent hover:bg-accent-hover mt-1 flex h-[48px] w-full items-center justify-center rounded-full text-[14px] font-semibold text-white transition-colors"
               >
                 Launch demo account
               </button>

@@ -150,20 +150,18 @@ function StepCard({
       {/* Ghost numeral — oversized, bleeding off the top corner */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute -top-4 end-3 select-none font-sans text-[96px] font-semibold leading-none tracking-[-0.04em] text-[#1fe06e]/50"
+        className="text-accent-bright/[0.22] pointer-events-none absolute -top-4 end-3 select-none font-sans text-[96px] font-semibold tabular-nums leading-none tracking-tight"
       >
         {step.num}
       </span>
       {/* Glass glyph tile */}
-      <span className="absolute start-6 top-6 flex h-12 w-12 items-center justify-center rounded-[14px] border border-white/[0.16] bg-white/[0.08] text-white backdrop-blur-md transition-colors duration-500 group-hover:border-white/[0.3] group-hover:bg-white/[0.16] xl:start-5 xl:top-5">
+      <span className="group-hover:border-accent-bright/50 group-hover:bg-accent/[0.20] absolute start-6 top-6 flex h-12 w-12 items-center justify-center rounded-[14px] border border-white/[0.16] bg-white/[0.08] text-white backdrop-blur-md transition-colors duration-500 xl:start-5 xl:top-5">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           {STEP_GLYPHS[i]}
         </svg>
       </span>
       <div className="relative">
-        <h3 className="mb-2 font-sans text-[22px] font-semibold leading-snug text-white xl:text-[20px]">
-          {step.title}
-        </h3>
+        <h3 className="text-title mb-2 font-sans leading-snug text-white">{step.title}</h3>
         <p className="font-body text-body text-white/[0.72]">{step.desc}</p>
         <span className="text-accent-bright mt-5 inline-flex items-center gap-1.5 rounded-full border border-white/[0.14] bg-white/[0.09] px-3 py-1.5 font-mono text-[11px] font-semibold tracking-[0.08em] backdrop-blur-sm">
           <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true">
@@ -421,9 +419,7 @@ export function ThreeStepsClient({
           style={pinActive ? { top: stickyTop } : undefined}
         >
           <div className="mx-auto w-full max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <SectionKicker className="text-foreground [&>span:first-child]:bg-accent mb-[14px]">
-              {kicker}
-            </SectionKicker>
+            <SectionKicker className="mb-[14px]">{kicker}</SectionKicker>
 
             <h2 className="text-foreground text-headline mb-8 font-sans">{heading}</h2>
 

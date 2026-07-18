@@ -184,7 +184,7 @@ const nextConfig = {
               // every chart silently fails to mount. See TradingViewWidget.tsx.
               'frame-src https://www.tradingview.com https://s.tradingview.com https://www.tradingview-widget.com',
               // frame-ancestors: more authoritative than X-Frame-Options in modern browsers.
-              // Restricts who can embed NewEra365 pages in an iframe.
+              // Restricts who can embed Newera365 pages in an iframe.
               "frame-ancestors 'self'",
               "style-src 'self' 'unsafe-inline'",
               // next/font self-hosts Google Fonts at build time — no external font CDN needed.

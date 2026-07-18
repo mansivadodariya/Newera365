@@ -18,7 +18,7 @@ import { readFile } from 'fs/promises';
 const HOST = process.env.SMTP_HOST ?? 'smtp.zeptomail.com';
 const PASS = process.env.SMTP_PASS ?? '';
 
-export const FROM_NAME = 'NewEra365';
+export const FROM_NAME = 'Newera365';
 // ZeptoMail has no sandbox sender — the from domain must be verified in all envs.
 export const FROM = process.env.EMAIL_FROM ?? 'no-reply@newera365.com';
 

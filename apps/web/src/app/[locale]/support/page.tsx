@@ -14,8 +14,8 @@ export async function generateMetadata({
   return {
     title: isAr ? 'الدعم' : 'Support',
     description: isAr
-      ? 'إجابات على الأسئلة الشائعة وطرق التواصل مع فريق NewEra365.'
-      : 'Answers to common questions and ways to reach the NewEra365 team.',
+      ? 'إجابات على الأسئلة الشائعة وطرق التواصل مع فريق Newera365.'
+      : 'Answers to common questions and ways to reach the Newera365 team.',
   };
 }
 

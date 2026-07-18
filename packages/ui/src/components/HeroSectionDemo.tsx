@@ -82,11 +82,10 @@ export function HeroSectionDemo() {
             <div className="flex flex-col items-center text-center xl:items-start xl:text-start">
               {/* Eyebrow */}
               <div className={`flex items-center gap-2 ${RISE}`} style={{ animationDelay: '80ms' }}>
-                <span className="bg-accent-bright block h-px w-[18px] flex-shrink-0" />
-                <span className="text-accent-bright text-eyebrow font-mono font-medium uppercase">
+                <span className="bg-accent block h-px w-[22px] flex-shrink-0" />
+                <span className="text-accent text-eyebrow font-mono font-medium uppercase">
                   {td('heroEyebrow')}
                 </span>
-                <span className="bg-accent-bright block h-px w-[18px] flex-shrink-0" />
               </div>
 
               <h1 className="text-display mt-6 max-w-[900px] font-sans text-white">
@@ -95,7 +94,7 @@ export function HeroSectionDemo() {
                     {line.words.map((w) => (
                       <span
                         key={w.i}
-                        className={`${RISE} me-[0.22em] inline-block ${line.premium ? 'text-accent-bright' : ''}`}
+                        className={`${RISE} me-[0.22em] inline-block`}
                         style={{ animationDelay: `${180 + w.i * 55}ms` }}
                       >
                         {w.text}
@@ -121,7 +120,7 @@ export function HeroSectionDemo() {
                 <button
                   onClick={() => setAuthModal('register')}
                   data-primary-cta="hero"
-                  className="font-body from-accent to-accent-bright inline-flex flex-none items-center gap-2 rounded-full bg-gradient-to-r px-8 py-[18px] text-[16px] font-semibold tracking-[-0.075px] text-white shadow-[0_16px_44px_-12px_rgba(0,176,80,0.85)] transition-all duration-300 hover:shadow-[0_22px_52px_-12px_rgba(26,217,102,0.95)] active:scale-[0.98]"
+                  className="font-body bg-accent hover:bg-accent-hover inline-flex flex-none items-center gap-2 rounded-full px-8 py-[18px] text-[16px] font-semibold tracking-[-0.075px] text-white shadow-[0_16px_44px_-12px_rgba(0,176,80,0.85)] transition-all duration-300 hover:shadow-[0_22px_52px_-12px_rgba(26,217,102,0.95)] active:scale-[0.98]"
                 >
                   {t('heroCTALive')}
                   <svg

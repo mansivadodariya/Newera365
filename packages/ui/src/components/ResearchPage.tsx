@@ -285,7 +285,7 @@ export function ResearchPage({
           <h1 className="text-foreground text-display mb-3 font-sans">
             {heroLine1}
             <br />
-            <span className="text-accent">{heroLine2}</span>
+            <span>{heroLine2}</span>
           </h1>
           <p className="font-body text-muted max-w-[310px] text-[14px] leading-[1.55]">
             {heroSubtitle}
@@ -324,7 +324,7 @@ export function ResearchPage({
                   onClick={() => handleContentTab(s.id)}
                   className={`font-body relative z-10 rounded-[9px] px-4 py-2 text-center text-[13px] font-medium transition-colors ${
                     contentTab === s.id
-                      ? 'text-[#111] dark:text-white'
+                      ? 'text-foreground dark:text-white'
                       : 'text-muted hover:text-foreground'
                   }`}
                 >
@@ -371,8 +371,8 @@ export function ResearchPage({
                 onClick={() => handleCategoryChange(cat)}
                 className={`font-body flex-shrink-0 rounded-full px-[14px] py-[8px] text-[13px] font-medium transition-all ${
                   activeCategory === cat
-                    ? 'bg-[#111] text-white dark:bg-white dark:text-[#111]'
-                    : 'bg-[#f2f2f4] text-[#6b7280] hover:bg-[#e5e5e5] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:bg-[#22252e] dark:hover:text-white/80'
+                    ? 'bg-accent text-white'
+                    : 'text-muted hover:bg-accent/[0.10] dark:hover:bg-accent/[0.15] bg-[#f2f2f4] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:text-white/80'
                 }`}
               >
                 {translateResearchCat(cat)}
@@ -414,7 +414,7 @@ export function ResearchPage({
               {/* Content */}
               <div className="flex flex-1 flex-col p-5 xl:min-h-[280px] xl:p-8">
                 <div className="mb-2.5 flex items-center gap-2.5">
-                  <p className="text-accent-bright font-mono text-[10px] font-medium uppercase tracking-[0.18em]">
+                  <p className="text-accent font-mono text-[10px] font-medium uppercase tracking-[0.18em]">
                     {t('featuredTag')}
                   </p>
                   <span
@@ -423,7 +423,7 @@ export function ResearchPage({
                     {translateResearchCat(featured.category)}
                   </span>
                 </div>
-                <p className="group-hover:text-accent-bright max-w-[30ch] font-sans text-[18px] font-semibold leading-[1.25] text-white transition-colors xl:text-[24px]">
+                <p className="text-title group-hover:text-accent-bright max-w-[30ch] font-sans text-white transition-colors">
                   {featured.title}
                 </p>
                 {featured.summary && (
@@ -504,15 +504,15 @@ export function ResearchPage({
                       {translateResearchCat(article.category)}
                     </span>
                     {article.readMinutes != null && (
-                      <span className="font-mono text-[9px] text-[#9ca3af]">
+                      <span className="text-muted font-mono text-[9px]">
                         · {t('readTimeLabel', { minutes: article.readMinutes })}
                       </span>
                     )}
                   </div>
-                  <p className="group-hover:text-accent mb-1 font-sans text-[14px] font-semibold leading-[1.25] tracking-[-0.21px] text-[#111] transition-colors dark:text-white">
+                  <p className="group-hover:text-accent text-foreground mb-1 font-sans text-[14px] font-semibold leading-[1.25] tracking-[-0.21px] transition-colors dark:text-white">
                     {article.title}
                   </p>
-                  <span className="font-mono text-[10px] text-[#9ca3af]">{article.date}</span>
+                  <span className="text-muted font-mono text-[10px]">{article.date}</span>
                 </div>
               </Link>
             ))}
@@ -631,10 +631,8 @@ export function ResearchPage({
         <section className="px-5 pb-10">
           <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <div className="mb-5 flex items-center gap-3">
-              <h2 className="text-foreground font-sans text-[22px] font-semibold leading-tight tracking-[-0.33px]">
-                {t('reportsHeading')}
-              </h2>
-              <span className="font-mono text-[11px] text-[#6b7280]">{t('reportsSubtitle')}</span>
+              <h2 className="text-foreground text-title font-sans">{t('reportsHeading')}</h2>
+              <span className="text-muted font-mono text-[11px]">{t('reportsSubtitle')}</span>
             </div>
             <div className="flex flex-col gap-3 xl:grid xl:grid-cols-2 xl:gap-4">
               {cmsReports.map((report) => (
@@ -659,7 +657,7 @@ export function ResearchPage({
                       {report.title}
                     </p>
                     {report.summary && (
-                      <p className="font-body mt-1 text-[12px] leading-[1.5] text-[#6b7280]">
+                      <p className="font-body text-muted mt-1 text-[12px] leading-[1.5]">
                         {report.summary}
                       </p>
                     )}
@@ -686,7 +684,7 @@ export function ResearchPage({
                       {t('reportDownload')}
                     </a>
                   ) : (
-                    <span className="text-muted flex-shrink-0 rounded-full bg-[#f2f2f4] px-4 py-2 font-sans text-[12px] dark:bg-[#1c1c1c] dark:text-[#9ca3af]">
+                    <span className="text-muted flex-shrink-0 rounded-full bg-[#f2f2f4] px-4 py-2 font-sans text-[12px] dark:bg-[#1c1c1c] dark:text-white/60">
                       {t('reportComingSoon')}
                     </span>
                   )}
@@ -703,10 +701,8 @@ export function ResearchPage({
           <div className="xl:flex xl:items-center xl:gap-16">
             {/* Left: heading */}
             <div className="xl:flex-1">
-              <SectionKicker className="mb-3 [&>span:first-child]:bg-white/50 [&>span:last-child]:text-white/50">
-                {t('briefingKicker')}
-              </SectionKicker>
-              <h2 className="text-headline-sm mb-2 font-sans text-white">
+              <SectionKicker className="mb-3">{t('briefingKicker')}</SectionKicker>
+              <h2 className="text-headline mb-2 font-sans text-white">
                 {t('briefingHeading')}
                 <br />
                 {t('briefingTime')}

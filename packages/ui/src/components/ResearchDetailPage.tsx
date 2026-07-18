@@ -135,9 +135,7 @@ export function ResearchDetailPage({
                 </span>
               )}
             </div>
-            <h1 className="text-foreground mb-3 font-sans text-[28px] font-semibold leading-[1.15] tracking-[-0.56px]">
-              {article.title}
-            </h1>
+            <h1 className="text-foreground text-headline mb-3 font-sans">{article.title}</h1>
             {article.author && (
               <p className="font-body text-muted text-[13px]">
                 {isAr ? 'بقلم' : 'By'}{' '}
@@ -284,7 +282,7 @@ export function ResearchDetailPage({
       {/* CTA */}
       <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <h2 className="text-headline-sm mb-3 font-sans text-white">
+          <h2 className="text-headline mb-3 font-sans text-white">
             {t('tradeHeading')}
             <br />
             {t('tradeSubheading')}

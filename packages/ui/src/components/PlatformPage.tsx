@@ -303,11 +303,11 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:max-w-[1200px] xl:items-center xl:gap-16">
           <div className="xl:flex-1">
             <h1 className="text-foreground text-display mb-5 font-sans [text-wrap:balance]">
-              {t('heroLine1')} <span className="text-accent">{t('heroAccent')}</span>
+              {t('heroLine1')} <span>{t('heroAccent')}</span>
               <br />
               {t('heroLine2')}
             </h1>
-            <p className="font-body text-lead text-muted max-w-[340px] xl:max-w-[440px] dark:text-[#B8BFCC]">
+            <p className="font-body text-lead text-muted max-w-[340px] xl:max-w-[440px] dark:text-white/60">
               {t('heroSubtitle')}
             </p>
           </div>
@@ -345,7 +345,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       {/* Terminal / Platform cards */}
       <section className="rounded-t-[32px] bg-transparent px-5 py-[56px] xl:py-16 dark:bg-[#07090D]">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
+          <SectionKicker className="mb-4">
             {t('terminalKicker')}
           </SectionKicker>
           <h2 className="text-foreground text-headline mb-8 font-sans">{t('terminalHeading')}</h2>
@@ -361,7 +361,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
               // "Open web trader" wraps to two tidy lines inside the pill on the
               // narrow 2-col mobile grid instead of cramping/overflowing.
               const ctaClass =
-                'font-body group-hover:bg-accent relative mt-auto flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-[#111] py-2 text-center text-[13px] font-semibold leading-tight text-white transition-all duration-200 group-hover:shadow-[0_6px_20px_rgba(0,176,80,0.4)] xl:text-[14px] dark:bg-white/10';
+                'font-body bg-accent hover:bg-accent-hover relative mt-auto flex min-h-[48px] items-center justify-center gap-2 rounded-full py-2 text-center text-[13px] font-semibold leading-tight text-white transition-all duration-200 active:scale-[0.98] xl:text-[14px]';
               const arrow =
                 card.cta === 'download' ? (
                   <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
@@ -394,13 +394,13 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
               return (
                 <div
                   key={card.id}
-                  className={`border-border hover:border-accent/30 dark:hover:border-accent/25 shadow-card group relative flex flex-col gap-[18px] overflow-hidden rounded-[22px] border bg-white p-[22px] transition-all duration-300 hover:bg-[#07130c] hover:shadow-[0_20px_48px_rgba(0,176,80,0.18)] xl:col-span-2 xl:p-[24px] dark:border-white/[0.06] dark:bg-[#1a1c22] dark:hover:bg-[#07130c] ${
+                  className={`border-border hover:border-accent/45 dark:hover:border-accent/45 shadow-card group relative flex flex-col gap-[18px] overflow-hidden rounded-[22px] border bg-white p-[22px] transition-all duration-300 hover:shadow-[0_20px_48px_rgba(0,176,80,0.18)] xl:col-span-2 xl:p-[24px] dark:border-white/[0.06] dark:bg-[#1a1c22] ${
                     i === 3 ? 'xl:col-start-2' : ''
                   }`}
                 >
                   {/* Green glow — fades in on hover */}
                   <span
-                    className="pointer-events-none absolute -top-[50px] left-[10%] h-[180px] w-[180px] rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-70"
+                    className="dark:group-hover:opacity-70 pointer-events-none absolute -top-[50px] left-[10%] h-[180px] w-[180px] rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-40"
                     style={{
                       background:
                         'radial-gradient(circle, rgba(0,176,80,0.4) 0%, rgba(0,176,80,0.1) 50%, transparent 70%)',
@@ -411,7 +411,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                   {/* Icon + tag — stacked on the 2-col mobile grid (icon + badge
                       won't fit side by side in ~117px), side by side from md up. */}
                   <div className="relative flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-2">
-                    <div className="bg-accent/10 text-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white">
+                    <div className="bg-accent/10 text-accent group-hover:bg-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300 group-hover:text-white">
                       <card.Icon />
                     </div>
                     <span className="border-accent/40 text-accent group-hover:border-accent/50 whitespace-nowrap rounded-full border px-3 py-[5px] font-mono text-[10px] font-semibold uppercase tracking-[0.12em] transition-colors duration-300">
@@ -421,10 +421,10 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
 
                   {/* Name + desc */}
                   <div className="relative">
-                    <p className="text-title mb-2 font-sans text-[#111] transition-colors duration-300 group-hover:text-white dark:text-white">
+                    <p className="text-title mb-2 font-sans text-foreground dark:text-white">
                       {t(card.titleKey as 'winTitle')}
                     </p>
-                    <p className="font-body text-body text-muted transition-colors duration-300 group-hover:text-white/60 dark:text-white/60">
+                    <p className="font-body text-body text-muted dark:text-white/60">
                       {t(card.descKey as 'winDesc')}
                     </p>
                   </div>
@@ -459,7 +459,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       {/* Tools section — brand-tinted band (replaced the off-palette teal) */}
       <section className="rounded-t-[32px] bg-gradient-to-b from-[#DCEAE1] to-[#F2F5F3] px-5 pb-12 pt-12 xl:px-8 xl:py-16 dark:from-[#0C1F14] dark:to-[#07090D]">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="text-foreground [&>span:first-child]:bg-accent mb-4">
+          <SectionKicker className="mb-4">
             {t('featuresKicker')}
           </SectionKicker>
           <h2 className="text-foreground text-headline mb-8 font-sans">{t('featuresHeading')}</h2>
@@ -474,7 +474,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                   <tool.Icon />
                 </div>
                 <div>
-                  <p className="mb-1 font-sans text-[16px] font-semibold text-[#111] xl:text-[20px] dark:text-white">
+                  <p className="mb-1 font-sans text-[16px] font-semibold text-foreground xl:text-[20px] dark:text-white">
                     {t(`feat${i + 1}` as 'feat1')}
                   </p>
                   <p className="font-body text-caption xl:text-body text-muted leading-snug dark:text-white/50">
@@ -492,7 +492,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       <section className="ink-band rounded-t-[32px] px-5 pb-14 pt-12 xl:pb-16 xl:pt-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="text-accent-bright [&>span:first-child]:bg-accent-bright mb-4">
+            <SectionKicker className="mb-4">
               {t('compareKicker')}
             </SectionKicker>
             <div className="mb-9 xl:flex xl:items-end xl:justify-between xl:gap-10">
@@ -548,7 +548,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
               {COMPARE_ROWS.map((row, i) => (
                 <div
                   key={row.id}
-                  className={`grid transition-colors hover:bg-white/[0.02] ${
+                  className={`grid transition-colors hover:bg-accent/[0.06] ${
                     i < COMPARE_ROWS.length - 1 ? 'border-b border-white/[0.06]' : ''
                   }`}
                   style={COMPARE_GRID}
@@ -576,7 +576,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
 
           {/* Works everywhere — device band continues the same ink chapter */}
           <ScrollReveal className="mt-14">
-            <SectionKicker className="text-accent-bright [&>span:first-child]:bg-accent-bright mb-4">
+            <SectionKicker className="mb-4">
               {t('devicesKicker')}
             </SectionKicker>
             <h2 className="text-headline font-sans text-white">{t('devicesLine1')}</h2>
@@ -590,7 +590,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
               {DEVICE_KEYS.map((dev) => (
                 <div
                   key={dev.key}
-                  className="hover:border-accent/40 group flex min-w-0 items-center gap-[14px] rounded-[16px] border border-white/[0.08] bg-white/[0.05] px-[18px] py-[14px] text-white transition-colors hover:bg-white/[0.10]"
+                  className="hover:border-accent/40 group flex min-w-0 items-center gap-[14px] rounded-[16px] border border-white/[0.08] bg-white/[0.05] px-[18px] py-[14px] text-white transition-colors hover:bg-accent/[0.12]"
                 >
                   <span className="group-hover:border-accent/40 group-hover:bg-accent/[0.15] group-hover:text-accent-bright flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[12px] border border-white/[0.10] bg-white/[0.06] text-white transition-colors [&>svg]:h-[22px] [&>svg]:w-[22px]">
                     <dev.Icon />

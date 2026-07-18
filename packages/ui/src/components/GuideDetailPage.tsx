@@ -85,7 +85,7 @@ function TocItems({
               className={`font-mono text-[11px] font-semibold tabular-nums transition-colors ${
                 active
                   ? 'text-accent'
-                  : 'text-muted dark:text-accent-bright/40 group-hover:text-accent/70 dark:group-hover:text-accent-bright/80'
+                  : 'text-muted'
               }`}
             >
               {String(i + 1).padStart(2, '0')}
@@ -316,16 +316,16 @@ export function GuideDetailPage({ slug: _slug, guide: cmsGuide }: GuideDetailPro
       {/* CTA closer on ink */}
       <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-accent-bright [&>span:last-child]:text-accent-bright mb-4">
+          <SectionKicker className="mb-4">
             {t('ctaKicker')}
           </SectionKicker>
-          <h2 className="text-headline-sm mb-3 font-sans text-white">{t('ctaHeading')}</h2>
+          <h2 className="text-headline mb-3 font-sans text-white">{t('ctaHeading')}</h2>
           <p className="font-body mb-7 max-w-[52ch] text-[15px] leading-relaxed text-white/[0.72]">
             {t('ctaDesc')}
           </p>
           <Link
             href={`/${locale}/guides`}
-            className="font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-white/45 active:scale-[0.98] md:w-fit md:px-8"
+            className="font-body flex h-[52px] w-full items-center justify-center gap-2 rounded-full border border-white/20 text-[14px] font-medium text-white transition-colors hover:border-accent-bright/60 active:scale-[0.98] md:w-fit md:px-8"
           >
             {t('moreGuides')}
             <svg

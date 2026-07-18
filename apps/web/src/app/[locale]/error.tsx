@@ -26,7 +26,7 @@ export default function Error({
       <div className="flex gap-3">
         <button
           onClick={reset}
-          className="flex h-[46px] items-center rounded-full border border-border px-6 font-body text-[14px] font-medium text-foreground transition-colors hover:border-foreground"
+          className="flex h-[46px] items-center rounded-full border border-border px-6 font-body text-[14px] font-medium text-foreground transition-colors hover:border-accent/50"
         >
           {t('tryAgain')}
         </button>

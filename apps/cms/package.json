@@ -2,7 +2,7 @@
   "name": "@newera365/cms",
   "version": "0.1.0",
   "private": true,
-  "description": "NewEra content backend",
+  "description": "Newera content backend",
   "scripts": {
     "dev": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts nodemon",
     "build:payload": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload build",

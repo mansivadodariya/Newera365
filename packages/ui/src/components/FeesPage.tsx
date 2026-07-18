@@ -74,14 +74,11 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       {/* Hero — receipt masthead */}
       <section className="bg-transparent px-5 pb-8 pt-9">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="mb-5 flex items-center gap-2.5">
-            <span className="bg-accent h-1.5 w-1.5 flex-shrink-0 rounded-[2px]" />
-            <span className="text-eyebrow text-muted font-mono uppercase">{t('receiptStamp')}</span>
-          </div>
-          <h1 className="text-display mb-4 font-sans">
-            <span className="text-foreground">{t('heroLine1')}</span>
+          <SectionKicker className="mb-5">{t('receiptStamp')}</SectionKicker>
+          <h1 className="text-display text-foreground mb-4 font-sans">
+            {t('heroLine1')}
             <br />
-            <span className="text-accent">{t('heroLine2')}</span>
+            {t('heroLine2')}
           </h1>
           <p className="font-body text-muted text-body-lg leading-[1.55] sm:max-w-[350px] xl:max-w-[560px]">
             {t('heroSubtitle')}
@@ -92,7 +89,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       {/* Spread ledger — account tiers as a terminal receipt */}
       <section className="bg-transparent px-5 pb-10">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+          <SectionKicker className="mb-5">
             {t('spreadsKicker')}
           </SectionKicker>
 
@@ -134,7 +131,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                 {displaySpreads.map((row) => (
                   <div
                     key={row.instrument}
-                    className="group grid grid-cols-[1fr_54px_54px_54px] items-center px-5 py-[13px] transition-colors hover:bg-[#F0F4F1] dark:hover:bg-white/[0.02]"
+                    className="group grid grid-cols-[1fr_54px_54px_54px] items-center px-5 py-[13px] transition-colors hover:bg-accent/[0.05] dark:hover:bg-accent/[0.06]"
                   >
                     <span className="text-foreground font-body text-body group-hover:text-accent font-medium transition-colors">
                       {row.instrument}
@@ -179,9 +176,11 @@ export function FeesPage({ spreadData }: FeesPageProps) {
           {/* Receipt footer action */}
           <Link
             href={`/${locale}/markets/forex`}
-            className="text-accent group mt-4 inline-flex items-center gap-2"
+            className="font-body text-foreground hover:text-accent group mt-4 inline-flex items-center gap-1.5 text-[14px] font-medium transition-colors"
           >
-            <span className="text-eyebrow font-mono uppercase">{t('viewAll')}</span>
+            <span className="link-underline group-hover:[background-size:100%_1px]">
+              {t('viewAll')}
+            </span>
             <svg
               width="13"
               height="13"
@@ -205,7 +204,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       {/* Other charges — the receipt, line by line */}
       <section className="rounded-t-[32px] bg-transparent px-5 pb-12 pt-[29px] dark:bg-[#0a0c0b]">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-5">
+          <SectionKicker className="mb-5">
             {t('otherKicker')}
           </SectionKicker>
 
@@ -221,7 +220,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                   direction="up"
                   className={i > 0 ? 'border-border border-t dark:border-white/[0.05]' : ''}
                 >
-                  <div className="group px-5 py-[15px] transition-colors hover:bg-[#F0F4F1] dark:hover:bg-white/[0.02]">
+                  <div className="group px-5 py-[15px] transition-colors hover:bg-accent/[0.05] dark:hover:bg-accent/[0.06]">
                     <div className="flex items-baseline gap-3">
                       <span className="text-foreground text-body-lg font-sans font-semibold">
                         {t(`charge${key}` as 'chargeOpening')}
@@ -263,7 +262,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       {/* Closing ink band — the grand total you never pay */}
       <section className="ink-band rounded-t-[32px] px-5 pb-16 pt-14 xl:px-[120px] xl:pb-20 xl:pt-20">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-6 [&>span:first-child]:bg-white/60 [&>span:last-child]:text-white/60">
+          <SectionKicker className="mb-6">
             {t('transparentKicker')}
           </SectionKicker>
 
@@ -277,7 +276,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
             {t('dontPayCaption')}
           </p>
 
-          <h2 className="text-headline-sm mt-10 font-sans text-white">
+          <h2 className="text-headline mt-10 font-sans text-white">
             {t('transparentLine1')}
             <br />
             {t('transparentLine2')}

@@ -27,11 +27,11 @@ function getDirectConnectionString(): string {
 
 const VALUES: Record<string, string> = {
   regulatory_disclosure_en:
-    'NewEra365 is an international online trading brand. Trading foreign exchange and CFDs on margin carries a high level of risk and may not be suitable for every investor; you can lose more than your initial deposit. Our services are not directed at residents of any jurisdiction where their distribution or use would be contrary to local law, and it is your responsibility to ensure you are permitted to use them in your country of residence.',
+    'Newera365 is an international online trading brand. Trading foreign exchange and CFDs on margin carries a high level of risk and may not be suitable for every investor; you can lose more than your initial deposit. Our services are not directed at residents of any jurisdiction where their distribution or use would be contrary to local law, and it is your responsibility to ensure you are permitted to use them in your country of residence.',
   regulatory_disclosure_ar:
     'نيو إيرا 365 علامة تجارية عالمية للتداول عبر الإنترنت. ينطوي تداول العملات الأجنبية والعقود مقابل الفروقات بالهامش على مستوى عالٍ من المخاطر وقد لا يكون مناسباً لكل مستثمر؛ وقد تخسر أكثر من إيداعك الأولي. خدماتنا غير موجَّهة إلى المقيمين في أي ولاية قضائية يكون فيها توزيعها أو استخدامها مخالفاً للقانون المحلي، وتقع عليك مسؤولية التأكد من أنه يُسمح لك باستخدامها في بلد إقامتك.',
   company_registration_en:
-    '© 2026 NewEra365. All rights reserved. NewEra365 and the NewEra365 logo are trademarks of the NewEra365 group. All products and services are provided subject to the terms, conditions and policies published on this website.',
+    '© 2026 Newera365. All rights reserved. Newera365 and the Newera365 logo are trademarks of the Newera365 group. All products and services are provided subject to the terms, conditions and policies published on this website.',
   company_registration_ar:
     '© 2026 نيو إيرا 365. جميع الحقوق محفوظة. اسم نيو إيرا 365 وشعارها علامتان تجاريتان لمجموعة نيو إيرا 365. تُقدَّم جميع المنتجات والخدمات وفقاً للشروط والأحكام والسياسات المنشورة على هذا الموقع.',
 };

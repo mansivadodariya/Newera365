@@ -27,10 +27,36 @@ export interface CmsFooterContact {
   hours?: string | null;
 }
 
+// Call + WhatsApp quick-action glyphs shown beside the footer phone number.
+// ponytail: mirror FloatingContactWidget's PhoneIcon/WhatsAppIcon so both
+// surfaces read identically; kept local to avoid a shared export for two SVGs.
+function PhoneIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function WhatsAppIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.4-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47s1.06 2.87 1.21 3.07c.15.2 2.09 3.2 5.07 4.48.71.31 1.26.49 1.69.63.71.23 1.36.19 1.87.12.57-.09 1.76-.72 2-1.42.25-.7.25-1.29.18-1.42-.08-.13-.28-.2-.57-.35zM12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.85 9.85 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88a9.83 9.83 0 0 1 6.99 2.9 9.83 9.83 0 0 1 2.9 7 9.9 9.9 0 0 1-9.9 9.87zm8.42-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.48-8.41z" />
+    </svg>
+  );
+}
+
 function Footer({
   riskDisclaimer,
   socialLinks,
   contact,
+  whatsapp,
   paymentMethods,
   regulatoryDisclosure,
   companyRegistration,
@@ -38,12 +64,16 @@ function Footer({
   riskDisclaimer?: string | null;
   socialLinks?: CmsSocialLinks;
   contact?: CmsFooterContact | null;
+  whatsapp?: string | null;
   paymentMethods?: string[];
   regulatoryDisclosure?: string | null;
   companyRegistration?: string | null;
 }) {
   const locale = useLocale();
   const t = useTranslations('footer');
+  // WhatsApp mirrors the floating widget's whatsappNumber (same source of
+  // truth); wa.me wants digits only. Null → the WhatsApp glyph is hidden.
+  const waDigits = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : null;
 
   // Navigation columns are deliberately frontend-owned (client feedback round
   // 3): they must render even when the CMS is unreachable, and they change
@@ -95,15 +125,11 @@ function Footer({
           <div className="xl:w-[300px] xl:shrink-0">
             <Image
               src="/images/logo-dark.png"
-              alt="NewEra365"
+              alt="Newera365"
               width={133}
               height={26}
               className="mb-[18px]"
             />
-
-            <p className="font-body mb-8 max-w-[300px] text-[14px] leading-[160%] text-[rgba(255,255,255,0.55)]">
-              {t('tagline')}
-            </p>
 
             {/* Social icons — Flaticon Uicons brand glyphs; conditional on CMS data */}
             {socialLinks && Object.values(socialLinks).some(Boolean) && (
@@ -176,12 +202,12 @@ function Footer({
                   {t('regHeading')}
                 </p>
                 {regulatoryDisclosure && (
-                  <p className="font-body mb-3 whitespace-pre-line text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.45)]">
+                  <p className="font-body mb-3 hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.45)]">
                     {regulatoryDisclosure}
                   </p>
                 )}
                 {companyRegistration && (
-                  <p className="font-body whitespace-pre-line text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.4)]">
+                  <p className="font-body hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.4)]">
                     {companyRegistration}
                   </p>
                 )}
@@ -191,7 +217,7 @@ function Footer({
               <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
                 {t('riskDisclosure')}
               </p>
-              <p className="font-body whitespace-pre-line text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.45)]">
+              <p className="font-body hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.45)]">
                 {riskDisclaimer ?? t('riskWarning')}
               </p>
             </div>
@@ -215,7 +241,30 @@ function Footer({
                     </li>
                   )}
                   {contact?.phone && (
-                    <li>
+                    <li className="flex items-center gap-2.5">
+                      {/* Call + WhatsApp quick actions prefix the number —
+                          monochrome to match the social row above; WhatsApp
+                          hides when unset. */}
+                      <span className="flex items-center gap-2">
+                        <a
+                          href={`tel:${contact.phone.replace(/\s+/g, '')}`}
+                          aria-label={t('callAria')}
+                          className="inline-flex text-white/40 transition-colors hover:text-white/80"
+                        >
+                          <PhoneIcon />
+                        </a>
+                        {waDigits && (
+                          <a
+                            href={`https://wa.me/${waDigits}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={t('whatsappAria')}
+                            className="inline-flex text-white/40 transition-colors hover:text-white/80"
+                          >
+                            <WhatsAppIcon />
+                          </a>
+                        )}
+                      </span>
                       <a
                         href={`tel:${contact.phone.replace(/\s+/g, '')}`}
                         className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
@@ -228,7 +277,9 @@ function Footer({
                     <li className="font-body text-[rgba(255,255,255,0.55)]">{contact.hours}</li>
                   )}
                   {contact?.address && (
-                    <li className="font-body text-[rgba(255,255,255,0.55)]">{contact.address}</li>
+                    <li className="font-body whitespace-pre-line leading-relaxed text-[rgba(255,255,255,0.55)]">
+                      {contact.address}
+                    </li>
                   )}
                 </ul>
               </div>
@@ -242,7 +293,7 @@ function Footer({
                   {paymentMethods.map((m) => (
                     <span
                       key={m}
-                      className="font-body rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-[rgba(255,255,255,0.75)]"
+                      className="font-body rounded-md border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[13px] font-normal text-[rgba(255,255,255,0.8)]"
                     >
                       {m}
                     </span>

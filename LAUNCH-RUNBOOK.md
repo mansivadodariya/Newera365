@@ -1,6 +1,6 @@
 # LAUNCH-RUNBOOK.md
 
-Handoff cutover for NewEra365. Covers the two owner/infrastructure changes that
+Handoff cutover for Newera365. Covers the two owner/infrastructure changes that
 must be done by a human with account access: **Neon database → company account**
 and **frontend → Cloudflare**. Written 2026-07-15 against the audited-green state
 (CI passing on `main`, HEAD `efcbd9a`).

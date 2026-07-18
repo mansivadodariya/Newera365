@@ -123,7 +123,7 @@ export function TwoPathsSection() {
                     <path d="M7 9v5c0 1.1 2.2 2 5 2s5-.9 5-2V9" />
                   </svg>
                 </span>
-                <span className="text-accent-bright font-mono text-[11px] font-semibold uppercase tracking-[0.14em]">
+                <span className="text-accent font-mono text-[11px] font-semibold uppercase tracking-[0.14em]">
                   {t('eduEyebrow')}
                 </span>
                 <h3 className="text-title mt-3 font-sans text-white">{t('eduTitle')}</h3>
@@ -138,8 +138,10 @@ export function TwoPathsSection() {
                     </span>
                   ))}
                 </div>
-                <span className="text-accent-bright mt-auto inline-flex items-center gap-2.5 pt-7 font-mono text-[13px] font-semibold">
-                  {t('eduCta')}
+                <span className="font-body group-hover:text-accent-bright mt-auto inline-flex items-center gap-1.5 pt-7 text-[14px] font-medium text-white transition-colors">
+                  <span className="link-underline group-hover:[background-size:100%_1px]">
+                    {t('eduCta')}
+                  </span>
                   <CtaArrow />
                 </span>
               </Link>
@@ -187,7 +189,7 @@ export function TwoPathsSection() {
                     <path d="M18 8h3v3" />
                   </svg>
                 </span>
-                <span className="text-accent-bright font-mono text-[11px] font-semibold uppercase tracking-[0.14em]">
+                <span className="text-accent font-mono text-[11px] font-semibold uppercase tracking-[0.14em]">
                   {t('tradeEyebrow')}
                 </span>
                 <h3 className="text-title mt-3 font-sans text-white">{t('tradeTitle')}</h3>
@@ -208,8 +210,10 @@ export function TwoPathsSection() {
                     </div>
                   ))}
                 </div>
-                <span className="text-accent-bright mt-auto inline-flex items-center gap-2.5 pt-7 font-mono text-[13px] font-semibold">
-                  {t('tradeCta')}
+                <span className="font-body text-foreground group-hover:text-accent mt-auto inline-flex items-center gap-1.5 pt-7 text-[14px] font-medium transition-colors">
+                  <span className="link-underline group-hover:[background-size:100%_1px]">
+                    {t('tradeCta')}
+                  </span>
                   <CtaArrow />
                 </span>
               </Link>

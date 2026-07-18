@@ -43,7 +43,7 @@ async function makeCover(file: string, label: string): Promise<void> {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000">
     <rect width="100%" height="100%" fill="#0B3D2E"/>
     <rect x="0" y="0" width="100%" height="12" fill="#C9A227"/>
-    <text x="50%" y="46%" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" fill="#ffffff" text-anchor="middle">NewEra365</text>
+    <text x="50%" y="46%" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" fill="#ffffff" text-anchor="middle">Newera365</text>
     <text x="50%" y="53%" font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#cfe3d8" text-anchor="middle">${safe}</text>
   </svg>`;
   await sharp(Buffer.from(svg)).png().toFile(file);
@@ -101,7 +101,7 @@ const ebooks: Ebook[] = [
         '2. Size every position from the stop distance, not gut feel.',
         '3. The 1% per-trade rule and how it compounds protection.',
         '4. Common mistakes that blow up the rule — and how to avoid them.',
-        'NewEra365 — Free Guide',
+        'Newera365 — Free Guide',
       ],
     },
     ar: {
@@ -120,7 +120,7 @@ const ebooks: Ebook[] = [
         'How to convert a stop-loss distance into the correct lot size.',
         'The 1% rule applied across different account sizes.',
         'Scaling in and out: position management without the guesswork.',
-        'NewEra365 — Free Guide',
+        'Newera365 — Free Guide',
       ],
     },
     ar: {
@@ -138,7 +138,7 @@ const ebooks: Ebook[] = [
         'Building a pre-trade checklist that removes emotion.',
         'Handling drawdowns without revenge trading.',
         'Routines used by professional traders to stay consistent.',
-        'NewEra365 — Free Guide',
+        'Newera365 — Free Guide',
       ],
     },
     ar: {
@@ -156,7 +156,7 @@ const ebooks: Ebook[] = [
         'The handful of indicators worth your screen space.',
         'Chart patterns with a measurable historical edge.',
         'Building a repeatable setup checklist from the above.',
-        'NewEra365 — Free Guide',
+        'Newera365 — Free Guide',
       ],
     },
     ar: {

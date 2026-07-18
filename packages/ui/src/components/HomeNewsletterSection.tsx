@@ -11,7 +11,7 @@ import { CountUp } from './CountUp';
  * Homepage newsletter teaser (client feedback #19). A premium, full-bleed ink
  * bento: the section IS the `.ink-band` (terminal grid + green signal glow,
  * identical in both themes per DESIGN.md §2/§3), a square-edged dark chapter
- * matching the "Why NewEra" band. Content sits in a centred max-width container
+ * matching the "Why Newera" band. Content sits in a centred max-width container
  * with a left-aligned editorial header over an asymmetric bento — a capture cell
  * (glowing `.text-sheen` subscriber count + form), a product mockup rendering the
  * actual Monday Briefing issue (masthead, glowing chart, teaser headlines), and
@@ -186,14 +186,14 @@ function IssueMockup({ content }: { content?: HomeNewsletterContent }) {
       {/* The issue — frosted paper card */}
       <div className="relative flex-1 rounded-[16px] border border-white/[0.1] bg-gradient-to-b from-white/[0.07] to-white/[0.02] p-5 backdrop-blur-sm">
         <div className="border-b border-white/[0.08] pb-3 text-center">
-          <p className="text-accent-bright font-mono text-[10px] font-semibold uppercase tracking-[0.24em]">
+          <p className="text-accent font-mono text-[10px] font-semibold uppercase tracking-[0.24em]">
             {t('captureEyebrow')}
           </p>
         </div>
 
         <div className="mt-4 flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
-            <span className="text-accent-bright font-mono text-[10px] font-semibold uppercase tracking-[0.14em]">
+            <span className="text-accent font-mono text-[10px] font-semibold uppercase tracking-[0.14em]">
               {t('leadLabel')}
             </span>
             <h4 className="mt-1.5 font-sans text-[15px] font-medium leading-snug text-white">
@@ -236,7 +236,7 @@ function IssueMockup({ content }: { content?: HomeNewsletterContent }) {
               key={row.label}
               className="flex items-baseline gap-3 border-b border-white/[0.06] py-2.5 last:border-b-0"
             >
-              <span className="text-accent-bright w-[92px] flex-shrink-0 font-mono text-[11px] uppercase tracking-[0.06em]">
+              <span className="text-accent w-[92px] flex-shrink-0 font-mono text-[11px] uppercase tracking-[0.06em]">
                 {row.label}
               </span>
               <span className="font-body text-[13px] text-white/80">{row.head}</span>
@@ -320,15 +320,13 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
       <div className="relative mx-auto max-w-[1200px]">
         {/* Header — editorial: claim on the start, the pitch on the end */}
         <ScrollReveal>
-          <SectionKicker className="text-accent-bright [&>span:first-child]:bg-accent-bright mb-4">
-            {t('kicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('kicker')}</SectionKicker>
           <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between xl:gap-10">
             <h2
               id="home-newsletter-heading"
               className="text-headline max-w-[17ch] text-balance font-sans text-white"
             >
-              {headline} <span className="text-accent-bright">{headlineAccent}</span>
+              {headline} <span>{headlineAccent}</span>
             </h2>
             <p className="text-lead max-w-[46ch] text-white/60 xl:pb-1">{subtitle}</p>
           </div>
@@ -344,7 +342,7 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
                 className="bg-accent/[0.22] pointer-events-none absolute -left-12 -top-16 h-56 w-56 rounded-full blur-[64px]"
               />
               <div className="relative">
-                <span className="text-accent-bright font-mono text-[11px] font-semibold uppercase tracking-[0.14em]">
+                <span className="text-accent font-mono text-[11px] font-semibold uppercase tracking-[0.14em]">
                   {t('captureEyebrow')}
                 </span>
                 <div
@@ -400,7 +398,7 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
                   <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                     <label
                       htmlFor="home-nl-email"
-                      className="text-accent-bright/90 font-mono text-[11px] font-semibold uppercase tracking-[0.14em]"
+                      className="text-accent font-mono text-[11px] font-semibold uppercase tracking-[0.14em]"
                     >
                       {t('formEyebrow')}
                     </label>
@@ -432,9 +430,11 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
                   <p className="text-caption font-body text-white/45">{t('privacyNote')}</p>
                   <Link
                     href={`/${locale}/newsletter`}
-                    className="link-underline text-accent-bright inline-flex items-center gap-1.5 font-mono text-[12px] font-semibold"
+                    className="font-body hover:text-accent-bright group inline-flex items-center gap-1.5 text-[14px] font-medium text-white transition-colors"
                   >
-                    {t('previewLink')}
+                    <span className="link-underline group-hover:[background-size:100%_1px]">
+                      {t('previewLink')}
+                    </span>
                     <SubmitArrow />
                   </Link>
                 </div>
@@ -448,7 +448,7 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
             {categories.map((c, i) => (
               <div
                 key={i}
-                className="hover:border-accent/40 group relative flex flex-col overflow-hidden rounded-[20px] border border-white/[0.08] bg-white/[0.035] p-5 ring-1 ring-inset ring-white/[0.05] transition-[border-color,background-color] duration-300 hover:bg-white/[0.06] md:col-span-1 xl:col-span-3"
+                className="hover:border-accent/40 hover:bg-accent/[0.08] group relative flex flex-col overflow-hidden rounded-[20px] border border-white/[0.08] bg-white/[0.035] p-5 ring-1 ring-inset ring-white/[0.05] transition-[border-color,background-color] duration-300 md:col-span-1 xl:col-span-3"
               >
                 <div className="flex items-start justify-between gap-3">
                   <ReticleGlyph>{c.icon}</ReticleGlyph>
@@ -456,7 +456,7 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
                     {c.cadence}
                   </span>
                 </div>
-                <h3 className="mt-4 font-sans text-[17px] font-semibold leading-tight text-white">
+                <h3 className="text-body-lg mt-4 font-sans font-semibold leading-tight text-white">
                   {c.title}
                 </h3>
                 <p className="font-body mt-1.5 text-[13.5px] leading-relaxed text-white/55">

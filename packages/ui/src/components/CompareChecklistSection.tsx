@@ -140,13 +140,13 @@ export function CompareChecklistSection() {
     <section className="bg-transparent px-5 py-10 xl:px-[80px] xl:py-14">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <ScrollReveal>
-          <SectionKicker className="text-muted [&>span:first-child]:bg-accent mb-3 dark:text-white/60">
+          <SectionKicker className="mb-3">
             {t('compareKicker')}
           </SectionKicker>
           <div className="xl:flex xl:items-end xl:justify-between xl:gap-10">
             <h2 className="text-headline text-foreground font-sans [text-wrap:balance]">
               {t('compareHeadingLine1')}{' '}
-              <span className="text-accent">{t('compareHeadingAccent')}</span>
+              <span>{t('compareHeadingAccent')}</span>
             </h2>
             <p className="font-body text-body text-muted mt-3 max-w-[44ch] xl:mt-0 dark:text-white/60">
               {t('compareSubtitle')}

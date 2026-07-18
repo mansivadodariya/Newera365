@@ -68,7 +68,7 @@ export function RiskBanner({ enabled, message }: RiskBannerProps) {
         </svg>
 
         {/* Message */}
-        <p className="font-body flex-1 text-[11px] leading-[1.6] text-[#92400E] dark:text-[#F59E0B]/80">
+        <p className="font-body flex-1 hyphens-auto text-justify text-[11px] leading-[1.6] text-[#92400E] dark:text-[#F59E0B]/80">
           {message}
         </p>
 

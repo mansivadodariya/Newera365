@@ -14,7 +14,7 @@ export const Users: CollectionConfig = {
     maxLoginAttempts: 5,
     lockTime: 600_000, // 10 minutes, in ms
     forgotPassword: {
-      generateEmailSubject: () => 'Reset your NewEra365 admin password',
+      generateEmailSubject: () => 'Reset your Newera365 admin password',
       generateEmailHTML: ({ token, user } = {}) => {
         const serverUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3001';
         // token is a Payload-generated hex string, but escape it too for defence in depth.
@@ -23,10 +23,10 @@ export const Users: CollectionConfig = {
         const name = escapeHtml((user as { name?: string } | undefined)?.name ?? 'there');
         return `
           <p>Hi ${name},</p>
-          <p>We received a request to reset the password for your NewEra365 admin account.</p>
+          <p>We received a request to reset the password for your Newera365 admin account.</p>
           <p><a href="${resetUrl}">Click here to reset your password</a>.</p>
           <p>This link is valid for one hour. If you did not request a reset, you can safely ignore this email.</p>
-          <p>— The NewEra365 team</p>
+          <p>— The Newera365 team</p>
         `;
       },
     },

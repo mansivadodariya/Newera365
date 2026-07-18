@@ -402,7 +402,7 @@ export interface CmsSiteSettings {
   regulatoryDisclosureAr?: string | null;
   companyRegistrationEn?: string | null;
   companyRegistrationAr?: string | null;
-  // Homepage USP metrics ("Why NewEra" band)
+  // Homepage USP metrics ("Why Newera" band)
   uspMetrics?:
     | {
         valueEn: string;

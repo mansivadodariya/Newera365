@@ -6,7 +6,7 @@
  * (SiteSettings.socialProofLogos) at them.
  *
  * WHY REST + upload (not the old local-API resolve-by-filename): Railway's FS is
- * ephemeral, so the media volume only ever held the stop-gap NewEra365
+ * ephemeral, so the media volume only ever held the stop-gap Newera365
  * placeholder tiles — the real wordmarks committed to src/media/ were never
  * pushed. Resolving existing media by filename just re-found the placeholders.
  * Uploading via REST lands the real bytes on the live volume. Works against

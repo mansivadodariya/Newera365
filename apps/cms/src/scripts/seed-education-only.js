@@ -103,7 +103,7 @@ async function main() {
         title: 'MetaTrader 5 Complete Guide',
         body: bodyBlocks(
           'MetaTrader 5 (MT5) is the industry-standard trading platform used by millions of traders worldwide. This guide covers everything from installation to advanced order types.',
-          'INSTALLING MT5: Download MT5 from the NewEra365 client portal or directly from MetaQuotes. Enter your account credentials to log in.',
+          'INSTALLING MT5: Download MT5 from the Newera365 client portal or directly from MetaQuotes. Enter your account credentials to log in.',
           'PLACING ORDERS: Click New Order or press F9. Enter the symbol, volume, stop loss and take profit. Choose between market order (instant fill) or limit/stop orders.',
         ),
       },

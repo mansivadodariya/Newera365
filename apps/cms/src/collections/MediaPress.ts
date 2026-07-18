@@ -8,7 +8,7 @@ export const MediaPress: CollectionConfig = {
     group: 'Company',
     useAsTitle: 'headline',
     defaultColumns: ['headline', 'publication', 'date', 'status'],
-    description: 'Press coverage, media mentions, and brand asset downloads for NewEra365.',
+    description: 'Press coverage, media mentions, and brand asset downloads for Newera365.',
   },
   access: { read: publicReadWhere({ status: { equals: 'published' } }) },
   fields: [

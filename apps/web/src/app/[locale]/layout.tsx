@@ -76,12 +76,12 @@ export async function generateMetadata({
     title: {
       default: isAr
         ? 'نيو إيرا 365: تداول الفوركس والعقود مقابل الفروقات'
-        : 'NewEra365: Forex & CFD Trading',
-      template: isAr ? '%s | نيو إيرا 365' : '%s | NewEra365',
+        : 'Newera365: Forex & CFD Trading',
+      template: isAr ? '%s | نيو إيرا 365' : '%s | Newera365',
     },
     description: isAr
       ? 'تداول الفوركس والمؤشرات والسلع والعملات الرقمية مع نيو إيرا 365، فروقات ضيقة وتنفيذ سريع ومنصة MT5. رأس المال في خطر.'
-      : 'Trade forex, indices, commodities and crypto CFDs with NewEra365: tight spreads, fast execution, and MT5. Capital at risk.',
+      : 'Trade forex, indices, commodities and crypto CFDs with Newera365: tight spreads, fast execution, and MT5. Capital at risk.',
     alternates: {
       canonical: `${BASE}/${locale}`,
       languages: {
@@ -91,7 +91,7 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      siteName: 'NewEra365',
+      siteName: 'Newera365',
       type: 'website',
       locale: locale === 'ar' ? 'ar_AE' : 'en_US',
       alternateLocale: locale === 'ar' ? ['en_US'] : ['ar_AE'],
@@ -186,7 +186,7 @@ export default async function LocaleLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'FinancialService',
-              name: 'NewEra365',
+              name: 'Newera365',
               url: BASE,
               logo: `${BASE}/favicon-dark.png`,
               description:
@@ -228,6 +228,7 @@ export default async function LocaleLayout({
                 riskDisclaimer={riskDisclaimer ?? undefined}
                 socialLinks={socialLinks}
                 contact={contact}
+                whatsapp={s?.whatsappNumber ?? null}
                 paymentMethods={paymentMethods}
                 regulatoryDisclosure={regulatoryDisclosure}
                 companyRegistration={companyRegistration}

@@ -15,7 +15,7 @@
   --border: #d7e0da;
   --section: #e8efea;
   --footer-bg: #04100a;
-  /* Deep green-black "ink" — dark anchor bands (Why NewEra, comparison matrix)
+  /* Deep green-black "ink" — dark anchor bands (Why Newera, comparison matrix)
      that keep their punch in BOTH themes. */
   --ink: #061309;
   --ink-soft: #0b2013;
@@ -212,7 +212,7 @@ h4 {
 }
 
 /* ── Signature surfaces (design overhaul 2026-07) ─────────────────────────
-   .ink-band — the deep green-black anchor band (Why NewEra, comparison
+   .ink-band — the deep green-black anchor band (Why Newera, comparison
    matrix). Terminal-grid texture + a single soft signal glow; identical in
    both themes so light mode keeps a dark anchor for contrast. */
 .ink-band {

@@ -79,10 +79,10 @@ function SectionKicker({ children, className = '', ...props }: SectionKickerProp
     <div
       {...props}
       ref={ref}
-      className={['flex items-center gap-2', className].filter(Boolean).join(' ')}
+      className={['text-accent flex items-center gap-2', className].filter(Boolean).join(' ')}
     >
       <span
-        className={`block h-px w-[22px] flex-shrink-0 origin-left bg-[#111111] transition-transform duration-700 ease-out rtl:origin-right dark:bg-[#FFFFFF] ${
+        className={`bg-accent block h-px w-[22px] flex-shrink-0 origin-left transition-transform duration-700 ease-out rtl:origin-right ${
           phase === 'armed' ? 'scale-x-0' : 'scale-x-100'
         }`}
       />

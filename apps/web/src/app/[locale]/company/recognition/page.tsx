@@ -14,8 +14,8 @@ export async function generateMetadata({
   return {
     title: isAr ? 'التقدير' : 'Recognition',
     description: isAr
-      ? 'الجوائز والتغطية الإعلامية والاعتراف الذي حصلت عليه NewEra365.'
-      : 'Awards, media coverage and press recognition earned by NewEra365.',
+      ? 'الجوائز والتغطية الإعلامية والاعتراف الذي حصلت عليه Newera365.'
+      : 'Awards, media coverage and press recognition earned by Newera365.',
   };
 }
 

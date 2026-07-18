@@ -1,12 +1,12 @@
 /**
  * seed-footer-legal-final.ts
  *
- * Writes the CLIENT-VERIFIED legal footer copy (NewEra Capital Markets (Pty) Ltd,
+ * Writes the CLIENT-VERIFIED legal footer copy (Newera Capital Markets (Pty) Ltd,
  * South Africa) into the SiteSettings footer fields.
  *
  * Supersedes the interim seed-footer-regulatory.ts placeholder copy — notably it
  * removes the current live risk_disclaimer's FALSE "authorised and regulated by the
- * FCA, ASIC, CySEC" claim (NewEra is a South African entity, not so regulated).
+ * FCA, ASIC, CySEC" claim (Newera is a South African entity, not so regulated).
  *
  * Field mapping (footer renders regulatoryDisclosure → companyRegistration →
  * riskDisclaimer → copyright[static i18n]):
@@ -44,10 +44,10 @@ const RISK_AR =
 
 const VALUES: Record<string, string> = {
   company_registration_en:
-    'NewEra Capital Markets (Pty) Ltd is a company registered in the Republic of South Africa under registration number 2024/447619/07. Registered office: 1 Edgemere Road, Elfindale, Cape Town, Western Cape, 7945, South Africa.',
+    'Newera Capital Markets (Pty) Ltd is a company registered in the Republic of South Africa under registration number 2024/447619/07. Registered office: 1 Edgemere Road, Elfindale, Cape Town, Western Cape, 7945, South Africa.',
   // AI draft — client compliance to verify. Entity name + address kept in Latin (registered legal form).
   company_registration_ar:
-    'تُعد NewEra Capital Markets (Pty) Ltd شركة مسجلة في جمهورية جنوب أفريقيا بموجب رقم التسجيل 2024/447619/07. المكتب المسجل: 1 Edgemere Road, Elfindale, Cape Town, Western Cape, 7945, South Africa.',
+    'تُعد Newera Capital Markets (Pty) Ltd شركة مسجلة في جمهورية جنوب أفريقيا بموجب رقم التسجيل 2024/447619/07. المكتب المسجل: 1 Edgemere Road, Elfindale, Cape Town, Western Cape, 7945, South Africa.',
   risk_disclaimer_en: RISK_EN,
   risk_disclaimer_ar: RISK_AR,
   // No separate licence/regulator statement in the client copy — clear the interim block.

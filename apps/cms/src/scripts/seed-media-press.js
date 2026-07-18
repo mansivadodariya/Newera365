@@ -3,7 +3,7 @@
  * matching the Figma design (node 2684:362 / 2717:374).
  *
  * Press coverage (isFeatured: false) = external media articles
- * Newsroom (isFeatured: true)        = NewEra365 press releases
+ * Newsroom (isFeatured: true)        = Newera365 press releases
  */
 const dotenv = require('dotenv');
 const path = require('path');
@@ -33,7 +33,7 @@ async function api(method, p, body) {
 // External press coverage articles (shown in top list)
 const PRESS_COVERAGE = [
   {
-    headline: 'NewEra365 launches sub-12ms execution tier',
+    headline: 'Newera365 launches sub-12ms execution tier',
     publication: 'Finance Magnates',
     date: '2026-05-28',
     url: '#',
@@ -42,7 +42,7 @@ const PRESS_COVERAGE = [
     sortOrder: 1,
   },
   {
-    headline: 'NewEra365 expands to 2,000+ instruments',
+    headline: 'Newera365 expands to 2,000+ instruments',
     publication: 'FX Empire',
     date: '2026-05-14',
     url: '#',
@@ -51,7 +51,7 @@ const PRESS_COVERAGE = [
     sortOrder: 2,
   },
   {
-    headline: 'NewEra365 secures $1M client insurance cover',
+    headline: 'Newera365 secures $1M client insurance cover',
     publication: 'Reuters',
     date: '2026-04-30',
     url: '#',
@@ -60,7 +60,7 @@ const PRESS_COVERAGE = [
     sortOrder: 3,
   },
   {
-    headline: 'MTs-first broker NewEra365 grows MEA footprint',
+    headline: 'MTs-first broker Newera365 grows MEA footprint',
     publication: 'Bloomberg',
     date: '2026-04-12',
     url: '#',
@@ -69,7 +69,7 @@ const PRESS_COVERAGE = [
     sortOrder: 4,
   },
   {
-    headline: 'NewEra365 rolls out copy trading & VPS',
+    headline: 'Newera365 rolls out copy trading & VPS',
     publication: 'Coindesk',
     date: '2026-03-27',
     url: '#',
@@ -78,7 +78,7 @@ const PRESS_COVERAGE = [
     sortOrder: 5,
   },
   {
-    headline: 'NewEra365 named fastest-growing broker',
+    headline: 'Newera365 named fastest-growing broker',
     publication: 'World Finance',
     date: '2026-03-09',
     url: '#',
@@ -91,8 +91,8 @@ const PRESS_COVERAGE = [
 // Newsroom press releases (shown in "Latest from the newsroom" section)
 const NEWSROOM = [
   {
-    headline: 'NewEra365 introduces sub-12ms execution',
-    publication: 'NewEra365',
+    headline: 'Newera365 introduces sub-12ms execution',
+    publication: 'Newera365',
     date: '2026-05-16',
     url: '#',
     excerpt: null,
@@ -100,8 +100,8 @@ const NEWSROOM = [
     sortOrder: 10,
   },
   {
-    headline: 'NewEra365 surpasses 2,000 tradeable instruments',
-    publication: 'NewEra365',
+    headline: 'Newera365 surpasses 2,000 tradeable instruments',
+    publication: 'Newera365',
     date: '2026-03-14',
     url: '#',
     excerpt: null,
@@ -109,8 +109,8 @@ const NEWSROOM = [
     sortOrder: 11,
   },
   {
-    headline: 'NewEra365 partners on $1m client insurance program',
-    publication: 'NewEra365',
+    headline: 'Newera365 partners on $1m client insurance program',
+    publication: 'Newera365',
     date: '2026-02-20',
     url: '#',
     excerpt: null,
@@ -118,8 +118,8 @@ const NEWSROOM = [
     sortOrder: 12,
   },
   {
-    headline: 'NewEra365 launches copy trading and VPS hosting',
-    publication: 'NewEra365',
+    headline: 'Newera365 launches copy trading and VPS hosting',
+    publication: 'Newera365',
     date: '2026-02-05',
     url: '#',
     excerpt: null,

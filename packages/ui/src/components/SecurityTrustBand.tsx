@@ -136,10 +136,8 @@ export function SecurityTrustBand() {
         <div className="grid gap-9 xl:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] xl:gap-14">
           {/* Intro rail */}
           <ScrollReveal>
-            <SectionKicker className="text-foreground [&>span:first-child]:bg-accent mb-4">
-              {t('securityKicker')}
-            </SectionKicker>
-            <h2 className="text-foreground text-headline-sm whitespace-pre-line font-sans">
+            <SectionKicker className="mb-4">{t('securityKicker')}</SectionKicker>
+            <h2 className="text-foreground text-headline whitespace-pre-line font-sans">
               {t('securityHeading')}
             </h2>
             <p className="font-body text-muted text-body mt-4 max-w-[42ch]">{t('securityIntro')}</p>
@@ -177,12 +175,12 @@ export function SecurityTrustBand() {
                   <span
                     dir="ltr"
                     aria-hidden="true"
-                    className="group-hover:text-accent/40 dark:text-accent-bright/[0.30] dark:group-hover:text-accent-bright/[0.55] w-[46px] shrink-0 font-sans text-[40px] font-semibold tabular-nums leading-none tracking-tight text-[#0C1F14]/[0.14] transition-colors duration-300 xl:w-[56px] xl:text-[46px]"
+                    className="text-foreground group-hover:text-accent dark:text-accent-bright w-[46px] shrink-0 font-sans text-[40px] font-semibold tabular-nums leading-none tracking-tight opacity-[0.08] transition-[color,opacity] duration-200 group-hover:opacity-40 xl:w-[56px] xl:text-[46px] dark:opacity-[0.28] dark:group-hover:opacity-70"
                   >
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <div className="min-w-0">
-                    <h3 className="text-foreground font-sans text-[17px] font-semibold leading-snug">
+                    <h3 className="text-foreground text-body-lg font-sans font-semibold leading-snug">
                       {t(titleKey)}
                     </h3>
                     <p className="font-body text-muted text-body mt-1.5 max-w-[52ch]">

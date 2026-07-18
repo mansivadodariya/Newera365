@@ -1,4 +1,4 @@
-# NewEra365
+# Newera365
 
 Forex/CFD broker website — `newera365.com`. Reference: **CSL-NE365-2026-Q2** (CodeSquareLabs). Target launch: July 2026.
 

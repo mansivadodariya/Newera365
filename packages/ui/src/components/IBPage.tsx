@@ -407,9 +407,9 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
             <h1 className="text-display font-sans">
               <span className="text-foreground">{t('heroLine1')}</span>
               <br />
-              <span className="text-accent">{t('heroLine2')}</span>
+              <span>{t('heroLine2')}</span>
             </h1>
-            <p className="font-body text-body text-muted mb-4 mt-4 max-w-[320px] xl:max-w-[480px] xl:text-[16px] dark:text-[#B8BFCC]">
+            <p className="font-body text-body text-muted mb-4 mt-4 max-w-[320px] xl:max-w-[480px] xl:text-[16px] dark:text-white/60">
               {heroSubtitle}
             </p>
 
@@ -510,9 +510,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       <section className="bg-transparent px-5 pb-8 pt-2 xl:pb-12">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="ink-band overflow-hidden rounded-[24px] border border-white/[0.08] p-7 xl:p-10">
-            <SectionKicker className="[&>span:first-child]:bg-accent-bright text-accent-bright mb-7">
-              {t('statsKicker')}
-            </SectionKicker>
+            <SectionKicker className="mb-7">{t('statsKicker')}</SectionKicker>
             <CountUpGroup>
               <div className="grid grid-cols-2 gap-x-6 gap-y-9 xl:grid-cols-4 xl:gap-x-10">
                 {heroStats.map((stat, i) => (
@@ -542,9 +540,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
         className="rounded-t-[32px] bg-[#FFFFFF] px-5 pb-10 pt-10 xl:pb-16 xl:pt-16 dark:bg-[#07090D]"
       >
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted mb-4 text-[#6B7280] dark:text-[#B8BFCC]">
-            {t('chooseKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('chooseKicker')}</SectionKicker>
           <h2 className="text-foreground text-headline mb-[10px] font-sans">
             {t('chooseHeading')}
           </h2>
@@ -552,11 +548,11 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
             {resolvedPartnerTypes.map((pt) => (
               <div
                 key={pt.id}
-                className="border-border hover:border-accent/30 dark:hover:border-accent/30 shadow-card group relative flex flex-col gap-[12px] overflow-hidden rounded-[22px] border bg-white p-[22px] transition-all duration-300 hover:bg-[#07130c] hover:shadow-[0_18px_44px_rgba(0,0,0,0.28)] dark:border-white/[0.08] dark:bg-[#15171c] dark:hover:bg-[#07130c]"
+                className="border-border hover:border-accent/45 dark:hover:border-accent/45 shadow-card group relative flex flex-col gap-[12px] overflow-hidden rounded-[22px] border bg-white p-[22px] transition-all duration-300 hover:shadow-[0_18px_44px_rgba(0,176,80,0.16)] dark:border-white/[0.08] dark:bg-[#15171c]"
               >
                 {/* Header — icon tile + program tag */}
                 <div className="flex items-center justify-between gap-2">
-                  <span className="bg-accent/10 text-accent group-hover:bg-accent-bright/[0.16] group-hover:text-accent-bright flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300">
+                  <span className="bg-accent/10 text-accent group-hover:bg-accent flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300 group-hover:text-white">
                     <PartnerIcon id={pt.id} />
                   </span>
                   <span className="bg-accent/10 text-accent group-hover:bg-accent/[0.18] flex-shrink-0 rounded-full px-[10px] py-[6px] font-mono text-[10px] tracking-[1.2px] transition-colors duration-300">
@@ -569,7 +565,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                 </div>
 
                 {/* Title */}
-                <span className="font-sans text-[22px] font-semibold tracking-[-0.44px] text-[#111] transition-colors duration-300 group-hover:text-white dark:text-white">
+                <span className="text-title text-foreground font-sans dark:text-white">
                   {pt.id === 'ib'
                     ? t('ibTitle')
                     : pt.id === 'affiliate'
@@ -578,18 +574,16 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                 </span>
 
                 {/* Desc */}
-                <p className="font-body text-body text-muted transition-colors duration-300 group-hover:text-white/60 dark:text-white/60">
-                  {pt.desc}
-                </p>
+                <p className="font-body text-body text-muted dark:text-white/60">{pt.desc}</p>
 
                 {/* Stats */}
-                <div className="flex gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)] transition-colors duration-300 group-hover:bg-[rgba(255,255,255,0.08)] dark:bg-[rgba(255,255,255,0.06)]">
+                <div className="group-hover:bg-accent/25 mt-auto flex gap-px overflow-hidden rounded-[12px] bg-[rgba(17,17,17,0.08)] transition-colors duration-300 dark:bg-[rgba(255,255,255,0.06)]">
                   {pt.stats.map((s) => (
                     <div
                       key={s.label}
-                      className="flex flex-1 flex-col gap-[2px] bg-[#F0F4F1] px-[10px] py-[12px] transition-colors duration-300 group-hover:bg-[#07130c] dark:bg-[#1a1c22] dark:group-hover:bg-[#07130c]"
+                      className="group-hover:bg-accent/[0.08] dark:group-hover:bg-accent/[0.10] flex flex-1 flex-col gap-[2px] bg-[#F0F4F1] px-[10px] py-[12px] transition-colors duration-300 dark:bg-[#1a1c22]"
                     >
-                      <span className="font-mono text-[9px] tracking-[1.08px] text-[#9ca3af] transition-colors duration-300 group-hover:text-white/45 dark:text-white/40">
+                      <span className="text-muted font-mono text-[9px] tracking-[1.08px] dark:text-white/40">
                         {(
                           {
                             'UP TO': t('upTo'),
@@ -603,7 +597,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                           } as Record<string, string>
                         )[s.label] ?? s.label}
                       </span>
-                      <span className="font-sans text-[14px] font-semibold text-[#111] transition-colors duration-300 group-hover:text-white dark:text-white">
+                      <span className="text-foreground font-sans text-[14px] font-semibold dark:text-white">
                         {s.value}
                       </span>
                     </div>
@@ -618,14 +612,12 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       {/* ── Income streams + monthly ladder (client IB deck, 2026-07) ────── */}
       <section className="bg-transparent px-5 pb-12 pt-4 xl:pb-16">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
-            {t('earnKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('earnKicker')}</SectionKicker>
           <div className="xl:flex xl:items-end xl:justify-between xl:gap-12">
             <h2 className="text-headline text-foreground max-w-[22ch] font-sans">
               {t('earnHeading')}
             </h2>
-            <p className="font-body text-lead text-muted mt-3 max-w-[460px] xl:mt-0 xl:flex-shrink-0">
+            <p className="font-body text-lead text-muted mt-3 max-w-[460px] hyphens-auto text-justify xl:mt-0 xl:flex-shrink-0">
               {t('earnSub')}
             </p>
           </div>
@@ -641,23 +633,23 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
             ).map(([titleKey, descKey], i) => (
               <div
                 key={titleKey}
-                className="border-border hover:border-accent/30 dark:hover:border-accent/30 shadow-card group relative overflow-hidden rounded-[20px] border bg-white p-6 transition-all duration-300 hover:bg-[#07130c] hover:shadow-[0_18px_44px_rgba(0,0,0,0.28)] dark:border-white/[0.08] dark:bg-[#15171c] dark:hover:bg-[#07130c]"
+                className="border-border hover:border-accent/45 dark:hover:border-accent/45 shadow-card group relative overflow-hidden rounded-[20px] border bg-white p-6 transition-all duration-300 hover:shadow-[0_18px_44px_rgba(0,176,80,0.16)] dark:border-white/[0.08] dark:bg-[#15171c]"
               >
                 <div className="flex items-center justify-between">
-                  <span className="bg-accent/10 text-accent group-hover:bg-accent-bright/[0.16] group-hover:text-accent-bright flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300">
+                  <span className="bg-accent/10 text-accent group-hover:bg-accent flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300 group-hover:text-white">
                     <StreamIcon index={i} />
                   </span>
                   <span
                     dir="ltr"
-                    className="text-accent/70 group-hover:text-accent-bright font-sans text-[26px] font-semibold tabular-nums leading-none transition-colors duration-300"
+                    className="text-foreground group-hover:text-accent dark:text-accent-bright font-sans text-[26px] font-semibold tabular-nums leading-none tracking-tight opacity-[0.15] transition-[color,opacity] duration-200 group-hover:opacity-40 dark:opacity-[0.28]"
                   >
                     {String(i + 1).padStart(2, '0')}
                   </span>
                 </div>
-                <h3 className="text-foreground mt-5 font-sans text-[19px] font-semibold transition-colors duration-300 group-hover:text-white">
+                <h3 className="text-foreground text-body-lg mt-5 font-sans font-semibold leading-snug">
                   {t(titleKey)}
                 </h3>
-                <p className="font-body text-body text-muted mt-1.5 transition-colors duration-300 group-hover:text-white/60 dark:text-[#B8BFCC]">
+                <p className="font-body text-body text-muted mt-1.5 dark:text-white/60">
                   {t(descKey)}
                 </p>
               </div>
@@ -724,9 +716,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       {/* ── Stream 1 — rebate matrix as terminal ledgers (IB deck) ─────── */}
       <section className="bg-transparent px-5 pb-12 pt-2 xl:pb-16">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
-            {t('stream1Kicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('stream1Kicker')}</SectionKicker>
           <h2 className="text-headline text-foreground max-w-[22ch] font-sans">
             {t('rebateHeading')}
           </h2>
@@ -808,9 +798,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       {/* ── Stream 2 — FTD eligibility: BOTH conditions (IB deck) ───────── */}
       <section className="bg-transparent px-5 pb-12 pt-2 xl:pb-16">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
-            {t('stream2Kicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('stream2Kicker')}</SectionKicker>
           <h2 className="text-headline text-foreground max-w-[20ch] font-sans">
             {t('ftdHeading')}
           </h2>
@@ -830,7 +818,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                   <p className="text-foreground mt-3 font-sans text-[15px] font-semibold">
                     {cond.unit}
                   </p>
-                  <p className="font-body text-body text-muted mt-1.5 dark:text-[#B8BFCC]">
+                  <p className="font-body text-body text-muted mt-1.5 dark:text-white/60">
                     {cond.detail}
                   </p>
                 </div>
@@ -851,9 +839,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       {/* Interactive partner estimator (client IB deck) */}
       <section className="bg-transparent px-5 pb-12 pt-2 xl:pb-16">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
-            {t('estKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('estKicker')}</SectionKicker>
           <div className="xl:flex xl:items-end xl:justify-between xl:gap-12">
             <h2 className="text-headline text-foreground max-w-[20ch] font-sans">
               {t('estHeading')}
@@ -947,7 +933,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                   ${estTotal.toLocaleString('en-US')}
                   <span className="text-white/50">/mo</span>
                 </p>
-                <p className="font-body text-caption mt-5 max-w-[46ch] text-white/35">
+                <p className="font-body text-caption mt-5 max-w-[46ch] hyphens-auto text-justify text-white/35">
                   {t('estDisclaimer')}
                 </p>
               </div>
@@ -959,9 +945,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       {/* Target markets — where the partnership performs best (IB deck) */}
       <section className="bg-transparent px-5 pb-12 pt-2 xl:pb-16">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
-            {t('marketsBandKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('marketsBandKicker')}</SectionKicker>
           <h2 className="text-headline text-foreground mb-8 max-w-[20ch] font-sans">
             {t('marketsBandHeading')}
           </h2>
@@ -979,9 +963,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       {/* Compliance ledger — quiet, factual partner terms (IB deck) */}
       <section className="bg-transparent px-5 pb-12 pt-2 xl:pb-16">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[900px]">
-          <SectionKicker className="[&>span:first-child]:bg-accent text-foreground mb-4">
-            {t('complianceKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('complianceKicker')}</SectionKicker>
           <h2 className="text-headline text-foreground mb-8 max-w-[22ch] font-sans">
             {t('complianceHeading')}
           </h2>
@@ -1005,9 +987,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
         style={{ background: 'var(--gradient-features)' }}
       >
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            {t('stepsKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('stepsKicker')}</SectionKicker>
           <h2 className="text-foreground text-headline mb-8 font-sans">{t('stepsHeading')}</h2>
           <div className="flex flex-col gap-[14px] xl:grid xl:grid-cols-2">
             {resolvedSteps.map((step) => (
@@ -1034,12 +1014,8 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       {/* Partner application form — POSTs to /api/partners/apply */}
       <section id="apply" className="bg-transparent px-5 pb-12 pt-2">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[760px]">
-          <SectionKicker className="[&>span:first-child]:bg-muted text-muted mb-4">
-            {t('applyKicker')}
-          </SectionKicker>
-          <h2 className="text-foreground mb-6 font-sans text-[28px] font-semibold leading-[1.1] tracking-[-0.6px] xl:text-[32px]">
-            {t('applyHeading')}
-          </h2>
+          <SectionKicker className="mb-4">{t('applyKicker')}</SectionKicker>
+          <h2 className="text-foreground text-headline mb-6 font-sans">{t('applyHeading')}</h2>
           {applyDone ? (
             <div className="bg-accent/10 text-accent font-body rounded-[16px] px-5 py-6 text-[14px]">
               {t('applySuccess')}

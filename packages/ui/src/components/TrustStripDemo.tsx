@@ -4,6 +4,7 @@ import Image from 'next/image';
 import type { CSSProperties } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import { SectionKicker } from './SectionKicker';
 
 export interface TrustLogo {
   url: string;
@@ -71,12 +72,9 @@ export function TrustStripDemo({ logos }: TrustStripDemoProps) {
     <section className="border-border border-y bg-transparent px-5 py-7 xl:py-8">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:max-w-[1200px] xl:items-center xl:gap-10">
         {/* Label cell — same kicker voice as every section eyebrow */}
-        <div className="xl:border-border mb-6 flex items-center gap-2.5 xl:mb-0 xl:w-[190px] xl:flex-shrink-0 xl:border-e xl:pe-8">
-          <span className="bg-accent h-px w-[26px] flex-shrink-0" />
-          <span className="text-foreground/80 text-eyebrow font-mono font-semibold uppercase tracking-[0.16em]">
-            {t('trustStripLabel')}
-          </span>
-        </div>
+        <SectionKicker className="xl:border-border mb-6 xl:mb-0 xl:w-[190px] xl:flex-shrink-0 xl:border-e xl:pe-8">
+          {t('trustStripLabel')}
+        </SectionKicker>
 
         {/* Wordmark row — a seamless marquee (two copies + a -50% loop with no
             seam, pause on hover, edge-faded, RTL-reversed). Reduced motion gets

@@ -147,7 +147,7 @@ export function TestimonialsSection({
         {/* Header: kicker + heading, with the rating band trailing on desktop */}
         <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
           <div>
-            <SectionKicker className="text-muted mb-4 [&>span:first-child]:bg-[#6b7280]">
+            <SectionKicker className="mb-4">
               {t('testimonialsKicker')}
             </SectionKicker>
             <h2 className="text-foreground text-headline max-w-[18ch] font-sans">
@@ -308,7 +308,7 @@ export function TestimonialsSection({
                     aria-current={i === active}
                     onClick={() => setActive(i)}
                     className={`h-1.5 rounded-full transition-all ${
-                      i === active ? 'bg-accent w-5' : 'bg-border hover:bg-muted w-1.5'
+                      i === active ? 'bg-accent w-5' : 'bg-border hover:bg-accent/50 w-1.5'
                     }`}
                   />
                 ))}

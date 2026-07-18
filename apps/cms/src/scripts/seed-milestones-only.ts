@@ -85,11 +85,11 @@ const MILESTONES: Milestone[] = [
     en: {
       label: 'New era',
       description:
-        'Released the NewEra365 platform — built from the ground up with every tool a trader needs.',
+        'Released the Newera365 platform — built from the ground up with every tool a trader needs.',
     },
     ar: {
       label: 'عهد جديد',
-      description: 'أطلقنا منصة NewEra365 — مبنية من الصفر بكل أداة يحتاجها المتداول.',
+      description: 'أطلقنا منصة Newera365 — مبنية من الصفر بكل أداة يحتاجها المتداول.',
     },
   },
 ];

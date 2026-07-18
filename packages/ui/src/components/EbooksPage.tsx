@@ -97,7 +97,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
           <h1 className="text-foreground text-display mb-3 font-sans">
             {t('heroLine1')}
             <br />
-            <span className="text-accent">{t('heroAccent')}</span>
+            <span>{t('heroAccent')}</span>
           </h1>
           <p className="font-body text-muted max-w-[340px] text-[15px] leading-[1.55]">
             {t('heroDesc')}
@@ -164,7 +164,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                     <p className="font-sans text-[22px] font-semibold leading-[1.1] text-white">
                       {t('heroLine1')}
                       <br />
-                      <span className="text-accent">{t('heroAccent')}</span>
+                      <span>{t('heroAccent')}</span>
                     </p>
                     <p className="font-body text-muted max-w-[320px] text-[15px] leading-[1.55]">
                       {t('heroDesc')}
@@ -234,7 +234,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                     placeholder={t('namePlaceholder')}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="font-body dark: border-border w-full rounded-[12px] border bg-white px-4 py-3 text-[15px] text-[#111] placeholder-[#9ca3af] outline-none transition-colors dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
+                    className="font-body dark: border-border w-full rounded-[12px] border bg-white px-4 py-3 text-[15px] text-foreground placeholder-[#9ca3af] outline-none transition-colors dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
                   />
                   <input
                     ref={emailRef}
@@ -243,7 +243,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                     placeholder={t('emailPlaceholderFull')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="font-body dark: border-border w-full rounded-[12px] border bg-white px-4 py-3 text-[15px] text-[#111] placeholder-[#9ca3af] outline-none transition-colors dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
+                    className="font-body dark: border-border w-full rounded-[12px] border bg-white px-4 py-3 text-[15px] text-foreground placeholder-[#9ca3af] outline-none transition-colors dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
                   />
                   {error && (
                     <p role="alert" className="font-body text-caption text-red-500">
@@ -273,7 +273,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
 
               {/* What's inside */}
               <div>
-                <SectionKicker className="my-4 [&>span:first-child]:bg-[#6B7280] [&>span:last-child]:text-[#6B7280]">
+                <SectionKicker className="my-4">
                   {t('whatsInsideKicker')}
                 </SectionKicker>
                 <div className="flex flex-col gap-[10px]">
@@ -313,7 +313,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
         <section className="px-5 pb-12 pt-8">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <SectionKicker className="mb-3">{t('moreGuidesKicker')}</SectionKicker>
-            <h2 className="text-foreground text-headline-sm mb-6 max-w-[560px] font-sans">
+            <h2 className="text-foreground text-headline mb-6 max-w-[560px] font-sans">
               {t('moreGuidesHeading')}
             </h2>
             <div className="border-border border-t">
@@ -340,7 +340,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                           {book.summary}
                         </p>
                       )}
-                      <span className="text-accent mt-3 inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.08em]">
+                      <span className="font-body text-foreground group-hover:text-accent mt-3 inline-flex items-center gap-1.5 text-[14px] font-medium transition-colors dark:text-white">
                         <svg
                           width="12"
                           height="12"
@@ -386,10 +386,10 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
       {/* CTA */}
       <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4 [&>span:last-child]:text-white/50">
+          <SectionKicker className="mb-4">
             {t('ctaKicker')}
           </SectionKicker>
-          <h2 className="text-headline-sm mb-3 font-sans text-white">{t('ctaHeading')}</h2>
+          <h2 className="text-headline mb-3 font-sans text-white">{t('ctaHeading')}</h2>
           <p className="font-body mb-7 max-w-[52ch] text-[15px] leading-relaxed text-white/[0.72]">
             {t('ctaDesc')}
           </p>

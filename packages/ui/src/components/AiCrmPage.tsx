@@ -160,14 +160,14 @@ export function AiCrmPage() {
           <div className="xl:grid xl:grid-cols-[1fr_480px] xl:items-center xl:gap-[60px]">
             {/* Claim */}
             <ScrollReveal>
-              <SectionKicker className="text-accent [&>span:first-child]:bg-accent mb-5">
+              <SectionKicker className="mb-5">
                 {t('kicker')}
               </SectionKicker>
 
               <h1 className="text-display text-foreground mb-4 font-sans [text-wrap:balance]">
                 {t('heroLine1')}
                 <br />
-                <span className="text-accent">{t('heroLine2')}</span>
+                <span>{t('heroLine2')}</span>
               </h1>
               <p className="text-lead font-body text-muted mb-8 max-w-[480px]">
                 {t('heroSubtitle')}
@@ -176,14 +176,14 @@ export function AiCrmPage() {
               <div className="flex flex-wrap gap-3">
                 <Link
                   href={`/${locale}/support`}
-                  className="from-accent to-accent-bright font-body inline-flex items-center gap-2 rounded-[10px] bg-gradient-to-r px-[22px] py-[14px] text-[15px] font-semibold text-white shadow-[0_16px_40px_-14px_rgba(0,176,80,0.8)] transition-[box-shadow,transform] hover:shadow-[0_20px_48px_-14px_rgba(26,217,102,0.9)] active:scale-[0.98]"
+                  className="bg-accent hover:bg-accent-hover font-body inline-flex items-center gap-2 rounded-full px-[22px] py-[14px] text-[15px] font-semibold text-white shadow-[0_16px_40px_-14px_rgba(0,176,80,0.8)] transition-all hover:shadow-[0_20px_48px_-14px_rgba(26,217,102,0.9)] active:scale-[0.98]"
                 >
                   {t('demoBtn')}
                   <ArrowIcon />
                 </Link>
                 <Link
                   href={`/${locale}/support`}
-                  className="font-body border-border text-foreground hover:border-accent/50 inline-flex items-center rounded-[10px] border bg-white px-5 py-[14px] text-[15px] font-semibold transition-colors dark:bg-white/[0.04]"
+                  className="font-body border-border text-foreground hover:border-accent/50 inline-flex items-center rounded-full border bg-white px-5 py-[14px] text-[15px] font-semibold transition-colors dark:bg-white/[0.04]"
                 >
                   {t('salesBtn')}
                 </Link>
@@ -228,7 +228,7 @@ export function AiCrmPage() {
 
                 {/* AI insight */}
                 <div className="border-accent/40 flex flex-col gap-1 rounded-[16px] border bg-white/[0.05] p-3.5">
-                  <p className="text-eyebrow text-accent-bright font-mono font-medium uppercase">
+                  <p className="text-eyebrow text-accent font-mono font-medium uppercase">
                     {t('insightLabel')}
                   </p>
                   <p className="text-caption font-body leading-[18px] text-white/80">
@@ -270,7 +270,7 @@ export function AiCrmPage() {
           <div className="xl:grid xl:grid-cols-[380px_1fr] xl:gap-16">
             {/* Sticky index */}
             <div className="xl:sticky xl:top-28 xl:self-start">
-              <SectionKicker className="text-muted [&>span:first-child]:bg-muted mb-4">
+              <SectionKicker className="mb-4">
                 {t('featuresKicker')}
               </SectionKicker>
               <h2 className="text-headline text-foreground mb-3 font-sans [text-wrap:balance]">
@@ -295,7 +295,7 @@ export function AiCrmPage() {
                           className={`font-mono text-[13px] font-medium tabular-nums transition-colors ${
                             on
                               ? 'text-accent'
-                              : 'text-muted dark:text-accent-bright/35 group-hover/idx:text-accent/70'
+                              : 'text-muted'
                           }`}
                         >
                           {num(i)}
@@ -341,7 +341,7 @@ export function AiCrmPage() {
                           className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border font-mono text-[13px] font-semibold tabular-nums transition-colors duration-300 ${
                             on
                               ? 'border-accent bg-accent/10 text-accent'
-                              : 'border-border bg-background text-muted dark:text-accent-bright/40'
+                              : 'border-border bg-background text-muted'
                           }`}
                         >
                           {num(i)}
@@ -371,7 +371,7 @@ export function AiCrmPage() {
           + border sharpens (no translate/scale). */}
       <section className="bg-[#F0F4F1] px-5 py-14 xl:px-[80px] xl:py-24 dark:bg-transparent">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="text-muted [&>span:first-child]:bg-muted mb-4">
+          <SectionKicker className="mb-4">
             {t('autoKicker')}
           </SectionKicker>
           <h2 className="text-headline text-foreground mb-3 font-sans [text-wrap:balance]">
@@ -386,10 +386,7 @@ export function AiCrmPage() {
                   <span className="text-accent border-accent/25 bg-accent-subtle group-hover/card:bg-accent flex h-12 w-12 items-center justify-center rounded-[12px] border transition-colors duration-300 group-hover/card:text-white">
                     {AUTOMATION_ICONS[i]}
                   </span>
-                  <div className="flex items-center gap-2">
-                    <span className="bg-accent h-1.5 w-1.5 rounded-full" />
-                    <p className="text-title text-foreground font-sans">{item.title}</p>
-                  </div>
+                  <p className="text-title text-foreground font-sans">{item.title}</p>
                   <p className="text-body font-body text-muted">{item.desc}</p>
                 </div>
               </ScrollReveal>
@@ -405,7 +402,7 @@ export function AiCrmPage() {
           <ScrollReveal>
             <div className="xl:flex xl:items-end xl:justify-between xl:gap-16">
               <div className="max-w-[560px]">
-                <SectionKicker className="text-accent-bright [&>span:first-child]:bg-accent-bright mb-5">
+                <SectionKicker className="mb-5">
                   {t('kicker')}
                 </SectionKicker>
                 <h2 className="text-headline font-sans text-white [text-wrap:balance]">
@@ -417,14 +414,14 @@ export function AiCrmPage() {
               <div className="mt-8 flex flex-wrap gap-3 xl:mt-0 xl:flex-shrink-0">
                 <Link
                   href={`/${locale}/support`}
-                  className="from-accent to-accent-bright font-body inline-flex items-center gap-2 rounded-[10px] bg-gradient-to-r px-6 py-[14px] text-[15px] font-semibold text-white shadow-[0_16px_44px_-12px_rgba(0,176,80,0.85)] transition-[box-shadow,transform] hover:shadow-[0_22px_52px_-12px_rgba(26,217,102,0.95)] active:scale-[0.98]"
+                  className="bg-accent hover:bg-accent-hover font-body inline-flex items-center gap-2 rounded-full px-6 py-[14px] text-[15px] font-semibold text-white shadow-[0_16px_44px_-12px_rgba(0,176,80,0.85)] transition-all hover:shadow-[0_22px_52px_-12px_rgba(26,217,102,0.95)] active:scale-[0.98]"
                 >
                   {t('ctaDemoBtn')}
                   <ArrowIcon />
                 </Link>
                 <Link
                   href={`/${locale}/support`}
-                  className="font-body hover:border-accent-bright/60 inline-flex items-center rounded-[10px] border border-white/15 px-[22px] py-[14px] text-[15px] font-semibold text-white/85 transition-colors hover:text-white"
+                  className="font-body hover:border-accent-bright/60 inline-flex items-center rounded-full border border-white/15 px-[22px] py-[14px] text-[15px] font-semibold text-white/85 transition-colors hover:text-white"
                 >
                   {t('ctaSalesBtn')}
                 </Link>

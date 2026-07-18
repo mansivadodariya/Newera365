@@ -3,7 +3,7 @@
  *
  * Empties SiteSettings.socialProofLogos so the homepage "As seen in" strip
  * (TrustStripDemo) self-hides. The press-logo-*.png media are placeholders
- * (they render the NewEra365 logo, not the real outlet marks), so the strip is
+ * (they render the Newera365 logo, not the real outlet marks), so the strip is
  * unsubstantiated until real, authorised press/partner logos are uploaded.
  *
  * Run: ts-node --transpile-only src/scripts/clear-social-proof-logos.ts
