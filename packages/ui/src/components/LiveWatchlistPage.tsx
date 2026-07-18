@@ -63,9 +63,7 @@ export function LiveWatchlistPage({ instruments }: LiveWatchlistPageProps) {
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">
-            {t('kicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('kicker')}</SectionKicker>
           <h1 className="text-foreground text-display mb-3 font-sans">
             {t('heroLine1')}
             <br />
@@ -115,9 +113,7 @@ export function LiveWatchlistPage({ instruments }: LiveWatchlistPageProps) {
         <section className="px-5 pb-12">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <ScrollReveal>
-              <SectionKicker className="mb-4">
-                {t('sheetKicker')}
-              </SectionKicker>
+              <SectionKicker className="mb-4">{t('sheetKicker')}</SectionKicker>
               <h2 className="text-foreground text-headline mb-6 max-w-[560px] font-sans">
                 {t('sheetHeading')}
               </h2>
@@ -218,7 +214,7 @@ export function LiveWatchlistPage({ instruments }: LiveWatchlistPageProps) {
                       {rows.map((row) => (
                         <tr
                           key={row.id}
-                          className="border-b border-white/[0.05] transition-colors last:border-b-0 hover:bg-accent/[0.06]"
+                          className="hover:bg-accent/[0.06] border-b border-white/[0.05] transition-colors last:border-b-0"
                         >
                           <td
                             dir="ltr"

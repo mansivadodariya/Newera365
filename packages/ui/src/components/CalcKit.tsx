@@ -51,7 +51,7 @@ export function NumberInput({
         step={step}
         dir="ltr"
         onChange={(e) => onChange(e.target.value)}
-        className="border-border w-full rounded-[12px] border bg-white px-4 py-3 text-start font-mono text-[14px] tabular-nums text-foreground outline-none transition-[border-color,box-shadow] duration-200 focus:shadow-[0_0_0_3px_rgba(0,176,80,0.12)] dark:border-white/10 dark:bg-[#1a1c22] dark:text-white"
+        className="border-border text-foreground w-full rounded-[12px] border bg-white px-4 py-3 text-start font-mono text-[14px] tabular-nums outline-none transition-[border-color,box-shadow] duration-200 focus:shadow-[0_0_0_3px_rgba(0,176,80,0.12)] dark:border-white/10 dark:bg-[#1a1c22] dark:text-white"
       />
     </div>
   );
@@ -109,7 +109,7 @@ export function LevelRow({
   tone?: LevelTone;
 }) {
   return (
-    <div className="-mx-2 flex items-center justify-between rounded-[7px] border-b border-white/5 px-2 py-2 transition-colors last:border-0 hover:bg-accent/[0.06]">
+    <div className="hover:bg-accent/[0.06] -mx-2 flex items-center justify-between rounded-[7px] border-b border-white/5 px-2 py-2 transition-colors last:border-0">
       <span
         className={`font-mono text-[11px] font-semibold uppercase tracking-[0.1em] ${TONE_CLASS[tone]}`}
       >

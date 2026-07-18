@@ -858,9 +858,7 @@ export function MarketCategoryPage({
       <section className="rounded-t-[32px] bg-gradient-to-r from-[#DCEAE1] to-[#F2F5F3] px-5 pb-10 pt-10 rtl:bg-gradient-to-l dark:from-[#0C1F14] dark:to-[#07090D]">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           {/* <SectionKicker className="mb-4"> */}
-          <SectionKicker className="mb-4">
-            {t('specsKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('specsKicker')}</SectionKicker>
           <h2 className="text-foreground text-headline mb-6 font-sans">{t('specsHeading')}</h2>
 
           <div className="mb-5 overflow-hidden rounded-[18px] bg-[#111111]">
@@ -874,9 +872,7 @@ export function MarketCategoryPage({
                     `spec${row.key.charAt(0).toUpperCase() + row.key.slice(1)}` as 'specMinSpread',
                   )}
                 </span>
-                <span className="font-body text-[14px] font-semibold text-white">
-                  {row.value}
-                </span>
+                <span className="font-body text-[14px] font-semibold text-white">{row.value}</span>
               </div>
             ))}
           </div>
@@ -917,13 +913,13 @@ export function MarketCategoryPage({
               <ScrollReveal key={market} index={i}>
                 <Link
                   href={`/${locale}/markets/${market.toLowerCase()}`}
-                  className="hover:border-accent/30 group flex items-center justify-between rounded-[18px] border border-white/[0.12] bg-[#F0F4F1] px-5 py-4 transition-all duration-200 hover:bg-accent/[0.12] hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] dark:bg-[#000000]"
+                  className="hover:border-accent/30 hover:bg-accent/[0.12] group flex items-center justify-between rounded-[18px] border border-white/[0.12] bg-[#F0F4F1] px-5 py-4 transition-all duration-200 hover:shadow-[0_4px_16px_rgba(0,0,0,0.15)] dark:bg-[#000000]"
                 >
                   <div>
                     <p className="text-foreground font-sans text-[15px] font-semibold">
                       {catText[market.toLowerCase() as keyof typeof catText]?.label ?? market}
                     </p>
-                    <p className="font-body mt-[3px] text-[11px] text-muted dark:text-white/60">
+                    <p className="font-body text-muted mt-[3px] text-[11px] dark:text-white/60">
                       {t('liveTag')}
                     </p>
                   </div>

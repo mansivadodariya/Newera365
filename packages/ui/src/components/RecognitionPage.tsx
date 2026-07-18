@@ -393,9 +393,7 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
       {newsroomItems.length > 0 && (
         <section className="bg-transparent px-5 py-12">
           <div className={WRAP}>
-            <SectionKicker className="mb-4">
-              {tPress('newsroomKicker')}
-            </SectionKicker>
+            <SectionKicker className="mb-4">{tPress('newsroomKicker')}</SectionKicker>
             <h2 className="text-foreground text-title mb-6 font-sans">
               {tPress('newsroomHeading')}
             </h2>
@@ -499,9 +497,7 @@ export function RecognitionPage({ awards, pressItems }: RecognitionPageProps) {
         <div className={WRAP}>
           <div className="border-border shadow-card dark:shadow-card-dark rounded-[24px] border bg-white p-7 md:flex md:items-center md:justify-between md:gap-10 md:p-9 dark:bg-[#111316]">
             <div className="max-w-md">
-              <SectionKicker className="mb-4">
-                {tPress('inquiriesKicker')}
-              </SectionKicker>
+              <SectionKicker className="mb-4">{tPress('inquiriesKicker')}</SectionKicker>
               <h2 className="text-foreground text-title mb-3 font-sans">
                 {tPress('inquiriesHeading')}
               </h2>

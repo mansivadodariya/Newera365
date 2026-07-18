@@ -50,7 +50,7 @@ export function Pagination({ page, totalPages, onPageChange, listRef }: Paginati
         onClick={() => handleChange(page - 1)}
         disabled={page === 1}
         aria-label="Previous page"
-        className="font-body flex h-9 w-9 items-center justify-center rounded-full border border-[#e5e7eb] text-[13px] text-muted transition-colors hover:border-accent/40 hover:text-foreground disabled:pointer-events-none disabled:opacity-30 dark:border-white/10 dark:text-white/40 dark:hover:border-accent/40 dark:hover:text-white/70"
+        className="font-body text-muted hover:border-accent/40 hover:text-foreground dark:hover:border-accent/40 flex h-9 w-9 items-center justify-center rounded-full border border-[#e5e7eb] text-[13px] transition-colors disabled:pointer-events-none disabled:opacity-30 dark:border-white/10 dark:text-white/40 dark:hover:text-white/70"
       >
         <svg width="13" height="13" viewBox="0 0 16 16" fill="none" className="rtl:-scale-x-100">
           <path
@@ -68,7 +68,7 @@ export function Pagination({ page, totalPages, onPageChange, listRef }: Paginati
         p === '…' ? (
           <span
             key={`ellipsis-${i}`}
-            className="font-body flex h-9 w-9 items-center justify-center text-[13px] text-muted dark:text-white/30"
+            className="font-body text-muted flex h-9 w-9 items-center justify-center text-[13px] dark:text-white/30"
           >
             …
           </span>
@@ -80,7 +80,7 @@ export function Pagination({ page, totalPages, onPageChange, listRef }: Paginati
             className={`font-body flex h-9 w-9 items-center justify-center rounded-full text-[13px] font-medium transition-colors ${
               p === page
                 ? 'bg-accent text-white'
-                : 'border border-[#e5e7eb] text-muted hover:border-accent/40 hover:text-foreground dark:border-white/10 dark:text-white/40 dark:hover:border-accent/40 dark:hover:text-white/70'
+                : 'text-muted hover:border-accent/40 hover:text-foreground dark:hover:border-accent/40 border border-[#e5e7eb] dark:border-white/10 dark:text-white/40 dark:hover:text-white/70'
             }`}
           >
             {p}
@@ -93,7 +93,7 @@ export function Pagination({ page, totalPages, onPageChange, listRef }: Paginati
         onClick={() => handleChange(page + 1)}
         disabled={page === totalPages}
         aria-label="Next page"
-        className="font-body flex h-9 w-9 items-center justify-center rounded-full border border-[#e5e7eb] text-[13px] text-muted transition-colors hover:border-accent/40 hover:text-foreground disabled:pointer-events-none disabled:opacity-30 dark:border-white/10 dark:text-white/40 dark:hover:border-accent/40 dark:hover:text-white/70"
+        className="font-body text-muted hover:border-accent/40 hover:text-foreground dark:hover:border-accent/40 flex h-9 w-9 items-center justify-center rounded-full border border-[#e5e7eb] text-[13px] transition-colors disabled:pointer-events-none disabled:opacity-30 dark:border-white/10 dark:text-white/40 dark:hover:text-white/70"
       >
         <svg width="13" height="13" viewBox="0 0 16 16" fill="none" className="rtl:-scale-x-100">
           <path

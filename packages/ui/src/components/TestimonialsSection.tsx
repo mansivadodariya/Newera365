@@ -147,9 +147,7 @@ export function TestimonialsSection({
         {/* Header: kicker + heading, with the rating band trailing on desktop */}
         <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
           <div>
-            <SectionKicker className="mb-4">
-              {t('testimonialsKicker')}
-            </SectionKicker>
+            <SectionKicker className="mb-4">{t('testimonialsKicker')}</SectionKicker>
             <h2 className="text-foreground text-headline max-w-[18ch] font-sans">
               {headline || t('testimonialsHeading')}
             </h2>

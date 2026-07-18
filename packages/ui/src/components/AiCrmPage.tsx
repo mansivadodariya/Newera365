@@ -160,9 +160,7 @@ export function AiCrmPage() {
           <div className="xl:grid xl:grid-cols-[1fr_480px] xl:items-center xl:gap-[60px]">
             {/* Claim */}
             <ScrollReveal>
-              <SectionKicker className="mb-5">
-                {t('kicker')}
-              </SectionKicker>
+              <SectionKicker className="mb-5">{t('kicker')}</SectionKicker>
 
               <h1 className="text-display text-foreground mb-4 font-sans [text-wrap:balance]">
                 {t('heroLine1')}
@@ -270,9 +268,7 @@ export function AiCrmPage() {
           <div className="xl:grid xl:grid-cols-[380px_1fr] xl:gap-16">
             {/* Sticky index */}
             <div className="xl:sticky xl:top-28 xl:self-start">
-              <SectionKicker className="mb-4">
-                {t('featuresKicker')}
-              </SectionKicker>
+              <SectionKicker className="mb-4">{t('featuresKicker')}</SectionKicker>
               <h2 className="text-headline text-foreground mb-3 font-sans [text-wrap:balance]">
                 {t('featuresLine1')} {t('featuresLine2')}
               </h2>
@@ -293,9 +289,7 @@ export function AiCrmPage() {
                         <span
                           dir="ltr"
                           className={`font-mono text-[13px] font-medium tabular-nums transition-colors ${
-                            on
-                              ? 'text-accent'
-                              : 'text-muted'
+                            on ? 'text-accent' : 'text-muted'
                           }`}
                         >
                           {num(i)}
@@ -371,9 +365,7 @@ export function AiCrmPage() {
           + border sharpens (no translate/scale). */}
       <section className="bg-[#F0F4F1] px-5 py-14 xl:px-[80px] xl:py-24 dark:bg-transparent">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">
-            {t('autoKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('autoKicker')}</SectionKicker>
           <h2 className="text-headline text-foreground mb-3 font-sans [text-wrap:balance]">
             {t('autoLine1')} {t('autoLine2')}
           </h2>
@@ -402,9 +394,7 @@ export function AiCrmPage() {
           <ScrollReveal>
             <div className="xl:flex xl:items-end xl:justify-between xl:gap-16">
               <div className="max-w-[560px]">
-                <SectionKicker className="mb-5">
-                  {t('kicker')}
-                </SectionKicker>
+                <SectionKicker className="mb-5">{t('kicker')}</SectionKicker>
                 <h2 className="text-headline font-sans text-white [text-wrap:balance]">
                   {t('ctaHeading')}
                 </h2>

@@ -224,9 +224,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">
-            {t('kicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('kicker')}</SectionKicker>
           <h1 className="text-foreground text-display mb-3 font-sans [text-wrap:balance]">
             {t('heroLine1')}
             <br />
@@ -242,9 +240,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
           <div className="border-border shadow-card overflow-hidden rounded-[24px] border bg-white dark:border-white/[0.07] dark:bg-[#111316] dark:shadow-none">
             {/* Header */}
             <div className="border-border border-b px-5 py-6 md:px-8 md:py-7 dark:border-white/[0.07]">
-              <SectionKicker className="mb-3">
-                {t('duelKicker')}
-              </SectionKicker>
+              <SectionKicker className="mb-3">{t('duelKicker')}</SectionKicker>
               <h2 className="text-foreground text-headline font-sans">{t('duelTitle')}</h2>
               <p className="font-body text-muted text-body mt-2 max-w-[560px]">
                 {t('duelSubtitle')}
@@ -329,9 +325,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="border-border shadow-card overflow-hidden rounded-[24px] border bg-white dark:border-white/[0.07] dark:bg-[#111316] dark:shadow-none">
             <div className="border-border border-b px-5 py-5 md:px-8 dark:border-white/[0.07]">
-              <SectionKicker className="mb-3">
-                {t('compKicker')}
-              </SectionKicker>
+              <SectionKicker className="mb-3">{t('compKicker')}</SectionKicker>
               <p className="text-foreground text-title font-sans">
                 {selectedInstrument?.name ?? ''}
               </p>
@@ -389,9 +383,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
       {/* The payoff — oversized annual saving on ink */}
       <section className="ink-band relative overflow-hidden rounded-t-[32px] px-5 pb-14 pt-12 md:pb-16 md:pt-14">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">
-            {t('savingKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-5">{t('savingKicker')}</SectionKicker>
           <p className="text-headline-sm font-sans text-white/85">{t('savingPre')}</p>
           <span
             dir="ltr"

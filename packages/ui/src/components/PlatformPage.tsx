@@ -345,9 +345,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       {/* Terminal / Platform cards */}
       <section className="rounded-t-[32px] bg-transparent px-5 py-[56px] xl:py-16 dark:bg-[#07090D]">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">
-            {t('terminalKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('terminalKicker')}</SectionKicker>
           <h2 className="text-foreground text-headline mb-8 font-sans">{t('terminalHeading')}</h2>
 
           {/* 3-up then 2-up (centered) on desktop — a balanced arrangement
@@ -400,7 +398,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                 >
                   {/* Green glow — fades in on hover */}
                   <span
-                    className="dark:group-hover:opacity-70 pointer-events-none absolute -top-[50px] left-[10%] h-[180px] w-[180px] rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-40"
+                    className="pointer-events-none absolute -top-[50px] left-[10%] h-[180px] w-[180px] rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-40 dark:group-hover:opacity-70"
                     style={{
                       background:
                         'radial-gradient(circle, rgba(0,176,80,0.4) 0%, rgba(0,176,80,0.1) 50%, transparent 70%)',
@@ -421,7 +419,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
 
                   {/* Name + desc */}
                   <div className="relative">
-                    <p className="text-title mb-2 font-sans text-foreground dark:text-white">
+                    <p className="text-title text-foreground mb-2 font-sans dark:text-white">
                       {t(card.titleKey as 'winTitle')}
                     </p>
                     <p className="font-body text-body text-muted dark:text-white/60">
@@ -459,9 +457,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       {/* Tools section — brand-tinted band (replaced the off-palette teal) */}
       <section className="rounded-t-[32px] bg-gradient-to-b from-[#DCEAE1] to-[#F2F5F3] px-5 pb-12 pt-12 xl:px-8 xl:py-16 dark:from-[#0C1F14] dark:to-[#07090D]">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">
-            {t('featuresKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('featuresKicker')}</SectionKicker>
           <h2 className="text-foreground text-headline mb-8 font-sans">{t('featuresHeading')}</h2>
 
           <div className="list-dim grid grid-cols-2 gap-[12px] xl:gap-[16px]">
@@ -474,7 +470,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                   <tool.Icon />
                 </div>
                 <div>
-                  <p className="mb-1 font-sans text-[16px] font-semibold text-foreground xl:text-[20px] dark:text-white">
+                  <p className="text-foreground mb-1 font-sans text-[16px] font-semibold xl:text-[20px] dark:text-white">
                     {t(`feat${i + 1}` as 'feat1')}
                   </p>
                   <p className="font-body text-caption xl:text-body text-muted leading-snug dark:text-white/50">
@@ -492,9 +488,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
       <section className="ink-band rounded-t-[32px] px-5 pb-14 pt-12 xl:pb-16 xl:pt-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="mb-4">
-              {t('compareKicker')}
-            </SectionKicker>
+            <SectionKicker className="mb-4">{t('compareKicker')}</SectionKicker>
             <div className="mb-9 xl:flex xl:items-end xl:justify-between xl:gap-10">
               <h2 className="text-headline max-w-[24ch] font-sans text-white [text-wrap:balance]">
                 {t('compareHeading')}
@@ -548,7 +542,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
               {COMPARE_ROWS.map((row, i) => (
                 <div
                   key={row.id}
-                  className={`grid transition-colors hover:bg-accent/[0.06] ${
+                  className={`hover:bg-accent/[0.06] grid transition-colors ${
                     i < COMPARE_ROWS.length - 1 ? 'border-b border-white/[0.06]' : ''
                   }`}
                   style={COMPARE_GRID}
@@ -576,9 +570,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
 
           {/* Works everywhere — device band continues the same ink chapter */}
           <ScrollReveal className="mt-14">
-            <SectionKicker className="mb-4">
-              {t('devicesKicker')}
-            </SectionKicker>
+            <SectionKicker className="mb-4">{t('devicesKicker')}</SectionKicker>
             <h2 className="text-headline font-sans text-white">{t('devicesLine1')}</h2>
             <h2 className="text-headline mb-8 font-sans text-white">{t('devicesLine2')}</h2>
 
@@ -590,7 +582,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
               {DEVICE_KEYS.map((dev) => (
                 <div
                   key={dev.key}
-                  className="hover:border-accent/40 group flex min-w-0 items-center gap-[14px] rounded-[16px] border border-white/[0.08] bg-white/[0.05] px-[18px] py-[14px] text-white transition-colors hover:bg-accent/[0.12]"
+                  className="hover:border-accent/40 hover:bg-accent/[0.12] group flex min-w-0 items-center gap-[14px] rounded-[16px] border border-white/[0.08] bg-white/[0.05] px-[18px] py-[14px] text-white transition-colors"
                 >
                   <span className="group-hover:border-accent/40 group-hover:bg-accent/[0.15] group-hover:text-accent-bright flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[12px] border border-white/[0.10] bg-white/[0.06] text-white transition-colors [&>svg]:h-[22px] [&>svg]:w-[22px]">
                     <dev.Icon />

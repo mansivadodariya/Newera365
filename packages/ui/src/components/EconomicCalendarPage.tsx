@@ -18,9 +18,7 @@ export function EconomicCalendarPage() {
       {/* Hero */}
       <section className="bg-transparent px-5 pb-8 pt-9">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">
-            {t('kicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('kicker')}</SectionKicker>
           <h1 className="text-foreground text-display mb-3 font-sans">
             {t('heroLine1')}
             <br />
@@ -101,9 +99,7 @@ export function EconomicCalendarPage() {
       <section className="px-5 pb-14">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="mb-2">
-              {t('storyKicker')}
-            </SectionKicker>
+            <SectionKicker className="mb-2">{t('storyKicker')}</SectionKicker>
           </ScrollReveal>
           <div className="divide-border border-border divide-y border-b">
             {STORY_KEYS.map((key, i) => (

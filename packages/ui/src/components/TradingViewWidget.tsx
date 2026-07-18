@@ -227,10 +227,10 @@ export function TradingViewWidget({
 
       {status === 'failed' && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-[inherit] bg-black/[0.03] px-4 text-center dark:bg-white/[0.04]">
-          <span className="text-[12px] font-medium text-foreground dark:text-white">
+          <span className="text-foreground text-[12px] font-medium dark:text-white">
             Live chart unavailable
           </span>
-          <span className="text-[10px] text-muted dark:text-white/50">
+          <span className="text-muted text-[10px] dark:text-white/50">
             Allow tradingview.com to view live prices
           </span>
         </div>

@@ -234,7 +234,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                     placeholder={t('namePlaceholder')}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="font-body dark: border-border w-full rounded-[12px] border bg-white px-4 py-3 text-[15px] text-foreground placeholder-[#9ca3af] outline-none transition-colors dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
+                    className="font-body dark: border-border text-foreground w-full rounded-[12px] border bg-white px-4 py-3 text-[15px] placeholder-[#9ca3af] outline-none transition-colors dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
                   />
                   <input
                     ref={emailRef}
@@ -243,7 +243,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
                     placeholder={t('emailPlaceholderFull')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="font-body dark: border-border w-full rounded-[12px] border bg-white px-4 py-3 text-[15px] text-foreground placeholder-[#9ca3af] outline-none transition-colors dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
+                    className="font-body dark: border-border text-foreground w-full rounded-[12px] border bg-white px-4 py-3 text-[15px] placeholder-[#9ca3af] outline-none transition-colors dark:border-white/10 dark:bg-[#111316] dark:text-white dark:placeholder-white/30"
                   />
                   {error && (
                     <p role="alert" className="font-body text-caption text-red-500">
@@ -273,9 +273,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
 
               {/* What's inside */}
               <div>
-                <SectionKicker className="my-4">
-                  {t('whatsInsideKicker')}
-                </SectionKicker>
+                <SectionKicker className="my-4">{t('whatsInsideKicker')}</SectionKicker>
                 <div className="flex flex-col gap-[10px]">
                   {([1, 2, 3, 4, 5] as const).map((i) => (
                     <div key={i} className="flex items-start gap-2.5">
@@ -386,9 +384,7 @@ export function EbooksPage({ ebooks: cmsEbooks }: EbooksPageProps) {
       {/* CTA */}
       <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-4">
-            {t('ctaKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('ctaKicker')}</SectionKicker>
           <h2 className="text-headline mb-3 font-sans text-white">{t('ctaHeading')}</h2>
           <p className="font-body mb-7 max-w-[52ch] text-[15px] leading-relaxed text-white/[0.72]">
             {t('ctaDesc')}

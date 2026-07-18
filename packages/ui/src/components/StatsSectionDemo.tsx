@@ -42,9 +42,7 @@ export async function StatsSectionDemo({
   return (
     <section className="bg-transparent px-5 pb-8 pt-10 xl:pb-10 xl:pt-12">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-        <SectionKicker className="mb-5">
-          {t('statsByNumbers')}
-        </SectionKicker>
+        <SectionKicker className="mb-5">{t('statsByNumbers')}</SectionKicker>
 
         <h2 className="text-foreground text-headline mb-8 whitespace-pre-line font-sans">
           {t('statsHeading')}
@@ -100,7 +98,7 @@ export async function StatsSectionDemo({
             />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="font-body text-body font-semibold leading-tight text-foreground dark:text-white">
+            <p className="font-body text-body text-foreground font-semibold leading-tight dark:text-white">
               {t('statsRegBadgeTitle')}
             </p>
             <p className="font-body text-caption text-muted mt-0.5">{t('statsRegBadgeDesc')}</p>

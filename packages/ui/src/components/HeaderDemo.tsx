@@ -308,12 +308,14 @@ function DropdownLink({
       <span className="min-w-0 flex-1">
         <span
           className={`font-body block text-[15px] font-medium leading-[1.2] transition-colors ${
-            isActive ? 'text-accent' : 'dark:text-foreground group-hover:text-accent text-foreground'
+            isActive
+              ? 'text-accent'
+              : 'dark:text-foreground group-hover:text-accent text-foreground'
           }`}
         >
           {d.label}
         </span>
-        <span className="font-body dark:text-muted mt-[2px] block text-[13px] leading-[1.35] text-muted">
+        <span className="font-body dark:text-muted text-muted mt-[2px] block text-[13px] leading-[1.35]">
           {d.sub}
         </span>
       </span>

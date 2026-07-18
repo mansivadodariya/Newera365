@@ -112,9 +112,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       {/* Hero - Join the desk */}
       <section className="px-5 pb-10 pt-9 xl:pt-12">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">
-            {t('heroKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-5">{t('heroKicker')}</SectionKicker>
           <h1 className="text-foreground text-display font-sans">
             {t('heroLine1')}
             <br />
@@ -127,9 +125,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       {/* Stats - the desk by the numbers (metric ledger) */}
       <section className="px-5 pb-12">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">
-            {t('statsKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-5">{t('statsKicker')}</SectionKicker>
           <div className="border-border bg-surface shadow-card overflow-hidden rounded-[20px] border dark:shadow-none">
             <CountUpGroup>
               <div className="bg-border grid grid-cols-2 gap-px xl:grid-cols-4">
@@ -154,9 +150,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       <section className="px-5 pb-14">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="mb-4">
-              {t('valuesKicker')}
-            </SectionKicker>
+            <SectionKicker className="mb-4">{t('valuesKicker')}</SectionKicker>
             <h2 className="text-foreground text-headline mb-8 max-w-[18ch] font-sans">
               {t('valuesHeading')}
             </h2>
@@ -185,9 +179,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
       <section className="px-5 pb-14">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="mb-4">
-              {t('rolesHeading')}
-            </SectionKicker>
+            <SectionKicker className="mb-4">{t('rolesHeading')}</SectionKicker>
             <div className="mb-6 flex items-end justify-between gap-4">
               <h2 className="text-foreground text-headline font-sans">{t('rolesTitle')}</h2>
               <span
@@ -332,9 +324,7 @@ export function CareersPage({ jobs: cmsJobs }: CareersPageProps) {
           <div className="xl:flex xl:flex-row xl:items-center xl:gap-10">
             {/* Left: text */}
             <div className="xl:flex-1">
-              <SectionKicker className="mb-4">
-                {t('openAppKicker')}
-              </SectionKicker>
+              <SectionKicker className="mb-4">{t('openAppKicker')}</SectionKicker>
               <h2 className="text-headline mb-3 font-sans text-white">
                 {t('openAppLine1')}
                 <br />

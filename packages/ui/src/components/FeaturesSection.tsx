@@ -89,9 +89,7 @@ export function FeaturesSection({ metrics }: FeaturesSectionProps) {
             {/* Header row */}
             <div className="xl:flex xl:items-end xl:justify-between xl:gap-16">
               <div>
-                <SectionKicker className="mb-5">
-                  {t('whyKicker')}
-                </SectionKicker>
+                <SectionKicker className="mb-5">{t('whyKicker')}</SectionKicker>
                 <h2 className="text-headline font-sans text-white [text-wrap:balance]">
                   {t('whyTitle')}
                 </h2>
@@ -108,7 +106,7 @@ export function FeaturesSection({ metrics }: FeaturesSectionProps) {
                   {resolvedMetrics.map(({ key, value, title, desc }, i) => (
                     <div
                       key={key}
-                      className={`group relative flex flex-col gap-4 px-1 py-8 transition-colors duration-300 hover:bg-accent/[0.08] sm:px-8 sm:py-9 xl:px-10 ${TILE_BORDERS[i]}`}
+                      className={`hover:bg-accent/[0.08] group relative flex flex-col gap-4 px-1 py-8 transition-colors duration-300 sm:px-8 sm:py-9 xl:px-10 ${TILE_BORDERS[i]}`}
                     >
                       {/* Accent rule draws across the hovered tile: the lattice
                         marks which metric you are reading. */}

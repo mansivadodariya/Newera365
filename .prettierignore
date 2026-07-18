@@ -5,3 +5,5 @@ build
 .turbo
 out
 coverage
+graphify-out
+apps/web/scripts/data

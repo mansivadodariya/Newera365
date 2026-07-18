@@ -99,9 +99,7 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
       {/* Hero — the claim, then a hairline creed of what we hold to */}
       <section className="rounded-b-[32px] px-5 pb-10 pt-9 xl:pb-14 xl:pt-14">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">
-            {t('heroKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-5">{t('heroKicker')}</SectionKicker>
           <h1 className="text-display font-sans">
             <span className="text-foreground">{t('heroLine1')}</span>
             <br />
@@ -116,7 +114,7 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
                 key={i}
                 className="border-border hover:bg-accent/[0.03] flex items-start gap-3 px-[18px] py-4 transition-colors [&:not(:last-child)]:border-b sm:[&:not(:last-child)]:border-b-0 sm:[&:not(:last-child)]:border-e"
               >
-                <span className="text-muted mt-px text-eyebrow font-mono tabular-nums">
+                <span className="text-muted text-eyebrow mt-px font-mono tabular-nums">
                   0{i + 1}
                 </span>
                 <span className="font-body text-foreground/85 text-caption leading-snug">
@@ -132,9 +130,7 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
       <section className="ink-band rounded-t-[32px] px-5 pb-14 pt-14 xl:pb-20 xl:pt-20">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="mb-7">
-              {t('missionKicker')}
-            </SectionKicker>
+            <SectionKicker className="mb-7">{t('missionKicker')}</SectionKicker>
           </ScrollReveal>
 
           <div className="relative">
@@ -199,9 +195,7 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
       >
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="mb-4">
-              {t('regionsKicker')}
-            </SectionKicker>
+            <SectionKicker className="mb-4">{t('regionsKicker')}</SectionKicker>
             <div className="xl:flex xl:items-end xl:justify-between xl:gap-10">
               <h2 className="text-foreground text-headline font-sans [text-wrap:balance]">
                 {t('regionsHeading')}
@@ -227,9 +221,7 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
       <section className="rounded-t-[32px] px-5 pb-12 pt-12 xl:pb-16 xl:pt-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
-            <SectionKicker className="mb-4">
-              {t('exploreKicker')}
-            </SectionKicker>
+            <SectionKicker className="mb-4">{t('exploreKicker')}</SectionKicker>
             <h2 className="text-foreground text-headline mb-8 font-sans">{t('exploreHeading')}</h2>
           </ScrollReveal>
           <div className="grid grid-cols-1 gap-[14px] md:grid-cols-2">
@@ -237,9 +229,9 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
               <ScrollReveal key={link.label} index={i} className="h-full">
                 <Link
                   href={`/${locale}${link.href}`}
-                  className="border-border shadow-card hover:border-accent/45 hover:shadow-card-lg dark:hover:border-accent/40 group flex h-full items-center gap-[14px] rounded-[18px] border bg-white px-[18px] py-[18px] transition-[border-color,box-shadow] duration-200 dark:border-white/[0.06] dark:bg-[#1a1c22] dark:shadow-none dark:hover:bg-accent/[0.15]"
+                  className="border-border shadow-card hover:border-accent/45 hover:shadow-card-lg dark:hover:border-accent/40 dark:hover:bg-accent/[0.15] group flex h-full items-center gap-[14px] rounded-[18px] border bg-white px-[18px] py-[18px] transition-[border-color,box-shadow] duration-200 dark:border-white/[0.06] dark:bg-[#1a1c22] dark:shadow-none"
                 >
-                  <div className="group-hover:bg-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[12px] bg-[#F0F4F1] text-foreground transition-colors duration-200 group-hover:text-white dark:bg-[#22252e] dark:text-white">
+                  <div className="group-hover:bg-accent text-foreground flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[12px] bg-[#F0F4F1] transition-colors duration-200 group-hover:text-white dark:bg-[#22252e] dark:text-white">
                     {link.icon}
                   </div>
                   <div className="min-w-0 flex-1">

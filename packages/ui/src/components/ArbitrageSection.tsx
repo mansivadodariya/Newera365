@@ -170,9 +170,7 @@ export function ArbitrageSection() {
           <div className="grid gap-9 xl:grid-cols-[1.02fr_0.98fr] xl:items-stretch xl:gap-12">
             {/* Left: the claim + the stat ledger + the accounts strip */}
             <div className="flex flex-col">
-              <SectionKicker>
-                {t('arbKicker')}
-              </SectionKicker>
+              <SectionKicker>{t('arbKicker')}</SectionKicker>
 
               <h2 className="text-headline text-foreground mt-3 flex flex-col font-sans">
                 <span>{t('arbHeadingLine1')}</span>

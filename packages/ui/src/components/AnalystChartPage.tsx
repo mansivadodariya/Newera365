@@ -372,9 +372,7 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
       {/* Desk masthead */}
       <section className="bg-transparent px-5 pb-6 pt-9">
         <ScrollReveal className={DESK}>
-          <SectionKicker className="mb-4">
-            {t('deskKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('deskKicker')}</SectionKicker>
           <h1 className="text-foreground text-display mb-3 font-sans">
             {t('heroLine1')} {t('heroLine2')}
             <br />
@@ -398,9 +396,7 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
       {/* Featured call - chart terminal + readout ledger */}
       <section className="px-5 pb-8">
         <ScrollReveal className={DESK}>
-          <SectionKicker className="mb-4">
-            {t('featuredKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('featuredKicker')}</SectionKicker>
           <div className="grid gap-4 xl:grid-cols-[1.9fr_1fr]">
             <FeaturedChart pair={featured} />
             <ReadoutLedger pair={featured} />
@@ -412,9 +408,7 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
       <section className="px-5 pb-8">
         <ScrollReveal className={DESK}>
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <SectionKicker>
-              {t('callsKicker')}
-            </SectionKicker>
+            <SectionKicker>{t('callsKicker')}</SectionKicker>
             <div className="flex flex-wrap gap-2">
               {TABS.map((tabItem) => (
                 <button
@@ -512,9 +506,7 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
       {/* Analyst commentary - the research note */}
       <section className="px-5 pb-14">
         <ScrollReveal className={DESK}>
-          <SectionKicker className="mb-4">
-            {t('commentaryLabel')}
-          </SectionKicker>
+          <SectionKicker className="mb-4">{t('commentaryLabel')}</SectionKicker>
           <div className="border-border shadow-card rounded-[20px] border bg-white p-6 md:p-8 xl:p-10 dark:border-white/[0.08] dark:bg-[#111318] dark:shadow-none">
             <div className="grid gap-8 xl:grid-cols-[2fr_1fr] xl:gap-10">
               {/* The note: a pulled call-out quote with an accent margin rule */}

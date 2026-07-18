@@ -261,7 +261,7 @@ export function FocusMarkets({ regions, mapAriaLabel }: FocusMarketsProps) {
             aria-hidden="true"
             onPointerEnter={(e) => e.pointerType === 'mouse' && setHoverId(r.id)}
             onPointerLeave={(e) => e.pointerType === 'mouse' && setHoverId(null)}
-            className={`border-border/70 absolute hidden rounded-pill border bg-white/70 px-2.5 py-1 backdrop-blur-sm transition-colors duration-300 sm:block dark:bg-[#0d1512]/70 dark:border-white/[0.12] ${
+            className={`border-border/70 rounded-pill absolute hidden border bg-white/70 px-2.5 py-1 backdrop-blur-sm transition-colors duration-300 sm:block dark:border-white/[0.12] dark:bg-[#0d1512]/70 ${
               r.id === hoverId ? 'border-accent/45 dark:border-accent-bright/60' : ''
             }`}
             style={{

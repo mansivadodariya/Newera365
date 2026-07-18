@@ -152,9 +152,7 @@ export function FundingStripSection() {
     <section className="bg-transparent px-5 py-10 xl:px-[80px] xl:py-14">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <ScrollReveal>
-          <SectionKicker className="mb-3">
-            {t('payKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-3">{t('payKicker')}</SectionKicker>
           <div className="xl:flex xl:items-end xl:justify-between xl:gap-10">
             <h2 className="text-headline text-foreground font-sans [text-wrap:balance]">
               {t('payHeadingLine1')} <span>{t('payHeadingAccent')}</span>
@@ -172,7 +170,7 @@ export function FundingStripSection() {
               {PROMISES.map((key) => (
                 <div
                   key={key}
-                  className="group flex items-center gap-3 bg-white px-6 py-5 transition-colors duration-300 hover:bg-accent/[0.05] dark:bg-[#14161c] dark:hover:bg-accent/[0.06]"
+                  className="hover:bg-accent/[0.05] dark:hover:bg-accent/[0.06] group flex items-center gap-3 bg-white px-6 py-5 transition-colors duration-300 dark:bg-[#14161c]"
                 >
                   {/* Check tile inverts to solid signal on hover */}
                   <span className="bg-accent/[0.1] group-hover:bg-accent flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-colors duration-300">

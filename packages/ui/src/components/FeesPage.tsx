@@ -89,9 +89,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       {/* Spread ledger — account tiers as a terminal receipt */}
       <section className="bg-transparent px-5 pb-10">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">
-            {t('spreadsKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-5">{t('spreadsKicker')}</SectionKicker>
 
           <div className="border-border bg-surface shadow-card overflow-hidden rounded-[18px] border dark:border-white/[0.06]">
             {/* Receipt header strip */}
@@ -131,7 +129,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                 {displaySpreads.map((row) => (
                   <div
                     key={row.instrument}
-                    className="group grid grid-cols-[1fr_54px_54px_54px] items-center px-5 py-[13px] transition-colors hover:bg-accent/[0.05] dark:hover:bg-accent/[0.06]"
+                    className="hover:bg-accent/[0.05] dark:hover:bg-accent/[0.06] group grid grid-cols-[1fr_54px_54px_54px] items-center px-5 py-[13px] transition-colors"
                   >
                     <span className="text-foreground font-body text-body group-hover:text-accent font-medium transition-colors">
                       {row.instrument}
@@ -204,9 +202,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       {/* Other charges — the receipt, line by line */}
       <section className="rounded-t-[32px] bg-transparent px-5 pb-12 pt-[29px] dark:bg-[#0a0c0b]">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">
-            {t('otherKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-5">{t('otherKicker')}</SectionKicker>
 
           <div className="border-border bg-surface shadow-card list-dim overflow-hidden rounded-[18px] border dark:border-white/[0.06]">
             {OTHER_CHARGES.map((charge, i) => {
@@ -220,7 +216,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                   direction="up"
                   className={i > 0 ? 'border-border border-t dark:border-white/[0.05]' : ''}
                 >
-                  <div className="group px-5 py-[15px] transition-colors hover:bg-accent/[0.05] dark:hover:bg-accent/[0.06]">
+                  <div className="hover:bg-accent/[0.05] dark:hover:bg-accent/[0.06] group px-5 py-[15px] transition-colors">
                     <div className="flex items-baseline gap-3">
                       <span className="text-foreground text-body-lg font-sans font-semibold">
                         {t(`charge${key}` as 'chargeOpening')}
@@ -262,9 +258,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       {/* Closing ink band — the grand total you never pay */}
       <section className="ink-band rounded-t-[32px] px-5 pb-16 pt-14 xl:px-[120px] xl:pb-20 xl:pt-20">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-6">
-            {t('transparentKicker')}
-          </SectionKicker>
+          <SectionKicker className="mb-6">{t('transparentKicker')}</SectionKicker>
 
           <span
             dir="ltr"
