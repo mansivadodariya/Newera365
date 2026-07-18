@@ -11,7 +11,7 @@ Newera365.com — website for a forex/CFD broker. Reference **CSL-NE365-2026-Q2*
 Run from the repo root — Turborepo pipelines tasks across all workspaces.
 
 ```bash
-npm install                 # install all workspaces
+npm install                 # install all workspaces (Node 22+ required; engine-strict is on)
 npm run dev                 # run web + cms + mt5-service together
 npm run build               # build all (CI runs this)
 npm run lint                # ESLint across workspaces (web lint also runs check-i18n)
@@ -113,14 +113,14 @@ Brand tokens are placeholders pending Gate 2 design handoff (NE-024).
 
 ## Deployment
 
-| Component             | Platform                                                                         |
-| --------------------- | -------------------------------------------------------------------------------- |
-| Frontend (`apps/web`) | Vercel                                                                           |
-| CMS (`apps/cms`)      | EC2 / Railway                                                                    |
-| Database              | Neon (serverless PostgreSQL)                                                     |
-| Media / gated PDFs    | Cloudflare R2 — wired via `@payloadcms/plugin-cloud-storage` in Phase 3 (NE-027) |
+| Component             | Platform                                                                                             |
+| --------------------- | ---------------------------------------------------------------------------------------------------- |
+| Frontend (`apps/web`) | Vercel (primary). Cloudflare Workers is a maintained standby (OpenNext, see docs/LAUNCH.md appendix) |
+| CMS (`apps/cms`)      | Railway                                                                                              |
+| Database              | Neon (serverless PostgreSQL, client's account)                                                       |
+| Media / gated PDFs    | Cloudflare R2 — wired via `@payloadcms/plugin-cloud-storage` in Phase 3 (NE-027)                     |
 
-CI: lint → type-check → build on push to `main`/`staging` (`.github/workflows/ci.yml`). Husky pre-commit runs Prettier via lint-staged.
+CI: lint → type-check → build on push to `main`/`staging` (`.github/workflows/ci.yml`, Node 22). CD is manual only (`.github/workflows/deploy.yml`, workflow_dispatch). Husky pre-commit runs Prettier via lint-staged. Operational procedures live in `docs/LAUNCH.md`; onboarding lives in `docs/WALKTHROUGH.md`.
 
 Required env vars are validated on CMS startup: `PAYLOAD_SECRET` (warn in dev, error in prod), `FRONTEND_URL`, `SMTP_PASS` (the ZeptoMail Send Mail Token), `EMAIL_FROM`, `CONSENT_IP_SALT` (all error in prod only). `HEALTH_CHECK_TOKEN` must be set to a non-empty value or the `/api/health` endpoint will always return 401.
 
@@ -128,9 +128,9 @@ Email is sent via **ZeptoMail SMTP** (Zoho's transactional service) through a si
 
 ## Completed Frontend Pages
 
-All components live in `packages/ui/src/components/` and are exported from `packages/ui/src/index.ts`. Routes are thin wrappers in `apps/web/src/app/[locale]/`.
+All components live in `packages/ui/src/components/{pages,sections,chrome,primitives,motion,market}/` (role-based folders, see `packages/ui/README.md`) and are exported from `packages/ui/src/index.ts`; non-component helpers live in `packages/ui/src/lib/`. Routes are thin wrappers in `apps/web/src/app/[locale]/`. One-off CMS scripts that have already run against prod live in `apps/cms/src/scripts/archive/` (excluded from lint/type-check; do not re-run).
 
-> **IA consolidation (2026-07-08/09), read this before trusting the route tables below.** The header was clubbed from 9 tabs to **5**: Trade, Markets, Platform, **Education** (a 3-column mega-panel absorbing the old Research + Tools groups), **Company** (absorbing Legal & Support). Eleven routes were merged and permanent-redirected (see `redirects()` in `apps/web/next.config.mjs`): the three calculator pages (`/tools/pivot|profit|fibonacci`) fold into **`/tools`** (6-tab `TraderToolsPage`, calculators are embeddable `PivotCalculator`/`ProfitCalculator`/`FibonacciCalculator`); `/education/audio` + `/education/webinars` fold into **`/education/media`** (`WebinarsSection`); `/company/awards` + `/company/media-press` become **`/company/recognition`** (`RecognitionPage`, an editorial ledger); `/faqs` + `/contact` become **`/support`** (`SupportPage`, search-first FAQ accordion, human-escalation seam, contact form with POST `/api/contact` intact); `/daily-news` + `/education/blog` listings fold into **`/research`** (client `useState` Analysis/News/Blog feed tabs; detail routes `/research/[slug]`, `/daily-news/[slug]`, `/education/blog/[slug]` all still resolve). Design revamp added homepage `TwoPathsSection`, a seamless press `Marquee` (`TrustStripDemo`), `ScrollReveal`/`CountUp`/`TiltReveal` motion primitives, and a testimonial carousel. See DESIGN.md §8 for the Life system and card taxonomy. Copy rule: no em/en dashes anywhere (EN + AR). The tables below still name some pre-merge routes; the merged targets above win.
+> **IA consolidation (2026-07-08/09), read this before trusting the route tables below.** The header was clubbed from 9 tabs to **5**: Trade, Markets, Platform, **Education** (a 3-column mega-panel absorbing the old Research + Tools groups), **Company** (absorbing Legal & Support). Eleven routes were merged and permanent-redirected (see `redirects()` in `apps/web/next.config.mjs`): the three calculator pages (`/tools/pivot|profit|fibonacci`) fold into **`/tools`** (6-tab `TraderToolsPage`, calculators are embeddable `PivotCalculator`/`ProfitCalculator`/`FibonacciCalculator`); `/education/audio` + `/education/webinars` fold into **`/education/media`** (`WebinarsSection`); `/company/awards` + `/company/media-press` become **`/company/recognition`** (`RecognitionPage`, an editorial ledger); `/faqs` + `/contact` become **`/support`** (`SupportPage`, search-first FAQ accordion, human-escalation seam, contact form with POST `/api/contact` intact); `/daily-news` + `/education/blog` listings fold into **`/research`** (client `useState` Analysis/News/Blog feed tabs; detail routes `/research/[slug]`, `/daily-news/[slug]`, `/education/blog/[slug]` all still resolve). Design revamp added homepage `TwoPathsSection`, a seamless press marquee (now `PartnersSection`; the old `TrustStripDemo` was deleted in the 2026-07-18 dead-code pass), `ScrollReveal`/`CountUp`/`TiltReveal` motion primitives, and a testimonial carousel. See DESIGN.md §8 for the Life system and card taxonomy. Copy rule: no em/en dashes anywhere (EN + AR). The tables below still name some pre-merge routes; the merged targets above win.
 
 ### Trade
 
