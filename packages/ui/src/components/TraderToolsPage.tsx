@@ -6,9 +6,9 @@ import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { CountUp } from './CountUp';
 import { CalcSelect } from './CalcSelect';
-import { PivotCalculator } from './PivotCalculatorPage';
-import { ProfitCalculator } from './ProfitCalculatorPage';
-import { FibonacciCalculator } from './FibonacciCalculatorPage';
+import { PivotCalculator } from './PivotCalculator';
+import { ProfitCalculator } from './ProfitCalculator';
+import { FibonacciCalculator } from './FibonacciCalculator';
 import { FormulaChips, NumberInput, ResultPanel } from './CalcKit';
 
 type ToolTab = 'MARGIN' | 'PIP' | 'SWAP' | 'PIVOT' | 'PROFIT' | 'FIBONACCI';

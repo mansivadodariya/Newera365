@@ -7,7 +7,23 @@ import { SectionKicker } from './SectionKicker';
 import { ScrollReveal } from './ScrollReveal';
 import { ChartWidget } from './ChartWidget';
 import { Accordion } from './Accordion';
-import type { InstrumentItem } from './InstrumentsPage';
+export interface InstrumentItem {
+  id: number;
+  name: string;
+  symbol: string;
+  assetClass: string;
+  /** Exact TradingView chart symbol (EXCHANGE:SYMBOL), CMS-managed. */
+  tvSymbol?: string | null;
+  spread?: number | null;
+  leverage?: string | null;
+  minTradeSize?: number | null;
+  // Specification fields surfaced on the market-category spec panel
+  contractSize?: number | null;
+  marginRequirement?: number | null;
+  tradingHours?: string | null;
+  swapLong?: number | null;
+  swapShort?: number | null;
+}
 
 // Capitalized category token used to build the per-category i18n key names for
 // the "Why trade" reasons and the FAQ accordion (e.g. whyForex1Title, faqForexQ1).

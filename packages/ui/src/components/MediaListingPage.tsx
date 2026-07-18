@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from './SectionKicker';
 import { Pagination } from './Pagination';
 import { humanize, distinctCategories, sameCategory } from './filterUtils';
-import { WebinarsSection, type WebinarItem } from './WebinarsPage';
+import { WebinarsSection, type WebinarItem } from './WebinarsSection';
 
 const MEDIA_PER_PAGE = 9;
 

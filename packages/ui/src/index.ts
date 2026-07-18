@@ -5,9 +5,6 @@
 
 export { safeUrl } from './lib/safeUrl';
 
-export { Button } from './components/Button';
-export type { ButtonProps, ButtonVariant } from './components/Button';
-
 export { SectionKicker } from './components/SectionKicker';
 export { Spotlight } from './components/Spotlight';
 
@@ -19,14 +16,12 @@ export { LanguageToggle } from './components/LanguageToggle';
 export { RiskBanner } from './components/RiskBanner';
 export { TopLoadingBar } from './components/TopLoadingBar';
 
-// ── Landing redesign DEMO components (isolated; not used by live pages) ──
+// ── Site chrome + homepage/landing sections (live; the "Demo" suffix is
+// historical — these were promoted from the landing redesign to the live site) ──
 export { HeaderDemo } from './components/HeaderDemo';
 export { MobileMenuDemo } from './components/MobileMenuDemo';
 export { HeroSectionDemo } from './components/HeroSectionDemo';
-export { HeroMarketPanel } from './components/HeroMarketPanel';
 export { RevealDemo } from './components/RevealDemo';
-export { TrustStripDemo } from './components/TrustStripDemo';
-export type { TrustLogo } from './components/TrustStripDemo';
 export { TestimonialsSection } from './components/TestimonialsSection';
 export type { TestimonialItem, TestimonialsSectionProps } from './components/TestimonialsSection';
 export { StatsSectionDemo } from './components/StatsSectionDemo';
@@ -39,13 +34,10 @@ export type { HomeNewsletterContent } from './components/HomeNewsletterSection';
 export { PartnersSection } from './components/PartnersSection';
 export type { PartnerItem, PartnersSectionProps } from './components/PartnersSection';
 export { CtaBannerDemo } from './components/CtaBannerDemo';
-export { TickerStrip } from './components/TickerStrip';
-export type { TickerItem } from './components/TickerStrip';
 export { TradingViewTicker } from './components/TradingViewTicker';
 export { Footer } from './components/Footer';
 export type { CmsFooterColumn, CmsSocialLinks } from './components/Footer';
 
-export { StatsSectionClient } from './components/StatsSectionClient';
 export { CountUp } from './components/CountUp';
 export { MarketsSectionGrid } from './components/MarketsSectionGrid';
 export type { MarketItem } from './components/MarketsSectionGrid';
@@ -89,7 +81,7 @@ export { EducationHubPage } from './components/EducationHubPage';
 export type { CmsEducationItem } from './components/EducationHubPage';
 export { MediaListingPage } from './components/MediaListingPage';
 export type { CmsVideoItem } from './components/MediaListingPage';
-export type { WebinarItem } from './components/WebinarsPage';
+export type { WebinarItem } from './components/WebinarsSection';
 export { EbooksPage } from './components/EbooksPage';
 export type { CmsEbookItem } from './components/EbooksPage';
 export { GlossaryPage } from './components/GlossaryPage';
@@ -115,7 +107,6 @@ export { EconomicCalendarPage } from './components/EconomicCalendarPage';
 export { AnalystChartPage } from './components/AnalystChartPage';
 export type { CmsAnalystCallItem, CmsAnalystProfile } from './components/AnalystChartPage';
 export { LiveWatchlistPage } from './components/LiveWatchlistPage';
-export { LiveMarketsSection } from './components/LiveMarketsSection';
 export { NewsletterPage } from './components/NewsletterPage';
 export { CareersPage } from './components/CareersPage';
 export type { CmsJobItem } from './components/CareersPage';

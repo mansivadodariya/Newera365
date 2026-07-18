@@ -3,10 +3,10 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 
 /**
- * Standardised scroll-reveal wrapper for the demo sections. Fades + lifts its
- * children into view once on intersection. Mirrors the timing already used by
- * StatsSectionClient / MarketsSectionGrid so the whole page shares one motion
- * vocabulary. No-ops under prefers-reduced-motion.
+ * Standardised scroll-reveal wrapper for the homepage sections. Fades + lifts
+ * its children into view once on intersection. Mirrors the timing used by
+ * MarketsSectionGrid so the whole page shares one motion vocabulary. No-ops
+ * under prefers-reduced-motion.
  */
 export function RevealDemo({
   children,
