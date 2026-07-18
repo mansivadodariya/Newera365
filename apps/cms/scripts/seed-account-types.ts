@@ -13,8 +13,9 @@
  */
 
 const CMS_URL = process.env.CMS_URL ?? 'http://localhost:3001';
-const EMAIL = process.env.CMS_EMAIL ?? 'demo@newera.com';
-const PASSWORD = process.env.CMS_PASSWORD ?? 'password123';
+const EMAIL = process.env.CMS_EMAIL ?? 'admin@newera365.com';
+const PASSWORD = process.env.CMS_PASSWORD;
+if (!PASSWORD) throw new Error('CMS_PASSWORD must be set — there is no default admin password.');
 
 interface AccountSeed {
   name: string;

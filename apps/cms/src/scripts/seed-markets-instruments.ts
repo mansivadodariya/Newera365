@@ -18,8 +18,9 @@ import dotenv from 'dotenv';
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const CMS_URL = process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3001';
-const EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'demo@newera.com';
-const PASS = process.env.SEED_ADMIN_PASS ?? 'password123';
+const EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@newera365.com';
+const PASS = process.env.SEED_ADMIN_PASS;
+if (!PASS) throw new Error('SEED_ADMIN_PASS must be set — there is no default admin password.');
 
 type Instrument = {
   name: string;

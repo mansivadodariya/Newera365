@@ -15,7 +15,7 @@
     "db:migrate:slug-indexes": "ts-node src/scripts/migrate-slug-indexes.ts",
     "seed:admin": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts ts-node --transpile-only src/scripts/ensure-admin.ts",
     "seed": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts ts-node --transpile-only src/scripts/seed.ts",
-    "patch:arabic": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts SEED_ADMIN_EMAIL=demo@newera.com SEED_ADMIN_PASS=password123 ts-node --transpile-only src/scripts/patch-arabic.ts",
+    "patch:arabic": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts ts-node --transpile-only src/scripts/patch-arabic.ts",
     "email:verify": "cross-env ts-node --transpile-only src/scripts/verify-email.ts",
     "clean": "rimraf dist build .turbo"
   },

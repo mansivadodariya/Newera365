@@ -2,12 +2,9 @@
  * One-shot patch script — adds missing Arabic fields to existing CMS records.
  * Safe to run against live data: it never deletes or recreates documents.
  *
- * Usage:
- *   SEED_ADMIN_EMAIL=demo@newera.com SEED_ADMIN_PASS=password123 \
- *     npx ts-node -e "require('./apps/cms/src/scripts/patch-arabic.ts')"
- *
- * Or via the npm script added in package.json:
- *   npm run patch:arabic --workspace=@newera365/cms
+ * Usage (set the admin credentials in the environment; no defaults):
+ *   SEED_ADMIN_EMAIL=admin@newera365.com SEED_ADMIN_PASS=<password> \
+ *     npm run patch:arabic --workspace=@newera365/cms
  */
 
 import dotenv from 'dotenv';
@@ -15,8 +12,9 @@ import path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const CMS = process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3001';
-const EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'demo@newera.com';
-const PASS = process.env.SEED_ADMIN_PASS ?? 'password123';
+const EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@newera365.com';
+const PASS = process.env.SEED_ADMIN_PASS;
+if (!PASS) throw new Error('SEED_ADMIN_PASS must be set — there is no default admin password.');
 let token = '';
 
 async function request(method: string, endpoint: string, body?: unknown) {
