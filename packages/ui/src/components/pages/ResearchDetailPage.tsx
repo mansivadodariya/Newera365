@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { RichText, readingMinutes } from '../primitives/RichText';
 import type { SlateNode } from '../primitives/RichText';
 import { ReadingProgress } from '../motion/ReadingProgress';
+import { ScrollReveal } from '../motion/ScrollReveal';
 
 export interface RelatedInstrument {
   id: number;
@@ -189,7 +190,7 @@ export function ResearchDetailPage({
       {/* Related instruments — shown when the article has relatedInstruments from CMS */}
       {article.relatedInstruments && article.relatedInstruments.length > 0 && (
         <section className="px-5 pb-6 pt-2">
-          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
             <p className="text-foreground mb-3 font-sans text-[15px] font-semibold">
               {t('relatedMarkets')}
             </p>
@@ -210,68 +211,71 @@ export function ResearchDetailPage({
                 </Link>
               ))}
             </div>
-          </div>
+          </ScrollReveal>
         </section>
       )}
 
       {/* Related articles — only real CMS items, section hidden when there are none */}
       {related.length > 0 && (
         <section className="bg-surface px-5 pb-10 pt-8">
-          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <p className="text-foreground mb-5 font-sans text-[18px] font-semibold">
-              {t('keepReading')}
-            </p>
+          <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            <ScrollReveal>
+              <p className="text-foreground mb-5 font-sans text-[18px] font-semibold">
+                {t('keepReading')}
+              </p>
+            </ScrollReveal>
             <div className="dark:divide-border flex flex-col divide-y divide-[#e5e7eb] xl:grid xl:grid-cols-3 xl:gap-[14px] xl:divide-y-0">
-              {related.map((art) => {
+              {related.map((art, artIndex) => {
                 const catLabel = (art.category ?? '').toUpperCase();
                 const pillColor =
                   art.catColor ?? CAT_COLORS[catLabel] ?? 'bg-accent/10 text-accent';
                 return (
-                  <Link
-                    key={art.slug}
-                    href={`/${locale}/${basePath}/${art.slug}`}
-                    className="group flex items-center justify-between gap-4 py-4 xl:flex-col xl:items-start xl:gap-3 xl:py-0"
-                  >
-                    {/* Desktop: cover thumbnail (CMS image, gradient fallback); image zooms + gains an inner shadow on hover (client-approved article-card override) */}
-                    <div className="relative hidden after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.14),inset_0_10px_30px_-6px_rgba(0,0,0,0.5)] after:transition-opacity after:duration-300 after:content-[''] motion-safe:group-hover:after:opacity-100 xl:block xl:h-[140px] xl:w-full xl:overflow-hidden xl:rounded-[12px] xl:bg-gradient-to-br xl:from-[#0d2b1a] xl:via-[#0a1f12] xl:to-[#111111]">
-                      {art.image ? (
-                        <img
-                          src={art.image}
-                          alt={art.title}
-                          className="h-full w-full object-cover transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.05]"
-                        />
-                      ) : null}
-                    </div>
-                    <div className="min-w-0 flex-1 xl:w-full xl:flex-none">
-                      {catLabel && (
-                        <div className="mb-1 flex items-center gap-2">
-                          <span
-                            className={`font-body rounded-full px-2 py-[2px] text-[9px] font-semibold uppercase tracking-[0.08em] ${pillColor}`}
-                          >
-                            {catLabel}
-                          </span>
-                        </div>
-                      )}
-                      <p className="text-foreground group-hover:text-accent font-sans text-[13px] font-semibold leading-[1.35] transition-colors xl:text-[14px]">
-                        {art.title}
-                      </p>
-                    </div>
-                    <svg
-                      width="7"
-                      height="12"
-                      viewBox="0 0 7 12"
-                      fill="none"
-                      className="text-muted group-hover:text-accent flex-shrink-0 transition-colors xl:hidden rtl:-scale-x-100"
+                  <ScrollReveal key={art.slug} index={artIndex}>
+                    <Link
+                      href={`/${locale}/${basePath}/${art.slug}`}
+                      className="group flex items-center justify-between gap-4 py-4 xl:flex-col xl:items-start xl:gap-3 xl:py-0"
                     >
-                      <path
-                        d="M1 1L6 6L1 11"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Link>
+                      {/* Desktop: cover thumbnail (CMS image, gradient fallback); image zooms + gains an inner shadow on hover (client-approved article-card override) */}
+                      <div className="relative hidden after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.14),inset_0_10px_30px_-6px_rgba(0,0,0,0.5)] after:transition-opacity after:duration-300 after:content-[''] motion-safe:group-hover:after:opacity-100 xl:block xl:h-[140px] xl:w-full xl:overflow-hidden xl:rounded-[12px] xl:bg-gradient-to-br xl:from-[#0d2b1a] xl:via-[#0a1f12] xl:to-[#111111]">
+                        {art.image ? (
+                          <img
+                            src={art.image}
+                            alt={art.title}
+                            className="h-full w-full object-cover transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.05]"
+                          />
+                        ) : null}
+                      </div>
+                      <div className="min-w-0 flex-1 xl:w-full xl:flex-none">
+                        {catLabel && (
+                          <div className="mb-1 flex items-center gap-2">
+                            <span
+                              className={`font-body rounded-full px-2 py-[2px] text-[9px] font-semibold uppercase tracking-[0.08em] ${pillColor}`}
+                            >
+                              {catLabel}
+                            </span>
+                          </div>
+                        )}
+                        <p className="text-foreground group-hover:text-accent font-sans text-[13px] font-semibold leading-[1.35] transition-colors xl:text-[14px]">
+                          {art.title}
+                        </p>
+                      </div>
+                      <svg
+                        width="7"
+                        height="12"
+                        viewBox="0 0 7 12"
+                        fill="none"
+                        className="text-muted group-hover:text-accent flex-shrink-0 transition-colors xl:hidden rtl:-scale-x-100"
+                      >
+                        <path
+                          d="M1 1L6 6L1 11"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </Link>
+                  </ScrollReveal>
                 );
               })}
             </div>
@@ -280,8 +284,8 @@ export function ResearchDetailPage({
       )}
 
       {/* CTA */}
-      <section className="rounded-t-[32px] bg-black px-5 pb-12 pt-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+      <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h2 className="text-headline mb-3 font-sans text-white">
             {t('tradeHeading')}
             <br />
@@ -290,7 +294,7 @@ export function ResearchDetailPage({
           <p className="font-body mb-7 text-[13px] leading-relaxed text-white/60">
             {t('tradeDesc')}
           </p>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );

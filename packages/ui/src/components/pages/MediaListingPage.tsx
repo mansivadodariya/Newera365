@@ -6,6 +6,7 @@ import { SectionKicker } from '../primitives/SectionKicker';
 import { Pagination } from '../primitives/Pagination';
 import { humanize, distinctCategories, sameCategory } from '../../lib/filterUtils';
 import { WebinarsSection, type WebinarItem } from '../sections/WebinarsSection';
+import { ScrollReveal } from '../motion/ScrollReveal';
 
 const MEDIA_PER_PAGE = 9;
 
@@ -317,74 +318,77 @@ export function MediaListingPage({ cmsVideos, webinars }: MediaListingPageProps)
             ) : (
               <div className="grid grid-cols-2 gap-[10px] xl:grid-cols-3">
                 {pagedFiltered.map((ep, epIndex) => (
-                  <div
-                    key={ep.id}
-                    className="dark:hover:border-accent/20 flex cursor-pointer flex-col gap-3 overflow-hidden rounded-[18px] bg-[#F0F4F1] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition-all duration-200 hover:shadow-[0_8px_24px_rgba(0,176,80,0.08)] dark:bg-[#1a1c22] dark:shadow-none"
-                    onClick={() => ep.href && window.open(ep.href, '_blank', 'noopener,noreferrer')}
-                    style={{ cursor: ep.href ? 'pointer' : 'default' }}
-                  >
-                    {/* Thumbnail — CMS cover, else the silk art plate. Each
+                  <ScrollReveal key={ep.id} index={epIndex}>
+                    <div
+                      className="dark:hover:border-accent/20 flex h-full cursor-pointer flex-col gap-3 overflow-hidden rounded-[18px] bg-[#F0F4F1] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition-all duration-200 hover:shadow-[0_8px_24px_rgba(0,176,80,0.08)] dark:bg-[#1a1c22] dark:shadow-none"
+                      onClick={() =>
+                        ep.href && window.open(ep.href, '_blank', 'noopener,noreferrer')
+                      }
+                      style={{ cursor: ep.href ? 'pointer' : 'default' }}
+                    >
+                      {/* Thumbnail — CMS cover, else the silk art plate. Each
                       fallback crops a different slice (by grid position) so
                       neighbouring cards don't repeat. */}
-                    <div className="relative flex h-[120px] items-center justify-center overflow-hidden rounded-[11px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111]">
-                      {ep.thumbnailUrl ? (
-                        <img
-                          src={ep.thumbnailUrl}
-                          alt={ep.title}
-                          className="absolute inset-0 h-full w-full object-cover opacity-80"
-                          onError={(e) => {
-                            // Broken CMS media → swap to the house art plate.
-                            e.currentTarget.src = '/images/edge-flow.jpg';
-                            e.currentTarget.style.objectPosition = `${35 + (epIndex % 3) * 15}% ${24 + (epIndex % 2) * 14}%`;
-                            e.currentTarget.classList.remove('opacity-80');
-                          }}
-                        />
-                      ) : (
-                        <img
-                          src="/images/edge-flow.jpg"
-                          alt=""
-                          aria-hidden="true"
-                          className="absolute inset-0 h-full w-full object-cover"
-                          style={{
-                            objectPosition: `${35 + (epIndex % 3) * 15}% ${24 + (epIndex % 2) * 14}%`,
-                          }}
-                        />
-                      )}
-                      <div className="bg-accent/90 relative z-10 flex h-8 w-8 items-center justify-center rounded-full">
-                        {ep.type === 'VIDEO' ? (
-                          <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
-                            <path d="M4 3l10 5-10 5V3z" fill="white" />
-                          </svg>
+                      <div className="relative flex h-[120px] items-center justify-center overflow-hidden rounded-[11px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1f12] to-[#111111]">
+                        {ep.thumbnailUrl ? (
+                          <img
+                            src={ep.thumbnailUrl}
+                            alt={ep.title}
+                            className="absolute inset-0 h-full w-full object-cover opacity-80"
+                            onError={(e) => {
+                              // Broken CMS media → swap to the house art plate.
+                              e.currentTarget.src = '/images/edge-flow.jpg';
+                              e.currentTarget.style.objectPosition = `${35 + (epIndex % 3) * 15}% ${24 + (epIndex % 2) * 14}%`;
+                              e.currentTarget.classList.remove('opacity-80');
+                            }}
+                          />
                         ) : (
-                          <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
-                            <circle cx="8" cy="6" r="3" stroke="white" strokeWidth="1.5" />
-                            <path
-                              d="M4 14c0-2.2 1.8-4 4-4s4 1.8 4 4"
-                              stroke="white"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                          </svg>
+                          <img
+                            src="/images/edge-flow.jpg"
+                            alt=""
+                            aria-hidden="true"
+                            className="absolute inset-0 h-full w-full object-cover"
+                            style={{
+                              objectPosition: `${35 + (epIndex % 3) * 15}% ${24 + (epIndex % 2) * 14}%`,
+                            }}
+                          />
                         )}
+                        <div className="bg-accent/90 relative z-10 flex h-8 w-8 items-center justify-center rounded-full">
+                          {ep.type === 'VIDEO' ? (
+                            <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
+                              <path d="M4 3l10 5-10 5V3z" fill="white" />
+                            </svg>
+                          ) : (
+                            <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
+                              <circle cx="8" cy="6" r="3" stroke="white" strokeWidth="1.5" />
+                              <path
+                                d="M4 14c0-2.2 1.8-4 4-4s4 1.8 4 4"
+                                stroke="white"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                              />
+                            </svg>
+                          )}
+                        </div>
+                        <div className="absolute end-2 top-2 rounded-full bg-black/60 px-2 py-[2px]">
+                          <span className="font-body text-[9px] text-white">{ep.duration}</span>
+                        </div>
                       </div>
-                      <div className="absolute end-2 top-2 rounded-full bg-black/60 px-2 py-[2px]">
-                        <span className="font-body text-[9px] text-white">{ep.duration}</span>
+                      {/* Content */}
+                      <div>
+                        <div className="mb-1.5 flex items-center gap-1.5">
+                          <span
+                            className={`font-body rounded-full px-2 py-[2px] text-[8px] font-semibold uppercase tracking-[0.08em] ${TAG_COLORS[ep.tagDisplay]}`}
+                          >
+                            {translateMediaCat(ep.tagDisplay)}
+                          </span>
+                        </div>
+                        <p className="text-foreground font-sans text-[12px] font-semibold leading-[1.4]">
+                          {ep.title}
+                        </p>
                       </div>
                     </div>
-                    {/* Content */}
-                    <div>
-                      <div className="mb-1.5 flex items-center gap-1.5">
-                        <span
-                          className={`font-body rounded-full px-2 py-[2px] text-[8px] font-semibold uppercase tracking-[0.08em] ${TAG_COLORS[ep.tagDisplay]}`}
-                        >
-                          {translateMediaCat(ep.tagDisplay)}
-                        </span>
-                      </div>
-                      <p className="text-foreground font-sans text-[12px] font-semibold leading-[1.4]">
-                        {ep.title}
-                      </p>
-                    </div>
-                  </div>
+                  </ScrollReveal>
                 ))}
               </div>
             )}

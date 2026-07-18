@@ -2,6 +2,21 @@ import { setRequestLocale } from 'next-intl/server';
 import { TraderToolsPage, CtaBanner } from '@newera365/ui';
 import type { CmsCalculatorInstrument } from '@newera365/ui';
 import { getInstruments } from '@/lib/cms';
+import type { Metadata } from 'next';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const isAr = params.locale === 'ar';
+  return {
+    title: isAr ? 'حاسبات التداول' : 'Trading Calculators',
+    description: isAr
+      ? 'حاسبات الهامش والنقاط والمبادلة والارتكاز والأرباح وفيبوناتشي مع بيانات حية للأدوات.'
+      : 'Margin, pip, swap, pivot, profit and Fibonacci calculators with live instrument data.',
+  };
+}
 
 export default async function TraderToolsRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);

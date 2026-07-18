@@ -7,6 +7,7 @@ import { SectionKicker } from '../primitives/SectionKicker';
 import { RichText, extractHeadings, readingMinutes } from '../primitives/RichText';
 import type { SlateNode } from '../primitives/RichText';
 import { ReadingProgress } from '../motion/ReadingProgress';
+import { ScrollReveal } from '../motion/ScrollReveal';
 
 export interface CmsGuideDetail {
   title: string;
@@ -313,7 +314,7 @@ export function GuideDetailPage({ slug: _slug, guide: cmsGuide }: GuideDetailPro
 
       {/* CTA closer on ink */}
       <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4">{t('ctaKicker')}</SectionKicker>
           <h2 className="text-headline mb-3 font-sans text-white">{t('ctaHeading')}</h2>
           <p className="font-body mb-7 max-w-[52ch] text-[15px] leading-relaxed text-white/[0.72]">
@@ -341,7 +342,7 @@ export function GuideDetailPage({ slug: _slug, guide: cmsGuide }: GuideDetailPro
               />
             </svg>
           </Link>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );

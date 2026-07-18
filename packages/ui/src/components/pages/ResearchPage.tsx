@@ -635,60 +635,59 @@ export function ResearchPage({
               <span className="text-muted font-mono text-[11px]">{t('reportsSubtitle')}</span>
             </div>
             <div className="flex flex-col gap-3 xl:grid xl:grid-cols-2 xl:gap-4">
-              {cmsReports.map((report) => (
-                <div
-                  key={report.id}
-                  className="flex items-start justify-between gap-4 rounded-[16px] bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-[transform,box-shadow] duration-300 hover:shadow-[0_16px_40px_-16px_rgba(8,19,12,0.18)] motion-safe:hover:-translate-y-1 dark:bg-[#1a1c22]"
-                >
-                  {report.thumbnailUrl && (
-                    <img
-                      src={report.thumbnailUrl}
-                      alt={report.title}
-                      className="h-16 w-16 flex-shrink-0 rounded-[10px] object-cover"
-                    />
-                  )}
-                  <div className="min-w-0 flex-1">
-                    {report.isGated && (
-                      <span className="mb-2 inline-block rounded-full bg-[#F59E0B]/15 px-2.5 py-[3px] font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-[#F59E0B]">
-                        {t('reportGated')}
+              {cmsReports.map((report, reportIndex) => (
+                <ScrollReveal key={report.id} index={reportIndex}>
+                  <div className="hover:border-accent/45 dark:hover:border-accent/45 flex h-full items-start justify-between gap-4 rounded-[16px] border border-transparent bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-[border-color,box-shadow] duration-300 hover:shadow-[0_8px_24px_rgba(0,176,80,0.1)] dark:bg-[#1a1c22]">
+                    {report.thumbnailUrl && (
+                      <img
+                        src={report.thumbnailUrl}
+                        alt={report.title}
+                        className="h-16 w-16 flex-shrink-0 rounded-[10px] object-cover"
+                      />
+                    )}
+                    <div className="min-w-0 flex-1">
+                      {report.isGated && (
+                        <span className="mb-2 inline-block rounded-full bg-[#F59E0B]/15 px-2.5 py-[3px] font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-[#F59E0B]">
+                          {t('reportGated')}
+                        </span>
+                      )}
+                      <p className="text-foreground font-sans text-[15px] font-semibold leading-[1.3] tracking-[-0.225px]">
+                        {report.title}
+                      </p>
+                      {report.summary && (
+                        <p className="font-body text-muted mt-1 text-[12px] leading-[1.5]">
+                          {report.summary}
+                        </p>
+                      )}
+                      <p className="text-muted mt-2 font-mono text-[10px]">
+                        {(() => {
+                          try {
+                            return new Date(report.publishedDate).toLocaleDateString('en-US', {
+                              month: 'short',
+                              year: 'numeric',
+                            });
+                          } catch {
+                            return '';
+                          }
+                        })()}
+                      </p>
+                    </div>
+                    {report.reportUrl ? (
+                      <a
+                        href={report.reportUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-accent hover:bg-accent/90 flex-shrink-0 rounded-full px-4 py-2 font-sans text-[12px] font-medium text-white transition-colors"
+                      >
+                        {t('reportDownload')}
+                      </a>
+                    ) : (
+                      <span className="text-muted flex-shrink-0 rounded-full bg-[#f2f2f4] px-4 py-2 font-sans text-[12px] dark:bg-[#1c1c1c] dark:text-white/60">
+                        {t('reportComingSoon')}
                       </span>
                     )}
-                    <p className="text-foreground font-sans text-[15px] font-semibold leading-[1.3] tracking-[-0.225px]">
-                      {report.title}
-                    </p>
-                    {report.summary && (
-                      <p className="font-body text-muted mt-1 text-[12px] leading-[1.5]">
-                        {report.summary}
-                      </p>
-                    )}
-                    <p className="text-muted mt-2 font-mono text-[10px]">
-                      {(() => {
-                        try {
-                          return new Date(report.publishedDate).toLocaleDateString('en-US', {
-                            month: 'short',
-                            year: 'numeric',
-                          });
-                        } catch {
-                          return '';
-                        }
-                      })()}
-                    </p>
                   </div>
-                  {report.reportUrl ? (
-                    <a
-                      href={report.reportUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-accent hover:bg-accent/90 flex-shrink-0 rounded-full px-4 py-2 font-sans text-[12px] font-medium text-white transition-colors"
-                    >
-                      {t('reportDownload')}
-                    </a>
-                  ) : (
-                    <span className="text-muted flex-shrink-0 rounded-full bg-[#f2f2f4] px-4 py-2 font-sans text-[12px] dark:bg-[#1c1c1c] dark:text-white/60">
-                      {t('reportComingSoon')}
-                    </span>
-                  )}
-                </div>
+                </ScrollReveal>
               ))}
             </div>
           </div>
@@ -697,7 +696,7 @@ export function ResearchPage({
 
       {/* Newsletter */}
       <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="xl:flex xl:items-center xl:gap-16">
             {/* Left: heading */}
             <div className="xl:flex-1">
@@ -787,7 +786,7 @@ export function ResearchPage({
               )}
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );

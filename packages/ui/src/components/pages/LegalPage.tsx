@@ -168,7 +168,7 @@ export function LegalPage({ documents }: LegalPageProps) {
                 className="border-border rounded-[16px] border bg-white p-4 xl:sticky xl:top-[88px] xl:p-5 dark:border-white/10 dark:bg-[#1a1c22]"
               >
                 <SectionKicker className="mb-4">{t('tocHeading')}</SectionKicker>
-                <ol className="flex flex-col gap-0.5">
+                <ol className="list-dim flex flex-col gap-0.5">
                   {tocItems.map((item) => {
                     const active = item.id === activeId;
                     return (

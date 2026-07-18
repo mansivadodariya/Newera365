@@ -4,6 +4,7 @@ import { useState, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { SectionKicker } from '../primitives/SectionKicker';
+import { ScrollReveal } from '../motion/ScrollReveal';
 import { CountUp } from '../motion/CountUp';
 import { CalcSelect } from '../primitives/CalcSelect';
 import { PivotCalculator } from '../primitives/PivotCalculator';
@@ -492,42 +493,45 @@ export function TraderToolsPage({ instruments: cmsInstruments }: TraderToolsPage
 
       {/* Other tools */}
       <section className="bg-transparent px-5 pb-10 pt-8">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-3">{t('moreKicker')}</SectionKicker>
-          <h2 className="text-foreground text-headline mb-5 font-sans">{t('moreHeading')}</h2>
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <ScrollReveal>
+            <SectionKicker className="mb-3">{t('moreKicker')}</SectionKicker>
+            <h2 className="text-foreground text-headline mb-5 font-sans">{t('moreHeading')}</h2>
+          </ScrollReveal>
           {/* Other tools */}
           <div className="mt-6 flex flex-col gap-[10px] xl:flex-row xl:gap-4">
-            {OTHER_TOOLS.map((tool) => (
-              <Link
-                key={tool.id}
-                href={tool.href}
-                className="hover:border-accent/30 dark:hover:border-accent/25 group flex items-center justify-between rounded-[16px] border border-[#e5e7eb] bg-white p-4 transition-all duration-200 hover:shadow-[0_4px_16px_rgba(0,176,80,0.08)] xl:flex-1 dark:border-white/[0.07] dark:bg-[#1a1c22]"
-              >
-                <div>
-                  <p className="text-foreground font-sans text-[14px] font-semibold dark:text-white">
-                    {tool.label}
-                  </p>
-                  <p className="font-body text-muted mt-0.5 text-[12px] dark:text-white/50">
-                    {tool.desc}
-                  </p>
-                </div>
-                <svg
-                  width="7"
-                  height="12"
-                  viewBox="0 0 7 12"
-                  fill="none"
-                  aria-hidden="true"
-                  className="group-hover:text-accent text-muted flex-shrink-0 transition-colors rtl:-scale-x-100 dark:text-white/30"
+            {OTHER_TOOLS.map((tool, i) => (
+              <ScrollReveal key={tool.id} index={i} className="xl:flex-1">
+                <Link
+                  href={tool.href}
+                  className="hover:border-accent/30 dark:hover:border-accent/25 group flex items-center justify-between rounded-[16px] border border-[#e5e7eb] bg-white p-4 transition-all duration-200 hover:shadow-[0_4px_16px_rgba(0,176,80,0.08)] dark:border-white/[0.07] dark:bg-[#1a1c22]"
                 >
-                  <path
-                    d="M1 1L6 6L1 11"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Link>
+                  <div>
+                    <p className="text-foreground font-sans text-[14px] font-semibold dark:text-white">
+                      {tool.label}
+                    </p>
+                    <p className="font-body text-muted mt-0.5 text-[12px] dark:text-white/50">
+                      {tool.desc}
+                    </p>
+                  </div>
+                  <svg
+                    width="7"
+                    height="12"
+                    viewBox="0 0 7 12"
+                    fill="none"
+                    aria-hidden="true"
+                    className="group-hover:text-accent text-muted flex-shrink-0 transition-colors rtl:-scale-x-100 dark:text-white/30"
+                  >
+                    <path
+                      d="M1 1L6 6L1 11"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+              </ScrollReveal>
             ))}
           </div>
         </div>

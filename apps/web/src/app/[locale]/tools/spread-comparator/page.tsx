@@ -2,6 +2,21 @@ import { setRequestLocale } from 'next-intl/server';
 import { SpreadComparatorPage, CtaBanner } from '@newera365/ui';
 import type { CmsSpreadInstrument } from '@newera365/ui';
 import { getInstruments } from '@/lib/cms';
+import type { Metadata } from 'next';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const isAr = params.locale === 'ar';
+  return {
+    title: isAr ? 'مقارن فروق الأسعار' : 'Spread Comparator',
+    description: isAr
+      ? 'قارن فروق أسعار Newera365 مع متوسط الصناعة عبر أنواع الحسابات.'
+      : 'Compare Newera365 spreads against the industry average across account types.',
+  };
+}
 
 export default async function SpreadComparatorRoute({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
