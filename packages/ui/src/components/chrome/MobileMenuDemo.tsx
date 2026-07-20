@@ -6,7 +6,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { useTheme } from 'next-themes';
 import { isRtl, type Locale } from '@newera365/types';
 import { LanguageToggle } from './LanguageToggle';
 import { AuthModal, type AuthModalType } from './AuthModal';
@@ -83,10 +82,7 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
   const t = useTranslations('nav');
   const pathname = usePathname();
   const navGroups = useNavGroups(t);
-  const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const [authModal, setAuthModal] = useState<AuthModalType>(null);
-  useEffect(() => setMounted(true), []);
 
   const rtl = isRtl(locale as Locale);
 
@@ -209,44 +205,6 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
 
           <div className="flex items-center gap-2">
             <LanguageToggle />
-            {mounted && (
-              <button
-                onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-                aria-label={
-                  resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
-                }
-                className="text-foreground dark:bg-surface flex h-[38px] w-[38px] items-center justify-center rounded-xl bg-[#f4f4f5] transition-colors"
-              >
-                {resolvedTheme === 'dark' ? (
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="4"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                ) : (
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path
-                      d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
-              </button>
-            )}
             <button
               onClick={onClose}
               aria-label="Close menu"

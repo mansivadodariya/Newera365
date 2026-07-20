@@ -219,7 +219,8 @@ export default async function LocaleLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          enableSystem={true}
+          forcedTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={messages}>

@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; color: #1a1a1a; margin: 60px; line-height: 1.5; }
+  h1 { font-size: 20pt; color: #0d3b24; border-bottom: 3px solid #00B050; padding-bottom: 8px; margin-top: 40px; }
+  h2 { font-size: 15pt; color: #0d3b24; margin-top: 30px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+  h3 { font-size: 12pt; color: #1a3a2a; margin-top: 20px; }
+  h4 { font-size: 11pt; color: #333; margin-top: 14px; margin-bottom: 4px; }
+  p { margin: 6px 0 10px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 20px 0; font-size: 10pt; }
+  th { background-color: #0d3b24; color: white; padding: 8px 10px; text-align: left; }
+  td { padding: 7px 10px; border: 1px solid #ddd; vertical-align: top; }
+  tr:nth-child(even) td { background-color: #f4f8f5; }
+  .tag-red    { background: #c0392b; color: white; padding: 2px 8px; border-radius: 4px; font-size: 9pt; font-weight: bold; }
+  .tag-orange { background: #e67e22; color: white; padding: 2px 8px; border-radius: 4px; font-size: 9pt; font-weight: bold; }
+  .tag-yellow { background: #f39c12; color: white; padding: 2px 8px; border-radius: 4px; font-size: 9pt; font-weight: bold; }
+  .tag-green  { background: #27ae60; color: white; padding: 2px 8px; border-radius: 4px; font-size: 9pt; font-weight: bold; }
+  .tag-grey   { background: #7f8c8d; color: white; padding: 2px 8px; border-radius: 4px; font-size: 9pt; font-weight: bold; }
+  code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: Consolas, monospace; font-size: 9.5pt; }
+  .cover { text-align: center; padding: 60px 0 40px 0; border-bottom: 3px solid #00B050; margin-bottom: 40px; }
+  .cover h1 { font-size: 26pt; border: none; color: #0d3b24; }
+  .cover p { font-size: 12pt; color: #555; }
+  .toc li { margin: 4px 0; }
+  .section-note { background: #f0f7f2; border-left: 4px solid #00B050; padding: 10px 14px; margin: 12px 0; font-size: 10pt; color: #333; }
+  ul { margin: 6px 0 10px 0; padding-left: 20px; }
+  li { margin: 4px 0; }
+  .part-divider { background: #0d3b24; color: white; padding: 14px 20px; margin: 50px -20px 30px -20px; font-size: 14pt; font-weight: bold; page-break-before: always; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <h1>NewEra365 — Developer Brief</h1>
+  <p><strong>Project:</strong> CSL-NE365-2026-Q2 &nbsp;|&nbsp; <strong>Date:</strong> June 2026</p>
+  <p>This document covers two areas:<br>
+  <strong>Part A</strong> — Homepage improvements based on client feedback<br>
+  <strong>Part B</strong> — CMS codebase audit: breaking issues &amp; missing pieces</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="part-divider">PART A — Homepage: Client Feedback Action Items</div>
+<!-- ============================================================ -->
+
+<h1>Overview</h1>
+<p>
+  The following action items are derived from client feedback on the current homepage. The homepage structure and components are already built. Most changes are copy updates, styling tweaks, and section reordering — not new builds.
+</p>
+
+<div class="section-note">
+  <strong>Quick context on existing structure:</strong> The homepage already has HeroSection, TrustStrip, StatsSection, ThreeStepsSection, MarketsSection, FeaturesSection, TestimonialsSection, ArbitrageSection, CtaBanner, and Footer — all CMS-driven. The issues are largely around copy strength, visual hierarchy, and CMS data not yet populated.
+</div>
+
+<!-- ─── FEEDBACK 1 ─── -->
+<h2>1. Open Account CTA — Needs to Be More Dominant</h2>
+<p>The primary business objective of the homepage is to drive account registrations. The current hero CTA structure is technically correct but the copy and header label don't reinforce this clearly enough.</p>
+
+<h4>Action 1.1 — Update Hero Headline and Subheadline Copy</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>packages/ui/src/components/HeroSectionDemo.tsx</code></td></tr>
+  <tr><td><strong>Current kicker</strong></td><td>"Crafted by pro traders" — reads internal, not visitor-facing</td></tr>
+  <tr><td><strong>Suggested kicker</strong></td><td>"Trusted by Traders Worldwide"</td></tr>
+  <tr><td><strong>Suggested headline</strong></td><td>"Start Trading Global Markets with a Trusted Broker"</td></tr>
+  <tr><td><strong>Suggested subheadline</strong></td><td>"Open your live account in minutes and access Forex, Metals, Indices, Stocks and Crypto."</td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-red">P1 — Critical</span></td></tr>
+</table>
+
+<h4>Action 1.2 — Change Header Button Label</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>packages/ui/src/components/HeaderDemo.tsx</code></td></tr>
+  <tr><td><strong>Current label</strong></td><td>"Get Started"</td></tr>
+  <tr><td><strong>Change to</strong></td><td>"Open Account"</td></tr>
+  <tr><td><strong>Why</strong></td><td>Aligns the header CTA with the hero CTA intent; removes ambiguity</td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-red">P1 — Critical</span></td></tr>
+</table>
+
+<h4>Action 1.3 — Replace Spec Chips with Trust Signals</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>packages/ui/src/components/HeroSectionDemo.tsx</code></td></tr>
+  <tr><td><strong>Current chips</strong></td><td>Spread / Leverage / Execution specs — relevant only to experienced traders</td></tr>
+  <tr><td><strong>Change to</strong></td><td>"Regulated" / "Instant Execution" / "24/5 Support" — hooks for all visitor types</td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-yellow">P3 — Medium</span></td></tr>
+</table>
+
+<!-- ─── FEEDBACK 2 ─── -->
+<h2>2. Trading Widget — Needs Clearer Labels</h2>
+<p>
+  The hero chart card (<code>HeroChartCard.tsx</code>) is a custom-built animated SVG card — not a real TradingView embed. It already has a <code>bottomLabel</code> prop and a pulsing "LIVE" badge. The issue is it looks decorative without clear context labels.
+</p>
+
+<h4>Action 2.1 — Add Context Labels to Chart Card</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>packages/ui/src/components/HeroChartCard.tsx</code></td></tr>
+  <tr><td><strong>Change 1</strong></td><td>Populate the existing <code>bottomLabel</code> prop with: <em>"Live Market Movement — Powered by MT5"</em></td></tr>
+  <tr><td><strong>Change 2</strong></td><td>Add a visible card title label above the chart: <em>"EUR/USD — Live Price"</em></td></tr>
+  <tr><td><strong>Change 3</strong></td><td>Increase price display font size from <code>text-sm</code> to <code>text-base</code> or larger</td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-orange">P2 — High</span></td></tr>
+</table>
+
+<h4>Action 2.2 — Improve Card Contrast</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>packages/ui/src/components/HeroChartCard.tsx</code></td></tr>
+  <tr><td><strong>Change</strong></td><td>Increase border opacity from <code>border-white/[0.12]</code> to <code>border-white/[0.22]</code> so the card is visually distinct from the page background in dark mode</td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-orange">P2 — High</span></td></tr>
+</table>
+
+<!-- ─── FEEDBACK 3 ─── -->
+<h2>3. USP / "Why Newera" Section — Needs Stronger Copy and Earlier Placement</h2>
+<p>
+  The <code>FeaturesSection</code> component already exists with 4 feature cards and a 7-item USP checklist. The problems are: (1) the section headline is too generic, (2) the checklist items may not match the client's required USPs, and (3) the section appears too deep in the page.
+</p>
+
+<h4>Action 3.1 — Update Section Headline</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>packages/ui/src/components/FeaturesSection.tsx</code></td></tr>
+  <tr><td><strong>Change headline to</strong></td><td>"Why Traders Choose Newera"</td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-orange">P2 — High</span></td></tr>
+</table>
+
+<h4>Action 3.2 — Update USP Checklist Items</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>packages/ui/src/components/FeaturesSection.tsx</code></td></tr>
+  <tr><td><strong>Required checklist items</strong></td><td>
+    1. Fast Withdrawals<br>
+    2. Ultra-Low Spreads<br>
+    3. MT5 Trading Platform<br>
+    4. Dedicated Relationship Managers<br>
+    5. Multilingual Support<br>
+    6. Regulated Liquidity Partners<br>
+    7. Negative Balance Protection
+  </td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-orange">P2 — High</span></td></tr>
+</table>
+
+<h4>Action 3.3 — Move FeaturesSection Higher in Page Order</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>apps/web/src/app/[locale]/page.tsx</code></td></tr>
+  <tr><td><strong>Current order</strong></td><td>Ticker → Hero → TrustStrip → Stats → ThreeSteps → Markets → <strong>Features</strong> → Testimonials → Arbitrage → CTA</td></tr>
+  <tr><td><strong>New order</strong></td><td>Ticker → Hero → TrustStrip → <strong>Features</strong> → Stats → ThreeSteps → Markets → Testimonials → Arbitrage → CTA</td></tr>
+  <tr><td><strong>Why</strong></td><td>Most visitors won't scroll past the third section. USPs need to appear before the 3-step journey.</td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-orange">P2 — High</span></td></tr>
+</table>
+
+<!-- ─── FEEDBACK 4 ─── -->
+<h2>4. Account Opening Journey — Already Built, Just Needs Copy Check</h2>
+<p>
+  The <code>ThreeStepsSectionDemo</code> component already exists with animated connectors and a scroll-coupled stepper. No code rebuild needed.
+</p>
+
+<h4>Action 4.1 — Verify Step Copy</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>packages/ui/src/components/ThreeStepsSectionDemo.tsx</code></td></tr>
+  <tr><td><strong>Check</strong></td><td>Confirm section headline reads: <em>"Open an Account in 3 Easy Steps"</em></td></tr>
+  <tr><td><strong>Check</strong></td><td>Confirm step labels read: <em>Register Online → Verify Your Identity → Fund &amp; Start Trading</em></td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-grey">P4 — Low</span></td></tr>
+</table>
+
+<!-- ─── FEEDBACK 5 ─── -->
+<h2>5. Social Proof — Components Built, CMS Data Missing</h2>
+<p>
+  Three social proof components already exist: <code>TrustStripDemo</code> (partner logos), <code>StatsSectionDemo</code> (KPI counters with CountUp animation), and <code>TestimonialsSection</code> (client quotes with 4.8/5 rating). These render placeholder/empty states when CMS data is not populated.
+</p>
+
+<h4>Action 5.1 — Populate CMS Data (Content Task, Not Code)</h4>
+<table>
+  <tr><th>CMS Location</th><th>What to Enter</th></tr>
+  <tr><td>CMS → Site Settings → KPI Stats</td><td>Real numbers: active traders, years of operation, executions/day, uptime %</td></tr>
+  <tr><td>CMS → Site Settings → Social Proof Logos</td><td>Partner logos, regulator logos, media mentions</td></tr>
+  <tr><td>CMS → Testimonials (or Site Settings)</td><td>Real client quotes with author name, role, rating</td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-red">P1 — Critical (launch blocker)</span></td></tr>
+</table>
+
+<!-- ─── FEEDBACK 6 ─── -->
+<h2>6. Footer — Component Built, CMS Data Missing</h2>
+<p>
+  The <code>Footer.tsx</code> component already renders: social links, 4-column nav grid, contact block (email, phone, address, hours, live chat), payment method badges, regulatory disclosure, risk warning, and copyright. This is complete code. The issue is CMS fields are empty.
+</p>
+
+<h4>Action 6.1 — Populate CMS Footer Data (Content Task, Not Code)</h4>
+<table>
+  <tr><th>CMS Location</th><th>What to Enter</th></tr>
+  <tr><td>CMS → Site Settings → Contact Details</td><td>Email, phone, address, support hours</td></tr>
+  <tr><td>CMS → Site Settings → Social Media</td><td>Facebook, X, LinkedIn, Instagram, YouTube, Telegram, TikTok URLs</td></tr>
+  <tr><td>CMS → Site Settings → Footer Columns</td><td>Navigation headings + links for each column</td></tr>
+  <tr><td>CMS → Site Settings → Risk Disclaimer</td><td>Full legal risk warning text (EN + AR)</td></tr>
+  <tr><td>CMS → Site Settings → Regulatory Disclosure</td><td>Company registration details, regulator name/number</td></tr>
+  <tr><td>CMS → Payment Methods</td><td>Add Visa, Mastercard, bank transfer, e-wallet logos</td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-red">P1 — Critical (launch blocker)</span></td></tr>
+</table>
+
+<!-- ─── FEEDBACK 7 ─── -->
+<h2>7. Market Ticker — Reduce Speed by Showing Fewer Instruments</h2>
+<p>
+  The ticker uses TradingView's official Ticker Tape widget. Speed is <strong>not configurable</strong> via any parameter — TradingView controls it. The only way to slow the effective scroll speed is to reduce the number of instruments shown.
+</p>
+
+<h4>Action 7.1 — Reduce Ticker Instruments from 5 to 3</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>packages/ui/src/components/TradingViewTicker.tsx</code></td></tr>
+  <tr><td><strong>Current</strong></td><td>EUR/USD, Gold, GBP/USD, S&amp;P 500, Bitcoin (5 instruments)</td></tr>
+  <tr><td><strong>Reduce to</strong></td><td>EUR/USD, Gold, S&amp;P 500 (3 instruments) — fewer items = slower effective scroll</td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-yellow">P3 — Medium</span></td></tr>
+</table>
+
+<!-- ─── FEEDBACK 8 ─── -->
+<h2>8. EN vs AR Layout Parity</h2>
+<p>
+  The RTL (Arabic) layout is handled via <code>dir()</code> from <code>@newera365/types</code>. Some visual inconsistencies exist between English and Arabic versions.
+</p>
+
+<h4>Action 8.1 — Audit Hero Chart Card in RTL</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>packages/ui/src/components/HeroChartCard.tsx</code></td></tr>
+  <tr><td><strong>Check</strong></td><td>The 3D tilt uses mouse X/Y coordinates. Verify it works correctly in RTL layout where the card may appear on the left side.</td></tr>
+  <tr><td><strong>Check</strong></td><td>Floating price chips use absolute positioning — confirm none overflow or misalign in RTL.</td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-yellow">P3 — Medium</span></td></tr>
+</table>
+
+<h4>Action 8.2 — Check Arabic CTA Button Width</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>packages/ui/src/components/HeroSectionDemo.tsx</code></td></tr>
+  <tr><td><strong>Check</strong></td><td>Arabic button text is typically wider. Verify <code>px-8</code> padding on the primary button still looks correct with the Arabic label <em>"فتح حساب حقيقي"</em>. Increase padding or use <code>min-w</code> if text wraps.</td></tr>
+  <tr><td><strong>Priority</strong></td><td><span class="tag-yellow">P3 — Medium</span></td></tr>
+</table>
+
+<!-- ─── PART A SUMMARY ─── -->
+<h2>Part A — Prioritised Summary</h2>
+<table>
+  <tr>
+    <th>Priority</th><th>#</th><th>Action</th><th>File</th><th>Type</th>
+  </tr>
+  <tr>
+    <td><span class="tag-red">P1</span></td>
+    <td>1.1</td>
+    <td>Update hero headline and subheadline</td>
+    <td><code>HeroSectionDemo.tsx</code></td>
+    <td>Code / Copy</td>
+  </tr>
+  <tr>
+    <td><span class="tag-red">P1</span></td>
+    <td>1.2</td>
+    <td>Header button → "Open Account"</td>
+    <td><code>HeaderDemo.tsx</code></td>
+    <td>Code / Copy</td>
+  </tr>
+  <tr>
+    <td><span class="tag-red">P1</span></td>
+    <td>5.1</td>
+    <td>Populate KPI stats, logos, testimonials in CMS</td>
+    <td>CMS Admin</td>
+    <td>Content</td>
+  </tr>
+  <tr>
+    <td><span class="tag-red">P1</span></td>
+    <td>6.1</td>
+    <td>Populate footer: contact, social, legal, payment methods</td>
+    <td>CMS Admin</td>
+    <td>Content</td>
+  </tr>
+  <tr>
+    <td><span class="tag-orange">P2</span></td>
+    <td>2.1</td>
+    <td>Add "Live Market Movement — Powered by MT5" label to chart card</td>
+    <td><code>HeroChartCard.tsx</code></td>
+    <td>Code</td>
+  </tr>
+  <tr>
+    <td><span class="tag-orange">P2</span></td>
+    <td>2.2</td>
+    <td>Increase chart card border contrast</td>
+    <td><code>HeroChartCard.tsx</code></td>
+    <td>Code</td>
+  </tr>
+  <tr>
+    <td><span class="tag-orange">P2</span></td>
+    <td>3.1</td>
+    <td>Update FeaturesSection headline → "Why Traders Choose Newera"</td>
+    <td><code>FeaturesSection.tsx</code></td>
+    <td>Code / Copy</td>
+  </tr>
+  <tr>
+    <td><span class="tag-orange">P2</span></td>
+    <td>3.2</td>
+    <td>Update USP checklist to 7 client-specified items</td>
+    <td><code>FeaturesSection.tsx</code></td>
+    <td>Code / Copy</td>
+  </tr>
+  <tr>
+    <td><span class="tag-orange">P2</span></td>
+    <td>3.3</td>
+    <td>Move FeaturesSection earlier in page order</td>
+    <td><code>page.tsx</code></td>
+    <td>Code</td>
+  </tr>
+  <tr>
+    <td><span class="tag-yellow">P3</span></td>
+    <td>1.3</td>
+    <td>Replace spec chips with trust signals</td>
+    <td><code>HeroSectionDemo.tsx</code></td>
+    <td>Code</td>
+  </tr>
+  <tr>
+    <td><span class="tag-yellow">P3</span></td>
+    <td>7.1</td>
+    <td>Reduce ticker from 5 to 3 instruments</td>
+    <td><code>TradingViewTicker.tsx</code></td>
+    <td>Code</td>
+  </tr>
+  <tr>
+    <td><span class="tag-yellow">P3</span></td>
+    <td>8.1</td>
+    <td>Audit HeroChartCard in RTL layout</td>
+    <td><code>HeroChartCard.tsx</code></td>
+    <td>Code / QA</td>
+  </tr>
+  <tr>
+    <td><span class="tag-yellow">P3</span></td>
+    <td>8.2</td>
+    <td>Check Arabic CTA button width / padding</td>
+    <td><code>HeroSectionDemo.tsx</code></td>
+    <td>Code / QA</td>
+  </tr>
+  <tr>
+    <td><span class="tag-grey">P4</span></td>
+    <td>4.1</td>
+    <td>Verify 3-step section copy is correct</td>
+    <td><code>ThreeStepsSectionDemo.tsx</code></td>
+    <td>Copy check</td>
+  </tr>
+</table>
+
+
+<!-- ============================================================ -->
+<div class="part-divider">PART B — CMS Audit: Breaking Issues &amp; Missing Pieces</div>
+<!-- ============================================================ -->
+
+<h1>Overview</h1>
+<p>
+  A full end-to-end audit was run across all 24 collections, the SiteSettings global, all 10 custom endpoints, the email layer, migrations, and build tooling. Below are the findings grouped by severity.
+</p>
+<div class="section-note">
+  <strong>What passed cleanly:</strong> All 24 collections are present and registered. All Payload v2 API call signatures are correct. All async/await is correct. No unhandled promise rejections. Email layer (ZeptoMail SMTP via mailer.ts) is correctly wired. Access controls, localization, hooks, and admin component references are all correct.
+</div>
+
+<!-- ─── CRITICAL ─── -->
+<h2>1. Build-Breaking — TypeScript Errors in Maintenance Script</h2>
+
+<h4>Issue</h4>
+<p>
+  <code>src/scripts/dedupe-analyst-calls.cts</code> has 6 TypeScript errors. This script is written in CommonJS (<code>require()</code>) for Node native TS-stripping compatibility, but this strips the type signatures from the <code>pg</code> module — making generic <code>query&lt;T&gt;()</code> calls and untyped reducer params fail <code>tsc</code>.
+</p>
+
+<table>
+  <tr><th>Line</th><th>Error Code</th><th>Description</th></tr>
+  <tr><td>55</td><td>TS2347</td><td><code>client.query&lt;{symbol, copies}&gt;()</code> — untyped generic call on CommonJS pg import</td></tr>
+  <tr><td>63</td><td>TS7006</td><td>Reducer parameter <code>n</code> implicitly has type <code>any</code></td></tr>
+  <tr><td>63</td><td>TS7006</td><td>Reducer parameter <code>r</code> implicitly has type <code>any</code></td></tr>
+  <tr><td>64</td><td>TS7006</td><td>Reducer parameter <code>n</code> implicitly has type <code>any</code></td></tr>
+  <tr><td>64</td><td>TS7006</td><td>Reducer parameter <code>r</code> implicitly has type <code>any</code></td></tr>
+  <tr><td>76</td><td>TS2347</td><td><code>client.query&lt;{n: string}&gt;()</code> — untyped generic call</td></tr>
+</table>
+
+<h4>Impact</h4>
+<p>Blocks <code>npm run build</code> and <code>npm run type-check</code> entirely. CI will fail on every push.</p>
+
+<h4>Fix</h4>
+<p>Add explicit types to the two reducer callbacks and cast the query result:</p>
+<p><code>before.rows.reduce((n: number, r: {copies: string}) => n + Number(r.copies), 0)</code></p>
+<p>And for the untyped generic calls, either cast the result with <code>as</code> or remove the generic and use explicit row typing after the call.</p>
+
+<table>
+  <tr><th>File</th><th>Severity</th><th>Type</th></tr>
+  <tr>
+    <td><code>src/scripts/dedupe-analyst-calls.cts</code></td>
+    <td><span class="tag-red">CRITICAL — Build Blocker</span></td>
+    <td>Code Fix</td>
+  </tr>
+</table>
+
+<!-- ─── SCHEMA BREAKING ─── -->
+<h2>2. Missing Database Column — <code>mt5SyncEnabled</code></h2>
+
+<h4>Issue</h4>
+<p>
+  The <code>mt5SyncEnabled</code> field (the master MT5 on/off switch) is defined in <code>src/globals/SiteSettings.ts:17</code> as a checkbox with default <code>true</code>. However, Migration 002 adds <code>mt5_api_endpoint</code>, <code>mt5_api_key</code>, and <code>mt5_refresh_interval_secs</code> to <code>site_settings</code> but does <strong>not</strong> add <code>mt5SyncEnabled</code>.
+</p>
+
+<h4>Impact</h4>
+<p>
+  The <code>/api/mt5/instruments</code> endpoint reads <code>settings.mt5SyncEnabled</code> via <code>payload.findGlobal()</code>. If the column is absent, Postgres returns a 500 error on every MT5 instruments request — which also breaks the homepage markets widget.
+</p>
+
+<h4>Fix</h4>
+<p>Run this SQL against the Neon database (or add it to a new migration file <code>005_...</code>):</p>
+<p><code>ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS "mt5SyncEnabled" boolean DEFAULT true;</code></p>
+
+<table>
+  <tr><th>Field</th><th>File</th><th>Missing From</th><th>Severity</th></tr>
+  <tr>
+    <td><code>mt5SyncEnabled</code></td>
+    <td><code>src/globals/SiteSettings.ts:17</code></td>
+    <td>All migration files</td>
+    <td><span class="tag-red">CRITICAL — Runtime 500</span></td>
+  </tr>
+</table>
+
+<!-- ─── SCHEMA GAPS ─── -->
+<h2>3. SiteSettings — Schema Gaps (Fields Defined, No DB Column)</h2>
+
+<h4>Issue</h4>
+<p>
+  SiteSettings has grown significantly since Migration 002 was written. Many fields defined in the global have no corresponding DB column in the main <code>migrations/</code> folder. These are partially covered by scripts in <code>src/scripts/</code> (specifically <code>migrate-missing-columns.ts</code> and <code>migrate-testimonials-and-footer.ts</code>), but it must be confirmed these have been run against the live Neon database.
+</p>
+
+<h4>Scalar fields with no column in migrations/ (covered by migrate-missing-columns.ts)</h4>
+<table>
+  <tr><th>Field Name</th><th>Used By</th><th>Impact if Missing</th></tr>
+  <tr><td><code>socialProofHeadlineEn</code> / <code>Ar</code></td><td>Homepage trust strip</td><td>Heading can't save</td></tr>
+  <tr><td><code>ratingValue</code>, <code>ratingCountEn</code> / <code>Ar</code></td><td>Testimonials section rating</td><td>Rating can't save</td></tr>
+  <tr><td><code>regulatoryDisclosureEn</code> / <code>Ar</code></td><td>Footer</td><td>Regulatory text can't save</td></tr>
+  <tr><td><code>companyRegistrationEn</code> / <code>Ar</code></td><td>Footer</td><td>Company info can't save</td></tr>
+  <tr><td><code>liveChatUrl</code></td><td>Footer live chat button</td><td>Link can't save</td></tr>
+  <tr><td><code>analystInitials</code>, <code>analystName</code>, <code>analystTitle</code>, <code>analystUpdated</code></td><td>/research/analyst-chart page</td><td>Analyst profile broken</td></tr>
+  <tr><td><code>analystCommentaryEn</code> / <code>Ar</code></td><td>/research/analyst-chart page</td><td>Commentary can't save</td></tr>
+  <tr><td><code>riskDisclaimerEn</code> / <code>Ar</code></td><td>Footer</td><td>Risk disclaimer can't save</td></tr>
+</table>
+
+<h4>Array tables with no migration in migrations/ (covered by migrate-testimonials-and-footer.ts)</h4>
+<table>
+  <tr><th>Array Field</th><th>Expected DB Table</th><th>Impact if Missing</th></tr>
+  <tr><td><code>testimonials</code></td><td><code>site_settings_testimonials</code></td><td>Testimonials section blank / 500 on save</td></tr>
+  <tr><td><code>footerEn</code></td><td><code>site_settings_footer_en</code> + nested links table</td><td>Footer nav columns blank / 500 on save</td></tr>
+  <tr><td><code>footerAr</code></td><td><code>site_settings_footer_ar</code> + nested links table</td><td>Arabic footer nav blank / 500 on save</td></tr>
+</table>
+
+<h4>Required Action</h4>
+<p>
+  Confirm with the database that the following scripts have been run against the live Neon DB. If not, run them immediately:
+</p>
+<ul>
+  <li><code>ts-node --transpile-only src/scripts/migrate-missing-columns.ts</code></li>
+  <li><code>ts-node --transpile-only src/scripts/migrate-testimonials-and-footer.ts</code></li>
+</ul>
+
+<table>
+  <tr><th>Severity</th><th>Type</th></tr>
+  <tr><td><span class="tag-red">CRITICAL — Runtime 500 if scripts not run</span></td><td>Database / Ops</td></tr>
+</table>
+
+<!-- ─── DATA INTEGRITY ─── -->
+<h2>4. Missing Slug Unique Index — Promotions Collection</h2>
+
+<h4>Issue</h4>
+<p>
+  The <code>Promotions</code> collection uses <code>slugField('title')</code> which generates a slug on every document. Migration 001 created compound <code>(slug, locale)</code> unique indexes for all slug-bearing collections — but <code>Promotions</code> was added after Migration 001 was written and was never included.
+</p>
+
+<h4>Impact</h4>
+<p>
+  Slug uniqueness is enforced only at the application layer. Two editors publishing simultaneously can create two promotions with the same slug and locale, causing frontend routing conflicts.
+</p>
+
+<h4>Fix</h4>
+<p>Add to a new migration file or run directly against Neon:</p>
+<p><code>CREATE UNIQUE INDEX IF NOT EXISTS uidx_promotions_slug_locale ON promotions (slug, locale);</code></p>
+
+<table>
+  <tr><th>Collection</th><th>Missing Index</th><th>Severity</th></tr>
+  <tr>
+    <td><code>Promotions</code> (<code>promotions</code> table)</td>
+    <td><code>uidx_promotions_slug_locale</code></td>
+    <td><span class="tag-orange">HIGH — Data Integrity</span></td>
+  </tr>
+</table>
+
+<!-- ─── COLLECTION TABLES ─── -->
+<h2>5. Collections with Tables Created by Scripts (Not migrations/)</h2>
+
+<h4>Issue</h4>
+<p>
+  Two collections have their DB tables created by standalone scripts rather than the official <code>migrations/</code> folder. On a fresh database deployment, these tables will not exist and reads will 500.
+</p>
+
+<table>
+  <tr><th>Collection</th><th>Script</th><th>Status</th></tr>
+  <tr>
+    <td><code>AnalystCalls</code> (<code>analyst-calls</code>)</td>
+    <td><code>src/scripts/migrate-analyst-calls-table.ts</code></td>
+    <td>Must confirm it has been run on Neon</td>
+  </tr>
+  <tr>
+    <td><code>CompanyMilestones</code> (<code>company-milestones</code>)</td>
+    <td><code>src/scripts/migrate-company-milestones-table.ts</code></td>
+    <td>Must confirm it has been run on Neon</td>
+  </tr>
+</table>
+
+<h4>Required Action</h4>
+<p>Confirm both tables exist in the Neon DB. If not, run:</p>
+<ul>
+  <li><code>ts-node --transpile-only src/scripts/migrate-analyst-calls-table.ts</code></li>
+  <li><code>ts-node --transpile-only src/scripts/migrate-company-milestones-table.ts</code></li>
+</ul>
+
+<table>
+  <tr><th>Severity</th><th>Type</th></tr>
+  <tr><td><span class="tag-orange">HIGH — 500 on fresh DB</span></td><td>Database / Ops</td></tr>
+</table>
+
+<!-- ─── SECURITY ─── -->
+<h2>6. Security Issues (Non-Breaking, Pre-Launch)</h2>
+
+<h4>6.1 — Newsletter Confirm Endpoint Has No Rate Limiting</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>src/endpoints/index.ts:586</code></td></tr>
+  <tr><td><strong>Issue</strong></td><td>Every other endpoint has a rate limiter applied. <code>GET /api/newsletter/confirm</code> was missed — no limiter assigned.</td></tr>
+  <tr><td><strong>Fix</strong></td><td>Apply <code>newsletterLimiter</code> middleware to the confirm route (same pattern as subscribe/unsubscribe).</td></tr>
+  <tr><td><strong>Severity</strong></td><td><span class="tag-yellow">MEDIUM</span></td></tr>
+</table>
+
+<h4>6.2 — Token Comparison After DB Fetch Not Timing-Safe</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>Files</strong></td><td><code>src/endpoints/index.ts:595–600</code> and <code>:698–742</code></td></tr>
+  <tr><td><strong>Issue</strong></td><td>The <code>safeTokenCompare()</code> function exists and is used for the health check token, but is not applied after the DB fetch for <code>confirmToken</code> and <code>unsubscribeToken</code>. After fetching the subscriber record, the retrieved token should be re-compared using <code>safeTokenCompare</code>.</td></tr>
+  <tr><td><strong>Fix</strong></td><td>After the <code>payload.find()</code> call returns a doc, add: <code>if (!safeTokenCompare(token, doc.confirmToken as string)) return 400</code> before proceeding.</td></tr>
+  <tr><td><strong>Severity</strong></td><td><span class="tag-yellow">MEDIUM</span></td></tr>
+</table>
+
+<h4>6.3 — Webinar Registration TOCTOU Race Condition</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>src/endpoints/index.ts:1096–1128</code></td></tr>
+  <tr><td><strong>Issue</strong></td><td>The duplicate check does <code>find()</code> then <code>create()</code> — two separate DB calls with a gap between them. Under concurrent requests, two registrations for the same email + webinar can both pass the duplicate check and both succeed.</td></tr>
+  <tr><td><strong>Fix</strong></td><td>Add a DB-level unique constraint on <code>(email, webinar_id)</code> in the <code>webinar_registrations</code> table and catch the constraint violation on create, returning the "already registered" response.</td></tr>
+  <tr><td><strong>Severity</strong></td><td><span class="tag-yellow">MEDIUM</span></td></tr>
+</table>
+
+<h4>6.4 — No TOTP Backup / Recovery Codes</h4>
+<table>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>File</strong></td><td><code>src/auth/totp.ts</code></td></tr>
+  <tr><td><strong>Issue</strong></td><td>The TOTP 2FA implementation has no backup/recovery codes. If an admin user loses their authenticator app, they are locked out. Manual recovery requires direct DB intervention.</td></tr>
+  <tr><td><strong>Fix</strong></td><td>Generate 10 single-use recovery codes during 2FA setup, store as hashed values, allow them to be consumed one-time at login as an alternative to the 6-digit TOTP code.</td></tr>
+  <tr><td><strong>Severity</strong></td><td><span class="tag-yellow">MEDIUM — Usability / Admin Safety</span></td></tr>
+</table>
+
+<!-- ─── LOW ─── -->
+<h2>7. Low Priority</h2>
+<table>
+  <tr><th>#</th><th>Issue</th><th>File</th><th>Severity</th></tr>
+  <tr>
+    <td>7.1</td>
+    <td>Rate limiter in-memory fallback resets on every deploy — all rate limit counters clear during rolling restarts</td>
+    <td><code>src/endpoints/index.ts:108–119</code></td>
+    <td><span class="tag-grey">LOW</span></td>
+  </tr>
+  <tr>
+    <td>7.2</td>
+    <td>ZeptoMail / SMTP credentials validated lazily (on first email send, not at startup) — silent failure until first email is triggered</td>
+    <td><code>src/email/transport.ts</code></td>
+    <td><span class="tag-grey">LOW</span></td>
+  </tr>
+  <tr>
+    <td>7.3</td>
+    <td><code>@payloadcms/plugin-cloud-storage</code> listed in <code>package.json</code> as a dependency but never imported or used (Phase 3 / NE-027 work, not yet started)</td>
+    <td><code>apps/cms/package.json</code></td>
+    <td><span class="tag-grey">LOW</span></td>
+  </tr>
+  <tr>
+    <td>7.4</td>
+    <td>No TOTP rate limiting — 6-digit codes (1M possibilities) can be brute-forced at the admin login without lockout</td>
+    <td><code>src/auth/totp.ts</code></td>
+    <td><span class="tag-grey">LOW</span></td>
+  </tr>
+</table>
+
+<!-- ─── SCOPE CONFIRMED ─── -->
+<h2>8. Scope Completeness — All Confirmed Present</h2>
+<p>The following were explicitly verified as in-scope and fully implemented:</p>
+<table>
+  <tr><th>Item</th><th>Status</th></tr>
+  <tr><td>All 24 collections present and registered in <code>payload.config.ts</code></td><td><span class="tag-green">PASS</span></td></tr>
+  <tr><td><code>AnalystCalls</code> collection (non-localized, backs /research/analyst-chart)</td><td><span class="tag-green">PASS</span></td></tr>
+  <tr><td><code>CompanyMilestones</code> collection (localized, backs /company/about timeline)</td><td><span class="tag-green">PASS</span></td></tr>
+  <tr><td><code>MediaPress</code> collection (separate from CompanyContent, backs /company/media-press)</td><td><span class="tag-green">PASS</span></td></tr>
+  <tr><td>SiteSettings global with all MT5, contact, social, platform download, risk banner fields</td><td><span class="tag-green">PASS</span></td></tr>
+  <tr><td>All 10 custom REST endpoints implemented with correct collection slugs</td><td><span class="tag-green">PASS</span></td></tr>
+  <tr><td>All Payload v2 API call signatures correct</td><td><span class="tag-green">PASS</span></td></tr>
+  <tr><td>Email layer (ZeptoMail SMTP) — all 7 mailer functions correct</td><td><span class="tag-green">PASS</span></td></tr>
+  <tr><td>Access controls (admin-only for users, newsletter-subscribers, webinar-registrations)</td><td><span class="tag-green">PASS</span></td></tr>
+  <tr><td>Localization — text fields localized, enums/dates/numbers not localized</td><td><span class="tag-green">PASS</span></td></tr>
+  <tr><td>All collection hooks wired (slugField, seoFields, deriveAlphabeticalIndex, archivePreviousLegalVersion)</td><td><span class="tag-green">PASS</span></td></tr>
+  <tr><td>TOTP 2FA on admin users</td><td><span class="tag-green">PASS</span></td></tr>
+  <tr><td>Seed scripts for all collections</td><td><span class="tag-green">PASS</span></td></tr>
+</table>
+
+<!-- ─── PART B SUMMARY ─── -->
+<h2>Part B — Action Summary</h2>
+<table>
+  <tr><th>Priority</th><th>#</th><th>Action</th><th>File / Location</th><th>Type</th></tr>
+  <tr>
+    <td><span class="tag-red">CRITICAL</span></td>
+    <td>1</td>
+    <td>Fix 6 TypeScript errors in dedupe-analyst-calls.cts</td>
+    <td><code>src/scripts/dedupe-analyst-calls.cts</code></td>
+    <td>Code Fix</td>
+  </tr>
+  <tr>
+    <td><span class="tag-red">CRITICAL</span></td>
+    <td>2</td>
+    <td>Add missing <code>mt5SyncEnabled</code> column to site_settings table</td>
+    <td>Neon DB / Migration</td>
+    <td>DB Migration</td>
+  </tr>
+  <tr>
+    <td><span class="tag-red">CRITICAL</span></td>
+    <td>3</td>
+    <td>Confirm <code>migrate-missing-columns.ts</code> has been run on Neon (scalar SiteSettings fields)</td>
+    <td><code>src/scripts/migrate-missing-columns.ts</code></td>
+    <td>Ops / DB</td>
+  </tr>
+  <tr>
+    <td><span class="tag-red">CRITICAL</span></td>
+    <td>4</td>
+    <td>Confirm <code>migrate-testimonials-and-footer.ts</code> has been run on Neon</td>
+    <td><code>src/scripts/migrate-testimonials-and-footer.ts</code></td>
+    <td>Ops / DB</td>
+  </tr>
+  <tr>
+    <td><span class="tag-orange">HIGH</span></td>
+    <td>5</td>
+    <td>Confirm <code>migrate-analyst-calls-table.ts</code> has been run on Neon</td>
+    <td><code>src/scripts/migrate-analyst-calls-table.ts</code></td>
+    <td>Ops / DB</td>
+  </tr>
+  <tr>
+    <td><span class="tag-orange">HIGH</span></td>
+    <td>6</td>
+    <td>Confirm <code>migrate-company-milestones-table.ts</code> has been run on Neon</td>
+    <td><code>src/scripts/migrate-company-milestones-table.ts</code></td>
+    <td>Ops / DB</td>
+  </tr>
+  <tr>
+    <td><span class="tag-orange">HIGH</span></td>
+    <td>7</td>
+    <td>Add <code>uidx_promotions_slug_locale</code> unique index to promotions table</td>
+    <td>Neon DB / Migration 005</td>
+    <td>DB Migration</td>
+  </tr>
+  <tr>
+    <td><span class="tag-yellow">MEDIUM</span></td>
+    <td>8</td>
+    <td>Add rate limiter to <code>GET /api/newsletter/confirm</code></td>
+    <td><code>src/endpoints/index.ts:586</code></td>
+    <td>Code Fix</td>
+  </tr>
+  <tr>
+    <td><span class="tag-yellow">MEDIUM</span></td>
+    <td>9</td>
+    <td>Apply <code>safeTokenCompare()</code> after DB fetch for confirm and unsubscribe tokens</td>
+    <td><code>src/endpoints/index.ts:595, 698</code></td>
+    <td>Code Fix</td>
+  </tr>
+  <tr>
+    <td><span class="tag-yellow">MEDIUM</span></td>
+    <td>10</td>
+    <td>Fix webinar registration TOCTOU race — add DB unique constraint on (email, webinar)</td>
+    <td><code>src/endpoints/index.ts:1096</code> + DB</td>
+    <td>Code + DB</td>
+  </tr>
+  <tr>
+    <td><span class="tag-yellow">MEDIUM</span></td>
+    <td>11</td>
+    <td>Add TOTP backup/recovery codes for admin lockout recovery</td>
+    <td><code>src/auth/totp.ts</code></td>
+    <td>Code</td>
+  </tr>
+  <tr>
+    <td><span class="tag-grey">LOW</span></td>
+    <td>12</td>
+    <td>Rate limiter in-memory fallback resets on deploy</td>
+    <td><code>src/endpoints/index.ts:108</code></td>
+    <td>Code</td>
+  </tr>
+  <tr>
+    <td><span class="tag-grey">LOW</span></td>
+    <td>13</td>
+    <td>Validate SMTP credentials at startup, not lazily</td>
+    <td><code>src/email/transport.ts</code></td>
+    <td>Code</td>
+  </tr>
+  <tr>
+    <td><span class="tag-grey">LOW</span></td>
+    <td>14</td>
+    <td>Add TOTP rate limiting on admin login attempts</td>
+    <td><code>src/auth/totp.ts</code></td>
+    <td>Code</td>
+  </tr>
+  <tr>
+    <td><span class="tag-grey">LOW</span></td>
+    <td>15</td>
+    <td>Remove unused <code>@payloadcms/plugin-cloud-storage</code> from package.json (Phase 3)</td>
+    <td><code>apps/cms/package.json</code></td>
+    <td>Cleanup</td>
+  </tr>
+</table>
+
+<br><br>
+<p style="color:#888; font-size:9pt; text-align:center; border-top:1px solid #ddd; padding-top:10px;">
+  NewEra365 — CSL-NE365-2026-Q2 &nbsp;|&nbsp; Prepared June 2026 &nbsp;|&nbsp; Confidential
+</p>
+
+</body>
+</html>

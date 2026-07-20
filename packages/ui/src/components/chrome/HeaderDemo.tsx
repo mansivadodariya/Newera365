@@ -6,7 +6,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
-import { useTheme } from 'next-themes';
 import { MobileMenuDemo } from './MobileMenuDemo';
 import { LanguageToggle } from './LanguageToggle';
 import { AuthModal, type AuthModalType } from './AuthModal';
@@ -173,63 +172,10 @@ function HamburgerIcon() {
   );
 }
 
-// Shared square-chip styling for the header utility buttons (theme toggle,
-// hamburger) and the language toggle. Keep in sync with LanguageToggle.tsx.
+// Shared square-chip styling for the header utility buttons (hamburger)
+// and the language toggle. Keep in sync with LanguageToggle.tsx.
 const CHIP =
   'flex h-[38px] items-center justify-center rounded-xl bg-[#f4f4f5] text-foreground transition-[background-color,transform] hover:bg-accent/[0.10] active:scale-[0.94] dark:bg-surface dark:hover:bg-accent/[0.10]';
-
-function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  if (!mounted)
-    return (
-      <div className="dark:bg-surface h-[38px] w-[38px] flex-shrink-0 rounded-xl bg-[#f4f4f5]" />
-    );
-  const isDark = resolvedTheme === 'dark';
-  return (
-    <button
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className={`${CHIP} w-[38px] flex-shrink-0`}
-    >
-      {isDark ? (
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-          style={{ display: 'block' }}
-        >
-          <circle cx="12" cy="12" r="4.4" stroke="currentColor" strokeWidth="1.8" />
-          <path
-            d="M12 2.6v2.1M12 19.3v2.1M4.7 4.7l1.5 1.5M17.8 17.8l1.5 1.5M2.6 12h2.1M19.3 12h2.1M4.7 19.3l1.5-1.5M17.8 6.2l1.5-1.5"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          />
-        </svg>
-      ) : (
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-          style={{ display: 'block' }}
-        >
-          <path
-            d="M20.5 13.4A8.3 8.3 0 1 1 10.6 3.5 6.6 6.6 0 0 0 20.5 13.4Z"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinejoin="round"
-          />
-        </svg>
-      )}
-    </button>
-  );
-}
 
 // Trigger only — the dropdown panel is a single shared element rendered once at
 // the nav level (see HeaderDemo) so it can morph between triggers.
@@ -579,7 +525,6 @@ function HeaderDemo() {
                 two lines. nowrap makes the track claim its content width instead. */}
             <div className="hidden items-center gap-3 whitespace-nowrap xl:flex">
               <LanguageToggle />
-              <ThemeToggle />
               <div className="bg-border mx-1 h-5 w-px" />
               <button
                 onClick={() => setAuthModal('demo')}
@@ -599,7 +544,6 @@ function HeaderDemo() {
               scroll-triggered StickyCtaBar owns the mobile conversion slot. */}
             <div className="flex items-center gap-2 xl:hidden">
               <LanguageToggle />
-              <ThemeToggle />
               <button
                 onClick={() => setMenuOpen(true)}
                 aria-label="Open navigation menu"
