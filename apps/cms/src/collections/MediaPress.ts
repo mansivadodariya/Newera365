@@ -1,5 +1,8 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere } from './_fields';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const mediaPressPaths = () => localePaths(['/company/recognition']);
 
 // Powers the /company/media-press page — press coverage, media kit downloads, media inquiries.
 export const MediaPress: CollectionConfig = {
@@ -11,6 +14,10 @@ export const MediaPress: CollectionConfig = {
     description: 'Press coverage, media mentions, and brand asset downloads for Newera365.',
   },
   access: { read: publicReadWhere({ status: { equals: 'published' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(mediaPressPaths)],
+    afterDelete: [createRevalidationDeleteHook(mediaPressPaths)],
+  },
   fields: [
     {
       name: 'headline',

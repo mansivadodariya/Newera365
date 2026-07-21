@@ -1,5 +1,8 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere } from './_fields';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const companyMilestonePaths = () => localePaths(['/company/about']);
 
 // Powers the /company/about "journey" timeline (the scroll-coupled rail).
 // `label` + `description` are localized so EN and AR each carry their own copy;
@@ -13,6 +16,10 @@ export const CompanyMilestones: CollectionConfig = {
     description: 'Timeline milestones shown on the About page journey, in display order.',
   },
   access: { read: publicReadWhere({ status: { equals: 'published' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(companyMilestonePaths)],
+    afterDelete: [createRevalidationDeleteHook(companyMilestonePaths)],
+  },
   fields: [
     {
       name: 'year',

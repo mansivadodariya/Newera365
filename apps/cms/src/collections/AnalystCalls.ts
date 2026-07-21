@@ -1,6 +1,9 @@
 import type { CollectionConfig } from 'payload/types';
 import { allowAnyCategory, publicReadWhere } from './_fields';
 import CategorySelect from '../components/CategorySelect';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const analystCallPaths = () => localePaths(['/research/analyst-chart']);
 
 const ANALYST_CATEGORIES = ['Majors', 'Crosses', 'Commodities', 'Crypto'];
 
@@ -13,6 +16,10 @@ export const AnalystCalls: CollectionConfig = {
     description: 'Weekly price-call rows displayed on the Analyst Chart page.',
   },
   access: { read: publicReadWhere({ status: { equals: 'active' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(analystCallPaths)],
+    afterDelete: [createRevalidationDeleteHook(analystCallPaths)],
+  },
   fields: [
     {
       name: 'symbol',

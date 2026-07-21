@@ -1,6 +1,9 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere } from './_fields';
 import CategorySelect from '../components/CategorySelect';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const faqPaths = () => localePaths(['/support']);
 
 const FAQ_CATEGORIES = [
   'trading',
@@ -21,6 +24,10 @@ export const FAQs: CollectionConfig = {
     defaultColumns: ['question', 'category', 'status'],
   },
   access: { read: publicReadWhere({ status: { equals: 'active' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(faqPaths)],
+    afterDelete: [createRevalidationDeleteHook(faqPaths)],
+  },
   fields: [
     { name: 'question', type: 'text', required: true, maxLength: 300, localized: true },
     { name: 'answer', type: 'richText', required: true, localized: true },

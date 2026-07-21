@@ -1,5 +1,8 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere, seoFields, slugField } from './_fields';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const webinarPaths = () => localePaths(['/education/media']);
 
 // Powers /webinars — upcoming sessions + replay archive.
 export const Webinars: CollectionConfig = {
@@ -10,6 +13,10 @@ export const Webinars: CollectionConfig = {
     defaultColumns: ['title', 'speaker', 'status', 'scheduledAt'],
   },
   access: { read: publicReadWhere({ status: { not_equals: 'cancelled' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(webinarPaths)],
+    afterDelete: [createRevalidationDeleteHook(webinarPaths)],
+  },
   fields: [
     { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),

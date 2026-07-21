@@ -1,6 +1,9 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere } from './_fields';
 import Mt5SyncStatusCell from '../components/Mt5SyncStatusCell';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const accountTypePaths = () => localePaths(['/trade/accounts']);
 
 // Powers the /accounts comparison table, /fees-charges, and the Spread
 // Comparator widget.
@@ -34,6 +37,10 @@ export const AccountTypes: CollectionConfig = {
       'Account type records power the comparison table and calculators. Add nameAr / featuresAr for Arabic display.',
   },
   access: { read: publicReadWhere({ status: { equals: 'active' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(accountTypePaths)],
+    afterDelete: [createRevalidationDeleteHook(accountTypePaths)],
+  },
   fields: [
     // ── Identity ────────────────────────────────────────────────────────────
     {

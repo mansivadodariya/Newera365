@@ -1,5 +1,8 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere, slugify } from './_fields';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const ibContentPaths = () => localePaths(['/trade/ib']);
 
 // Powers /trade/ib (Partners page). One document per deployment — getIBContent()
 // reads the first published document, so the slug value is not significant.
@@ -12,6 +15,10 @@ export const IBContent: CollectionConfig = {
     description: 'IB & Partners page copy. The first published document is used.',
   },
   access: { read: publicReadWhere({ status: { equals: 'published' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(ibContentPaths)],
+    afterDelete: [createRevalidationDeleteHook(ibContentPaths)],
+  },
   fields: [
     {
       name: 'slug',

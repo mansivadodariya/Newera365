@@ -1,6 +1,9 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere, slugField } from './_fields';
 import CategorySelect from '../components/CategorySelect';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const awardPaths = () => localePaths(['/company/recognition']);
 
 const AWARD_CATEGORIES = [
   'Execution',
@@ -21,6 +24,10 @@ export const Awards: CollectionConfig = {
     description: 'Industry awards and recognition received by Newera365.',
   },
   access: { read: publicReadWhere({ status: { equals: 'published' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(awardPaths)],
+    afterDelete: [createRevalidationDeleteHook(awardPaths)],
+  },
   fields: [
     {
       name: 'title',

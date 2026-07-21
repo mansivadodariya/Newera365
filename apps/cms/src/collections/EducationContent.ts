@@ -6,7 +6,37 @@ import {
   seoFields,
   slugField,
 } from './_fields';
-import { deriveAlphabeticalIndex } from '../hooks';
+import {
+  deriveAlphabeticalIndex,
+  createRevalidationHook,
+  createRevalidationDeleteHook,
+  localePaths,
+} from '../hooks';
+
+// EducationContent is a multi-type collection — different contentTypes surface
+// on different frontend routes. Purge every page the document could appear on.
+type EducationDoc = { contentType?: string; slug?: string };
+const educationPaths = (doc: EducationDoc): string[] => {
+  const paths = ['/education'];
+  const slug = doc.slug;
+  switch (doc.contentType) {
+    case 'guide':
+      paths.push('/guides');
+      if (slug) paths.push(`/guides/${slug}`);
+      break;
+    case 'glossary':
+      paths.push('/glossary');
+      break;
+    case 'ebook':
+      paths.push('/ebooks');
+      break;
+    case 'video':
+    case 'audio':
+      paths.push('/education/media');
+      break;
+  }
+  return localePaths(paths);
+};
 import CategorySelect from '../components/CategorySelect';
 
 const MEDIA_CATEGORIES = [
@@ -39,6 +69,8 @@ export const EducationContent: CollectionConfig = {
   access: { read: publicReadWhere({ status: { equals: 'published' } }) },
   hooks: {
     beforeChange: [deriveAlphabeticalIndex],
+    afterChange: [createRevalidationHook(educationPaths)],
+    afterDelete: [createRevalidationDeleteHook(educationPaths)],
   },
   fields: [
     { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },

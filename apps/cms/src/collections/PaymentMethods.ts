@@ -1,5 +1,10 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere } from './_fields';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+// Payment methods also render as chips in the site-wide footer, so purge the
+// root layout in addition to the /trade/funding page.
+const paymentMethodPaths = () => localePaths(['/trade/funding', '/en', '/ar']);
 
 // Powers /trade/funding — deposit and withdrawal methods.
 // Names use the parallel `nameAr` field. depositTime / withdrawalTime / fee are
@@ -14,6 +19,10 @@ export const PaymentMethods: CollectionConfig = {
     description: 'Manage deposit/withdrawal methods shown on the /trade/funding page.',
   },
   access: { read: publicReadWhere({ status: { equals: 'active' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(paymentMethodPaths)],
+    afterDelete: [createRevalidationDeleteHook(paymentMethodPaths)],
+  },
   fields: [
     {
       name: 'name',

@@ -1,6 +1,9 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere, seoFields, slugField } from './_fields';
 import CategorySelect from '../components/CategorySelect';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const careerPaths = () => localePaths(['/company/careers']);
 
 const DEPARTMENTS = [
   'Engineering',
@@ -23,6 +26,10 @@ export const Careers: CollectionConfig = {
     defaultColumns: ['title', 'department', 'status', 'publishedDate'],
   },
   access: { read: publicReadWhere({ status: { equals: 'open' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(careerPaths)],
+    afterDelete: [createRevalidationDeleteHook(careerPaths)],
+  },
   fields: [
     { name: 'title', type: 'text', required: true, maxLength: 100, localized: true },
     slugField('title'),

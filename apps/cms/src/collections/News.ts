@@ -1,6 +1,10 @@
 import type { CollectionConfig } from 'payload/types';
 import { allowAnyCategory, publicReadWhere, seoFields, slugField } from './_fields';
 import CategorySelect from '../components/CategorySelect';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const newsPaths = (doc: { slug?: string }) =>
+  localePaths(['/research', ...(doc.slug ? [`/daily-news/${doc.slug}`] : [])]);
 
 const NEWS_CATEGORIES = ['forex', 'commodities', 'indices', 'crypto', 'company', 'regulation'];
 
@@ -13,6 +17,10 @@ export const News: CollectionConfig = {
     defaultColumns: ['headline', 'category', 'status', 'publishedDate'],
   },
   access: { read: publicReadWhere({ status: { equals: 'published' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(newsPaths)],
+    afterDelete: [createRevalidationDeleteHook(newsPaths)],
+  },
   fields: [
     { name: 'headline', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('headline'),

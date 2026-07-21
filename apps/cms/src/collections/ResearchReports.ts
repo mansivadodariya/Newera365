@@ -1,5 +1,9 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere, seoFields, slugField } from './_fields';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const researchReportPaths = (doc: { slug?: string }) =>
+  localePaths(['/research', ...(doc.slug ? [`/research/${doc.slug}`] : [])]);
 
 // Powers /research — gated PDF download section. PDFs served via R2 signed URL.
 export const ResearchReports: CollectionConfig = {
@@ -10,6 +14,10 @@ export const ResearchReports: CollectionConfig = {
     defaultColumns: ['title', 'status', 'isGated', 'publishedDate'],
   },
   access: { read: publicReadWhere({ status: { equals: 'published' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(researchReportPaths)],
+    afterDelete: [createRevalidationDeleteHook(researchReportPaths)],
+  },
   fields: [
     { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),

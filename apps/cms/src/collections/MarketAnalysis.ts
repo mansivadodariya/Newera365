@@ -1,6 +1,10 @@
 import type { CollectionConfig } from 'payload/types';
 import { allowAnyCategory, publicReadWhere, seoFields, slugField } from './_fields';
 import CategorySelect from '../components/CategorySelect';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const marketAnalysisPaths = (doc: { slug?: string }) =>
+  localePaths(['/research', ...(doc.slug ? [`/research/${doc.slug}`] : [])]);
 
 const ASSET_CATEGORIES = ['forex', 'commodities', 'indices', 'stocks', 'etfs', 'crypto'];
 const EDITORIAL_CATEGORIES = ['macro', 'strategy', 'analysis', 'education'];
@@ -14,6 +18,10 @@ export const MarketAnalysis: CollectionConfig = {
     defaultColumns: ['title', 'assetCategory', 'status', 'publishedDate'],
   },
   access: { read: publicReadWhere({ status: { equals: 'published' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(marketAnalysisPaths)],
+    afterDelete: [createRevalidationDeleteHook(marketAnalysisPaths)],
+  },
   fields: [
     { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),

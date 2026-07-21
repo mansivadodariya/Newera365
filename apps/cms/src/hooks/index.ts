@@ -1,8 +1,83 @@
 import type {
   CollectionBeforeChangeHook,
   CollectionAfterChangeHook,
+  CollectionAfterDeleteHook,
   GlobalAfterChangeHook,
+  PayloadRequest,
 } from 'payload/types';
+
+const LOCALES = ['en', 'ar'] as const;
+type Locale = (typeof LOCALES)[number];
+
+/**
+ * Prefixes each path with each locale. `/trade/accounts` → `/en/trade/accounts`, `/ar/trade/accounts`.
+ * Pass pre-locale-prefixed strings ('/en/foo') to skip the expansion for that entry.
+ */
+export function localePaths(paths: string[]): string[] {
+  const out: string[] = [];
+  for (const p of paths) {
+    if (p.startsWith('/en/') || p.startsWith('/ar/') || p === '/en' || p === '/ar') {
+      out.push(p);
+    } else {
+      const norm = p.startsWith('/') ? p : `/${p}`;
+      for (const l of LOCALES) out.push(`/${l}${norm}`);
+    }
+  }
+  return out;
+}
+
+/** Low-level: fire-and-forget POST to the frontend's /api/revalidate. Silent on failure. */
+async function notifyRevalidatePaths(paths: string[], req?: PayloadRequest): Promise<void> {
+  const base = process.env.FRONTEND_URL?.replace(/\/+$/, '');
+  const secret = process.env.REVALIDATE_SECRET;
+  if (!base || !secret || paths.length === 0) return;
+  try {
+    await fetch(`${base}/api/revalidate?secret=${encodeURIComponent(secret)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ paths }),
+      signal: AbortSignal.timeout(5_000),
+    });
+  } catch (err) {
+    req?.payload.logger.warn({ err, paths }, '[revalidate] failed to notify frontend');
+  }
+}
+
+/**
+ * Collection factory: returns an afterChange hook that revalidates the paths
+ * derived from the saved document. Path builder gets the saved doc so it can
+ * key off slug, assetClass, contentType, etc.
+ * Always revalidates on save — even draft saves — because the *previous*
+ * published version may need to disappear from the cached page.
+ */
+export function createRevalidationHook<T = Record<string, unknown>>(
+  pathBuilder: (doc: T) => string[],
+): CollectionAfterChangeHook {
+  return async ({ doc, req }) => {
+    try {
+      const paths = pathBuilder(doc as T);
+      if (paths.length) await notifyRevalidatePaths(paths, req);
+    } catch (err) {
+      req.payload.logger.warn({ err }, '[revalidate] path builder threw');
+    }
+    return doc;
+  };
+}
+
+/** Same, for afterDelete. Same path builder shape. */
+export function createRevalidationDeleteHook<T = Record<string, unknown>>(
+  pathBuilder: (doc: T) => string[],
+): CollectionAfterDeleteHook {
+  return async ({ doc, req }) => {
+    try {
+      const paths = pathBuilder(doc as T);
+      if (paths.length) await notifyRevalidatePaths(paths, req);
+    } catch (err) {
+      req.payload.logger.warn({ err }, '[revalidate] path builder threw (afterDelete)');
+    }
+    return doc;
+  };
+}
 
 /**
  * EducationContent: derives the A-Z grouping key from the glossary term's
@@ -60,24 +135,9 @@ export const archivePreviousLegalVersion: CollectionAfterChangeHook = async ({ d
 };
 
 /**
- * Pings the frontend's /api/revalidate endpoint so a CMS save invalidates
- * Next.js's ISR cache immediately instead of waiting for the revalidate window
- * (300s for globals, 60s for collections). Silent on failure — a missed ping
- * only means the editor waits the normal ISR window, never data loss.
+ * SiteSettings save → purge every locale's root layout (footer, chrome).
  * Requires FRONTEND_URL + REVALIDATE_SECRET env vars on the CMS.
  */
 export const notifyRevalidateSiteChrome: GlobalAfterChangeHook = async ({ req }) => {
-  const base = process.env.FRONTEND_URL?.replace(/\/+$/, '');
-  const secret = process.env.REVALIDATE_SECRET;
-  if (!base || !secret) return;
-  try {
-    await fetch(`${base}/api/revalidate?secret=${encodeURIComponent(secret)}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ paths: ['/en', '/ar'] }),
-      signal: AbortSignal.timeout(5_000),
-    });
-  } catch (err) {
-    req.payload.logger.warn({ err }, '[revalidate] failed to notify frontend');
-  }
+  await notifyRevalidatePaths(['/en', '/ar'], req);
 };

@@ -1,8 +1,12 @@
 import type { CollectionConfig } from 'payload/types';
 import { allowAnyCategory, publicReadWhere, seoFields, slugField } from './_fields';
 import CategorySelect from '../components/CategorySelect';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
 
 const BLOG_CATEGORIES = ['market-news', 'analysis', 'tutorials', 'company-updates'];
+
+const blogPostPaths = (doc: { slug?: string }) =>
+  localePaths(['/research', ...(doc.slug ? [`/education/blog/${doc.slug}`] : [])]);
 
 // Powers /blog (listing) and /blog/[slug] (article).
 export const BlogPosts: CollectionConfig = {
@@ -13,6 +17,10 @@ export const BlogPosts: CollectionConfig = {
     defaultColumns: ['title', 'category', 'status', 'publishedDate'],
   },
   access: { read: publicReadWhere({ status: { equals: 'published' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(blogPostPaths)],
+    afterDelete: [createRevalidationDeleteHook(blogPostPaths)],
+  },
   fields: [
     { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },
     slugField('title'),

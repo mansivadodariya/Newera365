@@ -1,5 +1,8 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere, slugField } from './_fields';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const teamMemberPaths = () => localePaths(['/company/about']);
 
 // Powers the /about team section.
 export const TeamMembers: CollectionConfig = {
@@ -10,6 +13,10 @@ export const TeamMembers: CollectionConfig = {
     defaultColumns: ['name', 'role', 'status'],
   },
   access: { read: publicReadWhere({ status: { equals: 'active' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(teamMemberPaths)],
+    afterDelete: [createRevalidationDeleteHook(teamMemberPaths)],
+  },
   fields: [
     { name: 'name', type: 'text', required: true, maxLength: 100, localized: true },
     slugField('name'),

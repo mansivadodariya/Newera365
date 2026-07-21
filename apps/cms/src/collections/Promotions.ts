@@ -1,6 +1,9 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere, seoFields, slugField } from './_fields';
 import CategorySelect from '../components/CategorySelect';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const promotionPaths = () => localePaths(['/trade/promotions']);
 
 const PROMO_TAGS = ['NEW', 'MONTHLY', 'PERMANENT', 'LIMITED', 'EXCLUSIVE'];
 
@@ -14,6 +17,10 @@ export const Promotions: CollectionConfig = {
     description: 'Manage promotional cards shown on the /trade/promotions page.',
   },
   access: { read: publicReadWhere({ status: { equals: 'active' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(promotionPaths)],
+    afterDelete: [createRevalidationDeleteHook(promotionPaths)],
+  },
   fields: [
     {
       name: 'title',

@@ -1,6 +1,13 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere, seoFields, slugField } from './_fields';
-import { archivePreviousLegalVersion } from '../hooks';
+import {
+  archivePreviousLegalVersion,
+  createRevalidationHook,
+  createRevalidationDeleteHook,
+  localePaths,
+} from '../hooks';
+
+const legalPaths = () => localePaths(['/legal']);
 
 // Powers /terms, /privacy-policy, /risk-disclosure, /aml-policy, /cookie-policy.
 // Only one published document per pageType + locale may be live — publishing a
@@ -14,7 +21,8 @@ export const LegalPages: CollectionConfig = {
   },
   access: { read: publicReadWhere({ status: { equals: 'published' } }) },
   hooks: {
-    afterChange: [archivePreviousLegalVersion],
+    afterChange: [archivePreviousLegalVersion, createRevalidationHook(legalPaths)],
+    afterDelete: [createRevalidationDeleteHook(legalPaths)],
   },
   fields: [
     { name: 'title', type: 'text', required: true, maxLength: 200, localized: true },

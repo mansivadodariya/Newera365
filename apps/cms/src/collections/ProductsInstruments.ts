@@ -1,6 +1,10 @@
 import type { CollectionConfig } from 'payload/types';
 import { publicReadWhere } from './_fields';
 import Mt5SyncStatusCell from '../components/Mt5SyncStatusCell';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+const productPaths = (doc: { assetClass?: string }) =>
+  doc.assetClass ? localePaths([`/markets/${doc.assetClass}`]) : [];
 
 // Powers all 6 Markets pages, the 3 calculator widgets, and /fees-charges.
 // Language-neutral — instrument specs are not locale-specific.
@@ -28,6 +32,10 @@ export const ProductsInstruments: CollectionConfig = {
       'Each instrument can pull live data from MT5 or be updated manually. Use the "Use MT5 Live Data" toggle per row to switch modes.',
   },
   access: { read: publicReadWhere({ status: { equals: 'active' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(productPaths)],
+    afterDelete: [createRevalidationDeleteHook(productPaths)],
+  },
   fields: [
     // ── Identity ────────────────────────────────────────────────────────────
     {
