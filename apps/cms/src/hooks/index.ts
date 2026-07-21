@@ -1,4 +1,8 @@
-import type { CollectionBeforeChangeHook, CollectionAfterChangeHook } from 'payload/types';
+import type {
+  CollectionBeforeChangeHook,
+  CollectionAfterChangeHook,
+  GlobalAfterChangeHook,
+} from 'payload/types';
 
 /**
  * EducationContent: derives the A-Z grouping key from the glossary term's
@@ -53,4 +57,27 @@ export const archivePreviousLegalVersion: CollectionAfterChangeHook = async ({ d
     req.payload.logger.error({ err, docId: doc.id }, 'Failed to archive previous legal version');
   }
   return doc;
+};
+
+/**
+ * Pings the frontend's /api/revalidate endpoint so a CMS save invalidates
+ * Next.js's ISR cache immediately instead of waiting for the revalidate window
+ * (300s for globals, 60s for collections). Silent on failure — a missed ping
+ * only means the editor waits the normal ISR window, never data loss.
+ * Requires FRONTEND_URL + REVALIDATE_SECRET env vars on the CMS.
+ */
+export const notifyRevalidateSiteChrome: GlobalAfterChangeHook = async ({ req }) => {
+  const base = process.env.FRONTEND_URL?.replace(/\/+$/, '');
+  const secret = process.env.REVALIDATE_SECRET;
+  if (!base || !secret) return;
+  try {
+    await fetch(`${base}/api/revalidate?secret=${encodeURIComponent(secret)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ paths: ['/en', '/ar'] }),
+      signal: AbortSignal.timeout(5_000),
+    });
+  } catch (err) {
+    req.payload.logger.warn({ err }, '[revalidate] failed to notify frontend');
+  }
 };

@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload/types';
+import { notifyRevalidateSiteChrome } from '../hooks';
 
 // Global site chrome — all CMS-editable values that the frontend should never hardcode.
 // Locale pattern: separate EN / AR fields mirror the per-document locale approach used
@@ -6,6 +7,9 @@ import type { GlobalConfig } from 'payload/types';
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   access: { read: () => true },
+  hooks: {
+    afterChange: [notifyRevalidateSiteChrome],
+  },
   fields: [
     // ── MT5 Integration ──────────────────────────────────────────────────────
     {
