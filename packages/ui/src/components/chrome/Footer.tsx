@@ -113,7 +113,7 @@ function Footer({
   const columns = FOOTER_LINKS;
 
   return (
-    <footer className="bg-footer-bg px-5 pb-14 pt-12 text-white xl:px-[120px] xl:py-[64px]">
+    <footer className="bg-footer-bg px-5 pb-[112px] pt-12 text-white xl:px-[120px] xl:pb-[112px] xl:pt-[64px]">
       <div className="mx-auto max-w-[390px] xl:max-w-[1200px]">
         {/* Top section — on desktop the brand block sits left and the link
             columns spread across the remaining width so the row fills 1200px. */}
