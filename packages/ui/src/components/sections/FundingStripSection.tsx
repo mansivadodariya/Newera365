@@ -15,7 +15,7 @@ import { SectionKicker } from '../primitives/SectionKicker';
 function VisaMark() {
   // Wordmark — Visa's brand IS the wordmark. Blue in light, near-white on ink.
   return (
-    <svg viewBox="0 0 48 24" className="h-[18px] w-auto" role="img" aria-label="Visa">
+    <svg viewBox="0 0 48 24" className="h-[24px] w-auto xl:h-[28px]" role="img" aria-label="Visa">
       <text
         x="24"
         y="18"
@@ -36,7 +36,12 @@ function VisaMark() {
 function MastercardMark() {
   // Two interlocking circles + the lens overlap — the standalone-recognisable part.
   return (
-    <svg viewBox="0 0 40 24" className="h-[22px] w-auto" role="img" aria-label="Mastercard">
+    <svg
+      viewBox="0 0 40 24"
+      className="h-[28px] w-auto xl:h-[32px]"
+      role="img"
+      aria-label="Mastercard"
+    >
       <circle cx="15" cy="12" r="9" fill="#EB001B" />
       <circle cx="25" cy="12" r="9" fill="#F79E1B" />
       <path d="M20 4.8a9 9 0 0 1 0 14.4 9 9 0 0 1 0-14.4Z" fill="#FF5F00" />
@@ -47,7 +52,12 @@ function MastercardMark() {
 function BankMark() {
   // Regional bank transfer — a columned building. Monochrome ink glyph.
   return (
-    <svg viewBox="0 0 24 24" className="h-[22px] w-auto" role="img" aria-label="Bank transfer">
+    <svg
+      viewBox="0 0 24 24"
+      className="h-[28px] w-auto xl:h-[32px]"
+      role="img"
+      aria-label="Bank transfer"
+    >
       <g className="stroke-[#1a2a20] dark:stroke-white/85" strokeWidth="1.5" fill="none">
         <path d="M12 3 3 7.5h18L12 3Z" strokeLinejoin="round" />
         <path d="M4 21h16" strokeLinecap="round" />
@@ -60,7 +70,7 @@ function BankMark() {
 function BitcoinMark() {
   // Crypto — orange coin with a white B and the ₿ stems.
   return (
-    <svg viewBox="0 0 24 24" className="h-[22px] w-auto" role="img" aria-label="Crypto">
+    <svg viewBox="0 0 24 24" className="h-[28px] w-auto xl:h-[32px]" role="img" aria-label="Crypto">
       <circle cx="12" cy="12" r="11" fill="#F7931A" />
       <g fill="none" stroke="#fff" strokeWidth="1.4" strokeLinecap="round">
         <path d="M10 6.5v11M13 5.5v1.6M13 16.9v1.6M11 5.5v1.6M11 16.9v1.6" />
@@ -79,7 +89,7 @@ function BitcoinMark() {
 function TetherMark() {
   // USDT — green coin with the ₮ (T + crossbar).
   return (
-    <svg viewBox="0 0 24 24" className="h-[22px] w-auto" role="img" aria-label="USDT">
+    <svg viewBox="0 0 24 24" className="h-[28px] w-auto xl:h-[32px]" role="img" aria-label="USDT">
       <circle cx="12" cy="12" r="11" fill="#26A17B" />
       <g fill="none" stroke="#fff" strokeWidth="1.7" strokeLinecap="round">
         <path d="M6.5 8.2h11" />
@@ -93,7 +103,12 @@ function TetherMark() {
 function WalletMark() {
   // E-wallets — a wallet with a snap button. Monochrome ink glyph.
   return (
-    <svg viewBox="0 0 24 24" className="h-[21px] w-auto" role="img" aria-label="Wallets">
+    <svg
+      viewBox="0 0 24 24"
+      className="h-[27px] w-auto xl:h-[31px]"
+      role="img"
+      aria-label="Wallets"
+    >
       <g className="stroke-[#1a2a20] dark:stroke-white/85" strokeWidth="1.5" fill="none">
         <rect x="3" y="6" width="18" height="13" rx="2.5" />
         <path d="M3 9.5h13a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H3" />
@@ -189,11 +204,11 @@ export function FundingStripSection() {
                 <span className="text-muted font-mono text-[10px] uppercase tracking-[1.4px] dark:text-white/45">
                   {t('payAcceptLabel')}
                 </span>
-                <ul className="flex flex-wrap items-center gap-2.5">
+                <ul className="flex flex-wrap items-center gap-2.5 xl:gap-3">
                   {BRANDS.map((brand) => (
                     <li
                       key={brand.key}
-                      className="border-border hover:border-accent/40 flex h-[46px] min-w-[62px] items-center justify-center rounded-[11px] border bg-white px-3.5 transition-[border-color,box-shadow,transform] duration-300 hover:shadow-[0_10px_24px_-12px_rgba(0,176,80,0.35)] motion-safe:hover:-translate-y-0.5 dark:border-white/[0.08] dark:bg-[#1a1c22]"
+                      className="border-border hover:border-accent/40 flex h-[54px] min-w-[74px] items-center justify-center rounded-[12px] border bg-white px-4 transition-[border-color,box-shadow,transform] duration-300 hover:shadow-[0_10px_24px_-12px_rgba(0,176,80,0.35)] motion-safe:hover:-translate-y-0.5 xl:h-[60px] xl:min-w-[86px] xl:rounded-[14px] xl:px-5 dark:border-white/[0.08] dark:bg-[#1a1c22]"
                       title={t(brand.key)}
                     >
                       {brand.mark}

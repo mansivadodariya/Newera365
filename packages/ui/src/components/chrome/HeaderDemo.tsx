@@ -33,7 +33,6 @@ function useNavItems(t: ReturnType<typeof useTranslations<'nav'>>): NavItem[] {
         { label: t('tradeFundingLabel'), sub: t('tradeFundingSub'), href: '/trade/funding' },
         { label: t('tradeFeesLabel'), sub: t('tradeFeesSub'), href: '/trade/fees' },
         { label: t('tradePromosLabel'), sub: t('tradePromosSub'), href: '/trade/promotions' },
-        { label: t('tradeIbLabel'), sub: t('tradeIbSub'), href: '/trade/ib' },
       ],
     },
     {
@@ -532,6 +531,12 @@ function HeaderDemo() {
               >
                 {t('signIn')}
               </button>
+              <Link
+                href={`/${locale}/trade/ib`}
+                className="font-body border-accent/40 text-accent hover:bg-accent hover:border-accent flex items-center rounded-full border px-[18px] py-[10px] text-[14px] font-semibold transition-colors hover:text-white"
+              >
+                {t('tradeIbLabel')}
+              </Link>
               <button
                 onClick={() => setAuthModal('register')}
                 className="font-body bg-accent hover:bg-accent-hover focus-visible:ring-accent flex items-center rounded-full px-[22px] py-[11px] text-[15px] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(0,176,80,0.8)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"

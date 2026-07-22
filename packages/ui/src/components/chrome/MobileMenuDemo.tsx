@@ -22,7 +22,6 @@ function useNavGroups(t: ReturnType<typeof useTranslations<'nav'>>): NavGroup[] 
         { label: t('tradeFundingLabel'), href: '/trade/funding' },
         { label: t('tradeFeesLabel'), href: '/trade/fees' },
         { label: t('tradePromosLabel'), href: '/trade/promotions' },
-        { label: t('tradeIbLabel'), href: '/trade/ib' },
       ],
     },
     {
@@ -379,6 +378,13 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
           >
             {t('getStarted')}
           </button>
+          <Link
+            href={`/${locale}/trade/ib`}
+            onClick={onClose}
+            className="font-body border-accent/40 text-accent hover:bg-accent hover:border-accent flex h-[48px] w-full items-center justify-center rounded-full border text-[15px] font-semibold transition-colors hover:text-white"
+          >
+            {t('tradeIbLabel')}
+          </Link>
           <button
             onClick={() => go('demo')}
             className="font-body border-border text-foreground hover:border-accent hover:text-accent flex h-[48px] w-full items-center justify-center rounded-full border text-[15px] font-medium transition-colors"

@@ -57,27 +57,43 @@ const AR_FEATURE_VALUES: Record<string, string> = {
   'Custom spreads and priority execution': 'فروق مخصصة وتنفيذ ذو أولوية',
 };
 
-const MATRIX_ROW_DATA = [
-  { id: 'mt5', featureKey: 'featureMT5' as const, std: true, raw: true, vip: true },
-  { id: 'web', featureKey: 'featureWebMobile' as const, std: true, raw: true, vip: true },
-  { id: 'ea', featureKey: 'featureEA' as const, std: true, raw: true, vip: true },
-  { id: 'hedging', featureKey: 'featureHedging' as const, std: true, raw: true, vip: true },
-  {
-    id: 'dealer',
-    featureKey: 'featureDedicatedDealer' as const,
-    std: false,
-    raw: false,
-    vip: true,
-  },
+const MATRIX_ROW_DATA: {
+  id: string;
+  featureKey:
+    | 'featureMT5'
+    | 'featureWebMobile'
+    | 'featureEA'
+    | 'featureHedging'
+    | 'featureLatency'
+    | 'featurePriorityWithdrawals'
+    | 'featureScalping';
+  std: boolean;
+  raw: boolean;
+  vip: boolean;
+  stdNoteKey?: 'featureScalpingNoteVip';
+  rawNoteKey?: 'featureScalpingNoteVip';
+  vipNoteKey?: 'featureScalpingNoteVip';
+}[] = [
+  { id: 'mt5', featureKey: 'featureMT5', std: true, raw: true, vip: true },
+  { id: 'web', featureKey: 'featureWebMobile', std: true, raw: true, vip: true },
+  { id: 'ea', featureKey: 'featureEA', std: true, raw: true, vip: true },
+  { id: 'hedging', featureKey: 'featureHedging', std: true, raw: true, vip: true },
+  { id: 'latency', featureKey: 'featureLatency', std: false, raw: false, vip: false },
   {
     id: 'priority',
-    featureKey: 'featurePriorityWithdrawals' as const,
+    featureKey: 'featurePriorityWithdrawals',
     std: false,
     raw: true,
     vip: true,
   },
-  { id: 'vps', featureKey: 'featureFreeVPS' as const, std: false, raw: true, vip: true },
-  { id: 'spreads', featureKey: 'featureCustomSpreads' as const, std: false, raw: false, vip: true },
+  {
+    id: 'scalping',
+    featureKey: 'featureScalping',
+    std: false,
+    raw: false,
+    vip: true,
+    vipNoteKey: 'featureScalpingNoteVip',
+  },
 ];
 
 // Universal execution & risk conditions that apply to every account tier (#5).
@@ -195,7 +211,15 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
   // Comparison emphasis is interactive, not fixed: hovering a matrix column
   // lights it up. Nothing is highlighted at rest (client feedback).
   const [hoverCol, setHoverCol] = useState<number | null>(null);
-  const matrixRows = MATRIX_ROW_DATA.map((r) => ({ ...r, feature: t(r.featureKey) }));
+  const matrixRows = MATRIX_ROW_DATA.map((r) => ({
+    ...r,
+    feature: t(r.featureKey),
+    notes: [
+      r.stdNoteKey ? t(r.stdNoteKey) : null,
+      r.rawNoteKey ? t(r.rawNoteKey) : null,
+      r.vipNoteKey ? t(r.vipNoteKey) : null,
+    ] as [string | null, string | null, string | null],
+  }));
 
   // Badge labels per the client's ask: every live card carries one.
   // popular -> "Recommended" (crown), value -> "Best Value", pro -> "Professionals Choice".
@@ -698,14 +722,21 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
                       key={j}
                       onMouseEnter={() => setHoverCol(j)}
                       onMouseLeave={() => setHoverCol(null)}
-                      className={`flex items-center justify-center py-4 transition-colors ${
+                      className={`flex flex-col items-center justify-center gap-1 py-4 transition-colors ${
                         j === hoverCol ? 'bg-accent/[0.06]' : ''
                       }`}
                     >
                       {val ? (
-                        <span className="bg-accent/[0.16] flex h-6 w-6 items-center justify-center rounded-full">
-                          <Check />
-                        </span>
+                        <>
+                          <span className="bg-accent/[0.16] flex h-6 w-6 items-center justify-center rounded-full">
+                            <Check />
+                          </span>
+                          {row.notes[j] && (
+                            <span className="font-body text-center text-[11px] leading-tight text-white/55">
+                              {row.notes[j]}
+                            </span>
+                          )}
+                        </>
                       ) : (
                         <span className="font-body text-[15px] text-white/25">—</span>
                       )}
