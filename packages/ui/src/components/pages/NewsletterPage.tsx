@@ -259,7 +259,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
                     key={row.label}
                     className="border-border flex items-baseline gap-4 border-b py-3 last:border-b-0"
                   >
-                    <span className="text-caption text-accent w-[84px] flex-shrink-0 font-mono uppercase tracking-[0.08em]">
+                    <span className="text-caption text-accent w-[124px] flex-shrink-0 font-mono uppercase tracking-[0.08em]">
                       {row.label}
                     </span>
                     <span className="text-foreground font-body text-body font-medium">

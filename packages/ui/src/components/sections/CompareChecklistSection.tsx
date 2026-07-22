@@ -72,10 +72,32 @@ function CheckGlyph({ verified }: { verified: boolean }) {
   );
 }
 
-function Row({ want, proof, verified }: { want: string; proof: string; verified: boolean }) {
+function Row({
+  want,
+  proof,
+  verified,
+  isLast,
+}: {
+  want: string;
+  proof: string;
+  verified: boolean;
+  isLast: boolean;
+}) {
   return (
-    <li className="flex flex-col gap-1.5 px-5 py-[18px] xl:flex-row xl:items-center xl:gap-6 xl:px-7">
-      <div className="flex items-start gap-3.5 xl:flex-1">
+    <li
+      className={[
+        // Mobile: stacked. Each row separated by the ul's divide-y.
+        'flex flex-col gap-1.5 px-5 py-[18px]',
+        // Desktop: horizontal within the grid cell. Own bottom border replaces
+        // divide-y (grid + divide-y misbehave — divide adds a top border to
+        // every child, which stripes the top of every cell in the right column).
+        'xl:border-border xl:flex-row xl:items-center xl:gap-6 xl:border-b xl:px-7 xl:last:border-b-0 xl:dark:border-white/[0.06]',
+        // 7 items → 4 rows; item 7 spans both columns so it centers cleanly
+        // instead of stranding empty space next to it.
+        isLast ? 'xl:col-span-2 xl:justify-center' : '',
+      ].join(' ')}
+    >
+      <div className="flex items-start gap-3.5 xl:w-[240px] xl:flex-shrink-0">
         <CheckGlyph verified={verified} />
         <p
           className={[
@@ -88,7 +110,7 @@ function Row({ want, proof, verified }: { want: string; proof: string; verified:
       </div>
       <p
         className={[
-          'text-muted text-caption ps-[42px] font-mono tabular-nums leading-snug transition-opacity duration-300 motion-reduce:transition-none xl:w-[44%] xl:ps-0 xl:text-end dark:text-white/55',
+          'text-muted text-caption ps-[42px] font-mono tabular-nums leading-snug transition-opacity duration-300 motion-reduce:transition-none xl:flex-1 xl:ps-0 dark:text-white/55',
           verified ? 'opacity-100' : 'opacity-45',
         ].join(' ')}
       >
@@ -193,9 +215,15 @@ export function CompareChecklistSection() {
                 className="bg-accent absolute start-0 top-0 w-[2px] transition-[height] duration-300 ease-out motion-reduce:transition-none"
                 style={{ height: `${pct}%` }}
               />
-              <ul className="divide-border divide-y dark:divide-white/[0.06]">
+              <ul className="divide-border divide-y xl:grid xl:grid-cols-2 xl:gap-x-10 xl:divide-y-0 dark:divide-white/[0.06]">
                 {rows.map((r, i) => (
-                  <Row key={r.want} want={r.want} proof={r.proof} verified={i < count} />
+                  <Row
+                    key={r.want}
+                    want={r.want}
+                    proof={r.proof}
+                    verified={i < count}
+                    isLast={i === rows.length - 1}
+                  />
                 ))}
               </ul>
             </div>

@@ -83,9 +83,50 @@ export function EconomicCalendarPage() {
                 width="100%"
                 height="100%"
                 className="h-full"
+                interactive
                 config={{
                   importanceFilter: '-1,0,1',
                   countryFilter: 'ar,au,br,ca,cn,fr,de,in,id,it,jp,kr,mx,ru,sa,za,tr,gb,us,eu',
+                  isTransparent: false,
+                }}
+              />
+            </div>
+          </div>
+          <p className="font-body text-caption text-muted mt-3">{t('dataNote')}</p>
+        </div>
+      </section>
+
+      {/* News feed — TradingView Timeline widget in matching terminal chrome */}
+      <section className="px-5 pb-10">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="overflow-hidden rounded-[20px] border border-white/[0.08] bg-[#0A130E] shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)]">
+            <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 border-b border-white/[0.08] px-4 py-3 md:px-5">
+              <span className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2" aria-hidden="true">
+                  <span className="bg-accent-bright absolute inline-flex h-full w-full rounded-full opacity-60 motion-safe:animate-ping" />
+                  <span className="bg-accent-bright relative inline-flex h-2 w-2 rounded-full" />
+                </span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-white/[0.65]">
+                  {t('newsFeedLabel')}
+                </span>
+              </span>
+              <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-white/[0.55]">
+                {t('newsKicker')}
+              </span>
+            </div>
+            {/* Height mirrors the calendar rhythm so the two blocks feel paired
+                but the news column is a touch shorter (news is supplementary). */}
+            <div className="h-[480px] w-full md:h-[560px] xl:h-[640px]">
+              <ChartWidget
+                type="timeline"
+                theme="dark"
+                width="100%"
+                height="100%"
+                className="h-full"
+                interactive
+                config={{
+                  displayMode: 'regular',
+                  feedMode: 'all_symbols',
                   isTransparent: false,
                 }}
               />

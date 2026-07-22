@@ -13,7 +13,8 @@ type WidgetType =
   | 'single-quote'
   | 'ticker-tape'
   | 'forex-cross-rates'
-  | 'market-quotes';
+  | 'market-quotes'
+  | 'timeline';
 
 interface TradingViewWidgetProps {
   type: WidgetType;
@@ -23,6 +24,12 @@ interface TradingViewWidgetProps {
   theme?: 'light' | 'dark';
   className?: string;
   config?: Record<string, unknown>;
+  /**
+   * Off by default: a click mask sits above the iframe so surrounding UI
+   * (tickers, chart headers) isn't hijacked by the embed. Set true on pages
+   * where the embed IS the interaction — economic calendar, news timeline.
+   */
+  interactive?: boolean;
 }
 
 // External-embedding loaders. MUST be served from s3.tradingview.com — the
@@ -47,6 +54,7 @@ const WIDGET_URLS: Record<WidgetType, string> = {
   'forex-cross-rates':
     'https://s3.tradingview.com/external-embedding/embed-widget-forex-cross-rates.js',
   'market-quotes': 'https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js',
+  timeline: 'https://s3.tradingview.com/external-embedding/embed-widget-timeline.js',
 };
 
 function buildConfig(type: WidgetType, props: TradingViewWidgetProps): Record<string, unknown> {
@@ -74,6 +82,20 @@ function buildConfig(type: WidgetType, props: TradingViewWidgetProps): Record<st
     return { locale: 'en', colorTheme: theme, ...config };
   }
 
+  // timeline (news feed) is symbol-less — its content comes from displayMode +
+  // feedMode. Injecting a symbol scopes the feed to a single instrument, which
+  // is not what the calendar-page news column wants.
+  if (type === 'timeline') {
+    return {
+      width: '100%',
+      height: '100%',
+      locale: 'en',
+      colorTheme: theme,
+      isTransparent: true,
+      ...config,
+    };
+  }
+
   return {
     symbol,
     width: '100%',
@@ -94,6 +116,7 @@ export function TradingViewWidget({
   theme = 'dark',
   className = '',
   config = {},
+  interactive = false,
 }: TradingViewWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   // Two-pass mount: defer script injection until after the container is in the
@@ -241,8 +264,10 @@ export function TradingViewWidget({
           market-quotes, forex-cross-rates, screener, economic-calendar…) is
           read-only by default; consumers no longer add their own overlay. The
           outer div above is `relative`, so this covers exactly the widget and
-          leaves surrounding UI (period selectors, watchlist rows) interactive. */}
-      <div className="absolute inset-0 z-10 cursor-default" aria-hidden="true" />
+          leaves surrounding UI (period selectors, watchlist rows) interactive.
+          Skipped when the caller opts in with `interactive` — e.g. the calendar
+          + news timeline where the embed IS the interaction. */}
+      {!interactive && <div className="absolute inset-0 z-10 cursor-default" aria-hidden="true" />}
     </div>
   );
 }

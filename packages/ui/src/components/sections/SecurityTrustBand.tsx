@@ -180,7 +180,7 @@ export function SecurityTrustBand() {
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <div className="min-w-0">
-                    <h3 className="text-foreground text-body-lg font-sans font-semibold leading-snug">
+                    <h3 className="text-foreground group-hover:text-accent text-body-lg font-sans font-semibold leading-snug transition-colors duration-200">
                       {t(titleKey)}
                     </h3>
                     <p className="font-body text-muted text-body mt-1.5 max-w-[52ch]">

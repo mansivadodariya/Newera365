@@ -236,7 +236,7 @@ function IssueMockup({ content }: { content?: HomeNewsletterContent }) {
               key={row.label}
               className="flex items-baseline gap-3 border-b border-white/[0.06] py-2.5 last:border-b-0"
             >
-              <span className="text-accent w-[92px] flex-shrink-0 font-mono text-[11px] uppercase tracking-[0.06em]">
+              <span className="text-accent w-[116px] flex-shrink-0 font-mono text-[11px] uppercase tracking-[0.06em]">
                 {row.label}
               </span>
               <span className="font-body text-[13px] text-white/80">{row.head}</span>

@@ -1629,6 +1629,8 @@
     "legendMedium": "Medium",
     "legendLow": "Low",
     "liveFeedLabel": "Live feed",
+    "newsFeedLabel": "News feed",
+    "newsKicker": "TOP STORIES",
     "storyKicker": "HOW THE DESK READS IT",
     "story1Title": "Forecast sets the stage",
     "story1Desc": "Markets price in the consensus before the number ever prints. The forecast is the baseline, not the news.",
