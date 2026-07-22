@@ -83,7 +83,7 @@ const MILESTONES: Milestone[] = [
   {
     year: '2024',
     en: {
-      label: 'New era',
+      label: 'NewEra',
       description:
         'Released the Newera365 platform — built from the ground up with every tool a trader needs.',
     },

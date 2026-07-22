@@ -639,7 +639,7 @@
     "viewRole": "View role"
   },
   "about": {
-    "heroLine1": "A new era of trading,",
+    "heroLine1": "A NewEra of trading,",
     "heroAccent": "built by traders.",
     "heroDesc": "We started with a simple belief, traders deserve a broker that's transparent, fast and obsessed with execution.",
     "missionKicker": "OUR MISSION",
@@ -675,7 +675,7 @@
     "ctaKicker": "GET STARTED",
     "ctaLine1": "A premium global",
     "ctaLine2": "trading platform.",
-    "ctaLine3": "Built for the new era of markets.",
+    "ctaLine3": "Built for the NewEra of markets.",
     "ctaBtn": "Open an account",
     "milestone2014Label": "Founded",
     "milestone2014Desc": "Started with a single broker license and a focus on institutional-grade retail trading.",
@@ -685,7 +685,7 @@
     "milestone2019Desc": "Crossed six figures of active accounts during a period of rapid expansion across 6 countries.",
     "milestone2022Label": "Global expansion",
     "milestone2022Desc": "Expanded to ASIC and CySEC jurisdictions. Offices opened in Dubai and Singapore.",
-    "milestone2024Label": "New era",
+    "milestone2024Label": "NewEra",
     "milestone2024Desc": "Released the Newera365 platform, built from the ground up with every tool a trader needs.",
     "exploreRecognition": "Recognition",
     "exploreRecognitionDesc": "Awards and press coverage",
@@ -1600,7 +1600,7 @@
     "catCrypto": "Crypto",
     "disclaimer": "Indicative prices. For reference only, not for trading.",
     "ctaKicker": "START TRADING",
-    "ctaDesc": "A premium global trading platform built for the new era of markets.",
+    "ctaDesc": "A premium global trading platform built for the NewEra of markets.",
     "ctaBtn": "Open free account"
   },
   "calendar": {
@@ -1622,7 +1622,7 @@
     "noEvents": "No events match your filters.",
     "dataNote": "Data powered by third-party feed. Newera365 is not responsible for accuracy or delays. All times are GMT.",
     "ctaKicker": "TRADE THE NEWS",
-    "ctaDesc": "A premium global trading platform built for the new era of markets.",
+    "ctaDesc": "A premium global trading platform built for the NewEra of markets.",
     "ctaBtn": "Start trading",
     "kicker": "ECONOMIC CALENDAR",
     "legendHigh": "High impact",

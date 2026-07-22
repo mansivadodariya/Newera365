@@ -102,11 +102,8 @@ function Footer({
     },
     {
       heading: t('headingCompany'),
-      items: [{ label: t('linkAbout'), href: '/company/about' }],
-    },
-    {
-      heading: t('headingSupport'),
       items: [
+        { label: t('linkAbout'), href: '/company/about' },
         { label: t('linkSupport'), href: '/support' },
         { label: t('linkLegal'), href: '/legal' },
       ],
@@ -161,7 +158,7 @@ function Footer({
           </div>
 
           {/* Link grid — 2 cols mobile, 4 cols desktop (fills the row) */}
-          <div className="mb-10 grid grid-cols-2 gap-x-6 gap-y-8 xl:mb-0 xl:flex-1 xl:grid-cols-4 xl:gap-x-8">
+          <div className="mb-10 grid grid-cols-2 gap-x-6 gap-y-8 xl:mb-0 xl:flex-1 xl:grid-cols-3 xl:gap-x-8">
             {columns.map((col) => (
               <div key={col.heading}>
                 <p className="mb-3 font-mono text-[11px] font-medium uppercase leading-[100%] tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
