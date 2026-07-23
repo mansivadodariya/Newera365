@@ -65,7 +65,7 @@ const STEP_IMAGES = [
   '/images/register-desk-dark.jpg',
   '/images/verify-dark.jpg',
   '/images/deposit-dark.jpg',
-  '/images/trade-dark.jpg',
+  '/images/tradenewera.jpeg',
   '/images/withdraw-dark.jpg',
 ];
 

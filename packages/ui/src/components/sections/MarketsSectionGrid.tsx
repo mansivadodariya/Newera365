@@ -50,24 +50,30 @@ function MarketCard({ item, index, price }: { item: MarketItem; index: number; p
     <Link
       ref={ref}
       href={item.href}
-      className="hover:border-accent/45 group relative flex h-[168px] flex-col justify-end overflow-hidden rounded-[20px] border border-white/[0.08] px-4 py-4 shadow-[0_18px_40px_-20px_rgba(4,16,10,0.45)] transition-[border-color,box-shadow] duration-300 hover:shadow-[0_24px_48px_-20px_rgba(0,176,80,0.35)] xl:h-[210px]"
+      style={{ transformStyle: 'preserve-3d' }}
+      className="hover:border-accent/45 group relative flex h-[168px] transform-gpu flex-col justify-end overflow-hidden rounded-[20px] border border-white/[0.08] px-4 py-4 shadow-[0_18px_40px_-20px_rgba(4,16,10,0.45)] transition-[border-color,box-shadow,transform] duration-300 ease-out hover:shadow-[0_28px_54px_-18px_rgba(0,176,80,0.42)] motion-safe:hover:[transform:perspective(900px)_rotateX(4deg)_rotateY(-4deg)] xl:h-[210px]"
     >
       {/* Dark base */}
       <div className="absolute inset-0 bg-[#0A130E]" />
-      {/* Background photo — full presence; on hover it dims a little and zooms
-          in (client-requested push-in; clipped by the card's overflow-hidden) */}
+      {/* Background photo — full presence, sharp by default; on hover it brightens
+          further and zooms in slightly (client-requested push-in; clipped by the
+          card's overflow-hidden). The filter adds a small brightness/contrast
+          boost so the vibrant `cpt_*.png` sources don't read muted through the
+          scrim below. */}
       <Image
         src={item.bg}
         alt=""
         fill
         sizes="(min-width: 1280px) 200px, 50vw"
-        className="pointer-events-none object-cover opacity-[0.62] transition-[opacity,transform] duration-500 ease-out group-hover:opacity-[0.5] motion-safe:group-hover:scale-[1.08]"
+        style={{ filter: 'brightness(1.08) contrast(1.06) saturate(1.08)' }}
+        className="pointer-events-none object-cover opacity-100 transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.08]"
         aria-hidden="true"
       />
-      {/* Green-black scrim anchors the label zone */}
+      {/* Label-zone scrim — kept punchy at the very bottom for text contrast,
+          but pulled off the middle/top so the imagery reads sharp. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-t from-[#03130B]/[0.88] via-[#03130B]/[0.28] to-transparent"
+        className="absolute inset-0 bg-gradient-to-t from-[#03130B]/[0.82] via-[#03130B]/[0.08] to-transparent"
       />
       <span
         aria-hidden="true"
