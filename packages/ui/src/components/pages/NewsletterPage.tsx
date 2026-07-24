@@ -279,6 +279,22 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
 
       {/* In every issue: the briefing's standing table of contents */}
       <section className="px-5 pb-16 md:pb-20 xl:px-[80px]">
+        <style>{`
+          .ne-nl-row { position: relative; }
+          .ne-nl-row::before {
+            content: '';
+            position: absolute;
+            inset: 8px -14px;
+            border-radius: 14px;
+            background: #00B050;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+            pointer-events: none;
+          }
+          @media (hover: hover) {
+            .ne-nl-row:hover::before { opacity: 1; }
+          }
+        `}</style>
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
             <SectionKicker className="mb-8">{t('whatKicker')}</SectionKicker>
@@ -289,21 +305,21 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
                 <ScrollReveal index={idx}>
                   {/* Strict columns keep every row on the same rails: numeral,
                       then label, then content (content drops below on mobile). */}
-                  <div className="row-hover group grid grid-cols-[56px_1fr] items-start gap-x-4 py-6 sm:grid-cols-[72px_190px_1fr] sm:gap-x-8">
+                  <div className="ne-nl-row group grid grid-cols-[56px_1fr] items-start gap-x-4 py-6 sm:grid-cols-[72px_190px_1fr] sm:gap-x-8">
                     <span
-                      className="text-metric-sm text-accent/40 dark:text-accent-bright/50 group-hover:text-accent/70 dark:group-hover:text-accent-bright/80 font-sans tabular-nums leading-none transition-colors duration-300"
+                      className="text-metric-sm text-accent/40 dark:text-accent-bright/50 relative z-[1] font-sans tabular-nums leading-none transition-colors duration-300 group-hover:text-white"
                       dir="ltr"
                     >
                       {item.i}
                     </span>
-                    <span className="text-eyebrow text-muted pt-2 font-mono font-medium uppercase">
+                    <span className="text-eyebrow text-muted relative z-[1] pt-2 font-mono font-medium uppercase transition-colors duration-200 group-hover:text-white/90">
                       {item.label}
                     </span>
-                    <div className="col-span-2 mt-3 sm:col-span-1 sm:mt-0">
-                      <p className="text-foreground text-title font-sans leading-tight">
+                    <div className="relative z-[1] col-span-2 mt-3 sm:col-span-1 sm:mt-0">
+                      <p className="text-foreground text-title font-sans leading-tight transition-colors duration-200 group-hover:text-white">
                         {item.title}
                       </p>
-                      <p className="font-body text-muted text-body-lg mt-1.5 max-w-[560px]">
+                      <p className="font-body text-muted text-body-lg mt-1.5 max-w-[560px] transition-colors duration-200 group-hover:text-white/90">
                         {item.desc}
                       </p>
                     </div>

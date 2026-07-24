@@ -131,6 +131,20 @@ export function SecurityTrustBand() {
         .ne-sec-glyph.ne-sec-drawn path, .ne-sec-glyph.ne-sec-drawn rect {
           stroke-dashoffset: 0;
         }
+        .ne-sec-row { position: relative; }
+        .ne-sec-row::before {
+          content: '';
+          position: absolute;
+          inset: 8px -14px;
+          border-radius: 14px;
+          background: #00B050;
+          opacity: 0;
+          transition: opacity 0.3s ease-out;
+          pointer-events: none;
+        }
+        @media (hover: hover) {
+          .ne-sec-row:hover::before { opacity: 1; }
+        }
       `}</style>
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <div className="grid gap-9 xl:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] xl:gap-14">
@@ -171,24 +185,24 @@ export function SecurityTrustBand() {
           <div ref={ledgerRef} className="border-border border-t dark:border-white/[0.08]">
             {ITEMS.map(({ titleKey, subKey }, i) => (
               <ScrollReveal key={titleKey} index={i}>
-                <div className="border-border row-hover group grid grid-cols-[auto_1fr_auto] items-start gap-5 border-b py-6 xl:gap-7 xl:py-7 dark:border-white/[0.08]">
+                <div className="border-border ne-sec-row group grid grid-cols-[auto_1fr_auto] items-start gap-5 border-b py-6 xl:gap-7 xl:py-7 dark:border-white/[0.08]">
                   <span
                     dir="ltr"
                     aria-hidden="true"
-                    className="text-foreground group-hover:text-accent dark:text-accent-bright w-[46px] shrink-0 font-sans text-[40px] font-semibold tabular-nums leading-none tracking-tight opacity-[0.08] transition-[color,opacity] duration-200 group-hover:opacity-40 xl:w-[56px] xl:text-[46px] dark:opacity-[0.28] dark:group-hover:opacity-70"
+                    className="text-foreground dark:text-accent-bright relative z-[1] w-[46px] shrink-0 font-sans text-[40px] font-semibold tabular-nums leading-none tracking-tight opacity-[0.08] transition-[color,opacity] duration-200 group-hover:text-white group-hover:opacity-70 xl:w-[56px] xl:text-[46px] dark:opacity-[0.28] dark:group-hover:opacity-70"
                   >
                     {String(i + 1).padStart(2, '0')}
                   </span>
-                  <div className="min-w-0">
-                    <h3 className="text-foreground group-hover:text-accent text-body-lg font-sans font-semibold leading-snug transition-colors duration-200">
+                  <div className="relative z-[1] min-w-0">
+                    <h3 className="text-foreground text-body-lg font-sans font-semibold leading-snug transition-colors duration-200 group-hover:text-white">
                       {t(titleKey)}
                     </h3>
-                    <p className="font-body text-muted text-body mt-1.5 max-w-[52ch]">
+                    <p className="font-body text-muted text-body mt-1.5 max-w-[52ch] transition-colors duration-200 group-hover:text-white/90">
                       {t(subKey)}
                     </p>
                   </div>
                   <span
-                    className={`text-accent group-hover:text-accent-bright mt-1 shrink-0 transition-colors duration-300 ${
+                    className={`text-accent relative z-[1] mt-1 shrink-0 transition-colors duration-300 group-hover:text-white ${
                       phase === 'static'
                         ? ''
                         : `ne-sec-glyph${phase === 'drawn' ? 'ne-sec-drawn' : ''}`
