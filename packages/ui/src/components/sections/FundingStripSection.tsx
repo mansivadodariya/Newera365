@@ -15,7 +15,12 @@ import { SectionKicker } from '../primitives/SectionKicker';
 function VisaMark() {
   // Wordmark — Visa's brand IS the wordmark. Blue in light, near-white on ink.
   return (
-    <svg viewBox="0 0 48 24" className="h-[24px] w-auto xl:h-[28px]" role="img" aria-label="Visa">
+    <svg
+      viewBox="0 0 48 24"
+      className="h-[32px] w-auto sm:h-[36px] xl:h-[42px]"
+      role="img"
+      aria-label="Visa"
+    >
       <text
         x="24"
         y="18"
@@ -38,7 +43,7 @@ function MastercardMark() {
   return (
     <svg
       viewBox="0 0 40 24"
-      className="h-[28px] w-auto xl:h-[32px]"
+      className="h-[36px] w-auto sm:h-[40px] xl:h-[48px]"
       role="img"
       aria-label="Mastercard"
     >
@@ -54,7 +59,7 @@ function BankMark() {
   return (
     <svg
       viewBox="0 0 24 24"
-      className="h-[28px] w-auto xl:h-[32px]"
+      className="h-[36px] w-auto sm:h-[40px] xl:h-[48px]"
       role="img"
       aria-label="Bank transfer"
     >
@@ -70,7 +75,12 @@ function BankMark() {
 function BitcoinMark() {
   // Crypto — orange coin with a white B and the ₿ stems.
   return (
-    <svg viewBox="0 0 24 24" className="h-[28px] w-auto xl:h-[32px]" role="img" aria-label="Crypto">
+    <svg
+      viewBox="0 0 24 24"
+      className="h-[36px] w-auto sm:h-[40px] xl:h-[48px]"
+      role="img"
+      aria-label="Crypto"
+    >
       <circle cx="12" cy="12" r="11" fill="#F7931A" />
       <g fill="none" stroke="#fff" strokeWidth="1.4" strokeLinecap="round">
         <path d="M10 6.5v11M13 5.5v1.6M13 16.9v1.6M11 5.5v1.6M11 16.9v1.6" />
@@ -89,7 +99,12 @@ function BitcoinMark() {
 function TetherMark() {
   // USDT — green coin with the ₮ (T + crossbar).
   return (
-    <svg viewBox="0 0 24 24" className="h-[28px] w-auto xl:h-[32px]" role="img" aria-label="USDT">
+    <svg
+      viewBox="0 0 24 24"
+      className="h-[36px] w-auto sm:h-[40px] xl:h-[48px]"
+      role="img"
+      aria-label="USDT"
+    >
       <circle cx="12" cy="12" r="11" fill="#26A17B" />
       <g fill="none" stroke="#fff" strokeWidth="1.7" strokeLinecap="round">
         <path d="M6.5 8.2h11" />
@@ -105,7 +120,7 @@ function WalletMark() {
   return (
     <svg
       viewBox="0 0 24 24"
-      className="h-[27px] w-auto xl:h-[31px]"
+      className="h-[34px] w-auto sm:h-[38px] xl:h-[46px]"
       role="img"
       aria-label="Wallets"
     >
@@ -127,8 +142,8 @@ function WalletMark() {
 function CheckPromise() {
   return (
     <svg
-      width="16"
-      height="16"
+      width="22"
+      height="22"
       viewBox="0 0 16 16"
       fill="none"
       aria-hidden="true"
@@ -137,7 +152,7 @@ function CheckPromise() {
       <path
         d="M3 8.2l3.2 3.2L13 4.6"
         stroke="currentColor"
-        strokeWidth="1.9"
+        strokeWidth="2.2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -172,7 +187,7 @@ export function FundingStripSection() {
             <h2 className="text-headline text-foreground font-sans [text-wrap:balance]">
               {t('payHeadingLine1')} <span>{t('payHeadingAccent')}</span>
             </h2>
-            <p className="font-body text-body text-muted mt-3 max-w-[42ch] xl:mt-0 dark:text-white/60">
+            <p className="font-body text-body text-muted mt-3 max-w-[45ch] xl:mt-0 dark:text-white/60">
               {t('paySubtitle')}
             </p>
           </div>
@@ -185,13 +200,13 @@ export function FundingStripSection() {
               {PROMISES.map((key) => (
                 <div
                   key={key}
-                  className="hover:bg-accent/[0.05] dark:hover:bg-accent/[0.06] group flex items-center gap-3 bg-white px-6 py-5 transition-colors duration-300 dark:bg-[#14161c]"
+                  className="hover:bg-accent/[0.05] dark:hover:bg-accent/[0.06] group flex items-center gap-4 bg-white px-7 py-6 transition-colors duration-300 sm:py-7 dark:bg-[#14161c]"
                 >
                   {/* Check tile inverts to solid signal on hover */}
-                  <span className="bg-accent/[0.1] group-hover:bg-accent flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-colors duration-300">
+                  <span className="bg-accent/[0.1] group-hover:bg-accent flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full transition-colors duration-300">
                     <CheckPromise />
                   </span>
-                  <span className="text-foreground text-body-lg font-sans font-semibold">
+                  <span className="text-foreground font-sans text-lg font-bold sm:text-xl">
                     {t(key)}
                   </span>
                 </div>
@@ -199,16 +214,16 @@ export function FundingStripSection() {
             </div>
 
             {/* Accepted methods — recognisable brand marks on paper tiles. */}
-            <div className="flex flex-col gap-5 border-t border-[rgba(17,17,17,0.07)] px-6 py-6 xl:flex-row xl:items-center xl:justify-between dark:border-white/[0.06]">
+            <div className="flex flex-col gap-6 border-t border-[rgba(17,17,17,0.07)] px-7 py-7 xl:flex-row xl:items-center xl:justify-between dark:border-white/[0.06]">
               <div className="flex flex-col gap-4">
-                <span className="text-muted font-mono text-[10px] uppercase tracking-[1.4px] dark:text-white/45">
+                <span className="text-muted font-mono text-[12px] uppercase tracking-[1.8px] sm:text-[13px] dark:text-white/45">
                   {t('payAcceptLabel')}
                 </span>
-                <ul className="flex flex-wrap items-center gap-2.5 xl:gap-3">
+                <ul className="flex flex-wrap items-center gap-3 xl:gap-4">
                   {BRANDS.map((brand) => (
                     <li
                       key={brand.key}
-                      className="border-border hover:border-accent/40 flex h-[54px] min-w-[74px] items-center justify-center rounded-[12px] border bg-white px-4 transition-[border-color,box-shadow,transform] duration-300 hover:shadow-[0_10px_24px_-12px_rgba(0,176,80,0.35)] motion-safe:hover:-translate-y-0.5 xl:h-[60px] xl:min-w-[86px] xl:rounded-[14px] xl:px-5 dark:border-white/[0.08] dark:bg-[#1a1c22]"
+                      className="border-border hover:border-accent/40 flex h-[58px] min-w-[82px] items-center justify-center rounded-[14px] border bg-white px-5 transition-[border-color,box-shadow,transform] duration-300 hover:shadow-[0_10px_24px_-12px_rgba(0,176,80,0.35)] motion-safe:hover:-translate-y-0.5 sm:h-[66px] sm:min-w-[100px] sm:px-6 xl:h-[76px] xl:min-w-[118px] xl:rounded-[16px] dark:border-white/[0.08] dark:bg-[#1a1c22]"
                       title={t(brand.key)}
                     >
                       {brand.mark}
@@ -219,15 +234,15 @@ export function FundingStripSection() {
 
               <Link
                 href={`/${locale}/trade/funding`}
-                className="text-accent font-body group inline-flex w-fit items-center gap-1.5 text-[14px] font-semibold"
+                className="text-accent font-body group inline-flex w-fit items-center gap-2 text-[16px] font-bold xl:text-[18px]"
               >
                 {t('payCta')}
                 <svg
                   viewBox="0 0 24 24"
-                  className="h-[15px] w-[15px] transition-transform group-hover:translate-x-0.5 rtl:-scale-x-100"
+                  className="h-5 w-5 transition-transform group-hover:translate-x-1 rtl:-scale-x-100"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth={2}
+                  strokeWidth={2.2}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   aria-hidden="true"

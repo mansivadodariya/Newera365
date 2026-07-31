@@ -91,64 +91,64 @@ export function FeesPage({ spreadData }: FeesPageProps) {
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5">{t('spreadsKicker')}</SectionKicker>
 
-          <div className="border-border bg-surface shadow-card overflow-hidden rounded-[18px] border dark:border-white/[0.06]">
+          <div className="overflow-hidden rounded-[20px] border border-[#1b2b20] bg-[#080b09] shadow-2xl dark:border-[#1b2b20] dark:bg-[#080b09]">
             {/* Receipt header strip */}
-            <div className="border-border flex items-center justify-between border-b border-dashed px-5 py-3.5 dark:border-white/[0.1]">
-              <span className="text-eyebrow text-muted font-mono uppercase">
+            <div className="flex items-center justify-between border-b border-dashed border-[#1b2b20] bg-[#0d1410] px-5 py-3.5">
+              <span className="text-eyebrow font-mono uppercase text-gray-400">
                 {t('receiptStamp')}
               </span>
-              <span className="text-accent flex items-center gap-1.5">
-                <span className="bg-accent h-1.5 w-1.5 rounded-full" />
+              <span className="flex items-center gap-1.5 font-bold text-[#00b050]">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-[#00b050]" />
                 <span className="text-eyebrow font-mono uppercase">{t('spreadsKicker')}</span>
               </span>
             </div>
 
             {/* Column header */}
-            <div className="border-border grid grid-cols-[1fr_54px_54px_54px] border-b px-5 py-2.5 dark:border-white/[0.06]">
-              <span className="text-muted text-eyebrow font-mono uppercase">
+            <div className="grid grid-cols-[1fr_80px_80px_80px] border-b border-[#1b2b20] bg-[#0d1410] px-5 py-3">
+              <span className="text-eyebrow font-mono font-semibold uppercase text-gray-400">
                 {t('colInstrument')}
               </span>
-              <span className="text-accent text-eyebrow text-end font-mono uppercase">
+              <span className="text-eyebrow text-end font-mono font-bold uppercase text-[#00b050]">
                 {t('colRaw')}
               </span>
-              <span className="text-muted text-eyebrow text-end font-mono uppercase">
+              <span className="text-eyebrow text-end font-mono font-semibold uppercase text-gray-400">
                 {t('colStd')}
               </span>
-              <span className="text-muted text-eyebrow text-end font-mono uppercase">
+              <span className="text-eyebrow text-end font-mono font-semibold uppercase text-gray-400">
                 {t('colVip')}
               </span>
             </div>
 
             {/* Data rows — hairline ruled, mono tabular-nums */}
             {displaySpreads.length === 0 ? (
-              <p className="font-body text-muted text-body px-5 py-8 text-center">
+              <p className="font-body text-body px-5 py-8 text-center text-gray-400">
                 {t('noSpreads')}
               </p>
             ) : (
-              <div className="list-dim divide-border divide-y dark:divide-white/[0.05]">
+              <div className="divide-y divide-[#1b2b20]">
                 {displaySpreads.map((row) => (
                   <div
                     key={row.instrument}
-                    className="hover:bg-accent/[0.05] dark:hover:bg-accent/[0.06] group grid grid-cols-[1fr_54px_54px_54px] items-center px-5 py-[13px] transition-colors"
+                    className="group grid grid-cols-[1fr_80px_80px_80px] items-center border-l-4 border-l-transparent px-5 py-[14px] transition-all duration-200 hover:border-l-[#00b050] hover:bg-[#00b050]/20"
                   >
-                    <span className="text-foreground font-body text-body group-hover:text-accent font-medium transition-colors">
+                    <span className="font-body text-body font-semibold text-white transition-colors group-hover:text-[#00b050]">
                       {row.instrument}
                     </span>
                     <span
                       dir="ltr"
-                      className="text-accent text-body text-end font-mono font-semibold tabular-nums"
+                      className="text-body text-end font-mono font-bold tabular-nums text-[#00b050]"
                     >
                       {row.raw}
                     </span>
                     <span
                       dir="ltr"
-                      className="text-muted text-body text-end font-mono tabular-nums"
+                      className="text-body text-end font-mono tabular-nums text-gray-300 transition-colors group-hover:text-white"
                     >
                       {row.std}
                     </span>
                     <span
                       dir="ltr"
-                      className="text-muted text-body text-end font-mono tabular-nums"
+                      className="text-body text-end font-mono tabular-nums text-gray-300 transition-colors group-hover:text-white"
                     >
                       {row.vip}
                     </span>
@@ -159,11 +159,14 @@ export function FeesPage({ spreadData }: FeesPageProps) {
 
             {/* Ruled subtotal — tightest spread */}
             {tightest && (
-              <div className="border-foreground/70 grid grid-cols-[1fr_54px_54px_54px] items-center border-t-2 px-5 py-3.5 dark:border-white/30">
-                <span className="text-foreground text-eyebrow font-mono uppercase">
+              <div className="grid grid-cols-[1fr_80px_80px_80px] items-center border-t-2 border-[#00b050]/40 bg-[#0d1410] px-5 py-4">
+                <span className="text-eyebrow font-mono font-bold uppercase text-white">
                   {t('tightestSpread')}
                 </span>
-                <span dir="ltr" className="text-accent text-title text-end font-mono tabular-nums">
+                <span
+                  dir="ltr"
+                  className="text-title text-end font-mono font-extrabold tabular-nums text-[#00b050]"
+                >
                   {tightest}
                 </span>
                 <span className="col-span-2" />
@@ -200,11 +203,11 @@ export function FeesPage({ spreadData }: FeesPageProps) {
       </section>
 
       {/* Other charges — the receipt, line by line */}
-      <section className="rounded-t-[32px] bg-transparent px-5 pb-12 pt-[29px] dark:bg-[#0a0c0b]">
+      <section className="rounded-t-[32px] bg-transparent px-5 pb-12 pt-[29px]">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5">{t('otherKicker')}</SectionKicker>
 
-          <div className="border-border bg-surface shadow-card list-dim overflow-hidden rounded-[18px] border dark:border-white/[0.06]">
+          <div className="list-dim overflow-hidden rounded-[20px] border border-[#1b2b20] bg-[#080b09] shadow-2xl dark:border-[#1b2b20] dark:bg-[#080b09]">
             {OTHER_CHARGES.map((charge, i) => {
               const key = charge.key.charAt(0).toUpperCase() + charge.key.slice(1);
               const display = charge.green ? '$0.00' : translateValue(charge.value);
@@ -214,26 +217,26 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                   key={charge.key}
                   index={i}
                   direction="up"
-                  className={i > 0 ? 'border-border border-t dark:border-white/[0.05]' : ''}
+                  className={i > 0 ? 'border-t border-[#1b2b20]' : ''}
                 >
-                  <div className="hover:bg-accent/[0.05] dark:hover:bg-accent/[0.06] group px-5 py-[15px] transition-colors">
+                  <div className="group border-l-4 border-l-transparent px-5 py-[16px] transition-all duration-200 hover:border-l-[#00b050] hover:bg-[#00b050]/20">
                     <div className="flex items-baseline gap-3">
-                      <span className="text-foreground text-body-lg font-sans font-semibold">
+                      <span className="text-body-lg font-sans font-semibold text-white transition-colors group-hover:text-[#00b050]">
                         {t(`charge${key}` as 'chargeOpening')}
                       </span>
                       {/* Dotted receipt leader warms to signal on the lit line */}
                       <span
                         aria-hidden="true"
-                        className="border-border group-hover:border-accent/50 min-w-[24px] flex-1 translate-y-[-4px] border-b border-dotted transition-colors dark:border-white/[0.15]"
+                        className="min-w-[24px] flex-1 translate-y-[-4px] border-b border-dotted border-[#1b2b20] transition-colors group-hover:border-[#00b050]/60"
                       />
                       <span
                         {...(isMetric ? { dir: 'ltr' as const } : {})}
-                        className={`text-body-lg font-mono font-semibold tabular-nums ${charge.green ? 'text-accent' : 'text-foreground'}`}
+                        className={`text-body-lg font-mono font-bold tabular-nums ${charge.green ? 'text-[#00b050]' : 'text-gray-200 group-hover:text-white'}`}
                       >
                         {display}
                       </span>
                     </div>
-                    <p className="font-body text-caption text-muted mt-1">
+                    <p className="font-body text-caption mt-1 text-gray-400">
                       {t(`charge${key}Val` as 'chargeOpeningVal')}
                     </p>
                   </div>
@@ -242,12 +245,15 @@ export function FeesPage({ spreadData }: FeesPageProps) {
             })}
 
             {/* Ruled subtotal — zero account fees */}
-            <div className="border-foreground/70 flex items-baseline gap-3 border-t-2 px-5 py-4 dark:border-white/30">
-              <span className="text-foreground text-eyebrow font-mono uppercase">
+            <div className="flex items-baseline gap-3 border-t-2 border-[#00b050]/40 bg-[#0d1410] px-5 py-4">
+              <span className="text-eyebrow font-mono font-bold uppercase text-white">
                 {t('subtotalLabel')}
               </span>
               <span className="flex-1" />
-              <span dir="ltr" className="text-accent text-title font-mono tabular-nums">
+              <span
+                dir="ltr"
+                className="text-title font-mono font-extrabold tabular-nums text-[#00b050]"
+              >
                 $0.00
               </span>
             </div>

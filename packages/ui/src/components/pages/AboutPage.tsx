@@ -112,12 +112,12 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
             {creed.map((line, i) => (
               <li
                 key={i}
-                className="border-border hover:bg-accent/[0.03] flex items-start gap-3 px-[18px] py-4 transition-colors [&:not(:last-child)]:border-b sm:[&:not(:last-child)]:border-b-0 sm:[&:not(:last-child)]:border-e"
+                className="border-border group flex items-start gap-3 px-[18px] py-4 transition-all duration-300 hover:bg-[#00b050] [&:not(:last-child)]:border-b sm:[&:not(:last-child)]:border-b-0 sm:[&:not(:last-child)]:border-e"
               >
-                <span className="text-muted text-eyebrow mt-px font-mono tabular-nums">
+                <span className="text-muted text-eyebrow mt-px font-mono tabular-nums transition-colors duration-300 group-hover:text-white">
                   0{i + 1}
                 </span>
-                <span className="font-body text-foreground/85 text-caption leading-snug">
+                <span className="font-body text-foreground/85 text-caption leading-snug transition-colors duration-300 group-hover:text-white">
                   {line}
                 </span>
               </li>

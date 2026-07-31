@@ -140,7 +140,9 @@ export function FloatingContactWidget({ email, phone, whatsapp }: FloatingContac
     >
       {/* Soft mount entrance (the FAB must never pop in), then a gentle
           attention nudge until first interaction — both motion-gated. */}
-      <style>{`
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @media (prefers-reduced-motion: no-preference) {
           @keyframes ne-fab-in {
             from { opacity: 0; transform: scale(0.6) translateY(10px); }
@@ -158,7 +160,9 @@ export function FloatingContactWidget({ email, phone, whatsapp }: FloatingContac
               ne-fab-nudge 9s ease-in-out 5s infinite;
           }
         }
-      `}</style>
+      `,
+        }}
+      />
 
       {open && (
         <div

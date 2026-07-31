@@ -69,20 +69,19 @@ function MarketCard({ item, index, price }: { item: MarketItem; index: number; p
         className="pointer-events-none object-cover opacity-100 transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.08]"
         aria-hidden="true"
       />
-      {/* Label-zone scrim — kept punchy at the very bottom for text contrast,
-          but pulled off the middle/top so the imagery reads sharp. */}
+      {/* Label-zone scrim — high contrast gradient at the bottom so all titles & counts read sharp */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-t from-[#03130B]/[0.82] via-[#03130B]/[0.08] to-transparent"
+        className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/5"
       />
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-[20px] ring-1 ring-inset ring-white/[0.06]"
+        className="pointer-events-none absolute inset-0 rounded-[20px] ring-1 ring-inset ring-white/[0.12]"
       />
       {/* Explore affordance — slides in on hover (RTL-aware) */}
       <span
         aria-hidden="true"
-        className="absolute end-3 top-3 z-10 flex h-7 w-7 -translate-y-1 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+        className="absolute end-3 top-3 z-10 flex h-7 w-7 -translate-y-1 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
       >
         <svg width="12" height="12" viewBox="0 0 14 14" fill="none" className="rtl:-scale-x-100">
           <path
@@ -96,13 +95,13 @@ function MarketCard({ item, index, price }: { item: MarketItem; index: number; p
       </span>
       {/* Content: label, live quote, count anchored to the bottom */}
       <div className="relative z-10">
-        <p className="group-hover:text-accent-bright font-sans text-[17px] font-semibold text-white transition-colors duration-300">
+        <p className="font-sans text-[20px] font-extrabold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] transition-colors duration-300 group-hover:text-[#00b050] xl:text-[22px]">
           {item.name}
         </p>
         {/* Living quote board: renders nothing until a live price arrives, so
             the count line below always keeps the tile complete. */}
         {item.symbol ? <LiveSpark symbol={item.symbol} price={price} className="mt-[5px]" /> : null}
-        <p className="mt-[3px] font-mono text-[11.5px] font-medium tracking-[0.06em] text-white/[0.72] transition-colors duration-300 group-hover:text-white">
+        <p className="mt-1 font-mono text-[13px] font-bold tracking-[0.05em] text-white/95 drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)] transition-colors duration-300 group-hover:text-white">
           {item.count}
         </p>
       </div>

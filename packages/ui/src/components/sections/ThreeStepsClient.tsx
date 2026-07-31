@@ -137,11 +137,10 @@ function StepCard({
         sizes="(min-width: 1280px) 384px, (min-width: 768px) 640px, 100vw"
         className="object-cover object-center transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.03]"
       />
-      {/* Green-black scrim anchors the text zone; hairline ring gives the plate
-          its glass edge. */}
+      {/* Green-black scrim anchors the text zone; hairline ring gives the plate its glass edge. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-t from-[#03130B]/[0.92] via-[#03130B]/[0.38] to-[#03130B]/[0.12] transition-opacity duration-500 group-hover:opacity-[0.78]"
+        className="absolute inset-0 bg-gradient-to-t from-[#03130B]/95 via-[#03130B]/60 to-[#03130B]/15 transition-opacity duration-500 group-hover:opacity-90"
       />
       <span
         aria-hidden="true"
@@ -156,19 +155,23 @@ function StepCard({
       </span>
       {/* Glass glyph tile */}
       <span className="group-hover:border-accent-bright/50 group-hover:bg-accent/[0.20] absolute start-6 top-6 flex h-12 w-12 items-center justify-center rounded-[14px] border border-white/[0.16] bg-white/[0.08] text-white backdrop-blur-md transition-colors duration-500 xl:start-5 xl:top-5">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           {STEP_GLYPHS[i]}
         </svg>
       </span>
-      <div className="relative">
-        <h3 className="text-title mb-2 font-sans leading-snug text-white">{step.title}</h3>
-        <p className="font-body text-body text-white/[0.72]">{step.desc}</p>
-        <span className="text-accent-bright mt-5 inline-flex items-center gap-1.5 rounded-full border border-white/[0.14] bg-white/[0.09] px-3 py-1.5 font-mono text-[11px] font-semibold tracking-[0.08em] backdrop-blur-sm">
-          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <div className="relative z-10">
+        <h3 className="text-title mb-2 font-sans leading-snug text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)]">
+          {step.title}
+        </h3>
+        <p className="font-body text-body leading-relaxed text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)]">
+          {step.desc}
+        </p>
+        <span className="text-accent-bright mt-4 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 font-mono text-[12px] font-bold tracking-[0.08em] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] backdrop-blur-md">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
             <path
               d="M2.5 6.4l2.3 2.3L9.5 3.5"
               stroke="currentColor"
-              strokeWidth="1.8"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />

@@ -225,49 +225,53 @@ export function EducationHubPage({ content: cmsContent, webinarCount }: Educatio
           </ScrollReveal>
 
           <ScrollReveal delay={0.08}>
-            <div className="border-border shadow-card overflow-hidden rounded-[24px] border bg-white dark:border-white/[0.06] dark:bg-[#12141a]">
+            <div className="border-border shadow-card overflow-hidden rounded-[24px] border bg-white p-2 dark:border-white/[0.06] dark:bg-[#12141a]">
               {readingTrack.map((row, i) => (
-                <Link
+                <div
                   key={row.id}
-                  href={`/${locale}${row.href}`}
-                  className="hover:bg-accent/[0.05] dark:hover:bg-accent/[0.06] group flex items-center gap-4 border-b border-[#E6ECE8] px-5 py-6 transition-colors last:border-b-0 xl:gap-7 xl:px-8 xl:py-7 dark:border-white/[0.05]"
+                  className="border-b border-[#E6ECE8] py-1.5 last:border-b-0 dark:border-white/[0.05]"
                 >
-                  {/* Ghost numeral — latin figure, reads LTR in both directions */}
-                  <span
-                    dir="ltr"
-                    className="text-metric-sm text-foreground group-hover:text-accent dark:text-accent-bright w-[42px] flex-shrink-0 font-sans font-semibold tabular-nums leading-none tracking-tight opacity-[0.08] transition-[color,opacity] duration-200 group-hover:opacity-40 xl:w-[62px] dark:opacity-[0.28] dark:group-hover:opacity-70"
+                  <Link
+                    href={`/${locale}${row.href}`}
+                    className="group flex items-center gap-4 rounded-[16px] px-5 py-5 transition-all duration-300 hover:bg-[#00b050] xl:gap-7 xl:px-7 xl:py-6"
                   >
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
+                    {/* Ghost numeral — latin figure, reads LTR in both directions */}
+                    <span
+                      dir="ltr"
+                      className="text-metric-sm text-foreground dark:text-accent-bright w-[42px] flex-shrink-0 font-sans font-semibold tabular-nums leading-none tracking-tight opacity-[0.25] transition-all duration-300 group-hover:text-white group-hover:opacity-100 xl:w-[62px]"
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
 
-                  <div className="flex flex-1 flex-col gap-1.5">
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                      {row.level && (
-                        <span className="inline-flex items-center gap-1.5">
-                          <span
-                            className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${LEVEL_DOT[row.level]}`}
-                          />
-                          <span className="text-eyebrow text-muted font-mono">
-                            {t(row.level as 'levelBeginner')}
+                    <div className="flex flex-1 flex-col gap-1.5">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                        {row.level && (
+                          <span className="inline-flex items-center gap-1.5">
+                            <span
+                              className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${LEVEL_DOT[row.level]} group-hover:bg-white`}
+                            />
+                            <span className="text-eyebrow text-muted font-mono transition-colors duration-300 group-hover:text-white/90">
+                              {t(row.level as 'levelBeginner')}
+                            </span>
                           </span>
+                        )}
+                        <span className="text-caption text-muted/70 font-mono tabular-nums transition-colors duration-300 group-hover:text-white/90">
+                          {row.count}
                         </span>
-                      )}
-                      <span className="text-caption text-muted/70 font-mono tabular-nums">
-                        {row.count}
-                      </span>
+                      </div>
+                      <p className="text-title text-foreground w-fit font-sans font-bold transition-colors duration-300 group-hover:text-white">
+                        {row.title}
+                      </p>
+                      <p className="font-body text-body text-muted line-clamp-1 max-w-[560px] transition-colors duration-300 group-hover:text-white/95">
+                        {row.desc}
+                      </p>
                     </div>
-                    <p className="link-underline text-title group-hover:text-accent text-foreground w-fit font-sans transition-colors">
-                      {row.title}
-                    </p>
-                    <p className="font-body text-body text-muted line-clamp-1 max-w-[560px]">
-                      {row.desc}
-                    </p>
-                  </div>
 
-                  <span className="text-muted group-hover:text-accent transition-colors">
-                    {chevron}
-                  </span>
-                </Link>
+                    <span className="text-muted transition-colors duration-300 group-hover:text-white">
+                      {chevron}
+                    </span>
+                  </Link>
+                </div>
               ))}
             </div>
           </ScrollReveal>

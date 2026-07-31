@@ -121,7 +121,9 @@ export function SecurityTrustBand() {
     <section className="px-5 pb-10 pt-2 xl:pb-12">
       {/* Stroke draw-in: armed hides strokes (JS is running, so nothing can be
           trapped invisible), drawn traces them; rows stagger via --d. */}
-      <style>{`
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         .ne-sec-glyph path, .ne-sec-glyph rect {
           stroke-dasharray: 1;
           stroke-dashoffset: 1;
@@ -145,7 +147,9 @@ export function SecurityTrustBand() {
         @media (hover: hover) {
           .ne-sec-row:hover::before { opacity: 1; }
         }
-      `}</style>
+      `,
+        }}
+      />
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <div className="grid gap-9 xl:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] xl:gap-14">
           {/* Intro rail */}

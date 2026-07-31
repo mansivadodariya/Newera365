@@ -40,7 +40,7 @@ function useNavGroups(t: ReturnType<typeof useTranslations<'nav'>>): NavGroup[] 
       items: [
         { label: t('platformOverviewLabel'), href: '/platform/mt5' },
         { label: t('platformWebtraderLabel'), href: '/platform/webtrader' },
-        { label: t('toolsAiCrmLabel'), href: '/ai-crm' },
+        // { label: t('toolsAiCrmLabel'), href: '/ai-crm' },
       ],
     },
     {

@@ -63,7 +63,7 @@ function renderCell(item: PartnerItem, key: string | number, decorative = false)
             // Eager: the duplicated (off-screen) marquee copy must paint before
             // it scrolls into the window, or logos pop in mid-scroll.
             loading="eager"
-            className="h-8 w-auto max-w-[140px] object-contain xl:h-9 dark:brightness-0 dark:invert"
+            className="h-10 w-auto max-w-[165px] object-contain xl:h-12 dark:brightness-0 dark:invert"
           />
         ) : item.logoType === 'icon' && item.logoFilename ? (
           <>
@@ -72,11 +72,11 @@ function renderCell(item: PartnerItem, key: string | number, decorative = false)
               src={`/images/partners/${item.logoFilename}`}
               alt=""
               loading="eager"
-              className="h-9 w-auto max-w-[70%] object-contain"
+              className="h-11 w-auto max-w-[80%] object-contain"
             />
             <span
               dir="ltr"
-              className="text-caption text-center font-sans font-semibold tracking-[-0.01em] text-[#2f3a34] dark:text-white/80"
+              className="text-caption text-center font-sans font-bold tracking-[-0.01em] text-[#2f3a34] dark:text-white/90"
             >
               {item.name}
             </span>
@@ -84,7 +84,7 @@ function renderCell(item: PartnerItem, key: string | number, decorative = false)
         ) : (
           <span
             dir="ltr"
-            className="text-center font-sans text-base font-semibold tracking-[-0.01em] text-[#2f3a34] dark:text-white/80"
+            className="text-center font-sans text-lg font-bold tracking-[-0.01em] text-[#2f3a34] xl:text-xl dark:text-white/90"
           >
             {item.name}
           </span>
@@ -116,15 +116,15 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
     <section className="bg-transparent px-5 py-12 xl:py-16">
       <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
         <ScrollReveal>
-          <SectionKicker className="mb-4">{t('partnersKicker')}</SectionKicker>
-          <h2 className="text-foreground text-headline mb-3 max-w-[20ch] text-balance font-sans">
+          <SectionKicker className="mb-3">{t('partnersKicker')}</SectionKicker>
+          <h2 className="text-foreground text-headline mb-2 max-w-[20ch] text-balance font-sans">
             {t('partnersHeading')}
           </h2>
           <p className="text-muted text-lead max-w-[52ch]">{t('partnersSubtitle')}</p>
         </ScrollReveal>
 
         <ScrollReveal index={1}>
-          <div className="mt-10 xl:mt-14">
+          <div className="mt-5 xl:mt-6">
             {reduce ? (
               // Static, grouped fallback — every label + logo stays visible.
               <div className="flex flex-col gap-8">
@@ -159,7 +159,7 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
                 className="group/marquee relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_5%,#000_95%,transparent)]"
                 style={{ '--marquee-duration': `${durationS}s` } as CSSProperties}
               >
-                <div className="animate-marquee flex w-max py-6 group-hover/marquee:[animation-play-state:paused] rtl:[animation-direction:reverse]">
+                <div className="animate-marquee flex w-max py-2 group-hover/marquee:[animation-play-state:paused] rtl:[animation-direction:reverse]">
                   {[0, 1].map((copy) => (
                     <div
                       key={copy}

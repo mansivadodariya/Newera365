@@ -77,23 +77,20 @@ function Row({
   proof,
   verified,
   isLast,
+  isCol1,
 }: {
   want: string;
   proof: string;
   verified: boolean;
   isLast: boolean;
+  isCol1: boolean;
 }) {
   return (
     <li
       className={[
-        // Mobile: stacked. Each row separated by the ul's divide-y.
-        'flex flex-col gap-1.5 px-5 py-[18px]',
-        // Desktop: horizontal within the grid cell. Own bottom border replaces
-        // divide-y (grid + divide-y misbehave — divide adds a top border to
-        // every child, which stripes the top of every cell in the right column).
-        'xl:border-border xl:flex-row xl:items-center xl:gap-6 xl:border-b xl:px-7 xl:last:border-b-0 xl:dark:border-white/[0.06]',
-        // 7 items → 4 rows; item 7 spans both columns so it centers cleanly
-        // instead of stranding empty space next to it.
+        'flex flex-col gap-1.5 border-b border-[#1b2b20] px-5 py-[18px] transition-all duration-200 hover:bg-[#00b050]/20',
+        'xl:flex-row xl:items-center xl:gap-6 xl:px-7',
+        isCol1 ? 'xl:border-r xl:border-r-[#1b2b20]' : '',
         isLast ? 'xl:col-span-2 xl:justify-center' : '',
       ].join(' ')}
     >
@@ -102,7 +99,7 @@ function Row({
         <p
           className={[
             'text-body-lg font-sans font-semibold leading-snug transition-colors duration-300 motion-reduce:transition-none',
-            verified ? 'text-foreground' : 'text-muted dark:text-white/45',
+            verified ? 'text-white' : 'text-gray-400',
           ].join(' ')}
         >
           {want}
@@ -110,7 +107,7 @@ function Row({
       </div>
       <p
         className={[
-          'text-muted text-caption ps-[42px] font-mono tabular-nums leading-snug transition-opacity duration-300 motion-reduce:transition-none xl:flex-1 xl:ps-0 dark:text-white/55',
+          'text-caption ps-[42px] font-mono tabular-nums leading-snug text-gray-300 transition-opacity duration-300 motion-reduce:transition-none xl:flex-1 xl:ps-0',
           verified ? 'opacity-100' : 'opacity-45',
         ].join(' ')}
       >
@@ -176,13 +173,13 @@ export function CompareChecklistSection() {
         <ScrollReveal delay={0.1}>
           <div
             ref={panelRef}
-            className="border-border shadow-card mt-8 overflow-hidden rounded-[24px] border bg-white dark:border-white/[0.06] dark:bg-[#14161c] dark:shadow-none"
+            className="mt-8 overflow-hidden rounded-[24px] border border-[#1b2b20] bg-[#080b09] shadow-2xl dark:border-[#1b2b20] dark:bg-[#080b09]"
           >
             {/* Audit header: label + the live readout that climbs to 7/7 Verified */}
-            <div className="border-border flex items-center justify-between gap-3 border-b px-5 py-3.5 xl:px-7 dark:border-white/[0.06]">
+            <div className="flex items-center justify-between gap-3 border-b border-[#1b2b20] bg-[#0d1410] px-5 py-3.5 xl:px-7">
               <div className="flex items-center gap-2.5">
                 <AuditGlyph />
-                <span className="text-eyebrow text-muted font-mono uppercase dark:text-white/50">
+                <span className="text-eyebrow text-muted font-mono uppercase text-white">
                   {t('compareLedgerLabel')}
                 </span>
               </div>
@@ -208,14 +205,14 @@ export function CompareChecklistSection() {
             <div className="relative">
               <span
                 aria-hidden="true"
-                className="bg-border absolute inset-y-0 start-0 w-[2px] dark:bg-white/[0.08]"
+                className="absolute inset-y-0 start-0 w-[2px] bg-[#1b2b20]"
               />
               <span
                 aria-hidden="true"
-                className="bg-accent absolute start-0 top-0 w-[2px] transition-[height] duration-300 ease-out motion-reduce:transition-none"
+                className="absolute start-0 top-0 w-[2px] bg-[#00b050] shadow-[0_0_8px_rgba(0,176,80,0.6)] transition-[height] duration-300 ease-out motion-reduce:transition-none"
                 style={{ height: `${pct}%` }}
               />
-              <ul className="divide-border divide-y xl:grid xl:grid-cols-2 xl:gap-x-10 xl:divide-y-0 dark:divide-white/[0.06]">
+              <ul className="xl:grid xl:grid-cols-2">
                 {rows.map((r, i) => (
                   <Row
                     key={r.want}
@@ -223,6 +220,7 @@ export function CompareChecklistSection() {
                     proof={r.proof}
                     verified={i < count}
                     isLast={i === rows.length - 1}
+                    isCol1={i % 2 === 0 && i < rows.length - 1}
                   />
                 ))}
               </ul>

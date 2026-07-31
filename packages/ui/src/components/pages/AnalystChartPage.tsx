@@ -367,6 +367,10 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
     : undefined;
   const featured = selectedCall ?? filtered[0] ?? calls[0]!;
 
+  const half = Math.ceil(filtered.length / 2);
+  const leftItems = filtered.slice(0, half);
+  const rightItems = filtered.slice(half);
+
   return (
     <>
       {/* Desk masthead */}
@@ -434,70 +438,152 @@ export function AnalystChartPage({ cmsCalls, cmsAnalyst, locale }: AnalystChartP
             </div>
           </div>
 
-          {/* Ledger card: column masthead + hairline rows. Rows load the featured chart. */}
-          <div className="border-border shadow-card overflow-hidden rounded-[20px] border bg-white dark:border-white/[0.08] dark:bg-[#111318] dark:shadow-none">
-            {/* Column masthead */}
-            <div className="border-border text-muted hidden items-center justify-between border-b px-5 py-2.5 sm:flex dark:border-white/[0.06]">
-              <span className="text-eyebrow font-mono uppercase">{t('instrumentLabel')}</span>
-              <span className="text-eyebrow font-mono uppercase">
-                {t('lastLabel')} <span className="mx-1 opacity-40">/</span> {t('targetLabel')}
-              </span>
-            </div>
+          {/* Ledger card: 2 columns on md/xl with vertical separator in between (or full width if 1 item) */}
+          <div className="overflow-hidden rounded-[20px] border border-[#1b2b20] bg-[#080b09] shadow-2xl dark:border-[#1b2b20] dark:bg-[#080b09]">
+            <div
+              className={
+                rightItems.length === 0 ? 'grid grid-cols-1' : 'grid grid-cols-1 md:grid-cols-2'
+              }
+            >
+              {/* Left Column */}
+              <div
+                className={
+                  rightItems.length === 0
+                    ? ''
+                    : 'md:border-r md:border-[#1b2b20] rtl:md:border-l rtl:md:border-r-0 rtl:md:border-[#1b2b20]'
+                }
+              >
+                <div className="hidden items-center justify-between border-b border-[#1b2b20] bg-[#0d1410] px-5 py-3 text-gray-400 sm:flex">
+                  <span className="text-eyebrow font-mono font-semibold uppercase">
+                    {t('instrumentLabel')}
+                  </span>
+                  <span className="text-eyebrow font-mono font-semibold uppercase">
+                    {t('lastLabel')} <span className="mx-1 opacity-40">/</span> {t('targetLabel')}
+                  </span>
+                </div>
 
-            <div className="divide-border divide-y dark:divide-white/[0.06]">
-              {filtered.map((pair) => {
-                const active = pair.symbol === featured.symbol;
-                return (
-                  <button
-                    key={pair.symbol}
-                    type="button"
-                    onClick={() => setSelectedSymbol(pair.symbol)}
-                    aria-pressed={active}
-                    className={`focus-visible:ring-accent flex w-full cursor-pointer items-center justify-between border-s-2 px-5 py-3.5 text-start transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 ${
-                      active
-                        ? 'border-accent bg-accent/[0.06] dark:bg-accent/[0.08]'
-                        : 'hover:border-accent/40 hover:bg-accent/[0.03] border-transparent'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3.5">
-                      <Sparkline points={pair.sparkPoints} up={pair.up} />
-                      <div>
-                        <p
-                          dir="ltr"
-                          className="text-foreground font-sans text-[14px] font-semibold"
-                        >
-                          {pair.symbol}
-                        </p>
-                        <span
-                          className={`mt-0.5 inline-block rounded px-1.5 py-[2px] font-mono text-[9px] font-semibold uppercase tracking-[0.06em] ${SENTIMENT_STYLES[pair.sentiment]}`}
-                        >
-                          {sentimentLabel(pair.sentiment, t)}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 sm:gap-6">
-                      <span
-                        dir="ltr"
-                        className="text-foreground hidden font-mono text-[13px] tabular-nums sm:inline"
-                      >
-                        {pair.price}
-                      </span>
-                      <span
-                        dir="ltr"
-                        className={`inline-flex items-center gap-1 font-mono text-[13px] font-semibold tabular-nums ${
-                          pair.up ? 'text-[#00B050]' : 'text-[#EF4444]'
+                <div className="divide-y divide-[#1b2b20]">
+                  {leftItems.map((pair) => {
+                    const active = pair.symbol === featured.symbol;
+                    return (
+                      <button
+                        key={pair.symbol}
+                        type="button"
+                        onClick={() => setSelectedSymbol(pair.symbol)}
+                        aria-pressed={active}
+                        className={`group flex w-full cursor-pointer items-center justify-between px-5 py-4 text-start transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00b050] ${
+                          active ? 'bg-[#00b050]/20' : 'hover:bg-[#00b050]/20'
                         }`}
                       >
-                        <Caret up={pair.up} />
-                        {targetValue(pair.target)}
-                      </span>
-                      <span className="text-muted w-9 text-end font-mono text-[12px] tabular-nums">
-                        {pair.conf}%
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
+                        <div className="flex items-center gap-3.5">
+                          <Sparkline points={pair.sparkPoints} up={pair.up} />
+                          <div>
+                            <p
+                              dir="ltr"
+                              className="font-sans text-[14px] font-bold text-white transition-colors group-hover:text-[#00b050]"
+                            >
+                              {pair.symbol}
+                            </p>
+                            <span
+                              className={`mt-0.5 inline-block rounded px-1.5 py-[2px] font-mono text-[9px] font-semibold uppercase tracking-[0.06em] ${SENTIMENT_STYLES[pair.sentiment]}`}
+                            >
+                              {sentimentLabel(pair.sentiment, t)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4 sm:gap-6">
+                          <span
+                            dir="ltr"
+                            className="hidden font-mono text-[13px] tabular-nums text-gray-200 transition-colors group-hover:text-white sm:inline"
+                          >
+                            {pair.price}
+                          </span>
+                          <span
+                            dir="ltr"
+                            className={`inline-flex items-center gap-1 font-mono text-[13px] font-semibold tabular-nums ${
+                              pair.up ? 'text-[#00B050]' : 'text-[#EF4444]'
+                            }`}
+                          >
+                            <Caret up={pair.up} />
+                            {targetValue(pair.target)}
+                          </span>
+                          <span className="w-9 text-end font-mono text-[12px] tabular-nums text-gray-300 transition-colors group-hover:text-white">
+                            {pair.conf}%
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Right Column */}
+              {rightItems.length > 0 && (
+                <div>
+                  <div className="hidden items-center justify-between border-b border-t border-[#1b2b20] bg-[#0d1410] px-5 py-3 text-gray-400 sm:flex md:border-t-0">
+                    <span className="text-eyebrow font-mono font-semibold uppercase">
+                      {t('instrumentLabel')}
+                    </span>
+                    <span className="text-eyebrow font-mono font-semibold uppercase">
+                      {t('lastLabel')} <span className="mx-1 opacity-40">/</span> {t('targetLabel')}
+                    </span>
+                  </div>
+
+                  <div className="divide-y divide-[#1b2b20] border-t border-[#1b2b20] md:border-t-0">
+                    {rightItems.map((pair) => {
+                      const active = pair.symbol === featured.symbol;
+                      return (
+                        <button
+                          key={pair.symbol}
+                          type="button"
+                          onClick={() => setSelectedSymbol(pair.symbol)}
+                          aria-pressed={active}
+                          className={`group flex w-full cursor-pointer items-center justify-between px-5 py-4 text-start transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00b050] ${
+                            active ? 'bg-[#00b050]/20' : 'hover:bg-[#00b050]/20'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3.5">
+                            <Sparkline points={pair.sparkPoints} up={pair.up} />
+                            <div>
+                              <p
+                                dir="ltr"
+                                className="font-sans text-[14px] font-bold text-white transition-colors group-hover:text-[#00b050]"
+                              >
+                                {pair.symbol}
+                              </p>
+                              <span
+                                className={`mt-0.5 inline-block rounded px-1.5 py-[2px] font-mono text-[9px] font-semibold uppercase tracking-[0.06em] ${SENTIMENT_STYLES[pair.sentiment]}`}
+                              >
+                                {sentimentLabel(pair.sentiment, t)}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4 sm:gap-6">
+                            <span
+                              dir="ltr"
+                              className="hidden font-mono text-[13px] tabular-nums text-gray-200 transition-colors group-hover:text-white sm:inline"
+                            >
+                              {pair.price}
+                            </span>
+                            <span
+                              dir="ltr"
+                              className={`inline-flex items-center gap-1 font-mono text-[13px] font-semibold tabular-nums ${
+                                pair.up ? 'text-[#00B050]' : 'text-[#EF4444]'
+                              }`}
+                            >
+                              <Caret up={pair.up} />
+                              {targetValue(pair.target)}
+                            </span>
+                            <span className="w-9 text-end font-mono text-[12px] tabular-nums text-gray-300 transition-colors group-hover:text-white">
+                              {pair.conf}%
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </ScrollReveal>

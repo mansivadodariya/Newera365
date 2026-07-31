@@ -237,12 +237,12 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
       {/* The duel — animated spread bars, us vs the rest */}
       <section className="px-5 pb-6">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="border-border shadow-card overflow-hidden rounded-[24px] border bg-white dark:border-white/[0.07] dark:bg-[#111316] dark:shadow-none">
+          <div className="overflow-hidden rounded-[24px] border border-[#1b2b20] bg-[#080b09] shadow-2xl dark:border-[#1b2b20] dark:bg-[#080b09]">
             {/* Header */}
-            <div className="border-border border-b px-5 py-6 md:px-8 md:py-7 dark:border-white/[0.07]">
+            <div className="border-b border-[#1b2b20] bg-[#0d1410] px-5 py-6 md:px-8 md:py-7">
               <SectionKicker className="mb-3">{t('duelKicker')}</SectionKicker>
-              <h2 className="text-foreground text-headline font-sans">{t('duelTitle')}</h2>
-              <p className="font-body text-muted text-body mt-2 max-w-[560px]">
+              <h2 className="text-headline font-sans text-white">{t('duelTitle')}</h2>
+              <p className="font-body text-body mt-2 max-w-[560px] text-gray-300">
                 {t('duelSubtitle')}
               </p>
 
@@ -256,8 +256,8 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
                       onClick={() => setInstrumentSymbol(ins.symbol)}
                       className={`text-caption rounded-pill flex-shrink-0 px-3.5 py-[7px] font-mono font-medium tabular-nums transition-colors active:scale-[0.98] ${
                         active
-                          ? 'bg-accent border-accent border text-white'
-                          : 'border-border hover:border-accent/50 hover:text-foreground text-muted border bg-white dark:border-white/10 dark:bg-white/[0.03] dark:text-white/55 dark:hover:text-white'
+                          ? 'border border-[#00b050] bg-[#00b050] font-bold text-white'
+                          : 'border border-[#1b2b20] bg-[#0d1410] text-gray-300 hover:border-[#00b050] hover:text-white'
                       }`}
                     >
                       {ins.name}
@@ -269,35 +269,38 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
 
             {/* Arena — the bars */}
             <div ref={duel.ref} className="px-5 py-7 md:px-8 md:py-8">
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-4">
                 {contenders.map((c, i) => (
-                  <div key={c.key}>
+                  <div
+                    key={c.key}
+                    className="group rounded-[14px] border-l-4 border-l-transparent p-3.5 transition-all duration-200 hover:border-l-[#00b050] hover:bg-[#00b050]/20"
+                  >
                     <div className="mb-2.5 flex items-center justify-between gap-3">
                       <div className="flex min-w-0 items-center gap-2.5">
                         <span
                           className={`h-2.5 w-2.5 flex-shrink-0 rounded-[3px] ${
-                            c.camp === 'us' ? 'bg-accent' : 'bg-muted/45 dark:bg-white/25'
+                            c.camp === 'us' ? 'bg-[#00b050]' : 'bg-gray-500'
                           }`}
                         />
-                        <span className="text-body text-foreground font-sans font-semibold">
+                        <span className="text-body font-sans font-semibold text-white transition-colors group-hover:text-[#00b050]">
                           {c.label}
                         </span>
                         {c.champion && (
-                          <span className="text-accent bg-accent-subtle text-eyebrow rounded-pill px-2 py-0.5 font-mono uppercase">
+                          <span className="text-eyebrow rounded-pill bg-[#00b050] px-2.5 py-0.5 font-mono font-bold uppercase text-white">
                             {t('tightest')}
                           </span>
                         )}
                       </div>
                       <span
                         dir="ltr"
-                        className={`text-body-lg flex-shrink-0 font-mono font-semibold tabular-nums ${c.value}`}
+                        className={`text-body-lg flex-shrink-0 font-mono font-bold tabular-nums ${c.camp === 'us' ? 'text-[#00b050]' : 'text-gray-300'}`}
                       >
                         {fmtSpread(c.spread)} {data.unit}
                       </span>
                     </div>
-                    <div className="bg-accent/[0.06] rounded-pill relative h-3 w-full overflow-hidden dark:bg-white/[0.06]">
+                    <div className="rounded-pill relative h-3.5 w-full overflow-hidden bg-white/10">
                       <div
-                        className={`rounded-pill absolute inset-y-0 start-0 ${c.fill}`}
+                        className={`rounded-pill absolute inset-y-0 start-0 ${c.camp === 'us' ? 'bg-[#00b050]' : 'bg-gray-500'}`}
                         style={{
                           width: duel.filled ? `${pct(c.spread)}%` : '0%',
                           transition: duel.animate
@@ -312,7 +315,7 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
               </div>
 
               {/* Terminal footnote — how the numbers are measured */}
-              <p className="border-border text-muted text-caption mt-7 border-t pt-4 font-mono dark:border-white/[0.07]">
+              <p className="text-caption mt-7 border-t border-[#1b2b20] pt-4 font-mono text-gray-400">
                 {t('calcFormula')}
               </p>
             </div>
@@ -323,24 +326,24 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
       {/* The scorecard — full ledger across all three tiers */}
       <section className="px-5 pb-6">
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="border-border shadow-card overflow-hidden rounded-[24px] border bg-white dark:border-white/[0.07] dark:bg-[#111316] dark:shadow-none">
-            <div className="border-border border-b px-5 py-5 md:px-8 dark:border-white/[0.07]">
+          <div className="overflow-hidden rounded-[24px] border border-[#1b2b20] bg-[#080b09] shadow-2xl dark:border-[#1b2b20] dark:bg-[#080b09]">
+            <div className="border-b border-[#1b2b20] bg-[#0d1410] px-5 py-5 md:px-8">
               <SectionKicker className="mb-3">{t('compKicker')}</SectionKicker>
-              <p className="text-foreground text-title font-sans">
+              <p className="text-title font-sans font-bold text-white">
                 {selectedInstrument?.name ?? ''}
               </p>
             </div>
 
             {/* Column headers */}
-            <div className="grid grid-cols-[minmax(84px,1.15fr)_repeat(3,minmax(0,1fr))] items-end gap-2 px-5 pt-5 md:px-8">
+            <div className="grid grid-cols-[minmax(84px,1.15fr)_repeat(3,minmax(0,1fr))] items-end gap-2 border-b border-[#1b2b20] bg-[#0d1410] px-5 py-3 md:px-8">
               <span />
-              <span className="text-eyebrow text-muted text-center font-mono uppercase">
+              <span className="text-eyebrow text-center font-mono font-semibold uppercase text-gray-400">
                 {t('stdLabel')}
               </span>
-              <span className="text-accent text-eyebrow text-center font-mono uppercase">
+              <span className="text-eyebrow text-center font-mono font-bold uppercase text-[#00b050]">
                 {t('rawLabel')}
               </span>
-              <span className="text-eyebrow text-muted text-center font-mono uppercase">
+              <span className="text-eyebrow text-center font-mono font-semibold uppercase text-gray-400">
                 {t('vipLabel')}
               </span>
             </div>
@@ -350,26 +353,28 @@ export function SpreadComparatorPage({ instruments: cmsInstruments }: SpreadComp
               {scorecard.map((row, i) => (
                 <div
                   key={row.label}
-                  className={`grid grid-cols-[minmax(84px,1.15fr)_repeat(3,minmax(0,1fr))] items-center gap-2 py-3.5 ${
-                    i > 0 ? 'border-border border-t dark:border-white/[0.07]' : ''
+                  className={`group grid grid-cols-[minmax(84px,1.15fr)_repeat(3,minmax(0,1fr))] items-center gap-2 rounded-[8px] px-3 py-3.5 transition-all duration-200 hover:bg-[#00b050]/20 ${
+                    i > 0 ? 'border-t border-[#1b2b20]' : ''
                   }`}
                 >
-                  <span className="font-body text-caption text-muted">{row.label}</span>
+                  <span className="font-body text-caption font-medium text-gray-300 transition-colors group-hover:text-white">
+                    {row.label}
+                  </span>
                   <span
                     dir="ltr"
-                    className="text-body text-foreground text-center font-mono tabular-nums"
+                    className="text-body text-center font-mono tabular-nums text-gray-200 transition-colors group-hover:text-white"
                   >
                     {row.std}
                   </span>
                   <span
                     dir="ltr"
-                    className="text-accent text-body text-center font-mono font-semibold tabular-nums"
+                    className="text-body text-center font-mono font-bold tabular-nums text-[#00b050]"
                   >
                     {row.raw}
                   </span>
                   <span
                     dir="ltr"
-                    className="text-body text-foreground text-center font-mono tabular-nums"
+                    className="text-body text-center font-mono tabular-nums text-gray-200 transition-colors group-hover:text-white"
                   >
                     {row.vip}
                   </span>

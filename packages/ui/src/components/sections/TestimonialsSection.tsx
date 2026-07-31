@@ -86,9 +86,8 @@ export function TestimonialsSection({
     return () => clearInterval(id);
   }, [paused, count, active]);
 
-  // Scroll the active slide to the logical start — scrollBy on the TRACK only.
-  // (scrollIntoView also nudged the page vertically and double-fought snap.)
-  // The delta is measured from bounding rects, so it is correct in LTR and RTL.
+  // Scroll the active slide: first card to start corner, last card to end corner,
+  // middle cards centered in the track.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
@@ -97,13 +96,25 @@ export function TestimonialsSection({
     const rtl = getComputedStyle(track).direction === 'rtl';
     const tr = track.getBoundingClientRect();
     const sr = slide.getBoundingClientRect();
-    const delta = rtl ? sr.right - tr.right : sr.left - tr.left;
+
+    let delta = 0;
+    if (active === 0) {
+      delta = rtl ? track.scrollWidth - track.clientWidth - track.scrollLeft : -track.scrollLeft;
+    } else if (active === count - 1) {
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      delta = rtl ? -track.scrollLeft : maxScroll - track.scrollLeft;
+    } else {
+      const slideCenter = sr.left + sr.width / 2;
+      const trackCenter = tr.left + tr.width / 2;
+      delta = slideCenter - trackCenter;
+    }
+
     if (Math.abs(delta) < 1) return;
     programmatic.current = true;
     track.scrollBy({ left: delta, behavior: 'smooth' });
     const to = setTimeout(() => (programmatic.current = false), 600);
     return () => clearTimeout(to);
-  }, [active]);
+  }, [active, count]);
 
   // Keep `active` in sync when the user drags/scrolls the track directly, so
   // the dots and auto-advance never desync from what is actually on screen.
@@ -116,12 +127,14 @@ export function TestimonialsSection({
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         const rtl = getComputedStyle(track).direction === 'rtl';
-        const edge = rtl ? track.getBoundingClientRect().right : track.getBoundingClientRect().left;
+        const tr = track.getBoundingClientRect();
+        const center = tr.left + tr.width / 2;
         let nearest = 0;
         let best = Infinity;
         track.querySelectorAll<HTMLElement>('[data-idx]').forEach((s, i) => {
           const sr = s.getBoundingClientRect();
-          const d = Math.abs((rtl ? sr.right : sr.left) - edge);
+          const slideCenter = sr.left + sr.width / 2;
+          const d = Math.abs(slideCenter - center);
           if (d < best) {
             best = d;
             nearest = i;
@@ -185,39 +198,32 @@ export function TestimonialsSection({
         >
           <div
             ref={trackRef}
-            className={`scrollbar-hide flex snap-x snap-mandatory items-stretch gap-[14px] overflow-x-auto pb-1 ${
-              // On desktop the <=3 cards all fit, so drop the scroll clip and let
-              // the highlighted card scale + shadow bleed past the row edges for a
-              // seamless pop. (Falls back to a scroll-clip if more cards are added.)
+            className={`scrollbar-hide flex snap-x snap-mandatory items-stretch gap-[14px] overflow-x-auto px-4 py-6 xl:px-6 ${
               count <= 3 ? 'xl:overflow-visible' : ''
             }`}
           >
             {items.map((item, i) => {
               const isActive = i === active;
               // Edge cards scale inward (origin toward the row centre) so the
-              // active first/last card never overflows the track's clip box —
-              // RTL-flipped since index 0 is visually on the right there.
+              // active first/last card never overflows the track's clip box
               const originClass =
                 i === 0
-                  ? 'xl:origin-left rtl:xl:origin-right'
+                  ? 'origin-left rtl:origin-right'
                   : i === count - 1
-                    ? 'xl:origin-right rtl:xl:origin-left'
-                    : 'xl:origin-center';
+                    ? 'origin-right rtl:origin-left'
+                    : 'origin-center';
               return (
                 <div
                   key={i}
                   data-idx={i}
-                  className="w-[86%] flex-shrink-0 snap-start sm:w-[calc(50%-7px)] xl:w-[calc(33.333%-10px)]"
+                  className="w-[86%] flex-shrink-0 snap-center sm:w-[calc(50%-7px)] xl:w-[calc(33.333%-10px)]"
                 >
-                  {/* Active card grows to become the focus (the rest hold their
-                    size, dimmed) — the auto-advance and dots drive `active`, so
-                    on desktop where all cards are already visible the carousel
-                    reads as a moving spotlight rather than a dead scroll. */}
+                  {/* Active card grows to become the focus */}
                   <figure
                     className={`border-border relative flex h-full flex-col gap-4 rounded-[20px] border bg-white p-6 transition-[transform,opacity,box-shadow] duration-500 ease-out dark:bg-[#111316] ${originClass} ${
                       isActive
-                        ? 'shadow-card dark:shadow-card-dark xl:border-accent/40 xl:z-10 xl:scale-[1.05] xl:shadow-xl'
-                        : 'shadow-card dark:shadow-card-dark xl:opacity-55'
+                        ? 'shadow-card dark:shadow-card-dark border-accent/40 z-10 scale-[1.04] opacity-100 shadow-xl'
+                        : 'shadow-card dark:shadow-card-dark opacity-65'
                     }`}
                   >
                     {/* Quote glyph (locale-neutral — avoids LTR quote chars in RTL) */}

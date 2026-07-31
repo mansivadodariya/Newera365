@@ -667,9 +667,12 @@ export function MarketCategoryPage({
 
               {/* Dark watchlist container */}
               <div className="overflow-hidden rounded-[20px] bg-[#111111] xl:rounded-[24px]">
-                <div className="border-white/8 grid grid-cols-[minmax(0,1fr)_72px_56px] border-b px-4 py-2 xl:grid-cols-[1fr_100px_110px_110px_110px] xl:px-6">
+                <div className="border-white/8 grid grid-cols-[minmax(0,1fr)_72px_56px] border-b px-4 py-2 xl:grid-cols-[1fr_180px_100px_110px_110px_110px] xl:px-6">
                   <span className="font-body text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
                     {t('colSymbol')}
+                  </span>
+                  <span className="font-body hidden text-start text-[9px] font-medium uppercase tracking-[0.12em] text-white/30 xl:block">
+                    {t('colSecurity')}
                   </span>
                   <span className="font-body text-end text-[9px] font-medium uppercase tracking-[0.12em] text-white/30">
                     {t('colSpread')}
@@ -691,7 +694,7 @@ export function MarketCategoryPage({
                         type="button"
                         key={item.id}
                         onClick={() => setSelectedIdx(i)}
-                        className={`grid w-full grid-cols-[minmax(0,1fr)_72px_56px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_100px_110px_110px_110px] xl:px-6 xl:py-[14px] ${i < cmsRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-accent/[0.14]' : 'hover:bg-accent/[0.06]'}`}
+                        className={`grid w-full grid-cols-[minmax(0,1fr)_72px_56px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_180px_100px_110px_110px_110px] xl:px-6 xl:py-[14px] ${i < cmsRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-accent/[0.14]' : 'hover:bg-accent/[0.06]'}`}
                       >
                         <div className="flex min-w-0 items-center gap-3">
                           <span
@@ -701,11 +704,17 @@ export function MarketCategoryPage({
                             <p className="truncate font-sans text-[13px] font-semibold leading-none text-white">
                               {item.symbol}
                             </p>
-                            <p className="font-body mt-[3px] truncate text-[10px] text-white/40">
+                            <p className="font-body mt-[3px] truncate text-[10px] text-white/40 xl:hidden">
                               {item.name}
                             </p>
                           </div>
                         </div>
+                        <p
+                          className="font-body hidden truncate text-start text-[12px] font-medium text-white/70 xl:block"
+                          title={item.name}
+                        >
+                          {item.name}
+                        </p>
                         <p
                           className="font-body text-end text-[12px] font-medium tabular-nums text-white/70"
                           dir="ltr"
@@ -738,7 +747,7 @@ export function MarketCategoryPage({
                         type="button"
                         key={row.symbol}
                         onClick={() => setSelectedIdx(i)}
-                        className={`grid w-full grid-cols-[minmax(0,1fr)_72px_56px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_100px_110px_110px_110px] xl:px-6 xl:py-[14px] ${i < meta.staticRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-accent/[0.14]' : 'hover:bg-accent/[0.06]'}`}
+                        className={`grid w-full grid-cols-[minmax(0,1fr)_72px_56px] items-center px-4 py-[11px] text-start transition-colors xl:grid-cols-[1fr_180px_100px_110px_110px_110px] xl:px-6 xl:py-[14px] ${i < meta.staticRows.length - 1 ? 'border-b border-white/[0.06]' : ''} ${selectedIdx === i ? 'bg-accent/[0.14]' : 'hover:bg-accent/[0.06]'}`}
                       >
                         <div className="flex min-w-0 items-center gap-3">
                           <span
@@ -748,11 +757,17 @@ export function MarketCategoryPage({
                             <p className="truncate font-sans text-[13px] font-semibold leading-none text-white">
                               {row.symbol}
                             </p>
-                            <p className="font-body mt-[3px] truncate text-[10px] text-white/40">
+                            <p className="font-body mt-[3px] truncate text-[10px] text-white/40 xl:hidden">
                               {row.name}
                             </p>
                           </div>
                         </div>
+                        <p
+                          className="font-body hidden truncate text-start text-[12px] font-medium text-white/70 xl:block"
+                          title={row.name}
+                        >
+                          {row.name}
+                        </p>
                         <p
                           className="font-body text-end text-[12px] font-medium tabular-nums text-white/70"
                           dir="ltr"
@@ -822,20 +837,22 @@ export function MarketCategoryPage({
           <div className="border-border/70 border-t dark:border-white/[0.08]">
             {WHY_ITEMS.map((n, i) => (
               <ScrollReveal key={n} index={i}>
-                <div className="border-border/70 row-hover group flex items-start gap-5 border-b py-6 dark:border-white/[0.08]">
-                  <span
-                    className="group-hover:text-accent/40 dark:group-hover:text-accent-bright/60 dark:text-accent-bright/[0.32] font-mono text-[28px] font-semibold tabular-nums leading-none text-[#0C1F14]/[0.14] transition-colors duration-300 xl:text-[36px]"
-                    dir="ltr"
-                  >
-                    {`0${n}`}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-foreground text-title font-sans">
-                      {t(`why${cap}${n}Title`)}
-                    </h3>
-                    <p className="font-body text-muted text-body mt-2 max-w-[62ch]">
-                      {t(`why${cap}${n}Body`)}
-                    </p>
+                <div className="border-border/70 border-b py-2 dark:border-white/[0.08]">
+                  <div className="group flex items-start gap-5 rounded-[16px] px-4 py-5 transition-all duration-300 hover:bg-[#00b050]">
+                    <span
+                      className="font-mono text-[28px] font-semibold text-gray-400 transition-colors duration-300 group-hover:text-white xl:text-[32px] dark:text-white/40"
+                      dir="ltr"
+                    >
+                      {`0${n}`}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-foreground text-title font-sans font-bold transition-colors duration-300 group-hover:text-white">
+                        {t(`why${cap}${n}Title`)}
+                      </h3>
+                      <p className="font-body text-muted text-body mt-2 max-w-[62ch] transition-colors duration-300 group-hover:text-white/95">
+                        {t(`why${cap}${n}Body`)}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </ScrollReveal>
@@ -871,54 +888,60 @@ export function MarketCategoryPage({
       </section>
 
       {/* Specs section */}
-      <section className="rounded-t-[32px] bg-gradient-to-r from-[#DCEAE1] to-[#F2F5F3] px-5 pb-10 pt-10 rtl:bg-gradient-to-l dark:from-[#0C1F14] dark:to-[#07090D]">
-        <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          {/* <SectionKicker className="mb-4"> */}
-          <SectionKicker className="mb-4">{t('specsKicker')}</SectionKicker>
-          <h2 className="text-foreground text-headline mb-6 font-sans">{t('specsHeading')}</h2>
+      {validKey !== 'commodities' && (
+        <section className="rounded-t-[32px] bg-gradient-to-r from-[#DCEAE1] to-[#F2F5F3] px-5 pb-10 pt-10 rtl:bg-gradient-to-l dark:from-[#0C1F14] dark:to-[#07090D]">
+          <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            {/* <SectionKicker className="mb-4"> */}
+            <SectionKicker className="mb-4">{t('specsKicker')}</SectionKicker>
+            <h2 className="text-foreground text-headline mb-6 font-sans">{t('specsHeading')}</h2>
 
-          <div className="mb-5 overflow-hidden rounded-[18px] bg-[#111111]">
-            {SPEC_ROWS.map((row, i) => (
-              <div
-                key={row.key}
-                className={`flex items-center justify-between px-5 py-[13px] ${i < SPEC_ROWS.length - 1 ? 'border-b border-[#1f1c1c]' : ''}`}
-              >
-                <span className="font-body text-[13px] text-white/70">
-                  {t(
-                    `spec${row.key.charAt(0).toUpperCase() + row.key.slice(1)}` as 'specMinSpread',
-                  )}
-                </span>
-                <span className="font-body text-[14px] font-semibold text-white">{row.value}</span>
-              </div>
-            ))}
-          </div>
+            <div className="mb-6 grid grid-cols-1 gap-3 rounded-[18px] bg-[#111111] md:grid-cols-2 md:gap-4">
+              {SPEC_ROWS.map((row, i) => (
+                <div
+                  key={row.key}
+                  className={`flex items-center justify-between px-5 py-[13px] ${i < SPEC_ROWS.length - 1 ? 'border-b border-[#1f1c1c]' : ''}`}
+                >
+                  <span className="font-body text-[13px] text-white/70">
+                    {t(
+                      `spec${row.key.charAt(0).toUpperCase() + row.key.slice(1)}` as 'specMinSpread',
+                    )}
+                  </span>
+                  <span className="font-mono text-[14px] font-bold tabular-nums text-white">
+                    {row.value}
+                  </span>
+                </div>
+              ))}
+            </div>
 
-          <Link
-            href={`/${locale}/trade/accounts`}
-            className="bg-accent font-body hover:bg-accent-hover flex h-[48px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
-          >
-            {t('compareAccounts')}
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 16 16"
-              fill="none"
-              className="rtl:-scale-x-100"
+            <Link
+              href={`/${locale}/trade/accounts`}
+              className="bg-accent font-body hover:bg-accent-hover flex h-[48px] w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium text-white transition-colors"
             >
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
-        </ScrollReveal>
-      </section>
+              {t('compareAccounts')}
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 16 16"
+                fill="none"
+                className="rtl:-scale-x-100"
+              >
+                <path
+                  d="M3 8h10M9 4l4 4-4 4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+          </ScrollReveal>
+        </section>
+      )}
 
       {/* Other markets */}
-      <section className="bg-gradient-to-r from-[#DCEAE1] to-[#F2F5F3] px-5 pb-12 pt-10 rtl:bg-gradient-to-l dark:from-[#0C1F14] dark:to-[#07090D]">
+      <section
+        className={`${validKey === 'commodities' ? 'rounded-t-[32px]' : ''} bg-gradient-to-r from-[#DCEAE1] to-[#F2F5F3] px-5 pb-12 pt-10 rtl:bg-gradient-to-l dark:from-[#0C1F14] dark:to-[#07090D]`}
+      >
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-4 text-[10px] leading-[100%] tracking-[0.18em]">
             {t('otherKicker')}

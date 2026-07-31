@@ -649,15 +649,20 @@ function HeroContent({
             <div className="grid gap-3 xl:grid-cols-2 xl:gap-5">
               {trustRows.map((row, i) => (
                 <ScrollReveal key={row.key} index={i}>
-                  <div className="hover:border-accent-bright/25 hover:bg-accent/[0.08] group flex h-full items-start gap-4 rounded-[14px] border border-white/[0.06] bg-white/[0.03] p-[18px] transition-colors duration-300">
-                    <div className="bg-accent/[0.12] text-accent-bright group-hover:bg-accent/[0.25] flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-[11px] transition-colors duration-300">
-                      {row.icon}
-                    </div>
+                  <div className="group flex h-full items-start gap-4 rounded-[16px] border border-white/[0.08] bg-white/[0.03] p-5 transition-all duration-300 hover:border-[#00b050] hover:bg-[#00b050]">
+                    <span className="font-mono text-[26px] font-bold text-gray-400 transition-colors duration-300 group-hover:text-white">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
                     <div className="flex-1">
-                      <p className="text-body-lg mb-1 font-sans font-semibold text-white">
+                      <p className="text-body-lg mb-1 font-sans font-bold text-white transition-colors duration-300 group-hover:text-white">
                         {row.title}
                       </p>
-                      <p className="font-body text-body leading-[1.55] text-white/55">{row.desc}</p>
+                      <p className="font-body text-body leading-[1.55] text-gray-300 transition-colors duration-300 group-hover:text-white/95">
+                        {row.desc}
+                      </p>
+                    </div>
+                    <div className="flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-[11px] bg-[#00b050]/20 text-[#00b050] transition-colors duration-300 group-hover:bg-white/20 group-hover:text-white">
+                      {row.icon}
                     </div>
                   </div>
                 </ScrollReveal>

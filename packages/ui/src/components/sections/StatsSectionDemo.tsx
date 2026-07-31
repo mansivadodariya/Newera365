@@ -64,7 +64,7 @@ export async function StatsSectionDemo({
               <ScrollReveal key={stat.label} index={i} className="h-full">
                 <Spotlight
                   size={260}
-                  className="bg-ink-soft shadow-card hover:ring-accent/30 flex h-full flex-col gap-2 overflow-hidden rounded-[18px] p-[26px] ring-1 ring-inset ring-white/[0.04] transition-[transform,box-shadow] duration-300 motion-safe:hover:scale-[1.02] dark:bg-[#15171c]"
+                  className="bg-ink-soft shadow-card hover:ring-accent/30 flex h-full flex-col gap-6 overflow-hidden rounded-[18px] p-[26px] ring-1 ring-inset ring-white/[0.04] transition-[transform,box-shadow] duration-300 motion-safe:hover:scale-[1.02] dark:bg-[#15171c]"
                 >
                   {/* Accent tick stretches while the tile is read */}
                   <span
@@ -77,7 +77,7 @@ export async function StatsSectionDemo({
                   >
                     <CountUp flat value={stat.value} />
                   </span>
-                  <span className="font-mono text-[11px] font-medium uppercase tracking-[0.13em] text-white/55 transition-colors duration-300 group-hover/spot:text-white/80">
+                  <span className="font-mono text-[14px] font-medium uppercase tracking-[0.13em] text-white/55 transition-colors duration-300 group-hover/spot:text-white/80">
                     {stat.label}
                   </span>
                 </Spotlight>
@@ -87,7 +87,7 @@ export async function StatsSectionDemo({
         </CountUpGroup>
 
         {/* Regulated badge */}
-        <div className="border-border bg-surface shadow-card hover:border-accent/40 hover:shadow-card-lg mt-6 flex items-center gap-[14px] rounded-[16px] border px-5 py-[18px] transition-[transform,box-shadow,border-color] duration-300 motion-safe:hover:-translate-y-0.5 dark:bg-[#15171c]">
+        {/* <div className="border-border bg-surface shadow-card hover:border-accent/40 hover:shadow-card-lg mt-6 flex items-center gap-[14px] rounded-[16px] border px-5 py-[18px] transition-[transform,box-shadow,border-color] duration-300 motion-safe:hover:-translate-y-0.5 dark:bg-[#15171c]">
           <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#eef3ef] dark:bg-[#23262d]">
             <Image
               src="/icons/authority.png"
@@ -115,7 +115,7 @@ export async function StatsSectionDemo({
           >
             <path d="m9 18 6-6-6-6" />
           </svg>
-        </div>
+        </div> */}
       </div>
     </section>
   );

@@ -19,6 +19,49 @@ import {
 import type { TestimonialItem, HomeNewsletterContent } from '@newera365/ui';
 import { getSiteSettings } from '@/lib/cms';
 
+const ADDITIONAL_TESTIMONIALS = [
+  {
+    quoteEn:
+      'Swap-free account terms are transparent and fair. Trading Gold (XAUUSD) with tight spreads without hidden overnight fees makes a massive difference for my strategy.',
+    quoteAr:
+      'شروط الحساب الخالي من الفوائد شفافة وعادلة. تداول الذهب بسبريد ضيق ودون رسوم تبييت خفية أحدث فارقاً كبيراً في استراتيجيتي.',
+    authorName: 'Tariq M.',
+    authorRoleEn: 'Commodity trader · Kuwait City',
+    authorRoleAr: 'متداول سلع · مدينة الكويت',
+    rating: 5,
+  },
+  {
+    quoteEn:
+      'USDT deposits clear almost instantly and order execution under 15ms is real. No re-quotes or unexpected slippage during high volatility.',
+    quoteAr:
+      'إيداعات USDT تتأكد شبه فورياً وتنفيذ الأوامر في أقل من 15 ملي ثانية حقيقي. لا توجد إعادة تسعير أو انزلاق غير متوقع أثناء تقلبات السوق.',
+    authorName: 'Lucas V.',
+    authorRoleEn: 'Algorithmic trader · Frankfurt',
+    authorRoleAr: 'متداول خوارزمي · فرانكفورت',
+    rating: 5,
+  },
+  {
+    quoteEn:
+      'Customer support answered my account verification questions within minutes via live chat. Refreshing to deal with a broker that values client service.',
+    quoteAr:
+      'أجاب فريق الدعم الفني على استفسارات توثيق حسابي خلال دقائق عبر المحادثة المباشرة. من الرائع التعامل مع وسيط يهتم بخدمة العملاء.',
+    authorName: 'Nadia H.',
+    authorRoleEn: 'FX trader · Kuala Lumpur',
+    authorRoleAr: 'متداولة عملات · كوالالمبور',
+    rating: 5,
+  },
+  {
+    quoteEn:
+      'Switched my portfolio to Newera365 last year. The seamless web and mobile MT5 sync lets me manage risk on major FX pairs from anywhere.',
+    quoteAr:
+      'نقلت محفظتي إلى Newera365 العام الماضي. التزامن السلس لـ MT5 على الويب والهاتف يتيح لي إدارة المخاطر على أزواج العملات الرئيسية من أي مكان.',
+    authorName: 'Liam R.',
+    authorRoleEn: 'Portfolio manager · Sydney',
+    authorRoleAr: 'مدير محافظ · سدني',
+    rating: 5,
+  },
+];
+
 export default async function HomePage({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
 
@@ -26,9 +69,9 @@ export default async function HomePage({ params }: { params: { locale: string } 
 
   const kpiStats = siteSettings?.kpiStats ?? undefined;
 
-  // Resolve testimonials (client feedback #5) — locale-correct quote/role
+  // Resolve testimonials from CMS database + additional 4 global traders
   const isAr = params.locale === 'ar';
-  const testimonials: TestimonialItem[] = (siteSettings?.testimonials ?? []).flatMap((tm) => {
+  const dbTestimonials: TestimonialItem[] = (siteSettings?.testimonials ?? []).flatMap((tm) => {
     const quote = isAr ? tm.quoteAr : tm.quoteEn;
     if (!quote) return [];
     return [
@@ -41,9 +84,23 @@ export default async function HomePage({ params }: { params: { locale: string } 
       },
     ];
   });
+
+  const extraTestimonials: TestimonialItem[] = ADDITIONAL_TESTIMONIALS.map((tm) => ({
+    quote: isAr ? tm.quoteAr : tm.quoteEn,
+    authorName: tm.authorName,
+    authorRole: isAr ? tm.authorRoleAr : tm.authorRoleEn,
+    rating: tm.rating,
+    avatarUrl: null,
+  }));
+
+  const testimonials = [...dbTestimonials, ...extraTestimonials];
+
   const socialProofHeadline = isAr
     ? (siteSettings?.socialProofHeadlineAr ?? null)
     : (siteSettings?.socialProofHeadlineEn ?? null);
+
+  const ratingValue = siteSettings?.ratingValue ?? null;
+
   const ratingCaption = isAr
     ? (siteSettings?.ratingCountAr ?? null)
     : (siteSettings?.ratingCountEn ?? null);
@@ -97,7 +154,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
       <HomeNewsletterSection content={newsletterContent} />
       <TestimonialsSection
         headline={socialProofHeadline}
-        ratingValue={siteSettings?.ratingValue ?? null}
+        ratingValue={ratingValue}
         ratingCaption={ratingCaption}
         items={testimonials}
       />

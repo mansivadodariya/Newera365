@@ -279,7 +279,9 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
 
       {/* In every issue: the briefing's standing table of contents */}
       <section className="px-5 pb-16 md:pb-20 xl:px-[80px]">
-        <style>{`
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
           .ne-nl-row { position: relative; }
           .ne-nl-row::before {
             content: '';
@@ -294,7 +296,9 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
           @media (hover: hover) {
             .ne-nl-row:hover::before { opacity: 1; }
           }
-        `}</style>
+        `,
+          }}
+        />
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
             <SectionKicker className="mb-8">{t('whatKicker')}</SectionKicker>

@@ -55,9 +55,7 @@ function useNavItems(t: ReturnType<typeof useTranslations<'nav'>>): NavItem[] {
     {
       label: t('platform'),
       href: '/platform/mt5',
-      // AI CRM lives at its own top-level /ai-crm route (not under /platform),
-      // so it must be listed here to keep the Platform tab highlighted there.
-      activeFor: ['/platform', '/ai-crm'],
+      activeFor: ['/platform'],
       dropdown: [
         { label: t('platformOverviewLabel'), sub: t('platformOverviewSub'), href: '/platform/mt5' },
         {
@@ -65,7 +63,7 @@ function useNavItems(t: ReturnType<typeof useTranslations<'nav'>>): NavItem[] {
           sub: t('platformWebtraderSub'),
           href: '/platform/webtrader',
         },
-        { label: t('toolsAiCrmLabel'), sub: t('toolsAiCrmSub'), href: '/ai-crm' },
+        // { label: t('toolsAiCrmLabel'), sub: t('toolsAiCrmSub'), href: '/ai-crm' },
       ],
     },
     {

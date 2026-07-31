@@ -97,7 +97,7 @@ function Footer({
         { label: t('linkMT5'), href: '/platform/mt5' },
         { label: t('linkWebTrader'), href: '/platform/webtrader' },
         { label: t('linkTools'), href: '/tools' },
-        { label: t('linkAiCrm'), href: '/ai-crm' },
+        // { label: t('linkAiCrm'), href: '/ai-crm' },
       ],
     },
     {

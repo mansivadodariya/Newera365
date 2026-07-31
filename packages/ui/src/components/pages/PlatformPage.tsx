@@ -313,29 +313,15 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
           </div>
 
           {/* Device mockup */}
-          <div className="relative mt-6 h-[240px] overflow-visible xl:mt-0 xl:h-[340px] xl:w-[460px] xl:flex-shrink-0">
-            {/* Green glow behind */}
-            <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-[#c5f5d0] to-[#e8f8ec] dark:from-[#0a2a12] dark:to-[#111111]" />
-            {/* Laptop mock — bottom-left, larger */}
-            <div className="dark:border-border border-radius-[12px] absolute bottom-4 start-4 h-[170px] w-[240px] overflow-hidden rounded-[12px] border border-[#111111] bg-[#111111] p-[4px] shadow-[0_8px_32px_rgba(0,0,0,0.18)] xl:bottom-6 xl:start-6 xl:h-[220px] xl:w-[310px]">
+          <div className="relative mt-6 aspect-[1.33/1] w-full max-w-[460px] overflow-hidden rounded-[32px] bg-[#D4F5DD] p-3 shadow-[0_10px_32px_rgba(0,0,0,0.06)] xl:mt-0 xl:h-[340px] xl:w-[460px] xl:flex-shrink-0 dark:bg-[#0d2a15]">
+            <div className="relative h-full w-full overflow-hidden rounded-[22px]">
               <Image
-                src="/images/laptop.jpg"
-                alt="Platform on laptop"
-                width={132}
-                height={92}
+                src="/images/platformSide.png"
+                alt="Platform across devices"
+                width={460}
+                height={340}
                 loading="lazy"
-                className="h-full w-full shrink-0 rounded-[12px]"
-              />
-            </div>
-            {/* Phone mock — top-right, overlapping */}
-            <div className="dark:border-border border-radius-[12px] absolute end-6 top-4 h-[170px] w-[90px] overflow-hidden rounded-[12px] border border-[#111111] bg-[#111111] p-[4px] shadow-[0_12px_40px_rgba(0,0,0,0.2)] xl:end-8 xl:top-6 xl:h-[266px] xl:w-[128px] dark:bg-[#111111]">
-              <Image
-                src="/images/platform-mobile.jpg"
-                alt="Platform on mobile"
-                width={83}
-                height={162}
-                loading="lazy"
-                className="h-[162px] w-[83px] shrink-0 rounded-[12px] xl:h-[258px] xl:w-[120px]"
+                className="h-full w-full rounded-[22px] object-cover object-center"
               />
             </div>
           </div>
