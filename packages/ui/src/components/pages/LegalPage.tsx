@@ -70,7 +70,86 @@ export function LegalPage({ documents }: LegalPageProps) {
     label: PAGE_TYPE_LABELS[d.pageType] ? docLabel(d.pageType) : d.title,
   }));
 
-  const [activeDoc, setActiveDoc] = useState<string>(uniqueDocs[0]?.pageType ?? '');
+  const [activeDoc, setActiveDoc] = useState<string>(() => {
+    if (typeof window !== 'undefined' && uniqueDocs.length > 0) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const tabParam =
+        searchParams.get('tab') ||
+        searchParams.get('doc') ||
+        searchParams.get('type') ||
+        window.location.hash.replace('#', '');
+
+      if (tabParam) {
+        const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const target = norm(tabParam);
+
+        const matched = uniqueDocs.find((d) => {
+          const typeNorm = norm(d.pageType);
+          const titleNorm = norm(d.title || '');
+          return (
+            typeNorm === target ||
+            typeNorm.includes(target) ||
+            target.includes(typeNorm) ||
+            titleNorm.includes(target)
+          );
+        });
+
+        if (matched) return matched.pageType;
+      }
+    }
+    return uniqueDocs[0]?.pageType ?? '';
+  });
+
+  // Synchronize active tab with URL query parameter or hash on navigation
+  useEffect(() => {
+    if (typeof window === 'undefined' || uniqueDocs.length === 0) return;
+    const syncDocFromUrl = () => {
+      const searchParams = new URLSearchParams(window.location.search);
+      const tabParam =
+        searchParams.get('tab') ||
+        searchParams.get('doc') ||
+        searchParams.get('type') ||
+        window.location.hash.replace('#', '');
+
+      if (!tabParam) return;
+
+      const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const target = norm(tabParam);
+
+      const matched = uniqueDocs.find((d) => {
+        const typeNorm = norm(d.pageType);
+        const titleNorm = norm(d.title || '');
+        return (
+          typeNorm === target ||
+          typeNorm.includes(target) ||
+          target.includes(typeNorm) ||
+          titleNorm.includes(target)
+        );
+      });
+
+      if (matched) {
+        setActiveDoc(matched.pageType);
+      }
+    };
+
+    syncDocFromUrl();
+    window.addEventListener('popstate', syncDocFromUrl);
+    window.addEventListener('hashchange', syncDocFromUrl);
+    return () => {
+      window.removeEventListener('popstate', syncDocFromUrl);
+      window.removeEventListener('hashchange', syncDocFromUrl);
+    };
+  }, [uniqueDocs]);
+
+  const selectTab = (id: string) => {
+    setActiveDoc(id);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('tab', id);
+      window.history.replaceState({}, '', url.toString());
+    }
+  };
+
   const cmsDoc = uniqueDocs.find((d) => d.pageType === activeDoc) ?? null;
   const tocItems = cmsDoc
     ? extractHeadings(cmsDoc.body).map((h, idx) => ({
@@ -138,7 +217,7 @@ export function LegalPage({ documents }: LegalPageProps) {
               {cmsDocList.map((doc) => (
                 <button
                   key={doc.id}
-                  onClick={() => setActiveDoc(doc.id)}
+                  onClick={() => selectTab(doc.id)}
                   className={`flex-shrink-0 rounded-full border px-4 py-[7px] font-mono text-[12px] uppercase tracking-[0.06em] transition-colors active:scale-[0.98] ${
                     activeDoc === doc.id
                       ? 'bg-accent border-transparent text-white'

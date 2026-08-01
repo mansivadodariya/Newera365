@@ -102,7 +102,7 @@ async function main() {
     {
       slug: 'ib-program',
       heroSubtitle:
-        'Earn industry-leading commissions for every active trader you refer. Transparent payouts, monthly settlement, dedicated support.',
+        'Take your partner business to the next level with advanced tools, high rebate payouts, and full partner support from Newera365.',
       ibDescription:
         'Earn up to $8 per lot traded by your referrals. Tiered structure with monthly bonus.',
       affiliateDescription:
@@ -196,7 +196,7 @@ async function main() {
     `/ib-content/${id}`,
     {
       heroSubtitle:
-        'اكسب عمولات رائدة في الصناعة عن كل متداول نشط تحيله. مدفوعات شفافة، تسوية شهرية، دعم مخصص.',
+        'انتقل بأعمال الشراكة الخاصة بك إلى المستوى التالي مع أدوات متقدمة، ودفعات عمولات مرتفعة، ودعم كامل للشركاء من نيو إيرا 365.',
       ibDescription:
         'اكسب ما يصل إلى 8 دولارات لكل لوط يتداوله إحالاتك. هيكل متدرج مع مكافأة شهرية.',
       affiliateDescription:

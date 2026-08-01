@@ -148,6 +148,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
   const [applyLoading, setApplyLoading] = useState(false);
   const [applyDone, setApplyDone] = useState(false);
   const [applyError, setApplyError] = useState('');
+  const [activeStep, setActiveStep] = useState(0);
 
   const setField =
     (k: keyof typeof form) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -227,7 +228,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
     <>
       {/* 1. Hero Section with 9 Feature Pills and Right Registration Form */}
       <section className="relative overflow-hidden bg-transparent px-5 pb-12 pt-10 xl:pb-16 xl:pt-14">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:grid xl:max-w-[1200px] xl:grid-cols-[1.15fr_0.85fr] xl:items-start xl:gap-12">
+        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:grid xl:max-w-[1200px] xl:grid-cols-[1.15fr_0.85fr] xl:items-stretch xl:gap-12">
           {/* Left Content Column */}
           <div>
             <h1 className="text-display text-foreground font-sans">
@@ -238,7 +239,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
             </h1>
 
             <p className="font-body text-body-lg text-muted mb-8 mt-4 max-w-[560px]">
-              {cmsContent?.heroSubtitle ?? t('heroSubtitle')}
+              {t('heroSubtitle')}
             </p>
 
             {/* 9 Hero Feature Pill Cards (3x3 Grid) */}
@@ -263,35 +264,34 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
           </div>
 
           {/* Right Column: Hero Registration Form */}
-          <div className="border-border shadow-card mt-10 rounded-[24px] border bg-white p-7 xl:mt-0 dark:border-white/[0.08] dark:bg-[#11141a]">
-            <h3 className="text-headline text-foreground font-sans text-[22px] font-bold">
+          <div className="border-border shadow-card mt-10 flex flex-col justify-between rounded-[24px] border bg-white p-7 xl:mt-0 dark:border-white/[0.08] dark:bg-[#11141a]">
+            <h3 className="text-headline text-foreground mb-4 font-sans text-[22px] font-bold">
               {t('applyHeading')}
             </h3>
-            <p className="font-body text-body text-muted mb-5 mt-1">{t('applySub')}</p>
 
             {applyDone ? (
               <div className="font-body rounded-[16px] bg-[#00B050]/10 px-5 py-6 text-[14px] text-[#00B050]">
                 {t('applySuccess')}
               </div>
             ) : (
-              <form onSubmit={submitApply} className="flex flex-col gap-3">
-                <input
-                  required
-                  type="text"
-                  placeholder={t('applyName')}
-                  value={form.name}
-                  onChange={setField('name')}
-                  className={inputCls}
-                />
-                <input
-                  required
-                  type="email"
-                  placeholder={t('applyEmail')}
-                  value={form.email}
-                  onChange={setField('email')}
-                  className={inputCls}
-                />
-                <div className="grid grid-cols-2 gap-3">
+              <form onSubmit={submitApply} className="flex flex-1 flex-col gap-3.5">
+                <div className="grid gap-3.5 sm:grid-cols-2">
+                  <input
+                    required
+                    type="text"
+                    placeholder={t('applyName')}
+                    value={form.name}
+                    onChange={setField('name')}
+                    className={inputCls}
+                  />
+                  <input
+                    required
+                    type="email"
+                    placeholder={t('applyEmail')}
+                    value={form.email}
+                    onChange={setField('email')}
+                    className={inputCls}
+                  />
                   <input
                     type="text"
                     placeholder={t('applyCompany')}
@@ -319,30 +319,15 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                   value={form.message}
                   onChange={setField('message')}
                   rows={3}
-                  className={inputCls}
+                  className={`${inputCls} min-h-[90px] flex-1 resize-none`}
                 />
-
-                <div className="mt-1 flex items-start gap-2.5">
-                  <input
-                    id="hero-consent"
-                    type="checkbox"
-                    defaultChecked
-                    className="border-border mt-1 h-4 w-4 rounded accent-[#00B050]"
-                  />
-                  <label
-                    htmlFor="hero-consent"
-                    className="font-body text-muted text-[11px] leading-relaxed"
-                  >
-                    {t('disclaimerText')}
-                  </label>
-                </div>
 
                 {applyError && <p className="font-body text-[12px] text-red-500">{applyError}</p>}
 
                 <button
                   type="submit"
                   disabled={applyLoading}
-                  className="font-body mt-2 w-full rounded-full bg-[#00B050] px-6 py-3.5 text-[15px] font-semibold text-white transition-all hover:bg-[#00B050]/90 disabled:opacity-60"
+                  className="font-body mt-auto w-full rounded-full bg-[#00B050] px-6 py-4 text-[15px] font-semibold text-white transition-all hover:bg-[#00B050]/90 disabled:opacity-60"
                 >
                   {applyLoading ? t('applySubmitting') : t('applyCta')}
                 </button>
@@ -393,27 +378,64 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       {/* 3. Simple Steps to Join Our Partnership Program */}
       <section id="how-it-works" className="bg-transparent px-5 py-14 xl:py-20">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="text-center">
+          <div className="text-left">
             <SectionKicker className="mb-3">{t('stepsKicker')}</SectionKicker>
-            <h2 className="text-headline text-foreground font-sans">{t('stepsHeading')}</h2>
+            <h2 className="text-headline text-foreground font-sans text-[32px] font-bold tracking-tight md:text-[40px]">
+              {t('stepsHeading')}
+            </h2>
             <p className="font-body text-body-lg text-muted mt-2">{t('stepsSub')}</p>
           </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {programSteps.map((st) => (
-              <div
-                key={st.num}
-                className="border-border shadow-card flex flex-col items-start rounded-[20px] border bg-white p-7 dark:border-white/[0.08] dark:bg-[#15171c]"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#00B050] font-sans text-[18px] font-bold text-white">
-                  {st.num}
-                </span>
-                <h3 className="text-title text-foreground mt-5 font-sans font-semibold">
-                  {st.title}
-                </h3>
-                <p className="font-body text-body text-muted mt-2 leading-relaxed">{st.desc}</p>
-              </div>
-            ))}
+          <div className="border-border/70 mt-8 border-t dark:border-white/[0.08]">
+            {programSteps.map((st, idx) => {
+              const isActive = activeStep === idx;
+              const formattedNum = String(idx + 1).padStart(2, '0');
+              return (
+                <div
+                  key={st.num}
+                  className="border-border/70 border-b py-2.5 dark:border-white/[0.08]"
+                >
+                  <div
+                    onClick={() => setActiveStep(idx)}
+                    onMouseEnter={() => setActiveStep(idx)}
+                    className={`group cursor-pointer rounded-[20px] px-6 py-6 transition-all duration-300 ${
+                      isActive
+                        ? 'bg-[#00B050] text-white shadow-md'
+                        : 'bg-transparent hover:bg-[#00B050] hover:text-white'
+                    }`}
+                  >
+                    <div className="flex items-start gap-4 md:gap-5">
+                      <span
+                        className={`flex-shrink-0 font-mono text-[28px] font-bold leading-none transition-colors duration-300 md:text-[32px] ${
+                          isActive
+                            ? 'text-white'
+                            : 'text-gray-400 group-hover:text-white dark:text-white/40'
+                        }`}
+                        dir="ltr"
+                      >
+                        {formattedNum}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <h3
+                          className={`font-sans text-[20px] font-bold leading-snug transition-colors duration-300 md:text-[22px] ${
+                            isActive ? 'text-white' : 'text-foreground group-hover:text-white'
+                          }`}
+                        >
+                          {st.title}
+                        </h3>
+                        <p
+                          className={`font-body mt-2 text-[14px] leading-relaxed transition-colors duration-300 md:text-[15px] ${
+                            isActive ? 'text-white/95' : 'text-muted group-hover:text-white/95'
+                          }`}
+                        >
+                          {st.desc}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           <div className="mt-10 flex justify-center">
@@ -478,10 +500,9 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
       {/* 6. Become Our Partners — Bottom Application Form & Disclaimers */}
       <section id="apply" className="bg-transparent px-5 pb-12 pt-6">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[760px]">
-          <div className="text-center">
+          <div className="mb-6 text-left">
             <SectionKicker className="mb-3">{t('applyKicker')}</SectionKicker>
-            <h2 className="text-foreground text-headline mb-1 font-sans">{t('applyHeading')}</h2>
-            <p className="font-body text-body text-muted mb-8">{t('applySub')}</p>
+            <h2 className="text-foreground text-headline font-sans">{t('applyHeading')}</h2>
           </div>
 
           {applyDone ? (
@@ -537,37 +558,6 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
                 className={inputCls}
               />
 
-              <div className="mt-2 flex flex-col gap-2">
-                <div className="flex items-start gap-2.5">
-                  <input
-                    id="bottom-consent-1"
-                    type="checkbox"
-                    defaultChecked
-                    className="border-border mt-1 h-4 w-4 rounded accent-[#00B050]"
-                  />
-                  <label
-                    htmlFor="bottom-consent-1"
-                    className="font-body text-muted text-[12px] leading-relaxed"
-                  >
-                    {t('disclaimerText')}
-                  </label>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <input
-                    id="bottom-consent-2"
-                    type="checkbox"
-                    defaultChecked
-                    className="border-border mt-1 h-4 w-4 rounded accent-[#00B050]"
-                  />
-                  <label
-                    htmlFor="bottom-consent-2"
-                    className="font-body text-muted text-[12px] leading-relaxed"
-                  >
-                    {t('termsConsentText')}
-                  </label>
-                </div>
-              </div>
-
               {applyError && <p className="font-body text-[12px] text-red-500">{applyError}</p>}
 
               <button
@@ -579,19 +569,6 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
               </button>
             </form>
           )}
-
-          {/* Legal / Risk Warnings footer band */}
-          <div className="border-border text-muted mt-10 border-t pt-6 text-[12px] leading-relaxed">
-            <p className="mb-2">
-              <strong>{t('riskWarningLabel')}</strong>
-              {t('riskWarningText')}
-            </p>
-            <p className="mb-2">{t('jurisdictionText')}</p>
-            <p>
-              <strong>{t('affiliateNoticeLabel')}</strong>
-              {t('affiliateNoticeText')}
-            </p>
-          </div>
         </div>
       </section>
     </>
