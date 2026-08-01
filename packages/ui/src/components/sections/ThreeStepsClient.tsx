@@ -124,7 +124,7 @@ function StepCard({
       onMouseMove={handleMove}
       onMouseLeave={() => setTilt(null)}
       style={tilt ? { transform: tilt, transition: 'transform 0.12s ease-out' } : undefined}
-      className={`hover:border-accent/70 group relative flex min-h-[380px] min-w-0 flex-1 flex-col justify-end overflow-hidden rounded-[24px] border border-white/[0.08] p-6 shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)] transition-[opacity,transform,border-color,box-shadow] duration-500 [transform-style:preserve-3d] hover:shadow-[0_40px_72px_-24px_rgba(4,16,10,0.72)] xl:min-h-[400px] xl:p-5 ${
+      className={`hover:border-accent/70 group relative flex min-h-[400px] min-w-0 flex-1 flex-col justify-end overflow-hidden rounded-[24px] border border-white/[0.08] p-6 shadow-[0_28px_56px_-28px_rgba(4,16,10,0.55)] transition-[opacity,transform,border-color,box-shadow] duration-500 [transform-style:preserve-3d] hover:shadow-[0_40px_72px_-24px_rgba(4,16,10,0.72)] xl:min-h-[420px] xl:p-5 ${
         revealActive && !on
           ? 'opacity-0 [transform:translateY(1.5rem)]'
           : 'opacity-100 [transform:none]'
@@ -160,10 +160,10 @@ function StepCard({
         </svg>
       </span>
       <div className="relative z-10">
-        <h3 className="text-title mb-2 font-sans text-[20px] font-bold leading-snug text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] transition-colors duration-300 group-hover:text-[#00B050]">
+        <h3 className="text-title mb-2 font-sans text-[20px] font-bold leading-snug text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] transition-colors duration-300 group-hover:text-[#00B050] xl:text-[22px]">
           {step.title}
         </h3>
-        <p className="font-body font-sans text-[15px] font-medium leading-relaxed text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+        <p className="font-body flex min-h-[80px] items-start text-[14px] font-medium leading-[1.4] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] xl:text-[14px]">
           {step.desc}
         </p>
         <span className="text-accent-bright mt-4 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 font-mono text-[12px] font-bold tracking-[0.08em] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] backdrop-blur-md">
