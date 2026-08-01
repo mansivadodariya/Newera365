@@ -101,7 +101,7 @@ function MarketCard({ item, index, price }: { item: MarketItem; index: number; p
         {/* Living quote board: renders nothing until a live price arrives, so
             the count line below always keeps the tile complete. */}
         {item.symbol ? <LiveSpark symbol={item.symbol} price={price} className="mt-[5px]" /> : null}
-        <p className="mt-1 font-mono text-[13px] font-bold tracking-[0.05em] text-white/95 drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)] transition-colors duration-300 group-hover:text-white">
+        <p className="mt-1 font-sans text-[15px] font-bold tracking-[0.02em] text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)] transition-all duration-300 group-hover:text-[#00b050]">
           {item.count}
         </p>
       </div>

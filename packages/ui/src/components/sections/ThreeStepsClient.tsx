@@ -140,7 +140,7 @@ function StepCard({
       {/* Green-black scrim anchors the text zone; hairline ring gives the plate its glass edge. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-t from-[#03130B]/95 via-[#03130B]/60 to-[#03130B]/15 transition-opacity duration-500 group-hover:opacity-90"
+        className="absolute inset-0 bg-gradient-to-t from-[#03130B] via-[#03130B]/85 to-[#03130B]/25 transition-opacity duration-500 group-hover:opacity-95"
       />
       <span
         aria-hidden="true"
@@ -160,10 +160,10 @@ function StepCard({
         </svg>
       </span>
       <div className="relative z-10">
-        <h3 className="text-title mb-2 font-sans leading-snug text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)]">
+        <h3 className="text-title mb-2 font-sans text-[20px] font-bold leading-snug text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] transition-colors duration-300 group-hover:text-[#00B050]">
           {step.title}
         </h3>
-        <p className="font-body text-body leading-relaxed text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)]">
+        <p className="font-body text-[14px] font-medium leading-relaxed text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] transition-colors duration-300 group-hover:text-[#00B050]">
           {step.desc}
         </p>
         <span className="text-accent-bright mt-4 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 font-mono text-[12px] font-bold tracking-[0.08em] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] backdrop-blur-md">
