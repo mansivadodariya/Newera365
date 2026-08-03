@@ -329,10 +329,10 @@ export function FeesPage({ spreadData }: FeesPageProps) {
           <SectionKicker className="mb-5">{t('otherKicker')}</SectionKicker>
 
           <div className="overflow-hidden rounded-[20px] border border-[#1b2b20] bg-[#080b09] shadow-2xl dark:border-[#1b2b20] dark:bg-[#080b09]">
-            <div className="grid grid-cols-1 divide-y divide-[#1b2b20] md:grid-cols-2 md:divide-y-0">
-              {/* Column 1 */}
+            <div className="grid grid-cols-1 divide-y divide-[#1b2b20] md:grid-cols-3 md:divide-y-0">
+              {/* Column 1 (2 items: Account opening, Deposits) */}
               <div className="divide-y divide-[#1b2b20]">
-                {OTHER_CHARGES.slice(0, 3).map((charge, i) => {
+                {OTHER_CHARGES.slice(0, 2).map((charge, i) => {
                   const key = charge.key.charAt(0).toUpperCase() + charge.key.slice(1);
                   const display = charge.green ? '$0.00' : translateValue(charge.value);
                   const isMetric = /[$%\d]/.test(display);
@@ -363,14 +363,47 @@ export function FeesPage({ spreadData }: FeesPageProps) {
                 })}
               </div>
 
-              {/* Column 2 */}
+              {/* Column 2 (2 items: Withdrawals, Inactivity) */}
               <div className="divide-y divide-[#1b2b20] md:border-l md:border-[#1b2b20]">
-                {OTHER_CHARGES.slice(3, 6).map((charge, i) => {
+                {OTHER_CHARGES.slice(2, 4).map((charge, i) => {
                   const key = charge.key.charAt(0).toUpperCase() + charge.key.slice(1);
                   const display = charge.green ? '$0.00' : translateValue(charge.value);
                   const isMetric = /[$%\d]/.test(display);
                   return (
-                    <ScrollReveal key={charge.key} index={i + 3} direction="up">
+                    <ScrollReveal key={charge.key} index={i + 2} direction="up">
+                      <div className="group border-l-4 border-l-transparent px-5 py-[16px] transition-all duration-200 hover:border-l-[#00b050] hover:bg-[#00b050]/20">
+                        <div className="flex items-baseline gap-3">
+                          <span className="text-body-lg font-sans font-semibold text-white transition-colors group-hover:text-[#00b050]">
+                            {t(`charge${key}` as 'chargeOpening')}
+                          </span>
+                          <span
+                            aria-hidden="true"
+                            className="min-w-[24px] flex-1 translate-y-[-4px] border-b border-dotted border-[#1b2b20] transition-colors group-hover:border-[#00b050]/60"
+                          />
+                          <span
+                            {...(isMetric ? { dir: 'ltr' as const } : {})}
+                            className={`text-body-lg font-mono font-bold tabular-nums ${charge.green ? 'text-[#00b050]' : 'text-gray-200 group-hover:text-white'}`}
+                          >
+                            {display}
+                          </span>
+                        </div>
+                        <p className="font-body text-caption mt-1 text-gray-400">
+                          {t(`charge${key}Val` as 'chargeOpeningVal')}
+                        </p>
+                      </div>
+                    </ScrollReveal>
+                  );
+                })}
+              </div>
+
+              {/* Column 3 (2 items: Swap, Currency conversion) */}
+              <div className="divide-y divide-[#1b2b20] md:border-l md:border-[#1b2b20]">
+                {OTHER_CHARGES.slice(4, 6).map((charge, i) => {
+                  const key = charge.key.charAt(0).toUpperCase() + charge.key.slice(1);
+                  const display = charge.green ? '$0.00' : translateValue(charge.value);
+                  const isMetric = /[$%\d]/.test(display);
+                  return (
+                    <ScrollReveal key={charge.key} index={i + 4} direction="up">
                       <div className="group border-l-4 border-l-transparent px-5 py-[16px] transition-all duration-200 hover:border-l-[#00b050] hover:bg-[#00b050]/20">
                         <div className="flex items-baseline gap-3">
                           <span className="text-body-lg font-sans font-semibold text-white transition-colors group-hover:text-[#00b050]">
