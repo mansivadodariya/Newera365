@@ -18,6 +18,8 @@ const OTHER_CHARGES = [
 export interface CmsSpreadRow {
   instrument: string;
   symbol: string;
+  assetClass?: string | null;
+  leverage?: string | null;
   spread?: number | null;
   /** Dedicated RAW spread (preferred over computed value) */
   spreadRaw?: number | null;
@@ -26,6 +28,63 @@ export interface CmsSpreadRow {
   /** Dedicated VIP spread (preferred over computed value) */
   spreadVip?: number | null;
 }
+
+const DEFAULT_SPREAD_ROWS: CmsSpreadRow[] = [
+  {
+    instrument: 'EUR/USD',
+    symbol: 'EURUSD',
+    assetClass: 'forex',
+    leverage: '1:2000',
+    spreadRaw: 0.0,
+    spreadStandard: 0.8,
+    spreadVip: 1.2,
+  },
+  {
+    instrument: 'GBP/USD',
+    symbol: 'GBPUSD',
+    assetClass: 'forex',
+    leverage: '1:2000',
+    spreadRaw: 0.1,
+    spreadStandard: 1.0,
+    spreadVip: 1.5,
+  },
+  {
+    instrument: 'USD/JPY',
+    symbol: 'USDJPY',
+    assetClass: 'forex',
+    leverage: '1:2000',
+    spreadRaw: 0.1,
+    spreadStandard: 0.9,
+    spreadVip: 1.3,
+  },
+  {
+    instrument: 'Gold (XAU/USD)',
+    symbol: 'XAUUSD',
+    assetClass: 'commodities',
+    leverage: '1:1000',
+    spreadRaw: 1.2,
+    spreadStandard: 1.6,
+    spreadVip: 2.0,
+  },
+  {
+    instrument: 'US 30 (Dow Jones)',
+    symbol: 'US30',
+    assetClass: 'indices',
+    leverage: '1:500',
+    spreadRaw: 1.0,
+    spreadStandard: 1.4,
+    spreadVip: 1.8,
+  },
+  {
+    instrument: 'Bitcoin / USD',
+    symbol: 'BTCUSD',
+    assetClass: 'crypto',
+    leverage: '1:100',
+    spreadRaw: 8.0,
+    spreadStandard: 12.0,
+    spreadVip: 15.0,
+  },
+];
 
 interface FeesPageProps {
   /** Live instrument spread data from the CMS ProductsInstruments collection */
@@ -43,7 +102,44 @@ export function FeesPage({ spreadData }: FeesPageProps) {
     return v.toFixed(1);
   };
 
-  const displaySpreads = (spreadData ?? []).map((r) => {
+  const getSymbolType = (row: CmsSpreadRow) => {
+    if (row.assetClass) {
+      const ac = row.assetClass.toLowerCase();
+      if (ac === 'forex') return 'Forex';
+      if (ac === 'commodities') return 'Commodities';
+      if (ac === 'indices') return 'Indices';
+      if (ac === 'crypto') return 'Crypto';
+      if (ac === 'stocks') return 'Stocks';
+      return row.assetClass;
+    }
+    const name = row.instrument.toLowerCase();
+    if (
+      name.includes('gold') ||
+      name.includes('xau') ||
+      name.includes('silver') ||
+      name.includes('xag')
+    )
+      return 'Metals';
+    if (
+      name.includes('us 30') ||
+      name.includes('us 500') ||
+      name.includes('dow') ||
+      name.includes('sp500')
+    )
+      return 'Indices';
+    if (
+      name.includes('bitcoin') ||
+      name.includes('btc') ||
+      name.includes('eth') ||
+      name.includes('crypto')
+    )
+      return 'Crypto';
+    return 'Forex';
+  };
+
+  const rowsToDisplay = spreadData && spreadData.length > 0 ? spreadData : DEFAULT_SPREAD_ROWS;
+
+  const displaySpreads = rowsToDisplay.map((r) => {
     // Use dedicated fields when available; fall back to +0.8/+1.2 formula from legacy `spread`
     const base = r.spreadRaw ?? r.spread;
     const rawVal = r.spreadRaw ?? r.spread;
@@ -51,6 +147,8 @@ export function FeesPage({ spreadData }: FeesPageProps) {
     const vipVal = r.spreadVip ?? (base != null ? base + 1.2 : null);
     return {
       instrument: r.instrument,
+      symbol: r.symbol || r.instrument.replace(/[^A-Z]/g, ''),
+      type: getSymbolType(r),
       raw: fmt(rawVal ?? null),
       std: fmt(stdVal),
       vip: fmt(vipVal),
@@ -58,7 +156,7 @@ export function FeesPage({ spreadData }: FeesPageProps) {
   });
 
   // Ruled subtotal: the tightest RAW spread across the ledger — the receipt's "best line".
-  const rawNums = (spreadData ?? [])
+  const rawNums = rowsToDisplay
     .map((r) => r.spreadRaw ?? r.spread)
     .filter((v): v is number => v != null);
   const tightest = rawNums.length ? fmt(Math.min(...rawNums)) : null;
@@ -67,6 +165,15 @@ export function FeesPage({ spreadData }: FeesPageProps) {
     if (v === 'Free') return t('valueFree');
     if (v === 'Per-instrument') return t('valuePerInstrument');
     return v;
+  };
+
+  const safeTrans = (key: string, fallback: string) => {
+    try {
+      const val = t(key as any);
+      return !val || val.includes('.') ? fallback : val;
+    } catch {
+      return fallback;
+    }
   };
 
   return (
@@ -91,87 +198,101 @@ export function FeesPage({ spreadData }: FeesPageProps) {
         <ScrollReveal className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <SectionKicker className="mb-5">{t('spreadsKicker')}</SectionKicker>
 
-          <div className="overflow-hidden rounded-[20px] border border-[#1b2b20] bg-[#080b09] shadow-2xl dark:border-[#1b2b20] dark:bg-[#080b09]">
-            {/* Receipt header strip */}
-            <div className="flex items-center justify-between border-b border-dashed border-[#1b2b20] bg-[#0d1410] px-5 py-3.5">
-              <span className="text-eyebrow font-mono uppercase text-gray-400">
-                {t('receiptStamp')}
-              </span>
-              <span className="flex items-center gap-1.5 font-bold text-[#00b050]">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-[#00b050]" />
-                <span className="text-eyebrow font-mono uppercase">{t('spreadsKicker')}</span>
-              </span>
-            </div>
+          <div className="overflow-x-auto rounded-[20px] border border-[#1b2b20] bg-[#080b09] shadow-2xl dark:border-[#1b2b20] dark:bg-[#080b09]">
+            <div className="min-w-[640px]">
+              {/* Receipt header strip */}
+              <div className="flex items-center justify-between border-b border-dashed border-[#1b2b20] bg-[#0d1410] px-5 py-3.5">
+                <span className="text-eyebrow font-mono uppercase text-gray-400">
+                  {t('receiptStamp')}
+                </span>
+                <span className="flex items-center gap-1.5 font-bold text-[#00b050]">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-[#00b050]" />
+                  <span className="text-eyebrow font-mono uppercase">{t('spreadsKicker')}</span>
+                </span>
+              </div>
 
-            {/* Column header */}
-            <div className="grid grid-cols-[1fr_80px_80px_80px] border-b border-[#1b2b20] bg-[#0d1410] px-5 py-3">
-              <span className="text-eyebrow font-mono font-semibold uppercase text-gray-400">
-                {t('colInstrument')}
-              </span>
-              <span className="text-eyebrow text-end font-mono font-bold uppercase text-[#00b050]">
-                {t('colRaw')}
-              </span>
-              <span className="text-eyebrow text-end font-mono font-semibold uppercase text-gray-400">
-                {t('colStd')}
-              </span>
-              <span className="text-eyebrow text-end font-mono font-semibold uppercase text-gray-400">
-                {t('colVip')}
-              </span>
-            </div>
+              {/* Column header */}
+              <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr_1fr_1fr] gap-4 border-b border-[#1b2b20] bg-[#0d1410] px-5 py-3">
+                <span className="text-eyebrow font-mono font-semibold uppercase text-gray-400">
+                  {safeTrans('colInstrument', 'INSTRUMENT')}
+                </span>
+                <span className="text-eyebrow text-center font-mono font-semibold uppercase text-gray-400">
+                  {safeTrans('colSymbol', 'SYMBOL')}
+                </span>
+                <span className="text-eyebrow text-center font-mono font-semibold uppercase text-gray-400">
+                  {safeTrans('colCategory', 'TYPE')}
+                </span>
+                <span className="text-eyebrow text-center font-mono font-bold uppercase text-[#00b050]">
+                  {safeTrans('colRaw', 'RAW')}
+                </span>
+                <span className="text-eyebrow text-center font-mono font-semibold uppercase text-gray-400">
+                  {safeTrans('colStd', 'STD')}
+                </span>
+                <span className="text-eyebrow text-center font-mono font-semibold uppercase text-gray-400">
+                  {safeTrans('colVip', 'VIP')}
+                </span>
+              </div>
 
-            {/* Data rows — hairline ruled, mono tabular-nums */}
-            {displaySpreads.length === 0 ? (
-              <p className="font-body text-body px-5 py-8 text-center text-gray-400">
-                {t('noSpreads')}
-              </p>
-            ) : (
-              <div className="divide-y divide-[#1b2b20]">
-                {displaySpreads.map((row) => (
-                  <div
-                    key={row.instrument}
-                    className="group grid grid-cols-[1fr_80px_80px_80px] items-center border-l-4 border-l-transparent px-5 py-[14px] transition-all duration-200 hover:border-l-[#00b050] hover:bg-[#00b050]/20"
+              {/* Data rows — hairline ruled, mono tabular-nums */}
+              {displaySpreads.length === 0 ? (
+                <p className="font-body text-body px-5 py-8 text-center text-gray-400">
+                  {t('noSpreads')}
+                </p>
+              ) : (
+                <div className="divide-y divide-[#1b2b20]">
+                  {displaySpreads.map((row) => (
+                    <div
+                      key={row.instrument}
+                      className="group grid grid-cols-[1.5fr_1fr_1fr_1fr_1fr_1fr] items-center gap-4 border-l-4 border-l-transparent px-5 py-[14px] transition-all duration-200 hover:border-l-[#00b050] hover:bg-[#00b050]/20"
+                    >
+                      <span className="font-body text-body font-semibold text-white transition-colors group-hover:text-[#00b050]">
+                        {row.instrument}
+                      </span>
+                      <span className="text-center font-mono text-xs font-bold tracking-wider text-[#00b050]">
+                        {row.symbol}
+                      </span>
+                      <span className="text-center font-mono text-xs font-medium uppercase text-gray-400">
+                        {row.type}
+                      </span>
+                      <span
+                        dir="ltr"
+                        className="text-body text-center font-mono font-bold tabular-nums text-[#00b050]"
+                      >
+                        {row.raw}
+                      </span>
+                      <span
+                        dir="ltr"
+                        className="text-body text-center font-mono tabular-nums text-gray-300 transition-colors group-hover:text-white"
+                      >
+                        {row.std}
+                      </span>
+                      <span
+                        dir="ltr"
+                        className="text-body text-center font-mono tabular-nums text-gray-300 transition-colors group-hover:text-white"
+                      >
+                        {row.vip}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Ruled subtotal — tightest spread */}
+              {tightest && (
+                <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr_1fr_1fr] items-center gap-4 border-t-2 border-[#00b050]/40 bg-[#0d1410] px-5 py-4">
+                  <span className="text-eyebrow col-span-3 font-mono font-bold uppercase text-white">
+                    {t('tightestSpread')}
+                  </span>
+                  <span
+                    dir="ltr"
+                    className="text-title text-center font-mono font-extrabold tabular-nums text-[#00b050]"
                   >
-                    <span className="font-body text-body font-semibold text-white transition-colors group-hover:text-[#00b050]">
-                      {row.instrument}
-                    </span>
-                    <span
-                      dir="ltr"
-                      className="text-body text-end font-mono font-bold tabular-nums text-[#00b050]"
-                    >
-                      {row.raw}
-                    </span>
-                    <span
-                      dir="ltr"
-                      className="text-body text-end font-mono tabular-nums text-gray-300 transition-colors group-hover:text-white"
-                    >
-                      {row.std}
-                    </span>
-                    <span
-                      dir="ltr"
-                      className="text-body text-end font-mono tabular-nums text-gray-300 transition-colors group-hover:text-white"
-                    >
-                      {row.vip}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Ruled subtotal — tightest spread */}
-            {tightest && (
-              <div className="grid grid-cols-[1fr_80px_80px_80px] items-center border-t-2 border-[#00b050]/40 bg-[#0d1410] px-5 py-4">
-                <span className="text-eyebrow font-mono font-bold uppercase text-white">
-                  {t('tightestSpread')}
-                </span>
-                <span
-                  dir="ltr"
-                  className="text-title text-end font-mono font-extrabold tabular-nums text-[#00b050]"
-                >
-                  {tightest}
-                </span>
-                <span className="col-span-2" />
-              </div>
-            )}
+                    {tightest}
+                  </span>
+                  <span className="col-span-2" />
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Receipt footer action */}

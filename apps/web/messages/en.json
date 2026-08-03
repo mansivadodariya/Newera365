@@ -958,6 +958,8 @@
     "heroSubtitle": "Every charge in one place, spreads, commissions, overnight fees, conversions. Pulled live from MT5.",
     "spreadsKicker": "LIVE SPREADS · PIP",
     "colInstrument": "INSTRUMENT",
+    "colSymbol": "SYMBOL",
+    "colCategory": "TYPE",
     "colRaw": "RAW",
     "colStd": "STD",
     "colVip": "VIP",

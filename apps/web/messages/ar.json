@@ -958,6 +958,8 @@
     "heroSubtitle": "كل رسوم في مكان واحد، الفروقات والعمولات ورسوم الليل والتحويلات. مسحوبة مباشرة من MT5.",
     "spreadsKicker": "الفروقات المباشرة · نقطة",
     "colInstrument": "الأداة",
+    "colSymbol": "الرمز",
+    "colCategory": "النوع",
     "colRaw": "خام",
     "colStd": "معياري",
     "colVip": "VIP",

@@ -313,17 +313,15 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
           </div>
 
           {/* Device mockup */}
-          <div className="relative mt-6 aspect-[1.33/1] w-full max-w-[460px] overflow-hidden rounded-[32px] bg-[#D4F5DD] p-3 shadow-[0_10px_32px_rgba(0,0,0,0.06)] xl:mt-0 xl:h-[340px] xl:w-[460px] xl:flex-shrink-0 dark:bg-[#0d2a15]">
-            <div className="relative h-full w-full overflow-hidden rounded-[22px]">
-              <Image
-                src="/images/platformSide.png"
-                alt="Platform across devices"
-                width={460}
-                height={340}
-                loading="lazy"
-                className="h-full w-full rounded-[22px] object-cover object-center"
-              />
-            </div>
+          <div className="relative mt-6 w-full max-w-[560px] overflow-hidden rounded-[24px] transition-transform duration-500 hover:scale-[1.02] sm:max-w-[600px] xl:mt-0 xl:w-[580px] xl:max-w-[490px] xl:flex-shrink-0">
+            <Image
+              src="/images/platformSide.png"
+              alt="Platform across devices"
+              width={1200}
+              height={900}
+              loading="lazy"
+              className="h-auto w-full rounded-[24px] object-contain"
+            />
           </div>
         </div>
       </section>
