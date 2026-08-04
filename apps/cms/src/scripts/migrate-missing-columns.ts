@@ -307,6 +307,10 @@ const migrations: Array<{ description: string; sql: string }> = [
     description: 'ib_content_locales.wl_tech_stack',
     sql: `ALTER TABLE ib_content_locales ADD COLUMN IF NOT EXISTS wl_tech_stack varchar;`,
   },
+  {
+    description: 'account_types.commission Raw $8 update',
+    sql: `UPDATE account_types SET commission = '$8' WHERE LOWER(name) = 'raw' OR badge = 'value';`,
+  },
 ];
 
 async function run() {

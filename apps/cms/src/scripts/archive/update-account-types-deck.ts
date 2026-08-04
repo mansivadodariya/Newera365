@@ -17,7 +17,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 import payload from 'payload';
 
-const TARGETS: { match: string[]; data: Record<string, unknown> }[] = [
+const TARGETS: { match: string[]; data: Record<string, any> }[] = [
   {
     match: ['Demo'],
     data: {
@@ -61,7 +61,7 @@ const TARGETS: { match: string[]; data: Record<string, unknown> }[] = [
       spreadFrom: '0.2',
       usesMT5Data: false,
       spreadFromNumeric: 0.2,
-      commission: '$7',
+      commission: '$8',
       leverage: 'Up to 1:500',
       sortOrder: 3,
       features: [

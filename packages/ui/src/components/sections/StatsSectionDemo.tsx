@@ -26,9 +26,10 @@ export async function StatsSectionDemo({
 }) {
   const t = await getTranslations('home');
 
+  const rawStats = kpiStats && kpiStats.length > 0 ? kpiStats.slice(0, 4) : [];
   const stats =
-    kpiStats && kpiStats.length > 0
-      ? kpiStats.map((s) => ({
+    rawStats.length > 0
+      ? rawStats.map((s) => ({
           value: locale === 'ar' ? s.valueAr : s.valueEn,
           label: locale === 'ar' ? s.labelAr : s.labelEn,
         }))

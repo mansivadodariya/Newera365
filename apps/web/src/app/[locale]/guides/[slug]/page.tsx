@@ -24,8 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: slugToTitle(params.slug),
       description: isAr
-        ? 'أدلة ودروس التداول من Newera365.'
-        : 'Trading guides and tutorials from Newera365.',
+        ? 'أدلة ودروس التداول من Newera.'
+        : 'Trading guides and tutorials from Newera.',
       // Missing CMS doc responds 200 (soft-404), so keep deleted/unknown slugs
       // out of search indexes explicitly.
       robots: { index: false, follow: false },

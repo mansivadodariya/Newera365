@@ -11,21 +11,33 @@ import { CountUp } from '../motion/CountUp';
 // default keyed by method. The cover is presented as a tactile bordered logo
 // tile (grayscale → colour on hover).
 function defaultCover(name: string, methodType: string): string {
-  const n = name.toLowerCase();
+  const n = (name || '').toLowerCase();
   if (n.includes('skrill')) return '/images/payment/skrill.png';
   if (n.includes('neteller')) return '/images/payment/neteller.png';
-  switch (methodType) {
-    case 'card':
-      return '/images/payment/card.png';
-    case 'bank':
-      return '/images/payment/bank.png';
-    case 'crypto':
-      return '/images/payment/crypto.png';
-    case 'local':
-      return '/images/payment/local.png';
-    default:
-      return '/images/payment/card.png';
+  if (n.includes('visa') || n.includes('mastercard') || methodType === 'card') {
+    return '/images/payment/card.png';
   }
+  if (n.includes('bank') || n.includes('swift') || methodType === 'bank') {
+    return '/images/payment/bank.png';
+  }
+  if (n.includes('crypto') || n.includes('usdt') || n.includes('btc') || methodType === 'crypto') {
+    return '/images/payment/crypto.png';
+  }
+  return '/images/payment/card.png';
+}
+
+function resolveCoverUrl(name: string, methodType: string, rawCover: any): string {
+  let url = '';
+  if (typeof rawCover === 'string') {
+    url = rawCover;
+  } else if (rawCover && typeof rawCover === 'object' && rawCover.url) {
+    url = rawCover.url;
+  }
+
+  if (!url || url.includes('payment-method-') || url.includes('placeholder')) {
+    return defaultCover(name, methodType);
+  }
+  return url;
 }
 
 function IconCreditCard() {
@@ -484,19 +496,31 @@ function HeroContent({
     { key: 'seg4', icon: TRUST_ROWS[3]!.icon, title: t('seg4Title'), desc: t('seg4Desc') },
   ];
 
-  const methods = (paymentMethods ?? []).map((method) => ({
-    key: String(method.id),
-    icon: METHOD_TYPE_ICONS[method.methodType] ?? <IconCreditCard />,
-    typeBadge: translateMethodType(method.methodType),
-    name: locale === 'ar' ? (method.nameAr ?? method.name) : method.name,
-    cover: method.coverImage || defaultCover(method.name, method.methodType),
-    deposit: method.depositTime ?? '-',
-    withdraw: method.withdrawalTime ?? '-',
-    min: method.minDeposit ?? '-',
-    fee: method.fee ?? '-',
-    depositGreen: isGreenDepositValue(method.depositTime ?? ''),
-    feeGreen: isGreenFeeValue(method.fee ?? ''),
-  }));
+  const methods = (paymentMethods ?? [])
+    .filter((method) => {
+      const name = method.name.toLowerCase();
+      const type = method.methodType.toLowerCase();
+      return (
+        !name.includes('skrill') &&
+        !name.includes('neteller') &&
+        !name.includes('local') &&
+        type !== 'local' &&
+        type !== 'ewallet'
+      );
+    })
+    .map((method) => ({
+      key: String(method.id),
+      icon: METHOD_TYPE_ICONS[method.methodType] ?? <IconCreditCard />,
+      typeBadge: translateMethodType(method.methodType),
+      name: locale === 'ar' ? (method.nameAr ?? method.name) : method.name,
+      cover: resolveCoverUrl(method.name, method.methodType, method.coverImage),
+      deposit: method.depositTime ?? '-',
+      withdraw: method.withdrawalTime ?? '-',
+      min: method.minDeposit ?? '-',
+      fee: method.fee ?? '-',
+      depositGreen: isGreenDepositValue(method.depositTime ?? ''),
+      feeGreen: isGreenFeeValue(method.fee ?? ''),
+    }));
 
   return (
     <>
@@ -537,7 +561,7 @@ function HeroContent({
           <ScrollReveal>
             <SectionKicker className="mb-5">{t('methodsKicker')}</SectionKicker>
           </ScrollReveal>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-3 xl:gap-6">
             {methods.length === 0 && (
               <p className="font-body text-body text-muted col-span-full py-12 text-center dark:text-white/60">
                 {t('noMethods')}

@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
+import { AuthModal, type AuthModalType } from '../chrome/AuthModal';
 import { ScrollReveal } from '../motion/ScrollReveal';
 import { SectionKicker } from '../primitives/SectionKicker';
 
@@ -13,27 +15,15 @@ import { SectionKicker } from '../primitives/SectionKicker';
    fills a 32×24 box and is captioned + aria-labelled for the tile. */
 
 function VisaMark() {
-  // Wordmark — Visa's brand IS the wordmark. Blue in light, near-white on ink.
+  // Official Visa vector mark — cropped viewBox (0 9.4 31 11.5) so letters fill height properly.
   return (
     <svg
-      viewBox="0 0 48 24"
-      className="h-[32px] w-auto sm:h-[36px] xl:h-[42px]"
+      viewBox="0 9.4 31 11.5"
+      className="h-[26px] w-auto fill-[#1434CB] sm:h-[30px] xl:h-[36px] dark:fill-white"
       role="img"
       aria-label="Visa"
     >
-      <text
-        x="24"
-        y="18"
-        textAnchor="middle"
-        fontFamily="Arial, Helvetica, sans-serif"
-        fontWeight="700"
-        fontStyle="italic"
-        fontSize="19"
-        letterSpacing="0.5"
-        className="fill-[#1434CB] dark:fill-white"
-      >
-        VISA
-      </text>
+      <path d="M15.854 11.329l-2.003 9.367h-2.424l2.006-9.367zM26.051 17.377l1.275-3.518 0.735 3.518zM28.754 20.696h2.242l-1.956-9.367h-2.069c-0.003-0-0.007-0-0.010-0-0.459 0-0.853 0.281-1.019 0.68l-0.003 0.007-3.635 8.68h2.544l0.506-1.4h3.109zM22.429 17.638c0.010-2.473-3.419-2.609-3.395-3.714 0.008-0.336 0.327-0.694 1.027-0.785 0.13-0.013 0.28-0.021 0.432-0.021 0.711 0 1.385 0.162 1.985 0.452l-0.027-0.012 0.425-1.987c-0.673-0.261-1.452-0.413-2.266-0.416h-0.001c-2.396 0-4.081 1.275-4.096 3.098-0.015 1.348 1.203 2.099 2.122 2.549 0.945 0.459 1.262 0.754 1.257 1.163-0.006 0.63-0.752 0.906-1.45 0.917-0.032 0.001-0.071 0.001-0.109 0.001-0.871 0-1.691-0.219-2.407-0.606l0.027 0.013-0.439 2.052c0.786 0.315 1.697 0.497 2.651 0.497 0.015 0 0.030-0 0.045-0h-0.002c2.546 0 4.211-1.257 4.22-3.204zM12.391 11.329l-3.926 9.367h-2.562l-1.932-7.477c-0.037-0.364-0.26-0.668-0.57-0.82l-0.006-0.003c-0.688-0.338-1.488-0.613-2.325-0.786l-0.066-0.011 0.058-0.271h4.124c0 0 0.001 0 0.001 0 0.562 0 1.028 0.411 1.115 0.948l0.001 0.006 1.021 5.421 2.522-6.376z" />
     </svg>
   );
 }
@@ -166,9 +156,9 @@ function CheckPromise() {
 const BRANDS = [
   { key: 'payVisa', mark: <VisaMark /> },
   { key: 'payMastercard', mark: <MastercardMark /> },
-  { key: 'payBank', mark: <BankMark /> },
+  // { key: 'payBank', mark: <BankMark /> },
   { key: 'payCrypto', mark: <BitcoinMark /> },
-  { key: 'payUsdt', mark: <TetherMark /> },
+  // { key: 'payUsdt', mark: <TetherMark /> },
   { key: 'payWallets', mark: <WalletMark /> },
 ] as const;
 
@@ -177,6 +167,7 @@ const PROMISES = ['payPromise1', 'payPromise2', 'payPromise3'] as const;
 export function FundingStripSection() {
   const t = useTranslations('home');
   const locale = useLocale();
+  const [authModal, setAuthModal] = useState<AuthModalType>(null);
 
   return (
     <section className="bg-transparent px-5 py-10 xl:px-[80px] xl:py-14">
@@ -223,7 +214,7 @@ export function FundingStripSection() {
                   {BRANDS.map((brand) => (
                     <li
                       key={brand.key}
-                      className="border-border hover:border-accent/40 flex h-[58px] min-w-[82px] items-center justify-center rounded-[14px] border bg-white px-5 transition-[border-color,box-shadow,transform] duration-300 hover:shadow-[0_10px_24px_-12px_rgba(0,176,80,0.35)] motion-safe:hover:-translate-y-0.5 sm:h-[66px] sm:min-w-[100px] sm:px-6 xl:h-[76px] xl:min-w-[118px] xl:rounded-[16px] dark:border-white/[0.08] dark:bg-[#1a1c22]"
+                      className="border-border hover:border-accent/40 flex h-[58px] w-[104px] items-center justify-center rounded-[14px] border bg-white px-3 transition-[border-color,box-shadow,transform] duration-300 hover:shadow-[0_10px_24px_-12px_rgba(0,176,80,0.35)] motion-safe:hover:-translate-y-0.5 sm:h-[66px] sm:w-[124px] sm:px-4 xl:h-[76px] xl:w-[140px] xl:rounded-[16px] dark:border-white/[0.08] dark:bg-[#1a1c22]"
                       title={t(brand.key)}
                     >
                       {brand.mark}
@@ -232,28 +223,50 @@ export function FundingStripSection() {
                 </ul>
               </div>
 
-              <Link
-                href={`/${locale}/trade/funding`}
-                className="text-accent font-body group inline-flex w-fit items-center gap-2 text-[16px] font-bold xl:text-[18px]"
-              >
-                {t('payCta')}
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-5 w-5 transition-transform group-hover:translate-x-1 rtl:-scale-x-100"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2.2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
+              <div className="flex flex-col items-start gap-3 sm:items-end xl:items-end">
+                <Link
+                  href={`/${locale}/trade/funding`}
+                  className="text-accent font-body group inline-flex w-fit items-center gap-2 text-[16px] font-bold xl:text-[18px]"
                 >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </Link>
+                  {t('payCta')}
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-5 w-5 transition-transform group-hover:translate-x-1 rtl:-scale-x-100"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2.2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </Link>
+                <button
+                  onClick={() => setAuthModal('register')}
+                  className="font-body bg-accent hover:bg-accent-hover focus-visible:ring-accent group inline-flex items-center gap-2 rounded-full px-6 py-3 text-[15px] font-semibold text-white shadow-[0_10px_24px_-10px_rgba(0,176,80,0.8)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                >
+                  <span>{t('depositNow')}</span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:-scale-x-100"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2.2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </ScrollReveal>
       </div>
+
+      <AuthModal type={authModal} onClose={() => setAuthModal(null)} />
     </section>
   );
 }

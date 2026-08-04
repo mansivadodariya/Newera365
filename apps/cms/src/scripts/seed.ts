@@ -343,7 +343,7 @@ async function seedSiteSettings() {
     mt5RefreshIntervalSecs: 60,
     kpiStats: [
       { valueEn: '12+', valueAr: '+12', labelEn: 'Years in Markets', labelAr: 'سنة في الأسواق' },
-      { valueEn: '180k', valueAr: '180 ألف', labelEn: 'Active Traders', labelAr: 'متداول نشط' },
+      { valueEn: '10k', valueAr: '10 ألف', labelEn: 'Active Traders', labelAr: 'متداول نشط' },
       {
         valueEn: '< 12 ms',
         valueAr: '< 12 ms',
@@ -686,7 +686,7 @@ async function seedAccountTypes() {
       platforms: ['mt5', 'web-trader', 'mobile'],
       usesMT5Data: false,
       spreadFromNumeric: 0.2,
-      commission: '$7',
+      commission: '$8',
       features: [
         { value: 'Interbank raw pricing' },
         { value: 'Metals commission $10 per lot' },
@@ -764,6 +764,7 @@ async function seedPaymentMethods() {
       sortOrder: 2,
       status: 'active',
     },
+    /*
     {
       name: 'Skrill',
       methodType: 'ewallet',
@@ -784,6 +785,7 @@ async function seedPaymentMethods() {
       sortOrder: 4,
       status: 'active',
     },
+    */
     {
       name: 'Crypto (USDT, BTC)',
       methodType: 'crypto',
@@ -794,6 +796,7 @@ async function seedPaymentMethods() {
       sortOrder: 5,
       status: 'active',
     },
+    /*
     {
       name: 'Local bank transfer',
       methodType: 'local',
@@ -804,30 +807,53 @@ async function seedPaymentMethods() {
       sortOrder: 6,
       status: 'active',
     },
+    */
   ];
   const arNames: Record<string, string> = {
     'Visa / Mastercard': 'فيزا / ماستركارد',
     'Bank wire (SWIFT)': 'تحويل بنكي (SWIFT)',
-    Skrill: 'سكريل',
-    Neteller: 'نيتيلر',
+    // Skrill: 'سكريل',
+    // Neteller: 'نيتيلر',
     'Crypto (USDT, BTC)': 'عملات رقمية (USDT, BTC)',
-    'Local bank transfer': 'تحويل بنكي محلي',
+    // 'Local bank transfer': 'تحويل بنكي محلي',
   };
   for (const m of methods) {
-    const logoId = await seedImage(
-      `pay-${m.name
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '')}`,
-      m.name,
-      { bg: '#0E2A20', w: 480, h: 300, alt: `${m.name} logo` },
-    );
-    const doc = await post<{ id: number }>('payment-methods', { ...m, logo: logoId });
+    let logoId: number | null = null;
+    let localFileName = '';
+    if (m.methodType === 'card') localFileName = 'card.png';
+    else if (m.methodType === 'bank') localFileName = 'bank.png';
+    else if (m.methodType === 'crypto') localFileName = 'crypto.png';
+
+    if (localFileName) {
+      const realPath = path.resolve(__dirname, '../../../web/public/images/payment', localFileName);
+      if (fs.existsSync(realPath)) {
+        logoId = await uploadMedia(realPath, `${m.name} logo`);
+      }
+    }
+
+    if (!logoId) {
+      logoId = await seedImage(
+        `pay-${m.name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '')}`,
+        m.name,
+        { bg: '#0E2A20', w: 480, h: 300, alt: `${m.name} logo` },
+      );
+    }
+
+    const doc = await post<{ id: number }>('payment-methods', {
+      ...m,
+      logo: logoId,
+      coverImage: logoId,
+    });
     if (arNames[m.name]) {
       await patch('payment-methods', doc.id, { nameAr: arNames[m.name] }, 'en');
     }
   }
-  console.log(`   ✅ ${methods.length} payment methods created (EN + AR names)`);
+  console.log(
+    `   ✅ ${methods.length} payment methods created with real branded images (EN + AR names)`,
+  );
 }
 
 // ─── Products / Instruments ─────────────────────────────────────────────────

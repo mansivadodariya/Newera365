@@ -1214,4 +1214,93 @@ export async function registerCustomEndpoints(app: Express, payload: Payload): P
       return res.status(500).json({ error: 'Something went wrong. Please try again later.' });
     }
   });
+
+  // ── Open Account Send Verification Code ──────────────────────────────────
+  app.post('/api/account/send-code', contactLimiter, async (req: ReqWithId, res: Response) => {
+    const { email } = req.body ?? {};
+    if (typeof email !== 'string' || !EMAIL_PATTERN.test(email)) {
+      return res.status(400).json({ error: 'A valid email address is required.' });
+    }
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    payload.logger.info({ email, code }, 'Generated verification code for open account');
+    return res.json({
+      success: true,
+      code,
+      message: 'Verification code sent to your email address.',
+    });
+  });
+
+  // ── Open Account Trader Registration ─────────────────────────────────────
+  app.post('/api/account/register', contactLimiter, async (req: ReqWithId, res: Response) => {
+    const { firstName, lastName, email, verificationCode, password, country, phone, partnerCode } =
+      req.body ?? {};
+
+    if (typeof firstName !== 'string' || !firstName.trim()) {
+      return res.status(400).json({ error: 'First name is required.' });
+    }
+    if (typeof lastName !== 'string' || !lastName.trim()) {
+      return res.status(400).json({ error: 'Last name is required.' });
+    }
+    if (typeof email !== 'string' || !EMAIL_PATTERN.test(email)) {
+      return res.status(400).json({ error: 'A valid email address is required.' });
+    }
+    if (typeof password !== 'string' || password.length < 8) {
+      return res.status(400).json({ error: 'Password must be at least 8 characters long.' });
+    }
+    if (typeof country !== 'string' || !country.trim()) {
+      return res.status(400).json({ error: 'Country of residence is required.' });
+    }
+    if (typeof phone !== 'string' || !phone.trim()) {
+      return res.status(400).json({ error: 'Phone number is required.' });
+    }
+
+    try {
+      const safeFirstName = firstName.trim().slice(0, 100);
+      const safeLastName = lastName.trim().slice(0, 100);
+      const safeCountry = country.trim().slice(0, 100);
+      const safePhone = phone.trim().slice(0, 50);
+      const safePartnerCode = partnerCode ? String(partnerCode).trim().slice(0, 50) : '';
+
+      const rawIp = req.ip ?? req.socket.remoteAddress ?? '';
+      const ipHash = createHash('sha256')
+        .update(CONSENT_IP_SALT + rawIp)
+        .digest('hex');
+
+      const details = [
+        `First Name: ${safeFirstName}`,
+        `Last Name: ${safeLastName}`,
+        `Email: ${email.toLowerCase()}`,
+        `Country: ${safeCountry}`,
+        `Phone: ${safePhone}`,
+        safePartnerCode && `Partner Code: ${safePartnerCode}`,
+        verificationCode && `Verification Code: ${verificationCode}`,
+      ]
+        .filter(Boolean)
+        .join('\n');
+
+      await payload.create({
+        collection: 'contact-submissions',
+        data: {
+          name: `${safeFirstName} ${safeLastName}`,
+          email: email.toLowerCase(),
+          subject: 'Open Account Application',
+          message: details,
+          submittedAt: new Date().toISOString(),
+          ipHash,
+          status: 'new',
+        },
+        depth: 0,
+      });
+
+      return res.json({
+        success: true,
+        message: 'Your account application has been submitted successfully! Welcome to Newera.',
+      });
+    } catch (err) {
+      payload.logger.error({ requestId: req.requestId, err }, 'account/register error');
+      return res
+        .status(500)
+        .json({ error: 'Failed to submit account application. Please try again later.' });
+    }
+  });
 }

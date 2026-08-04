@@ -337,7 +337,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
         </div>
       </section>
 
-      {/* 2. Why Partners Choose Newera365 */}
+      {/* 2. Why Partners Choose Newera */}
       <section id="why-choose-us" className="bg-[#FFFFFF] px-5 py-14 xl:py-20 dark:bg-[#07090D]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="text-center">
@@ -449,7 +449,7 @@ export function IBPage({ cmsContent }: { cmsContent?: IBCmsContent | null }) {
         </div>
       </section>
 
-      {/* 4. Why Your Clients Will Love Newera365 */}
+      {/* 4. Why Your Clients Will Love Newera */}
       <section id="client-benefits" className="bg-[#FFFFFF] px-5 py-14 xl:py-20 dark:bg-[#07090D]">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <div className="text-center">

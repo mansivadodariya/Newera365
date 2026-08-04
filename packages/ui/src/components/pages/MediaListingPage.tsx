@@ -42,9 +42,120 @@ interface EpisodeItem {
   href?: string | null;
 }
 
+const BABYPIPS_TOPIC_MAP: Record<string, string> = {
+  'technical-analysis-that-works': 'https://www.babypips.com/learn/forex/technical-analysis',
+  'position-sizing-without-guesswork':
+    'https://www.babypips.com/trading/position-size-matters-forex-traders',
+  'carry-trade-explained': 'https://www.babypips.com/learn/forex/carry-trade',
+  'reading-the-cot-report': 'https://forums.babypips.com/t/need-help-with-the-c-o-t-strategy/39422',
+  'inside-the-fed-traders-view':
+    'https://www.babypips.com/analysis/fundies-cheat-sheet-update-2026-07-29-fomc-hold-iran-strike-chip-rout-core-pce',
+  'why-oil-moves-tuesday':
+    'https://www.babypips.com/news/daily-forex-financial-market-news-recap-2026-02-17',
+  'interview-london-market-maker':
+    'https://forums.babypips.com/t/job-interview-at-a-forex-broker-company-need-help-advice-d/66448',
+  'live-boe-rate-decision':
+    'https://www.babypips.com/learn/forex/central-banks-and-monetary-policy',
+};
+
+const DEFAULT_EPISODES: EpisodeItem[] = [
+  {
+    id: 'technical-analysis-that-works',
+    typeTab: 'VIDEO',
+    categoryTab: 'EDUCATION',
+    tagDisplay: 'EDUCATION',
+    duration: '',
+    title: 'Technical analysis that actually works',
+    desc: 'Practical chart patterns and key indicators.',
+    type: 'VIDEO',
+    featured: false,
+    href: 'https://www.babypips.com/learn/forex/technical-analysis',
+  },
+  {
+    id: 'position-sizing-without-guesswork',
+    typeTab: 'VIDEO',
+    categoryTab: 'EDUCATION',
+    tagDisplay: 'EDUCATION',
+    duration: '',
+    title: 'Position sizing without the guesswork',
+    desc: 'Calculate exact lot size based on your risk tolerance.',
+    type: 'VIDEO',
+    featured: false,
+    href: 'https://www.babypips.com/trading/position-size-matters-forex-traders',
+  },
+  {
+    id: 'carry-trade-explained',
+    typeTab: 'VIDEO',
+    categoryTab: 'STRATEGY',
+    tagDisplay: 'STRATEGY',
+    duration: '',
+    title: 'The carry trade explained',
+    desc: 'How interest rate differentials create long-term yield.',
+    type: 'VIDEO',
+    featured: false,
+    href: 'https://www.babypips.com/learn/forex/carry-trade',
+  },
+  {
+    id: 'reading-the-cot-report',
+    typeTab: 'VIDEO',
+    categoryTab: 'STRATEGY',
+    tagDisplay: 'STRATEGY',
+    duration: '',
+    title: 'Reading the COT report',
+    desc: 'Track institutional positioning before big market turns.',
+    type: 'VIDEO',
+    featured: false,
+    href: 'https://forums.babypips.com/t/need-help-with-the-c-o-t-strategy/39422',
+  },
+  {
+    id: 'inside-the-fed-traders-view',
+    typeTab: 'VIDEO',
+    categoryTab: 'MACRO',
+    tagDisplay: 'MACRO',
+    duration: '',
+    title: "Inside the Fed: a former trader's view",
+    desc: 'Understanding central bank announcements and interest rate cycles.',
+    type: 'VIDEO',
+    featured: true,
+    href: 'https://www.babypips.com/analysis/fundies-cheat-sheet-update-2026-07-29-fomc-hold-iran-strike-chip-rout-core-pce',
+  },
+  {
+    id: 'why-oil-moves-tuesday',
+    typeTab: 'AUDIO',
+    categoryTab: 'MACRO',
+    tagDisplay: 'MACRO',
+    duration: '',
+    title: 'Why oil moves on Tuesday',
+    desc: 'Weekly API inventory reports and energy market volatility.',
+    type: 'AUDIO',
+    featured: false,
+    href: 'https://www.babypips.com/news/daily-forex-financial-market-news-recap-2026-02-17',
+  },
+  {
+    id: 'interview-london-market-maker',
+    typeTab: 'AUDIO',
+    categoryTab: 'INTERVIEWS',
+    tagDisplay: 'INTERVIEWS',
+    duration: '',
+    title: 'Interview: a London market maker',
+    desc: 'Liquidity, order flow and interbank execution secrets.',
+    type: 'AUDIO',
+    featured: false,
+    href: 'https://forums.babypips.com/t/job-interview-at-a-forex-broker-company-need-help-advice-d/66448',
+  },
+];
+
 function videoItemToEpisode(v: CmsVideoItem): EpisodeItem {
   const type: 'VIDEO' | 'AUDIO' = v.contentType === 'audio' ? 'AUDIO' : 'VIDEO';
   const cat = v.mediaCategory ? v.mediaCategory.toUpperCase() : type;
+
+  let href = 'https://www.babypips.com/learn';
+  if (v.videoEmbed && v.videoEmbed.startsWith('http') && !v.videoEmbed.includes('example')) {
+    href = v.videoEmbed;
+  } else if (v.slug && BABYPIPS_TOPIC_MAP[v.slug]) {
+    href = BABYPIPS_TOPIC_MAP[v.slug] as string;
+  }
+
   return {
     id: v.slug,
     typeTab: type,
@@ -56,7 +167,7 @@ function videoItemToEpisode(v: CmsVideoItem): EpisodeItem {
     type,
     featured: v.isFeatured === true,
     thumbnailUrl: v.thumbnailUrl,
-    href: v.videoEmbed ?? null,
+    href,
   };
 }
 
@@ -100,7 +211,7 @@ export function MediaListingPage({ cmsVideos, webinars }: MediaListingPageProps)
 
   const episodes = useMemo<EpisodeItem[]>(() => {
     if (cmsVideos?.length) return cmsVideos.map(videoItemToEpisode);
-    return [];
+    return DEFAULT_EPISODES;
   }, [cmsVideos]);
 
   // Decide whether to show category tabs (Macro/Strategy/etc.) or type tabs (Video/Audio)

@@ -75,13 +75,13 @@ export async function generateMetadata({
     metadataBase: new URL(BASE),
     title: {
       default: isAr
-        ? 'نيو إيرا 365: تداول الفوركس والعقود مقابل الفروقات'
-        : 'Newera365: Forex & CFD Trading',
-      template: isAr ? '%s | نيو إيرا 365' : '%s | Newera365',
+        ? 'نيو إيرا: تداول الفوركس والعقود مقابل الفروقات'
+        : 'Newera: Forex & CFD Trading',
+      template: isAr ? '%s | نيو إيرا' : '%s | Newera',
     },
     description: isAr
-      ? 'تداول الفوركس والمؤشرات والسلع والعملات الرقمية مع نيو إيرا 365، فروقات ضيقة وتنفيذ سريع ومنصة MT5. رأس المال في خطر.'
-      : 'Trade forex, indices, commodities and crypto CFDs with Newera365: tight spreads, fast execution, and MT5. Capital at risk.',
+      ? 'تداول الفوركس والمؤشرات والسلع والعملات الرقمية مع نيو إيرا، فروقات ضيقة وتنفيذ سريع ومنصة MT5. رأس المال في خطر.'
+      : 'Trade forex, indices, commodities and crypto CFDs with Newera: tight spreads, fast execution, and MT5. Capital at risk.',
     alternates: {
       canonical: `${BASE}/${locale}`,
       languages: {
@@ -91,7 +91,7 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      siteName: 'Newera365',
+      siteName: 'Newera',
       type: 'website',
       locale: locale === 'ar' ? 'ar_AE' : 'en_US',
       alternateLocale: locale === 'ar' ? ['en_US'] : ['ar_AE'],
@@ -101,8 +101,8 @@ export async function generateMetadata({
           width: 1200,
           height: 630,
           alt: isAr
-            ? 'نيو إيرا 365: تداول الفوركس والعقود مقابل الفروقات'
-            : 'Newera365: Forex and CFD Trading',
+            ? 'نيو إيرا: تداول الفوركس والعقود مقابل الفروقات'
+            : 'Newera: Forex and CFD Trading',
         },
       ],
     },
@@ -201,7 +201,7 @@ export default async function LocaleLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'FinancialService',
-              name: 'Newera365',
+              name: 'Newera',
               url: BASE,
               logo: `${BASE}/favicon-dark.png`,
               description:

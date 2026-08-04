@@ -134,13 +134,14 @@ function StepCard({
         src={STEP_IMAGES[i] ?? '/images/hero-terminal-macro.jpg'}
         alt=""
         fill
+        quality={95}
         sizes="(min-width: 1280px) 384px, (min-width: 768px) 640px, 100vw"
         className="object-cover object-center transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.03]"
       />
       {/* Green-black scrim anchors the text zone; hairline ring gives the plate its glass edge. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-t from-[#03130B] via-[#03130B]/85 to-[#03130B]/25 transition-opacity duration-500"
+        className="absolute inset-0 bg-gradient-to-t from-[#03130B] via-[#03130B]/45 to-transparent transition-opacity duration-500"
       />
       <span
         aria-hidden="true"

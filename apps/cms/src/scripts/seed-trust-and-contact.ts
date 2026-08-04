@@ -28,7 +28,7 @@ import payload from 'payload';
 
 const KPI_STATS = [
   { valueEn: '12+', valueAr: '+12', labelEn: 'Years in Markets', labelAr: 'عاماً في الأسواق' },
-  { valueEn: '180k+', valueAr: '+180 ألف', labelEn: 'Active Traders', labelAr: 'متداول نشط' },
+  { valueEn: '10k', valueAr: '10 ألف', labelEn: 'Active Traders', labelAr: 'متداول نشط' },
   {
     valueEn: '< 12 ms',
     valueAr: 'أقل من 12 م.ث',
@@ -36,13 +36,6 @@ const KPI_STATS = [
     labelAr: 'متوسط التنفيذ',
   },
   { valueEn: '99.99%', valueAr: '99.99%', labelEn: 'Platform Uptime', labelAr: 'جاهزية المنصة' },
-  {
-    valueEn: '10,000+',
-    valueAr: '+10,000',
-    labelEn: 'Tradable Instruments',
-    labelAr: 'أداة قابلة للتداول',
-  },
-  { valueEn: '120+', valueAr: '+120', labelEn: 'Countries Served', labelAr: 'دولة نخدمها' },
 ];
 
 const RATING = {

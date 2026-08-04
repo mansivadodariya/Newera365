@@ -12,7 +12,7 @@ import { Spotlight } from '../primitives/Spotlight';
 /* ─── "Why Newera" proof band ────────────────────────────────────────────────
    The site's signature section (client feedback: the USPs existed but were
    invisible). A full-bleed ink band — identical in light and dark mode — that
-   states the reasons to choose Newera365 as four oversized, verifiable
+   states the reasons to choose Newera as four oversized, verifiable
    numbers instead of four small feature cards. Numbers are the product;
    numbers get the stage. */
 

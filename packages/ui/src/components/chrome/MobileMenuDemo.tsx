@@ -186,7 +186,7 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
           <Link href={`/${locale}`} onClick={onClose} aria-label="Go to home">
             <Image
               src="/images/logo-light.png"
-              alt="Newera365"
+              alt="Newera"
               width={133}
               height={26}
               className="block dark:hidden"
@@ -194,7 +194,7 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
             />
             <Image
               src="/images/logo-dark.png"
-              alt="Newera365"
+              alt="Newera"
               width={133}
               height={26}
               className="hidden dark:block"

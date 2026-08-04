@@ -13,8 +13,8 @@ export async function generateMetadata({
   return {
     title: isAr ? 'مقارن فروق الأسعار' : 'Spread Comparator',
     description: isAr
-      ? 'قارن فروق أسعار Newera365 مع متوسط الصناعة عبر أنواع الحسابات.'
-      : 'Compare Newera365 spreads against the industry average across account types.',
+      ? 'قارن فروق أسعار Newera مع متوسط الصناعة عبر أنواع الحسابات.'
+      : 'Compare Newera spreads against the industry average across account types.',
   };
 }
 

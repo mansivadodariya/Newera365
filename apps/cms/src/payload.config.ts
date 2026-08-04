@@ -177,7 +177,7 @@ export default buildConfig({
       idleTimeoutMillis: 10_000,
       connectionTimeoutMillis: 10_000,
     },
-    // Schema managed via migrations; push disabled to prevent interactive Drizzle prompts.
+    // Schema managed via migrations/seeds; push disabled to prevent Drizzle relation conflicts.
     push: false,
   }),
   collections: [

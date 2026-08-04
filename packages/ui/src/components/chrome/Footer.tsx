@@ -122,7 +122,7 @@ function Footer({
           <div className="xl:w-[300px] xl:shrink-0">
             <Image
               src="/images/logo-dark.png"
-              alt="Newera365"
+              alt="Newera"
               width={133}
               height={26}
               className="mb-[18px]"

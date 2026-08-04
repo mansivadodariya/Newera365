@@ -401,12 +401,12 @@ function HeaderDemo() {
           {/* Left: Logo */}
           <Link
             href={`/${locale}`}
-            aria-label="Newera365, go to home"
+            aria-label="Newera, go to home"
             className="flex-shrink-0 justify-self-start"
           >
             <Image
               src="/images/logo-light.png"
-              alt="Newera365"
+              alt="Newera"
               width={133}
               height={26}
               className="block dark:hidden"
@@ -414,7 +414,7 @@ function HeaderDemo() {
             />
             <Image
               src="/images/logo-dark.png"
-              alt="Newera365"
+              alt="Newera"
               width={133}
               height={26}
               className="hidden dark:block"
