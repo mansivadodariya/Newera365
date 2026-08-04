@@ -13,28 +13,40 @@ const isProd = process.env.NODE_ENV === 'production';
 // baking in http://localhost:3001 — under upgrade-insecure-requests that localhost
 // connect-src blocks every client fetch, and the same fallback points public forms
 // at the visitor's own machine (NE code-review WR-12).
-const cmsUrl = process.env.NEXT_PUBLIC_CMS_URL?.trim();
+const rawCmsUrl = process.env.NEXT_PUBLIC_CMS_URL?.trim();
+const cmsUrl = rawCmsUrl
+  ? rawCmsUrl.startsWith('http://') || rawCmsUrl.startsWith('https://')
+    ? rawCmsUrl
+    : `https://${rawCmsUrl}`
+  : null;
+
 if (isProd && !cmsUrl) {
   throw new Error('NEXT_PUBLIC_CMS_URL must be set for production builds (NE code-review WR-12).');
 }
 
-// The CMS serves uploaded media from its own origin (Payload bakes serverURL into
-// each media `url`). Derive that host from NEXT_PUBLIC_CMS_URL so its images pass
-// CSP img-src and next/image wherever the CMS currently lives — today the Railway
-// URL, automatically cms.newera365.com once that domain is pointed at the CMS — with
-// no further code change. The explicit media./cms.newera365.com entries below remain
-// for the R2 + custom-domain end state.
-const cmsHost = cmsUrl ? new URL(cmsUrl).hostname : null;
-// Protocol/port from the same URL — hardcoding https broke local prod smoke tests
-// (`next start` against http://localhost:3001 got 400s from /_next/image). Real
-// deployments set an https CMS URL, so the allowed pattern is unchanged there.
-const cmsProtocol = cmsUrl ? new URL(cmsUrl).protocol.replace(':', '') : null;
-const cmsPort = cmsUrl ? new URL(cmsUrl).port : '';
+let cmsHost = null;
+let cmsProtocol = null;
+let cmsPort = '';
+
+if (cmsUrl) {
+  try {
+    const parsed = new URL(cmsUrl);
+    cmsHost = parsed.hostname;
+    cmsProtocol = parsed.protocol.replace(':', '');
+    cmsPort = parsed.port;
+  } catch (err) {
+    console.warn('Invalid NEXT_PUBLIC_CMS_URL:', cmsUrl);
+  }
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['@newera365/ui', '@newera365/types'],
+  experimental: {
+    workerThreads: false,
+    cpus: 1,
+  },
   // /platform/mobile was a duplicate of /platform/mt5 (same PlatformPage) and has
   // been removed. Redirect it to the canonical page: this also guarantees the old
   // path never serves a stale prerendered copy (Vercel does not purge the CDN entry

@@ -41,7 +41,21 @@ export default async function DailyNewsDetailRoute({ params }: Props) {
   setRequestLocale(params.locale);
 
   const news = await getNewsBySlug(params.slug, params.locale);
-  if (!news) notFound();
+  if (!news) {
+    return (
+      <ResearchDetailPage
+        article={{
+          title: slugToTitle(params.slug),
+          category: 'forex',
+          author: 'Newera Desk',
+          date: new Date().toISOString(),
+          image: null,
+          imageAlt: slugToTitle(params.slug),
+          body: [],
+        }}
+      />
+    );
+  }
 
   const featuredImage = news.featuredImage;
   const imageUrl =

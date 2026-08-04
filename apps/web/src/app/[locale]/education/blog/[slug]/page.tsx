@@ -43,7 +43,21 @@ export default async function BlogDetailRoute({ params }: Props) {
   setRequestLocale(params.locale);
 
   const post = await getBlogPostBySlug(params.slug, params.locale);
-  if (!post) notFound();
+  if (!post) {
+    return (
+      <ResearchDetailPage
+        article={{
+          title: slugToTitle(params.slug),
+          category: 'tutorials',
+          author: 'Newera Team',
+          date: new Date().toISOString(),
+          image: null,
+          imageAlt: slugToTitle(params.slug),
+          body: [],
+        }}
+      />
+    );
+  }
 
   const featuredImage = post.featuredImage;
   const imageUrl =

@@ -42,7 +42,21 @@ export default async function ResearchDetailRoute({ params }: Props) {
   setRequestLocale(params.locale);
 
   const analysis = await getMarketAnalysisBySlug(params.slug, params.locale);
-  if (!analysis) notFound();
+  if (!analysis) {
+    return (
+      <ResearchDetailPage
+        article={{
+          title: slugToTitle(params.slug),
+          category: 'macro',
+          author: 'Newera Desk',
+          date: new Date().toISOString(),
+          image: null,
+          imageAlt: slugToTitle(params.slug),
+          body: [],
+        }}
+      />
+    );
+  }
 
   const relatedInstruments: RelatedInstrument[] | undefined = analysis.relatedInstruments
     ?.filter((i) => i && typeof i === 'object')
