@@ -59,9 +59,23 @@ const jetbrainsMono = JetBrains_Mono({
 
 const isLocale = (value: string): value is Locale => (LOCALES as readonly string[]).includes(value);
 
-const BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000')
+const rawBase = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000')
   .trim()
   .replace(/\/+$/, '');
+
+const BASE = rawBase
+  ? rawBase.startsWith('http://') || rawBase.startsWith('https://')
+    ? rawBase
+    : `https://${rawBase}`
+  : 'http://localhost:3000';
+
+function getMetadataBase(urlStr: string): URL {
+  try {
+    return new URL(urlStr);
+  } catch {
+    return new URL('http://localhost:3000');
+  }
+}
 
 // Per-locale metadata so Next.js emits correct hreflang + canonical tags.
 export async function generateMetadata({
@@ -72,7 +86,7 @@ export async function generateMetadata({
   const { locale } = params;
   const isAr = locale === 'ar';
   return {
-    metadataBase: new URL(BASE),
+    metadataBase: getMetadataBase(BASE),
     title: {
       default: isAr
         ? 'نيو إيرا: تداول الفوركس والعقود مقابل الفروقات'

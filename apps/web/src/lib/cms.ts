@@ -1,4 +1,11 @@
-const CMS_URL = process.env.NEXT_PUBLIC_CMS_URL ?? 'http://localhost:3001';
+const rawCmsUrl = (process.env.NEXT_PUBLIC_CMS_URL ?? 'http://localhost:3001')
+  .trim()
+  .replace(/\/+$/, '');
+const CMS_URL = rawCmsUrl
+  ? rawCmsUrl.startsWith('http://') || rawCmsUrl.startsWith('https://')
+    ? rawCmsUrl
+    : `https://${rawCmsUrl}`
+  : 'http://localhost:3001';
 
 // ---------------------------------------------------------------------------
 // Slate richtext node shape (matches Payload v2 Slate editor output)
