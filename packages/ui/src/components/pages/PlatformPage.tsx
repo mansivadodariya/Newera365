@@ -317,9 +317,9 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
             {/* Pure floor shadow strictly BELOW the bottom edge — ZERO side/top shadow */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute left-1/2 top-full mt-2.5 h-6 w-[70%] -translate-x-1/2 rounded-[100%] bg-black/20 blur-md transition-all duration-500 group-hover:w-[75%] dark:bg-[#00b050]/40"
+              className="pointer-events-none absolute left-1/2 top-full mt-2.5 h-6 w-[70%] -translate-x-1/2 rounded-[100%] bg-black/20 blur-md transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-[78%] group-hover:opacity-90 dark:bg-[#00b050]/40"
             />
-            <div className="relative overflow-hidden rounded-[24px] transition-transform duration-500 [backface-visibility:hidden] [transform:translateZ(0)] [will-change:transform] hover:scale-[1.02]">
+            <div className="relative overflow-hidden rounded-[24px] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] [backface-visibility:hidden] [transform:translateZ(0)] [will-change:transform] group-hover:scale-[1.025]">
               <Image
                 src="/images/platformSide.png"
                 alt="Platform across devices"
@@ -328,7 +328,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                 priority
                 quality={100}
                 unoptimized
-                className="h-auto w-full rounded-[24px] object-contain [backface-visibility:hidden] [image-rendering:-webkit-optimize-contrast]"
+                className="h-auto w-full rounded-[24px] object-contain [backface-visibility:hidden]"
               />
             </div>
           </div>
