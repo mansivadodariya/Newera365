@@ -279,6 +279,7 @@ export function EducationHubPage({ content: cmsContent, webinarCount }: Educatio
       </section>
 
       {/* Watch and listen — media formats as ink-art cards */}
+      {/*
       <section className="px-5 pb-12">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
@@ -300,10 +301,8 @@ export function EducationHubPage({ content: cmsContent, webinarCount }: Educatio
                     style={{ objectPosition: row.crop }}
                     className="absolute inset-0 h-full w-full object-cover opacity-[0.5] transition-opacity duration-300 group-hover:opacity-[0.72]"
                   />
-                  {/* Green-black scrim anchoring the text zone */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#03130B]/[0.92] via-[#03130B]/[0.38] to-[#03130B]/[0.12]" />
 
-                  {/* Ghost numeral bleeding off the top corner (04..06) */}
                   <span
                     dir="ltr"
                     className="text-accent-bright/[0.14] group-hover:text-accent-bright/30 pointer-events-none absolute end-4 top-1 select-none font-mono text-[84px] font-bold leading-none transition-colors duration-300"
@@ -333,9 +332,10 @@ export function EducationHubPage({ content: cmsContent, webinarCount }: Educatio
           </div>
         </div>
       </section>
+      */}
 
       {/* Featured this week — editorial divider rows */}
-      <section className="px-5 pb-12 pt-2">
+      <section className="px-5 pb-12 pt-0">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <ScrollReveal>
             <SectionKicker className="mb-5">{t('featuredKicker')}</SectionKicker>
