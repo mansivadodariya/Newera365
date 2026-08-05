@@ -34,7 +34,14 @@ function resolveCoverUrl(name: string, methodType: string, rawCover: any): strin
     url = rawCover.url;
   }
 
-  if (!url || url.includes('payment-method-') || url.includes('placeholder')) {
+  // If no URL, or placeholder, or localhost, or local seed file (not hosted on Railway)
+  if (
+    !url ||
+    url.includes('payment-method-') ||
+    url.includes('placeholder') ||
+    url.includes('localhost') ||
+    url.includes('pay-seed-')
+  ) {
     return defaultCover(name, methodType);
   }
 
@@ -44,19 +51,6 @@ function resolveCoverUrl(name: string, methodType: string, rawCover: any): strin
     if (cmsBase) {
       return `${cmsBase}${url}`;
     }
-  }
-
-  // If pointing to localhost:3001 on a non-localhost domain, replace host or fallback
-  if (
-    typeof window !== 'undefined' &&
-    window.location.hostname !== 'localhost' &&
-    url.includes('localhost:3001')
-  ) {
-    const cmsBase = (process.env.NEXT_PUBLIC_CMS_URL ?? '').trim().replace(/\/+$/, '');
-    if (cmsBase && !cmsBase.includes('localhost')) {
-      return url.replace(/http:\/\/localhost:3001/, cmsBase);
-    }
-    return defaultCover(name, methodType);
   }
 
   return url;

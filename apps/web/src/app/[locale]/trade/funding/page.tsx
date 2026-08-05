@@ -15,7 +15,9 @@ function mapMethod(m: CmsPaymentMethod): CmsPaymentMethodItem {
   // When unset the FundingPage falls back to a bundled static cover.
   const logo = m.logo;
   let rawUrl = logo && typeof logo !== 'number' ? (logo.url ?? null) : null;
-  if (
+  if (rawUrl && (rawUrl.includes('localhost') || rawUrl.includes('pay-seed-'))) {
+    rawUrl = null;
+  } else if (
     rawUrl &&
     (rawUrl.startsWith('/media/') || (rawUrl.startsWith('/') && !rawUrl.startsWith('/images/')))
   ) {
