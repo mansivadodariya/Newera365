@@ -284,7 +284,7 @@ function UpcomingCard({
         <span
           aria-hidden="true"
           dir="ltr"
-          className="text-accent-bright/[0.22] absolute -top-6 end-4 select-none font-sans text-[96px] font-semibold tabular-nums leading-none tracking-tight"
+          className="text-accent-bright/35 pointer-events-none absolute end-5 top-5 select-none font-mono text-[36px] font-bold tabular-nums leading-none tracking-tight"
         >
           {ghostDay}
         </span>

@@ -147,10 +147,10 @@ function StepCard({
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 rounded-[24px] ring-1 ring-inset ring-white/[0.06]"
       />
-      {/* Ghost numeral — oversized, bleeding off the top corner */}
+      {/* Step numeral badge */}
       <span
         aria-hidden="true"
-        className="text-accent-bright/[0.22] pointer-events-none absolute -top-4 end-3 select-none font-sans text-[96px] font-semibold tabular-nums leading-none tracking-tight"
+        className="text-accent-bright/35 pointer-events-none absolute end-5 top-5 select-none font-mono text-[36px] font-bold tabular-nums leading-none tracking-tight xl:end-5 xl:top-5"
       >
         {step.num}
       </span>
