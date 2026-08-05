@@ -14,7 +14,16 @@ function mapMethod(m: CmsPaymentMethod): CmsPaymentMethodItem {
   // The `logo` upload (resolved via depth=1) becomes the desktop cover banner.
   // When unset the FundingPage falls back to a bundled static cover.
   const logo = m.logo;
-  const coverImage = logo && typeof logo !== 'number' ? (logo.url ?? null) : null;
+  let rawUrl = logo && typeof logo !== 'number' ? (logo.url ?? null) : null;
+  if (
+    rawUrl &&
+    (rawUrl.startsWith('/media/') || (rawUrl.startsWith('/') && !rawUrl.startsWith('/images/')))
+  ) {
+    const cmsBase = (process.env.NEXT_PUBLIC_CMS_URL ?? '').trim().replace(/\/+$/, '');
+    if (cmsBase) {
+      rawUrl = `${cmsBase}${rawUrl}`;
+    }
+  }
   return {
     id: m.id,
     name: m.name,
@@ -25,7 +34,7 @@ function mapMethod(m: CmsPaymentMethod): CmsPaymentMethodItem {
     minDeposit: m.minDeposit,
     fee: m.fee,
     notes: m.notes,
-    coverImage,
+    coverImage: rawUrl,
   };
 }
 

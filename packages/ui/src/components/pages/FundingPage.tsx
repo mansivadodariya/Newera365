@@ -37,6 +37,28 @@ function resolveCoverUrl(name: string, methodType: string, rawCover: any): strin
   if (!url || url.includes('payment-method-') || url.includes('placeholder')) {
     return defaultCover(name, methodType);
   }
+
+  // Prepend CMS base URL if it's a relative media upload path (e.g. /media/...)
+  if (url.startsWith('/media/') || (url.startsWith('/') && !url.startsWith('/images/'))) {
+    const cmsBase = (process.env.NEXT_PUBLIC_CMS_URL ?? '').trim().replace(/\/+$/, '');
+    if (cmsBase) {
+      return `${cmsBase}${url}`;
+    }
+  }
+
+  // If pointing to localhost:3001 on a non-localhost domain, replace host or fallback
+  if (
+    typeof window !== 'undefined' &&
+    window.location.hostname !== 'localhost' &&
+    url.includes('localhost:3001')
+  ) {
+    const cmsBase = (process.env.NEXT_PUBLIC_CMS_URL ?? '').trim().replace(/\/+$/, '');
+    if (cmsBase && !cmsBase.includes('localhost')) {
+      return url.replace(/http:\/\/localhost:3001/, cmsBase);
+    }
+    return defaultCover(name, methodType);
+  }
+
   return url;
 }
 
@@ -510,6 +532,7 @@ function HeroContent({
     })
     .map((method) => ({
       key: String(method.id),
+      methodType: method.methodType,
       icon: METHOD_TYPE_ICONS[method.methodType] ?? <IconCreditCard />,
       typeBadge: translateMethodType(method.methodType),
       name: locale === 'ar' ? (method.nameAr ?? method.name) : method.name,
@@ -577,8 +600,17 @@ function HeroContent({
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={method.cover}
-                      alt=""
+                      alt={method.name}
                       aria-hidden="true"
+                      onError={(e) => {
+                        const fallback = defaultCover(method.name, method.methodType);
+                        if (
+                          e.currentTarget.src !== fallback &&
+                          !e.currentTarget.src.endsWith(fallback)
+                        ) {
+                          e.currentTarget.src = fallback;
+                        }
+                      }}
                       className="h-full w-full object-cover object-center transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.05]"
                     />
                   </div>
