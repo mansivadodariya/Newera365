@@ -300,11 +300,10 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
     <>
       {/* Hero */}
       <section className="rounded-b-[32px] bg-gradient-to-b from-[#F2F5F3] to-[#BDEECA] px-5 pb-10 pt-10 dark:bg-gradient-to-b dark:from-[#000000] dark:to-[#085A00]">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:max-w-[1200px] xl:items-center xl:gap-8">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:max-w-[1200px] xl:items-center xl:gap-2">
           <div className="xl:flex-1">
-            <h1 className="text-foreground text-display mb-5 font-sans [text-wrap:balance]">
-              {t('heroLine1')} <span>{t('heroAccent')}</span>
-              <br />
+            <h1 className="text-foreground text-display mb-5 font-sans">
+              {t('heroLine1')} <span> {t('heroAccent')} </span>
               {t('heroLine2')}
             </h1>
             <p className="font-body text-lead text-muted max-w-[340px] xl:max-w-[440px] dark:text-white/60">
@@ -313,22 +312,17 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
           </div>
 
           {/* Device mockup */}
-          <div className="group relative mt-6 w-full max-w-[560px] sm:max-w-[600px] xl:mt-0 xl:w-[560px] xl:max-w-[560px] xl:flex-shrink-0">
+          <div className="group relative mt-6 w-full max-w-[560px] sm:max-w-[600px] xl:mt-0 xl:w-[550px] xl:max-w-[550px] xl:flex-shrink-0">
             {/* Pure floor shadow strictly BELOW the bottom edge — ZERO side/top shadow */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute left-1/2 top-full mt-2.5 h-6 w-[70%] -translate-x-1/2 rounded-[100%] bg-black/20 blur-md transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-[78%] group-hover:opacity-90 dark:bg-[#00b050]/40"
+              className="pointer-events-none absolute left-1/2 top-full mt-2.5 h-6 w-[70%] -translate-x-1/2 rounded-[100%] bg-black/20 blur-md transition-all duration-500 group-hover:w-[75%] dark:bg-[#00b050]/40"
             />
-            <div className="relative overflow-hidden rounded-[24px] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] [backface-visibility:hidden] [transform:translateZ(0)] [will-change:transform] group-hover:scale-[1.025]">
-              <Image
+            <div className="relative overflow-hidden rounded-[24px] transition-transform duration-500 hover:scale-[1.02]">
+              <img
                 src="/images/platformSide.png"
                 alt="Platform across devices"
-                width={1200}
-                height={900}
-                priority
-                quality={100}
-                unoptimized
-                className="h-auto w-full rounded-[24px] object-contain [backface-visibility:hidden]"
+                className="h-auto w-full rounded-[24px] object-contain [image-rendering:-webkit-optimize-contrast]"
               />
             </div>
           </div>
