@@ -360,8 +360,8 @@ async function seedSiteSettings() {
     downloadMt5Ios: 'https://apps.apple.com/app/metatrader-5/id413251709',
     downloadMt5Android: 'https://play.google.com/store/apps/details?id=net.metaquotes.metatrader5',
     downloadWebTrader: 'https://trade.newera365.com',
-    contactEmail: 'support@newera365.com',
-    contactEmailCompliance: 'compliance@newera365.com',
+    contactEmail: 'support@newera.com',
+    contactEmailCompliance: 'compliance@newera.com',
     contactPhone: '+1 867-778-3511',
     contactAddressEn:
       'Level 14, Boulevard Plaza Tower 1, Sheikh Mohammed Bin Rashid Boulevard, Dubai, UAE',
@@ -379,9 +379,9 @@ async function seedSiteSettings() {
     riskBannerAr:
       'عقود الفروقات أدوات مالية معقدة. 74% من حسابات المستثمرين الأفراد تخسر أموالها عند تداول عقود الفروقات مع هذا المزود.',
     riskDisclaimerEn:
-      'Newera365 is authorised and regulated by the FCA (UK), ASIC (Australia), and CySEC (Cyprus). Trading leveraged products carries significant risk. Not suitable for all investors.',
+      'Newera is authorised and regulated by the FCA (UK), ASIC (Australia), and CySEC (Cyprus). Trading leveraged products carries significant risk. Not suitable for all investors.',
     riskDisclaimerAr:
-      'نيو إيرا 365 مرخصة ومنظمة من قبل FCA وASIC وCySEC. التداول بالمنتجات ذات الرافعة المالية ينطوي على مخاطر عالية.',
+      'نيو إيرا مرخصة ومنظمة من قبل FCA وASIC وCySEC. التداول بالمنتجات ذات الرافعة المالية ينطوي على مخاطر عالية.',
     // Analyst Chart — Featured Analyst
     analystInitials: 'DR',
     analystName: 'Diego Romero',
