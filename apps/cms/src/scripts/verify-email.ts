@@ -69,7 +69,7 @@ async function main(): Promise<void> {
 
   // Confirm the dev-mode transport produces a well-formed message (headers + body).
   const probe = await emailTransport.sendMail({
-    from: 'Newera365 <no-reply@newera365.com>',
+    from: 'Newera <no-reply@newera365.com>',
     to: 'probe@example.com',
     subject: 'probe',
     html: '<p>probe</p>',
@@ -137,11 +137,11 @@ async function main(): Promise<void> {
         connectionTimeout: 5_000,
         greetingTimeout: 5_000,
       },
-      { from: `Newera365 <${acct.user}>` },
+      { from: `Newera <${acct.user}>` },
     );
     const info = await etherealTransport.sendMail({
       to: 'inbox@example.com',
-      subject: '[verify] Newera365 SMTP send path',
+      subject: '[verify] Newera SMTP send path',
       html: '<h2>SMTP transmission OK</h2><p>Proves the nodemailer SMTP send path works from this codebase.</p>',
     });
     console.log('  ✓ SMTP send accepted:', info.accepted, '| server response:', info.response);
@@ -170,12 +170,12 @@ async function main(): Promise<void> {
         connectionTimeout: 8_000,
         greetingTimeout: 8_000,
       },
-      { from: `Newera365 <${REAL.from}>` },
+      { from: `Newera <${REAL.from}>` },
     );
     try {
       const info = await liveTransport.sendMail({
         to: REAL.from,
-        subject: '[verify] Newera365 ZeptoMail live send',
+        subject: '[verify] Newera ZeptoMail live send',
         html: '<h2>ZeptoMail live send OK</h2><p>If you received this, ZeptoMail SMTP is fully working.</p>',
       });
       console.log('  ✓ ZeptoMail accepted:', info.accepted, '| server response:', info.response);

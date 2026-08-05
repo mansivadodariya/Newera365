@@ -187,9 +187,9 @@ const SAMPLE: Dict = {
 
   // ── Regulatory / company / risk (GENERIC placeholder — compliance must replace) ──
   regulatoryDisclosureEn:
-    'Newera365 is a trading name of [Registered Entity Ltd], authorised and regulated by [Regulator] under licence number [000000]. Trading services are provided in accordance with the regulator’s rules.',
+    'Newera is a trading name of [Registered Entity Ltd], authorised and regulated by [Regulator] under licence number [000000]. Trading services are provided in accordance with the regulator’s rules.',
   regulatoryDisclosureAr:
-    'Newera365 اسم تجاري لـ [الكيان المسجّل المحدودة]، المرخّص والخاضع لرقابة [الجهة التنظيمية] بموجب الترخيص رقم [000000]. تُقدَّم خدمات التداول وفقاً لقواعد الجهة التنظيمية.',
+    'Newera اسم تجاري لـ [الكيان المسجّل المحدودة]، المرخّص والخاضع لرقابة [الجهة التنظيمية] بموجب الترخيص رقم [000000]. تُقدَّم خدمات التداول وفقاً لقواعد الجهة التنظيمية.',
   companyRegistrationEn:
     '[Registered Entity Ltd], Company No. 000000. Registered office: 1 Example Street, London, EC1A 1AA, United Kingdom.',
   companyRegistrationAr:

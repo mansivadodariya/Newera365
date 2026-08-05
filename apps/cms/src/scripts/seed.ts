@@ -1,5 +1,5 @@
 /**
- * Demo data seed script for Newera365 CMS.
+ * Demo data seed script for Newera CMS.
  *
  * Uses Payload's REST API. The CMS must be running on port 3001.
  * An admin user must already exist (create one via /admin on first boot).
@@ -208,7 +208,7 @@ async function makeImage(
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
     <rect width="100%" height="100%" fill="${bg}"/>
     <rect x="0" y="0" width="100%" height="10" fill="#C9A227"/>
-    <text x="50%" y="46%" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" fill="#ffffff" text-anchor="middle">Newera365</text>
+    <text x="50%" y="46%" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" fill="#ffffff" text-anchor="middle">Newera</text>
     <text x="50%" y="53%" font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#cfe3d8" text-anchor="middle">${safe}</text>
   </svg>`;
   await sharp(Buffer.from(svg)).png().toFile(file);
@@ -1272,13 +1272,13 @@ async function seedFaqs() {
     },
     {
       en: {
-        question: 'What leverage does Newera365 offer?',
+        question: 'What leverage does Newera offer?',
         answer: richText(
           'We offer leverage up to 1:500 on forex and major commodity pairs, 1:200 on metals, 1:100 on indices, and 1:20 on stocks, ETFs and crypto.',
         ),
       },
       ar: {
-        question: 'ما هي الرافعة المالية التي تقدمها نيو إيرا 365؟',
+        question: 'ما هي الرافعة المالية التي تقدمها نيو إيرا؟',
         answer: richText(
           'نقدم رافعة مالية تصل إلى 1:500 على العملات والسلع الرئيسية، و1:200 على المعادن، و1:100 على المؤشرات، و1:20 على الأسهم والصناديق والعملات الرقمية.',
         ),
@@ -1304,15 +1304,15 @@ async function seedFaqs() {
     },
     {
       en: {
-        question: 'Is my money safe with Newera365?',
+        question: 'Is my money safe with Newera?',
         answer: richText(
-          'Yes. Client funds are held in segregated accounts with tier-1 banks, completely separate from our operating capital. Newera365 is regulated by the FCA, ASIC, and CySEC.',
+          'Yes. Client funds are held in segregated accounts with tier-1 banks, completely separate from our operating capital. Newera is regulated by the FCA, ASIC, and CySEC.',
         ),
       },
       ar: {
-        question: 'هل أموالي آمنة مع نيو إيرا 365؟',
+        question: 'هل أموالي آمنة مع نيو إيرا؟',
         answer: richText(
-          'نعم. يتم الاحتفاظ بأموال العملاء في حسابات منفصلة لدى بنوك من الدرجة الأولى، منفصلة تماماً عن رأس مالنا التشغيلي. نيو إيرا 365 خاضعة لرقابة FCA وASIC وCySEC.',
+          'نعم. يتم الاحتفاظ بأموال العملاء في حسابات منفصلة لدى بنوك من الدرجة الأولى، منفصلة تماماً عن رأس مالنا التشغيلي. نيو إيرا خاضعة لرقابة FCA وASIC وCySEC.',
         ),
       },
       category: 'regulation',
@@ -1445,7 +1445,7 @@ async function seedBlogPosts() {
           'Key resistance sits at 1.0920, a level that has capped multiple rally attempts over the past three weeks. Support is found at 1.0800, which aligns with the 50-day moving average.',
           "The ECB is expected to hold rates at Thursday's meeting, but any dovish language from President Lagarde could send the pair lower. Watch for a break below 1.0780 as a bearish confirmation signal.",
         ),
-        author: 'Newera365 Research Desk',
+        author: 'Newera Research Desk',
       },
       ar: {
         title: 'التوقعات الأسبوعية لـ EUR/USD: تصريحات الفيدرالي تحدّ من المكاسب',
@@ -1456,7 +1456,7 @@ async function seedBlogPosts() {
           'تقع مقاومة رئيسية عند 1.0920، وهو مستوى حدّ من محاولات الارتداد المتعددة خلال الأسابيع الثلاثة الماضية. يقع الدعم عند 1.0800.',
           'يُتوقع أن يُبقي البنك المركزي الأوروبي على أسعار الفائدة في اجتماع الخميس. راقب كسر 1.0780 كإشارة هبوطية.',
         ),
-        author: 'مكتب أبحاث نيو إيرا 365',
+        author: 'مكتب أبحاث نيو إيرا',
       },
       category: 'market-news',
       publishedDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
@@ -1579,7 +1579,7 @@ async function seedBlogPosts() {
           "Key data this week: Tuesday's CPI print is the most important near-term catalyst. A reading above 3.3% would validate further dollar strength and likely push EUR/USD below 1.0750.",
           'Trading the dollar: The DXY has historically struggled to sustain above 105 without explicit hawkish Fed guidance. Watch for profit-taking if the level is reached without a data catalyst.',
         ),
-        author: 'Newera365 Research Desk',
+        author: 'Newera Research Desk',
       },
       ar: {
         title: 'مؤشر الدولار الأمريكي يختبر 105 — المحركات الكلية الرئيسية هذا الأسبوع',
@@ -1590,7 +1590,7 @@ async function seedBlogPosts() {
           'البيانات الرئيسية هذا الأسبوع: يُعدّ مؤشر CPI يوم الثلاثاء المحفز الأهم على المدى القريب. قراءة أعلى من 3.3% ستدعم قوة الدولار.',
           'تداول الدولار: عانى مؤشر DXY تاريخياً من الحفاظ على مستويات فوق 105 دون توجيه صريح من الاحتياطي الفيدرالي.',
         ),
-        author: 'مكتب أبحاث نيو إيرا 365',
+        author: 'مكتب أبحاث نيو إيرا',
       },
       category: 'market-news',
       publishedDate: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000).toISOString(),
@@ -1632,7 +1632,7 @@ async function seedBlogPosts() {
           'Risk-on dynamics: Sustained equity gains typically weaken the Japanese yen (a safe haven), support AUD and NZD (commodity currencies) and pressure USD/CHF higher.',
           'The divergence to watch: If equities are rising on rate-cut hopes while the dollar is also strong, something has to give. Historically, one of these correlations breaks — and identifying which is the key trade.',
         ),
-        author: 'Newera365 Research Desk',
+        author: 'Newera Research Desk',
       },
       ar: {
         title: 'S&P 500 عند مستويات قياسية: ماذا يعني الارتفاع للفوركس؟',
@@ -1642,7 +1642,7 @@ async function seedBlogPosts() {
           'ديناميكيات المخاطرة: يُضعف الأداء القوي للأسهم عادةً الين الياباني ويدعم الدولار الأسترالي والنيوزيلندي.',
           'التباين الذي يجب مراقبته: إذا ارتفعت الأسهم على آمال خفض الفائدة بينما الدولار قوي أيضاً، فأحد هذين الارتباطين سينكسر.',
         ),
-        author: 'مكتب أبحاث نيو إيرا 365',
+        author: 'مكتب أبحاث نيو إيرا',
       },
       category: 'analysis',
       publishedDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
@@ -1713,7 +1713,7 @@ async function seedBlogPosts() {
           "THEME 4 — DOLLAR FLOWS: Month-end rebalancing added noise to last week's dollar move. The underlying trend is still dollar-positive pending a sustained inflation rollover.",
           'THEME 5 — UK ELECTIONS: Political uncertainty is creating volatility in GBP pairs. Traders are treating this as a binary event and positioning accordingly — reduced exposure, wider stops.',
         ),
-        author: 'Newera365 Research Desk',
+        author: 'Newera Research Desk',
       },
       ar: {
         title: 'إحاطة يوم الاثنين: الموضوعات الكلية التي تقود الأسواق هذا الأسبوع',
@@ -1726,7 +1726,7 @@ async function seedBlogPosts() {
           'الموضوع الرابع — تدفقات الدولار: لا يزال الاتجاه الأساسي إيجابياً للدولار.',
           'الموضوع الخامس — الانتخابات البريطانية: يخلق عدم اليقين السياسي تقلبات في أزواج الجنيه الإسترليني.',
         ),
-        author: 'مكتب أبحاث نيو إيرا 365',
+        author: 'مكتب أبحاث نيو إيرا',
       },
       category: 'market-news',
       publishedDate: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString(),
@@ -2054,7 +2054,7 @@ async function seedLegalPages() {
         title: 'Terms and Conditions',
         slug: 'terms-and-conditions',
         body: legalBody(
-          'These Terms and Conditions govern your use of the Newera365 trading platform and services. By opening an account, you agree to be bound by these terms.',
+          'These Terms and Conditions govern your use of the Newera trading platform and services. By opening an account, you agree to be bound by these terms.',
           [
             {
               heading: 'Eligibility',
@@ -2070,7 +2070,7 @@ async function seedLegalPages() {
             },
             {
               heading: 'Intellectual Property',
-              body: 'All content, data, and software provided by Newera365 is proprietary and protected by intellectual property laws.',
+              body: 'All content, data, and software provided by Newera is proprietary and protected by intellectual property laws.',
             },
             {
               heading: 'Governing Law',
@@ -2082,7 +2082,7 @@ async function seedLegalPages() {
       ar: {
         title: 'الشروط والأحكام',
         body: legalBody(
-          'تحكم هذه الشروط والأحكام استخدامك لمنصة وخدمات نيو إيرا 365 للتداول. بفتح حساب، توافق على الالتزام بهذه الشروط.',
+          'تحكم هذه الشروط والأحكام استخدامك لمنصة وخدمات نيو إيرا للتداول. بفتح حساب، توافق على الالتزام بهذه الشروط.',
           [
             {
               heading: 'الأهلية',
@@ -2098,7 +2098,7 @@ async function seedLegalPages() {
             },
             {
               heading: 'الملكية الفكرية',
-              body: 'جميع المحتوى والبيانات والبرامج المقدمة من نيو إيرا 365 مملوكة ومحمية بقوانين الملكية الفكرية.',
+              body: 'جميع المحتوى والبيانات والبرامج المقدمة من نيو إيرا مملوكة ومحمية بقوانين الملكية الفكرية.',
             },
             {
               heading: 'القانون الحاكم',
@@ -2116,7 +2116,7 @@ async function seedLegalPages() {
         title: 'Privacy Policy',
         slug: 'privacy-policy',
         body: legalBody(
-          'Newera365 is committed to protecting your personal data. This Privacy Policy explains how we collect, use, and protect your information.',
+          'Newera is committed to protecting your personal data. This Privacy Policy explains how we collect, use, and protect your information.',
           [
             {
               heading: 'Data We Collect',
@@ -2140,7 +2140,7 @@ async function seedLegalPages() {
       ar: {
         title: 'سياسة الخصوصية',
         body: legalBody(
-          'تلتزم نيو إيرا 365 بحماية بياناتك الشخصية. تشرح هذه السياسة كيفية جمع معلوماتك واستخدامها وحمايتها.',
+          'تلتزم نيو إيرا بحماية بياناتك الشخصية. تشرح هذه السياسة كيفية جمع معلوماتك واستخدامها وحمايتها.',
           [
             {
               heading: 'البيانات التي نجمعها',
@@ -2226,11 +2226,11 @@ async function seedLegalPages() {
         title: 'AML Policy',
         slug: 'aml-policy',
         body: legalBody(
-          'Newera365 maintains a comprehensive Anti-Money Laundering (AML) programme to detect and prevent financial crime across all client accounts and transactions.',
+          'Newera maintains a comprehensive Anti-Money Laundering (AML) programme to detect and prevent financial crime across all client accounts and transactions.',
           [
             {
               heading: 'Policy Scope',
-              body: 'This policy applies to all clients and transactions processed through Newera365 Ltd. We are committed to the highest standards of anti-money laundering and counter-terrorist financing compliance.',
+              body: 'This policy applies to all clients and transactions processed through Newera Ltd. We are committed to the highest standards of anti-money laundering and counter-terrorist financing compliance.',
             },
             {
               heading: 'Customer Due Diligence',
@@ -2250,11 +2250,11 @@ async function seedLegalPages() {
       ar: {
         title: 'سياسة مكافحة غسل الأموال',
         body: legalBody(
-          'تحتفظ نيو إيرا 365 ببرنامج شامل لمكافحة غسل الأموال للكشف عن الجرائم المالية ومنعها عبر جميع حسابات العملاء والمعاملات.',
+          'تحتفظ نيو إيرا ببرنامج شامل لمكافحة غسل الأموال للكشف عن الجرائم المالية ومنعها عبر جميع حسابات العملاء والمعاملات.',
           [
             {
               heading: 'نطاق السياسة',
-              body: 'تنطبق هذه السياسة على جميع العملاء والمعاملات التي تتم معالجتها عبر نيو إيرا 365. نلتزم بأعلى معايير مكافحة غسل الأموال وتمويل الإرهاب.',
+              body: 'تنطبق هذه السياسة على جميع العملاء والمعاملات التي تتم معالجتها عبر نيو إيرا. نلتزم بأعلى معايير مكافحة غسل الأموال وتمويل الإرهاب.',
             },
             {
               heading: 'العناية الواجبة بالعميل',
@@ -2280,7 +2280,7 @@ async function seedLegalPages() {
         title: 'Cookie Policy',
         slug: 'cookie-policy',
         body: legalBody(
-          'This Cookie Policy explains how Newera365 uses cookies and similar technologies when you visit our website.',
+          'This Cookie Policy explains how Newera uses cookies and similar technologies when you visit our website.',
           [
             {
               heading: 'What Are Cookies',
@@ -2300,7 +2300,7 @@ async function seedLegalPages() {
       ar: {
         title: 'سياسة ملفات تعريف الارتباط',
         body: legalBody(
-          'تشرح سياسة ملفات تعريف الارتباط هذه كيفية استخدام نيو إيرا 365 لملفات تعريف الارتباط والتقنيات المشابهة عند زيارتك لموقعنا.',
+          'تشرح سياسة ملفات تعريف الارتباط هذه كيفية استخدام نيو إيرا لملفات تعريف الارتباط والتقنيات المشابهة عند زيارتك لموقعنا.',
           [
             {
               heading: 'ما هي ملفات تعريف الارتباط',
@@ -2356,12 +2356,12 @@ async function seedTeamMembers() {
         name: 'James Hartley',
         slug: 'james-hartley',
         role: 'Chief Executive Officer',
-        bio: 'James has 20+ years of financial markets experience, previously serving as Head of FX at two tier-1 investment banks before co-founding Newera365.',
+        bio: 'James has 20+ years of financial markets experience, previously serving as Head of FX at two tier-1 investment banks before co-founding Newera.',
       },
       ar: {
         name: 'جيمس هارتلي',
         role: 'الرئيس التنفيذي',
-        bio: 'يتمتع جيمس بأكثر من 20 عاماً من الخبرة في الأسواق المالية، حيث شغل منصب رئيس قسم الفوركس في بنكين من الدرجة الأولى قبل تأسيس نيو إيرا 365.',
+        bio: 'يتمتع جيمس بأكثر من 20 عاماً من الخبرة في الأسواق المالية، حيث شغل منصب رئيس قسم الفوركس في بنكين من الدرجة الأولى قبل تأسيس نيو إيرا.',
       },
       sortOrder: 1,
     },
@@ -3192,7 +3192,7 @@ async function seedCareers() {
         title: 'Senior Backend Engineer — Trading Infrastructure',
         slug: 'senior-backend-engineer-trading',
         summary:
-          'Build and maintain the low-latency execution engine and real-time data pipelines powering Newera365.',
+          'Build and maintain the low-latency execution engine and real-time data pipelines powering Newera.',
         body: bodyBlocks(
           'ROLE: You will work on the core trading infrastructure — order routing, position management, P&L calculation — serving 180,000+ active accounts.',
           'REQUIREMENTS: 5+ years with Go or Rust in high-throughput environments. Experience with FIX protocol, WebSocket streams, and time-series databases (TimescaleDB/InfluxDB). Strong knowledge of TCP/IP and systems programming.',
@@ -3218,7 +3218,7 @@ async function seedCareers() {
         title: 'Institutional Sales Manager — GCC',
         slug: 'institutional-sales-manager-gcc',
         summary:
-          "Grow Newera365's institutional client base across the Gulf Cooperation Council region.",
+          "Grow Newera's institutional client base across the Gulf Cooperation Council region.",
         body: bodyBlocks(
           'You will identify and onboard institutional clients (hedge funds, family offices, money managers) across the UAE, Saudi Arabia, and Kuwait.',
           'REQUIREMENTS: 5+ years in FX/CFD institutional sales. Existing network of GCC-based fund managers. Fluent in English and Arabic. Experience with Salesforce or similar CRM.',
@@ -3226,7 +3226,7 @@ async function seedCareers() {
       },
       ar: {
         title: 'مدير مبيعات مؤسسية — دول مجلس التعاون',
-        summary: 'توسيع قاعدة عملاء نيو إيرا 365 المؤسسيين في منطقة دول مجلس التعاون الخليجي.',
+        summary: 'توسيع قاعدة عملاء نيو إيرا المؤسسيين في منطقة دول مجلس التعاون الخليجي.',
         body: bodyBlocks(
           'ستتولى تحديد وإلحاق العملاء المؤسسيين (صناديق التحوط، مكاتب العائلات، مديرو الأموال) في الإمارات والسعودية والكويت.',
           'المتطلبات: 5 سنوات أو أكثر في مبيعات الفوركس/CFD المؤسسية. شبكة علاقات من مديري الصناديق في دول مجلس التعاون.',
@@ -3267,17 +3267,17 @@ async function seedCareers() {
         title: 'FX Market Analyst',
         slug: 'fx-market-analyst',
         summary:
-          'Produce daily and weekly market commentary, trade setups and research reports for Newera365 clients.',
+          'Produce daily and weekly market commentary, trade setups and research reports for Newera clients.',
         body: bodyBlocks(
-          'You will write market analysis across forex, indices and commodities — published daily on the Newera365 research hub.',
+          'You will write market analysis across forex, indices and commodities — published daily on the Newera research hub.',
           'REQUIREMENTS: 3+ years trading or analyzing FX markets. Strong technical analysis skills (Elliott Wave, Fibonacci, price action). Proven writing ability — samples required.',
         ),
       },
       ar: {
         title: 'محلل أسواق FX',
-        summary: 'إنتاج تعليقات سوقية يومية وأسبوعية وتقارير بحثية لعملاء نيو إيرا 365.',
+        summary: 'إنتاج تعليقات سوقية يومية وأسبوعية وتقارير بحثية لعملاء نيو إيرا.',
         body: bodyBlocks(
-          'ستكتب تحليلات السوق عبر الفوركس والمؤشرات والسلع — تُنشر يومياً على مركز بحوث نيو إيرا 365.',
+          'ستكتب تحليلات السوق عبر الفوركس والمؤشرات والسلع — تُنشر يومياً على مركز بحوث نيو إيرا.',
           'المتطلبات: 3 سنوات أو أكثر في تداول أو تحليل أسواق الفوركس. مهارات قوية في التحليل الفني.',
         ),
       },
@@ -3291,7 +3291,7 @@ async function seedCareers() {
         title: 'Compliance Officer — MENA',
         slug: 'compliance-officer-mena',
         summary:
-          'Ensure Newera365 operations comply with FSRA regulations and international AML/KYC standards.',
+          'Ensure Newera operations comply with FSRA regulations and international AML/KYC standards.',
         body: bodyBlocks(
           "You will be responsible for regulatory compliance across all MENA jurisdictions, maintaining the firm's FSRA licence, and managing AML/KYC policy and training.",
           'REQUIREMENTS: 4+ years compliance experience at an FCA, FSRA or DFSA regulated firm. Strong knowledge of AML/KYC regulations. Law or finance degree preferred.',
@@ -3299,7 +3299,7 @@ async function seedCareers() {
       },
       ar: {
         title: 'مسؤول الامتثال — منطقة الشرق الأوسط وشمال أفريقيا',
-        summary: 'ضمان امتثال عمليات نيو إيرا 365 للوائح FSRA ومعايير AML/KYC الدولية.',
+        summary: 'ضمان امتثال عمليات نيو إيرا للوائح FSRA ومعايير AML/KYC الدولية.',
         body: bodyBlocks(
           'ستكون مسؤولاً عن الامتثال التنظيمي في جميع ولايات الشرق الأوسط وشمال أفريقيا.',
           'المتطلبات: 4 سنوات أو أكثر من خبرة الامتثال في شركة منظمة من FCA أو FSRA أو DFSA.',
@@ -3315,7 +3315,7 @@ async function seedCareers() {
         title: 'Performance Marketing Manager',
         slug: 'performance-marketing-manager',
         summary:
-          "Own paid acquisition across Google, Meta, and programmatic channels to grow Newera365's client base.",
+          "Own paid acquisition across Google, Meta, and programmatic channels to grow Newera's client base.",
         body: bodyBlocks(
           'You will manage a significant monthly performance marketing budget, running campaigns across paid search, paid social and programmatic display targeting retail traders in the MENA region.',
           'REQUIREMENTS: 4+ years performance marketing experience with budgets of $500k+ per month. Strong analytical skills, proficiency in Google Ads, Meta Ads, and attribution tools.',
@@ -3324,7 +3324,7 @@ async function seedCareers() {
       ar: {
         title: 'مدير التسويق الأدائي',
         summary:
-          'إدارة الاستحواذ المدفوع عبر Google وMeta والقنوات البرامجية لتنمية قاعدة عملاء نيو إيرا 365.',
+          'إدارة الاستحواذ المدفوع عبر Google وMeta والقنوات البرامجية لتنمية قاعدة عملاء نيو إيرا.',
         body: bodyBlocks(
           'ستدير ميزانية تسويقية شهرية كبيرة، وتشغيل حملات عبر البحث المدفوع والتواصل الاجتماعي المدفوع.',
           'المتطلبات: 4 سنوات أو أكثر من خبرة التسويق الأدائي بميزانيات تزيد عن 500 ألف دولار شهرياً.',
@@ -3339,7 +3339,7 @@ async function seedCareers() {
       en: {
         title: 'Senior Product Designer',
         slug: 'senior-product-designer',
-        summary: "Lead the design of Newera365's web and mobile trading experience.",
+        summary: "Lead the design of Newera's web and mobile trading experience.",
         body: bodyBlocks(
           'You will own the design process end-to-end — from user research to final component specs — across our web platform, mobile apps, and client-facing tools.',
           'REQUIREMENTS: 5+ years product design experience. Proficiency in Figma. Experience designing for complex, data-rich products. Portfolio of shipped work required.',
@@ -3347,7 +3347,7 @@ async function seedCareers() {
       },
       ar: {
         title: 'مصمم منتجات أول',
-        summary: 'قيادة تصميم تجربة التداول على الويب والجوال لنيو إيرا 365.',
+        summary: 'قيادة تصميم تجربة التداول على الويب والجوال لنيو إيرا.',
         body: bodyBlocks(
           'ستمتلك عملية التصميم من البداية إلى النهاية — من أبحاث المستخدم إلى مواصفات المكونات النهائية.',
           'المتطلبات: 5 سنوات أو أكثر من خبرة تصميم المنتجات. إجادة Figma. خبرة في تصميم منتجات غنية بالبيانات.',
@@ -3363,15 +3363,15 @@ async function seedCareers() {
         title: 'Introducing Broker Partnership Manager',
         slug: 'ib-partnership-manager',
         summary:
-          "Build and manage Newera365's global network of introducing brokers and affiliate partners.",
+          "Build and manage Newera's global network of introducing brokers and affiliate partners.",
         body: bodyBlocks(
-          'You will recruit, onboard and grow a portfolio of IB partners — individuals and small businesses who refer clients to Newera365 in exchange for commission rebates.',
+          'You will recruit, onboard and grow a portfolio of IB partners — individuals and small businesses who refer clients to Newera in exchange for commission rebates.',
           'REQUIREMENTS: 3+ years in FX/CFD broker partnerships. Existing network of IB relationships. Strong commercial negotiation skills. Experience with IB portal management.',
         ),
       },
       ar: {
         title: 'مدير شراكات الوسطاء المعرِّفين',
-        summary: 'بناء وإدارة شبكة نيو إيرا 365 العالمية من الوسطاء المعرِّفين والشركاء التابعين.',
+        summary: 'بناء وإدارة شبكة نيو إيرا العالمية من الوسطاء المعرِّفين والشركاء التابعين.',
         body: bodyBlocks(
           'ستقوم باستقطاب وتأهيل وتنمية محفظة من شركاء IB.',
           'المتطلبات: 3 سنوات أو أكثر في شراكات وسطاء الفوركس/CFD. شبكة علاقات IB قائمة.',
@@ -3479,12 +3479,12 @@ async function seedWebinars() {
         slug: 'risk-management-masterclass-volatile-markets',
         speaker: 'Claire Deschamps',
         speakerBio:
-          'Chief Compliance Officer at Newera365. Covers position sizing, drawdown protection, and psychological discipline.',
+          'Chief Compliance Officer at Newera. Covers position sizing, drawdown protection, and psychological discipline.',
       },
       ar: {
         title: 'دورة متخصصة في إدارة المخاطر: حماية رأس المال في الأسواق المتقلبة',
         speakerBio:
-          'مديرة الامتثال الرئيسية في نيو إيرا 365. تغطي تحديد حجم المركز وحماية السحب والانضباط النفسي.',
+          'مديرة الامتثال الرئيسية في نيو إيرا. تغطي تحديد حجم المركز وحماية السحب والانضباط النفسي.',
       },
       scheduledAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000).toISOString(),
       timezone: 'UTC+4 (Dubai)',
@@ -3604,7 +3604,7 @@ async function seedIBContent() {
   const doc = await post<{ id: number }>('ib-content', {
     slug: 'ib-program',
     heroSubtitle:
-      'Take your partner business to the next level with advanced tools, high rebate payouts, and full partner support from Newera365.',
+      'Take your partner business to the next level with advanced tools, high rebate payouts, and full partner support from Newera.',
     ibDescription:
       'Earn up to $8 per lot traded by your referrals. Tiered structure with monthly bonus.',
     affiliateDescription:
@@ -3698,7 +3698,7 @@ async function seedIBContent() {
     doc.id,
     {
       heroSubtitle:
-        'انتقل بأعمال الشراكة الخاصة بك إلى المستوى التالي مع أدوات متقدمة، ودفعات عمولات مرتفعة، ودعم كامل للشركاء من نيو إيرا 365.',
+        'انتقل بأعمال الشراكة الخاصة بك إلى المستوى التالي مع أدوات متقدمة، ودفعات عمولات مرتفعة، ودعم كامل للشركاء من نيو إيرا.',
       ibDescription:
         'اكسب ما يصل إلى 8 دولارات لكل لوط يتداوله إحالاتك. هيكل متدرج مع مكافأة شهرية.',
       affiliateDescription:
@@ -3908,12 +3908,12 @@ async function seedMediaPress() {
   const items = [
     {
       en: {
-        headline: 'Newera365 launches raw-spread accounts for MENA retail traders',
+        headline: 'Newera launches raw-spread accounts for MENA retail traders',
         excerpt:
           'The broker expands its product line with institutional-grade pricing aimed at the region’s fast-growing retail base.',
       },
       ar: {
-        headline: 'Newera365 تطلق حسابات السبريد الخام لمتداولي التجزئة في الشرق الأوسط',
+        headline: 'Newera تطلق حسابات السبريد الخام لمتداولي التجزئة في الشرق الأوسط',
         excerpt:
           'الوسيط يوسّع خط منتجاته بتسعير بمستوى مؤسسي يستهدف قاعدة التجزئة سريعة النمو في المنطقة.',
       },
@@ -3925,12 +3925,12 @@ async function seedMediaPress() {
     },
     {
       en: {
-        headline: 'Interview: How Newera365 is approaching MT5 connectivity and execution',
+        headline: 'Interview: How Newera is approaching MT5 connectivity and execution',
         excerpt:
           'A sit-down with the trading desk on latency, liquidity routing, and what transparent execution means for clients.',
       },
       ar: {
-        headline: 'مقابلة: كيف تتعامل Newera365 مع اتصال MT5 والتنفيذ',
+        headline: 'مقابلة: كيف تتعامل Newera مع اتصال MT5 والتنفيذ',
         excerpt:
           'جلسة مع مكتب التداول حول زمن الاستجابة وتوجيه السيولة ومعنى التنفيذ الشفاف للعملاء.',
       },
@@ -3942,12 +3942,12 @@ async function seedMediaPress() {
     },
     {
       en: {
-        headline: 'Newera365 named among the fastest-growing brokers in the Gulf',
+        headline: 'Newera named among the fastest-growing brokers in the Gulf',
         excerpt:
           'Independent analysis highlights the firm’s client growth, regulatory posture and education-first approach.',
       },
       ar: {
-        headline: 'Newera365 تُصنَّف بين أسرع الوسطاء نمواً في الخليج',
+        headline: 'Newera تُصنَّف بين أسرع الوسطاء نمواً في الخليج',
         excerpt:
           'تحليل مستقل يسلّط الضوء على نمو العملاء والموقف التنظيمي ونهج التعليم أولاً لدى الشركة.',
       },
@@ -3961,11 +3961,11 @@ async function seedMediaPress() {
       en: {
         headline: 'Opinion: Why transparent fee structures matter for retail FX',
         excerpt:
-          'A guest column from the Newera365 research team on the long-term value of clear, all-in pricing.',
+          'A guest column from the Newera research team on the long-term value of clear, all-in pricing.',
       },
       ar: {
         headline: 'رأي: لماذا تهمّ هياكل الرسوم الشفافة لتداول الفوركس بالتجزئة',
-        excerpt: 'مقال ضيف من فريق أبحاث Newera365 حول القيمة طويلة الأجل للتسعير الواضح والشامل.',
+        excerpt: 'مقال ضيف من فريق أبحاث Newera حول القيمة طويلة الأجل للتسعير الواضح والشامل.',
       },
       publication: 'The National',
       date: '2026-02-14',
@@ -4034,7 +4034,7 @@ const SEED_TARGETS: Record<string, () => Promise<void>> = {
 };
 
 async function main() {
-  console.log('\n🌱 Newera365 Demo Data Seed\n');
+  console.log('\n🌱 Newera Demo Data Seed\n');
   const only = process.argv[2];
   try {
     await login();

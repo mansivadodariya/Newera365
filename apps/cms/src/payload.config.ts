@@ -210,7 +210,7 @@ export default buildConfig({
   cors: allowedOrigins,
   csrf: allowedOrigins,
   email: {
-    fromName: 'Newera365',
+    fromName: 'Newera',
     fromAddress,
     transport: emailTransport,
   },

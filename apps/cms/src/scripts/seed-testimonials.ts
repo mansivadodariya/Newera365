@@ -84,9 +84,9 @@ const TESTIMONIALS = [
   },
   {
     quoteEn:
-      'Switched my portfolio to Newera365 last year. The seamless web and mobile MT5 sync lets me manage risk on major FX pairs from anywhere.',
+      'Switched my portfolio to Newera last year. The seamless web and mobile MT5 sync lets me manage risk on major FX pairs from anywhere.',
     quoteAr:
-      'نقلت محفظتي إلى Newera365 العام الماضي. التزامن السلس لـ MT5 على الويب والهاتف يتيح لي إدارة المخاطر على أزواج العملات الرئيسية من أي مكان.',
+      'نقلت محفظتي إلى Newera العام الماضي. التزامن السلس لـ MT5 على الويب والهاتف يتيح لي إدارة المخاطر على أزواج العملات الرئيسية من أي مكان.',
     authorName: 'Liam R.',
     authorRoleEn: 'Portfolio manager · Sydney',
     authorRoleAr: 'مدير محافظ · سدني',
