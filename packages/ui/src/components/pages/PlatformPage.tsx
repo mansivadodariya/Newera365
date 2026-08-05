@@ -300,7 +300,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
     <>
       {/* Hero */}
       <section className="rounded-b-[32px] bg-gradient-to-b from-[#F2F5F3] to-[#BDEECA] px-5 pb-10 pt-10 dark:bg-gradient-to-b dark:from-[#000000] dark:to-[#085A00]">
-        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:max-w-[1200px] xl:items-center xl:gap-16">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:flex xl:max-w-[1200px] xl:items-center xl:gap-8">
           <div className="xl:flex-1">
             <h1 className="text-foreground text-display mb-5 font-sans [text-wrap:balance]">
               {t('heroLine1')} <span>{t('heroAccent')}</span>
@@ -313,7 +313,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
           </div>
 
           {/* Device mockup */}
-          <div className="group relative mt-6 w-full max-w-[560px] sm:max-w-[600px] xl:mt-0 xl:w-[490px] xl:max-w-[490px] xl:flex-shrink-0">
+          <div className="group relative mt-6 w-full max-w-[560px] sm:max-w-[600px] xl:mt-0 xl:w-[560px] xl:max-w-[560px] xl:flex-shrink-0">
             {/* Pure floor shadow strictly BELOW the bottom edge — ZERO side/top shadow */}
             <div
               aria-hidden="true"
