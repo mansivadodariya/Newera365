@@ -127,7 +127,7 @@ export function TwoPathsSection() {
                   {t('eduEyebrow')}
                 </span>
                 <h3 className="text-title mt-3 font-sans text-white">{t('eduTitle')}</h3>
-                <p className="text-body mt-3 max-w-[34ch] text-white/[0.72]">{t('eduBody')}</p>
+                <p className="text-body mt-3 max-w-[34ch] text-white">{t('eduBody')}</p>
                 <div className="mt-5 flex flex-wrap gap-2">
                   {chips.map((c) => (
                     <span
@@ -193,14 +193,14 @@ export function TwoPathsSection() {
                   {t('tradeEyebrow')}
                 </span>
                 <h3 className="text-title mt-3 font-sans text-white">{t('tradeTitle')}</h3>
-                <p className="text-body mt-3 max-w-[34ch] text-white/[0.72]">{t('tradeBody')}</p>
+                <p className="text-body mt-3 max-w-[34ch] text-white">{t('tradeBody')}</p>
                 <div className="mt-5 flex flex-col">
                   {ledger.map((row) => (
                     <div
                       key={row.k}
                       className="flex items-baseline justify-between border-b border-white/[0.08] py-[9px] text-[13px] last:border-b-0"
                     >
-                      <span className="text-white/[0.55]">{row.k}</span>
+                      <span className="text-white/90">{row.k}</span>
                       <span
                         dir="ltr"
                         className={`font-mono font-semibold tabular-nums ${row.hot ? 'text-accent-bright' : 'text-white'}`}

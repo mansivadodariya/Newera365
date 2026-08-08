@@ -60,6 +60,36 @@ const ADDITIONAL_TESTIMONIALS = [
     authorRoleAr: 'مدير محافظ · سدني',
     rating: 5,
   },
+  {
+    quoteEn:
+      "I've traded with several brokers over the years, but Newera's raw spreads on EUR/USD are consistently the tightest. The transparency around fees is something I genuinely appreciate.",
+    quoteAr:
+      'تداولت مع عدة وسطاء على مر السنين، لكن سبريد EUR/USD في Newera هو الأضيق باستمرار. أقدّر حقاً الشفافية في رسوم التداول.',
+    authorName: 'James O.',
+    authorRoleEn: 'Forex day trader · London',
+    authorRoleAr: 'متداول يومي في العملات · لندن',
+    rating: 5,
+  },
+  {
+    quoteEn:
+      'Funding and withdrawing is genuinely painless. I tested with a small transfer first, and funds hit my account within hours. That kind of reliability builds real trust.',
+    quoteAr:
+      'عمليات الإيداع والسحب سهلة للغاية. جربت بتحويل صغير أولاً، ووصلت الأموال لحسابي في غضون ساعات. هذا النوع من الموثوقية يبني ثقة حقيقية.',
+    authorName: 'Sara K.',
+    authorRoleEn: 'Retail investor · Dubai',
+    authorRoleAr: 'مستثمرة · دبي',
+    rating: 5,
+  },
+  {
+    quoteEn:
+      'The MT5 platform on both desktop and mobile is stable and responsive. Chart loading is near-instant even during busy sessions like NFP. Exactly what a serious trader needs.',
+    quoteAr:
+      'منصة MT5 على سطح المكتب والهاتف مستقرة وسريعة الاستجابة. تحميل الرسوم البيانية شبه فوري حتى في جلسات مزدحمة مثل وقت صدور NFP. هذا ما يحتاجه المتداول الجاد.',
+    authorName: 'Farouk A.',
+    authorRoleEn: 'Swing trader · Cairo',
+    authorRoleAr: 'متداول سوينغ · القاهرة',
+    rating: 5,
+  },
 ];
 
 export default async function HomePage({ params }: { params: { locale: string } }) {

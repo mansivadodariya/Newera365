@@ -118,6 +118,79 @@ const USP_METRICS = [
   },
 ];
 
+const TESTIMONIALS = [
+  {
+    quoteEn:
+      'Swap-free account terms are transparent and fair. Trading Gold (XAUUSD) with tight spreads without hidden overnight fees makes a massive difference for my strategy.',
+    quoteAr:
+      'شروط الحساب الخالي من الفوائد شفافة وعادلة. تداول الذهب بسبريد ضيق ودون رسوم تبييت خفية أحدث فارقاً كبيراً في استراتيجيتي.',
+    authorName: 'Tariq M.',
+    authorRoleEn: 'Commodity trader · Kuwait City',
+    authorRoleAr: 'متداول سلع · مدينة الكويت',
+    rating: 5,
+  },
+  {
+    quoteEn:
+      'USDT deposits clear almost instantly and order execution under 15ms is real. No re-quotes or unexpected slippage during high volatility.',
+    quoteAr:
+      'إيداعات USDT تتأكد شبه فورياً وتنفيذ الأوامر في أقل من 15 ملي ثانية حقيقي. لا توجد إعادة تسعير أو انزلاق غير متوقع أثناء تقلبات السوق.',
+    authorName: 'Lucas V.',
+    authorRoleEn: 'Algorithmic trader · Frankfurt',
+    authorRoleAr: 'متداول خوارزمي · فرانكفورت',
+    rating: 5,
+  },
+  {
+    quoteEn:
+      'Customer support answered my account verification questions within minutes via live chat. Refreshing to deal with a broker that values client service.',
+    quoteAr:
+      'أجاب فريق الدعم الفني على استفسارات توثيق حسابي خلال دقائق عبر المحادثة المباشرة. من الرائع التعامل مع وسيط يهتم بخدمة العملاء.',
+    authorName: 'Nadia H.',
+    authorRoleEn: 'FX trader · Kuala Lumpur',
+    authorRoleAr: 'متداولة عملات · كوالالمبور',
+    rating: 5,
+  },
+  {
+    quoteEn:
+      'Switched my portfolio to Newera last year. The seamless web and mobile MT5 sync lets me manage risk on major FX pairs from anywhere.',
+    quoteAr:
+      'نقلت محفظتي إلى Newera العام الماضي. التزامن السلس لـ MT5 على الويب والهاتف يتيح لي إدارة المخاطر على أزواج العملات الرئيسية من أي مكان.',
+    authorName: 'Liam R.',
+    authorRoleEn: 'Portfolio manager · Sydney',
+    authorRoleAr: 'مدير محافظ · سدني',
+    rating: 5,
+  },
+  {
+    quoteEn:
+      "I've traded with several brokers over the years, but Newera's raw spreads on EUR/USD are consistently the tightest. The transparency around fees is something I genuinely appreciate.",
+    quoteAr:
+      'تداولت مع عدة وسطاء على مر السنين، لكن سبريد EUR/USD في Newera هو الأضيق باستمرار. أقدّر حقاً الشفافية في رسوم التداول.',
+    authorName: 'James O.',
+    authorRoleEn: 'Forex day trader · London',
+    authorRoleAr: 'متداول يومي في العملات · لندن',
+    rating: 5,
+  },
+  {
+    quoteEn:
+      'Funding and withdrawing is genuinely painless. I tested with a small transfer first, and funds hit my account within hours. That kind of reliability builds real trust.',
+    quoteAr:
+      'عمليات الإيداع والسحب سهلة للغاية. جربت بتحويل صغير أولاً، ووصلت الأموال لحسابي في غضون ساعات. هذا النوع من الموثوقية يبني ثقة حقيقية.',
+    authorName: 'Sara K.',
+    authorRoleEn: 'Retail investor · Dubai',
+    authorRoleAr: 'مستثمرة · دبي',
+    rating: 5,
+  },
+  {
+    quoteEn:
+      'The MT5 platform on both desktop and mobile is stable and responsive. Chart loading is near-instant even during busy sessions like NFP. Exactly what a serious trader needs.',
+    quoteAr:
+      'منصة MT5 على سطح المكتب والهاتف مستقرة وسريعة الاستجابة. تحميل الرسوم البيانية شبه فوري حتى في جلسات مزدحمة مثل وقت صدور NFP. هذا ما يحتاجه المتداول الجاد.',
+    authorName: 'Farouk A.',
+    authorRoleEn: 'Swing trader · Cairo',
+    authorRoleAr: 'متداول سوينغ · القاهرة',
+    rating: 5,
+  },
+];
+
 async function run() {
   const apply = process.env.APPLY === '1';
   const secret = process.env.PAYLOAD_SECRET;
@@ -133,6 +206,7 @@ async function run() {
   const data: Record<string, unknown> = {
     kpiStats: KPI_STATS,
     uspMetrics: USP_METRICS,
+    testimonials: TESTIMONIALS,
     ...RATING,
     ...DOWNLOAD_URLS,
   };

@@ -174,10 +174,10 @@ function IssueMockup({ content }: { content?: HomeNewsletterContent }) {
         className="bg-accent/[0.16] pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full blur-[80px]"
       />
       <div className="relative mb-4 flex items-center justify-between">
-        <span className="rounded-full border border-white/[0.12] bg-white/[0.06] px-3 py-1 font-mono text-[11px] uppercase tracking-[0.1em] text-white/70 backdrop-blur">
+        <span className="rounded-full border border-white/[0.12] bg-white/[0.06] px-3 py-1 font-mono text-[11px] uppercase tracking-[0.1em] text-white backdrop-blur">
           {t('issueChip')}
         </span>
-        <span className="inline-flex items-center gap-2 font-mono text-[11px] text-white/40">
+        <span className="inline-flex items-center gap-2 font-mono text-[11px] text-white">
           <span className="bg-accent-bright h-1.5 w-1.5 rounded-full shadow-[0_0_8px_2px_rgba(26,217,102,0.6)]" />
           {content?.issueMeta ?? t('issueMeta')}
         </span>
@@ -239,7 +239,7 @@ function IssueMockup({ content }: { content?: HomeNewsletterContent }) {
               <span className="text-accent w-[116px] flex-shrink-0 font-mono text-[11px] uppercase tracking-[0.06em]">
                 {row.label}
               </span>
-              <span className="font-body text-[13px] text-white/80">{row.head}</span>
+              <span className="font-body text-[13px] text-white">{row.head}</span>
             </li>
           ))}
         </ul>
@@ -328,7 +328,7 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
             >
               {headline} <span>{headlineAccent}</span>
             </h2>
-            <p className="text-lead max-w-[46ch] text-white/60 xl:pb-1">{subtitle}</p>
+            <p className="text-lead max-w-[46ch] text-white xl:pb-1">{subtitle}</p>
           </div>
         </ScrollReveal>
 
@@ -365,7 +365,7 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
                       />
                     ))}
                   </div>
-                  <p className="font-body text-body text-white/60">{metricLabel}</p>
+                  <p className="font-body text-body text-white">{metricLabel}</p>
                 </div>
               </div>
 
@@ -391,7 +391,7 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
                     </span>
                     <div>
                       <p className="text-title font-sans text-white">{t('successHeading')}</p>
-                      <p className="text-body font-body mt-1 text-white/70">{t('successDesc')}</p>
+                      <p className="text-body font-body mt-1 text-white">{t('successDesc')}</p>
                     </div>
                   </div>
                 ) : (
@@ -411,7 +411,7 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder={t('emailPlaceholder')}
                         aria-label={t('emailLabel')}
-                        className="font-body text-body w-full rounded-[13px] border border-white/[0.14] bg-white/[0.06] px-4 py-3 text-white outline-none transition-colors placeholder:text-white/40 sm:flex-1"
+                        className="font-body text-body w-full rounded-[13px] border border-white/[0.14] bg-white/[0.06] px-4 py-3 text-white outline-none transition-colors placeholder:text-white/60 sm:flex-1"
                       />
                       <button
                         type="submit"
@@ -427,7 +427,7 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
                 )}
 
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-                  <p className="text-caption font-body text-white/45">{t('privacyNote')}</p>
+                  <p className="text-caption font-body text-white/80">{t('privacyNote')}</p>
                   <Link
                     href={`/${locale}/newsletter`}
                     className="font-body hover:text-accent-bright group inline-flex items-center gap-1.5 text-[14px] font-medium text-white transition-colors"
@@ -452,14 +452,14 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
               >
                 <div className="flex items-start justify-between gap-3">
                   <ReticleGlyph>{c.icon}</ReticleGlyph>
-                  <span className="rounded-full border border-white/[0.1] bg-white/[0.05] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-white/55">
+                  <span className="rounded-full border border-white/[0.2] bg-white/[0.08] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-white">
                     {c.cadence}
                   </span>
                 </div>
                 <h3 className="text-body-lg mt-4 font-sans font-semibold leading-tight text-white">
                   {c.title}
                 </h3>
-                <p className="font-body mt-1.5 text-[13.5px] leading-relaxed text-white/55">
+                <p className="font-body mt-1.5 text-[13.5px] leading-relaxed text-white">
                   {c.desc}
                 </p>
               </div>

@@ -235,7 +235,7 @@ export function ArbitrageSection() {
                 className="pointer-events-none absolute inset-0 rounded-[24px] ring-1 ring-inset ring-white/[0.06]"
               />
               <div className="relative flex h-full min-h-[300px] flex-col justify-between gap-8 p-7 xl:p-8">
-                <span className="text-eyebrow font-mono font-medium uppercase text-white/45">
+                <span className="text-eyebrow font-mono font-medium uppercase text-white">
                   {t('arbStat1Label')}
                 </span>
                 <div>
@@ -245,7 +245,7 @@ export function ArbitrageSection() {
                   >
                     {t('arbStat1Value')}
                   </span>
-                  <p className="font-body text-body mt-2 text-white/70">{t('arbStat1Desc')}</p>
+                  <p className="font-body text-body mt-2 text-white">{t('arbStat1Desc')}</p>
                   <ExecutionBar />
                 </div>
               </div>
