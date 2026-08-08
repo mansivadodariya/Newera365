@@ -491,10 +491,15 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
               <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/30">
                 {t('poweredBy')}
               </p>
-              <button className="bg-accent hover:bg-accent-bright inline-flex h-10 items-center justify-center gap-2 rounded-full px-5 font-sans text-[13px] font-semibold text-white transition-all duration-200 hover:shadow-[0_10px_28px_-8px_rgba(26,217,102,0.6)] active:scale-[0.98]">
+              <a
+                href="https://webtrading.newera365.com/terminal"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-accent hover:bg-accent-bright inline-flex h-10 items-center justify-center gap-2 rounded-full px-5 font-sans text-[13px] font-semibold text-white transition-all duration-200 hover:shadow-[0_10px_28px_-8px_rgba(26,217,102,0.6)] active:scale-[0.98]"
+              >
                 {t('ctaBtn')}
                 <ArrowRight />
-              </button>
+              </a>
             </div>
           </div>
         </ScrollReveal>
@@ -529,12 +534,22 @@ export function WebTraderPage({ specs }: WebTraderPageProps = {}) {
               {t('fallbackDesc')}
             </p>
             <div className="flex flex-wrap gap-2.5">
-              <button className="bg-foreground text-background hover:bg-accent inline-flex h-11 items-center justify-center rounded-full px-5 font-sans text-[13px] font-semibold transition-colors duration-200 hover:text-white active:scale-[0.98]">
+              <a
+                href="https://download.terminal.free/cdn/web/newera.capital.markets/mt5/neweracapitalmarkets5setup.exe"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-foreground text-background hover:bg-accent inline-flex h-11 items-center justify-center rounded-full px-5 font-sans text-[13px] font-semibold transition-colors duration-200 hover:text-white active:scale-[0.98]"
+              >
                 {t('fallbackDesktopBtn')}
-              </button>
-              <button className="bg-foreground text-background hover:bg-accent inline-flex h-11 items-center justify-center rounded-full px-5 font-sans text-[13px] font-semibold transition-colors duration-200 hover:text-white active:scale-[0.98]">
+              </a>
+              <a
+                href="https://download.terminal.free/cdn/mobile/mt5/android?server=NeweraCapitalMarkets-Server"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-foreground text-background hover:bg-accent inline-flex h-11 items-center justify-center rounded-full px-5 font-sans text-[13px] font-semibold transition-colors duration-200 hover:text-white active:scale-[0.98]"
+              >
                 {t('fallbackMobileBtn')}
-              </button>
+              </a>
             </div>
           </div>
         </ScrollReveal>

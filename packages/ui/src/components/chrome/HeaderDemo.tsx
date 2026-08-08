@@ -76,6 +76,7 @@ function useNavItems(t: ReturnType<typeof useTranslations<'nav'>>): NavItem[] {
         '/glossary',
         '/ebooks',
         '/research',
+        '/analysis',
         '/daily-news',
         '/newsletter',
         '/tools',
@@ -94,6 +95,7 @@ function useNavItems(t: ReturnType<typeof useTranslations<'nav'>>): NavItem[] {
           heading: t('groupResearch'),
           items: [
             { label: t('researchArticlesLabel'), sub: t('researchArticlesSub'), href: '/research' },
+            // { label: t('researchAnalysisLabel'), sub: t('researchAnalysisSub'), href: '/analysis' },
             {
               label: t('researchAnalystLabel'),
               sub: t('researchAnalystSub'),
@@ -523,12 +525,12 @@ function HeaderDemo() {
             <div className="hidden items-center gap-3 whitespace-nowrap xl:flex">
               <LanguageToggle />
               <div className="bg-border mx-1 h-5 w-px" />
-              <button
-                onClick={() => setAuthModal('demo')}
+              <a
+                href="https://webtrading.newera365.com/terminal"
                 className="font-body text-foreground flex min-h-[38px] items-center text-[15px] font-medium transition-opacity hover:opacity-70"
               >
                 {t('signIn')}
-              </button>
+              </a>
               <Link
                 href={`/${locale}/trade/ib`}
                 className="font-body border-accent/40 text-accent hover:bg-accent hover:border-accent flex items-center rounded-full border px-[18px] py-[10px] text-[14px] font-semibold transition-colors hover:text-white"

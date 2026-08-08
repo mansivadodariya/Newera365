@@ -134,3 +134,4 @@ export type { CmsJobItem } from './components/pages/CareersPage';
 export { RecognitionPage } from './components/pages/RecognitionPage';
 export type { AwardCardItem, MediaPressItem } from './components/pages/RecognitionPage';
 export { AiCrmPage } from './components/pages/AiCrmPage';
+export { AnalysisPage } from './components/pages/AnalysisPage';

@@ -27,26 +27,25 @@ process.env.PAYLOAD_CONFIG_PATH =
 import payload from 'payload';
 
 const KPI_STATS = [
-  { valueEn: '12+', valueAr: '+12', labelEn: 'Years in Markets', labelAr: 'عاماً في الأسواق' },
-  { valueEn: '10k', valueAr: '10 ألف', labelEn: 'Active Traders', labelAr: 'متداول نشط' },
+  { valueEn: '3+', valueAr: '+3', labelEn: 'Years in Market', labelAr: 'سنوات في السوق' },
+  { valueEn: '50k', valueAr: '50 ألف', labelEn: 'Active Traders', labelAr: 'متداول نشط' },
   {
     valueEn: '< 12 ms',
     valueAr: 'أقل من 12 م.ث',
     labelEn: 'Avg Execution',
     labelAr: 'متوسط التنفيذ',
   },
-  { valueEn: '99.99%', valueAr: '99.99%', labelEn: 'Platform Uptime', labelAr: 'جاهزية المنصة' },
+  { valueEn: '99.95%', valueAr: '99.95%', labelEn: 'Platform Uptime', labelAr: 'جاهزية المنصة' },
 ];
 
 const RATING = {
-  socialProofHeadlineEn: 'Trusted by 180,000+ traders worldwide',
-  socialProofHeadlineAr: 'يثق بنا أكثر من 180 ألف متداول حول العالم',
+  socialProofHeadlineEn: 'Trusted by 50,000+ traders worldwide',
+  socialProofHeadlineAr: 'موثوق من أكثر من 50,000 متداول حول العالم',
   ratingValue: '4.8',
   ratingCountEn: 'based on 2,400+ verified reviews',
   ratingCountAr: 'استناداً إلى أكثر من 2,400 تقييم موثَّق',
 };
 
-// Details already published on the /contact page — used only to fill blanks.
 const CONTACT_FALLBACKS = {
   contactPhone: '+1 867-778-3511',
   whatsappNumber: '+18677783511',
@@ -55,6 +54,69 @@ const CONTACT_FALLBACKS = {
   contactAddressEn: 'DIFC Gate Village, Tower 4, Dubai, UAE',
   contactAddressAr: 'مركز دبي المالي العالمي، غيت فيليدج، البرج 4، دبي، الإمارات',
 };
+
+const DOWNLOAD_URLS = {
+  downloadWindows:
+    'https://download.terminal.free/cdn/web/newera.capital.markets/mt5/neweracapitalmarkets5setup.exe',
+  downloadMac:
+    'https://download.terminal.free/cdn/web/newera.capital.markets/mt5/neweracapitalmarkets5setup.exe',
+  downloadWebTrader: 'https://webtrading.newera365.com/terminal',
+  downloadAndroid:
+    'https://download.terminal.free/cdn/mobile/mt5/android?server=NeweraCapitalMarkets-Server',
+  downloadIos:
+    'https://download.terminal.free/cdn/mobile/mt5/ios?server=NeweraCapitalMarkets-Server',
+};
+
+const USP_METRICS = [
+  {
+    valueEn: '< 15 ms',
+    valueAr: '< 15 ms',
+    titleEn: 'Average execution speed',
+    titleAr: 'متوسط سرعة التنفيذ',
+    descEn: 'Orders fill at real market speed, not screen speed.',
+    descAr: 'تُنفَّذ الأوامر بسرعة السوق الحقيقية، لا بسرعة الشاشة.',
+  },
+  {
+    valueEn: '24/7',
+    valueAr: '24/7',
+    titleEn: 'Support availability',
+    titleAr: 'توفر الدعم',
+    descEn: 'A human on the other end, any day of the week.',
+    descAr: 'شخص حقيقي في الطرف الآخر، في أي يوم من أيام الأسبوع.',
+  },
+  {
+    valueEn: '100%',
+    valueAr: '100%',
+    titleEn: 'Straight-to-market execution',
+    titleAr: 'تنفيذ مباشر إلى السوق',
+    descEn: 'No dealing desk intervention on client orders.',
+    descAr: 'لا تدخل من مكتب التداول في أوامر العملاء.',
+  },
+  {
+    valueEn: 'Tier-1',
+    valueAr: 'المستوى 1',
+    titleEn: 'Regulated & segregated',
+    titleAr: 'منظّم وأموال منفصلة',
+    descEn: 'Client funds are held separately from company funds in Tier-1 regulated banks.',
+    descAr: 'تُحفظ أموال العملاء بشكل منفصل عن أموال الشركة في بنوك مرخصة من المستوى الأول.',
+  },
+  {
+    valueEn: '0',
+    valueAr: '0',
+    titleEn: 'Re-quotes on market orders',
+    titleAr: 'إعادة تسعير على أوامر السوق',
+    descEn: 'The price you click is the price you get.',
+    descAr: 'السعر الذي تنقر عليه هو السعر الذي تحصل عليه.',
+  },
+  {
+    valueEn: '2026',
+    valueAr: '2026',
+    titleEn: 'Built for the next generation of trading',
+    titleAr: 'مصمم لجيل التداول القادم',
+    descEn: 'Modern infrastructure, not a legacy platform bolted together.',
+    descAr: 'بنية تحتية حديثة، وليست منصة قديمة مجمعة.',
+  },
+];
 
 async function run() {
   const apply = process.env.APPLY === '1';
@@ -68,7 +130,12 @@ async function run() {
     overrideAccess: true,
   })) as Record<string, unknown>;
 
-  const data: Record<string, unknown> = { kpiStats: KPI_STATS, ...RATING };
+  const data: Record<string, unknown> = {
+    kpiStats: KPI_STATS,
+    uspMetrics: USP_METRICS,
+    ...RATING,
+    ...DOWNLOAD_URLS,
+  };
   for (const [key, value] of Object.entries(CONTACT_FALLBACKS)) {
     const cur = current[key];
     if (cur == null || cur === '') data[key] = value;

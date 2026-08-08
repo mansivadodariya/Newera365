@@ -253,7 +253,7 @@ export function FocusMarkets({ regions, mapAriaLabel }: FocusMarketsProps) {
 
       {/* Market labels: quiet glass chips pinned near their dots (sm+ only,
           sized and placed to cover as little of the map as possible) */}
-      {regions.map((r) => {
+      {/* {regions.map((r) => {
         const p = MARKET_POINTS[r.id];
         return (
           <div
@@ -275,10 +275,10 @@ export function FocusMarkets({ regions, mapAriaLabel }: FocusMarketsProps) {
             </span>
           </div>
         );
-      })}
+      })} */}
 
       {/* Mobile legend: names live under the map so nothing covers it */}
-      <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 sm:hidden">
+      {/* <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 sm:hidden">
         {regions.map((r) => (
           <span key={r.id} className="flex items-center gap-1.5">
             <span aria-hidden="true" className="bg-accent h-1.5 w-1.5 rounded-full" />
@@ -287,7 +287,7 @@ export function FocusMarkets({ regions, mapAriaLabel }: FocusMarketsProps) {
             </span>
           </span>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }

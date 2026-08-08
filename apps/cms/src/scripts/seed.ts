@@ -342,24 +342,26 @@ async function seedSiteSettings() {
     mt5SyncEnabled: false,
     mt5RefreshIntervalSecs: 60,
     kpiStats: [
-      { valueEn: '12+', valueAr: '+12', labelEn: 'Years in Markets', labelAr: 'سنة في الأسواق' },
-      { valueEn: '10k', valueAr: '10 ألف', labelEn: 'Active Traders', labelAr: 'متداول نشط' },
+      { valueEn: '3+', valueAr: '+3', labelEn: 'Years in Market', labelAr: 'سنوات في السوق' },
+      { valueEn: '50k', valueAr: '50 ألف', labelEn: 'Active Traders', labelAr: 'متداول نشط' },
       {
         valueEn: '< 12 ms',
         valueAr: '< 12 ms',
         labelEn: 'Avg Execution',
         labelAr: 'متوسط التنفيذ',
       },
-      { valueEn: '99.99%', valueAr: '99.99%', labelEn: 'Platform Uptime', labelAr: 'وقت التشغيل' },
+      { valueEn: '99.95%', valueAr: '99.95%', labelEn: 'Platform Uptime', labelAr: 'وقت التشغيل' },
     ],
     socialProofLogos: [],
     downloadMt5Windows:
-      'https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe',
+      'https://download.terminal.free/cdn/web/newera.capital.markets/mt5/neweracapitalmarkets5setup.exe',
     downloadMt5Mac:
-      'https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/MetaTrader5.dmg',
-    downloadMt5Ios: 'https://apps.apple.com/app/metatrader-5/id413251709',
-    downloadMt5Android: 'https://play.google.com/store/apps/details?id=net.metaquotes.metatrader5',
-    downloadWebTrader: 'https://trade.newera365.com',
+      'https://download.terminal.free/cdn/web/newera.capital.markets/mt5/neweracapitalmarkets5setup.exe',
+    downloadMt5Ios:
+      'https://download.terminal.free/cdn/mobile/mt5/ios?server=NeweraCapitalMarkets-Server',
+    downloadMt5Android:
+      'https://download.terminal.free/cdn/mobile/mt5/android?server=NeweraCapitalMarkets-Server',
+    downloadWebTrader: 'https://webtrading.newera365.com/terminal',
     contactEmail: 'support@newera.com',
     contactEmailCompliance: 'compliance@newera.com',
     contactPhone: '+1 867-778-3511',
@@ -497,10 +499,10 @@ async function seedSiteSettings() {
       {
         valueEn: 'Tier-1',
         valueAr: 'المستوى 1',
-        titleEn: 'Banking-grade liquidity',
-        titleAr: 'سيولة بمستوى مصرفي',
-        descEn: 'Pricing sourced from major global liquidity providers.',
-        descAr: 'التسعير مصدره كبار مزودي السيولة العالميين.',
+        titleEn: 'Regulated & segregated',
+        titleAr: 'منظّم وأموال منفصلة',
+        descEn: 'Client funds are held separately from company funds in Tier-1 regulated banks.',
+        descAr: 'تُحفظ أموال العملاء بشكل منفصل عن أموال الشركة في بنوك مرخصة من المستوى الأول.',
       },
       {
         valueEn: '0',
@@ -2629,31 +2631,6 @@ async function seedPromotions() {
       sortOrder: 4,
       activeTo: '2026-08-12',
     },
-    {
-      en: {
-        title: 'EA Traders Bonus',
-        slug: 'free-vps-hosting',
-        valueDisplay: 'Free VPS',
-        tag: 'PERK',
-        description: 'VPS hosting for 50+ accounts running automated strategies.',
-        terms: 'Min balance $1,000. VPS provisioned within 48 hours of eligibility.',
-        ctaLabel: 'Claim',
-        ctaHref: '/en/trade/accounts',
-      },
-      ar: {
-        title: 'مكافأة متداولي EA',
-        valueDisplay: 'VPS مجاني',
-        tag: 'ميزة',
-        description: 'استضافة VPS للحسابات التي تشغّل 50+ من الاستراتيجيات الآلية.',
-        terms: 'الحد الأدنى للرصيد 1,000 دولار. يتم توفير VPS خلال 48 ساعة من الأهلية.',
-        ctaLabel: 'تحقق من الأهلية',
-        ctaHref: '/ar/trade/accounts',
-      },
-      tagColor: 'grey',
-      isHighlighted: false,
-      sortOrder: 5,
-      activeTo: '2026-08-31',
-    },
   ];
 
   for (const promo of promos) {
@@ -3194,7 +3171,7 @@ async function seedCareers() {
         summary:
           'Build and maintain the low-latency execution engine and real-time data pipelines powering Newera.',
         body: bodyBlocks(
-          'ROLE: You will work on the core trading infrastructure — order routing, position management, P&L calculation — serving 180,000+ active accounts.',
+          'ROLE: You will work on the core trading infrastructure — order routing, position management, P&L calculation — serving 50,000+ active accounts.',
           'REQUIREMENTS: 5+ years with Go or Rust in high-throughput environments. Experience with FIX protocol, WebSocket streams, and time-series databases (TimescaleDB/InfluxDB). Strong knowledge of TCP/IP and systems programming.',
           'WHAT WE OFFER: Competitive salary, annual bonus, ESOP, remote-friendly, health insurance, free Raw trading account.',
         ),

@@ -52,6 +52,7 @@ function useNavGroups(t: ReturnType<typeof useTranslations<'nav'>>): NavGroup[] 
         { label: t('eduGlossaryLabel'), href: '/glossary' },
         { label: t('eduEbooksLabel'), href: '/ebooks' },
         { label: t('researchArticlesLabel'), href: '/research' },
+        // { label: t('researchAnalysisLabel'), href: '/analysis' },
         { label: t('researchAnalystLabel'), href: '/research/analyst-chart' },
         { label: t('researchNewsletterLabel'), href: '/newsletter' },
         { label: t('toolsMarginLabel'), href: '/tools' },
@@ -385,12 +386,13 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
           >
             {t('tradeIbLabel')}
           </Link>
-          <button
-            onClick={() => go('demo')}
+          <a
+            href="https://webtrading.newera365.com/terminal"
+            onClick={onClose}
             className="font-body border-border text-foreground hover:border-accent hover:text-accent flex h-[48px] w-full items-center justify-center rounded-full border text-[15px] font-medium transition-colors"
           >
             {t('signIn')}
-          </button>
+          </a>
         </div>
       </div>
 

@@ -384,7 +384,6 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [selectedCountryObj, setSelectedCountryObj] = useState<CountryInfo>(DEFAULT_COUNTRY); // India default
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [partnerCode, setPartnerCode] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
 
   // Per-field Error State
@@ -528,7 +527,6 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
           password,
           country: selectedCountryObj.name,
           phone: `${selectedCountryObj.code} ${phoneNumber.trim()}`,
-          partnerCode: partnerCode.trim(),
         }),
       });
 
@@ -536,10 +534,20 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
       if (!res.ok) {
         setGlobalError(data.error ?? 'Failed to submit application. Please check your fields.');
       } else {
-        setSuccessMessage(data.message ?? 'Application submitted successfully! Welcome to Newera.');
+        setSuccessMessage(
+          data.message ?? 'Application submitted successfully! Redirecting to trade portal...',
+        );
+        setTimeout(() => {
+          window.location.href = 'https://webtrading.newera365.com/terminal';
+        }, 1200);
       }
     } catch {
-      setSuccessMessage('Your account application has been submitted successfully!');
+      setSuccessMessage(
+        'Your account application has been submitted successfully! Redirecting to trade portal...',
+      );
+      setTimeout(() => {
+        window.location.href = 'https://webtrading.newera365.com/terminal';
+      }, 1200);
     } finally {
       setIsSubmitting(false);
     }
@@ -727,13 +735,12 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
                   <p className="font-body text-foreground/80 max-w-[420px] text-[14px] leading-relaxed">
                     {successMessage}
                   </p>
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="font-body mt-3 rounded-full bg-[#00B050] px-8 py-2.5 text-[14px] font-semibold text-white transition-all hover:bg-[#00B050]/90"
+                  <a
+                    href="https://webtrading.newera365.com/terminal"
+                    className="font-body mt-3 inline-flex items-center justify-center rounded-full bg-[#00B050] px-8 py-2.5 text-[14px] font-semibold text-white transition-all hover:bg-[#00B050]/90"
                   >
-                    Done
-                  </button>
+                    Proceed to Registration Portal &rarr;
+                  </a>
                 </div>
               ) : (
                 <form
@@ -945,56 +952,41 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
                     </div>
                   </div>
 
-                  {/* Row 5: Searchable Phone Dial Code + Partner Code (2 Cols) */}
-                  <div className="grid grid-cols-2 gap-3.5">
-                    <div>
-                      <label className="font-body text-foreground/90 mb-1 block text-[12px] font-medium">
-                        Phone <span className="text-red-500">*</span>
-                      </label>
-                      <div className="flex items-center gap-1.5">
-                        <SearchablePhoneCodeSelect
-                          selectedCountry={selectedCountryObj}
-                          onSelect={(c) => setSelectedCountryObj(c)}
-                        />
-                        <input
-                          type="tel"
-                          placeholder={selectedCountryObj.placeholder ?? 'Phone number'}
-                          value={phoneNumber}
-                          maxLength={selectedCountryObj.maxDigits}
-                          onChange={(e) => {
-                            const val = e.target.value.replace(/\D/g, '');
-                            if (val.length <= selectedCountryObj.maxDigits) {
-                              setPhoneNumber(val);
-                            }
-                            clearFieldError('phoneNumber');
-                          }}
-                          autoComplete="tel"
-                          className={`border-border/80 bg-background text-foreground placeholder:text-muted/60 font-body w-full rounded-[12px] border px-3 py-[9px] text-[13.5px] outline-none transition-shadow focus:ring-2 ${
-                            fieldErrors.phoneNumber
-                              ? 'border-red-500 focus:ring-red-500/30'
-                              : 'focus:border-[#00b050] focus:ring-[#00b050]/30'
-                          }`}
-                        />
-                      </div>
-                      {fieldErrors.phoneNumber && (
-                        <span className="mt-0.5 block text-[11px] font-medium text-red-500">
-                          {fieldErrors.phoneNumber}
-                        </span>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="font-body text-foreground/90 mb-1 block text-[12px] font-medium">
-                        Partner code <span className="text-muted/70">(optional)</span>
-                      </label>
+                  {/* Row 5: Searchable Phone Dial Code */}
+                  <div>
+                    <label className="font-body text-foreground/90 mb-1 block text-[12px] font-medium">
+                      Phone <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex items-center gap-1.5">
+                      <SearchablePhoneCodeSelect
+                        selectedCountry={selectedCountryObj}
+                        onSelect={(c) => setSelectedCountryObj(c)}
+                      />
                       <input
-                        type="text"
-                        placeholder="Referral / partner code"
-                        value={partnerCode}
-                        onChange={(e) => setPartnerCode(e.target.value)}
-                        className="border-border/80 bg-background text-foreground placeholder:text-muted/60 font-body w-full rounded-[12px] border px-3 py-[9px] text-[13.5px] outline-none transition-shadow focus:border-[#00b050] focus:ring-2 focus:ring-[#00b050]/30"
+                        type="tel"
+                        placeholder={selectedCountryObj.placeholder ?? 'Phone number'}
+                        value={phoneNumber}
+                        maxLength={selectedCountryObj.maxDigits}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/\D/g, '');
+                          if (val.length <= selectedCountryObj.maxDigits) {
+                            setPhoneNumber(val);
+                          }
+                          clearFieldError('phoneNumber');
+                        }}
+                        autoComplete="tel"
+                        className={`border-border/80 bg-background text-foreground placeholder:text-muted/60 font-body w-full rounded-[12px] border px-3 py-[9px] text-[13.5px] outline-none transition-shadow focus:ring-2 ${
+                          fieldErrors.phoneNumber
+                            ? 'border-red-500 focus:ring-red-500/30'
+                            : 'focus:border-[#00b050] focus:ring-[#00b050]/30'
+                        }`}
                       />
                     </div>
+                    {fieldErrors.phoneNumber && (
+                      <span className="mt-0.5 block text-[11px] font-medium text-red-500">
+                        {fieldErrors.phoneNumber}
+                      </span>
+                    )}
                   </div>
 
                   {/* Row 6: Terms Agreement Checkbox */}
@@ -1103,7 +1095,13 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
             $50,000 virtual funds for demo, no deposit, no pressure.
           </p>
 
-          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              window.location.href = 'https://webtrading.newera365.com/terminal';
+            }}
+            className="flex flex-col gap-4"
+          >
             <div>
               <label className="font-body text-foreground mb-1 block text-[12px] font-medium">
                 Email <span className="text-red-500">*</span>

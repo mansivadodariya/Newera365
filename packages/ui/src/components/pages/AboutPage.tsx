@@ -85,11 +85,11 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
     cmsMilestones && cmsMilestones.length > 0
       ? cmsMilestones.map((m) => ({ year: m.year, label: m.label, desc: m.description ?? '' }))
       : [
-          { year: '2014', label: t('milestone2014Label'), desc: t('milestone2014Desc') },
-          { year: '2016', label: t('milestone2016Label'), desc: t('milestone2016Desc') },
-          { year: '2019', label: t('milestone2019Label'), desc: t('milestone2019Desc') },
-          { year: '2022', label: t('milestone2022Label'), desc: t('milestone2022Desc') },
-          { year: '2024', label: t('milestone2024Label'), desc: t('milestone2024Desc') },
+          { year: '2023', label: t('milestone2014Label'), desc: t('milestone2014Desc') },
+          { year: '2026', label: t('milestone2016Label'), desc: t('milestone2016Desc') },
+          { year: '50,000+', label: t('milestone2019Label'), desc: t('milestone2019Desc') },
+          { year: 'Expansion', label: t('milestone2022Label'), desc: t('milestone2022Desc') },
+          { year: 'NewEra', label: t('milestone2024Label'), desc: t('milestone2024Desc') },
         ];
 
   const creed = [t('creed1'), t('creed2'), t('creed3')];
@@ -99,7 +99,9 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
       {/* Hero — the claim, then a hairline creed of what we hold to */}
       <section className="rounded-b-[32px] px-5 pb-10 pt-9 xl:pb-14 xl:pt-14">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <SectionKicker className="mb-5">{t('heroKicker')}</SectionKicker>
+          <SectionKicker className="text-accent-bright mb-5 text-[13px] font-extrabold uppercase tracking-[0.2em] sm:text-[15px]">
+            {t('heroKicker')}
+          </SectionKicker>
           <h1 className="text-display font-sans">
             <span className="text-foreground">{t('heroLine1')}</span>
             <br />

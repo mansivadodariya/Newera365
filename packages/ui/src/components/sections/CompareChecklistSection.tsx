@@ -164,7 +164,7 @@ export function CompareChecklistSection() {
             <h2 className="text-headline text-foreground font-sans [text-wrap:balance]">
               {t('compareHeadingLine1')} <span>{t('compareHeadingAccent')}</span>
             </h2>
-            <p className="font-body text-body text-muted mt-3 max-w-[44ch] xl:mt-0 dark:text-white/60">
+            <p className="font-body text-body text-muted mt-3 max-w-[44ch] xl:mt-0 dark:text-white">
               {t('compareSubtitle')}
             </p>
           </div>
@@ -195,7 +195,7 @@ export function CompareChecklistSection() {
                 <span dir="ltr" className="text-foreground tabular-nums">
                   {count}/{TOTAL}
                 </span>
-                <span className={done ? 'text-accent' : 'text-muted dark:text-white/50'}>
+                <span className={done ? 'text-accent' : 'text-muted dark:text-white'}>
                   {done ? t('compareStatusVerified') : t('compareStatusScanning')}
                 </span>
               </div>

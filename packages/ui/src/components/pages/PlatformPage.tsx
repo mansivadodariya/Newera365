@@ -8,17 +8,17 @@ import Image from 'next/image';
 
 function IconWindows() {
   return (
-    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-      <rect x="2.5" y="2.5" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="11.5" y="2.5" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="2.5" y="11.5" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="11.5" y="11.5" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.5" />
+    <svg width="24" height="24" viewBox="0 0 20 20" fill="none" className="h-6 w-6 sm:h-7 sm:w-7">
+      <rect x="2.5" y="2.5" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.8" />
+      <rect x="11.5" y="2.5" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.8" />
+      <rect x="2.5" y="11.5" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.8" />
+      <rect x="11.5" y="11.5" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.8" />
     </svg>
   );
 }
 function IconMac() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="h-6 w-6 sm:h-7 sm:w-7">
       <path
         fill="currentColor"
         d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"
@@ -28,7 +28,7 @@ function IconMac() {
 }
 function IconAndroid() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="h-6 w-6 sm:h-7 sm:w-7">
       <path
         fill="currentColor"
         d="M6 9v7a1 1 0 001 1h1v3a1 1 0 002 0v-3h2v3a1 1 0 002 0v-3h1a1 1 0 001-1V9H6zM4.5 9a1 1 0 00-1 1v5a1 1 0 002 0v-5a1 1 0 00-1-1zm15 0a1 1 0 00-1 1v5a1 1 0 002 0v-5a1 1 0 00-1-1zM15.3 3.9l1.1-1.6a.4.4 0 00-.65-.45L14.6 3.5A6 6 0 0012 3a6 6 0 00-2.6.5L8.25 1.85a.4.4 0 10-.65.45L8.7 3.9A5 5 0 006 8h12a5 5 0 00-2.7-4.1zM9.5 6.5a.7.7 0 110-1.4.7.7 0 010 1.4zm5 0a.7.7 0 110-1.4.7.7 0 010 1.4z"
@@ -38,28 +38,28 @@ function IconAndroid() {
 }
 function IconWeb() {
   return (
-    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M10 2v16M2 10h16" stroke="currentColor" strokeWidth="1.5" />
-      <ellipse cx="10" cy="10" rx="4" ry="8" stroke="currentColor" strokeWidth="1.5" />
+    <svg width="24" height="24" viewBox="0 0 20 20" fill="none" className="h-6 w-6 sm:h-7 sm:w-7">
+      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M10 2v16M2 10h16" stroke="currentColor" strokeWidth="1.8" />
+      <ellipse cx="10" cy="10" rx="4" ry="8" stroke="currentColor" strokeWidth="1.8" />
     </svg>
   );
 }
 function IconMobile() {
   return (
-    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-      <rect x="5" y="2" width="10" height="16" rx="2" stroke="currentColor" strokeWidth="1.5" />
+    <svg width="24" height="24" viewBox="0 0 20 20" fill="none" className="h-6 w-6 sm:h-7 sm:w-7">
+      <rect x="5" y="2" width="10" height="16" rx="2" stroke="currentColor" strokeWidth="1.8" />
       <circle cx="10" cy="15.5" r="1" fill="currentColor" />
     </svg>
   );
 }
 function IconIndicators() {
   return (
-    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
       <polyline
         points="2,14 7,9 11,12 18,5"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -68,20 +68,20 @@ function IconIndicators() {
 }
 function IconEa() {
   return (
-    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-      <rect x="4" y="4" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M8 8h4M8 11h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <rect x="4" y="4" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M8 8h4M8 11h2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   );
 }
 function IconTimeframes() {
   return (
-    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-      <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.5" />
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.8" />
       <path
         d="M10 6v4l2.5 2.5"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -90,11 +90,11 @@ function IconTimeframes() {
 }
 function IconHedging() {
   return (
-    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
       <path
         d="M2 14h16M4 10h12M6 6h8"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.8"
         strokeLinecap="round"
       />
     </svg>
@@ -102,11 +102,21 @@ function IconHedging() {
 }
 function IconLinux() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M12 2c-2 0-3.2 1.6-3.2 3.7 0 1 .1 1.9-.4 2.8-.6 1-1.7 1.8-2.3 3.1-.5 1-.9 2.1-1.6 3-.4.5-.9.9-.8 1.5.1.5.7.6 1.2.7.9.2 1.3.5 1.8 1.1.6.7 1.6 1.3 3 1.5h4.6c1.4-.2 2.4-.8 3-1.5.5-.6.9-.9 1.8-1.1.5-.1 1.1-.2 1.2-.7.1-.6-.4-1-.8-1.5-.7-.9-1.1-2-1.6-3-.6-1.3-1.7-2.1-2.3-3.1-.5-.9-.4-1.8-.4-2.8C15.2 3.6 14 2 12 2zm-1.6 3.4a.7.7 0 110 1.4.7.7 0 010-1.4zm3.2 0a.7.7 0 110 1.4.7.7 0 010-1.4zM12 7.6c.7 0 1.5.4 1.5.9 0 .3-.7.6-1.5.6s-1.5-.3-1.5-.6c0-.5.8-.9 1.5-.9z" />
     </svg>
   );
 }
+
+const DEFAULT_DOWNLOADS: Required<CmsPlatformDownloads> = {
+  windows:
+    'https://download.terminal.free/cdn/web/newera.capital.markets/mt5/neweracapitalmarkets5setup.exe',
+  mac: 'https://download.terminal.free/cdn/web/newera.capital.markets/mt5/neweracapitalmarkets5setup.exe',
+  webTrader: 'https://webtrading.newera365.com/terminal',
+  android:
+    'https://download.terminal.free/cdn/mobile/mt5/android?server=NeweraCapitalMarkets-Server',
+  ios: 'https://download.terminal.free/cdn/mobile/mt5/ios?server=NeweraCapitalMarkets-Server',
+};
 
 interface PlatformCard {
   id: string;
@@ -181,10 +191,6 @@ const TOOLS = [
   { id: 'hedging', Icon: IconHedging },
 ];
 
-// MT5 surface comparison (client feedback: Mobile vs Desktop vs Web matrix).
-// Cells: true = included, false = not available, 'ltd' = limited, any other
-// string = a count. Counts are MetaQuotes' published MT5 built-ins; the honest
-// gaps stay visible (EAs and MQL5 are desktop-only, push alerts mobile-only).
 type CompareCell = boolean | string;
 const COMPARE_ROWS: {
   id: string;
@@ -204,7 +210,6 @@ const COMPARE_ROWS: {
   { id: 'history', labelKey: 'compareRowHistory', cells: [true, true, true] },
 ];
 
-// Column order matches the client doc: Mobile | Desktop | Web.
 const COMPARE_COLS = [
   { key: 'compareColMobile', subKey: 'compareColMobileSub', Icon: IconMobile },
   { key: 'compareColDesktop', subKey: 'compareColDesktopSub', Icon: IconWindows },
@@ -215,9 +220,6 @@ const COMPARE_GRID = {
   gridTemplateColumns: 'minmax(170px, 1.3fr) repeat(3, minmax(122px, 1fr))',
 };
 
-// Full device matrix for the "Works Everywhere" band (matches the reference
-// 6-tile grid). Linux has no dedicated MT5 build in CMS, so it points at the
-// browser Web Trader, which runs on Linux.
 const DEVICE_KEYS = [
   { key: 'androidTitle' as const, urlKey: 'android' as const, Icon: IconAndroid },
   { key: 'iosTitle' as const, urlKey: 'ios' as const, Icon: IconMobile },
@@ -242,26 +244,27 @@ interface PlatformPageProps {
 export function PlatformPage({ downloads }: PlatformPageProps) {
   const locale = useLocale();
   const t = useTranslations('platform');
-  // Comparison emphasis is interactive, not fixed: hovering a matrix column
-  // lights it up (same behaviour as the accounts feature matrix).
   const [hoverCol, setHoverCol] = useState<number | null>(null);
 
-  // Ink-ledger cell treatment (mirrors the accounts matrix): included = accent
-  // check chip, missing = quiet dash, limited = mono chip, counts = tabular
-  // figures (desktop carries the highest built-in counts, so it reads accent).
   const renderCompareCell = (cell: CompareCell, isDesktopCol: boolean) => {
     if (cell === true)
       return (
         <span
-          className="bg-accent/[0.16] flex h-6 w-6 items-center justify-center rounded-full"
+          className="bg-accent/20 border-accent/40 flex h-7 w-7 items-center justify-center rounded-full border shadow-sm"
           role="img"
           aria-label={t('compareYes')}
         >
-          <svg width="13" height="13" viewBox="0 0 14 14" fill="none" className="text-accent">
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 14 14"
+            fill="none"
+            className="text-accent-bright"
+          >
             <path
               d="M2.5 7l3 3 6-6"
               stroke="currentColor"
-              strokeWidth="1.75"
+              strokeWidth="2.2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
@@ -271,23 +274,23 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
     if (cell === false)
       return (
         <span
-          className="font-body text-[15px] text-white/25"
+          className="flex h-7 w-7 items-center justify-center rounded-full border border-red-500/30 bg-red-500/15 font-sans text-[13px] font-bold text-red-400"
           role="img"
           aria-label={t('compareNo')}
         >
-          —
+          ✖
         </span>
       );
     if (cell === 'ltd')
       return (
-        <span className="rounded-full border border-white/15 px-2 py-[3px] font-mono text-[10px] uppercase tracking-[0.08em] text-white/50">
+        <span className="rounded-full border border-white/25 bg-white/5 px-2.5 py-[4px] font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-white/80">
           {t('compareLimited')}
         </span>
       );
     return (
       <span
         dir="ltr"
-        className={`font-sans text-[15px] font-semibold tabular-nums ${
+        className={`font-sans text-[16px] font-bold tabular-nums ${
           isDesktopCol ? 'text-accent-bright' : 'text-white'
         }`}
       >
@@ -339,8 +342,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
               instead of all five cramped into a single row. */}
           <div className="grid grid-cols-2 gap-[14px] md:grid-cols-3 xl:grid-cols-6 xl:gap-[18px]">
             {PLATFORM_CARDS.map((card, i) => {
-              const rawUrl = downloads?.[card.urlKey] ?? null;
-              const url = rawUrl ?? (card.webFallback ? `/${locale}/web-trader` : null);
+              const url = DEFAULT_DOWNLOADS[card.urlKey];
               const isInternal = url?.startsWith('/') ?? false;
               // min-h (not fixed h) + tight leading so a long label like
               // "Open web trader" wraps to two tidy lines inside the pill on the
@@ -396,7 +398,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                   {/* Icon + tag — stacked on the 2-col mobile grid (icon + badge
                       won't fit side by side in ~117px), side by side from md up. */}
                   <div className="relative flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-2">
-                    <div className="bg-accent/10 text-accent group-hover:bg-accent flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[14px] transition-colors duration-300 group-hover:text-white">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#00b050]/15 text-[#00b050] shadow-sm transition-all duration-300 group-hover:bg-[#00b050] group-hover:text-white motion-safe:group-hover:scale-105 sm:h-12 sm:w-12 sm:rounded-[16px] dark:bg-[#00b050]/20 dark:text-[#1ad966]">
                       <card.Icon />
                     </div>
                     <span className="border-accent/40 text-accent group-hover:border-accent/50 whitespace-nowrap rounded-full border px-3 py-[5px] font-mono text-[10px] font-semibold uppercase tracking-[0.12em] transition-colors duration-300">
@@ -490,9 +492,12 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
               without scrolling from md up (same rig as the accounts matrix). */}
           <ScrollReveal className="overflow-x-auto rounded-[20px] border border-white/[0.08]">
             <div className="min-w-[640px] bg-white/[0.03] md:min-w-0">
-              {/* Header row — device surfaces, hovered column lights up */}
-              <div className="grid border-b border-white/[0.08]" style={COMPARE_GRID}>
-                <span className="sticky start-0 z-[1] flex items-end bg-[#0b1c11] px-5 pb-5 pt-6 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45 md:bg-transparent">
+              {/* Header row — device surfaces with high contrast bright headings */}
+              <div
+                className="grid border-b border-white/[0.12] bg-white/[0.04]"
+                style={COMPARE_GRID}
+              >
+                <span className="sticky start-0 z-[1] flex items-end bg-[#0b1c11] px-5 pb-5 pt-6 font-mono text-[11px] font-extrabold uppercase tracking-[0.14em] text-white/85 md:bg-transparent">
                   {t('compareColFeature')}
                 </span>
                 {COMPARE_COLS.map((col, j) => (
@@ -500,25 +505,27 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                     key={col.key}
                     onMouseEnter={() => setHoverCol(j)}
                     onMouseLeave={() => setHoverCol(null)}
-                    className={`flex flex-col items-center justify-end gap-1 px-2 pb-5 pt-6 text-center transition-colors ${
-                      j === hoverCol ? 'bg-accent/[0.10]' : ''
+                    className={`flex flex-col items-center justify-end gap-1.5 px-2 pb-5 pt-6 text-center transition-colors ${
+                      j === hoverCol ? 'bg-accent/[0.14]' : ''
                     }`}
                   >
                     <span
-                      className={`transition-colors [&>svg]:h-4 [&>svg]:w-4 ${
-                        j === hoverCol ? 'text-accent-bright' : 'text-white/55'
+                      className={`transition-colors [&>svg]:h-5 [&>svg]:w-5 ${
+                        j === hoverCol
+                          ? 'text-accent-bright scale-110'
+                          : 'text-[#00b050] dark:text-[#1ad966]'
                       }`}
                     >
                       <col.Icon />
                     </span>
                     <span
-                      className={`font-sans text-[16px] font-semibold ${
+                      className={`font-sans text-[17px] font-extrabold tracking-tight ${
                         j === hoverCol ? 'text-accent-bright' : 'text-white'
                       }`}
                     >
                       {t(col.key as 'compareColMobile')}
                     </span>
-                    <span className="font-body text-[11px] text-white/45">
+                    <span className="font-body text-[12px] font-semibold text-white/85">
                       {t(col.subKey as 'compareColMobileSub')}
                     </span>
                   </div>
@@ -534,7 +541,7 @@ export function PlatformPage({ downloads }: PlatformPageProps) {
                   }`}
                   style={COMPARE_GRID}
                 >
-                  <span className="font-body sticky start-0 z-[1] bg-[#0a1810] px-5 py-4 text-[14px] text-white/80 md:bg-transparent">
+                  <span className="font-body sticky start-0 z-[1] bg-[#0a1810] px-5 py-4 text-[14.5px] font-semibold text-white/95 md:bg-transparent">
                     {t(row.labelKey as 'compareRowCharts')}
                   </span>
                   {row.cells.map((cell, j) => (

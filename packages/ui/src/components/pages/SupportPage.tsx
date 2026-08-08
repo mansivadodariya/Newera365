@@ -142,19 +142,20 @@ const CHANNELS: Channel[] = [
     action: 'mailto:support@newera.com',
   },
   {
-    id: 'call',
-    value: '+1 867-778-3511',
+    id: 'chat',
+    value: '24/7 Real-Time Assistance',
     icon: (
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
         <path
-          d="M5 2h3l1.5 4-2 1.5a11 11 0 004 4L13 9.5l4 1.5v3c0 2.5-5 4-10-1S2.5 4.5 5 2z"
+          d="M18 10c0 3.866-3.582 7-8 7a9.4 9.4 0 01-3.665-.732L2 17l1.01-2.905A6.8 6.8 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7z"
           stroke="currentColor"
           strokeWidth="1.5"
+          strokeLinecap="round"
           strokeLinejoin="round"
         />
       </svg>
     ),
-    action: 'tel:+18677783511',
+    action: '#live-chat',
   },
 ];
 
@@ -200,9 +201,8 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
       const email = contactDetails?.email || ch.value;
       return { ...ch, value: email, action: `mailto:${email}` };
     }
-    if (ch.id === 'call') {
-      const phone = contactDetails?.phone || ch.value;
-      return { ...ch, value: phone, action: `tel:${phone.replace(/[\s-]/g, '')}` };
+    if (ch.id === 'chat') {
+      return { ...ch, value: '24/7 Real-Time Assistance', action: '#live-chat' };
     }
     return ch;
   });

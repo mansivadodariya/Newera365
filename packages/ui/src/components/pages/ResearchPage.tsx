@@ -293,17 +293,14 @@ export function ResearchPage({
         </div>
       </section>
 
-      {/* Content source tabs — Analysis / News / Blog (merged insights desk) */}
+      {/* Content source tabs — Analysis / News / Blog */}
       {hasFeeds && (
-        <section className="px-5 pb-1 pt-1">
+        <section className="px-5 pb-3 pt-1">
           <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <div className="border-border relative inline-grid grid-cols-3 rounded-[12px] border bg-[#f2f2f4] p-1 dark:border-white/[0.08] dark:bg-[#1a1c22]">
-              {/* Sliding active-tab indicator: transforms between the three feeds
-                  (snaps under reduced motion). Physical translateX is mirrored in
-                  RTL so it tracks the logical-start tab. */}
+            <div className="border-border relative inline-grid h-11 grid-cols-3 items-center rounded-[12px] border bg-white p-1 shadow-sm dark:border-white/[0.10] dark:bg-[#12141a]">
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-y-1 start-1 rounded-[9px] bg-white shadow-sm transition-transform duration-300 ease-out motion-reduce:transition-none dark:bg-[#2a2d36]"
+                className="pointer-events-none absolute inset-y-1 start-1 rounded-[9px] bg-[#00B050] shadow-[0_4px_14px_rgba(0,176,80,0.35)] transition-transform duration-300 ease-out motion-reduce:transition-none"
                 style={{
                   width: 'calc((100% - 0.5rem) / 3)',
                   transform: `translateX(${
@@ -322,10 +319,10 @@ export function ResearchPage({
                 <button
                   key={s.id}
                   onClick={() => handleContentTab(s.id)}
-                  className={`font-body relative z-10 rounded-[9px] px-4 py-2 text-center text-[13px] font-medium transition-colors ${
+                  className={`font-body relative z-10 flex h-full items-center justify-center rounded-[9px] px-5 text-center text-[13px] font-semibold transition-colors ${
                     contentTab === s.id
-                      ? 'text-foreground dark:text-white'
-                      : 'text-muted hover:text-foreground'
+                      ? 'text-white'
+                      : 'text-foreground/70 hover:text-foreground dark:text-white/70 dark:hover:text-white'
                   }`}
                 >
                   {s.label}
@@ -336,48 +333,52 @@ export function ResearchPage({
         </section>
       )}
 
-      {/* Search bar */}
-      <section className="px-5 pb-4">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="dark:bg-surface flex items-center gap-2.5 rounded-[12px] bg-[#f2f2f4] px-3.5">
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 16 16"
-              fill="none"
-              className="text-muted flex-shrink-0"
-            >
-              <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-            <input
-              type="search"
-              placeholder={t('searchPlaceholder')}
-              value={search}
-              onChange={(e) => handleSearchChange(e.target.value)}
-              className="font-body text-foreground placeholder:text-muted w-full bg-transparent py-3 text-[13px] outline-none"
-            />
-          </div>
-        </div>
-      </section>
+      {/* Category pills (LEFT) & Search bar (RIGHT) — inside a themed background card container */}
+      <section className="px-5 pb-6">
+        <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+          <div className="border-border shadow-card flex flex-col items-stretch justify-between gap-3.5 rounded-[20px] border bg-white p-3 sm:flex-row sm:items-center sm:p-3.5 dark:border-white/[0.08] dark:bg-[#12141a]">
+            {/* Category Chips */}
+            <div className="scrollbar-hide flex flex-1 items-center gap-2 overflow-x-auto py-0.5">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => handleCategoryChange(cat)}
+                  className={`font-body flex-shrink-0 rounded-full px-4 py-2 text-[13px] font-semibold transition-all ${
+                    activeCategory === cat
+                      ? 'bg-[#00B050] text-white shadow-sm'
+                      : 'text-foreground/70 hover:text-foreground bg-[#f4f6f5] hover:bg-[#00B050]/10 dark:bg-[#1a1c22] dark:text-white/70 dark:hover:bg-[#00B050]/15 dark:hover:text-white'
+                  }`}
+                >
+                  {translateResearchCat(cat)}
+                </button>
+              ))}
+            </div>
 
-      {/* Category tabs */}
-      <section className="px-5 pb-4">
-        <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <div className="scrollbar-hide flex gap-2 overflow-x-auto">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => handleCategoryChange(cat)}
-                className={`font-body flex-shrink-0 rounded-full px-[14px] py-[8px] text-[13px] font-medium transition-all ${
-                  activeCategory === cat
-                    ? 'bg-accent text-white'
-                    : 'text-muted hover:bg-accent/[0.10] dark:hover:bg-accent/[0.15] bg-[#f2f2f4] dark:bg-[#1a1c22] dark:text-white/50 dark:hover:text-white/80'
-                }`}
+            {/* Search bar input beside categories */}
+            <div className="border-border flex h-10 flex-shrink-0 items-center gap-2.5 rounded-[12px] border bg-[#f8faf9] px-3.5 shadow-inner transition-all focus-within:border-[#00B050] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#00B050]/20 sm:w-64 md:w-72 xl:w-80 dark:border-white/[0.10] dark:bg-[#1a1c22] dark:focus-within:bg-[#12141a]">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 16 16"
+                fill="none"
+                className="flex-shrink-0 text-[#00B050] dark:text-[#1ad966]"
               >
-                {translateResearchCat(cat)}
-              </button>
-            ))}
+                <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.8" />
+                <path
+                  d="M11 11l3 3"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <input
+                type="search"
+                placeholder={t('searchPlaceholder')}
+                value={search}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="font-body text-foreground placeholder:text-muted flex-1 bg-transparent text-[13px] outline-none dark:text-white"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -527,13 +528,13 @@ export function ResearchPage({
                   {...extProps(article)}
                   className="shadow-card-dark group flex h-full flex-col overflow-hidden rounded-[18px] bg-[#111111] transition-all duration-200 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
                 >
-                  {/* Thumbnail — image zooms + gains an inner shadow on hover (client-approved article-card override) */}
-                  <div className="relative h-[140px] overflow-hidden bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111] after:pointer-events-none after:absolute after:inset-0 after:opacity-0 after:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.14),inset_0_10px_30px_-6px_rgba(0,0,0,0.5)] after:transition-opacity after:duration-300 after:content-[''] motion-safe:group-hover:after:opacity-100">
+                  {/* Thumbnail — crisp 16:9 ratio, bright visuals + subtle zoom on hover */}
+                  <div className="relative aspect-[16/9] h-[175px] w-full overflow-hidden rounded-t-[18px] bg-gradient-to-br from-[#0d2b1a] via-[#0a1a10] to-[#111111] after:pointer-events-none after:absolute after:inset-0 after:opacity-0 after:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.14),inset_0_10px_30px_-6px_rgba(0,0,0,0.5)] after:transition-opacity after:duration-300 after:content-[''] motion-safe:group-hover:after:opacity-100">
                     {article.thumbnailUrl ? (
                       <img
                         src={article.thumbnailUrl}
                         alt={article.title}
-                        className="absolute inset-0 h-full w-full object-cover opacity-70 transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.05]"
+                        className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.06]"
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-end p-3 transition-transform duration-300 ease-out motion-safe:group-hover:scale-[1.05]">

@@ -13,7 +13,10 @@ type WidgetType =
   | 'single-quote'
   | 'ticker-tape'
   | 'forex-cross-rates'
+  | 'forex-heat-map'
+  | 'technical-analysis'
   | 'market-quotes'
+  | 'stock-heatmap'
   | 'timeline';
 
 interface TradingViewWidgetProps {
@@ -53,7 +56,11 @@ const WIDGET_URLS: Record<WidgetType, string> = {
   'ticker-tape': 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js',
   'forex-cross-rates':
     'https://s3.tradingview.com/external-embedding/embed-widget-forex-cross-rates.js',
+  'forex-heat-map': 'https://s3.tradingview.com/external-embedding/embed-widget-forex-heat-map.js',
+  'technical-analysis':
+    'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js',
   'market-quotes': 'https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js',
+  'stock-heatmap': 'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js',
   timeline: 'https://s3.tradingview.com/external-embedding/embed-widget-timeline.js',
 };
 
@@ -92,6 +99,25 @@ function buildConfig(type: WidgetType, props: TradingViewWidgetProps): Record<st
       locale: 'en',
       colorTheme: theme,
       isTransparent: true,
+      ...config,
+    };
+  }
+
+  if (type === 'stock-heatmap') {
+    return {
+      exchanges: [],
+      dataSource: 'S&P500',
+      grouping: 'sector',
+      blockSize: 'market_cap_basic',
+      blockColor: 'change',
+      locale: 'en',
+      colorTheme: theme,
+      hasTopBar: false,
+      isDataSetEnabled: false,
+      isZoomEnabled: true,
+      hasSymbolTooltip: true,
+      width: '100%',
+      height: '100%',
       ...config,
     };
   }

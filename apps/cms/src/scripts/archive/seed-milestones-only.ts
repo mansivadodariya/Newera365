@@ -32,64 +32,63 @@ type Milestone = {
 // Source of truth carried over from apps/web/messages/{en,ar}.json (about.milestone*).
 const MILESTONES: Milestone[] = [
   {
-    year: '2014',
+    year: '2023',
     en: {
       label: 'Founded',
-      description:
-        'Started with a single broker license and a focus on institutional-grade retail trading.',
+      description: 'Started operations with a Saint Lucia IBC brokerage licence.',
     },
     ar: {
       label: 'التأسيس',
-      description: 'بدأنا بترخيص وساطة واحد مع التركيز على تداول التجزئة بمستوى مؤسسي.',
+      description: 'بدأنا عملياتنا بترخيص وساطة IBC في سانت لوسيا.',
     },
   },
   {
-    year: '2016',
+    year: '2026',
     en: {
-      label: 'First license',
+      label: 'First Regulatory Expansion',
       description:
-        'Granted FCA authorisation — regulated where it matters to clients in Singapore, EU and the UK.',
+        'Expanded our regulatory footprint by obtaining an FSCA licence in South Africa.',
     },
     ar: {
-      label: 'أول ترخيص',
-      description:
-        'حصلنا على ترخيص FCA — تنظيم حيث يهم العملاء في سنغافورة والاتحاد الأوروبي والمملكة المتحدة.',
+      label: 'أول توسع تنظيمي',
+      description: 'وسّعنا نطاقنا التنظيمي من خلال الحصول على ترخيص FSCA في جنوب إفريقيا.',
     },
   },
   {
-    year: '2019',
+    year: '50,000+',
     en: {
-      label: '100k traders',
-      description:
-        'Crossed six figures of active accounts during a period of rapid expansion across 6 countries.',
+      label: '50,000+ Traders',
+      description: 'Successfully surpassed five figures during our expansion phase.',
     },
     ar: {
-      label: '100 ألف متداول',
-      description: 'تجاوزنا ستة أرقام من الحسابات النشطة خلال فترة توسع سريع في 6 دول.',
+      label: '50,000+ متداول',
+      description: 'تجاوزنا بنجاح حاجز الخمسة أرقام خلال مرحلة التوسع.',
     },
   },
   {
-    year: '2022',
+    year: 'Expansion',
     en: {
-      label: 'Global expansion',
+      label: 'Global Expansion',
       description:
-        'Expanded to ASIC and CySEC jurisdictions. Offices opened in Dubai and Singapore.',
+        'Our global presence continues to expand across key international markets, strengthening our position within the financial industry.',
     },
     ar: {
       label: 'التوسع العالمي',
-      description: 'توسعنا إلى ولايتي ASIC وCySEC. افتُتحت مكاتب في دبي وسنغافورة.',
+      description:
+        'يستمر حضورنا العالمي في التوسع عبر الأسواق الدولية الرئيسية، مما يعزز مكانتنا في القطاع المالي.',
     },
   },
   {
-    year: '2024',
+    year: 'NewEra',
     en: {
       label: 'NewEra',
       description:
-        'Released the Newera365 platform — built from the ground up with every tool a trader needs.',
+        'Built from the ground up with every tool a trader needs. We remain committed to innovation, identifying new opportunities, and expanding into additional global markets.',
     },
     ar: {
       label: 'عهد جديد',
-      description: 'أطلقنا منصة Newera365 — مبنية من الصفر بكل أداة يحتاجها المتداول.',
+      description:
+        'تم بناؤها من الصفر مع كل أداة يحتاجها المتداول. نواصل التزامنا بالابتكار وتحديد الفرص الجديدة والتوسع في أسواق عالمية إضافية.',
     },
   },
 ];
