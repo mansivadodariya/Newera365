@@ -1,0 +1,406 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+
+type WidgetType =
+  | 'advanced-chart'
+  | 'mini-chart'
+  | 'symbol-overview'
+  | 'market-overview'
+  | 'screener'
+  | 'economic-calendar'
+  | 'symbol-info'
+  | 'single-quote'
+  | 'ticker-tape'
+  | 'forex-cross-rates'
+  | 'forex-heat-map'
+  | 'technical-analysis'
+  | 'market-quotes'
+  | 'stock-heatmap'
+  | 'timeline';
+
+interface TradingViewWidgetProps {
+  type: WidgetType;
+  symbol?: string;
+  width?: string | number;
+  height?: string | number;
+  theme?: 'light' | 'dark';
+  className?: string;
+  config?: Record<string, unknown>;
+  /**
+   * Off by default: a click mask sits above the iframe so surrounding UI
+   * (tickers, chart headers) isn't hijacked by the embed. Set true on pages
+   * where the embed IS the interaction — economic calendar, news timeline.
+   */
+  interactive?: boolean;
+}
+
+// External-embedding loaders. MUST be served from s3.tradingview.com — the
+// s.tradingview.com / www.tradingview.com hosts return an HTML error page for
+// these paths, which the browser then ORB-blocks (net::ERR_BLOCKED_BY_ORB), so
+// the chart iframe never mounts. The s3 host is the canonical TradingView CDN
+// (it's what the working TradingViewTicker uses). The rendered chart iframe is
+// served from www.tradingview-widget.com — see frame-src in apps/web/next.config.mjs.
+const WIDGET_URLS: Record<WidgetType, string> = {
+  'advanced-chart': 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js',
+  'mini-chart':
+    'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js',
+  'symbol-overview':
+    'https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js',
+  'market-overview':
+    'https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js',
+  screener: 'https://s3.tradingview.com/external-embedding/embed-widget-screener.js',
+  'economic-calendar': 'https://s3.tradingview.com/external-embedding/embed-widget-events.js',
+  'symbol-info': 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js',
+  'single-quote': 'https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js',
+  'ticker-tape': 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js',
+  'forex-cross-rates':
+    'https://s3.tradingview.com/external-embedding/embed-widget-forex-cross-rates.js',
+  'forex-heat-map': 'https://s3.tradingview.com/external-embedding/embed-widget-forex-heat-map.js',
+  'technical-analysis':
+    'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js',
+  'market-quotes': 'https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js',
+  'stock-heatmap': 'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js',
+  timeline: 'https://s3.tradingview.com/external-embedding/embed-widget-timeline.js',
+};
+
+function buildConfig(type: WidgetType, props: TradingViewWidgetProps): Record<string, unknown> {
+  const { symbol = 'OANDA:EURUSD', theme = 'dark', config = {} } = props;
+
+  if (type === 'advanced-chart') {
+    return {
+      autosize: true,
+      symbol,
+      interval: 'D',
+      timezone: 'Etc/UTC',
+      theme,
+      style: '1',
+      locale: 'en',
+      enable_publishing: false,
+      hide_top_toolbar: false,
+      save_image: false,
+      ...config,
+    };
+  }
+
+  // market-overview uses a tabs[] config — don't inject symbol/autosize which
+  // conflict with the tabs-based rendering.
+  if (type === 'market-overview') {
+    return { locale: 'en', colorTheme: theme, ...config };
+  }
+
+  // timeline (news feed) is symbol-less — its content comes from displayMode +
+  // feedMode. Injecting a symbol scopes the feed to a single instrument, which
+  // is not what the calendar-page news column wants.
+  if (type === 'timeline') {
+    return {
+      width: '100%',
+      height: '100%',
+      locale: 'en',
+      colorTheme: theme,
+      isTransparent: false,
+      ...config,
+    };
+  }
+
+  if (type === 'stock-heatmap') {
+    return {
+      exchanges: [],
+      dataSource: 'S&P500',
+      grouping: 'sector',
+      blockSize: 'market_cap_basic',
+      blockColor: 'change',
+      locale: 'en',
+      colorTheme: theme,
+      hasTopBar: false,
+      isDataSetEnabled: false,
+      isZoomEnabled: true,
+      hasSymbolTooltip: true,
+      width: '100%',
+      height: '100%',
+      ...config,
+    };
+  }
+
+  return {
+    symbol,
+    width: '100%',
+    height: '100%',
+    locale: 'en',
+    colorTheme: theme,
+    isTransparent: false,
+    autosize: true,
+    ...config,
+  };
+}
+
+export function TradingViewWidget({
+  type,
+  symbol = 'OANDA:EURUSD',
+  width = '100%',
+  height = '100%',
+  theme = 'dark',
+  className = '',
+  config = {},
+  interactive = true,
+}: TradingViewWidgetProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  // Two-pass mount: defer script injection until after the container is in the
+  // DOM and laid out (non-zero size). Mirrors the proven TradingViewTicker
+  // pattern and avoids the StrictMode double-invoke clearing the script mid-load.
+  const [mounted, setMounted] = useState(false);
+  // 'failed' covers ad-blockers / CSP / network blocking s3.tradingview.com so
+  // the UI shows a graceful notice instead of a permanently-empty box.
+  const [status, setStatus] = useState<'loading' | 'ready' | 'failed'>('loading');
+
+  // Defer the (heavy) embed script until the widget is near the viewport —
+  // below-fold embeds stop competing with above-fold work. The container and
+  // its skeleton stay visible throughout, so nothing is hidden behind the gate.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') {
+      setMounted(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setMounted(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: '400px 0px' },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const configKey = JSON.stringify(config);
+
+  useEffect(() => {
+    if (!mounted) return;
+    const container = containerRef.current;
+    if (!container) return;
+
+    setStatus('loading');
+    container.innerHTML =
+      '<div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>';
+
+    const script = document.createElement('script');
+    script.src = WIDGET_URLS[type];
+    script.type = 'text/javascript';
+    script.async = true;
+    script.innerHTML = JSON.stringify(buildConfig(type, { type, symbol, theme, config }));
+    script.onerror = () => setStatus('failed');
+    container.appendChild(script);
+
+    // The embed script injects an <iframe> once it loads. The iframe *element*
+    // appears before its cross-origin document paints, so flipping to ready on
+    // insertion flashes a blank/white box. Wait for the iframe's load event
+    // (fires cross-origin) plus a short settle, with a fallback timer in case
+    // load already fired or never fires.
+    let cancelled = false;
+    let revealTimer: ReturnType<typeof setTimeout> | undefined;
+    let settleTimer: ReturnType<typeof setTimeout> | undefined;
+    let revealed = false;
+    const reveal = () => {
+      if (revealed || cancelled) return;
+      revealed = true;
+      requestAnimationFrame(() => {
+        settleTimer = setTimeout(() => {
+          if (!cancelled) setStatus('ready');
+        }, 200);
+      });
+    };
+    const observer = new MutationObserver(() => {
+      const iframe = container.querySelector('iframe');
+      if (!iframe) return;
+      observer.disconnect();
+
+      const tryHideLogo = () => {
+        try {
+          const doc = iframe.contentDocument || iframe.contentWindow?.document;
+          if (doc && doc.head) {
+            const style = doc.createElement('style');
+            style.textContent = `
+              .tv-embed-widget-copyright,
+              .tv-embed-widget-branding,
+              .tv-embed-widget-watermark,
+              .js-copyright-label,
+              .label-dzbd7lyV,
+              .snap-dzbd7lyV,
+              .end-dzbd7lyV,
+              .bottom-dzbd7lyV,
+              [class*="label-"],
+              [class*="snap-"],
+              [class*="end-"],
+              [class*="js-copyright"] {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+              }
+            `;
+            doc.head.appendChild(style);
+          }
+        } catch {
+          // Cross-origin iframe CORS boundary catch
+        }
+      };
+
+      iframe.addEventListener(
+        'load',
+        () => {
+          tryHideLogo();
+          reveal();
+        },
+        { once: true },
+      );
+      tryHideLogo();
+      revealTimer = setTimeout(reveal, 2500);
+    });
+    observer.observe(container, { childList: true, subtree: true });
+
+    const timeout = setTimeout(() => {
+      if (!container.querySelector('iframe')) setStatus('failed');
+    }, 8000);
+
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+      clearTimeout(timeout);
+      clearTimeout(revealTimer);
+      clearTimeout(settleTimer);
+      container.innerHTML = '';
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, type, symbol, theme, configKey]);
+
+  return (
+    <div
+      className={['relative overflow-hidden', className].filter(Boolean).join(' ')}
+      style={{ width, height, minHeight: typeof height === 'number' ? height : 180 }}
+    >
+      {/* Force-hide scrollbars, borders, logos, copyright links & target labels inside TradingView embeds */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        .tradingview-widget-container,
+        .tradingview-widget-container__widget,
+        .tradingview-widget-copyright {
+          border: none !important;
+          outline: none !important;
+          box-shadow: none !important;
+          overflow: hidden !important;
+          width: 100% !important;
+          height: 100% !important;
+          max-width: 100% !important;
+          box-sizing: border-box !important;
+        }
+        .tradingview-widget-container iframe {
+          border: none !important;
+          border-width: 0 !important;
+          outline: none !important;
+          box-shadow: none !important;
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
+          width: calc(100% + 8px) !important;
+          height: calc(100% + 8px) !important;
+          margin: -4px !important;
+          max-width: none !important;
+          box-sizing: border-box !important;
+          overflow: hidden !important;
+        }
+        .tradingview-widget-container iframe::-webkit-scrollbar {
+          display: none !important;
+          width: 0 !important;
+          height: 0 !important;
+        }
+        .tradingview-widget-copyright,
+        a.tradingview-widget-copyright,
+        .tradingview-widget-container__widget > a,
+        .tv-embed-widget-copyright,
+        .tv-embed-widget-branding,
+        .tv-embed-widget-watermark,
+        .js-copyright-label,
+        .label-dzbd7lyV,
+        .snap-dzbd7lyV,
+        .end-dzbd7lyV,
+        .bottom-dzbd7lyV,
+        .label-dzbd7lyV.snap-dzbd7lyV.end-dzbd7lyV,
+        [class*="label-dzbd7lyV"],
+        [class*="snap-dzbd7lyV"],
+        [class*="end-dzbd7lyV"],
+        [class*="tradingview-widget-copyright"],
+        [class*="tv-copyright"],
+        [class*="tv-widget-logo"],
+        [class*="tv-embed-widget-wrapper__copyright"],
+        [class*="js-copyright"] {
+          display: none !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
+          pointer-events: none !important;
+          height: 0 !important;
+          width: 0 !important;
+          overflow: hidden !important;
+        }
+      `,
+        }}
+      />
+      <div
+        ref={containerRef}
+        className="tradingview-widget-container h-full w-full overflow-hidden [&_iframe]:border-none [&_iframe]:outline-none"
+        suppressHydrationWarning
+      >
+        <div className="tradingview-widget-container__widget" />
+      </div>
+
+      {/* Branded loading skeleton — opaque surface so the embed's blank first
+          paint never shows through; fades out once the iframe has painted. */}
+      <div
+        className={[
+          'absolute inset-0 z-[5] overflow-hidden rounded-[inherit] transition-opacity duration-300',
+          theme === 'light' ? 'bg-white' : 'bg-[#0d1117]',
+          status === 'loading' ? 'opacity-100' : 'pointer-events-none opacity-0',
+        ].join(' ')}
+        aria-hidden="true"
+      >
+        <div className="flex h-full w-full flex-col justify-center gap-3 px-5 py-4">
+          {[82, 64, 91, 73].map((w, i) => (
+            <div
+              key={i}
+              className={[
+                'h-3 rounded-full',
+                theme === 'light' ? 'bg-black/[0.06]' : 'bg-white/[0.06]',
+                status === 'loading' ? 'motion-safe:animate-pulse' : '',
+              ].join(' ')}
+              style={{ width: `${w}%`, animationDelay: `${i * 150}ms` }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {status === 'failed' && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-[inherit] bg-black/[0.03] px-4 text-center dark:bg-white/[0.04]">
+          <span className="text-foreground text-[12px] font-medium dark:text-white">
+            Live chart unavailable
+          </span>
+          <span className="text-muted text-[10px] dark:text-white/50">
+            Allow tradingview.com to view live prices
+          </span>
+        </div>
+      )}
+
+      {/* Click mask — sits above the iframe so pointer events never reach
+          TradingView. Centralised here so EVERY embed (advanced-chart,
+          market-quotes, forex-cross-rates, screener, economic-calendar…) is
+          read-only by default; consumers no longer add their own overlay. The
+          outer div above is `relative`, so this covers exactly the widget and
+          leaves surrounding UI (period selectors, watchlist rows) interactive.
+          Skipped when the caller opts in with `interactive` — e.g. the calendar
+          + news timeline where the embed IS the interaction. */}
+      {!interactive && <div className="absolute inset-0 z-10 cursor-default" aria-hidden="true" />}
+    </div>
+  );
+}
+
+export type { WidgetType, TradingViewWidgetProps };

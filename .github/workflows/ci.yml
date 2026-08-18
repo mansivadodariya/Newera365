@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    branches: [main, staging]
+
+jobs:
+  ci:
+    name: Lint · Type-check · Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # ── Lint ────────────────────────────────────────────────────────────────
+      - name: Lint
+        run: npm run lint
+        env:
+          # `next lint` executes apps/web/next.config.mjs, whose WR-12 guard throws
+          # when NEXT_PUBLIC_CMS_URL is unset under NODE_ENV=production (which `next
+          # lint` sets on CI). Provide the same dummy CMS URL the Build step uses.
+          NEXT_PUBLIC_CMS_URL: https://cms.newera365.com
+
+      # ── Type-check ──────────────────────────────────────────────────────────
+      - name: Type-check
+        run: npm run type-check
+
+      # ── Build ───────────────────────────────────────────────────────────────
+      # Requires production env vars; use dummy values so the build doesn't crash
+      # on startup guards. Real secrets are never stored in CI.
+      - name: Build
+        run: npm run build
+        env:
+          NODE_ENV: production
+          # CMS
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET || 'ci-dummy-secret-32-chars-minimum!!' }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://user:pass@localhost/db' }}
+          FRONTEND_URL: https://newera365.com
+          SMTP_PASS: ${{ secrets.SMTP_PASS || 'ci-dummy-smtp-token' }}
+          EMAIL_FROM: no-reply@newera365.com
+          PAYLOAD_PUBLIC_SERVER_URL: https://cms.newera365.com
+          # Web
+          NEXT_PUBLIC_CMS_URL: https://cms.newera365.com

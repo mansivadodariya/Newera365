@@ -1,0 +1,9 @@
+node_modules
+dist
+build
+.next
+.turbo
+out
+coverage
+graphify-out
+apps/web/scripts/data

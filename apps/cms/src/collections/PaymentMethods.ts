@@ -1,0 +1,110 @@
+import type { CollectionConfig } from 'payload/types';
+import { publicReadWhere } from './_fields';
+import { createRevalidationHook, createRevalidationDeleteHook, localePaths } from '../hooks';
+
+// Payment methods also render as chips in the site-wide footer, so purge the
+// root layout in addition to the /trade/funding page.
+const paymentMethodPaths = () => localePaths(['/trade/funding', '/en', '/ar']);
+
+// Powers /trade/funding — deposit and withdrawal methods.
+// Names use the parallel `nameAr` field. depositTime / withdrawalTime / fee are
+// localized (Payload locales) so editors set Arabic per row; methodType labels
+// are mapped via i18n in the component.
+export const PaymentMethods: CollectionConfig = {
+  slug: 'payment-methods',
+  admin: {
+    group: 'Trading',
+    useAsTitle: 'name',
+    defaultColumns: ['name', 'methodType', 'status', 'sortOrder'],
+    description: 'Manage deposit/withdrawal methods shown on the /trade/funding page.',
+  },
+  access: { read: publicReadWhere({ status: { equals: 'active' } }) },
+  hooks: {
+    afterChange: [createRevalidationHook(paymentMethodPaths)],
+    afterDelete: [createRevalidationDeleteHook(paymentMethodPaths)],
+  },
+  fields: [
+    {
+      name: 'name',
+      type: 'text',
+      required: true,
+      maxLength: 80,
+      admin: { description: 'Display name, e.g. "Visa / Mastercard".' },
+    },
+    {
+      name: 'nameAr',
+      type: 'text',
+      maxLength: 120,
+      admin: { description: 'Arabic display name (leave blank to fall back to English name).' },
+    },
+    {
+      name: 'methodType',
+      type: 'select',
+      required: true,
+      options: [
+        { label: 'Card (Visa / Mastercard)', value: 'card' },
+        { label: 'Bank Wire (SWIFT / SEPA)', value: 'bank' },
+        { label: 'E-Wallet (Skrill, Neteller…)', value: 'ewallet' },
+        { label: 'Cryptocurrency', value: 'crypto' },
+        { label: 'Local Bank Transfer', value: 'local' },
+      ],
+      admin: { description: 'Used for grouping and icon selection.' },
+    },
+    {
+      name: 'logo',
+      type: 'upload',
+      relationTo: 'media',
+      admin: { description: 'Payment method logo (optional). Shown alongside the name.' },
+    },
+    {
+      name: 'depositTime',
+      type: 'text',
+      localized: true,
+      maxLength: 80,
+      admin: { description: 'Deposit processing time, e.g. "Instant" or "1–2 business days".' },
+    },
+    {
+      name: 'withdrawalTime',
+      type: 'text',
+      localized: true,
+      maxLength: 80,
+      admin: { description: 'Withdrawal processing time, e.g. "1–3 business days".' },
+    },
+    {
+      name: 'minDeposit',
+      type: 'text',
+      maxLength: 30,
+      admin: { description: 'Minimum deposit amount, e.g. "$10" or "€50".' },
+    },
+    {
+      name: 'fee',
+      type: 'text',
+      localized: true,
+      maxLength: 50,
+      admin: { description: 'Fee description, e.g. "None" or "1.5%".' },
+    },
+    {
+      name: 'notes',
+      type: 'textarea',
+      maxLength: 200,
+      admin: { description: 'Optional small-print notes shown under the method row.' },
+    },
+    {
+      name: 'sortOrder',
+      type: 'number',
+      defaultValue: 0,
+      admin: { description: 'Display order on the funding page (lower = higher).' },
+    },
+    {
+      name: 'status',
+      type: 'select',
+      required: true,
+      defaultValue: 'active',
+      options: [
+        { label: 'Active', value: 'active' },
+        { label: 'Inactive', value: 'inactive' },
+      ],
+      admin: { description: 'Inactive methods are hidden from the website.' },
+    },
+  ],
+};

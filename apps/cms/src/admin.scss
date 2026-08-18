@@ -1,0 +1,38 @@
+// Custom admin styles. Loaded via `admin.css` in payload.config.ts.
+//
+// Theme-swapped brand marks. Payload renders a white wordmark fine on the dark
+// admin theme but it disappears on the light theme, so the Logo/Icon graphics
+// render both variants and we swap them here via the `data-theme` attribute
+// Payload sets on <html>. Keeping these rules in the stylesheet (instead of an
+// inline <style> tag inside the graphic component) prevents the raw CSS from
+// leaking into the nav as visible text.
+.ne-logo,
+.ne-icon {
+  width: auto;
+  display: block;
+}
+
+.ne-logo {
+  height: 120px;
+}
+
+.ne-icon {
+  height: 80px;
+}
+
+.ne-logo--dark,
+.ne-icon--dark {
+  display: none;
+}
+
+[data-theme='dark'] {
+  .ne-logo--light,
+  .ne-icon--light {
+    display: none;
+  }
+
+  .ne-logo--dark,
+  .ne-icon--dark {
+    display: block;
+  }
+}

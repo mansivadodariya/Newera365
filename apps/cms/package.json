@@ -1,0 +1,48 @@
+{
+  "name": "@newera365/cms",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Newera content backend",
+  "scripts": {
+    "dev": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts nodemon",
+    "build:payload": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload build",
+    "build:server": "tsc",
+    "build": "npm run build:payload && npm run build:server",
+    "start": "cross-env PAYLOAD_CONFIG_PATH=dist/payload.config.js NODE_ENV=production node dist/server.js",
+    "lint": "eslint src",
+    "type-check": "tsc --noEmit",
+    "generate:types": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:types",
+    "db:migrate:slug-indexes": "ts-node src/scripts/migrate-slug-indexes.ts",
+    "seed:admin": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts ts-node --transpile-only src/scripts/ensure-admin.ts",
+    "seed:payment-methods": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts ts-node --transpile-only src/scripts/seed-payment-methods-local.ts",
+    "seed": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts ts-node --transpile-only src/scripts/seed.ts",
+    "patch:arabic": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts ts-node --transpile-only src/scripts/patch-arabic.ts",
+    "email:verify": "cross-env ts-node --transpile-only src/scripts/verify-email.ts",
+    "clean": "rimraf dist build .turbo"
+  },
+  "dependencies": {
+    "@newera365/types": "*",
+    "@payloadcms/bundler-webpack": "1.0.9",
+    "@payloadcms/db-postgres": "^0.8.4",
+    "@payloadcms/richtext-slate": "^1.5.1",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-rate-limit": "^7.4.1",
+    "nodemailer": "^8.0.7",
+    "payload": "^2.30.1",
+    "pg": "^8.13.3",
+    "sharp": "0.32.6"
+  },
+  "devDependencies": {
+    "@newera365/config": "*",
+    "@types/express": "^4.17.21",
+    "@types/nodemailer": "^8.0.0",
+    "@types/pg": "^8.11.10",
+    "eslint": "^8.57.1",
+    "nodemon": "^3.1.7",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}

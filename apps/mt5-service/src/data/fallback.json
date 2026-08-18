@@ -1,0 +1,43 @@
+{
+  "instruments": [
+    {
+      "symbol": "EURUSD",
+      "assetClass": "forex",
+      "bid": 1.0842,
+      "ask": 1.0843,
+      "spread": 0.1,
+      "swapLong": -0.85,
+      "swapShort": 0.12,
+      "leverage": 500,
+      "contractSize": 100000,
+      "marginCurrency": "USD",
+      "tradingHours": "Mon 00:00 - Fri 22:00 UTC"
+    },
+    {
+      "symbol": "XAUUSD",
+      "assetClass": "commodities",
+      "bid": 2318.4,
+      "ask": 2318.7,
+      "spread": 0.3,
+      "swapLong": -4.2,
+      "swapShort": 1.1,
+      "leverage": 200,
+      "contractSize": 100,
+      "marginCurrency": "USD",
+      "tradingHours": "Mon 01:00 - Fri 23:00 UTC"
+    },
+    {
+      "symbol": "US500",
+      "assetClass": "indices",
+      "bid": 5210.5,
+      "ask": 5211.0,
+      "spread": 0.5,
+      "swapLong": -2.1,
+      "swapShort": -0.4,
+      "leverage": 100,
+      "contractSize": 1,
+      "marginCurrency": "USD",
+      "tradingHours": "Mon 00:00 - Fri 21:00 UTC"
+    }
+  ]
+}

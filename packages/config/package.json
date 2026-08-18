@@ -1,0 +1,21 @@
+{
+  "name": "@newera365/config",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "files": [
+    "eslint-preset.js",
+    "tailwind-preset.js"
+  ],
+  "scripts": {
+    "lint": "echo \"no-op\"",
+    "type-check": "echo \"no-op\"",
+    "clean": "echo \"no-op\""
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
+    "eslint-config-next": "^14.2.18",
+    "eslint-config-prettier": "^9.1.0"
+  }
+}

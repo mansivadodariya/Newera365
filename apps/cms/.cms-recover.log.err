@@ -1,0 +1,123 @@
+
+⚠️  PAYLOAD_SECRET is still the placeholder value "change-me-in-production".
+   Generate a real secret: openssl rand -hex 32
+   Leaving this in place means admin JWTs are signed with a public string.
+
+
+⚠️  PAYLOAD_SECRET is still the placeholder value "change-me-in-production".
+   Generate a real secret: openssl rand -hex 32
+   Leaving this in place means admin JWTs are signed with a public string.
+
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:2008:16)
+    at listenInCluster (node:net:2065:12)
+    at Server.listen (node:net:2170:7)
+    at app.listen (D:\NewEra365\newera365-app\node_modules\express\lib\application.js:635:24)
+    at start (D:\NewEra365\newera365-app\apps\cms\src\server.ts:109:22)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+
+⚠️  PAYLOAD_SECRET is still the placeholder value "change-me-in-production".
+   Generate a real secret: openssl rand -hex 32
+   Leaving this in place means admin JWTs are signed with a public string.
+
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:2008:16)
+    at listenInCluster (node:net:2065:12)
+    at Server.listen (node:net:2170:7)
+    at app.listen (D:\NewEra365\newera365-app\node_modules\express\lib\application.js:635:24)
+    at start (D:\NewEra365\newera365-app\apps\cms\src\server.ts:109:22)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+
+⚠️  PAYLOAD_SECRET is still the placeholder value "change-me-in-production".
+   Generate a real secret: openssl rand -hex 32
+   Leaving this in place means admin JWTs are signed with a public string.
+
+
+⚠️  PAYLOAD_SECRET is still the placeholder value "change-me-in-production".
+   Generate a real secret: openssl rand -hex 32
+   Leaving this in place means admin JWTs are signed with a public string.
+
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:2008:16)
+    at listenInCluster (node:net:2065:12)
+    at Server.listen (node:net:2170:7)
+    at app.listen (D:\NewEra365\newera365-app\node_modules\express\lib\application.js:635:24)
+    at start (D:\NewEra365\newera365-app\apps\cms\src\server.ts:109:22)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+
+⚠️  PAYLOAD_SECRET is still the placeholder value "change-me-in-production".
+   Generate a real secret: openssl rand -hex 32
+   Leaving this in place means admin JWTs are signed with a public string.
+
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:2008:16)
+    at listenInCluster (node:net:2065:12)
+    at Server.listen (node:net:2170:7)
+    at app.listen (D:\NewEra365\newera365-app\node_modules\express\lib\application.js:635:24)
+    at start (D:\NewEra365\newera365-app\apps\cms\src\server.ts:109:22)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+
+⚠️  PAYLOAD_SECRET is still the placeholder value "change-me-in-production".
+   Generate a real secret: openssl rand -hex 32
+   Leaving this in place means admin JWTs are signed with a public string.
+
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:2008:16)
+    at listenInCluster (node:net:2065:12)
+    at Server.listen (node:net:2170:7)
+    at app.listen (D:\NewEra365\newera365-app\node_modules\express\lib\application.js:635:24)
+    at start (D:\NewEra365\newera365-app\apps\cms\src\server.ts:109:22)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+
+⚠️  PAYLOAD_SECRET is still the placeholder value "change-me-in-production".
+   Generate a real secret: openssl rand -hex 32
+   Leaving this in place means admin JWTs are signed with a public string.
+
+
+⚠️  PAYLOAD_SECRET is still the placeholder value "change-me-in-production".
+   Generate a real secret: openssl rand -hex 32
+   Leaving this in place means admin JWTs are signed with a public string.
+
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:2008:16)
+    at listenInCluster (node:net:2065:12)
+    at Server.listen (node:net:2170:7)
+    at app.listen (D:\NewEra365\newera365-app\node_modules\express\lib\application.js:635:24)
+    at start (D:\NewEra365\newera365-app\apps\cms\src\server.ts:109:22)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
