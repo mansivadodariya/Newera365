@@ -151,6 +151,8 @@ const nextConfig = {
     // A broad wildcard would allow any compromised/misconfigured subdomain to serve
     // images through Next.js's image optimisation pipeline.
     remotePatterns: [
+      // Benzinga News CDN
+      { protocol: 'https', hostname: 'cdn.benzinga.com' },
       // Cloudflare R2 CDN (NE-027) — add more subdomains as they're provisioned.
       { protocol: 'https', hostname: 'media.newera365.com' },
       { protocol: 'https', hostname: 'cms.newera365.com' },
@@ -207,13 +209,13 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'",
               // next/font self-hosts Google Fonts at build time — no external font CDN needed.
               "font-src 'self' data:",
-              `img-src 'self' data: blob: https://media.newera365.com https://cms.newera365.com${cmsUrl ? ` ${cmsUrl}` : ''} https://www.facebook.com https://www.google-analytics.com${isDev ? ' http://localhost:3001' : ''}`,
+              `img-src 'self' data: blob: https://cdn.benzinga.com https://media.newera365.com https://cms.newera365.com${cmsUrl ? ` ${cmsUrl}` : ''} https://www.facebook.com https://www.google-analytics.com${isDev ? ' http://localhost:3001' : ''}`,
               // worker-src: TradingView charts use Web Workers for rendering.
               "worker-src 'self' blob:",
               // Analytics domains: GA4 and Meta Pixel fire only after cookie consent (Analytics.tsx),
               // but CSP must whitelist their domains or the browser blocks the requests entirely.
               // MT5 service URL is included so live instrument data can be fetched from the browser.
-              `connect-src 'self' ${cmsUrl || 'http://localhost:3001'}${process.env.NEXT_PUBLIC_MT5_SERVICE_URL ? ` ${process.env.NEXT_PUBLIC_MT5_SERVICE_URL.trim()}` : ''} https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://connect.facebook.net https://s3.tradingview.com`,
+              `connect-src 'self' https://api.benzinga.com ${cmsUrl || 'http://localhost:3001'}${process.env.NEXT_PUBLIC_MT5_SERVICE_URL ? ` ${process.env.NEXT_PUBLIC_MT5_SERVICE_URL.trim()}` : ''} https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://connect.facebook.net https://s3.tradingview.com`,
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",

@@ -3,14 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./tailwind-preset": "./tailwind-preset.js",
+    "./eslint-preset": "./eslint-preset.js"
+  },
   "files": [
     "eslint-preset.js",
     "tailwind-preset.js"
   ],
   "scripts": {
-    "lint": "echo \"no-op\"",
-    "type-check": "echo \"no-op\"",
-    "clean": "echo \"no-op\""
+    "lint": "node -e \"process.exit(0)\"",
+    "type-check": "node -e \"process.exit(0)\"",
+    "clean": "node -e \"process.exit(0)\""
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^8.13.0",

@@ -89,13 +89,14 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
   const activeHref = (() => {
     let best: string | null = null;
     let bestLen = -1;
+    const safePathname = pathname || '';
     for (const g of navGroups) {
       for (const { href } of g.items) {
         const full = `/${locale}${href === '/' ? '' : href}`;
         const matches =
           href === '/'
-            ? pathname === `/${locale}` || pathname === `/${locale}/`
-            : pathname === full || pathname.startsWith(`${full}/`);
+            ? safePathname === `/${locale}` || safePathname === `/${locale}/`
+            : safePathname === full || safePathname.startsWith(`${full}/`);
         if (matches && full.length > bestLen) {
           best = href;
           bestLen = full.length;
@@ -182,19 +183,11 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
         <div className="border-border flex h-16 flex-shrink-0 items-center justify-between border-b px-[18px]">
           <Link href={`/${locale}`} onClick={onClose} aria-label="Go to home">
             <Image
-              src="/images/logo-light.png"
+              src="/logo-light.png"
               alt="Newera"
-              width={133}
-              height={26}
-              className="block dark:hidden"
-              priority
-            />
-            <Image
-              src="/images/logo-dark.png"
-              alt="Newera"
-              width={133}
-              height={26}
-              className="hidden dark:block"
+              width={140}
+              height={32}
+              className="h-7 w-auto object-contain"
               priority
             />
           </Link>

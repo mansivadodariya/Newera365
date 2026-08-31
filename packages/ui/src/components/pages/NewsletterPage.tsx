@@ -6,17 +6,54 @@ import { SectionKicker } from '../primitives/SectionKicker';
 import { ScrollReveal } from '../motion/ScrollReveal';
 import { CountUp } from '../motion/CountUp';
 
-interface NewsletterPageProps {
+export interface NewsletterPageProps {
   initialState?: 'confirmed' | 'unsubscribed';
+  dayName?: string | null;
+  leadHeadline?: string | null;
+  fxHead?: string | null;
+  cmdHead?: string | null;
+  macroHead?: string | null;
+  teasers?: { label: string; head: string }[] | null;
 }
 
-export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
+export function NewsletterPage({
+  initialState,
+  dayName,
+  leadHeadline,
+  fxHead,
+  cmdHead,
+  macroHead,
+  teasers,
+}: NewsletterPageProps = {}) {
   const t = useTranslations('newsletter');
   const locale = useLocale();
+  const isAr = locale === 'ar';
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const computedDayName =
+    dayName ||
+    new Intl.DateTimeFormat(isAr ? 'ar-AE' : 'en-US', { weekday: 'long' }).format(new Date());
+
+  const heroLine1 = isAr ? `نشرة يوم ${computedDayName}` : `The ${computedDayName}`;
+  const formEyebrow = isAr
+    ? `احصل على عدد يوم ${computedDayName}`
+    : `Get this ${computedDayName}'s issue`;
+  const masthead = isAr ? `نشرة ${computedDayName} الموجزة` : `The ${computedDayName} Briefing`;
+  const issueMeta = isAr
+    ? `العدد 118 · ${computedDayName} 7:00 ص · 5 دقائق قراءة`
+    : `ISSUE 118 · ${computedDayName.toUpperCase()} 7:00AM · 5 MIN READ`;
+
+  const activeTeasers =
+    teasers && teasers.length > 0
+      ? teasers
+      : [
+          { label: t('teaser1Label'), head: fxHead ?? t('teaser1Head') },
+          { label: t('teaser2Label'), head: cmdHead ?? t('teaser2Head') },
+          { label: t('teaser3Label'), head: macroHead ?? t('teaser3Head') },
+        ];
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -52,7 +89,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
         <ScrollReveal className="mx-auto w-full max-w-[420px]">
           <div className="border-border bg-surface shadow-card rounded-[24px] border px-6 py-10 text-center md:px-8">
             <p className="text-eyebrow text-accent mb-6 font-mono font-medium uppercase">
-              {t('masthead')}
+              {masthead}
             </p>
             <div
               className={`mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full ${
@@ -122,7 +159,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
           <ScrollReveal className="w-full">
             <SectionKicker className="mb-6">{t('heroKicker')}</SectionKicker>
             <h1 className="text-foreground text-display font-sans">
-              {t('heroLine1')} <span>{t('heroAccent')}</span>
+              {heroLine1} <span>{t('heroAccent')}</span>
             </h1>
             <p className="font-body text-muted text-lead mt-5 max-w-[440px]">{t('heroSubtitle')}</p>
 
@@ -153,7 +190,7 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
                   htmlFor="nl-email"
                   className="text-eyebrow text-muted font-mono font-medium uppercase"
                 >
-                  {t('formEyebrow')}
+                  {formEyebrow}
                 </label>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <input
@@ -205,20 +242,30 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
                   {t('issueTag')}
                 </p>
                 <h2 className="text-foreground text-headline mt-2 font-sans uppercase leading-[1.02] tracking-tight">
-                  {t('masthead')}
+                  {masthead}
                 </h2>
                 <p className="border-border text-caption text-muted mt-4 border-y py-2 font-mono uppercase tracking-[0.1em]">
-                  {t('issueMeta')}
+                  {issueMeta}
                 </p>
               </div>
 
               {/* Lead story */}
               <div className="mt-6 flex items-start justify-between gap-4">
-                <div className="min-w-0 flex-1">
+                <div className="group/lead relative min-w-0 flex-1">
                   <p className="text-eyebrow text-accent font-mono font-medium uppercase">
                     {t('leadLabel')}
                   </p>
-                  <h3 className="text-foreground text-title mt-2 font-sans">{t('leadHeadline')}</h3>
+                  <h3 className="text-foreground text-title group-hover/lead:text-accent mt-2 line-clamp-2 cursor-default font-sans transition-colors">
+                    {leadHeadline ?? t('leadHeadline')}
+                  </h3>
+                  {/* Shorter custom tooltip */}
+                  <div
+                    role="tooltip"
+                    className="border-border bg-surface/95 text-foreground pointer-events-none absolute left-0 top-full z-50 mt-2 hidden w-max max-w-[280px] rounded-lg border px-3 py-2 text-[12px] font-normal leading-snug shadow-xl backdrop-blur-md transition-all group-hover/lead:block"
+                  >
+                    {leadHeadline ?? t('leadHeadline')}
+                    <div className="border-border bg-surface absolute -top-1 left-4 h-2 w-2 -rotate-45 border-l border-t" />
+                  </div>
                 </div>
                 <svg
                   width="96"
@@ -245,25 +292,30 @@ export function NewsletterPage({ initialState }: NewsletterPageProps = {}) {
 
               {/* Teaser headlines */}
               <ul className="border-border mt-6 border-t">
-                {[
-                  { label: t('teaser1Label'), head: t('teaser1Head') },
-                  { label: t('teaser2Label'), head: t('teaser2Head') },
-                  { label: t('teaser3Label'), head: t('teaser3Head') },
-                ].map((row) => (
+                {activeTeasers.map((row) => (
                   <li
                     key={row.label}
-                    className="border-border flex items-baseline gap-4 border-b py-3 last:border-b-0"
+                    className="border-border flex cursor-default items-baseline gap-4 border-b py-3 last:border-b-0"
                   >
                     <span className="text-caption text-accent w-[124px] flex-shrink-0 font-mono uppercase tracking-[0.08em]">
                       {row.label}
                     </span>
-                    <span className="text-foreground font-body text-body font-medium">
-                      {row.head}
-                    </span>
+                    <div className="group/tip relative min-w-0 flex-1">
+                      <span className="text-foreground font-body text-body group-hover/tip:text-accent line-clamp-2 font-medium transition-colors">
+                        {row.head}
+                      </span>
+                      {/* Shorter compact tooltip */}
+                      <div
+                        role="tooltip"
+                        className="border-border bg-surface/95 text-foreground pointer-events-none absolute bottom-full left-0 z-50 mb-2 hidden w-max max-w-[280px] rounded-lg border px-3 py-2 text-[12px] font-normal leading-snug shadow-xl backdrop-blur-md transition-all group-hover/tip:block"
+                      >
+                        {row.head}
+                        <div className="border-border bg-surface absolute -bottom-1 left-4 h-2 w-2 rotate-45 border-b border-r" />
+                      </div>
+                    </div>
                   </li>
                 ))}
               </ul>
-
               <p className="border-border text-caption text-muted mt-5 border-t pt-4 font-mono uppercase tracking-[0.1em]">
                 {t('issueFooter')}
               </p>

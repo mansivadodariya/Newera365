@@ -33,11 +33,13 @@ export function LanguageToggle({ fullWidth = false }: LanguageToggleProps) {
     document.cookie = `NEXT_LOCALE=${next}; path=/; SameSite=lax; max-age=31536000`;
 
     // Swap the locale segment: /en/foo → /ar/foo
-    const newPath = pathname.replace(/^\/[a-z]{2}(\/|$)/, `/${next}$1`);
+    const current =
+      pathname || (typeof window !== 'undefined' ? window.location.pathname : `/${locale}`);
+    const newPath = current.replace(/^\/[a-z]{2}(\/|$)/, `/${next}$1`) || `/${next}`;
     // Full page navigation ensures the server receives the new locale cookie
     // and re-renders all Server Components in the correct locale.
     window.location.href = newPath;
-  }, [next, pathname]);
+  }, [locale, next, pathname]);
 
   if (fullWidth) {
     return (

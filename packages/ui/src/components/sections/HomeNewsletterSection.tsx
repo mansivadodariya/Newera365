@@ -37,6 +37,8 @@ export interface HomeNewsletterContent {
   fxHead?: string | null;
   cmdHead?: string | null;
   macroHead?: string | null;
+  teasers?: { label: string; head: string }[] | null;
+  dayName?: string | null;
   categories?: { cadence?: string | null; title?: string | null; desc?: string | null }[] | null;
 }
 
@@ -157,16 +159,38 @@ function ReticleGlyph({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** The rich product shot: a compact render of this week's Monday Briefing —
-    masthead, a glowing lead chart, and three teaser headlines on a frosted
-    "paper" card. Copy resolves from CMS `content` with i18n fallback. */
-function IssueMockup({ content }: { content?: HomeNewsletterContent }) {
+/** The rich product shot: a compact render of this week's Daily/Monday Briefing —
+    masthead, a glowing lead chart, and three dynamic teaser headlines on a frosted
+    "paper" card. Copy resolves dynamically from live news and CMS `content`. */
+function IssueMockup({ content, dayName }: { content?: HomeNewsletterContent; dayName?: string }) {
   const t = useTranslations('homeNewsletter');
-  const teasers = [
-    { label: t('fxLabel'), head: content?.fxHead ?? t('fxHead') },
-    { label: t('cmdLabel'), head: content?.cmdHead ?? t('cmdHead') },
-    { label: t('macroLabel'), head: content?.macroHead ?? t('macroHead') },
-  ];
+  const locale = useLocale();
+  const isAr = locale === 'ar';
+
+  const activeDay =
+    dayName ||
+    content?.dayName ||
+    new Intl.DateTimeFormat(isAr ? 'ar-AE' : 'en-US', { weekday: 'long' }).format(new Date());
+
+  const captureEyebrow = isAr
+    ? `نشرة ${activeDay} الموجزة`
+    : `THE ${activeDay.toUpperCase()} BRIEFING`;
+
+  const defaultIssueMeta = isAr
+    ? `العدد 118 · ${activeDay} 7:00 ص`
+    : `ISSUE 118 · ${activeDay.toUpperCase()} 7:00AM · 5 MIN READ`;
+
+  const issueMeta = content?.issueMeta ?? defaultIssueMeta;
+
+  const teasers =
+    content?.teasers && content.teasers.length > 0
+      ? content.teasers
+      : [
+          { label: t('fxLabel'), head: content?.fxHead ?? t('fxHead') },
+          { label: t('cmdLabel'), head: content?.cmdHead ?? t('cmdHead') },
+          { label: t('macroLabel'), head: content?.macroHead ?? t('macroHead') },
+        ];
+
   return (
     <div className="relative flex h-full flex-col overflow-hidden rounded-[22px] border border-white/[0.09] bg-white/[0.02] p-5 ring-1 ring-inset ring-white/[0.05] md:col-span-2 xl:col-span-7 xl:row-start-1 xl:p-6">
       <span
@@ -179,26 +203,34 @@ function IssueMockup({ content }: { content?: HomeNewsletterContent }) {
         </span>
         <span className="inline-flex items-center gap-2 font-mono text-[11px] text-white">
           <span className="bg-accent-bright h-1.5 w-1.5 rounded-full shadow-[0_0_8px_2px_rgba(26,217,102,0.6)]" />
-          {content?.issueMeta ?? t('issueMeta')}
+          {issueMeta}
         </span>
       </div>
 
       {/* The issue — frosted paper card */}
       <div className="relative flex-1 rounded-[16px] border border-white/[0.1] bg-gradient-to-b from-white/[0.07] to-white/[0.02] p-5 backdrop-blur-sm">
         <div className="border-b border-white/[0.08] pb-3 text-center">
-          <p className="text-accent font-mono text-[10px] font-semibold uppercase tracking-[0.24em]">
-            {t('captureEyebrow')}
+          <p className="text-accent font-mono text-[11px] font-semibold uppercase tracking-[0.24em]">
+            {captureEyebrow}
           </p>
         </div>
 
         <div className="mt-4 flex items-start justify-between gap-4">
-          <div className="min-w-0 flex-1">
+          <div className="group/lead relative min-w-0 flex-1">
             <span className="text-accent font-mono text-[10px] font-semibold uppercase tracking-[0.14em]">
               {t('leadLabel')}
             </span>
-            <h4 className="mt-1.5 font-sans text-[15px] font-medium leading-snug text-white">
+            <h4 className="group-hover/lead:text-accent-bright mt-1.5 cursor-default font-sans text-[15px] font-medium leading-snug text-white transition-colors">
               {content?.leadHeadline ?? t('leadHeadline')}
             </h4>
+            {/* Shorter custom tooltip */}
+            <div
+              role="tooltip"
+              className="pointer-events-none absolute left-0 top-full z-50 mt-2 hidden w-max max-w-[280px] rounded-lg border border-white/15 bg-[#0a1610]/95 px-3 py-2 text-[12px] font-normal leading-snug text-white shadow-xl backdrop-blur-md transition-all group-hover/lead:block"
+            >
+              {content?.leadHeadline ?? t('leadHeadline')}
+              <div className="absolute -top-1 left-4 h-2 w-2 -rotate-45 border-l border-t border-white/15 bg-[#0a1610]" />
+            </div>
           </div>
           <svg
             width="104"
@@ -234,12 +266,24 @@ function IssueMockup({ content }: { content?: HomeNewsletterContent }) {
           {teasers.map((row) => (
             <li
               key={row.label}
-              className="flex items-baseline gap-3 border-b border-white/[0.06] py-2.5 last:border-b-0"
+              className="flex cursor-default items-baseline gap-3 border-b border-white/[0.06] py-2.5 last:border-b-0"
             >
               <span className="text-accent w-[116px] flex-shrink-0 font-mono text-[11px] uppercase tracking-[0.06em]">
                 {row.label}
               </span>
-              <span className="font-body text-[13px] text-white">{row.head}</span>
+              <div className="group/tip relative min-w-0 flex-1">
+                <span className="font-body line-clamp-2 text-[13px] text-white transition-colors group-hover/tip:text-white/90">
+                  {row.head}
+                </span>
+                {/* Shorter compact tooltip */}
+                <div
+                  role="tooltip"
+                  className="pointer-events-none absolute bottom-full left-0 z-50 mb-2 hidden w-max max-w-[280px] rounded-lg border border-white/15 bg-[#0a1610]/95 px-3 py-2 text-[12px] font-normal leading-snug text-white shadow-xl backdrop-blur-md transition-all group-hover/tip:block"
+                >
+                  {row.head}
+                  <div className="absolute -bottom-1 left-4 h-2 w-2 rotate-45 border-b border-r border-white/15 bg-[#0a1610]" />
+                </div>
+              </div>
             </li>
           ))}
         </ul>
@@ -251,17 +295,27 @@ function IssueMockup({ content }: { content?: HomeNewsletterContent }) {
 export function HomeNewsletterSection({ content }: { content?: HomeNewsletterContent } = {}) {
   const t = useTranslations('homeNewsletter');
   const locale = useLocale();
+  const isAr = locale === 'ar';
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Dynamic day calculation (e.g. "Monday", "Tuesday" or Arabic equivalents)
+  const computedDayName =
+    content?.dayName ||
+    new Intl.DateTimeFormat(isAr ? 'ar-AE' : 'en-US', { weekday: 'long' }).format(new Date());
+
   // CMS content overrides i18n defaults per field (section renders either way).
-  const headline = content?.headline ?? t('headline');
-  const headlineAccent = content?.headlineAccent ?? t('headlineAccent');
+  const headline =
+    content?.headline ?? (isAr ? `نشرة يوم ${computedDayName}` : `The ${computedDayName}`);
+  const headlineAccent = content?.headlineAccent ?? (isAr ? 'الموجزة.' : 'briefing.');
   const subtitle = content?.subtitle ?? t('subtitle');
   const metricValue = content?.metricValue ?? t('metricValue');
   const metricLabel = content?.metricLabel ?? t('metricLabel');
+  const formEyebrow = isAr
+    ? `احصل على عدد يوم ${computedDayName}`
+    : `Get this ${computedDayName}'s issue`;
 
   const categories = CATEGORY_ICONS.map((cat, i) => {
     const cms = content?.categories?.[i];
@@ -397,7 +451,7 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
                       htmlFor="home-nl-email"
                       className="text-accent font-mono text-[11px] font-semibold uppercase tracking-[0.14em]"
                     >
-                      {t('formEyebrow')}
+                      {formEyebrow}
                     </label>
                     <div className="flex flex-col gap-2.5 sm:flex-row">
                       <input
@@ -439,7 +493,7 @@ export function HomeNewsletterSection({ content }: { content?: HomeNewsletterCon
             </div>
 
             {/* ── Product mockup cell ──────────────────────────────────── */}
-            <IssueMockup content={content} />
+            <IssueMockup content={content} dayName={computedDayName} />
 
             {/* ── The four content categories ──────────────────────────── */}
             {categories.map((c, i) => (

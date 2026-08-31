@@ -66,7 +66,7 @@ export function StickyCtaBar() {
     };
   }, [pathname]);
 
-  if (NO_CTA_SUFFIXES.some((s) => pathname.endsWith(s))) return null;
+  if (pathname && NO_CTA_SUFFIXES.some((s) => pathname.endsWith(s))) return null;
 
   return (
     <>

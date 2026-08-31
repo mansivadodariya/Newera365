@@ -1,3 +1,10 @@
+import {
+  fetchBenzingaNews,
+  fetchBenzingaNewsBySlug,
+  fetchBenzingaMarketBriefing,
+} from './benzinga';
+export { fetchBenzingaNews, fetchBenzingaNewsBySlug, fetchBenzingaMarketBriefing };
+
 const rawCmsUrl = (process.env.NEXT_PUBLIC_CMS_URL ?? 'http://localhost:3001')
   .trim()
   .replace(/\/+$/, '');
@@ -762,27 +769,57 @@ export async function getBlogPosts(locale: string, limit = 10): Promise<CmsArtic
     },
     locale,
   );
-  return data.docs.map((post) => {
-    const thumbnailUrl = resolveMediaUrl(post.featuredImage);
-    return {
-      id: post.id,
-      slug: post.slug,
-      title: post.title,
-      // Blog posts have no asset class; tabs use the real CMS `category` below.
-      assetCategory: 'forex',
-      category: post.category,
-      analyst: post.author ?? null,
-      publishedDate: post.publishedDate ?? post.createdAt ?? '',
-      status: post.status,
-      thumbnailUrl,
-      summary: post.excerpt ?? null,
-      body: post.body ?? null,
-    };
-  });
+
+  if (data.docs.length > 0) {
+    return data.docs.map((post) => {
+      const thumbnailUrl = resolveMediaUrl(post.featuredImage);
+      return {
+        id: post.id,
+        slug: post.slug,
+        title: post.title,
+        // Blog posts have no asset class; tabs use the real CMS `category` below.
+        assetCategory: 'forex',
+        category: post.category,
+        analyst: post.author ?? null,
+        publishedDate: post.publishedDate ?? post.createdAt ?? '',
+        status: post.status,
+        thumbnailUrl,
+        summary: post.excerpt ?? null,
+        body: post.body ?? null,
+      };
+    });
+  }
+
+  // Supplement with Benzinga feed if CMS has no blog posts
+  const bzArticles = await fetchBenzingaNews(limit);
+  return bzArticles.map((a) => ({
+    ...a,
+    category: 'tutorials',
+  }));
 }
 
 export async function getBlogPostBySlug(slug: string, locale: string): Promise<CmsBlogPost | null> {
-  return fetchBySlug<CmsBlogPost>('blog-posts', slug, locale);
+  const cmsDoc = await fetchBySlug<CmsBlogPost>('blog-posts', slug, locale);
+  if (cmsDoc) return cmsDoc;
+
+  // Fallback to Benzinga by slug
+  const bzNews = await fetchBenzingaNewsBySlug(slug);
+  if (!bzNews) return null;
+
+  return {
+    id: bzNews.id,
+    title: bzNews.headline,
+    slug: bzNews.slug,
+    status: 'published',
+    publishedDate: bzNews.publishedDate,
+    category: 'tutorials',
+    author: bzNews.source,
+    excerpt: bzNews.seoDescription,
+    featuredImage: bzNews.featuredImage,
+    body: bzNews.body ?? [],
+    seoTitle: bzNews.seoTitle,
+    seoDescription: bzNews.seoDescription,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -802,17 +839,21 @@ function richTextHasContent(nodes?: SlateNode[] | null): boolean {
 }
 
 export async function getNews(locale: string, limit = 20): Promise<CmsArticle[]> {
-  const data = await fetchCollection<CmsNews>(
-    'news',
-    {
-      'where[status][equals]': 'published',
-      sort: '-publishedDate',
-      depth: '1',
-      limit: String(limit),
-    },
-    locale,
-  );
-  return data.docs.map((n) => {
+  const [data, bzArticles] = await Promise.all([
+    fetchCollection<CmsNews>(
+      'news',
+      {
+        'where[status][equals]': 'published',
+        sort: '-publishedDate',
+        depth: '1',
+        limit: String(limit),
+      },
+      locale,
+    ),
+    fetchBenzingaNews(limit),
+  ]);
+
+  const cmsArticles: CmsArticle[] = data.docs.map((n) => {
     const thumbnailUrl = resolveMediaUrl(n.featuredImage);
     // Body-less news items are pointers to an external story — link the card
     // straight to the source instead of an internal page with placeholder prose.
@@ -833,10 +874,28 @@ export async function getNews(locale: string, limit = 20): Promise<CmsArticle[]>
       externalUrl,
     };
   });
+
+  if (cmsArticles.length > 0) {
+    const existingSlugs = new Set(cmsArticles.map((a) => a.slug));
+    const combined = [...cmsArticles];
+    for (const bz of bzArticles) {
+      if (!existingSlugs.has(bz.slug)) {
+        combined.push(bz);
+      }
+    }
+    return combined.slice(0, limit);
+  }
+
+  return bzArticles.slice(0, limit);
 }
 
 export async function getNewsBySlug(slug: string, locale: string): Promise<CmsNews | null> {
-  return fetchBySlug<CmsNews>('news', slug, locale);
+  if (slug.startsWith('bz-') || /^\d+$/.test(slug)) {
+    return fetchBenzingaNewsBySlug(slug);
+  }
+  const cmsDoc = await fetchBySlug<CmsNews>('news', slug, locale);
+  if (cmsDoc) return cmsDoc;
+  return fetchBenzingaNewsBySlug(slug);
 }
 
 // ---------------------------------------------------------------------------

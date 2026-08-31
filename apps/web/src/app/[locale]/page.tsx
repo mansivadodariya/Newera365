@@ -17,7 +17,7 @@ import {
   CompareChecklistSection,
 } from '@newera365/ui';
 import type { TestimonialItem, HomeNewsletterContent } from '@newera365/ui';
-import { getSiteSettings } from '@/lib/cms';
+import { getSiteSettings, getNews, fetchBenzingaMarketBriefing } from '@/lib/cms';
 
 const ADDITIONAL_TESTIMONIALS = [
   {
@@ -95,25 +95,31 @@ const ADDITIONAL_TESTIMONIALS = [
 export default async function HomePage({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
 
-  const siteSettings = await getSiteSettings();
+  const [siteSettings, latestNews, marketBriefing] = await Promise.all([
+    getSiteSettings(),
+    getNews(params.locale, 8),
+    fetchBenzingaMarketBriefing(),
+  ]);
 
   const kpiStats = siteSettings?.kpiStats ?? undefined;
 
   // Resolve testimonials from CMS database + additional 4 global traders
   const isAr = params.locale === 'ar';
-  const dbTestimonials: TestimonialItem[] = (siteSettings?.testimonials ?? []).flatMap((tm) => {
-    const quote = isAr ? tm.quoteAr : tm.quoteEn;
-    if (!quote) return [];
-    return [
-      {
-        quote,
-        authorName: tm.authorName,
-        authorRole: isAr ? (tm.authorRoleAr ?? null) : (tm.authorRoleEn ?? null),
-        rating: tm.rating ?? 5,
-        avatarUrl: tm.avatarUrl ?? null,
-      },
-    ];
-  });
+  const dbTestimonials: TestimonialItem[] = (siteSettings?.testimonials ?? []).flatMap(
+    (tm: any) => {
+      const quote = isAr ? tm.quoteAr : tm.quoteEn;
+      if (!quote) return [];
+      return [
+        {
+          quote,
+          authorName: tm.authorName,
+          authorRole: isAr ? (tm.authorRoleAr ?? null) : (tm.authorRoleEn ?? null),
+          rating: tm.rating ?? 5,
+          avatarUrl: tm.avatarUrl ?? null,
+        },
+      ];
+    },
+  );
 
   const extraTestimonials: TestimonialItem[] = ADDITIONAL_TESTIMONIALS.map((tm) => ({
     quote: isAr ? tm.quoteAr : tm.quoteEn,
@@ -137,22 +143,57 @@ export default async function HomePage({ params }: { params: { locale: string } 
 
   const uspMetrics = siteSettings?.uspMetrics ?? undefined;
   const partners = siteSettings?.partners ?? undefined;
-
-  // Homepage newsletter teaser (feedback #19) — locale-resolved CMS copy; the
-  // component falls back to its i18n defaults for any field left unset.
   const s = siteSettings;
+
+  // Dynamic day calculation for briefing
+  const now = new Date();
+  const dayName = new Intl.DateTimeFormat(isAr ? 'ar-AE' : 'en-US', {
+    weekday: 'long',
+  }).format(now);
+
+  // Strict FX, Commodities, and Macro stories from Benzinga
+  const leadStory =
+    (isAr ? s?.nlLeadHeadlineAr : s?.nlLeadHeadlineEn) ??
+    marketBriefing.lead ??
+    latestNews[0]?.title ??
+    'Dollar braces for CPI as the desk trims risk';
+
+  const fxHead =
+    (isAr ? s?.nlFxHeadAr : s?.nlFxHeadEn) ??
+    marketBriefing.fx ??
+    'US-Japan Yen Intervention Signals Bond Market Fear';
+
+  const cmdHead =
+    (isAr ? s?.nlCmdHeadAr : s?.nlCmdHeadEn) ??
+    marketBriefing.commodities ??
+    "Gold's range and the key level that breaks it";
+
+  const macroHead =
+    (isAr ? s?.nlMacroHeadAr : s?.nlMacroHeadEn) ??
+    marketBriefing.macro ??
+    'Hotter PCE Inflation: 5 Defensive ETFs Investors Can Turn to as Rate-Cut Hopes Fade';
+
+  const dynamicTeasers = [
+    { label: isAr ? 'العملات' : 'FX', head: fxHead },
+    { label: isAr ? 'السلع' : 'COMMODITIES', head: cmdHead },
+    { label: isAr ? 'الاقتصاد الكلي' : 'MACRO', head: macroHead },
+  ];
+
+  // Homepage newsletter teaser (feedback #19) — dynamic live news + day name
   const newsletterContent: HomeNewsletterContent = {
-    headline: (isAr ? s?.nlHeadlineAr : s?.nlHeadlineEn) ?? null,
-    headlineAccent: (isAr ? s?.nlHeadlineAccentAr : s?.nlHeadlineAccentEn) ?? null,
+    headline:
+      (isAr ? s?.nlHeadlineAr : s?.nlHeadlineEn) ??
+      (isAr ? `نشرة يوم ${dayName}` : `The ${dayName}`),
+    headlineAccent:
+      (isAr ? s?.nlHeadlineAccentAr : s?.nlHeadlineAccentEn) ?? (isAr ? 'الموجزة.' : 'briefing.'),
     subtitle: (isAr ? s?.nlSubtitleAr : s?.nlSubtitleEn) ?? null,
     metricValue: s?.nlMetricValue ?? null,
     metricLabel: (isAr ? s?.nlMetricLabelAr : s?.nlMetricLabelEn) ?? null,
     issueMeta: (isAr ? s?.nlIssueMetaAr : s?.nlIssueMetaEn) ?? null,
-    leadHeadline: (isAr ? s?.nlLeadHeadlineAr : s?.nlLeadHeadlineEn) ?? null,
-    fxHead: (isAr ? s?.nlFxHeadAr : s?.nlFxHeadEn) ?? null,
-    cmdHead: (isAr ? s?.nlCmdHeadAr : s?.nlCmdHeadEn) ?? null,
-    macroHead: (isAr ? s?.nlMacroHeadAr : s?.nlMacroHeadEn) ?? null,
-    categories: (s?.nlCategories ?? []).map((c) => ({
+    leadHeadline: (isAr ? s?.nlLeadHeadlineAr : s?.nlLeadHeadlineEn) ?? leadStory,
+    teasers: dynamicTeasers,
+    dayName,
+    categories: (s?.nlCategories ?? []).map((c: any) => ({
       cadence: (isAr ? c.cadenceAr : c.cadenceEn) ?? null,
       title: (isAr ? c.titleAr : c.titleEn) ?? null,
       desc: (isAr ? c.descAr : c.descEn) ?? null,

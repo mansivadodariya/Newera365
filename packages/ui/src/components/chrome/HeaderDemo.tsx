@@ -279,6 +279,7 @@ function HeaderDemo() {
   const locale = useLocale();
   const t = useTranslations('nav');
   const pathname = usePathname();
+  const safePathname = pathname || '';
 
   const displayNav = useNavItems(t);
   const activeItem = openNav ? (displayNav.find((i) => i.label === openNav) ?? null) : null;
@@ -290,7 +291,9 @@ function HeaderDemo() {
   const activeDropdownHref =
     activeDropdownItems
       .map((d) => d.href)
-      .filter((h) => pathname === `/${locale}${h}` || pathname.startsWith(`/${locale}${h}/`))
+      .filter(
+        (h) => safePathname === `/${locale}${h}` || safePathname.startsWith(`/${locale}${h}/`),
+      )
       .sort((a, b) => b.length - a.length)[0] ?? null;
 
   useEffect(() => {
@@ -401,19 +404,11 @@ function HeaderDemo() {
             className="flex-shrink-0 justify-self-start"
           >
             <Image
-              src="/images/logo-light.png"
+              src="/logo-light.png"
               alt="Newera"
-              width={133}
-              height={26}
-              className="block dark:hidden"
-              priority
-            />
-            <Image
-              src="/images/logo-dark.png"
-              alt="Newera"
-              width={133}
-              height={26}
-              className="hidden dark:block"
+              width={140}
+              height={32}
+              className="h-7 w-auto object-contain"
               priority
             />
           </Link>

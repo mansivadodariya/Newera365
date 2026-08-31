@@ -9,6 +9,6 @@ export const NO_CTA_SUFFIXES = ['/ai-crm', '/newsletter'];
 
 export function SmartCtaBanner() {
   const pathname = usePathname();
-  if (NO_CTA_SUFFIXES.some((s) => pathname.endsWith(s))) return null;
+  if (pathname && NO_CTA_SUFFIXES.some((s) => pathname.endsWith(s))) return null;
   return <CtaBanner />;
 }

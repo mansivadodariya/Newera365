@@ -72,8 +72,9 @@ function Footer({
   const locale = useLocale();
   const t = useTranslations('footer');
   // WhatsApp mirrors the floating widget's whatsappNumber (same source of
-  // truth); wa.me wants digits only. Null → the WhatsApp glyph is hidden.
-  const waDigits = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : null;
+  // truth); wa.me wants digits only.
+  const activeWhatsapp = whatsapp || '+18677783511';
+  const waDigits = activeWhatsapp.replace(/[^0-9]/g, '');
 
   // Navigation columns are deliberately frontend-owned (client feedback round
   // 3): they must render even when the CMS is unreachable, and they change
@@ -118,15 +119,30 @@ function Footer({
         {/* Top section — on desktop the brand block sits left and the link
             columns spread across the remaining width so the row fills 1200px. */}
         <div className="xl:mb-12 xl:flex xl:items-start xl:justify-between xl:gap-16">
-          {/* Brand block: logo, tagline, social */}
-          <div className="xl:w-[300px] xl:shrink-0">
+          {/* Brand block: logo, company info, registered address, social */}
+          <div className="xl:w-[320px] xl:shrink-0">
             <Image
-              src="/images/logo-dark.png"
+              src="/logo-dark.png"
               alt="Newera"
-              width={133}
-              height={26}
-              className="mb-[18px]"
+              width={140}
+              height={32}
+              className="mb-[18px] h-7 w-auto object-contain"
             />
+
+            <div className="font-body mb-6 flex flex-col gap-3 text-[13px] leading-[150%]">
+              <div>
+                <p className="text-[13px] font-medium text-white">{t('entityName')}</p>
+                <p className="text-[12px] text-[rgba(255,255,255,0.6)]">{t('regNumber')}</p>
+              </div>
+              <div>
+                <p className="font-mono text-[10px] font-medium uppercase tracking-[1px] text-[rgba(255,255,255,0.4)]">
+                  {t('regAddressHeading')}
+                </p>
+                <p className="mt-1 text-[12px] leading-relaxed text-[rgba(255,255,255,0.6)]">
+                  {t('regAddress')}
+                </p>
+              </div>
+            </div>
 
             {/* Social icons — Flaticon Uicons brand glyphs; conditional on CMS data */}
             {socialLinks && Object.values(socialLinks).some(Boolean) && (
@@ -190,9 +206,14 @@ function Footer({
             right — so neither column leaves the dead space the single long risk
             block used to. Each block hides when its data is empty; the risk
             warning always shows. */}
-        <div className="grid gap-x-16 gap-y-10 xl:grid-cols-2">
-          {/* Regulatory: company registration + risk disclosure */}
-          <div className="flex flex-col gap-8">
+        {/* Optional regulatory & practical info */}
+        {(regulatoryDisclosure ||
+          companyRegistration ||
+          contact?.email ||
+          contact?.phone ||
+          contact?.address ||
+          (paymentMethods && paymentMethods.length > 0)) && (
+          <div className="mb-8 grid gap-x-16 gap-y-8 xl:grid-cols-2">
             {(regulatoryDisclosure || companyRegistration) && (
               <div>
                 <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
@@ -210,95 +231,94 @@ function Footer({
                 )}
               </div>
             )}
-            <div>
-              <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
-                {t('riskDisclosure')}
-              </p>
-              <p className="font-body hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.45)]">
-                {riskDisclaimer ?? t('riskWarning')}
-              </p>
-            </div>
-          </div>
-          {/* Practical: contact details + payment methods */}
-          <div className="flex flex-col gap-8">
-            {(contact?.email || contact?.phone || contact?.address) && (
-              <div>
-                <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
-                  {t('contactHeading')}
-                </p>
-                <ul className="flex flex-col gap-2 text-[14px]">
-                  {contact?.email && (
-                    <li>
-                      <a
-                        href={`mailto:${contact.email}`}
-                        className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
-                      >
-                        {contact.email}
-                      </a>
-                    </li>
-                  )}
-                  {contact?.phone && (
-                    <li className="flex items-center gap-2.5">
-                      {/* Call + WhatsApp quick actions prefix the number —
-                          monochrome to match the social row above; WhatsApp
-                          hides when unset. */}
-                      <span className="flex items-center gap-2">
+            {/* Practical: contact details + payment methods */}
+            <div className="flex flex-col gap-6">
+              {(contact?.email || contact?.phone || contact?.address) && (
+                <div>
+                  <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+                    {t('contactHeading')}
+                  </p>
+                  <ul className="flex flex-col gap-2 text-[14px]">
+                    {contact?.email && (
+                      <li>
                         <a
-                          href={`tel:${contact.phone.replace(/\s+/g, '')}`}
-                          aria-label={t('callAria')}
-                          className="inline-flex text-white/40 transition-colors hover:text-white/80"
+                          href={`mailto:${contact.email}`}
+                          className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
                         >
-                          <PhoneIcon />
+                          {contact.email}
                         </a>
-                        {waDigits && (
+                      </li>
+                    )}
+                    {contact?.phone && (
+                      <li className="flex items-center gap-2.5">
+                        <span className="flex items-center gap-2">
                           <a
-                            href={`https://wa.me/${waDigits}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={t('whatsappAria')}
+                            href={`tel:${contact.phone.replace(/\s+/g, '')}`}
+                            aria-label={t('callAria')}
                             className="inline-flex text-white/40 transition-colors hover:text-white/80"
                           >
-                            <WhatsAppIcon />
+                            <PhoneIcon />
                           </a>
-                        )}
-                      </span>
-                      <a
-                        href={`tel:${contact.phone.replace(/\s+/g, '')}`}
-                        className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
-                      >
-                        {contact.phone}
-                      </a>
-                    </li>
-                  )}
-                  {contact?.hours && (
-                    <li className="font-body text-[rgba(255,255,255,0.55)]">{contact.hours}</li>
-                  )}
-                  {contact?.address && (
-                    <li className="font-body whitespace-pre-line leading-relaxed text-[rgba(255,255,255,0.55)]">
-                      {contact.address}
-                    </li>
-                  )}
-                </ul>
-              </div>
-            )}
-            {paymentMethods && paymentMethods.length > 0 && (
-              <div>
-                <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
-                  {t('paymentsHeading')}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {paymentMethods.map((m) => (
-                    <span
-                      key={m}
-                      className="font-body rounded-md border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[13px] font-normal text-[rgba(255,255,255,0.8)]"
-                    >
-                      {m}
-                    </span>
-                  ))}
+                          {waDigits && (
+                            <a
+                              href={`https://wa.me/${waDigits}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={t('whatsappAria')}
+                              className="inline-flex text-white/40 transition-colors hover:text-white/80"
+                            >
+                              <WhatsAppIcon />
+                            </a>
+                          )}
+                        </span>
+                        <a
+                          href={`tel:${contact.phone.replace(/\s+/g, '')}`}
+                          className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
+                        >
+                          {contact.phone}
+                        </a>
+                      </li>
+                    )}
+                    {contact?.hours && (
+                      <li className="font-body text-[rgba(255,255,255,0.55)]">{contact.hours}</li>
+                    )}
+                    {contact?.address && (
+                      <li className="font-body whitespace-pre-line leading-relaxed text-[rgba(255,255,255,0.55)]">
+                        {contact.address}
+                      </li>
+                    )}
+                  </ul>
                 </div>
-              </div>
-            )}
+              )}
+              {paymentMethods && paymentMethods.length > 0 && (
+                <div>
+                  <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+                    {t('paymentsHeading')}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {paymentMethods.map((m) => (
+                      <span
+                        key={m}
+                        className="font-body rounded-md border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[13px] font-normal text-[rgba(255,255,255,0.8)]"
+                      >
+                        {m}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
+        )}
+
+        {/* Full-width Risk Disclosure section */}
+        <div className="w-full">
+          <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
+            {t('riskDisclosure')}
+          </p>
+          <p className="font-body w-full hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[170%] text-[rgba(255,255,255,0.45)]">
+            {riskDisclaimer ?? t('riskWarning')}
+          </p>
         </div>
 
         {/* Copyright row */}

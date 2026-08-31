@@ -57,11 +57,8 @@ export function HeroSectionDemo() {
 
   return (
     <>
-      <section className="relative overflow-hidden bg-[#050B07] px-5 pb-14 pt-12 md:pt-14 xl:pb-16 xl:pt-20">
-        {/* Signal-peak plate — full-bleed ink artwork in both themes. A soft
-            uniform veil keeps the type crisp over the glow, an xl-only
-            start-side scrim deepens the text column (flipped for RTL), and a
-            bottom seam lands the section into the Edge ink band below. */}
+      <section className="relative overflow-hidden bg-[var(--ink)] px-5 pb-10 pt-12 md:pt-14 xl:pb-12 xl:pt-20">
+        {/* Signal-peak plate with lighter emerald overlays to merge seamlessly with below */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 select-none">
           <Image
             src="/images/hero-signal-peak.jpg"
@@ -70,11 +67,20 @@ export function HeroSectionDemo() {
             priority
             sizes="100vw"
             quality={85}
-            className="object-contain object-center xl:object-cover"
+            className="object-contain object-center opacity-95 xl:object-cover"
           />
-          <div className="absolute inset-0 bg-black/45 xl:bg-black/30" />
-          <div className="absolute inset-0 hidden bg-gradient-to-r from-[#020704]/[0.72] via-[#020704]/[0.28] to-transparent xl:block rtl:bg-gradient-to-l" />
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[var(--ink)]" />
+          {/* Very light transparent veil to keep background bright & vibrant */}
+          <div className="to-[var(--ink)]/30 absolute inset-0 bg-gradient-to-b from-[#03150b]/25 via-transparent" />
+
+          {/* Lighter Emerald and Signal Green Radial Glows */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_65%_at_50%_20%,rgba(0,200,90,0.22),rgba(4,22,12,0.08)_60%,transparent_85%)]" />
+          <div className="absolute -top-24 left-1/2 h-[480px] w-[750px] -translate-x-1/2 rounded-full bg-[#1AD966]/20 blur-[130px]" />
+          <div className="bg-[#00B050]/18 absolute -left-20 top-1/3 h-[380px] w-[380px] rounded-full blur-[120px]" />
+          <div className="bg-[#18C98B]/16 absolute -right-20 top-1/4 h-[380px] w-[380px] rounded-full blur-[120px]" />
+
+          {/* Light side scrim + subtle seamless transition into the section below */}
+          <div className="absolute inset-0 hidden bg-gradient-to-r from-[#03140a]/45 via-[#03140a]/10 to-transparent xl:block rtl:bg-gradient-to-l" />
+          <div className="via-[var(--ink)]/20 absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent to-[var(--ink)]" />
         </div>
 
         <div className="relative mx-auto w-full max-w-[1200px]">
