@@ -122,7 +122,7 @@ export function FloatingContactWidget({
   }, [open]);
 
   // On small screens, lift above the sticky CTA bar once it appears
-  const barOnThisRoute = !NO_CTA_SUFFIXES.some((s) => pathname.endsWith(s));
+  const barOnThisRoute = Boolean(pathname) && !NO_CTA_SUFFIXES.some((s) => pathname?.endsWith(s));
   useEffect(() => {
     if (!barOnThisRoute) return;
     const onScroll = () => setLiftAboveBar(window.scrollY > BAR_SCROLL_THRESHOLD);

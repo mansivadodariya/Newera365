@@ -189,11 +189,12 @@ function DesktopNavItem({
   onOpen: () => void;
   onScheduleClose: () => void;
 }) {
+  const safePath = pathname || '';
   const isActive = item.activeFor
-    ? item.activeFor.some((r) => pathname.startsWith(`/${locale}${r}`))
+    ? item.activeFor.some((r) => safePath.startsWith(`/${locale}${r}`))
     : item.href === '/'
-      ? pathname === `/${locale}` || pathname === `/${locale}/`
-      : pathname.startsWith(`/${locale}${item.href}`);
+      ? safePath === `/${locale}` || safePath === `/${locale}/`
+      : safePath.startsWith(`/${locale}${item.href}`);
 
   const hasMenu = Boolean(item.dropdown || item.groups);
 
