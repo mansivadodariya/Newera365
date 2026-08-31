@@ -10,9 +10,10 @@ interface Props {
   params: { locale: string; slug: string };
 }
 
-// Pre-render published market-analysis articles at build (slugs locale-neutral).
+// Pre-render top recent market-analysis articles at build time. Remaining
+// articles are rendered on demand and cached via Next.js ISR (dynamicParams = true by default).
 export async function generateStaticParams() {
-  const articles = await getResearchArticles('en', 100);
+  const articles = await getResearchArticles('en', 10);
   return LOCALES.flatMap((locale) => articles.map((a) => ({ locale, slug: a.slug })));
 }
 

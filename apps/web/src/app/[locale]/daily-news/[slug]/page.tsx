@@ -10,10 +10,10 @@ interface Props {
   params: { locale: string; slug: string };
 }
 
-// Pre-render published news at build time (slugs are locale-neutral). Unknown
-// slugs still render on demand via the static fallback in ResearchDetailPage.
+// Pre-render top recent news at build time. Remaining articles are rendered
+// on demand and cached via Next.js ISR (dynamicParams = true by default).
 export async function generateStaticParams() {
-  const items = await getNews('en', 100);
+  const items = await getNews('en', 10);
   return LOCALES.flatMap((locale) => items.map((n) => ({ locale, slug: n.slug })));
 }
 

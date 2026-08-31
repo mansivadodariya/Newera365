@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import {
   fetchBenzingaNews,
   fetchBenzingaNewsBySlug,
@@ -591,6 +592,75 @@ interface PaginatedResponse<T> {
   hasPrevPage: boolean;
 }
 
+// In-memory cache + in-flight request deduplication + failure circuit breaker
+// Prevents redundant requests and cascading timeouts during static builds and SSR.
+interface MemoryCacheEntry<T> {
+  data: T;
+  expiresAt: number;
+}
+
+const memoryCache = new Map<string, MemoryCacheEntry<unknown>>();
+const inFlightRequests = new Map<string, Promise<unknown>>();
+const loggedErrors = new Set<string>();
+
+const CMS_TIMEOUT_MS = 4_000; // 4s timeout (fast failover prevents Vercel build stalls)
+const ERROR_CACHE_TTL_MS = 30_000; // Cache failure for 30s to fail-fast across static pages
+const SUCCESS_CACHE_TTL_MS = 60_000; // In-memory cache for 60s
+
+async function cachedFetchWithDedupe<T>(
+  url: string,
+  fetchOptions: RequestInit,
+  fallbackValue: T,
+  errorLogKey: string,
+): Promise<T> {
+  const now = Date.now();
+  const cached = memoryCache.get(url);
+  if (cached && cached.expiresAt > now) {
+    return cached.data as T;
+  }
+
+  const existingInFlight = inFlightRequests.get(url);
+  if (existingInFlight) {
+    return existingInFlight as Promise<T>;
+  }
+
+  const fetchPromise = (async () => {
+    try {
+      const res = await fetch(url, {
+        ...fetchOptions,
+        signal: AbortSignal.timeout(CMS_TIMEOUT_MS),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = (await res.json()) as T;
+      memoryCache.set(url, {
+        data,
+        expiresAt: Date.now() + SUCCESS_CACHE_TTL_MS,
+      });
+      return data;
+    } catch (error) {
+      if (!loggedErrors.has(errorLogKey)) {
+        loggedErrors.add(errorLogKey);
+        console.warn(
+          `[cms] Failed to fetch ${errorLogKey}: ${
+            error instanceof Error ? error.message : error
+          }. Using fallback data.`,
+        );
+      }
+      // Negative cache: prevent subsequent pages during static build from stalling
+      memoryCache.set(url, {
+        data: fallbackValue,
+        expiresAt: Date.now() + ERROR_CACHE_TTL_MS,
+      });
+      return fallbackValue;
+    } finally {
+      inFlightRequests.delete(url);
+    }
+  })();
+
+  inFlightRequests.set(url, fetchPromise);
+  return fetchPromise;
+}
+
 // locale is passed as a Payload native locale param (?locale=en/ar)
 // rather than a where-clause filter — requires native localization in the CMS.
 export async function fetchCollection<T>(
@@ -602,46 +672,31 @@ export async function fetchCollection<T>(
   const qs = new URLSearchParams(allParams).toString();
   // Encode the collection segment for defence-in-depth (callers pass literals today).
   const url = `${CMS_URL}/api/${encodeURIComponent(slug)}${qs ? `?${qs}` : ''}`;
-  try {
-    // 8s timeout so a hung CMS (Neon cold start / outage) can't stall SSR forever (NE WR-8).
-    const res = await fetch(url, {
-      next: { revalidate: 60 },
-      signal: AbortSignal.timeout(8_000),
-    } as RequestInit);
-    if (!res.ok) throw new Error(`${res.status}`);
-    return res.json();
-  } catch (error) {
-    console.error(
-      `[cms] Failed to fetch /${slug}:`,
-      error instanceof Error ? error.message : error,
-    );
-    return {
-      docs: [],
-      totalDocs: 0,
-      totalPages: 0,
-      page: 1,
-      hasNextPage: false,
-      hasPrevPage: false,
-    };
-  }
+  const emptyFallback: PaginatedResponse<T> = {
+    docs: [],
+    totalDocs: 0,
+    totalPages: 0,
+    page: 1,
+    hasNextPage: false,
+    hasPrevPage: false,
+  };
+
+  return cachedFetchWithDedupe<PaginatedResponse<T>>(
+    url,
+    { next: { revalidate: 60 } } as RequestInit,
+    emptyFallback,
+    `/${slug}${qs ? `?${qs}` : ''}`,
+  );
 }
 
 async function fetchGlobal<T>(slug: string): Promise<T | null> {
   const url = `${CMS_URL}/api/globals/${slug}`;
-  try {
-    const res = await fetch(url, {
-      next: { revalidate: 300 },
-      signal: AbortSignal.timeout(8_000),
-    });
-    if (!res.ok) throw new Error(`${res.status}`);
-    return res.json();
-  } catch (error) {
-    console.error(
-      `[cms] Failed to fetch global /${slug}:`,
-      error instanceof Error ? error.message : error,
-    );
-    return null;
-  }
+  return cachedFetchWithDedupe<T | null>(
+    url,
+    { next: { revalidate: 300 } } as RequestInit,
+    null,
+    `global /${slug}`,
+  );
 }
 
 async function fetchBySlug<T>(
@@ -750,9 +805,11 @@ export async function getResearchArticles(locale: string, limit = 10): Promise<C
 // Site Settings (global — locale-neutral, bilingual fields inside)
 // ---------------------------------------------------------------------------
 
-export async function getSiteSettings(): Promise<CmsSiteSettings | null> {
-  return fetchGlobal<CmsSiteSettings>('site-settings');
-}
+export const getSiteSettings = cache(
+  async function getSiteSettings(): Promise<CmsSiteSettings | null> {
+    return fetchGlobal<CmsSiteSettings>('site-settings');
+  },
+);
 
 // ---------------------------------------------------------------------------
 // Blog Posts
@@ -1030,7 +1087,9 @@ export async function getLegalPages(locale: string): Promise<CmsLegalPage[]> {
 // Payment Methods — locale-aware after localized fields were added
 // ---------------------------------------------------------------------------
 
-export async function getPaymentMethods(locale?: string): Promise<CmsPaymentMethod[]> {
+export const getPaymentMethods = cache(async function getPaymentMethods(
+  locale?: string,
+): Promise<CmsPaymentMethod[]> {
   const data = await fetchCollection<CmsPaymentMethod>(
     'payment-methods',
     {
@@ -1050,7 +1109,7 @@ export async function getPaymentMethods(locale?: string): Promise<CmsPaymentMeth
     seen.add(key);
     return true;
   });
-}
+});
 
 // ---------------------------------------------------------------------------
 // Webinars

@@ -9,9 +9,10 @@ interface Props {
   params: { locale: string; slug: string };
 }
 
-// Pre-render published guides at build time (slugs are locale-neutral).
+// Pre-render top guides at build time. Remaining guides are rendered
+// on demand and cached via Next.js ISR (dynamicParams = true by default).
 export async function generateStaticParams() {
-  const guides = await getGuides('en');
+  const guides = (await getGuides('en')).slice(0, 10);
   return LOCALES.flatMap((locale) => guides.map((g) => ({ locale, slug: g.slug })));
 }
 
