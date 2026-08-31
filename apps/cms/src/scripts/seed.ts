@@ -372,6 +372,7 @@ async function seedSiteSettings() {
     contactEmail: 'support@newera365.com',
     contactEmailCompliance: 'compliance@newera365.com',
     contactPhone: '+1 867-778-3511',
+    whatsappNumber: '+18677783511',
     contactAddressEn:
       'Level 14, Boulevard Plaza Tower 1, Sheikh Mohammed Bin Rashid Boulevard, Dubai, UAE',
     contactAddressAr: 'الطابق 14، برج بلازا بوليفارد 1، شارع الشيخ محمد بن راشد، دبي، الإمارات',

@@ -144,9 +144,13 @@ export function FloatingContactWidget({
   return (
     <div
       ref={rootRef}
-      className={`pointer-events-auto fixed end-4 z-[9999] transition-[bottom] duration-300 sm:bottom-6 sm:end-6 ${
+      className={`pointer-events-auto fixed end-4 right-4 z-[9999] transition-[bottom] duration-300 sm:bottom-6 sm:end-6 sm:right-6 rtl:end-auto rtl:left-4 rtl:right-auto rtl:sm:left-6 rtl:sm:right-auto ${
         liftAboveBar && barOnThisRoute ? 'bottom-[88px]' : 'bottom-4 sm:bottom-6'
       }`}
+      style={{
+        position: 'fixed',
+        zIndex: 99999,
+      }}
     >
       <style
         dangerouslySetInnerHTML={{
@@ -280,7 +284,22 @@ export function FloatingContactWidget({
         aria-expanded={open}
         aria-controls="contact-widget-panel"
         aria-label={open ? t('close') : t('open')}
-        className={`ms-auto flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-[#138346] text-white shadow-[0_12px_28px_-6px_rgba(19,131,70,0.7)] transition-all duration-200 hover:scale-105 hover:bg-[#0f6f3b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#138346] focus-visible:ring-offset-2 active:scale-[0.95]`}
+        className="ms-auto flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-[#138346] text-white shadow-[0_12px_28px_-6px_rgba(19,131,70,0.7)] transition-all duration-200 hover:scale-105 hover:bg-[#0f6f3b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#138346] focus-visible:ring-offset-2 active:scale-[0.95]"
+        style={{
+          width: '56px',
+          height: '56px',
+          minWidth: '56px',
+          minHeight: '56px',
+          borderRadius: '50%',
+          backgroundColor: '#138346',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#ffffff',
+          boxShadow: '0 12px 28px -6px rgba(19, 131, 70, 0.7)',
+          border: 'none',
+          cursor: 'pointer',
+        }}
       >
         {open ? <CloseIcon /> : <ChatIcon />}
       </button>
