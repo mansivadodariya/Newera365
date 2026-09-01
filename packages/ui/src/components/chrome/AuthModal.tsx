@@ -652,7 +652,7 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
 
               <div className="mt-1 flex w-full flex-col gap-3 sm:mt-2 sm:max-w-[420px] sm:gap-3.5">
                 <a
-                  href="http://trade.newera365.com/register"
+                  href="https://trade.newera365.com/register"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-body flex h-[46px] w-full items-center justify-center gap-2 rounded-full bg-[#00B050] text-[14px] font-bold text-white shadow-lg transition-all hover:bg-[#00B050]/90 active:scale-[0.98] sm:h-[50px] sm:text-[15px]"
@@ -674,7 +674,7 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
                 </a>
 
                 <a
-                  href="http://trade.newera365.com/login"
+                  href="https://trade.newera365.com/login"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-body text-foreground border-border/80 text-foreground/90 hover:text-foreground flex h-[46px] w-full items-center justify-center gap-2 rounded-full border bg-slate-100/90 text-[13.5px] font-semibold shadow-sm transition-all hover:bg-slate-200 active:scale-[0.98] sm:h-[50px] sm:text-[14.5px] dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/15"
@@ -685,7 +685,7 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="2"
+                    strokeWidth="2.2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   >
@@ -745,7 +745,7 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              window.location.href = 'http://trade.newera365.com/register';
+              window.location.href = 'https://trade.newera365.com/opendemoaccount';
             }}
             className="flex flex-col gap-4"
           >

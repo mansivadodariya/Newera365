@@ -147,12 +147,14 @@ export function HeroSectionDemo() {
                   </svg>
                 </button>
                 {/* Secondary — clearly subordinate to the primary CTA. */}
-                <button
-                  onClick={() => setAuthModal('demo')}
+                <a
+                  href="https://trade.newera365.com/opendemoaccount"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="font-body hover:border-accent-bright hover:text-accent-bright inline-flex flex-none items-center rounded-full border border-white/[0.22] bg-white/[0.06] px-[22px] py-[18px] text-[15px] font-medium tracking-[-0.075px] text-white backdrop-blur-sm transition-colors"
                 >
                   {t('heroCTADemo')}
-                </button>
+                </a>
                 {/* Tertiary — quiet text link, no visual weight. */}
                 <Link
                   href={`/${locale}/support`}

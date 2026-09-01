@@ -98,13 +98,15 @@ export function StickyCtaBar() {
           </Link>
 
           <div className="flex items-center justify-end gap-3 md:gap-4">
-            <button
-              onClick={() => setAuthModal('demo')}
+            <a
+              href="https://trade.newera365.com/opendemoaccount"
+              target="_blank"
+              rel="noopener noreferrer"
               tabIndex={visible ? 0 : -1}
               className="font-body text-foreground flex-shrink-0 whitespace-nowrap text-[13px] font-medium transition-opacity hover:opacity-70"
             >
               {t('stickyCtaDemo')}
-            </button>
+            </a>
             <button
               onClick={() => setAuthModal('register')}
               tabIndex={visible ? 0 : -1}

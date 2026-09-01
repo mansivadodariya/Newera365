@@ -53,12 +53,14 @@ export function CtaBannerDemo() {
               >
                 {t('ctaBannerLive')}
               </button>
-              <button
-                onClick={() => setAuthModal('demo')}
+              <a
+                href="https://trade.newera365.com/opendemoaccount"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="font-body focus-visible:ring-accent hover:border-accent-bright/60 flex h-[48px] items-center justify-center rounded-full border border-white/20 px-6 text-[15px] font-medium text-white transition-colors focus-visible:outline-none focus-visible:ring-2 active:scale-[0.98] sm:h-[52px] sm:px-8"
               >
                 {t('ctaBannerDemo')}
-              </button>
+              </a>
             </div>
           </div>
         </Spotlight>
