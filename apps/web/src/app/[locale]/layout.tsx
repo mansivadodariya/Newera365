@@ -111,9 +111,10 @@ export async function generateMetadata({
       alternateLocale: locale === 'ar' ? ['en_US'] : ['ar_AE'],
       images: [
         {
-          url: '/og-image.jpg',
+          url: `${BASE}/og-image.jpg`,
           width: 1200,
           height: 630,
+          type: 'image/jpeg',
           alt: isAr
             ? 'نيو إيرا: تداول الفوركس والعقود مقابل الفروقات'
             : 'Newera: Forex and CFD Trading',
@@ -122,13 +123,21 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      images: ['/og-image.jpg'],
+      title: isAr
+        ? 'نيو إيرا: تداول الفوركس والعقود مقابل الفروقات'
+        : 'Newera: Forex & CFD Trading',
+      description: isAr
+        ? 'تداول الفوركس والمؤشرات والسلع والعملات الرقمية مع نيو إيرا.'
+        : 'Trade forex, indices, commodities and crypto CFDs with Newera.',
+      images: [`${BASE}/og-image.jpg`],
     },
     icons: {
       icon: [
+        { url: '/favicon.ico', sizes: 'any' },
         { url: '/favicon-light.png', media: '(prefers-color-scheme: light)', type: 'image/png' },
         { url: '/favicon-dark.png', media: '(prefers-color-scheme: dark)', type: 'image/png' },
       ],
+      apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
     },
   };
 }
@@ -250,15 +259,15 @@ export default async function LocaleLayout({
                   route transitions. */}
               <StickyCtaBar />
               <FloatingContactWidget
-                email={s?.contactEmail ?? null}
-                phone={s?.contactPhone ?? null}
-                whatsapp={s?.whatsappNumber ?? null}
+                email={s?.contactEmail || 'support@newera365.com'}
+                phone={s?.contactPhone || '+1 867-778-3511'}
+                whatsapp={s?.whatsappNumber || '+18677783511'}
               />
               <Footer
                 riskDisclaimer={riskDisclaimer ?? undefined}
                 socialLinks={socialLinks}
                 contact={contact}
-                whatsapp={s?.whatsappNumber ?? null}
+                whatsapp={s?.whatsappNumber || '+18677783511'}
                 paymentMethods={paymentMethods}
                 regulatoryDisclosure={regulatoryDisclosure}
                 companyRegistration={companyRegistration}

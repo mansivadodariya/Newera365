@@ -178,7 +178,8 @@ export default buildConfig({
       connectionTimeoutMillis: 10_000,
     },
     // Schema managed via migrations/seeds; push disabled to prevent Drizzle relation conflicts.
-    push: false,
+    // TEMPORARILY enabled to create tables in the new empty database — revert to false after.
+    push: true,
   }),
   collections: [
     Users,

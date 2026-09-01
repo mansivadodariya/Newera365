@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { RichText, extractHeadings } from '../primitives/RichText';
 import type { SlateNode } from '../primitives/RichText';
@@ -22,6 +22,13 @@ const PAGE_TYPE_LABELS: Record<string, string> = {
   'risk-disclosure': 'Risk Warning',
   'aml-policy': 'AML Policy',
   'cookie-policy': 'Cookie Policy',
+  'website-terms': 'Website Terms',
+  'anti-fraud-policy': 'Anti-Fraud Policy',
+  'conflicts-of-interest': 'Conflicts of Interest',
+  'complaint-handling': 'Complaint Handling',
+  'deposit-withdrawal': 'Deposit & Withdrawal',
+  'order-execution': 'Order Execution',
+  'suspicious-activity-reporting': 'SAR Policy',
 };
 
 // Deterministic so server and client render identically (no hydration mismatch):
@@ -47,18 +54,36 @@ export function LegalPage({ documents }: LegalPageProps) {
   const t = useTranslations('legal');
   const locale = useLocale();
 
-  const docLabel = (id: string) =>
-    id === 'terms'
-      ? t('docTerms')
-      : id === 'privacy-policy'
-        ? t('docPrivacy')
-        : id === 'risk-disclosure'
-          ? t('docRisk')
-          : id === 'aml-policy'
-            ? t('docAml')
-            : id === 'cookie-policy'
-              ? t('docCookies')
-              : id;
+  const docLabel = (id: string) => {
+    switch (id) {
+      case 'terms':
+        return t('docTerms');
+      case 'privacy-policy':
+        return t('docPrivacy');
+      case 'risk-disclosure':
+        return t('docRisk');
+      case 'aml-policy':
+        return t('docAml');
+      case 'cookie-policy':
+        return t('docCookies');
+      case 'website-terms':
+        return t.has('docWebsiteTerms') ? t('docWebsiteTerms') : 'Website Terms';
+      case 'anti-fraud-policy':
+        return t.has('docAntiFraud') ? t('docAntiFraud') : 'Anti-Fraud Policy';
+      case 'conflicts-of-interest':
+        return t.has('docConflicts') ? t('docConflicts') : 'Conflicts of Interest';
+      case 'complaint-handling':
+        return t.has('docComplaintHandling') ? t('docComplaintHandling') : 'Complaint Handling';
+      case 'deposit-withdrawal':
+        return t.has('docDepositWithdrawal') ? t('docDepositWithdrawal') : 'Deposit & Withdrawal';
+      case 'order-execution':
+        return t.has('docOrderExecution') ? t('docOrderExecution') : 'Order Execution';
+      case 'suspicious-activity-reporting':
+        return t.has('docSar') ? t('docSar') : 'SAR Policy';
+      default:
+        return id;
+    }
+  };
 
   const uniqueDocs = (documents ?? [])
     .filter((d) => Boolean(d.title?.trim()))
@@ -189,6 +214,87 @@ export function LegalPage({ documents }: LegalPageProps) {
     return () => observer.disconnect();
   }, [tocKey]);
 
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeftPos, setScrollLeftPos] = useState(0);
+
+  const checkScrollability = useCallback(() => {
+    const el = tabsContainerRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setCanScrollLeft(scrollLeft > 4);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 4);
+  }, []);
+
+  useEffect(() => {
+    const el = tabsContainerRef.current;
+    if (!el) return;
+
+    checkScrollability();
+    el.addEventListener('scroll', checkScrollability, { passive: true });
+    window.addEventListener('resize', checkScrollability, { passive: true });
+
+    // Enable horizontal scroll via mouse wheel
+    const handleWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && el.scrollWidth > el.clientWidth) {
+        e.preventDefault();
+        el.scrollLeft += e.deltaY;
+      }
+    };
+    el.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      el.removeEventListener('scroll', checkScrollability);
+      window.removeEventListener('resize', checkScrollability);
+      el.removeEventListener('wheel', handleWheel);
+    };
+  }, [checkScrollability, cmsDocList.length]);
+
+  // Center active tab in view on change
+  useEffect(() => {
+    const el = tabsContainerRef.current;
+    if (!el) return;
+    const activeBtn = el.querySelector<HTMLElement>('[data-active="true"]');
+    if (activeBtn) {
+      const elRect = el.getBoundingClientRect();
+      const btnRect = activeBtn.getBoundingClientRect();
+      const targetScroll =
+        el.scrollLeft + (btnRect.left - elRect.left) - elRect.width / 2 + btnRect.width / 2;
+      el.scrollTo({ left: targetScroll, behavior: 'smooth' });
+    }
+  }, [activeDoc]);
+
+  const scrollByAmount = (amount: number) => {
+    const el = tabsContainerRef.current;
+    if (!el) return;
+    el.scrollBy({ left: amount, behavior: 'smooth' });
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const el = tabsContainerRef.current;
+    if (!el) return;
+    setIsDragging(true);
+    setStartX(e.pageX - el.offsetLeft);
+    setScrollLeftPos(el.scrollLeft);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const el = tabsContainerRef.current;
+    if (!el) return;
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    el.scrollLeft = scrollLeftPos - walk;
+  };
+
+  const stopDragging = () => {
+    setIsDragging(false);
+  };
+
   const hasToc = tocItems.length > 0;
 
   return (
@@ -209,18 +315,53 @@ export function LegalPage({ documents }: LegalPageProps) {
         </div>
       </section>
 
-      {/* Document selector: terminal chips */}
+      {/* Document selector: terminal chips with horizontal scrolling */}
       {hasCms && (
         <section className="px-5 pb-6">
-          <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-            <div className="scrollbar-hide flex gap-2 overflow-x-auto">
+          <div className="motion-safe:animate-rise-in relative mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
+            {/* Left Scroll Button */}
+            {canScrollLeft && (
+              <button
+                type="button"
+                aria-label="Scroll left"
+                onClick={() => scrollByAmount(-240)}
+                className="border-border text-foreground absolute -left-3 top-1/2 z-10 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border bg-white/90 shadow-md backdrop-blur transition-transform hover:scale-110 md:flex dark:border-white/10 dark:bg-[#1a1c22]/90"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+            )}
+
+            {/* Scrollable Container */}
+            <div
+              ref={tabsContainerRef}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={stopDragging}
+              onMouseLeave={stopDragging}
+              className={`scrollbar-hide flex select-none gap-2 overflow-x-auto scroll-smooth py-1 ${
+                isDragging ? 'cursor-grabbing' : 'cursor-grab md:cursor-auto'
+              }`}
+              style={{
+                WebkitOverflowScrolling: 'touch',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+              }}
+            >
               {cmsDocList.map((doc) => (
                 <button
                   key={doc.id}
+                  data-active={activeDoc === doc.id ? 'true' : 'false'}
                   onClick={() => selectTab(doc.id)}
-                  className={`flex-shrink-0 rounded-full border px-4 py-[7px] font-mono text-[12px] uppercase tracking-[0.06em] transition-colors active:scale-[0.98] ${
+                  className={`flex-shrink-0 rounded-full border px-4 py-[7px] font-mono text-[12px] uppercase tracking-[0.06em] transition-all active:scale-[0.98] ${
                     activeDoc === doc.id
-                      ? 'bg-accent border-transparent text-white'
+                      ? 'bg-accent border-transparent text-white shadow-sm'
                       : 'border-border text-muted hover:border-accent/50 hover:text-foreground dark:hover:border-accent/50 bg-white dark:border-white/10 dark:bg-[#111318] dark:text-white/55 dark:hover:text-white'
                   }`}
                 >
@@ -228,6 +369,25 @@ export function LegalPage({ documents }: LegalPageProps) {
                 </button>
               ))}
             </div>
+
+            {/* Right Scroll Button */}
+            {canScrollRight && (
+              <button
+                type="button"
+                aria-label="Scroll right"
+                onClick={() => scrollByAmount(240)}
+                className="border-border text-foreground absolute -right-3 top-1/2 z-10 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border bg-white/90 shadow-md backdrop-blur transition-transform hover:scale-110 md:flex dark:border-white/10 dark:bg-[#1a1c22]/90"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            )}
           </div>
         </section>
       )}

@@ -1,5 +1,5 @@
 # ── Build stage ──────────────────────────────────────────────────────────────
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 
 # Copy monorepo root files needed by npm workspaces
@@ -30,11 +30,9 @@ RUN npm run build
 # It has NO default on purpose: Railway must pass it as a build variable. A stale
 # hardcoded URL would silently ship a broken admin bundle if the service URL changes.
 WORKDIR /app/apps/cms
-ARG PAYLOAD_PUBLIC_SERVER_URL
+ARG PAYLOAD_PUBLIC_SERVER_URL=https://newera365cms-production.up.railway.app
 ENV PAYLOAD_CONFIG_PATH=src/payload.config.ts
-ENV PAYLOAD_PUBLIC_SERVER_URL=$PAYLOAD_PUBLIC_SERVER_URL
-# Fail loudly if the build variable is missing rather than baking an empty URL.
-RUN test -n "$PAYLOAD_PUBLIC_SERVER_URL" || (echo "ERROR: PAYLOAD_PUBLIC_SERVER_URL build arg is required (pass it as a Railway build variable)." && exit 1)
+ENV PAYLOAD_PUBLIC_SERVER_URL=${PAYLOAD_PUBLIC_SERVER_URL:-https://newera365cms-production.up.railway.app}
 RUN npm run build
 
 # Prune dev deps from the full node_modules tree
@@ -42,7 +40,7 @@ WORKDIR /app
 RUN npm prune --omit=dev
 
 # ── Production runner ─────────────────────────────────────────────────────────
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production

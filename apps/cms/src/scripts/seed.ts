@@ -373,9 +373,8 @@ async function seedSiteSettings() {
     contactEmailCompliance: 'compliance@newera365.com',
     contactPhone: '+1 867-778-3511',
     whatsappNumber: '+18677783511',
-    contactAddressEn:
-      'Level 14, Boulevard Plaza Tower 1, Sheikh Mohammed Bin Rashid Boulevard, Dubai, UAE',
-    contactAddressAr: 'الطابق 14، برج بلازا بوليفارد 1، شارع الشيخ محمد بن راشد، دبي، الإمارات',
+    contactAddressEn: null,
+    contactAddressAr: null,
     supportHoursEn: 'Sunday–Friday 00:00–21:00 GMT+4',
     supportHoursAr: 'الأحد–الجمعة 00:00–21:00 GMT+4',
     socialX: 'https://x.com/newera365',
@@ -2116,33 +2115,42 @@ async function seedLegalPages() {
   console.log('⚖️  Legal Pages...');
   await deleteAllDocs('legal-pages');
   const pages = [
+    // 1. Terms & Conditions (from Website-Terms-Conditions.pdf)
     {
       pageType: 'terms',
       en: {
         title: 'Terms and Conditions',
         slug: 'terms-and-conditions',
         body: legalBody(
-          'These Terms and Conditions govern your use of the Newera trading platform and services. By opening an account, you agree to be bound by these terms.',
+          'NEWERA CAPITAL MARKETS LIMITED ("the Company / NCML") (Company No.: 2023-00564) was incorporated on 8 November 2023 under Cap 12.14, Section 6 of International Business Companies Act, Saint Lucia. Your access to and use of this website is subject to these terms and conditions, our Terms and Conditions of Service (as applicable to your jurisdiction of residence), and any notices, disclaimers or other statements contained on this website (referred to collectively as "Terms"). By using this website, you agree to be subject to the Terms.',
           [
             {
-              heading: 'Eligibility',
-              body: 'You must be at least 18 years old and legally permitted to trade financial instruments in your jurisdiction.',
+              heading: 'Accuracy of Information',
+              body: 'Although the content of this website is based on information that we consider to be reliable and endeavour to keep current, we do not warrant that any information on this website is current or accurate as of the date (and time) of its availability. To the extent permitted by laws, we do not accept any responsibility arising in any way from errors in, or omissions from, the information on this website. The products and services described on this website vary from time to time and may not always be available or may be restricted.',
             },
             {
-              heading: 'Account Usage',
-              body: 'You are responsible for maintaining the confidentiality of your login credentials and all activities carried out under your account.',
+              heading: 'Visitors to This Website',
+              body: 'The information on this website is not intended for distribution to, or use by, any person in any country or jurisdiction where its distribution or use would be contrary to local laws or regulations. Visitors to this website are responsible for ascertaining the terms of and complying with any local laws or regulations that they are subject to. Strictly, you must be over eighteen (18) years of age to use our services.',
             },
             {
-              heading: 'Risk Warning',
-              body: 'Trading leveraged products carries significant risk. You may lose more than your initial deposit.',
+              heading: 'General Information Only',
+              body: 'The information on this website is general in nature and does not take into account your personal investment objectives, financial situation or means. It also does not constitute a recommendation that you enter into a particular transaction, nor is it a representation that any product described on this website is suitable or appropriate for you. The Company is not a financial advisor. None of the material contained on this website should be construed as business, financial, investment, hedging, trading, legal, regulatory, tax, or accounting advice. Nor should you use the content of this website as the primary basis for any investment decisions that you wish to engage in. We encourage you to seek independent advice before deciding whether to acquire our services. Also, please ensure that you read and understand our legal documents before you decide whether to use our services.',
             },
             {
-              heading: 'Intellectual Property',
-              body: 'All content, data, and software provided by Newera is proprietary and protected by intellectual property laws.',
+              heading: 'Copyright and Trademark',
+              body: "Except where it is necessary for you to view this website on your browser, or as permitted under the applicable laws or the Terms, none of the information or content on this website is permitted to be reproduced, adapted, uploaded to a third party, distributed or transmitted in any form by any process without the Company's written consent. Newera Capital Markets Limited and the NCML logo are registered trademarks of the Company. Apple, the Apple logo, Mac, iPhone, iPad, and iPod touch are trademarks of Apple Inc., registered in the United States and other countries. App Store is a service mark of Apple Inc. Android is a trademark of Google Inc., while Windows is a registered trademark of Microsoft Corporation in the United States and other countries.",
             },
             {
-              heading: 'Governing Law',
-              body: 'These Terms are governed by and construed in accordance with the laws of England and Wales.',
+              heading: 'Third Party Content',
+              body: 'From time to time, this website may contain links to other websites or resources provided by third parties. We provide you with third-party links/resources solely for your information and convenience. We do not make any representations or warranties about the content, suitability or appropriateness of the content or products contained in any third-party websites or resources.',
+            },
+            {
+              heading: 'Disclaimer and Limitation of Liability',
+              body: 'To the maximum extent permitted by laws, we will not be liable in any way for loss or damage suffered by you through use of or access to this website, or our failure to provide this website.',
+            },
+            {
+              heading: 'Review of Website Terms & Conditions',
+              body: 'NEWERA CAPITAL MARKETS LIMITED is committed to continuously improving this policy and it will be reviewed regularly (at least every six months) for effectiveness and updated. This Website Terms & Conditions is supported by management. NEWERA CAPITAL MARKETS LIMITED commits to providing this policy to all employees and displaying it in its business with clients.',
             },
           ],
         ),
@@ -2150,57 +2158,75 @@ async function seedLegalPages() {
       ar: {
         title: 'الشروط والأحكام',
         body: legalBody(
-          'تحكم هذه الشروط والأحكام استخدامك لمنصة وخدمات نيو إيرا للتداول. بفتح حساب، توافق على الالتزام بهذه الشروط.',
+          'تأسست شركة NEWERA CAPITAL MARKETS LIMITED ("الشركة / NCML") (رقم الشركة: 2023-00564) في 8 نوفمبر 2023 بموجب الفصل 12.14، المادة 6 من قانون الشركات التجارية الدولية في سانت لوسيا. يخضع وصولك إلى هذا الموقع واستخدامك له لهذه الشروط والأحكام، وشروط وأحكام الخدمة الخاصة بنا (حسب ما ينطبق على ولايتك القضائية)، وأي إشعارات أو إخلاء مسؤولية أو بيانات أخرى واردة في هذا الموقع (المشار إليها مجتمعة باسم "الشروط"). من خلال استخدام هذا الموقع، فإنك توافق على الالتزام بهذه الشروط.',
           [
             {
-              heading: 'الأهلية',
-              body: 'يجب أن تكون في سن 18 عاماً على الأقل ومسموحاً لك قانونياً بتداول الأدوات المالية في ولايتك القضائية.',
+              heading: 'دقة المعلومات',
+              body: 'على الرغم من أن محتوى هذا الموقع يستند إلى معلومات نعتبرها موثوقة ونسعى جاهدين لإبقائها محدثة، إلا أننا لا نضمن أن أي معلومات على هذا الموقع محدثة أو دقيقة اعتباراً من تاريخ (ووقت) توفرها. وإلى الحد الذي تسمح به القوانين، فإننا لا نتحمل أي مسؤولية تنشأ بأي شكل من الأشكال عن أخطاء أو سهو في المعلومات الواردة في هذا الموقع. تختلف المنتجات والخدمات الموضحة في هذا الموقع من وقت لآخر وقد لا تكون متاحة دائماً أو قد تخضع لقيود.',
             },
             {
-              heading: 'استخدام الحساب',
-              body: 'أنت مسؤول عن الحفاظ على سرية بيانات تسجيل الدخول الخاصة بك وجميع الأنشطة التي تتم على حسابك.',
+              heading: 'زوار هذا الموقع',
+              body: 'المعلومات الواردة في هذا الموقع ليست مخصصة للتوزيع على أو الاستخدام من قبل أي شخص في أي بلد أو ولاية قضائية يكون فيها هذا التوزيع أو الاستخدام مخالفاً للقوانين أو اللوائح المحلية. زوار هذا الموقع مسؤولون عن التأكد من شروط والامتثال لأي قوانين أو لوائح محلية يخضعون لها. يجب أن يكون عمرك فوق ثمانية عشر (18) عاماً بشكل صارم لاستخدام خدماتنا.',
             },
             {
-              heading: 'تحذير المخاطر',
-              body: 'تداول المنتجات ذات الرافعة المالية ينطوي على مخاطر عالية. قد تخسر أكثر من وديعتك الأولية.',
+              heading: 'معلومات عامة فقط',
+              body: 'المعلومات الواردة في هذا الموقع عامة بطبيعتها ولا تأخذ في الاعتبار أهدافك الاستثمارية الشخصية أو وضعك المالي أو إمكانياتك. كما أنها لا تشكل توصية بالدخول في معاملة معينة، وليست إقراراً بأن أي منتج موضح في هذا الموقع مناسب أو ملائم لك. الشركة ليست مستشاراً مالياً. لا ينبغي تفسير أي من المواد الواردة في هذا الموقع على أنها نصيحة تجارية أو مالية أو استثمارية أو تحوطية أو تداولية أو قانونية أو تنظيمية أو ضريبية أو محاسبية. ولا ينبغي استخدام محتوى هذا الموقع كأساس رئيسي لأي قرارات استثمارية. نشجعك على طلب مشورة مستقلة قبل اتخاذ القرار، والتأكد من قراءة وفهم وثائقنا القانونية.',
             },
             {
-              heading: 'الملكية الفكرية',
-              body: 'جميع المحتوى والبيانات والبرامج المقدمة من نيو إيرا مملوكة ومحمية بقوانين الملكية الفكرية.',
+              heading: 'حقوق الطبع والنشر والعلامات التجارية',
+              body: 'باستثناء ما هو ضروري لعرض هذا الموقع على متصفحك، أو كما هو مسموح به بموجب القوانين المعمول بها أو الشروط، لا يُسمح بإعادة إنتاج أو تعديل أو تحميل لأطراف ثالثة أو توزيع أو نقل أي من المعلومات أو المحتوى على هذا الموقع بأي شكل دون موافقة خطية من الشركة. تعد Newera Capital Markets Limited وشعار NCML علامات تجارية مسجلة للشركة. وتعتبر كافة العلامات التجارية الأخرى مملوكة لأصحابها المعنيين.',
             },
             {
-              heading: 'القانون الحاكم',
-              body: 'تخضع هذه الشروط لقوانين إنجلترا وويلز وتُفسَّر وفقاً لها.',
+              heading: 'محتوى الأطراف الثالثة',
+              body: 'من وقت لآخر، قد يحتوي هذا الموقع على روابط لمواقع إلكترونية أو موارد أخرى تقدمها أطراف ثالثة. نحن نقدم لك روابط وموارد الأطراف الثالثة فقط لمعلوماتك وراحتك. نحن لا نقدم أي تعهدات أو ضمانات بشأن المحتوى أو الملاءمة للمحتوى أو المنتجات الواردة في أي مواقع أو موارد تابعة لأطراف ثالثة.',
+            },
+            {
+              heading: 'إخلاء المسؤولية وتحديدها',
+              body: 'إلى أقصى حد تسمح به القوانين، لن نكون مسؤولين بأي شكل من الأشكال عن أي خسارة أو ضرر تتكبده من خلال استخدام هذا الموقع أو الوصول إليه، أو فشلنا في توفير هذا الموقع.',
+            },
+            {
+              heading: 'مراجعة الشروط والأحكام',
+              body: 'تلتزم شركة NEWERA CAPITAL MARKETS LIMITED بالتحسين المستمر لهذه السياسة وستتم مراجعتها بانتظام (كل ستة أشهر على الأقل) لتقييم فاعليتها وتحديثها. هذه الشروط والأحكام مدعومة من الإدارة، وتلتزم الشركة بتقديم هذه السياسة لجميع الموظفين وعرضها في تعاملاتها مع العملاء.',
             },
           ],
         ),
       },
       effectiveDate: '2026-01-01',
-      version: 'v3.0',
+      version: 'v1.0',
     },
+
+    // 2. Privacy Policy (from Privacy Policies.docx)
     {
       pageType: 'privacy-policy',
       en: {
         title: 'Privacy Policy',
         slug: 'privacy-policy',
         body: legalBody(
-          'Newera is committed to protecting your personal data. This Privacy Policy explains how we collect, use, and protect your information.',
+          'NEWERA CAPITAL MARKETS LIMITED ("the Company / Newera Capital") is committed to protecting its customers\' and other website users\' ("the Client / the Clients") privacy and developing technology that gives the Clients the most powerful, satisfying, and safe online experience. This Privacy Policy (the "Policy") applies to the Newera Capital website and governs data collection and usage. By using the Newera Capital website, the Clients indicate their consent to the data practices described in this Policy.',
           [
             {
-              heading: 'Data We Collect',
-              body: 'We collect your name, email, phone number, trading activity, device information, and IP addresses.',
+              heading: "Collection of the Clients' Personal Information",
+              body: 'In accordance with applicable Anti-Money Laundering and Counter-Terrorism Financing regulations and laws, Newera Capital has an obligation to collect information and verify the identity of its Clients (KYC information). Specifically, the information we collect for KYC identification may include identity, contact details, National Identifier, socio-demographic, transactional, financial, contractual, and documentary data. When submitting an application form to open a live or demo account with Newera Capital, the Client provides personal information to entities within the Newera Capital group of companies (collectively, the "Newera Capital Group") and its affiliated entities, including Newera Capital Markets Limited. Personal information refers to any information about the Client that identifies the Client or by which the Client\'s identity can reasonably be ascertained. Newera Capital also maintains records of all transactions and activities on the Client\'s account(s), and may record telephone conversations and electronic communications for dispute resolution, quality assurance, and statutory compliance. Sensitive information is only collected when required by law, with client consent, or under exigent circumstances.',
             },
             {
-              heading: 'How We Use Data',
-              body: 'We use your data to provide trading services, comply with regulatory requirements, and improve our products.',
+              heading: "Use of the Clients' Personal Information",
+              body: "Newera Capital collects and uses the Clients' personal information to operate its website and deliver requested services. Newera Capital also uses personally identifiable information to inform Clients of other products or services offered by Newera Capital and its affiliates. Newera Capital does not sell, rent, or lease its customer lists to third parties. We may share data with trusted partners strictly for performing statistical analysis, customer support, email/postal communications, or essential business functions under strict confidentiality obligations. Sensitive personal information (such as race, religion, or political affiliations) is never disclosed without explicit consent. Personal information is disclosed without notice only if required by law, to protect and defend the rights or property of Newera Capital, or under exigent circumstances to protect personal safety.",
             },
             {
-              heading: 'Data Sharing',
-              body: 'We do not sell your data. We share data with regulatory authorities as required by law and with licensed third-party service providers.',
+              heading: 'Use of Cookies',
+              body: 'The Newera Capital website uses "cookies" to help Clients personalize their online experience. A cookie is a text file placed on the Client\'s device by a web page server. Cookies cannot be used to run programs or deliver viruses to computers. Cookies are uniquely assigned and can only be read by a web server in the domain that issued them. Cookies save time by recalling specific preferences and information on subsequent visits. Clients can modify their browser settings to accept or decline cookies; declining cookies may prevent full utilization of interactive platform features.',
             },
             {
-              heading: 'Your Rights',
-              body: 'You have the right to access, correct, or delete your data. To exercise these rights, contact privacy@newera365.com.',
+              heading: "Security of the Clients' Personal Information",
+              body: "Newera Capital secures the Clients' personal information from unauthorized access, use, or disclosure on computer servers in a controlled, secure environment. When personal information (such as financial or payment card data) is transmitted to other websites, it is protected through the use of encryption, including Secure Socket Layer (SSL) protocol.",
+            },
+            {
+              heading: 'Languages',
+              body: 'The language of communication between the Company and the Client shall be in English. All binding contractual documentation is available in English. Upon its sole discretion, the Company may communicate with the Client in languages other than English; however, in case of any discrepancy between translated communications and the English language version, the original English version published on the website shall prevail.',
+            },
+            {
+              heading: 'Review of Privacy Policy',
+              body: 'NEWERA CAPITAL MARKETS LIMITED is committed to continuously improving this policy, and it will be reviewed regularly (at least every six months) for effectiveness and updated. This Privacy Policy is supported by management. NEWERA CAPITAL MARKETS LIMITED commits to providing this policy to all employees and displaying it in its business with clients.',
             },
           ],
         ),
@@ -2208,23 +2234,31 @@ async function seedLegalPages() {
       ar: {
         title: 'سياسة الخصوصية',
         body: legalBody(
-          'تلتزم نيو إيرا بحماية بياناتك الشخصية. تشرح هذه السياسة كيفية جمع معلوماتك واستخدامها وحمايتها.',
+          'تلتزم شركة NEWERA CAPITAL MARKETS LIMITED ("الشركة / Newera Capital") بحماية خصوصية عملائها ومستخدمي موقعها الإلكتروني الآخرين ("العميل / العملاء") وتطوير التقنيات التي تمنح العملاء تجربة رقمية آمنة وموثوقة. تنطبق سياسة الخصوصية هذه ("السياسة") على موقع Newera Capital الإلكتروني وتحكم جمع البيانات واستخدامها. ويُعد استخدام موقع Newera Capital موافقة صريحة من العميل على ممارسات البيانات الموضحة في هذه السياسة.',
           [
             {
-              heading: 'البيانات التي نجمعها',
-              body: 'نجمع اسمك، بريدك الإلكتروني، رقم هاتفك، نشاط التداول، معلومات الجهاز، وعناوين IP.',
+              heading: 'جمع المعلومات الشخصية للعملاء',
+              body: 'وفقاً للوائح وقوانين مكافحة غسل الأموال وتمويل الإرهاب المعمول بها، تلتزم Newera Capital بجمع المعلومات والتحقق من هوية عملائها (معلومات اعرف عميلك KYC). ويشمل ذلك وثائق الهوية، وبيانات الاتصال، ورقم الهوية الوطنية، والبيانات الاجتماعية والديموغرافية، والمعاملات المالية، والبيانات التعاقدية. عند تقديم طلب فتح حساب، يقدم العميل معلوماته الشخصية لشركات المجموعة. كما تحتفظ الشركة بسجلات المعاملات، والتصفيات، وتسجيل المحادثات الهاتفية والمراسلات لأغراض حل النزاعات والامتثال القانوني. ولا يتم جمع المعلومات الحساسة إلا بموجب القانون أو بموافقة صريحة.',
             },
             {
-              heading: 'كيف نستخدم البيانات',
-              body: 'نستخدم بياناتك لتقديم خدمات التداول، والامتثال للمتطلبات التنظيمية، وتحسين منتجاتنا.',
+              heading: 'استخدام المعلومات الشخصية للعملاء',
+              body: 'تجمع Newera Capital وتستخدم المعلومات الشخصية لتشغيل موقعها وتقديم الخدمات المطلوبة للعملاء، وإبلاغهم بالمنتجات والخدمات الإضافية. لا تبيع الشركة أو تؤجر قوائم عملائها لأطراف ثالثة. قد تتم مشاركة البيانات مع شركاء موثوقين فقط لإجراء التحليلات الإحصائية وتقديم الدعم وخدمات المعالجة بموجب اتفاقيات سرية صارمة. لا تُفصح الشركة عن البيانات الحساسة دون موافقة صريحة، ولا يتم الكشف عن البيانات دون إشعار إلا إذا تطلب القانون ذلك أو لحماية حقوق الشركة وسلامة المستخدمين.',
             },
             {
-              heading: 'مشاركة البيانات',
-              body: 'لا نبيع بياناتك. نشارك البيانات مع السلطات التنظيمية وفقاً للقانون ومع مزودي الخدمات المرخصين.',
+              heading: 'استخدام ملفات تعريف الارتباط (Cookies)',
+              body: 'يستخدم موقع Newera Capital "ملفات تعريف الارتباط" لتخصيص تجربة العميل على الإنترنت. ملف تعريف الارتباط هو ملف نصي يُحفظ على جهاز العميل بواسطة خادم صفحة الويب ولا يمكن استخدامه لتشغيل برامج أو نقل فيروسات. تُستخدم الكوكيز لتوفير الوقت وتذكر التفضيلات والبيانات عند الزيارات اللاحقة. يمكن للعملاء تعديل إعدادات المتصفح لرفض الكوكيز، مع العلم أن رفضها قد يقيد بعض ميزات الموقع التفاعلية.',
             },
             {
-              heading: 'حقوقك',
-              body: 'لديك الحق في الوصول إلى بياناتك أو تصحيحها أو حذفها. لممارسة هذه الحقوق، تواصل مع privacy@newera365.com.',
+              heading: 'أمان المعلومات الشخصية للعملاء',
+              body: 'تؤمّن Newera Capital المعلومات الشخصية للعملاء من الوصول أو الاستخدام أو الإفصاح غير المصرح به على خوادم محمية في بيئة آمنة وخاضعة للرقابة. وعند نقل المعلومات الشخصية والمالية، يتم حمايتها باستخدام تقنيات التشفير المتقدمة بما في ذلك بروتوكول طبقة المنافذ الآمنة (SSL).',
+            },
+            {
+              heading: 'اللغات والنسخة المعتمدة',
+              body: 'تكون لغة التواصل الرسمية بين الشركة والعميل هي اللغة الإنجليزية، وتتوفر جميع الوثائق التعاقدية الملزمة باللغة الإنجليزية. يجوز للشركة التواصل بلغات أخرى؛ ومع ذلك، في حالة وجود أي تعارض بين أي ترجمة والنسخة الإنجليزية، تسود النسخة الإنجليزية المعتمدة والمنشورة على الموقع الإلكتروني.',
+            },
+            {
+              heading: 'مراجعة سياسة الخصوصية',
+              body: 'تلتزم شركة NEWERA CAPITAL MARKETS LIMITED بالتحسين المستمر لهذه السياسة وستتم مراجعتها بانتظام (كل ستة أشهر على الأقل) لتقييم فاعليتها وتحديثها. تحظى هذه السياسة بدعم الإدارة، وتلتزم الشركة بتوفيرها لجميع الموظفين وتطبيقها في تعاملاتها مع العملاء.',
             },
           ],
         ),
@@ -2232,135 +2266,47 @@ async function seedLegalPages() {
       effectiveDate: '2026-01-01',
       version: 'v2.1',
     },
-    {
-      pageType: 'risk-disclosure',
-      en: {
-        title: 'Risk Disclosure',
-        slug: 'risk-disclosure',
-        body: legalBodyWithLead(
-          'IMPORTANT RISK WARNING',
-          'Trading in Contracts for Difference (CFDs) and other leveraged instruments carries a high level of risk to your capital.',
-          [
-            {
-              heading: 'Nature of CFDs',
-              body: 'CFDs are complex instruments. 74% of retail investor accounts lose money when trading CFDs with this provider.',
-            },
-            {
-              heading: 'Assessing Suitability',
-              body: 'You should consider whether you understand how CFDs work and whether you can afford to take the high risk of losing your money.',
-            },
-            {
-              heading: 'Past Performance',
-              body: 'Past performance is not indicative of future results. Never trade with money you cannot afford to lose.',
-            },
-            {
-              heading: 'Independent Advice',
-              body: 'Seek independent financial advice if you are unsure about the suitability of these products for your circumstances.',
-            },
-          ],
-        ),
-      },
-      ar: {
-        title: 'إفصاح المخاطر',
-        body: legalBodyWithLead(
-          'تحذير مهم من المخاطر',
-          'التداول في عقود الفروقات والأدوات ذات الرافعة المالية ينطوي على مخاطر عالية لرأس مالك.',
-          [
-            {
-              heading: 'طبيعة عقود الفروقات',
-              body: 'عقود الفروقات أدوات معقدة. 74% من حسابات المستثمرين الأفراد تخسر أموالها عند التداول مع هذا المزود.',
-            },
-            {
-              heading: 'تقييم الملاءمة',
-              body: 'يجب أن تفكر فيما إذا كنت تفهم كيف تعمل عقود الفروقات وما إذا كنت تستطيع تحمّل خطر خسارة أموالك.',
-            },
-            {
-              heading: 'الأداء السابق',
-              body: 'الأداء السابق ليس مؤشراً على النتائج المستقبلية. لا تتداول أبداً بأموال لا تستطيع تحمّل خسارتها.',
-            },
-            {
-              heading: 'المشورة المستقلة',
-              body: 'اطلب مشورة مالية مستقلة إذا كنت غير متأكد من ملاءمة هذه المنتجات لظروفك.',
-            },
-          ],
-        ),
-      },
-      effectiveDate: '2026-01-01',
-      version: 'v1.0',
-    },
-    {
-      pageType: 'aml-policy',
-      en: {
-        title: 'AML Policy',
-        slug: 'aml-policy',
-        body: legalBody(
-          'Newera maintains a comprehensive Anti-Money Laundering (AML) programme to detect and prevent financial crime across all client accounts and transactions.',
-          [
-            {
-              heading: 'Policy Scope',
-              body: 'This policy applies to all clients and transactions processed through Newera Ltd. We are committed to the highest standards of anti-money laundering and counter-terrorist financing compliance.',
-            },
-            {
-              heading: 'Customer Due Diligence',
-              body: 'All clients undergo Know-Your-Customer (KYC) verification before account activation. Enhanced due diligence is applied to higher-risk profiles, including Politically Exposed Persons (PEPs).',
-            },
-            {
-              heading: 'Transaction Monitoring',
-              body: 'We monitor account activity on an ongoing basis to identify unusual or suspicious patterns that may indicate money laundering.',
-            },
-            {
-              heading: 'Reporting',
-              body: 'Suspicious activity is reported to the relevant financial intelligence unit in line with our regulatory obligations.',
-            },
-          ],
-        ),
-      },
-      ar: {
-        title: 'سياسة مكافحة غسل الأموال',
-        body: legalBody(
-          'تحتفظ نيو إيرا ببرنامج شامل لمكافحة غسل الأموال للكشف عن الجرائم المالية ومنعها عبر جميع حسابات العملاء والمعاملات.',
-          [
-            {
-              heading: 'نطاق السياسة',
-              body: 'تنطبق هذه السياسة على جميع العملاء والمعاملات التي تتم معالجتها عبر نيو إيرا. نلتزم بأعلى معايير مكافحة غسل الأموال وتمويل الإرهاب.',
-            },
-            {
-              heading: 'العناية الواجبة بالعميل',
-              body: 'يخضع جميع العملاء للتحقق من الهوية (اعرف عميلك) قبل تفعيل الحساب. تُطبَّق عناية واجبة معززة على الملفات عالية المخاطر بما في ذلك الأشخاص المعرّضون سياسياً.',
-            },
-            {
-              heading: 'مراقبة المعاملات',
-              body: 'نراقب نشاط الحساب بشكل مستمر لتحديد الأنماط غير العادية أو المشبوهة التي قد تشير إلى غسل الأموال.',
-            },
-            {
-              heading: 'الإبلاغ',
-              body: 'يتم الإبلاغ عن النشاط المشبوه إلى وحدة الاستخبارات المالية المعنية وفقاً لالتزاماتنا التنظيمية.',
-            },
-          ],
-        ),
-      },
-      effectiveDate: '2026-01-01',
-      version: 'v1.0',
-    },
+
+    // 3. Cookie Policy (from Cookie-Policy.pdf)
     {
       pageType: 'cookie-policy',
       en: {
         title: 'Cookie Policy',
         slug: 'cookie-policy',
         body: legalBody(
-          'This Cookie Policy explains how Newera uses cookies and similar technologies when you visit our website.',
+          'NEWERA CAPITAL MARKETS LIMITED ("the Company") (Company No.: 2023-00564) was incorporated on 8 November 2023 under Cap 12.14, Section 6 of International Business Companies Act, Saint Lucia. When you use our Website, NCML will use cookies to distinguish you from other users of the NCML Website. This enables the Company to provide you with a more relevant and effective experience when browsing the NCML Website, including presenting pages in accordance with your needs or preferences, and allowing us to improve the site generally. This Cookie Policy provides you with comprehensive information about the cookies we use and the way we are using them. You should also read the NCML Privacy Policy in conjunction with this Policy.',
           [
             {
-              heading: 'What Are Cookies',
-              body: 'Cookies are small text files placed on your device that help us remember your preferences, analyse site usage, and enable core features.',
+              heading: 'What is a Cookie?',
+              body: "Cookies are small files of information that often include a unique identification number or value, which are stored on your computer's hard drive as a result of using the NCML Website. Unless you have adjusted your browser setting so that it will refuse cookies, the NCML system will issue cookies as soon as you visit the NCML Website. Cookies are frequently used on many websites on the internet and you can choose if and how a cookie will be accepted by changing your preferences and options in your browser. Some of our business partners (e.g. advertisers) use cookies on the NCML Website. We have no access to, or control over, these cookies. The cookies do not contain personally identifying information nor are they used to identify you. You may choose to disable cookies; however, you may not be able to access some parts of the NCML Website if you choose to disable cookie acceptance in your browser, particularly the secure parts of the Website.",
             },
             {
-              heading: 'Types We Use',
-              body: 'We use essential cookies for core functionality, analytics cookies to understand how the site is used, and marketing cookies to deliver relevant advertising.',
+              heading: 'How to Delete and Block Cookies',
+              body: 'You can choose to accept or decline cookies. Most web browsers automatically accept cookies, but you can usually modify your browser setting to decline cookies if you prefer. This may prevent you from taking full advantage of the website. For further information about disabling cookies, please refer to www.allaboutcookies.org.',
             },
             {
-              heading: 'Managing Cookies',
-              body: 'You can manage or disable non-essential cookies at any time through your browser settings or our cookie preferences panel.',
+              heading: 'Your Consent',
+              body: 'By continuing to use the NCML Website, you are agreeing to the Company placing cookies on your computer for analyzing the way you use the NCML Website. If you do not wish to accept cookies in connection with your use of this Website, you must stop using the NCML Website.',
+            },
+            {
+              heading: 'Session Cookies',
+              body: 'We use session cookies for the following purposes: (i) To allow you to carry information across pages of the NCML site and avoid having to re-enter information; (ii) Within registration to allow you to access stored information; (iii) Non-personal data for tagging purposes only (by random number).',
+            },
+            {
+              heading: 'Persistent Cookies',
+              body: 'The Company uses persistent cookies for the following purposes: (i) To help us recognize you as a unique visitor (by number) when you return to the NCML website, tailor content or advertisements to match your preferred interests, and avoid showing you the same adverts repeatedly; (ii) To compile anonymous, aggregated statistics to understand how users use the site and improve the structure of the NCML Website; (iii) To internally identify you by account name, name, email address, customer identification number, currency, and location (geographic and computer ID/IP address); (iv) To differentiate users who are on the same network and correctly allocate transactions to the appropriate account; (v) Within research surveys to ensure you are not invited to complete a questionnaire too often or after you have already done so.',
+            },
+            {
+              heading: 'Third Party Cookies',
+              body: 'Third parties serve cookies via this site for the following purposes: (i) To serve advertisements on the NCML site and track whether these advertisements are clicked on by users; (ii) To control how often you are shown a particular advertisement; (iii) To tailor content to your preferences; (iv) To count the number of anonymous users of the NCML site; (v) For website usage analysis.',
+            },
+            {
+              heading: 'Use of Web Beacons',
+              body: 'Some of the NCML web pages may contain electronic images known as Web beacons (sometimes known as clear gifs) that allow the Company to count users who have visited these pages. Web beacons collect only limited information including a cookie number, time and date of a page view, and a description of the page on which the Web beacon resides. NCML could also carry web beacons placed by third-party advertisers. These beacons do not carry any personally identifiable information and are only used to track the effectiveness of a particular campaign. If you wish to know more about cookies, please consult the help menu on your web browser or visit independent information providers such as www.allaboutcookies.org. If you have any questions regarding NCML privacy or security measures, please email info@newera365.com.',
+            },
+            {
+              heading: 'Review of Cookie Policy',
+              body: 'NEWERA CAPITAL MARKETS LIMITED is committed to continuously improving this policy and it will be reviewed regularly (at least every six months) for effectiveness and updated. This Cookie Policy is supported by management. NEWERA CAPITAL MARKETS LIMITED commits to providing this policy to all employees and displaying it in its business with clients.',
             },
           ],
         ),
@@ -2368,19 +2314,801 @@ async function seedLegalPages() {
       ar: {
         title: 'سياسة ملفات تعريف الارتباط',
         body: legalBody(
-          'تشرح سياسة ملفات تعريف الارتباط هذه كيفية استخدام نيو إيرا لملفات تعريف الارتباط والتقنيات المشابهة عند زيارتك لموقعنا.',
+          'تأسست شركة NEWERA CAPITAL MARKETS LIMITED ("الشركة") (رقم الشركة: 2023-00564) في 8 نوفمبر 2023 بموجب الفصل 12.14، المادة 6 من قانون الشركات التجارية الدولية في سانت لوسيا. عند استخدام موقعنا الإلكتروني، ستستخدم الشركة ملفات تعريف الارتباط لتمييزك عن المستخدمين الآخرين لموقع NCML، مما يتيح تقديم تجربة أكثر ملاءمة وفاعلية، وتخصيص الصفحات وفقاً لاحتياجاتك وتفضيلاتك، وتحسين الموقع بشكل عام. توفر هذه السياسة معلومات شاملة حول ملفات تعريف الارتباط التي نستخدمها وكيفية استخدامها بالتكامل مع سياسة الخصوصية.',
           [
             {
-              heading: 'ما هي ملفات تعريف الارتباط',
-              body: 'ملفات تعريف الارتباط هي ملفات نصية صغيرة تُحفظ على جهازك تساعدنا على تذكّر تفضيلاتك وتحليل استخدام الموقع وتمكين الميزات الأساسية.',
+              heading: 'ما هي ملفات تعريف الارتباط (Cookies)؟',
+              body: 'ملفات تعريف الارتباط هي ملفات معلومات صغيرة تتضمن غالباً رقم أو قيمة تعريف فريدة، تُخزن على القرص الصلب لجهازك نتيجة استخدام موقع NCML. ما لم تقم بتعديل إعدادات متصفحك لرفض الكوكيز، سيقوم نظامنا بإصدارها بمجرد زيارة الموقع. تُستخدم الكوكيز على نطاق واسع عبر الإنترنت ويمكنك التحكم في قبولها من خلال خيارات متصفحك. لا تحتوي ملفات الكوكيز على معلومات تعريف شخصية ولا تُستخدم للتعرف على هويتك، ولكن قد يؤدي تعطيلها إلى منع الوصول لبعض أجزاء الموقع، خاصة الأقسام الآمنة.',
             },
             {
-              heading: 'الأنواع التي نستخدمها',
-              body: 'نستخدم ملفات أساسية للوظائف الجوهرية، وملفات تحليلية لفهم كيفية استخدام الموقع، وملفات تسويقية لتقديم إعلانات ذات صلة.',
+              heading: 'كيفية حذف وحظر ملفات تعريف الارتباط',
+              body: 'يمكنك اختيار قبول أو رفض ملفات تعريف الارتباط. تقبل معظم متصفحات الويب ملفات الكوكيز تلقائياً، ولكن يمكنك تعديل إعدادات متصفحك لرفضها، مما قد يحد من الاستفادة الكاملة من ميزات الموقع. لمزيد من المعلومات حول تعطيل الكوكيز، يرجى زيارة www.allaboutcookies.org.',
             },
             {
-              heading: 'إدارة ملفات تعريف الارتباط',
-              body: 'يمكنك إدارة ملفات تعريف الارتباط غير الأساسية أو تعطيلها في أي وقت من خلال إعدادات متصفحك أو لوحة تفضيلات ملفات تعريف الارتباط لدينا.',
+              heading: 'موافقة المستخدم',
+              body: 'من خلال الاستمرار في استخدام موقع NCML، فإنك توافق على قيام الشركة بوضع ملفات تعريف الارتباط على جهازك لتحليل كيفية استخدامك للموقع. إذا كنت لا ترغب في قبول ملفات تعريف الارتباط، فيجب عليك التوقف عن استخدام موقع NCML.',
+            },
+            {
+              heading: 'ملفات تعريف الارتباط المؤقتة (Session Cookies)',
+              body: 'نستخدم ملفات تعريف الارتباط المؤقتة للأغراض التالية: (1) تمكينك من نقل المعلومات عبر صفحات الموقع وتجنب إعادة إدخالها؛ (2) الوصول إلى المعلومات المحفوظة أثناء التسجيل؛ (3) للبيانات غير الشخصية لأغراض وضع العلامات فقط (برقم عشوائي).',
+            },
+            {
+              heading: 'ملفات تعريف الارتباط الدائمة (Persistent Cookies)',
+              body: 'تستخدم الشركة ملفات تعريف الارتباط الدائمة للأغراض التالية: (1) التعرف عليك كزائر فريد وتخصيص المحتوى والإعلانات وفقاً لتفضيلاتك وتجنب تكرار الإعلانات؛ (2) جمع إحصاءات مجمعة لفهم استخدام الموقع وتحسين بنيته؛ (3) التعرف عليك داخلياً بالاسم والبريد الإلكتروني ورقم تعريف العميل والعملة والموقع؛ (4) التمييز بين المستخدمين على نفس الشبكة وتخصيص المعاملات بشكل صحيح؛ (5) إدارة استطلاعات الرأي.',
+            },
+            {
+              heading: 'ملفات تعريف الارتباط للأطراف الثالثة',
+              body: 'تُقدم أطراف ثالثة ملفات تعريف ارتباط عبر هذا الموقع للأغراض التالية: (1) تقديم الإعلانات على الموقع وتتبع نقرات المستخدمين؛ (2) التحكم في معدل ظهور الإعلان؛ (3) تخصيص المحتوى وفقاً لاهتماماتك؛ (4) حساب عدد المستخدمين المجهولين؛ (5) تحليل استخدام الموقع.',
+            },
+            {
+              heading: 'استخدام إشارات الويب (Web Beacons)',
+              body: 'قد تحتوي بعض صفحات الويب على صور إلكترونية تُعرف باسم إشارات الويب لحساب عدد الزوار وقياس التفاعل مع المحتوى دون جمع أي بيانات تعريف شخصية. لمزيد من المعلومات، يرجى مراجعة قائمة المساعدة في متصفحك أو زيارة www.allaboutcookies.org. لأي استفسارات تتعلق بإجراءات الخصوصية، يرجى مراسلتنا عبر info@newera365.com.',
+            },
+            {
+              heading: 'مراجعة سياسة ملفات تعريف الارتباط',
+              body: 'تلتزم شركة NEWERA CAPITAL MARKETS LIMITED بالتحسين المستمر لهذه السياسة وستتم مراجعتها بانتظام (كل ستة أشهر على الأقل) لتقييم فاعليتها وتحديثها. تحظى هذه السياسة بدعم الإدارة، وتلتزم الشركة بتوفيرها لجميع الموظفين وتطبيقها في تعاملاتها مع العملاء.',
+            },
+          ],
+        ),
+      },
+      effectiveDate: '2026-01-01',
+      version: 'v1.0',
+    },
+
+    // 4. AML, KYC & Due Diligence Policy (from AML-KYC-Due-Diligence.pdf)
+    {
+      pageType: 'aml-policy',
+      en: {
+        title: 'AML, KYC & Due Diligence Policy',
+        slug: 'aml-policy',
+        body: legalBody(
+          'The Anti-Money Laundering, Know Your Customer & Due Diligence Policy of NEWERA CAPITAL MARKETS LIMITED ("the Company") is formulated in accordance with Saint Lucia legislation (Money Laundering Prevention Act, Anti-Terrorism Act, Proceeds of Crime Act) and FATF 40 Recommendations under the Financial Services Regulatory Authority (FSRA).',
+          [
+            {
+              heading: '1. Regulatory Framework & Policy Objectives',
+              body: 'Our policy implements a comprehensive risk-based framework to combat money laundering and terrorist financing, strictly prohibiting dealings with shell banks, anonymous accounts, and jurisdictions blacklisted by FATF.',
+            },
+            {
+              heading: '2. Five Core Anti-Money Laundering Pillars',
+              body: 'Our AML program rests upon: (i) Customer identification procedures (KYC); (ii) Robust record-keeping; (iii) Internal suspicious reporting to the Compliance Officer; (iv) Internal preventative controls; and (v) Ongoing employee compliance training.',
+            },
+            {
+              heading: '3. Compliance Standards & Staff Responsibilities',
+              body: 'Full compliance with AML procedures is mandatory for all personnel. Failure to report suspicious activities or comply with AML mandates constitutes grounds for summary dismissal and regulatory referral.',
+            },
+            {
+              heading: '4. Targeted Financial Sanctions & UN Sanctions Screening',
+              body: 'The Company screens all prospective and existing clients against the United Nations Security Council Resolutions (UNSCR) consolidated sanctions list and domestic enforcement databases prior to account onboarding.',
+            },
+            {
+              heading: '5. Client Due Diligence (CDD) Protocols',
+              body: 'No funds may be disbursed or transactions executed until satisfactory identity verification is obtained. Third-party representation requires complete documentation of beneficial ownership and authority.',
+            },
+            {
+              heading: '6. Identification Verification Standards',
+              body: 'Identity verification uses cumulative, reliable documentation. Single unverified data sources are not accepted. The legal responsibility for verification rests entirely with the Company.',
+            },
+            {
+              heading: '7. Source of Wealth & Enhanced Due Diligence',
+              body: 'Enhanced due diligence is required for high-net-worth applicants, complex corporate structures, and Politically Exposed Persons (PEPs), including documented verification of source of wealth and economic background.',
+            },
+            {
+              heading: '8. Individual Customer Requirements',
+              body: 'Individual applicants must provide valid government-issued photographic ID (passport or national ID card) and independent proof of residential address (utility bill or bank statement within 90 days).',
+            },
+            {
+              heading: '9. Corporate Customer Due Diligence Standards',
+              body: 'Corporate applicants must furnish Certificate of Incorporation, Memorandum and Articles of Association, Certificate of Incumbency listing current directors, and full identity records for all Ultimate Beneficial Owners (UBOs holding 25%+).',
+            },
+            {
+              heading: '10. Bi-Annual Review and Corporate Governance',
+              body: 'This Policy is reviewed at least every six months for operational effectiveness and updated in accordance with statutory directives issued by the Saint Lucia FSRA.',
+            },
+          ],
+        ),
+      },
+      ar: {
+        title: 'سياسة مكافحة غسل الأموال والعناية الواجبة (AML/KYC)',
+        body: legalBody(
+          'تمت صياغة سياسة مكافحة غسل الأموال والتحقق من هوية العميل لشركة NEWERA CAPITAL MARKETS LIMITED وفقاً لقوانين سانت لوسيا (قانون منع غسل الأموال، قانون مكافحة الإرهاب) وتوصيات مجموعة العمل المالي (FATF) بإشراف هيئة تنظيم الخدمات المالية (FSRA).',
+          [
+            {
+              heading: '1. الإطار التنظيمي وأهداف السياسة',
+              body: 'تطبق سياستنا نهجاً قائماً على تقييم المخاطر لمنع غسل الأموال وتمويل الإرهاب، مع الحظر التام للتعامل مع البنوك الوهمية أو الحسابات مجهولة الهوية أو الدول المدرجة في القائمة السوداء لـ FATF.',
+            },
+            {
+              heading: '2. الركائز الخمس لمكافحة غسل الأموال',
+              body: 'يرتكز برنامجنا على: (1) إجراءات التحقق من الهوية (KYC)؛ (2) حفظ السجلات؛ (3) الإبلاغ الداخلي لضابط الامتثال؛ (4) الرقابة الداخلية والوقاية؛ (5) التدريب المستمر للموظفين.',
+            },
+            {
+              heading: '3. معايير الامتثال ومسؤوليات الموظفين',
+              body: 'الامتثال لإجراءات مكافحة غسل الأموال إلزامي لجميع موظفي الشركة، ويعتبر أي إهمال أو تقاعس في الإبلاغ مخالفة جسيمة تستوجب المساءلة القانونية والفصل الفوري.',
+            },
+            {
+              heading: '4. فحص العقوبات الدولية وقوائم الأمم المتحدة',
+              body: 'تُجري الشركة فحصاً شاملاً لجميع العملاء الجدد والحاليين مقابل القوائم الموحدة لمجلس الأمن الدولي (UNSCR) وقوائم العقوبات الرسمية قبل تفعيل أي حساب.',
+            },
+            {
+              heading: '5. إجراءات العناية الواجبة بالعملاء (CDD)',
+              body: 'لا يتم تنفيذ أي معاملات أو تحويلات مالية قبل اكتمال التحقق من هوية العميل والتحقق من المستفيد الحقيقي وصحة التوكيلات القانونية.',
+            },
+            {
+              heading: '6. معايير التحقق التراكمي من الهوية',
+              body: 'تعتمد إجراءات التحقق على مصادر ووثائق متعددة موثوقة ومطابقة ولا يُكتفى بمصدر منفرد لتأكيد الهوية ومحل الإقامة.',
+            },
+            {
+              heading: '7. مصادر الثروة والعناية الواجبة المعززة (EDD)',
+              body: 'تُطبق العناية المعززة على الشخصيات السياسية البارزة (PEPs) والهياكل المعقدة، بما يشمل التحقق الموثق من مصادر الثروة والنشاط الاقتصادي المولد لها.',
+            },
+            {
+              heading: '8. متطلبات التحقق للأفراد',
+              body: 'يلتزم العميل الفرد بتقديم جواز سفر ساري المفعول أو بطاقة هوية وطنية معتمدة، مع وثيقة حديثة لإثبات العنوان (فاتورة خدمات أو كشف بنكي حديث).',
+            },
+            {
+              heading: '9. متطلبات التحقق للشركات والمؤسسات',
+              body: 'تلتزم الشركات بتقديم شهادة التأسيس، وعقد التأسيس، والنظام الأساسي، وشهادة الصلاحية (Incumbency)، مع بيانات كاملة للمستفيدين الحقيقيين (25%+).',
+            },
+            {
+              heading: '10. المراجعة النصف سنوية والحوكمة',
+              body: 'تخضع هذه السياسة للمراجعة الدورية كل ستة أشهر لضمان مواكبة أحدث التوجيهات الصادرة عن الهيئات الرقابية في سانت لوسيا.',
+            },
+          ],
+        ),
+      },
+      effectiveDate: '2026-01-01',
+      version: 'v1.0',
+    },
+
+    // 5. Risk Disclosure (Existing standard disclosure)
+    {
+      pageType: 'risk-disclosure',
+      en: {
+        title: 'Risk Disclosure',
+        slug: 'risk-disclosure',
+        body: legalBodyWithLead(
+          'IMPORTANT RISK WARNING',
+          'Trading in Contracts for Difference (CFDs) and other leveraged instruments carries a high level of risk to your capital. You may lose more than your initial deposit.',
+          [
+            {
+              heading: '1. Nature of Leveraged Products & CFDs',
+              body: 'CFDs are complex derivative instruments. Between 70% and 80% of retail investor accounts lose money when trading CFDs due to the effects of leverage and rapid market shifts.',
+            },
+            {
+              heading: '2. Assessing Suitability & Experience',
+              body: 'Before opening an account, you should carefully evaluate your investment objectives, trading experience, and risk tolerance, ensuring you fully comprehend product mechanics.',
+            },
+            {
+              heading: '3. Market Volatility & Gapping Risks',
+              body: 'Financial markets experience sharp price swings, slippage, and weekend gap events during which stop-loss orders may execute at prices significantly different from requested levels.',
+            },
+            {
+              heading: '4. Past Performance Disclaimer',
+              body: 'Past trading results, backtests, and historical chart patterns are not indicative of future performance. Never invest discretionary capital you cannot afford to lose entirely.',
+            },
+            {
+              heading: '5. Independent Professional Advice',
+              body: 'If you do not fully understand the risks associated with derivative and foreign exchange trading, you should consult an independent, licensed financial advisor before trading.',
+            },
+          ],
+        ),
+      },
+      ar: {
+        title: 'إفصاح وتحذير المخاطر',
+        body: legalBodyWithLead(
+          'تحذير مهم من المخاطر',
+          'التداول في عقود الفروقات (CFDs) والمنتجات المالية ذات الرافعة ينطوي على مستوى عالٍ من المخاطر لرأس مالك. قد تخسر أكثر من مبلغ إيداعك الأولي.',
+          [
+            {
+              heading: '1. طبيعة المنتجات ذات الرافعة وعقود الفروقات',
+              body: 'عقود الفروقات أدوات مشتقة معقدة. تخسر نسبة كبيرة من حسابات المستثمرين الأفراد أموالها نتيجة تأثير الرافعة المالية والتقلبات السريعة في السوق.',
+            },
+            {
+              heading: '2. تقييم الملاءمة والخبرة الاستثمارية',
+              body: 'يجب عليك قبل التداول تقييم أهدافك وخبرتك وقدرتك على تحمل المخاطر والتأكد من استيعابك لكيفية عمل هذه الأدوات المالية.',
+            },
+            {
+              heading: '3. تقلبات الأسواق ومخاطر الفجوات السعرية',
+              body: 'تشهد الأسواق المالية تقلبات حادة وانزلاقات سعرية وفجوات افتتاحية قد تؤدي لتنفيذ أوامر وقف الخسارة عند مستويات مختلفة عن السعر المحدد.',
+            },
+            {
+              heading: '4. الأداء السابق لا يضمن النتائج المستقبلية',
+              body: 'النتائج التاريخية ونماذج التداول السابقة ليست مؤشراً على الأداء المستقبلي. لا تتداول أبداً بأموال لا تستطيع تحمل خسارتها بالكامل.',
+            },
+            {
+              heading: '5. طلب المشورة المالية المستقلة',
+              body: 'إذا كانت لديك أي شكوك بشأن ملائمة هذه المنتجات لظروفك المالية، نوصي باستشارة مستشار مالي مستقل ومرخص قبل اتخاذ أي قرار.',
+            },
+          ],
+        ),
+      },
+      effectiveDate: '2026-01-01',
+      version: 'v1.0',
+    },
+
+    // 6. Website Terms & Conditions (from Website-Terms-Conditions.pdf)
+    {
+      pageType: 'website-terms',
+      en: {
+        title: 'Website Terms & Conditions',
+        slug: 'website-terms',
+        body: legalBody(
+          'NEWERA CAPITAL MARKETS LIMITED ("the Company / NCML") (Company No.: 2023-00564) was incorporated on 8 November 2023 under Cap 12.14, Section 6 of International Business Companies Act, Saint Lucia. Your access to and use of this website is subject to these Terms & Conditions and all applicable disclaimers.',
+          [
+            {
+              heading: '1. Preamble and Acceptance of Terms',
+              body: 'By accessing or browsing this website, you agree to be bound by these Website Terms and our accompanying legal policies. If you do not agree to these terms, you must immediately cease using this website.',
+            },
+            {
+              heading: '2. Accuracy of Website Information',
+              body: 'While the Company endeavors to maintain current and reliable information, we do not warrant that all content is entirely accurate or error-free at any given time. Products and services may vary and may be restricted in certain jurisdictions.',
+            },
+            {
+              heading: '3. Visitors to This Website & Age Restriction (18+)',
+              body: 'The information on this website is not intended for distribution to, or use by, any person in jurisdictions where such distribution would contravene local laws. Users must be strictly over eighteen (18) years of age.',
+            },
+            {
+              heading: '4. General Information Only — No Advice',
+              body: 'All material on this website is of a general educational nature and does not constitute financial, investment, legal, tax, or trading advice. Users must seek independent professional guidance before making financial decisions.',
+            },
+            {
+              heading: '5. Copyright, Trademarks and Intellectual Property',
+              body: 'Newera Capital Markets Limited and the NCML logo are registered trademarks. No website content may be reproduced, transmitted, or distributed without express written authorization from the Company.',
+            },
+            {
+              heading: '6. Third-Party Content & Hyperlinks',
+              body: 'Links to external websites are provided solely for user convenience. The Company makes no representations regarding the accuracy, safety, or reliability of third-party websites or services.',
+            },
+            {
+              heading: '7. Disclaimer and Limitation of Liability',
+              body: 'To the maximum extent permitted by applicable law, the Company disclaims all liability for any direct or indirect loss or damages arising from the use of or inability to access this website.',
+            },
+            {
+              heading: '8. Periodic Policy Review',
+              body: 'This Website Terms & Conditions document is reviewed regularly (at least every six months) by executive management to ensure ongoing relevance and compliance.',
+            },
+          ],
+        ),
+      },
+      ar: {
+        title: 'شروط استخدام الموقع الإلكتروني',
+        body: legalBody(
+          'تأسست شركة NEWERA CAPITAL MARKETS LIMITED ("الشركة / NCML") (رقم الشركة: 2023-00564) في 8 نوفمبر 2023 بموجب الفصل 12.14 المادة 6 من قانون الشركات في سانت لوسيا. يخضع استخدامك لهذا الموقع لهذه الشروط والأحكام.',
+          [
+            {
+              heading: '1. مقدمة والموافقة على الشروط',
+              body: 'يُعد تصفحك لهذا الموقع أو استخدامه موافقة صريحة على الالتزام بشروط الاستخدام والسياسات القانونية المعتمدة. في حال عدم الموافقة، يُرجى التوقف عن استخدام الموقع.',
+            },
+            {
+              heading: '2. دقة المعلومات وتوفر الخدمات',
+              body: 'على الرغم من حرص الشركة على تحديث المحتوى، لا نضمن خلو الموقع تماماً من الأخطاء في كل الأوقات. قد تتغير المنتجات والخدمات أو تخضع لقيود جغرافية.',
+            },
+            {
+              heading: '3. زوار الموقع والسن القانوني (18+)',
+              body: 'المعلومات الواردة في هذا الموقع ليست موجهة لأي شخص في أي دولة تحظر قوانينها مثل هذا الاستخدام. يُشترط أن يتجاوز عمر المستخدم ثمانية عشر (18) عاماً.',
+            },
+            {
+              heading: '4. محتوى عام لأغراض التوعية — لا يمثل مشورة',
+              body: 'جميع المعلومات المنشورة عامة وتثقيفية ولا تمثل نصائح استثمارية أو مالية أو قانونية. يُنصح بالحصول على مشورة مهنية مستقلة قبل التداول.',
+            },
+            {
+              heading: '5. حقوق الطبع والنشر والعلامات التجارية',
+              body: 'اسم وشعار Newera Capital Markets علامات تجارية مسجلة. يُحظر نسخ أو إعادة نشر أي جزء من محتوى الموقع دون إذن خطي مسبق من الشركة.',
+            },
+            {
+              heading: '6. روابط ومحتوى الأطراف الثالثة',
+              body: 'الروابط الخارجية متوفرة لتسهيل وصول المستخدمين فقط، ولا تتحمل الشركة أي مسؤولية عن موثوقية أو محتوى المواقع والخدمات الخارجية.',
+            },
+            {
+              heading: '7. إخلاء وحدود المسؤولية',
+              body: 'إلى أقصى حد يسمح به القانون، لا تتحمل الشركة أي مسؤولية عن أي خسائر مباشرة أو غير مباشرة تنشأ عن استخدام الموقع أو تعذر الوصول إليه.',
+            },
+            {
+              heading: '8. المراجعة الدورية للسياسة',
+              body: 'تخضع شروط استخدام الموقع لمراجعة دورية منتظمة كل ستة أشهر على الأقل من قبل الإدارة لضمان دقتها المستمرة.',
+            },
+          ],
+        ),
+      },
+      effectiveDate: '2026-01-01',
+      version: 'v1.0',
+    },
+
+    // 7. Anti-Fraud & Financial Crime Policy (from Anti-Fraud-and-Financial-Crime-Policy.pdf)
+    {
+      pageType: 'anti-fraud-policy',
+      en: {
+        title: 'Anti-Fraud & Financial Crime Policy',
+        slug: 'anti-fraud-policy',
+        body: legalBody(
+          'NEWERA CAPITAL MARKETS LIMITED ("the Company") is committed to the highest possible standards of openness, transparency, and accountability in all its affairs, maintaining a strict zero-tolerance policy against fraud and financial crime in any form.',
+          [
+            {
+              heading: '1. Policy Objectives & Commitment',
+              body: 'The objective of this policy is to establish clear definitions of fraud, enforce strict prohibitions against dishonest conduct, outline staff responsibilities, and protect whistleblowers who report suspected violations.',
+            },
+            {
+              heading: '2. Definition of Fraud & Unlawful Gains',
+              body: 'Fraud involves intentional deceit to secure unfair or unlawful gain or cause financial loss to another. Acts such as deception, bribery, forgery, extortion, corruption, embezzlement, and collusion fall within the scope of this policy.',
+            },
+            {
+              heading: '3. Main Types and Examples of Fraud',
+              body: 'Main fraud categories include: (i) Theft of funds or intellectual property; (ii) False accounting and misleading records; (iii) Fraudulent payment instructions; (iv) Bribery and kickbacks; and (v) Application forgery or data manipulation.',
+            },
+            {
+              heading: '4. Responsibilities of Employees and Staff',
+              body: 'All employees are required to remain vigilant, identify indicators of irregular conduct, maintain operational controls, and report any suspicious behavior immediately to the Compliance Officer or Board of Directors.',
+            },
+            {
+              heading: '5. Dealing with Reports of Suspected Fraud',
+              body: 'The Company operates a proactive detection framework. Upon receiving a report, a comprehensive investigation is launched immediately in coordination with relevant regulatory and law enforcement authorities.',
+            },
+            {
+              heading: '6. Confidentiality & Whistleblower Protection',
+              body: 'All fraud reports are treated with the strictest confidentiality. Employees who report concerns in good faith are fully protected against retaliation, victimization, or adverse employment action.',
+            },
+            {
+              heading: '7. Actions Arising from Investigations',
+              body: 'Individuals found guilty of fraudulent activity or financial crime face immediate disciplinary dismissal and full legal prosecution under applicable civil and criminal statutes.',
+            },
+            {
+              heading: '8. Periodic Policy Review',
+              body: 'This Anti-Fraud Policy is reviewed regularly (at least semi-annually) by executive management to verify its preventative effectiveness and operational integrity.',
+            },
+          ],
+        ),
+      },
+      ar: {
+        title: 'سياسة مكافحة الاحتيال والجرائم المالية',
+        body: legalBody(
+          'تلتزم شركة NEWERA CAPITAL MARKETS LIMITED ("الشركة") بأعلى معايير الشفافية والنزاهة والمساءلة، وتتبع سياسة عدم التسامح مطلقاً مع الاحتيال والجرائم المالية بكافة أشكالها.',
+          [
+            {
+              heading: '1. أهداف السياسة والالتزام المؤسسي',
+              body: 'تهدف هذه السياسة لتحديد مفهوم الاحتيال بوضوح، وفرض حظر قاطع على أي ممارسات غير نزيهة، وتحديد مسؤوليات الموظفين، وحماية المبلغين عن المخالفات.',
+            },
+            {
+              heading: '2. تعريف الاحتيال والمكاسب غير المشروعة',
+              body: 'يشمل الاحتيال أي فعل خادع ومتعمد لتحقيق مكاسب غير مشروعة أو إلحاق ضرر بالآخرين، بما في ذلك الرشوة والتزوير والاختلاس والتواطؤ.',
+            },
+            {
+              heading: '3. الأنواع الرئيسية ونماذج الاحتيال',
+              body: 'تشمل: (1) سرقة الأصول أو الملكية الفكرية؛ (2) تزوير الدفاتر والسجلات المحاسبية؛ (3) تعليمات الدفع المزيفة؛ (4) الرشاوى؛ (5) التلاعب بالبيانات أو تزوير الطلبات.',
+            },
+            {
+              heading: '4. مسؤوليات الموظفين وفرق العمل',
+              body: 'يلتزم جميع الموظفين باليقظة ورصد أي مؤشرات غير طبيعية والإبلاغ الفوري لضابط الامتثال ومجلس الإدارة عن أي شبهات احتيال.',
+            },
+            {
+              heading: '5. التعامل مع بلاغات وشبهات الاحتيال',
+              body: 'تتبنى الشركة آليات كشف استباقية. عند ورود أي بلاغ، يتم فتح تحقيق فوري وشامل بالتعاون مع الجهات التنظيمية والأمنية المختصة.',
+            },
+            {
+              heading: '6. السرية وحماية المُبلّغين (Whistleblowing)',
+              body: 'تُعامل جميع البلاغات بسرية تامة ومطلقة. يتم توفير الحماية الكاملة لأي موظف يبلغ بحسن نية ضد أي إجراءات انتقامية أو مضايقات.',
+            },
+            {
+              heading: '7. الإجراءات المترتبة على ثبوت الاحتيال',
+              body: 'يواجه أي شخص يثبت تورطه في أعمال احتيالية عقوبة الفصل الفوري من العمل والملاحقة القضائية والجنائية لاسترداد الحقوق.',
+            },
+            {
+              heading: '8. المراجعة الدورية للسياسة',
+              body: 'تخضع سياسة مكافحة الاحتيال لمراجعة نصف سنوية منتظمة من قبل الإدارة لتقييم فاعليتها وتحديث ضوابطها الرقابية.',
+            },
+          ],
+        ),
+      },
+      effectiveDate: '2026-01-01',
+      version: 'v1.0',
+    },
+
+    // 8. Conflicts of Interests Policy (from Conflicts-of-Interests-Policy.pdf)
+    {
+      pageType: 'conflicts-of-interest',
+      en: {
+        title: 'Conflicts of Interests Policy',
+        slug: 'conflicts-of-interest',
+        body: legalBody(
+          'This Conflicts of Interests Policy is issued in accordance with applicable Saint Lucia legislation (International Business Companies Act), requiring NEWERA CAPITAL MARKETS LIMITED to take all reasonable steps to identify, prevent, and manage conflicts of interest across its business operations.',
+          [
+            {
+              heading: '1. Policy Objectives & Core Principles',
+              body: 'The Company is committed to acting honestly, fairly, professionally, and in the best interests of its clients at all times, maintaining clear organizational mechanisms to prevent conflicts from harming clients.',
+            },
+            {
+              heading: '2. Criteria for Identifying Conflicts of Interest',
+              body: "Conflicts are identified where the Company, employee, or related party may: (i) Gain financial benefit at the client's expense; (ii) Have an interest distinct from the client's outcome; (iii) Have incentive to favor one client group over another; or (iv) Receive third-party inducements.",
+            },
+            {
+              heading: '3. Typical Conflict Scenarios',
+              body: 'Potential scenarios include trading volume incentives, remuneration arrangements with liquidity providers, strategy provider compensation, and personal account dealing by staff.',
+            },
+            {
+              heading: '4. Management Procedures and Organizational Controls',
+              body: 'Controls include continuous transaction monitoring, information segregation (Chinese walls), independent reporting lines, four-eyes supervision, internal audits, and separate management of conflicting departments.',
+            },
+            {
+              heading: '5. Personal Account Dealing & External Interests',
+              body: 'Employees and officers are prohibited from engaging in conflicting external business activities without prior Board approval and must adhere to strict personal account trading rules.',
+            },
+            {
+              heading: '6. Client Consent and Material Interests',
+              body: 'By entering into the Client Agreement, clients consent to the application of this policy. If a specific conflict cannot be adequately resolved internally, the Company will disclose the situation to the client.',
+            },
+            {
+              heading: '7. Disclosure of Information to Clients',
+              body: 'Where organizational arrangements are insufficient to guarantee prevention of risk to client interests, the Company clearly discloses the nature of the conflict prior to executing transactions.',
+            },
+            {
+              heading: '8. Governing Language and Policy Review',
+              body: 'This Policy is maintained in English as the authoritative version and is reviewed every six months by the Compliance Officer and Board of Directors.',
+            },
+          ],
+        ),
+      },
+      ar: {
+        title: 'سياسة تضارب المصالح',
+        body: legalBody(
+          'صدرت هذه السياسة بموجب تشريعات سانت لوسيا المعمول بها، وتلزم شركة NEWERA CAPITAL MARKETS LIMITED باتخاذ كافة التدابير لتحديد ومنع وإدارة تضارب المصالح في جميع تعاملاتها.',
+          [
+            {
+              heading: '1. أهداف السياسة والمبادئ الأساسية',
+              body: 'تلتزم الشركة بالتصرف بنزاهة وعدالة واحترافية وبما يخدم مصلحة عملائها الفضلى دائماً، مع تطبيق ضوابط تنظيمية متكاملة لمنع أي إضرار بمصالح العملاء.',
+            },
+            {
+              heading: '2. معايير تحديد تضارب المصالح',
+              body: 'يُحدد التضارب عندما يكون للشركة أو أحد موظفيها: (1) مصلحة مالية على حساب العميل؛ (2) مصلحة في نتيجة الصفقة تختلف عن مصلحة العميل؛ (3) حافز لتفضيل عميل على آخر؛ (4) تلقي حوافز خارجية.',
+            },
+            {
+              heading: '3. سيناريوهات ومجالات التضارب المحتملة',
+              body: 'تشمل مجالات التضارب: خطط المكافآت المرتبطة بأحجام التداول، وعمولات مزودي السيولة، ومدفوعات مزودي استراتيجيات التداول، وتداولات الموظفين الشخصية.',
+            },
+            {
+              heading: '4. الإجراءات والضوابط التنظيمية للإدارة والرقابة',
+              body: 'تتضمن الضوابط: الرقابة المستمرة، والجدران الصينية لفصل المعلومات، وفصل خطوط الإشراف، ومبدأ الرقابة الثنائية (Four-Eyes)، والتدقيق الداخلي المستمر.',
+            },
+            {
+              heading: '5. تداولات الموظفين الشخصية والأنشطة الخارجية',
+              body: 'يُحظر على الموظفين ممارسة أي أنشطة تجارية خارجية تتعارض مع مصالح الشركة دون موافقة مسبقة من مجلس الإدارة، مع الالتزام بقواعد التداول الشخصي.',
+            },
+            {
+              heading: '6. موافقة العميل والإفصاح عن المصالح الجوهرية',
+              body: 'تعتبر موافقة العميل على اتفاقية فتح الحساب قبولاً لتطبيق هذه السياسة. في حال تعذر معالجة أي تضارب داخلياً، يتم الرجوع للعميل وإخطاره.',
+            },
+            {
+              heading: '7. الإفصاح عن المعلومات للعملاء',
+              body: 'عندما لا تكون الترتيبات التنظيمية كافية لتفادي مخاطر الإضرار بمصالح العميل، تقوم الشركة بالإفصاح عن طبيعة التضارب قبل تنفيذ الصفقة.',
+            },
+            {
+              heading: '8. اللغة الرسمية والمراجعة الدورية',
+              body: 'النسخة الإنجليزية هي النسخة المعتمدة رسمياً، وتخضع السياسة للمراجعة الدورية كل ستة أشهر من قبل ضابط الامتثال ومجلس الإدارة.',
+            },
+          ],
+        ),
+      },
+      effectiveDate: '2026-01-01',
+      version: 'v1.0',
+    },
+
+    // 9. Customer Complaint Handling Policy (from Customer-Complaint-Handling-Policy.pdf)
+    {
+      pageType: 'complaint-handling',
+      en: {
+        title: 'Customer Complaint Handling Policy',
+        slug: 'complaint-handling',
+        body: legalBody(
+          'NEWERA CAPITAL MARKETS LIMITED values customer feedback in order to continuously improve service quality. We are committed to consistent, fair, prompt, and confidential complaint handling.',
+          [
+            {
+              heading: '1. Policy Objectives & Standards',
+              body: 'Our goal is to make it easy for clients to voice dissatisfaction and to ensure all complaints are investigated impartially, professionally, and resolved as quickly as possible.',
+            },
+            {
+              heading: '2. Dedicated Channels & Complaint Receipt',
+              body: 'Complaints should be directed to our dedicated channel at escalation@newera365.com or compliance@newera365.com. Any complaint received by staff is forwarded immediately to the Complaint Handling Officer.',
+            },
+            {
+              heading: '3. Acknowledgment & Record Keeping',
+              body: 'Every complaint is acknowledged promptly upon receipt. Complete records of communications and investigative steps are securely logged and maintained for audit and regulatory review.',
+            },
+            {
+              heading: '4. Polite and Courteous Response',
+              body: 'Every complainant is treated with professional courtesy. Where possible, straightforward queries are resolved on the spot by frontline support specialists.',
+            },
+            {
+              heading: '5. Escalation Procedures',
+              body: 'If a complaint cannot be resolved within the standard timeframe, it is escalated to Senior Management and Trust Officers, with updated resolution milestones provided to the client.',
+            },
+            {
+              heading: '6. Seven (7) Working Days Resolution Target',
+              body: 'The Company strives to investigate and resolve all complaints within seven (7) working days. Clients are kept regularly informed of progress and any service improvements implemented.',
+            },
+            {
+              heading: '7. Satisfaction Follow-Up & Policy Review',
+              body: 'Follow-up evaluations are conducted with complainants to assess resolution satisfaction. This Policy is reviewed at least semi-annually by management.',
+            },
+          ],
+        ),
+      },
+      ar: {
+        title: 'سياسة معالجة شكاوى العملاء',
+        body: legalBody(
+          'تولي شركة NEWERA CAPITAL MARKETS LIMITED اهتماماً بالغاً بملاحظات وشكاوى عملائها لتحسين جودة الخدمات، وتلتزم بمعالجة كافة الشكاوى بنزاهة وسرية وسرعة.',
+          [
+            {
+              heading: '1. أهداف السياسة ومعايير الخدمة',
+              body: 'نهدف لتسهيل تقديم الشكاوى للعملاء وضمان التحقيق في كل شكوى بحيادية واحترافية والعمل على حلها في أسرع وقت ممكن.',
+            },
+            {
+              heading: '2. القنوات المخصصة لتلقي الشكاوى',
+              body: 'تُرسل الشكاوى عبر البريد المخصص: escalation@newera365.com أو compliance@newera365.com، وتُحال الشكاوى الواردة للموظفين إلى ضابط الشكاوى فوراً.',
+            },
+            {
+              heading: '3. تأكيد الاستلام وتوثيق السجلات',
+              body: 'يتم تأكيد استلام الشكوى فور ورودها، وتُوثق كافة المراسلات والتحقيقات في سجلات آمنة ومتاحة لاطلاع الإدارة والهيئات الرقابية.',
+            },
+            {
+              heading: '4. الاستجابة المهنية والتعامل اللائق',
+              body: 'يُعامل كل عميل بأعلى درجات اللباقة والكياسة المهنية، مع العمل على حل المشكلات البسيطة بشكل فوري ومباشر.',
+            },
+            {
+              heading: '5. إجراءات التصعيد الداخلي',
+              body: 'في حال تعذر حل الشكوى ضمن الإطار الزمني الأولي، يتم تصعيدها للإدارة العليا ومسؤولي الائتمان، مع إخطار العميل بالجدول الزمني المحدث.',
+            },
+            {
+              heading: '6. مهلة الحل المستهدفة (7 أيام عمل)',
+              body: 'تسعى الشركة للبت في جميع الشكاوى وحلها خلال سبعة (7) أيام عمل كحد أقصى، مع إبقاء العميل على اطلاع مستمر بتقدم المعالجة.',
+            },
+            {
+              heading: '7. قياس رضا العميل والمراجعة الدورية',
+              body: 'يتم التواصل مع العملاء لاحقاً لتقييم مدى رضاهم عن المعالجة، وتخضع هذه السياسة للمراجعة نصف السنوية من قبل الإدارة.',
+            },
+          ],
+        ),
+      },
+      effectiveDate: '2026-01-01',
+      version: 'v1.0',
+    },
+
+    // 10. Deposit & Withdrawal Policy (from Deposit-Withdrawal-Policy.pdf)
+    {
+      pageType: 'deposit-withdrawal',
+      en: {
+        title: 'Deposit & Withdrawal Policy',
+        slug: 'deposit-withdrawal',
+        body: legalBody(
+          'This Deposit & Withdrawal Policy provides clients with a summary of NEWERA CAPITAL MARKETS LIMITED policies and terms governing deposit and withdrawal transactions across all live trading accounts.',
+          [
+            {
+              heading: '1. Policy Objective & Scope',
+              body: 'This policy governs all funding, balance transfers, and withdrawal transactions requested by clients who hold trading accounts with Newera Capital Markets Limited.',
+            },
+            {
+              heading: '2. Client Authorization & Settlements',
+              body: 'The Client authorizes the Company to process deposits and withdrawals on their behalf for account funding, settlement of trading transactions, and payment of outstanding obligations.',
+            },
+            {
+              heading: '3. Right to Withdraw Free Margin',
+              body: 'Clients have the right to withdraw unencumbered funds (Free Margin not utilized for open trade margin coverage) at any time without closing their trading account.',
+            },
+            {
+              heading: '4. Fund Processing Timeframes & Remittance',
+              body: "Fund transfer requests are processed within standard timeframes posted on the website. Crediting into the client's personal account depends on the beneficiary bank's processing schedule.",
+            },
+            {
+              heading: '5. Same-Method & Same-Remitter Rule (AML Compliance)',
+              body: 'Withdrawals must strictly be returned via the same payment method and to the same originating remitter account used for deposit. Third-party withdrawals are strictly prohibited under AML rules.',
+            },
+            {
+              heading: '6. Execution via Client Portal & Bank Freezes',
+              body: "All withdrawal requests must be initiated through the secure Client Portal on our website. The Company assumes no responsibility for delays resulting from account freezes imposed by the client's own bank.",
+            },
+            {
+              heading: '7. Regular Policy Review',
+              body: 'This Deposit & Withdrawal Policy is reviewed regularly (at least semi-annually) by financial operations and compliance management to maintain high operational standards.',
+            },
+          ],
+        ),
+      },
+      ar: {
+        title: 'سياسة الإيداع والسحب',
+        body: legalBody(
+          'توضح هذه السياسة القواعد والشروط المعتمدة لدى شركة NEWERA CAPITAL MARKETS LIMITED فيما يتعلق بمعاملات الإيداع والسحب لجميع حسابات التداول.',
+          [
+            {
+              heading: '1. هدف ونطاق السياسة',
+              body: 'تنطبق هذه السياسة على كافة عمليات تمويل الحسابات، والتحويلات الداخلية، وطلبات السحب المقدمة من قبل عملاء الشركة.',
+            },
+            {
+              heading: '2. تفويض العميل وتسوية العمليات',
+              body: 'يفوض العميل الشركة بتنفيذ عمليات الإيداع والسحب نيابة عنه لتمويل الحساب وتسوية نتائج التداول وسداد أي مبالغ مستحقة.',
+            },
+            {
+              heading: '3. الحق في سحب الهامش الحر (Free Margin)',
+              body: 'يحق للعميل سحب أي أموال غير محجوزة كهامش تغطية للمراكز المفتوحة (الهامش الحر) في أي وقت دون الحاجة لإغلاق الحساب.',
+            },
+            {
+              heading: '4. المهل الزمنية لمعالجة التحويلات',
+              body: 'تتم معالجة طلبات السحب من قبل الشركة ضمن المهل المحددة على الموقع، وتعتمد مدة وصول الأموال على البنك المستلم الخاص بالعميل.',
+            },
+            {
+              heading: '5. قاعدة السحب بنفس طريقة ومصدر الإيداع (AML)',
+              body: 'يجب أن تتم السحوبات حصرياً بنفس وسيلة الدفع وإلى نفس الحساب المصرفي الأصلي المودع منه، ويُمنع منعاً باتاً السحب لحسابات أطراف ثالثة.',
+            },
+            {
+              heading: '6. التنفيذ عبر بوابة العميل وإخلاء المسؤولية عن البنوك',
+              body: 'تُقدم جميع الطلبات عبر بوابة العميل الآمنة على الموقع. لا تتحمل الشركة أي مسؤولية عن تأخيرات ناتجة عن تجميد الحسابات من قبل بنك العميل.',
+            },
+            {
+              heading: '7. المراجعة الدورية للسياسة',
+              body: 'تخضع هذه السياسة لمراجعة دورية نصف سنوية من قبل إدارة العمليات المالية والامتثال لضمان كفاءة التنفيذ وأمان التحويلات.',
+            },
+          ],
+        ),
+      },
+      effectiveDate: '2026-01-01',
+      version: 'v1.0',
+    },
+
+    // 11. Order Execution Policy (from Order-Execution-Policy.pdf)
+    {
+      pageType: 'order-execution',
+      en: {
+        title: 'Order Execution Policy',
+        slug: 'order-execution',
+        body: legalBody(
+          'This Order Execution Policy provides an overview of how NEWERA CAPITAL MARKETS LIMITED executes client orders, the factors influencing execution timing, and how market volatility impacts order handling.',
+          [
+            {
+              heading: '1. Policy Objectives & Key Terms',
+              body: 'Key concepts such as Base Currency, Quote Currency, Completed Transaction, Long/Short Positions, Margin, Margin Calls, Slippage, and Underlying Markets are defined and govern order processing.',
+            },
+            {
+              heading: '2. Inherent Trading Risks Disclaimer',
+              body: 'Clients acknowledge the substantial risks inherent in trading financial instruments. This policy outlines order handling factors but is not exhaustive of all market risks.',
+            },
+            {
+              heading: '3. Commercial Efforts for Best Execution (No Absolute Guarantees)',
+              body: 'The Company makes commercially reasonable efforts to achieve the best outcome considering price, cost, speed, and liquidity. However, execution speed and pricing are not guaranteed during volatile conditions.',
+            },
+            {
+              heading: '4. Margin Requirements and Auto-Close Liquidation',
+              body: 'Orders will be declined if available margin is insufficient. When account margin falls below required thresholds, open positions may be liquidated automatically to mitigate further losses.',
+            },
+            {
+              heading: '5. Execution Practices and Slippage Management',
+              body: 'Slippage (the difference between expected and executed price) is a standard market dynamic during volatile announcements or illiquid hours. Orders execute at the next best available market price.',
+            },
+            {
+              heading: '6. Supported Order Types (Market, Pending, TP, SL)',
+              body: 'The platform supports Market Orders, Pending Orders (Buy/Sell Limit, Buy/Sell Stop), Take Profit (TP), and Stop Loss (SL) orders to manage market entries and risk.',
+            },
+            {
+              heading: '7. Client Consent & Policy Updates',
+              body: 'Placing an order signifies agreement to this Execution Policy. Clients are responsible for maintaining familiarity with current execution terms.',
+            },
+            {
+              heading: '8. Governing Language & Semi-Annual Review',
+              body: 'The English version is legally binding. This Policy is reviewed at least every six months by the management and trading desk.',
+            },
+          ],
+        ),
+      },
+      ar: {
+        title: 'سياسة تنفيذ الأوامر',
+        body: legalBody(
+          'تقدم هذه السياسة نظرة شاملة حول كيفية قيام شركة NEWERA CAPITAL MARKETS LIMITED بتنفيذ أوامر التداول، والعوامل المؤثرة على سرعة التنفيذ والتعامل مع تقلبات الأسواق.',
+          [
+            {
+              heading: '1. أهداف السياسة وتفسير المصطلحات',
+              body: 'تحدد السياسة المفاهيم الأساسية للتداول بما في ذلك عملة الأساس، وعملة التسعير، ومراكز الشراء والبيع، والهامش، والانزلاق السعري، والأسواق الأساسية.',
+            },
+            {
+              heading: '2. إقرار المخاطر المرتبطة بالتداول',
+              body: 'يقر العميل بالمخاطر الجوهرية للتداول في الأدوات المالية. تهدف هذه السياسة لتوضيح آليات التنفيذ دون أن تحصر كافة المخاطر المحتملة.',
+            },
+            {
+              heading: '3. بذل أقصى الجهود التجارية لأفضل تنفيذ (دون ضمانات مطلقة)',
+              body: 'تبذل الشركة كافة المساعي التجارية المعقولة لتحقيق أفضل النتائج من حيث السعر والسرعة، دون تقديم ضمانات مطلقة أثناء تقلبات الأسواق العنيفة.',
+            },
+            {
+              heading: '4. متطلبات الهامش والإغلاق التلقائي (Stop Out)',
+              body: 'يتم رفض الأوامر في حال عدم كفاية الهامش. وعند هبوط مستوى الهامش دون الحد الأدنى، قد تُغلق الصفقات تلقائياً للحد من تراكم الخسائر.',
+            },
+            {
+              heading: '5. ممارسات التنفيذ وإدارة الانزلاق السعري (Slippage)',
+              body: 'يعد الانزلاق السعري أمراً طبيعياً خلال صدور الأخبار القوية أو نقص السيولة، وتُنفذ الأوامر عند أفضل سعر متاح تالياً في السوق.',
+            },
+            {
+              heading: '6. أنواع الأوامر المدعومة (السوق، المعلقة، جني الأرباح، وقف الخسارة)',
+              body: 'تدعم المنصة أوامر السوق الفورية، والأوامر المعلقة (Limit / Stop)، وأوامر جني الأرباح (TP) ووقف الخسارة (SL) لإدارة المراكز والمخاطر.',
+            },
+            {
+              heading: '7. موافقة العميل وتحديثات السياسة',
+              body: 'يُعد إرسال أي أمر تداول عبر المنصة موافقة صريحة على شروط التنفيذ، ويقع على عاتق العميل متابعة أي تحديثات تطرأ على السياسة.',
+            },
+            {
+              heading: '8. اللغة الرسمية والمراجعة الدورية',
+              body: 'تُعتبر النسخة الإنجليزية هي المرجع القانوني الملزم، وتخضع السياسة للمراجعة نصف السنوية من قبل إدارة التداول والامتثال.',
+            },
+          ],
+        ),
+      },
+      effectiveDate: '2026-01-01',
+      version: 'v1.0',
+    },
+
+    // 12. Suspicious Activity Reporting Policy (from Suspicious-Activity-Reporting-Policy-and-Procedures.pdf)
+    {
+      pageType: 'suspicious-activity-reporting',
+      en: {
+        title: 'Suspicious Activity Reporting (SAR) Policy & Procedures',
+        slug: 'suspicious-activity-reporting',
+        body: legalBody(
+          'Based on guidelines issued by the Financial Services Regulatory Authority (FSRA) on AML/CFT, NEWERA CAPITAL MARKETS LIMITED has implemented this internal Suspicious Activity Report (SAR) Policy to detect, investigate, and fulfill reporting obligations regarding suspicious transactions.',
+          [
+            {
+              heading: '1. Policy Objectives & Framework',
+              body: 'Establishes structured internal mechanisms for identifying, evaluating, investigating, reporting, and recording potential suspicious transactions or attempted illicit activity.',
+            },
+            {
+              heading: '2. Identifying Suspicious Activities & Red Flags',
+              body: 'Employees must continuously monitor accounts for unusual transaction patterns, anomalous behaviors, or red flags that diverge from legitimate commercial trading activity.',
+            },
+            {
+              heading: '3. Evaluating and Internal Investigations',
+              body: 'Upon detecting a red flag, employees must notify the AML Compliance Officer (CO) immediately. The CO evaluates suspicion grounds and conducts structured investigations within five (5) working days.',
+            },
+            {
+              heading: '4. Reporting to Regulatory Authorities (FSRA & FIA Saint Lucia)',
+              body: 'Where reasonable grounds for suspicion exist, the Compliance Officer, in consultation with the Board of Directors, submits official reports directly to the Financial Services Regulatory Authority and Financial Intelligence Authority of Saint Lucia.',
+            },
+            {
+              heading: '5. Confidentiality & Prohibition on Tipping-Off',
+              body: 'All SAR filings and internal deliberations are strictly confidential. Under no circumstances may employees tip off the subject customer or unauthorized third parties regarding an ongoing investigation or report.',
+            },
+            {
+              heading: '6. Record-Keeping Mandate (Minimum 6-Year Retention)',
+              body: 'Complete records of customer identification, transactional background, and internal investigation files must be securely retained for a minimum period of six (6) years following transaction completion.',
+            },
+            {
+              heading: '7. Periodic Policy Review & Governance',
+              body: 'This SAR Policy is reviewed regularly (at least every six months) by executive management and the Compliance Officer to ensure strict adherence to international and Saint Lucia financial crime directives.',
+            },
+          ],
+        ),
+      },
+      ar: {
+        title: 'سياسة وإجراءات الإبلاغ عن الأنشطة المشبوهة (SAR)',
+        body: legalBody(
+          'استناداً لتوجيهات هيئة تنظيم الخدمات المالية (FSRA) بشأن مكافحة غسل الأموال وتمويل الإرهاب، طبقت شركة NEWERA CAPITAL MARKETS LIMITED هذه السياسة الداخلية للإبلاغ عن الأنشطة والمعاملات المشبوهة.',
+          [
+            {
+              heading: '1. أهداف السياسة والإطار الإجرائي',
+              body: 'تهدف السياسة لوضع آليات مؤسسية دقيقة لتحديد وتقييم والتحقيق في المعاملات المشبوهة أو المحاولات غير المشروعة وتوثيقها ورفع التقارير بشأنها.',
+            },
+            {
+              heading: '2. رصد الأنشطة المشبوهة والمؤشرات الحمراء (Red Flags)',
+              body: 'يلتزم موظفو الشركة بمراقبة الحسابات لرصد أي أنماط تداول غير معتادة أو طلبات مستغربة تخرج عن النطاق التجاري الطبيعي.',
+            },
+            {
+              heading: '3. التقييم والتحقيق الداخلي لضابط الامتثال',
+              body: 'عند رصد أي مؤشر اشتباه، يُخطر ضابط الامتثال (CO) فوراً لإجراء تقييم شامل وجمع الأدلة خلال مهلة أقصاها خمسة (5) أيام عمل.',
+            },
+            {
+              heading: '4. رفع التقارير للهيئات الرقابية (FSRA & FIA)',
+              body: 'عند ثبوت الاشتباه المعقول، يقوم ضابط الامتثال بالتشاور مع مجلس الإدارة ورفع تقرير رسمي مباشر لهيئة تنظيم الخدمات المالية ووحدة الاستخبارات المالية في سانت لوسيا.',
+            },
+            {
+              heading: '5. السرية التامة وحظر التنبيه (Anti-Tipping Off)',
+              body: 'تُحاط تقارير الاشتباه بسرية مطلقة، ويُحظر تماماً إشعار العميل أو أي طرف غير مخول بوجود تحقيق أو تقرير مرفوع بشأنه.',
+            },
+            {
+              heading: '6. حفظ السجلات والبيانات (6 سنوات كحد أدنى)',
+              body: 'تُحفظ كافة ملفات التحقيق والوثائق الثبوتية وسجلات المعاملات في أرشيف آمن لمدة لا تقل عن ست (6) سنوات من تاريخ إتمام المعاملة.',
+            },
+            {
+              heading: '7. المراجعة الدورية والحوكمة الرقابية',
+              body: 'تخضع هذه السياسة لمراجعة دورية كل ستة أشهر لضمان الامتثال الصارم للقوانين والمعايير الدولية لمكافحة الجرائم المالية.',
             },
           ],
         ),

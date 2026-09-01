@@ -380,11 +380,19 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
   const t = useTranslations('auth');
   const overlayRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<1 | 2>(1);
+  const [agreePolicies, setAgreePolicies] = useState(false);
+  const [ackRisks, setAckRisks] = useState(false);
+  const [confirmAccuracy, setConfirmAccuracy] = useState(false);
+
+  const canStartApp = agreePolicies && ackRisks && confirmAccuracy;
 
   useEffect(() => {
     if (type) {
       document.body.style.overflow = 'hidden';
       setStep(1);
+      setAgreePolicies(false);
+      setAckRisks(false);
+      setConfirmAccuracy(false);
     } else {
       document.body.style.overflow = '';
     }
@@ -515,9 +523,61 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
                 <strong>{t('step1RiskWarning')}</strong>
               </p>
 
-              <div className="mt-1">
-                <p className="font-semibold">{t('readyToStart')}</p>
-                <p className="text-muted mt-1">{t('readyToStartDesc')}</p>
+              {/* Mandatory Confirmations Framework */}
+              <div className="mt-2 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 sm:p-5 dark:border-white/10 dark:bg-white/[0.03]">
+                <div className="mb-3.5">
+                  <h3 className="text-foreground font-sans text-[15px] font-bold sm:text-[16px]">
+                    {t('beforeYouContinue')}
+                  </h3>
+                  <p className="text-muted mt-0.5 text-[12.5px] sm:text-[13px]">
+                    {t('reviewDocsCarefully')}
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  <label className="flex cursor-pointer select-none items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={agreePolicies}
+                      onChange={(e) => setAgreePolicies(e.target.checked)}
+                      className="accent-accent text-accent focus:ring-accent mt-1 h-4 w-4 cursor-pointer rounded border-gray-300 dark:border-gray-600 dark:bg-gray-800"
+                    />
+                    <span className="text-foreground text-[12.5px] leading-snug sm:text-[13px]">
+                      {t('ackAgreeTermsAndPolicies')}
+                    </span>
+                  </label>
+
+                  <label className="flex cursor-pointer select-none items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={ackRisks}
+                      onChange={(e) => setAckRisks(e.target.checked)}
+                      className="accent-accent text-accent focus:ring-accent mt-1 h-4 w-4 cursor-pointer rounded border-gray-300 dark:border-gray-600 dark:bg-gray-800"
+                    />
+                    <span className="text-foreground text-[12.5px] leading-snug sm:text-[13px]">
+                      {t('ackLeverageRisks')}
+                    </span>
+                  </label>
+
+                  <label className="flex cursor-pointer select-none items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={confirmAccuracy}
+                      onChange={(e) => setConfirmAccuracy(e.target.checked)}
+                      className="accent-accent text-accent focus:ring-accent mt-1 h-4 w-4 cursor-pointer rounded border-gray-300 dark:border-gray-600 dark:bg-gray-800"
+                    />
+                    <span className="text-foreground text-[12.5px] leading-snug sm:text-[13px]">
+                      {t('ackInfoAccurate')}
+                    </span>
+                  </label>
+                </div>
+
+                {!canStartApp && (
+                  <div className="mt-3.5 flex items-center gap-2 rounded-xl bg-amber-500/10 px-3 py-2 text-[12px] font-medium text-amber-700 dark:bg-amber-500/15 dark:text-amber-300">
+                    <LockIcon />
+                    <span>{t('lockConfirmRequired')}</span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -525,10 +585,15 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
             <div className="border-border/70 flex shrink-0 items-center justify-end rounded-b-[24px] border-t bg-slate-50/80 px-5 py-3.5 sm:px-6 sm:py-4 dark:border-white/10 dark:bg-[#16181d]">
               <button
                 type="button"
+                disabled={!canStartApp}
                 onClick={() => setStep(2)}
-                className="font-body rounded-full bg-[#00B050] px-6 py-2.5 text-[14px] font-semibold text-white shadow-md transition-all hover:bg-[#00B050]/90 active:scale-[0.98] sm:px-8 sm:py-3 sm:text-[15px]"
+                className={`font-body flex items-center gap-2 rounded-full px-6 py-2.5 text-[14px] font-semibold text-white shadow-md transition-all sm:px-8 sm:py-3 sm:text-[15px] ${
+                  canStartApp
+                    ? 'cursor-pointer bg-[#00B050] hover:bg-[#00B050]/90 active:scale-[0.98]'
+                    : 'cursor-not-allowed bg-gray-400 opacity-60 dark:bg-gray-600'
+                }`}
               >
-                {t('startApplication')}
+                <span>{t('startMyApplication')}</span>
               </button>
             </div>
           </div>

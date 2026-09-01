@@ -234,7 +234,19 @@ export interface CmsLegalPage {
   id: number;
   title: string;
   slug: string;
-  pageType: 'terms' | 'privacy-policy' | 'risk-disclosure' | 'aml-policy' | 'cookie-policy';
+  pageType:
+    | 'terms'
+    | 'privacy-policy'
+    | 'risk-disclosure'
+    | 'aml-policy'
+    | 'cookie-policy'
+    | 'website-terms'
+    | 'anti-fraud-policy'
+    | 'conflicts-of-interest'
+    | 'complaint-handling'
+    | 'deposit-withdrawal'
+    | 'order-execution'
+    | 'suspicious-activity-reporting';
   body: SlateNode[];
   effectiveDate: string;
   version?: string | null;
