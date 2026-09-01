@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { ALL_COUNTRIES, type CountryInfo } from './CountryData';
 
@@ -378,6 +378,8 @@ const DEFAULT_COUNTRY: CountryInfo = ALL_COUNTRIES[0] ?? {
 
 export function AuthModal({ type, onClose }: AuthModalProps) {
   const t = useTranslations('auth');
+  const tLegal = useTranslations('legal');
+  const locale = useLocale();
   const overlayRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<1 | 2>(1);
   const [agreePolicies, setAgreePolicies] = useState(false);
@@ -447,77 +449,47 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
             </div>
 
             {/* Scrollable Content Body */}
-            <div className="font-body text-foreground flex flex-1 flex-col gap-4 overflow-y-auto p-5 text-[13px] leading-relaxed sm:p-6 sm:text-[13.5px] md:p-8 md:text-[14px]">
+            <div
+              style={{
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'rgba(0, 176, 80, 0.45) transparent',
+              }}
+              className="font-body text-foreground scrollbar-tiny flex flex-1 flex-col gap-4 overflow-y-auto p-5 text-[13px] leading-relaxed sm:p-6 sm:text-[13.5px] md:p-8 md:text-[14px]"
+            >
               <p>{t('step1Welcome')}</p>
 
               <ul className="flex list-disc flex-col gap-1.5 pl-6 font-medium">
-                <li>
-                  <a
-                    href="/legal?tab=terms"
-                    onClick={onClose}
-                    className="font-semibold text-[#00B050] underline hover:text-[#00B050]/80"
-                  >
-                    {t('termsOfBusiness')}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/legal?tab=execution"
-                    onClick={onClose}
-                    className="font-semibold text-[#00B050] underline hover:text-[#00B050]/80"
-                  >
-                    {t('orderExecutionPolicy')}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/legal?tab=risk-disclosure"
-                    onClick={onClose}
-                    className="font-semibold text-[#00B050] underline hover:text-[#00B050]/80"
-                  >
-                    {t('riskDisclosureStatement')}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/legal?tab=charges"
-                    onClick={onClose}
-                    className="font-semibold text-[#00B050] underline hover:text-[#00B050]/80"
-                  >
-                    {t('scheduleOfCharges')}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/legal?tab=conflicts"
-                    onClick={onClose}
-                    className="font-semibold text-[#00B050] underline hover:text-[#00B050]/80"
-                  >
-                    {t('conflictsOfInterestPolicy')}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/legal?tab=privacy-policy"
-                    onClick={onClose}
-                    className="font-semibold text-[#00B050] underline hover:text-[#00B050]/80"
-                  >
-                    {t('privacyPolicy')}
-                  </a>
-                </li>
+                {[
+                  { tab: 'terms', label: tLegal('docTerms') },
+                  { tab: 'order-execution', label: tLegal('docOrderExecution') },
+                  {
+                    tab: 'client-agreement',
+                    label: tLegal.has('docClientAgreement')
+                      ? tLegal('docClientAgreement')
+                      : 'Client Agreement',
+                  },
+                  { tab: 'conflicts-of-interest', label: tLegal('docConflicts') },
+                  { tab: 'privacy-policy', label: tLegal('docPrivacy') },
+                  { tab: 'cookie-policy', label: tLegal('docCookies') },
+                  { tab: 'aml-policy', label: tLegal('docAml') },
+                  { tab: 'anti-fraud-policy', label: tLegal('docAntiFraud') },
+                  { tab: 'complaint-handling', label: tLegal('docComplaintHandling') },
+                  { tab: 'deposit-withdrawal', label: tLegal('docDepositWithdrawal') },
+                  { tab: 'suspicious-activity-reporting', label: tLegal('docSar') },
+                ].map((doc) => (
+                  <li key={doc.tab}>
+                    <a
+                      href={`/${locale}/legal?tab=${doc.tab}`}
+                      onClick={onClose}
+                      className="font-semibold text-[#00B050] underline hover:text-[#00B050]/80"
+                    >
+                      {doc.label}
+                    </a>
+                  </li>
+                ))}
               </ul>
 
-              <p>
-                {t('step1AgreementDesc')}{' '}
-                <a
-                  href="/legal?tab=terms"
-                  onClick={onClose}
-                  className="font-semibold text-[#00B050] underline hover:text-[#00B050]/80"
-                >
-                  {t('clientAgreement')}
-                </a>
-                .
-              </p>
+              <p>{t('step1AgreementDesc')}</p>
 
               <p>
                 <strong>{t('step1RiskWarning')}</strong>
@@ -725,7 +697,10 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
         )
       ) : (
         /* ── Demo Modal ── */
-        <div className="relative z-10 flex max-h-[85vh] w-full max-w-[580px] flex-col overflow-y-auto rounded-[24px] bg-white p-5 shadow-[0_32px_80px_rgba(0,0,0,0.22)] sm:max-h-[90vh] md:p-8 dark:bg-[#111316]">
+        <div
+          style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(0, 176, 80, 0.45) transparent' }}
+          className="scrollbar-tiny relative z-10 flex max-h-[85vh] w-full max-w-[580px] flex-col overflow-y-auto rounded-[24px] bg-white p-5 shadow-[0_32px_80px_rgba(0,0,0,0.22)] sm:max-h-[90vh] md:p-8 dark:bg-[#111316]"
+        >
           <button
             type="button"
             onClick={onClose}

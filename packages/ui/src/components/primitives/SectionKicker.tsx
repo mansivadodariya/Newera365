@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ReactNode, type HTMLAttributes } from
 
 interface SectionKickerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
+  uppercase?: boolean;
 }
 
 /**
@@ -15,7 +16,12 @@ interface SectionKickerProps extends HTMLAttributes<HTMLDivElement> {
  * so RTL keeps the tick draw only. The animation is an enhancement, never a
  * gate on visibility (armed only after JS runs, with an IO bail-out).
  */
-function SectionKicker({ children, className = '', ...props }: SectionKickerProps) {
+function SectionKicker({
+  children,
+  uppercase = true,
+  className = '',
+  ...props
+}: SectionKickerProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<'static' | 'armed' | 'drawn'>('static');
   const text = typeof children === 'string' && /[A-Za-z]/.test(children) ? children : null;
@@ -86,7 +92,10 @@ function SectionKicker({ children, className = '', ...props }: SectionKickerProp
           phase === 'armed' ? 'scale-x-0' : 'scale-x-100'
         }`}
       />
-      <span className="text-eyebrow font-mono font-medium uppercase" aria-label={text ?? undefined}>
+      <span
+        className={`text-eyebrow font-mono font-medium ${uppercase ? 'uppercase' : ''}`}
+        aria-label={text ?? undefined}
+      >
         <span aria-hidden={text !== null ? true : undefined}>{eyebrow}</span>
         {typing && (
           <span

@@ -64,8 +64,10 @@ function renderNode(node: SlateNode, i: number): ReactNode {
         </h1>
       );
     case 'h2': {
+      const text = extractText(node).trim();
+      if (!text) return null;
       const h2id =
-        extractText(node)
+        text
           .toLowerCase()
           .replace(/[^\p{L}\p{N}]+/gu, '-')
           .replace(/^-+|-+$/g, '') || undefined;
@@ -205,7 +207,8 @@ export function extractHeadings(
   for (const node of content) {
     const match = node.type?.match(/^h(\d)$/);
     if (match) {
-      const text = extractText(node);
+      const text = extractText(node).trim();
+      if (!text) continue;
       const id = text
         .toLowerCase()
         .replace(/[^\p{L}\p{N}]+/gu, '-')

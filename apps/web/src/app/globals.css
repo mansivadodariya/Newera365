@@ -186,6 +186,36 @@ h4 {
   display: none;
 }
 
+/* Tiny themed brand green scrollbar */
+.scrollbar-tiny {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(0, 176, 80, 0.45) transparent !important;
+  -ms-overflow-style: auto !important;
+}
+.scrollbar-tiny::-webkit-scrollbar {
+  display: block !important;
+  width: 5px !important;
+  height: 5px !important;
+}
+.scrollbar-tiny::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+.scrollbar-tiny::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 176, 80, 0.4) !important;
+  border-radius: 9999px !important;
+}
+.scrollbar-tiny:hover::-webkit-scrollbar-thumb,
+.scrollbar-tiny::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 176, 80, 0.75) !important;
+}
+.dark .scrollbar-tiny::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 176, 80, 0.45) !important;
+}
+.dark .scrollbar-tiny:hover::-webkit-scrollbar-thumb,
+.dark .scrollbar-tiny::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 176, 80, 0.8) !important;
+}
+
 /* ── Shared interaction utilities (site-wide interactivity pass) ───────────
    Reusable hover/press affordances applied across cards, links, and tappable
    surfaces. All movement is gated behind `prefers-reduced-motion: no-preference`

@@ -401,7 +401,7 @@ export interface LegalPage {
   pageType:
     | 'terms'
     | 'privacy-policy'
-    | 'risk-disclosure'
+    | 'client-agreement'
     | 'aml-policy'
     | 'cookie-policy'
     | 'website-terms'

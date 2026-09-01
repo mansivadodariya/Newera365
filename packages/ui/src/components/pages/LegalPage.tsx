@@ -18,11 +18,10 @@ export interface CmsLegalDocument {
 
 const PAGE_TYPE_LABELS: Record<string, string> = {
   terms: 'Terms & Conditions',
+  'client-agreement': 'Client Agreement',
   'privacy-policy': 'Privacy Policy',
-  'risk-disclosure': 'Risk Warning',
   'aml-policy': 'AML Policy',
   'cookie-policy': 'Cookie Policy',
-  'website-terms': 'Website Terms',
   'anti-fraud-policy': 'Anti-Fraud Policy',
   'conflicts-of-interest': 'Conflicts of Interest',
   'complaint-handling': 'Complaint Handling',
@@ -58,16 +57,14 @@ export function LegalPage({ documents }: LegalPageProps) {
     switch (id) {
       case 'terms':
         return t('docTerms');
+      case 'client-agreement':
+        return t.has('docClientAgreement') ? t('docClientAgreement') : 'Client Agreement';
       case 'privacy-policy':
         return t('docPrivacy');
-      case 'risk-disclosure':
-        return t('docRisk');
       case 'aml-policy':
         return t('docAml');
       case 'cookie-policy':
         return t('docCookies');
-      case 'website-terms':
-        return t.has('docWebsiteTerms') ? t('docWebsiteTerms') : 'Website Terms';
       case 'anti-fraud-policy':
         return t.has('docAntiFraud') ? t('docAntiFraud') : 'Anti-Fraud Policy';
       case 'conflicts-of-interest':
@@ -85,9 +82,28 @@ export function LegalPage({ documents }: LegalPageProps) {
     }
   };
 
+  const DOC_ORDER: string[] = [
+    'terms',
+    'privacy-policy',
+    'cookie-policy',
+    'aml-policy',
+    'client-agreement',
+    'anti-fraud-policy',
+    'conflicts-of-interest',
+    'complaint-handling',
+    'deposit-withdrawal',
+    'order-execution',
+    'suspicious-activity-reporting',
+  ];
+
   const uniqueDocs = (documents ?? [])
     .filter((d) => Boolean(d.title?.trim()))
-    .filter((d, i, arr) => arr.findIndex((x) => x.pageType === d.pageType) === i);
+    .filter((d, i, arr) => arr.findIndex((x) => x.pageType === d.pageType) === i)
+    .sort((a, b) => {
+      const ia = DOC_ORDER.indexOf(a.pageType);
+      const ib = DOC_ORDER.indexOf(b.pageType);
+      return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+    });
   const hasCms = uniqueDocs.length > 0;
 
   const cmsDocList = uniqueDocs.map((d) => ({
@@ -175,13 +191,57 @@ export function LegalPage({ documents }: LegalPageProps) {
     }
   };
 
+  function formatHeadingTitle(text: string): string {
+    if (!text) return '';
+    const letters = text.replace(/[^A-Za-z]/g, '');
+    if (letters.length > 3 && letters === letters.toUpperCase()) {
+      const acronyms = new Set([
+        'AML',
+        'KYC',
+        'SAR',
+        'NCML',
+        'FX',
+        'CFD',
+        'CFDS',
+        'MT5',
+        'XOH',
+        'PEP',
+        'PEPS',
+        'UNSCR',
+        'UNSC',
+        'CDD',
+        'EDD',
+        'EEA',
+        'PRC',
+        'IP',
+        'SSL',
+        'URL',
+        'TOC',
+        'ID',
+        'LLP',
+      ]);
+      return text
+        .split(/\s+/)
+        .map((w, idx) => {
+          const cleanWord = w.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+          if (acronyms.has(cleanWord)) return w;
+          if (idx === 0) return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+          return w.toLowerCase();
+        })
+        .join(' ');
+    }
+    return text;
+  }
+
   const cmsDoc = uniqueDocs.find((d) => d.pageType === activeDoc) ?? null;
   const tocItems = cmsDoc
-    ? extractHeadings(cmsDoc.body).map((h, idx) => ({
-        num: String(idx + 1),
-        title: h.text,
-        id: h.id,
-      }))
+    ? extractHeadings(cmsDoc.body)
+        .filter((h) => Boolean(h.text && h.text.trim()))
+        .map((h, idx) => ({
+          num: String(idx + 1),
+          title: formatHeadingTitle(h.text),
+          id: h.id,
+        }))
     : [];
 
   // Scroll-spy: highlight the TOC anchor for the section currently in view.
@@ -305,11 +365,17 @@ export function LegalPage({ documents }: LegalPageProps) {
       <section className="bg-transparent px-5 pb-6 pt-9">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
           <h1 className="text-foreground text-display font-sans">
-            {t('heroLine1')}
-            <br />
-            <span>{t('heroLine2')}</span>
+            {cmsDoc?.title ? (
+              cmsDoc.title
+            ) : (
+              <>
+                {t('heroLine1')}
+                <br />
+                <span>{t('heroLine2')}</span>
+              </>
+            )}
           </h1>
-          <p className="font-body text-muted max-w-[340px] text-[15px] leading-[1.55]">
+          <p className="font-body text-muted max-w-[440px] text-[15px] leading-[1.55]">
             {t('heroSubtitle')}
           </p>
         </div>
@@ -359,7 +425,7 @@ export function LegalPage({ documents }: LegalPageProps) {
                   key={doc.id}
                   data-active={activeDoc === doc.id ? 'true' : 'false'}
                   onClick={() => selectTab(doc.id)}
-                  className={`flex-shrink-0 rounded-full border px-4 py-[7px] font-mono text-[12px] uppercase tracking-[0.06em] transition-all active:scale-[0.98] ${
+                  className={`flex-shrink-0 rounded-full border px-4 py-[7px] font-mono text-[12px] tracking-[0.06em] transition-all active:scale-[0.98] ${
                     activeDoc === doc.id
                       ? 'bg-accent border-transparent text-white shadow-sm'
                       : 'border-border text-muted hover:border-accent/50 hover:text-foreground dark:hover:border-accent/50 bg-white dark:border-white/10 dark:bg-[#111318] dark:text-white/55 dark:hover:text-white'
@@ -406,7 +472,9 @@ export function LegalPage({ documents }: LegalPageProps) {
                 aria-label={t('tocHeading')}
                 className="border-border rounded-[16px] border bg-white p-4 xl:sticky xl:top-[88px] xl:p-5 dark:border-white/10 dark:bg-[#1a1c22]"
               >
-                <SectionKicker className="mb-4">{t('tocHeading')}</SectionKicker>
+                <SectionKicker className="mb-4" uppercase={false}>
+                  {t('tocHeading')}
+                </SectionKicker>
                 <ol className="list-dim flex flex-col gap-0.5">
                   {tocItems.map((item) => {
                     const active = item.id === activeId;

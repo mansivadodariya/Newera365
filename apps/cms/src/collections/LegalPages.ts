@@ -9,7 +9,7 @@ import {
 
 const legalPaths = () => localePaths(['/legal']);
 
-// Powers /terms, /privacy-policy, /risk-disclosure, /aml-policy, /cookie-policy.
+// Powers /terms, /privacy-policy, /client-agreement, /aml-policy, /cookie-policy.
 // Only one published document per pageType + locale may be live — publishing a
 // new version auto-archives the previous one (archivePreviousLegalVersion).
 export const LegalPages: CollectionConfig = {
@@ -34,7 +34,6 @@ export const LegalPages: CollectionConfig = {
       options: [
         'terms',
         'privacy-policy',
-        'risk-disclosure',
         'aml-policy',
         'cookie-policy',
         'website-terms',
@@ -44,6 +43,7 @@ export const LegalPages: CollectionConfig = {
         'deposit-withdrawal',
         'order-execution',
         'suspicious-activity-reporting',
+        'client-agreement',
       ],
       admin: { description: 'One published document per type per locale.' },
     },

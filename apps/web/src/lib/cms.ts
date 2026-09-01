@@ -236,11 +236,10 @@ export interface CmsLegalPage {
   slug: string;
   pageType:
     | 'terms'
+    | 'client-agreement'
     | 'privacy-policy'
-    | 'risk-disclosure'
     | 'aml-policy'
     | 'cookie-policy'
-    | 'website-terms'
     | 'anti-fraud-policy'
     | 'conflicts-of-interest'
     | 'complaint-handling'

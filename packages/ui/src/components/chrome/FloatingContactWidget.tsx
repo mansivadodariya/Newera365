@@ -204,6 +204,24 @@ export function FloatingContactWidget({
             <p className="font-body relative mt-3.5 block rounded-[12px] border border-white/[0.08] bg-black/40 px-3.5 py-2.5 text-[13px] leading-snug text-white/95">
               {t('welcome')}
             </p>
+            <div className="relative mt-2.5 flex flex-col gap-1.5">
+              <a
+                href={`tel:${activePhone.replace(/\s+/g, '')}`}
+                className="font-body flex items-center gap-2 rounded-lg px-1 py-0.5 text-[12px] text-white/80 transition-colors hover:text-white"
+                dir="ltr"
+              >
+                <PhoneIcon />
+                <span>{activePhone}</span>
+              </a>
+              <a
+                href={`mailto:${activeEmail}`}
+                className="font-body flex items-center gap-2 rounded-lg px-1 py-0.5 text-[12px] text-white/80 transition-colors hover:text-white"
+                dir="ltr"
+              >
+                <MailIcon />
+                <span>{activeEmail}</span>
+              </a>
+            </div>
           </div>
 
           {/* Channel rows */}
