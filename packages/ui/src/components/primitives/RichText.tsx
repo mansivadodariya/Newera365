@@ -177,15 +177,18 @@ function renderNode(node: SlateNode, i: number): ReactNode {
         </figure>
       );
     }
-    default:
+    default: {
+      const text = extractText(node).trim();
+      if (!text) return null;
       return (
         <p
           key={i}
-          className="font-body text-foreground mb-4 hyphens-auto text-justify text-[15px] leading-[1.7]"
+          className="font-body text-foreground mb-4 hyphens-auto whitespace-pre-line text-justify text-[15px] leading-[1.7]"
         >
           {children}
         </p>
       );
+    }
   }
 }
 
@@ -196,7 +199,12 @@ interface RichTextProps {
 
 export function RichText({ content, className }: RichTextProps) {
   if (!content || content.length === 0) return null;
-  return <div className={className}>{content.map((node, i) => renderNode(node, i))}</div>;
+  const validNodes = content.filter((node) => {
+    if (node.type === 'upload') return true;
+    return Boolean(extractText(node).trim());
+  });
+  if (validNodes.length === 0) return null;
+  return <div className={className}>{validNodes.map((node, i) => renderNode(node, i))}</div>;
 }
 
 export function extractHeadings(

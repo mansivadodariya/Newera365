@@ -7,7 +7,12 @@ process.env.PAYLOAD_CONFIG_PATH =
 import payload from 'payload';
 
 function paragraph(text: string) {
-  return [{ children: [{ text }] }];
+  if (!text || !text.trim()) return [];
+  return text
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => ({ children: [{ text: p }] }));
 }
 
 function legalSections(sections: { heading: string; body: string }[]) {

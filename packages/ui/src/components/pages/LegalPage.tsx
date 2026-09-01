@@ -507,7 +507,7 @@ export function LegalPage({ documents }: LegalPageProps) {
           )}
 
           {/* Document body: CMS content only */}
-          <div className="flex min-w-0 flex-col gap-6">
+          <div className="flex min-w-0 flex-col gap-2.5">
             {cmsDoc ? (
               <>
                 {(cmsDoc.effectiveDate || cmsDoc.version) && (
@@ -524,7 +524,7 @@ export function LegalPage({ documents }: LegalPageProps) {
                 )}
                 <RichText
                   content={cmsDoc.body}
-                  className="[&_a]:link-underline flex flex-col gap-3 [&_h2]:scroll-mt-[88px] [&_h3]:scroll-mt-[88px]"
+                  className="[&_a]:link-underline flex flex-col [&_h2]:scroll-mt-[88px] [&_h3]:scroll-mt-[88px]"
                 />
               </>
             ) : (
