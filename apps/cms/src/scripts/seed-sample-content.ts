@@ -91,9 +91,9 @@ const SAMPLE: Dict = {
   ],
 
   // ── Contact ───────────────────────────────────────────────────────────────
-  contactEmail: 'support@newera365.com',
+  contactEmail: 'info@newera365.com',
   contactEmailCompliance: 'compliance@newera365.com',
-  contactPhone: '+1 867-778-3511',
+  contactPhone: '+44 2070970860',
   whatsappNumber: '+18677783511',
   contactAddressEn: '1 Example Street, London, EC1A 1AA, United Kingdom',
   contactAddressAr: '١ شارع المثال، لندن، EC1A 1AA، المملكة المتحدة',

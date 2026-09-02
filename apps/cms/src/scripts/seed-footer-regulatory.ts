@@ -38,7 +38,7 @@ const VALUES: Record<string, string> = {
     'Newera is authorised and regulated by the FCA (UK), ASIC (Australia), and CySEC (Cyprus). Trading leveraged products carries significant risk. Not suitable for all investors.',
   risk_disclaimer_ar:
     'نيو إيرا مرخصة ومنظمة من قبل FCA وASIC وCySEC. التداول بالمنتجات ذات الرافعة المالية ينطوي على مخاطر عالية.',
-  contact_email: 'support@newera365.com',
+  contact_email: 'info@newera365.com',
 };
 
 async function run() {

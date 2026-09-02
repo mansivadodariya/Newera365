@@ -369,9 +369,9 @@ async function seedSiteSettings() {
     downloadMt5Android:
       'https://download.terminal.free/cdn/mobile/mt5/android?server=NeweraCapitalMarkets-Server',
     downloadWebTrader: 'https://webtrading.newera365.com/terminal',
-    contactEmail: 'support@newera365.com',
+    contactEmail: 'info@newera365.com',
     contactEmailCompliance: 'compliance@newera365.com',
-    contactPhone: '+1 867-778-3511',
+    contactPhone: '+44 2070970860',
     whatsappNumber: '+18677783511',
     contactAddressEn: null,
     contactAddressAr: null,

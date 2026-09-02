@@ -132,14 +132,14 @@ interface Channel {
 const CHANNELS: Channel[] = [
   {
     id: 'email',
-    value: 'support@newera365.com',
+    value: 'info@newera365.com',
     icon: (
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
         <rect x="2" y="5" width="16" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
         <path d="M2 7l8 5 8-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
     ),
-    action: 'mailto:support@newera365.com',
+    action: 'mailto:info@newera365.com',
   },
   {
     id: 'chat',

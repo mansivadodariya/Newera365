@@ -80,8 +80,8 @@ function MailIcon() {
  * script.
  */
 export function FloatingContactWidget({
-  email = 'support@newera365.com',
-  phone = '+18677783511',
+  email = 'info@newera365.com',
+  phone = '+44 2070970860',
   whatsapp = '+18677783511',
 }: FloatingContactWidgetProps) {
   const t = useTranslations('contactWidget');
@@ -132,8 +132,8 @@ export function FloatingContactWidget({
   }, [barOnThisRoute]);
 
   const activeWhatsapp = whatsapp || '+18677783511';
-  const activeEmail = email || 'support@newera365.com';
-  const activePhone = phone || '+18677783511';
+  const activeEmail = email || 'info@newera365.com';
+  const activePhone = phone || '+44 2070970860';
   const waDigits = activeWhatsapp.replace(/[^0-9]/g, '');
 
   const rowClass =

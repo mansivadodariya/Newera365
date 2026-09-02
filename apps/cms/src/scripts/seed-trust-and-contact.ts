@@ -47,7 +47,7 @@ const RATING = {
 };
 
 const CONTACT_FALLBACKS = {
-  contactPhone: '+1 867-778-3511',
+  contactPhone: '+44 2070970860',
   whatsappNumber: '+18677783511',
   supportHoursEn: 'Monday–Friday, 24/5',
   supportHoursAr: 'الاثنين–الجمعة، 24/5',
