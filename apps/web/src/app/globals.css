@@ -334,7 +334,10 @@ h4 {
   }
 }
 
-/* TradingView Logo & Watermark Removal — Loaded after all other styles */
+/* TradingView Logo & Watermark Removal — Loaded after all other styles.
+   ⚠️  The wildcard [class*="…"] selectors MUST be scoped to TradingView
+   containers — otherwise they nuke Tailwind utilities like `end-4`,
+   `snap-start`, `label-*` everywhere on the page (e.g. FloatingContactWidget). */
 .tv-embed-widget-copyright,
 .tv-embed-widget-branding,
 .tv-embed-widget-watermark,
@@ -342,10 +345,20 @@ h4 {
 .label-dzbd7lyV,
 .snap-dzbd7lyV,
 .end-dzbd7lyV,
-[class*="label-"],
-[class*="snap-"],
-[class*="end-"],
 [class*="js-copyright"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Scoped wildcard selectors — only inside TradingView embed containers */
+.tradingview-widget-container [class*="label-"],
+.tradingview-widget-container [class*="snap-"],
+.tradingview-widget-container [class*="end-"] {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;

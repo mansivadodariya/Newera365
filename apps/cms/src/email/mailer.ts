@@ -19,8 +19,8 @@ export async function sendNewsletterConfirmation({
 }): Promise<void> {
   const isAr = locale === 'ar';
   const subject = isAr
-    ? 'تأكيد اشتراكك في النشرة الإخبارية — Newera365'
-    : 'Confirm your Newera365 newsletter subscription';
+    ? 'تأكيد اشتراكك في النشرة الإخبارية — Newera'
+    : 'Confirm your Newera newsletter subscription';
 
   // confirmUrl is built from controlled sources but must still be escaped —
   // if an env var is misconfigured the raw string could break out of the href.
@@ -41,26 +41,26 @@ export async function sendNewsletterConfirmation({
     ? `
       <div dir="rtl" style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
         <h2>تأكيد الاشتراك في النشرة الإخبارية</h2>
-        <p>شكراً لاشتراكك في نشرة Newera365 الإخبارية.</p>
+        <p>شكراً لاشتراكك في نشرة Newera الإخبارية.</p>
         <p>يرجى النقر على الرابط أدناه لتأكيد اشتراكك:</p>
         <p><a href="${safeConfirmUrl}" style="background:#1a56db;color:#fff;padding:12px 24px;border-radius:4px;text-decoration:none;display:inline-block">تأكيد الاشتراك</a></p>
         <p style="color:#6b7280;font-size:13px">إذا لم تطلب الاشتراك، يمكنك تجاهل هذا البريد الإلكتروني.</p>
         <p style="color:#6b7280;font-size:13px">هذا الرابط صالح لمدة 72 ساعة.</p>
         <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>
-        <p style="color:#9ca3af;font-size:12px">Newera365 — تداول بثقة</p>
+        <p style="color:#9ca3af;font-size:12px">Newera — تداول بثقة</p>
         ${unsubscribeFooterAr}
       </div>
     `
     : `
       <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
         <h2>Confirm your newsletter subscription</h2>
-        <p>Thank you for subscribing to the Newera365 newsletter.</p>
+        <p>Thank you for subscribing to the Newera newsletter.</p>
         <p>Click the button below to confirm your subscription:</p>
         <p><a href="${safeConfirmUrl}" style="background:#1a56db;color:#fff;padding:12px 24px;border-radius:4px;text-decoration:none;display:inline-block">Confirm subscription</a></p>
         <p style="color:#6b7280;font-size:13px">If you didn't request this, you can safely ignore this email.</p>
         <p style="color:#6b7280;font-size:13px">This link is valid for 72 hours.</p>
         <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>
-        <p style="color:#9ca3af;font-size:12px">Newera365 — Trade with confidence</p>
+        <p style="color:#9ca3af;font-size:12px">Newera — Trade with confidence</p>
         ${unsubscribeFooterEn}
       </div>
     `;
@@ -104,27 +104,27 @@ export async function sendEbookDelivery({
     ? `
       <div dir="rtl" style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;padding:32px">
         <div style="border-bottom:3px solid #00b050;padding-bottom:16px;margin-bottom:24px">
-          <span style="font-size:22px;font-weight:700;color:#111">Newera365</span>
+          <span style="font-size:22px;font-weight:700;color:#111">Newera</span>
         </div>
         <h2 style="color:#111;font-size:20px;margin-bottom:12px">ها هو كتابك الإلكتروني 📘</h2>
         <p style="color:#374151;line-height:1.6">شكراً لطلبك <strong>${safeTitle}</strong>. الملف مرفق بهذا البريد.</p>
         <p style="color:#374151;line-height:1.6">إذا لم يظهر المرفق، يمكنك تنزيله مباشرة:</p>
         <p><a href="${safeUrl}" style="background:#00b050;color:#fff;padding:12px 24px;border-radius:4px;text-decoration:none;display:inline-block">تنزيل الـ PDF</a></p>
         <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>
-        <p style="color:#9ca3af;font-size:12px">Newera365 — تداول بثقة</p>
+        <p style="color:#9ca3af;font-size:12px">Newera — تداول بثقة</p>
       </div>
     `
     : `
       <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;padding:32px">
         <div style="border-bottom:3px solid #00b050;padding-bottom:16px;margin-bottom:24px">
-          <span style="font-size:22px;font-weight:700;color:#111">Newera365</span>
+          <span style="font-size:22px;font-weight:700;color:#111">Newera</span>
         </div>
         <h2 style="color:#111;font-size:20px;margin-bottom:12px">Here's your ebook 📘</h2>
         <p style="color:#374151;line-height:1.6">Thanks for requesting <strong>${safeTitle}</strong>. The PDF is attached to this email.</p>
         <p style="color:#374151;line-height:1.6">If the attachment doesn't show, download it directly:</p>
         <p><a href="${safeUrl}" style="background:#00b050;color:#fff;padding:12px 24px;border-radius:4px;text-decoration:none;display:inline-block">Download the PDF</a></p>
         <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>
-        <p style="color:#9ca3af;font-size:12px">Newera365 — Trade with confidence</p>
+        <p style="color:#9ca3af;font-size:12px">Newera — Trade with confidence</p>
       </div>
     `;
 
@@ -203,7 +203,7 @@ export async function sendWebinarRegistrationConfirmation({
         <p>الموعد (UTC): ${when}</p>
         <p>سنرسل إليك رابط الحضور قبل بدء الندوة.</p>
         <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>
-        <p style="color:#9ca3af;font-size:12px">Newera365 — تداول بثقة</p>
+        <p style="color:#9ca3af;font-size:12px">Newera — تداول بثقة</p>
       </div>
     `
     : `
@@ -214,7 +214,7 @@ export async function sendWebinarRegistrationConfirmation({
         <p>When (UTC): ${when}</p>
         <p>We'll send you the joining link before the session starts.</p>
         <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>
-        <p style="color:#9ca3af;font-size:12px">Newera365 — Trade with confidence</p>
+        <p style="color:#9ca3af;font-size:12px">Newera — Trade with confidence</p>
       </div>
     `;
 
@@ -265,8 +265,8 @@ export async function sendNewsletterWelcome({
 }): Promise<void> {
   const isAr = locale === 'ar';
   const subject = isAr
-    ? 'مرحباً بك في نشرة Newera365 الإخبارية'
-    : 'Welcome to The Monday Briefing — Newera365';
+    ? 'مرحباً بك في نشرة Newera الإخبارية'
+    : 'Welcome to The Monday Briefing — Newera';
 
   const serverUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3001';
   const unsubscribeUrl = unsubscribeToken
@@ -283,10 +283,10 @@ export async function sendNewsletterWelcome({
     ? `
       <div dir="rtl" style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;padding:32px">
         <div style="border-bottom:3px solid #00b050;padding-bottom:16px;margin-bottom:24px">
-          <span style="font-size:22px;font-weight:700;color:#111">Newera365</span>
+          <span style="font-size:22px;font-weight:700;color:#111">Newera</span>
         </div>
         <h2 style="color:#111;font-size:20px;margin-bottom:12px">اشتراكك مؤكد ✓</h2>
-        <p style="color:#374151;line-height:1.6">مرحباً بك في نشرة <strong>The Monday Briefing</strong> من Newera365.</p>
+        <p style="color:#374151;line-height:1.6">مرحباً بك في نشرة <strong>The Monday Briefing</strong> من Newera.</p>
         <p style="color:#374151;line-height:1.6">إليك ما ستحصل عليه كل أسبوع:</p>
         <ul style="color:#374151;line-height:2;padding-right:20px">
           <li>تحليل السوق الأسبوعي من فريق المحللين</li>
@@ -296,17 +296,17 @@ export async function sendNewsletterWelcome({
         </ul>
         <p style="color:#6b7280;font-size:13px;margin-top:24px">تصل النشرة كل يوم اثنين قبل افتتاح الأسواق.</p>
         <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>
-        <p style="color:#9ca3af;font-size:12px">Newera365 — تداول بثقة</p>
+        <p style="color:#9ca3af;font-size:12px">Newera — تداول بثقة</p>
         ${unsubFooterAr}
       </div>
     `
     : `
       <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;padding:32px">
         <div style="border-bottom:3px solid #00b050;padding-bottom:16px;margin-bottom:24px">
-          <span style="font-size:22px;font-weight:700;color:#111">Newera365</span>
+          <span style="font-size:22px;font-weight:700;color:#111">Newera</span>
         </div>
         <h2 style="color:#111;font-size:20px;margin-bottom:12px">You're in ✓</h2>
-        <p style="color:#374151;line-height:1.6">Welcome to <strong>The Monday Briefing</strong> by Newera365.</p>
+        <p style="color:#374151;line-height:1.6">Welcome to <strong>The Monday Briefing</strong> by Newera.</p>
         <p style="color:#374151;line-height:1.6">Here's what lands in your inbox every week:</p>
         <ul style="color:#374151;line-height:2;padding-left:20px">
           <li>Weekly market thesis from our trading desk</li>
@@ -316,7 +316,7 @@ export async function sendNewsletterWelcome({
         </ul>
         <p style="color:#6b7280;font-size:13px;margin-top:24px">Delivered every Monday before markets open.</p>
         <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>
-        <p style="color:#9ca3af;font-size:12px">Newera365 — Trade with confidence</p>
+        <p style="color:#9ca3af;font-size:12px">Newera — Trade with confidence</p>
         ${unsubFooterEn}
       </div>
     `;

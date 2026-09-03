@@ -241,8 +241,11 @@ export function FloatingContactWidget({
                   <span className="font-body block text-[14px] font-semibold text-[#0F172A] dark:text-white">
                     {t('whatsapp')}
                   </span>
-                  <span className="font-body block truncate text-[12px] text-[#64748B] dark:text-[#94a3b8]">
-                    {t('whatsappSub')}
+                  <span
+                    className="font-body block truncate text-[12px] text-[#64748B] dark:text-[#94a3b8]"
+                    dir="ltr"
+                  >
+                    {activeWhatsapp}
                   </span>
                 </span>
               </a>
