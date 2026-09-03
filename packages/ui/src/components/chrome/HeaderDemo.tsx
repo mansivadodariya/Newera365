@@ -516,7 +516,7 @@ function HeaderDemo() {
               <LanguageToggle />
               <div className="bg-border mx-1 h-5 w-px" />
               <a
-                href="https://webtrading.newera365.com/terminal"
+                href="https://trade.newera365.com/login"
                 className="font-body text-foreground flex min-h-[38px] items-center text-[15px] font-medium transition-opacity hover:opacity-70"
               >
                 {t('signIn')}

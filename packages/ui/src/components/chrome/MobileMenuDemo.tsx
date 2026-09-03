@@ -376,7 +376,7 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
             {t('tradeIbLabel')}
           </Link>
           <a
-            href="https://webtrading.newera365.com/terminal"
+            href="https://trade.newera365.com/login"
             onClick={onClose}
             className="font-body border-border text-foreground hover:border-accent hover:text-accent flex h-[48px] w-full items-center justify-center rounded-full border text-[15px] font-medium transition-colors"
           >
