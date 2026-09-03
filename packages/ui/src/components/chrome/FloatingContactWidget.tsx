@@ -312,7 +312,7 @@ export function FloatingContactWidget({
           minWidth: '56px',
           minHeight: '56px',
           borderRadius: '50%',
-          backgroundColor: '#138346',
+          backgroundColor: '#00b050',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
