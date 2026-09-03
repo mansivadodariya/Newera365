@@ -192,7 +192,7 @@ export default async function LocaleLayout({
         email: s.contactEmail ?? null,
         phone: s.contactPhone ?? null,
         address: (isAr ? s.contactAddressAr : s.contactAddressEn) ?? null,
-        hours: (isAr ? s.supportHoursAr : s.supportHoursEn) ?? null,
+        hours: null,
       }
     : undefined;
   const regulatoryDisclosure = s

@@ -279,9 +279,7 @@ function Footer({
                         </a>
                       </li>
                     )}
-                    {contact?.hours && (
-                      <li className="font-body text-[rgba(255,255,255,0.55)]">{contact.hours}</li>
-                    )}
+
                     {contact?.address && (
                       <li className="font-body whitespace-pre-line leading-relaxed text-[rgba(255,255,255,0.55)]">
                         {contact.address}
