@@ -206,10 +206,10 @@ function Footer({
               </p>
               <div className="flex flex-col gap-1.5 text-[13px]">
                 <a
-                  href={`mailto:${contact?.email || 'info@newera365sa.com'}`}
+                  href="mailto:info@newera365sa.com"
                   className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
                 >
-                  {contact?.email || 'info@newera365sa.com'}
+                  info@newera365sa.com
                 </a>
                 {waDigits && (
                   <a
@@ -262,7 +262,7 @@ function Footer({
             {t('riskDisclosure')}
           </p>
           <div className="font-body w-full hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[170%] text-[rgba(255,255,255,0.45)]">
-            {riskDisclaimer ?? t('riskWarning')}
+            {t('riskWarning')}
           </div>
         </div>
 
@@ -271,12 +271,7 @@ function Footer({
           <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-[1.5px] text-[rgba(255,255,255,0.4)]">
             {t('regHeading')}
           </p>
-          <div>{renderRegulatoryContent(regulatoryDisclosure || t('regBody'))}</div>
-          {companyRegistration && (
-            <p className="font-body mt-3 hyphens-auto whitespace-pre-line text-justify text-[12px] font-normal leading-[165%] text-[rgba(255,255,255,0.4)]">
-              {companyRegistration}
-            </p>
-          )}
+          <div>{renderRegulatoryContent(t('regBody'))}</div>
         </div>
 
         {/* Practical: Payment methods if provided */}
