@@ -43,7 +43,7 @@ Regional Restrictions
 
 The products and services described on this website are not intended for distribution to, or use by, any person in any country or jurisdiction where such distribution, offer, solicitation or use would be contrary to applicable law or regulation.
 
-Services are not offered to citizens/residents of certain jurisdictions, including the United States, Cuba, Iraq, North Korea, Myanmar and Russia, or to persons in jurisdictions that are subject to applicable international sanctions or other regulatory restrictions.
+Services are not offered to citizens/residents of certain jurisdictions, including the United States, Cuba, Iraq, North Korea, Myanmar, Russia and the UAE, or to persons in jurisdictions that are subject to applicable international sanctions or other regulatory restrictions.
 
 Additional restrictions may apply depending upon the client’s country of residence, nationality, regulatory requirements and the Newera Capital entity providing the relevant service.`;
 
@@ -69,7 +69,7 @@ const REGULATORY_LEGAL_AR = `تُستخدم نيو إيرا كابيتال (Newe
 
 المنتجات والخدمات الموضحة في هذا الموقع ليست موجهة للتوزيع أو الاستخدام من قبل أي شخص في أي بلد أو ولاية قضائية يكون فيها هذا التوزيع أو العرض أو الالتماس أو الاستخدام مخالفاً للقانون أو اللوائح المعمول بها.
 
-لا يتم تقديم الخدمات لمواطني/مقيمين في ولايات قضائية معينة، بما في ذلك الولايات المتحدة، وكوبا، والعراق، وكوريا الشمالية، وميانمار، وروسيا، أو للأشخاص في ولايات قضائية تخضع لعقوبات دولية سارية أو قيود تنظيمية أخرى.
+لا يتم تقديم الخدمات لمواطني/مقيمين في ولايات قضائية معينة، بما في ذلك الولايات المتحدة، وكوبا، والعراق، وكوريا الشمالية، وميانمار، وروسيا، والإمارات العربية المتحدة، أو للأشخاص في ولايات قضائية تخضع لعقوبات دولية سارية أو قيود تنظيمية أخرى.
 
 قد تنطبق قيود إضافية اعتماداً على بلد إقامة العميل، وجنسيته، والمتطلبات التنظيمية، وكيان Newera Capital الذي يقدم الخدمة المعنية.`;
 
