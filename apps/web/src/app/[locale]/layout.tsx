@@ -87,6 +87,7 @@ export async function generateMetadata({
   const isAr = locale === 'ar';
   return {
     metadataBase: getMetadataBase(BASE),
+    applicationName: 'Newera',
     title: {
       default: isAr
         ? 'نيو إيرا: تداول الفوركس والعقود مقابل الفروقات'
@@ -105,7 +106,7 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      siteName: 'Newera',
+      siteName: isAr ? 'نيو إيرا' : 'Newera',
       type: 'website',
       locale: locale === 'ar' ? 'ar_AE' : 'en_US',
       alternateLocale: locale === 'ar' ? ['en_US'] : ['ar_AE'],
@@ -221,20 +222,29 @@ export default async function LocaleLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'FinancialService',
-              name: 'Newera',
-              url: BASE,
-              logo: `${BASE}/favicon-dark.png`,
-              description:
-                'Forex and CFD broker offering tight spreads, fast MT5 execution, and multilingual support.',
-              sameAs: [
-                'https://x.com/newera365',
-                'https://linkedin.com/company/newera365',
-                'https://instagram.com/newera365',
-              ],
-            }),
+            __html: JSON.stringify([
+              {
+                '@context': 'https://schema.org',
+                '@type': 'WebSite',
+                name: isAr ? 'نيو إيرا' : 'Newera',
+                alternateName: ['Newera365', 'Newera 365', 'Newera Capital Markets'],
+                url: BASE,
+              },
+              {
+                '@context': 'https://schema.org',
+                '@type': 'FinancialService',
+                name: 'Newera',
+                url: BASE,
+                logo: `${BASE}/favicon-dark.png`,
+                description:
+                  'Forex and CFD broker offering tight spreads, fast MT5 execution, and multilingual support.',
+                sameAs: [
+                  'https://x.com/newera365',
+                  'https://linkedin.com/company/newera365',
+                  'https://instagram.com/newera365',
+                ],
+              },
+            ]),
           }}
         />
       </head>
