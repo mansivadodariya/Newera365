@@ -73,7 +73,7 @@ const REGULATORY_LEGAL_AR = `تُستخدم نيو إيرا كابيتال (Newe
 
 قد تنطبق قيود إضافية اعتماداً على بلد إقامة العميل، وجنسيته، والمتطلبات التنظيمية، وكيان Newera Capital الذي يقدم الخدمة المعنية.`;
 
-const EMAIL = 'info@newera365sa.com';
+const EMAIL = 'info@newera365.com';
 
 async function run() {
   const connectionString = process.env.DATABASE_URL;

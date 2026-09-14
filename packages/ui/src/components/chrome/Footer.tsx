@@ -37,6 +37,24 @@ function WhatsAppIcon() {
   );
 }
 
+function PhoneIcon() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+    </svg>
+  );
+}
+
 function renderRegulatoryContent(content: string) {
   const blocks = content
     .split(/\r?\n\s*\r?\n/)
@@ -98,10 +116,9 @@ function Footer({
 }) {
   const locale = useLocale();
   const t = useTranslations('footer');
-  // WhatsApp mirrors the floating widget's whatsappNumber (same source of
-  // truth); wa.me wants digits only.
-  const activeWhatsapp = whatsapp || '+18677783511';
-  const waDigits = activeWhatsapp.replace(/[^0-9]/g, '');
+  const activeEmail = 'info@newera365.com';
+  const activePhone = '+44 2070970860';
+  const phoneDigits = activePhone.replace(/[^0-9+]/g, '');
 
   // Navigation columns are deliberately frontend-owned (client feedback round
   // 3): they must render even when the CMS is unreachable, and they change
@@ -206,23 +223,21 @@ function Footer({
               </p>
               <div className="flex flex-col gap-1.5 text-[13px]">
                 <a
-                  href="mailto:info@newera365sa.com"
+                  href={`mailto:${activeEmail}`}
                   className="font-body text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
                 >
-                  info@newera365sa.com
+                  {activeEmail}
                 </a>
-                {waDigits && (
+                {activePhone && (
                   <a
-                    href={`https://wa.me/${waDigits}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={t('whatsappAria')}
+                    href={`tel:${phoneDigits}`}
+                    aria-label={t('callAria')}
                     className="inline-flex items-center gap-2 text-[rgba(255,255,255,0.85)] transition-colors hover:text-white"
                   >
                     <span className="text-white/40">
-                      <WhatsAppIcon />
+                      <PhoneIcon />
                     </span>
-                    <span dir="ltr">{activeWhatsapp}</span>
+                    <span dir="ltr">{activePhone}</span>
                   </a>
                 )}
               </div>

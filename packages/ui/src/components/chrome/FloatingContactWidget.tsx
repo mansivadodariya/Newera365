@@ -66,7 +66,7 @@ function MailIcon() {
  * script.
  */
 export function FloatingContactWidget({
-  email = 'support@newera365sa.com',
+  email = 'support@newera365.com',
   whatsapp = '+18677783511',
 }: FloatingContactWidgetProps) {
   const t = useTranslations('contactWidget');
@@ -117,7 +117,7 @@ export function FloatingContactWidget({
   }, [barOnThisRoute]);
 
   const activeWhatsapp = whatsapp || '+18677783511';
-  const activeEmail = email || 'support@newera365sa.com';
+  const activeEmail = email || 'support@newera365.com';
   const waDigits = activeWhatsapp.replace(/[^0-9]/g, '');
 
   const rowClass =

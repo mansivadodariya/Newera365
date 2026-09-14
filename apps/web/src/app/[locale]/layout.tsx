@@ -269,7 +269,7 @@ export default async function LocaleLayout({
                   route transitions. */}
               <StickyCtaBar />
               <FloatingContactWidget
-                email="support@newera365sa.com"
+                email={s?.contactEmail || 'support@newera365.com'}
                 whatsapp={s?.whatsappNumber || '+18677783511'}
               />
               <Footer
