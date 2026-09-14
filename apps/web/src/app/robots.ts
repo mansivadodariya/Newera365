@@ -1,10 +1,8 @@
 import type { MetadataRoute } from 'next';
 
-// .trim() first: a stray trailing newline in the Vercel env var was leaking into
-// sitemap/robots URLs as `https://host%0A/en`. Strip whitespace, then trailing slashes.
-const BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000')
-  .trim()
-  .replace(/\/+$/, '');
+const defaultUrl =
+  process.env.NODE_ENV === 'production' ? 'https://newera365.com' : 'http://localhost:3000';
+const BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? defaultUrl).trim().replace(/\/+$/, '');
 
 export default function robots(): MetadataRoute.Robots {
   return {

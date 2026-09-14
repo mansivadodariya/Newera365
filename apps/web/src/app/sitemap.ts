@@ -2,11 +2,9 @@ import type { MetadataRoute } from 'next';
 import { LOCALES } from '@newera365/types';
 import { getBlogPosts, getGuides, getResearchArticles } from '@/lib/cms';
 
-// .trim() first: a stray trailing newline in the Vercel env var was leaking into
-// sitemap/robots URLs as `https://host%0A/en`. Strip whitespace, then trailing slashes.
-const BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000')
-  .trim()
-  .replace(/\/+$/, '');
+const defaultUrl =
+  process.env.NODE_ENV === 'production' ? 'https://newera365.com' : 'http://localhost:3000';
+const BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? defaultUrl).trim().replace(/\/+$/, '');
 
 // Curated public routes. Transactional/utility pages (newsletter confirmation
 // landings) are intentionally omitted — they should not be indexed.

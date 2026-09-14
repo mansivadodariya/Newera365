@@ -9,6 +9,24 @@ import { routing } from './i18n/routing';
 const intlMiddleware = createMiddleware(routing);
 
 export default function middleware(request: NextRequest) {
+  const host = request.headers.get('host') || '';
+
+  // Redirect any *.vercel.app requests to the canonical custom domain (301 Permanent)
+  if (host.includes('.vercel.app')) {
+    const rawCanonical = (process.env.NEXT_PUBLIC_SITE_URL || 'https://newera365.com')
+      .trim()
+      .replace(/^https?:\/\//, '')
+      .replace(/\/+$/, '');
+
+    const canonicalHost = rawCanonical.includes('localhost') ? 'newera365.com' : rawCanonical;
+
+    const url = request.nextUrl.clone();
+    url.protocol = 'https';
+    url.host = canonicalHost;
+    url.port = '';
+    return NextResponse.redirect(url, { status: 301 });
+  }
+
   try {
     return intlMiddleware(request);
   } catch (err) {

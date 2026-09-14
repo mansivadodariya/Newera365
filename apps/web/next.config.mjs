@@ -167,6 +167,22 @@ const nextConfig = {
   },
   async headers() {
     return [
+      // Block search engines from indexing any *.vercel.app deployment/preview URLs
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: '(?<subdomain>.*)\\.vercel\\.app',
+          },
+        ],
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow',
+          },
+        ],
+      },
       {
         source: '/(.*)',
         headers: [
