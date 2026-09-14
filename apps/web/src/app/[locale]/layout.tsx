@@ -227,7 +227,7 @@ export default async function LocaleLayout({
                 '@context': 'https://schema.org',
                 '@type': 'WebSite',
                 name: isAr ? 'نيو إيرا' : 'Newera',
-                alternateName: ['Newera365', 'Newera 365', 'Newera Capital Markets'],
+                alternateName: ['Newera', 'Newera', 'Newera Capital Markets'],
                 url: BASE,
               },
               {
