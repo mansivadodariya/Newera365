@@ -34,6 +34,10 @@ const MARKETS = [
     symbol: 'AAPL.US',
   },
   {
+    key: 'crypto',
+    bg: '/images/cpt_crypto.jpg',
+  },
+  {
     key: 'etfs',
     bg: '/images/cpt_etf.jpg',
     nameKey: 'marketsETFs',
@@ -54,10 +58,10 @@ export async function MarketsSectionDemo() {
   const marketItems = MARKETS.map((market) => ({
     key: market.key,
     bg: market.bg,
-    name: t(market.nameKey),
-    count: t(market.countKey),
-    href: `/${locale}/markets/${market.key}`,
-    symbol: market.symbol,
+    name: 'nameKey' in market ? t(market.nameKey as any) : undefined,
+    count: 'countKey' in market ? t(market.countKey as any) : undefined,
+    href: 'nameKey' in market ? `/${locale}/markets/${market.key}` : undefined,
+    symbol: 'symbol' in market ? (market.symbol as string) : undefined,
   }));
 
   return (
