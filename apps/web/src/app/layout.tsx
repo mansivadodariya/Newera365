@@ -1,4 +1,20 @@
 import type { ReactNode } from 'react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  metadataBase: new URL('https://newera365.com'),
+  applicationName: 'Newera',
+  title: {
+    default: 'Newera | Forex & CFD Trading',
+    template: '%s | Newera',
+  },
+  description:
+    'Trade forex, indices, commodities, stocks and crypto CFDs with Newera: tight spreads, fast execution, and MT5.',
+  openGraph: {
+    siteName: 'Newera',
+    type: 'website',
+  },
+};
 
 // Pass-through root layout. next-intl renders <html>/<body> inside
 // app/[locale]/layout.tsx (so it can set lang/dir per locale), which means the

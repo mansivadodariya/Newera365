@@ -73,7 +73,7 @@ function getMetadataBase(urlStr: string): URL {
   try {
     return new URL(urlStr);
   } catch {
-    return new URL('http://localhost:3000');
+    return new URL('https://newera365.com');
   }
 }
 
@@ -227,15 +227,35 @@ export default async function LocaleLayout({
                 '@context': 'https://schema.org',
                 '@type': 'WebSite',
                 name: isAr ? 'نيو إيرا' : 'Newera',
-                alternateName: ['Newera', 'Newera', 'Newera Capital Markets'],
-                url: BASE,
+                alternateName: [
+                  'Newera 365',
+                  'Newera365',
+                  'Newera Capital Markets',
+                  'Newera 365 SA',
+                  'نيو إيرا 365',
+                  'نيو إيرا',
+                ],
+                url: 'https://newera365.com/',
+              },
+              {
+                '@context': 'https://schema.org',
+                '@type': 'Organization',
+                name: 'Newera Capital Markets',
+                alternateName: ['Newera', 'Newera 365', 'Newera365'],
+                url: 'https://newera365.com/',
+                logo: 'https://newera365.com/favicon-dark.png',
+                sameAs: [
+                  'https://x.com/newera365',
+                  'https://linkedin.com/company/newera365',
+                  'https://instagram.com/newera365',
+                ],
               },
               {
                 '@context': 'https://schema.org',
                 '@type': 'FinancialService',
                 name: 'Newera',
-                url: BASE,
-                logo: `${BASE}/favicon-dark.png`,
+                url: 'https://newera365.com/',
+                logo: 'https://newera365.com/favicon-dark.png',
                 description:
                   'Forex and CFD broker offering tight spreads, fast MT5 execution, and multilingual support.',
                 sameAs: [

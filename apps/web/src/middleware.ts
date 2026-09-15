@@ -24,7 +24,9 @@ export default function middleware(request: NextRequest) {
     url.protocol = 'https';
     url.host = canonicalHost;
     url.port = '';
-    return NextResponse.redirect(url, { status: 301 });
+    const response = NextResponse.redirect(url, { status: 301 });
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+    return response;
   }
 
   try {
