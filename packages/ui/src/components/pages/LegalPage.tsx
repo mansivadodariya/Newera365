@@ -539,9 +539,6 @@ export function LegalPage({ documents }: LegalPageProps) {
       {/* Footer note */}
       <section className="ink-band rounded-t-[32px] px-5 pb-12 pt-10">
         <div className="motion-safe:animate-rise-in mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <p className="font-body text-caption mb-5 hyphens-auto text-justify leading-[1.7] text-white/60">
-            {t('footerDisclaimer')}
-          </p>
           {hasCms && (
             <div className="flex flex-wrap gap-3">
               {cmsDocList
