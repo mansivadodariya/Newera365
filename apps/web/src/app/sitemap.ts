@@ -20,7 +20,6 @@ const STATIC_PATHS = [
   '/markets/commodities',
   '/markets/stocks',
   '/markets/etfs',
-  '/markets/crypto',
   '/platform/mt5',
   '/platform/webtrader',
   '/education',

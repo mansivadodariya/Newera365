@@ -31,7 +31,6 @@ function useNavGroups(t: ReturnType<typeof useTranslations<'nav'>>): NavGroup[] 
         { label: t('marketsIndicesLabel'), href: '/markets/indices' },
         { label: t('marketsStocksLabel'), href: '/markets/stocks' },
         { label: t('marketsCommoditiesLabel'), href: '/markets/commodities' },
-        { label: t('marketsCryptoLabel'), href: '/markets/crypto' },
         { label: t('marketsEtfsLabel'), href: '/markets/etfs' },
       ],
     },

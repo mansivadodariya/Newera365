@@ -133,7 +133,6 @@ function Footer({
         { label: t('linkCommodities'), href: '/markets/commodities' },
         { label: t('linkStocks'), href: '/markets/stocks' },
         { label: t('linkEtfs'), href: '/markets/etfs' },
-        { label: t('linkCrypto'), href: '/markets/crypto' },
       ],
     },
     {
@@ -311,7 +310,7 @@ function Footer({
         {/* Copyright row */}
         <div className="border-t border-[rgba(255,255,255,0.08)] pt-5">
           <span className="font-mono text-[10px] font-medium tracking-[1.5px] text-[rgba(255,255,255,0.35)]">
-            {t('copyright')}
+            {t('copyright', { year: new Date().getFullYear() })}
           </span>
         </div>
       </div>

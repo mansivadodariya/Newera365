@@ -188,14 +188,14 @@ export default async function LocaleLayout({
 
   // Footer contact, regulatory & payment data — all CMS-driven (client feedback #6)
   const isAr = locale === 'ar';
-  const contact = s
-    ? {
-        email: s.contactEmail ?? null,
-        phone: s.contactPhone ?? null,
-        address: (isAr ? s.contactAddressAr : s.contactAddressEn) ?? null,
-        hours: null,
-      }
-    : undefined;
+  const saintLuciaAddress =
+    'Ground Floor, The Sotheby Building, Rodney Village, Rodney Bay, Gros-Islet, Saint Lucia';
+  const contact = {
+    email: s?.contactEmail ?? null,
+    phone: s?.contactPhone ?? null,
+    address: (isAr ? s?.contactAddressAr : s?.contactAddressEn) || saintLuciaAddress,
+    hours: null,
+  };
   const regulatoryDisclosure = s
     ? ((isAr ? s.regulatoryDisclosureAr : s.regulatoryDisclosureEn) ?? undefined)
     : undefined;
@@ -244,6 +244,12 @@ export default async function LocaleLayout({
                 alternateName: ['Newera', 'Newera 365', 'Newera365'],
                 url: 'https://newera365.com/',
                 logo: 'https://newera365.com/favicon-dark.png',
+                address: {
+                  '@type': 'PostalAddress',
+                  streetAddress: 'Ground Floor, The Sotheby Building, Rodney Village, Rodney Bay',
+                  addressLocality: 'Gros-Islet',
+                  addressCountry: 'LC',
+                },
                 sameAs: [
                   'https://x.com/newera365',
                   'https://linkedin.com/company/newera365',
@@ -258,6 +264,12 @@ export default async function LocaleLayout({
                 logo: 'https://newera365.com/favicon-dark.png',
                 description:
                   'Forex and CFD broker offering tight spreads, fast MT5 execution, and multilingual support.',
+                address: {
+                  '@type': 'PostalAddress',
+                  streetAddress: 'Ground Floor, The Sotheby Building, Rodney Village, Rodney Bay',
+                  addressLocality: 'Gros-Islet',
+                  addressCountry: 'LC',
+                },
                 sameAs: [
                   'https://x.com/newera365',
                   'https://linkedin.com/company/newera365',

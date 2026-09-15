@@ -87,6 +87,17 @@ const nextConfig = {
         destination: '/:locale/ai-crm',
         permanent: true,
       },
+      // /markets/crypto redirect to /markets/forex
+      {
+        source: '/:locale(en|ar)/markets/crypto',
+        destination: '/:locale/markets/forex',
+        permanent: true,
+      },
+      {
+        source: '/markets/crypto',
+        destination: '/en/markets/forex',
+        permanent: true,
+      },
       // /markets/instruments was the standalone full-spec table; its route was removed
       // and instrument specs now live within /markets/[category]. Without this redirect
       // the path falls through to the [category] segment and soft-404s (HTTP 200 + "Page

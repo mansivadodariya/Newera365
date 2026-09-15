@@ -195,17 +195,76 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
   const locale = useLocale();
   const isAr = locale === 'ar';
 
-  // Channels: CMS-sourced email/phone, falling back to the static defaults so the UI never goes blank.
-  const channels = CHANNELS.map((ch) => {
-    if (ch.id === 'email') {
-      const email = contactDetails?.email || ch.value;
-      return { ...ch, value: email, action: `mailto:${email}` };
-    }
-    if (ch.id === 'chat') {
-      return { ...ch, value: '24/7 Real-Time Assistance', action: '#live-chat' };
-    }
-    return ch;
-  });
+  const registeredAddress =
+    contactDetails?.address ||
+    'Ground Floor, The Sotheby Building, Rodney Village, Rodney Bay, Gros-Islet, Saint Lucia';
+
+  // Channels: CMS-sourced email/phone/address, falling back to the official defaults.
+  const channels = [
+    {
+      id: 'email',
+      title: tc('channelEmail'),
+      value: contactDetails?.email || 'support@newera365.com',
+      tag: tc('channelEmailReply'),
+      action: `mailto:${contactDetails?.email || 'support@newera365.com'}`,
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+          <rect
+            x="2"
+            y="5"
+            width="16"
+            height="11"
+            rx="1.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+          <path d="M2 7l8 5 8-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      ),
+    },
+    {
+      id: 'chat',
+      title: tc('channelCall'),
+      value: '24/7 Real-Time Assistance',
+      tag: tc('channelCallHours'),
+      action: '#live-chat',
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M18 10c0 3.866-3.582 7-8 7a9.4 9.4 0 01-3.665-.732L2 17l1.01-2.905A6.8 6.8 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7z"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: 'address',
+      title: tc('channelAddress'),
+      value: registeredAddress,
+      tag: tc('channelAddressTag'),
+      action: '#address',
+      icon: (
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        >
+          <path
+            d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <circle cx="12" cy="10" r="3" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ),
+    },
+  ];
 
   // Promise stats: CMS-driven when seeded, falling back to the static defaults otherwise.
   const promiseStatTiles =
@@ -578,7 +637,7 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
           <SectionKicker className="mb-4">{tc('channelsKicker')}</SectionKicker>
           <h2 className="text-foreground text-headline mb-8 font-sans">{tc('channelsHeading')}</h2>
         </ScrollReveal>
-        <div className={`${WRAP} grid gap-[14px] md:grid-cols-2`}>
+        <div className={`${WRAP} grid gap-[14px] md:grid-cols-2 lg:grid-cols-3`}>
           {channels.map((ch, i) => (
             <ScrollReveal key={ch.id} index={i}>
               <a
@@ -589,13 +648,13 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
                   {ch.icon}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-foreground text-body font-sans font-semibold">
-                    {ch.id === 'email' ? tc('channelEmail') : tc('channelCall')}
+                  <p className="text-foreground text-body font-sans font-semibold">{ch.title}</p>
+                  <p className="font-body text-muted text-caption mt-[3px] line-clamp-2">
+                    {ch.value}
                   </p>
-                  <p className="font-body text-muted text-caption mt-[3px]">{ch.value}</p>
                 </div>
                 <span className="text-muted flex-shrink-0 font-mono text-[10px] tracking-[1px]">
-                  {ch.id === 'email' ? tc('channelEmailReply') : tc('channelCallHours')}
+                  {ch.tag}
                 </span>
                 <svg
                   width="14"

@@ -48,7 +48,6 @@ function useNavItems(t: ReturnType<typeof useTranslations<'nav'>>): NavItem[] {
           sub: t('marketsCommoditiesSub'),
           href: '/markets/commodities',
         },
-        { label: t('marketsCryptoLabel'), sub: t('marketsCryptoSub'), href: '/markets/crypto' },
         { label: t('marketsEtfsLabel'), sub: t('marketsEtfsSub'), href: '/markets/etfs' },
       ],
     },

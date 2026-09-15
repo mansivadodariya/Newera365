@@ -4,7 +4,7 @@ import { MarketCategoryPage, CtaBanner } from '@newera365/ui';
 import { getInstruments, getSiteSettings } from '@/lib/cms';
 import type { Metadata } from 'next';
 
-const VALID_CATEGORIES = ['forex', 'indices', 'commodities', 'stocks', 'etfs', 'crypto'] as const;
+const VALID_CATEGORIES = ['forex', 'indices', 'commodities', 'stocks', 'etfs'] as const;
 type Category = (typeof VALID_CATEGORIES)[number];
 
 const CATEGORY_META: Record<
@@ -59,16 +59,6 @@ const CATEGORY_META: Record<
     ar: {
       title: 'تداول صناديق ETF CFD',
       desc: 'تداول صناديق القطاعات والمؤشرات بصيغة CFD للتعرض الواسع للسوق.',
-    },
-  },
-  crypto: {
-    en: {
-      title: 'Crypto CFD Trading',
-      desc: 'Trade Bitcoin, Ethereum and major crypto pairs as CFDs 24/7.',
-    },
-    ar: {
-      title: 'تداول العملات الرقمية',
-      desc: 'تداول البيتكوين والإيثيريوم وأبرز أزواج العملات الرقمية بصيغة CFD 24/7.',
     },
   },
 };

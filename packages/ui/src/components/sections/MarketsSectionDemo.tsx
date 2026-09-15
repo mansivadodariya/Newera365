@@ -34,13 +34,6 @@ const MARKETS = [
     symbol: 'AAPL.US',
   },
   {
-    key: 'crypto',
-    bg: '/images/cpt_crypto.jpg',
-    nameKey: 'marketsCrypto',
-    countKey: 'marketsCryptoCount',
-    symbol: 'BTCUSD',
-  },
-  {
     key: 'etfs',
     bg: '/images/cpt_etf.jpg',
     nameKey: 'marketsETFs',

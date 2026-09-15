@@ -5,6 +5,9 @@ import { getFaqs, getSiteSettings } from '@/lib/cms';
 import type { CmsFaq } from '@/lib/cms';
 import type { Metadata } from 'next';
 
+const SAINT_LUCIA_ADDRESS =
+  'Ground Floor, The Sotheby Building, Rodney Village, Rodney Bay, Gros-Islet, Saint Lucia';
+
 export async function generateMetadata({
   params,
 }: {
@@ -12,10 +15,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const isAr = params.locale === 'ar';
   return {
-    title: isAr ? 'الدعم' : 'Support',
+    title: isAr ? 'تواصل معنا والدعم' : 'Contact Us & Support',
     description: isAr
-      ? 'إجابات على الأسئلة الشائعة وطرق التواصل مع فريق Newera.'
-      : 'Answers to common questions and ways to reach the Newera team.',
+      ? `تواصل مع نيو إيرا (Newera). العنوان المسجل: ${SAINT_LUCIA_ADDRESS}. الدعم الفني وخدمة العملاء على مدار الساعة.`
+      : `Get in touch with Newera. Registered address: ${SAINT_LUCIA_ADDRESS}. 24/5 dedicated client support.`,
   };
 }
 
@@ -33,14 +36,14 @@ export default async function SupportRoute({ params }: { params: { locale: strin
   setRequestLocale(params.locale);
   const [faqs, s] = await Promise.all([getFaqs(params.locale), getSiteSettings()]);
 
-  const contactDetails: CmsContactDetails | undefined = s
-    ? {
-        email: s.contactEmail,
-        phone: s.contactPhone,
-        address: params.locale === 'ar' ? s.contactAddressAr : s.contactAddressEn,
-        supportHours: params.locale === 'ar' ? s.supportHoursAr : s.supportHoursEn,
-      }
-    : undefined;
+  const contactDetails: CmsContactDetails = {
+    email: s?.contactEmail || 'support@newera365.com',
+    phone: s?.contactPhone || '+44 2070970860',
+    address:
+      (params.locale === 'ar' ? s?.contactAddressAr : s?.contactAddressEn) || SAINT_LUCIA_ADDRESS,
+    supportHours:
+      (params.locale === 'ar' ? s?.supportHoursAr : s?.supportHoursEn) || '24/5 Client Desk',
+  };
 
   return (
     <>
