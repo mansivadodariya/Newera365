@@ -1,5 +1,7 @@
 import { revalidatePath } from 'next/cache';
 
+export const dynamic = 'force-dynamic';
+
 // Called by Payload's afterChange hook when SiteSettings (and any other
 // content wired to `notifyRevalidateSiteChrome`) is saved. Purges the ISR
 // cache for the given paths so the next visitor sees the CMS edit

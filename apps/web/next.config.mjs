@@ -42,11 +42,7 @@ if (cmsUrl) {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@newera365/ui', '@newera365/types'],
-  experimental: {
-    workerThreads: false,
-    cpus: 1,
-  },
+  transpilePackages: ['@newera365/ui', '@newera365/types', 'framer-motion', 'lucide-react'],
   // /platform/mobile was a duplicate of /platform/mt5 (same PlatformPage) and has
   // been removed. Redirect it to the canonical page: this also guarantees the old
   // path never serves a stale prerendered copy (Vercel does not purge the CDN entry
