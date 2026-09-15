@@ -54,6 +54,27 @@ const nextConfig = {
   // 'always', so only the /en and /ar prefixed forms exist.
   async redirects() {
     return [
+      // Legacy routes: /about and /about-us -> /company/about
+      {
+        source: '/:locale(en|ar)/about',
+        destination: '/:locale/company/about',
+        permanent: true,
+      },
+      {
+        source: '/about',
+        destination: '/en/company/about',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|ar)/about-us',
+        destination: '/:locale/company/about',
+        permanent: true,
+      },
+      {
+        source: '/about-us',
+        destination: '/en/company/about',
+        permanent: true,
+      },
       {
         source: '/:locale(en|ar)/platform/mobile',
         destination: '/:locale/platform/mt5',
@@ -120,6 +141,9 @@ const nextConfig = {
       },
       { source: '/:locale(en|ar)/faqs', destination: '/:locale/support', permanent: true },
       { source: '/:locale(en|ar)/contact', destination: '/:locale/support', permanent: true },
+      { source: '/contact', destination: '/en/support', permanent: true },
+      { source: '/:locale(en|ar)/contact-us', destination: '/:locale/support', permanent: true },
+      { source: '/contact-us', destination: '/en/support', permanent: true },
       { source: '/:locale(en|ar)/daily-news', destination: '/:locale/research', permanent: true },
       {
         source: '/:locale(en|ar)/education/blog',
