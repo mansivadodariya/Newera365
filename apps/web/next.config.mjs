@@ -42,7 +42,7 @@ if (cmsUrl) {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@newera365/ui', '@newera365/types'],
+  transpilePackages: ['@newera365/ui', '@newera365/types', 'framer-motion', 'lucide-react'],
   experimental: {
     workerThreads: false,
     cpus: 1,
