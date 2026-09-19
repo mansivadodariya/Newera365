@@ -14,6 +14,7 @@
 
 // ── lib ──────────────────────────────────────────────────────────────────────
 export { safeUrl } from './lib/safeUrl';
+export { CRM_URLS } from './lib/crm';
 
 // ── motion ───────────────────────────────────────────────────────────────────
 export { CountUp } from './components/motion/CountUp';

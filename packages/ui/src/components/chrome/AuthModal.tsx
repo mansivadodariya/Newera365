@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { ALL_COUNTRIES, type CountryInfo } from './CountryData';
+import { CRM_URLS } from '../../lib/crm';
 
 export type AuthModalType = 'register' | 'demo' | null;
 
@@ -624,7 +625,7 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
 
               <div className="mt-1 flex w-full flex-col gap-3 sm:mt-2 sm:max-w-[420px] sm:gap-3.5">
                 <a
-                  href="https://trade.newera365.com/register"
+                  href={CRM_URLS.register}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-body flex h-[46px] w-full items-center justify-center gap-2 rounded-full bg-[#00B050] text-[14px] font-bold text-white shadow-lg transition-all hover:bg-[#00B050]/90 active:scale-[0.98] sm:h-[50px] sm:text-[15px]"
@@ -646,7 +647,7 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
                 </a>
 
                 <a
-                  href="https://trade.newera365.com/login"
+                  href={CRM_URLS.login}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-body text-foreground border-border/80 text-foreground/90 hover:text-foreground flex h-[46px] w-full items-center justify-center gap-2 rounded-full border bg-slate-100/90 text-[13.5px] font-semibold shadow-sm transition-all hover:bg-slate-200 active:scale-[0.98] sm:h-[50px] sm:text-[14.5px] dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/15"
@@ -720,7 +721,8 @@ export function AuthModal({ type, onClose }: AuthModalProps) {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              window.location.href = 'https://trade.newera365.com/opendemoaccount';
+              window.open(CRM_URLS.demo, '_blank', 'noopener,noreferrer');
+              onClose();
             }}
             className="flex flex-col gap-4"
           >

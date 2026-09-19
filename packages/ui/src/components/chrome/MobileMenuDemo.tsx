@@ -10,6 +10,7 @@ import { isRtl, type Locale } from '@newera365/types';
 import { LanguageToggle } from './LanguageToggle';
 import { AuthModal, type AuthModalType } from './AuthModal';
 import { NavIcon } from '../../lib/navIcons';
+import { CRM_URLS } from '../../lib/crm';
 
 type NavGroup = { section: string | null; items: { label: string; href: string }[] };
 
@@ -375,7 +376,9 @@ function MobileMenuDemo({ open, onClose }: MobileMenuDemoProps) {
             {t('tradeIbLabel')}
           </Link>
           <a
-            href="https://trade.newera365.com/login"
+            href={CRM_URLS.login}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={onClose}
             className="font-body border-border text-foreground hover:border-accent hover:text-accent flex h-[48px] w-full items-center justify-center rounded-full border text-[15px] font-medium transition-colors"
           >

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { AuthModal, type AuthModalType } from '../chrome/AuthModal';
 import { Spotlight } from '../primitives/Spotlight';
+import { CRM_URLS } from '../../lib/crm';
 
 /**
  * Homepage closer — the ink anchor. A cinematic terminal plate sits under the
@@ -54,7 +55,7 @@ export function CtaBannerDemo() {
                 {t('ctaBannerLive')}
               </button>
               <a
-                href="https://trade.newera365.com/opendemoaccount"
+                href={CRM_URLS.demo}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-body focus-visible:ring-accent hover:border-accent-bright/60 flex h-[48px] items-center justify-center rounded-full border border-white/20 px-6 text-[15px] font-medium text-white transition-colors focus-visible:outline-none focus-visible:ring-2 active:scale-[0.98] sm:h-[52px] sm:px-8"

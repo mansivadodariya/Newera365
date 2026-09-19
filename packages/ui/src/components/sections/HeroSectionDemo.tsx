@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { AuthModal, type AuthModalType } from '../chrome/AuthModal';
+import { CRM_URLS } from '../../lib/crm';
 
 /* ─── HeroSectionDemo ───────────────────────────────────────────────────
    Ink-plate hero (client art drop, 2026-07-13). The whole section rides on a
@@ -148,7 +149,7 @@ export function HeroSectionDemo() {
                 </button>
                 {/* Secondary — clearly subordinate to the primary CTA. */}
                 <a
-                  href="https://trade.newera365.com/opendemoaccount"
+                  href={CRM_URLS.demo}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-body hover:border-accent-bright hover:text-accent-bright inline-flex flex-none items-center rounded-full border border-white/[0.22] bg-white/[0.06] px-[22px] py-[18px] text-[15px] font-medium tracking-[-0.075px] text-white backdrop-blur-sm transition-colors"

@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { AuthModal, type AuthModalType } from './AuthModal';
 import { NO_CTA_SUFFIXES } from '../sections/SmartCtaBanner';
+import { CRM_URLS } from '../../lib/crm';
 
 /** Fallback for pages with no tagged primary CTA. */
 const SCROLL_THRESHOLD = 300;
@@ -99,7 +100,7 @@ export function StickyCtaBar() {
 
           <div className="flex items-center justify-end gap-3 md:gap-4">
             <a
-              href="https://trade.newera365.com/opendemoaccount"
+              href={CRM_URLS.demo}
               target="_blank"
               rel="noopener noreferrer"
               tabIndex={visible ? 0 : -1}
