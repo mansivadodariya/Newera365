@@ -138,46 +138,54 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
       </section>
 
       {/* Manifesto — the founder's conviction, oversized on ink */}
-      <section className="ink-band rounded-t-[32px] px-5 pb-14 pt-14 xl:pb-20 xl:pt-20">
+      <section className="ink-band rounded-t-[32px] px-5 py-12 xl:py-16">
         <div className="mx-auto max-w-[390px] md:max-w-2xl xl:max-w-[1200px]">
-          <ScrollReveal>
-            <SectionKicker className="mb-7">{t('missionKicker')}</SectionKicker>
-          </ScrollReveal>
+          <div className="grid grid-cols-1 items-end justify-between gap-8 lg:grid-cols-12 lg:gap-12">
+            <div className="lg:col-span-8">
+              <ScrollReveal>
+                <SectionKicker className="mb-6">{t('missionKicker')}</SectionKicker>
+              </ScrollReveal>
 
-          <div className="relative">
-            <span
-              aria-hidden="true"
-              className="text-accent-bright/20 pointer-events-none absolute -start-2 -top-6 select-none font-serif text-[120px] leading-none xl:text-[180px]"
-            >
-              &ldquo;
-            </span>
-            <ScrollReveal delay={0.05}>
-              <blockquote className="relative max-w-[920px]">
-                <p className="text-headline font-sans font-medium leading-[1.14] tracking-[-0.01em] text-white">
-                  {t('missionText')}
-                </p>
-              </blockquote>
-            </ScrollReveal>
-          </div>
+              <div className="relative">
+                <span
+                  aria-hidden="true"
+                  className="text-accent-bright/20 pointer-events-none absolute -start-2 -top-6 select-none font-serif text-[100px] leading-none xl:text-[140px]"
+                >
+                  &ldquo;
+                </span>
+                <ScrollReveal delay={0.05}>
+                  <blockquote className="relative max-w-[840px]">
+                    <p className="text-headline font-sans font-medium leading-[1.2] tracking-[-0.01em] text-white">
+                      {t('missionText')}
+                    </p>
+                  </blockquote>
+                </ScrollReveal>
+              </div>
+            </div>
 
-          <div className="my-10 h-px w-full bg-white/10 xl:my-12" />
-
-          <div className="flex flex-col gap-9 sm:flex-row sm:items-end sm:justify-end">
-            <ScrollReveal direction="none" delay={0.1}>
-              <CountUpGroup>
-                <div className="flex flex-col gap-2 sm:items-end sm:text-end">
-                  <span
-                    dir="ltr"
-                    className="text-sheen text-metric w-fit font-sans tabular-nums leading-none"
-                  >
-                    <CountUp value={manifestoStatValue ?? '100%'} />
-                  </span>
-                  <span className="max-w-[300px] font-mono text-[11px] uppercase tracking-[0.12em] text-white/55">
-                    {t('manifestoStatLabel')}
-                  </span>
-                </div>
-              </CountUpGroup>
-            </ScrollReveal>
+            <div className="lg:col-span-4 lg:flex lg:justify-end">
+              <ScrollReveal direction="none" delay={0.1}>
+                <CountUpGroup>
+                  <div className="shadow-card flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm sm:p-7 lg:min-w-[260px]">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-accent h-2 w-2 animate-pulse rounded-full shadow-[0_0_8px_var(--color-accent)]" />
+                      <span className="text-accent-bright font-mono text-[11px] font-semibold uppercase tracking-[0.14em]">
+                        {t('missionKicker')}
+                      </span>
+                    </div>
+                    <span
+                      dir="ltr"
+                      className="text-sheen text-metric w-fit font-sans tabular-nums leading-none"
+                    >
+                      <CountUp value={manifestoStatValue ?? '100%'} />
+                    </span>
+                    <span className="max-w-[260px] font-mono text-[11px] uppercase tracking-[0.12em] text-white/60">
+                      {t('manifestoStatLabel')}
+                    </span>
+                  </div>
+                </CountUpGroup>
+              </ScrollReveal>
+            </div>
           </div>
         </div>
       </section>
