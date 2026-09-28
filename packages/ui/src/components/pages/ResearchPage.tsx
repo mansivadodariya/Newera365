@@ -96,9 +96,15 @@ function defaultCategoryArt(cat: string): string {
   if (c.includes('stock') || c.includes('equity')) return '/images/market-stocks-dark.jpg';
   if (c.includes('indic') || c.includes('spx') || c.includes('nasdaq'))
     return '/images/market-indices-dark.jpg';
-  if (c.includes('etf')) return '/images/market-etfs-dark-v2.jpg';
   return '/images/hero-green-chart.jpg';
 }
+
+const REPORT_FALLBACK_IMAGES = [
+  '/images/market-commodities-dark.jpg',
+  '/images/market-forex-dark.jpg',
+  '/images/market-indices-dark.jpg',
+  '/images/hero-green-chart.jpg',
+];
 
 function Sparkline({ data, positive = true }: { data: readonly number[]; positive?: boolean }) {
   const max = Math.max(...data);
@@ -857,24 +863,28 @@ export function ResearchPage({
               {cmsReports.map((report, reportIndex) => (
                 <ScrollReveal key={report.id} index={reportIndex}>
                   <div className="hover:border-accent/45 dark:hover:border-accent/45 flex h-full items-start justify-between gap-4 rounded-[16px] border border-transparent bg-white p-5 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.06)] transition-[border-color,box-shadow] duration-300 hover:shadow-[0_8px_24px_rgba(0,176,80,0.1)] dark:bg-[#1a1c22]">
-                    {report.thumbnailUrl && (
-                      <img
-                        src={report.thumbnailUrl}
-                        alt={report.title}
-                        onError={(e) => {
-                          const fallback =
-                            FALLBACK_IMAGES[reportIndex % FALLBACK_IMAGES.length] ??
-                            FALLBACK_IMAGES[0];
-                          if (
-                            e.currentTarget.src !== fallback &&
-                            !e.currentTarget.src.endsWith(fallback)
-                          ) {
-                            e.currentTarget.src = fallback;
-                          }
-                        }}
-                        className="h-16 w-16 flex-shrink-0 rounded-[10px] object-cover"
-                      />
-                    )}
+                    <img
+                      src={
+                        report.thumbnailUrl && !report.thumbnailUrl.startsWith('http://localhost')
+                          ? report.thumbnailUrl
+                          : (REPORT_FALLBACK_IMAGES[reportIndex % REPORT_FALLBACK_IMAGES.length] ??
+                            '/images/hero-green-chart.jpg')
+                      }
+                      alt={report.title}
+                      onError={(e) => {
+                        const fallback =
+                          REPORT_FALLBACK_IMAGES[reportIndex % REPORT_FALLBACK_IMAGES.length] ||
+                          REPORT_FALLBACK_IMAGES[0] ||
+                          '/images/hero-green-chart.jpg';
+                        if (
+                          e.currentTarget.src !== fallback &&
+                          !e.currentTarget.src.endsWith(fallback)
+                        ) {
+                          e.currentTarget.src = fallback;
+                        }
+                      }}
+                      className="h-16 w-16 flex-shrink-0 rounded-[10px] object-cover"
+                    />
                     <div className="min-w-0 flex-1">
                       {report.isGated && (
                         <span className="mb-2 inline-block rounded-full bg-[#F59E0B]/15 px-2.5 py-[3px] font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-[#F59E0B]">

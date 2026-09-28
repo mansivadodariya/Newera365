@@ -52,7 +52,8 @@ const AR_FEATURE_VALUES: Record<string, string> = {
   'Swap-free available on request': 'خيار بدون فوائد تبييت عند الطلب',
   'Interbank raw pricing': 'تسعير خام من البنوك مباشرة',
   'Metals commission $10 per lot': 'عمولة المعادن 10 دولار لكل عقد',
-  'Built for scalpers and EAs': 'مصمم للمضاربة السريعة والأنظمة الآلية',
+  'Built for scalpers and EAs': 'مصمم لتداول الجوال والويب والأنظمة الآلية',
+  'Built for mobile & web trading': 'مصمم للتداول عبر الجوال والويب',
   'Zero commission trading': 'تداول بدون عمولة',
   'Custom spreads and priority execution': 'فروق مخصصة وتنفيذ ذو أولوية',
 };
@@ -282,10 +283,12 @@ export function AccountsPage({ cmsAccounts }: AccountsPageProps) {
   } as const;
 
   const rawAccounts = cmsAccounts ?? [];
-  const uniqueCmsAccounts = rawAccounts.filter((item, index, self) => {
-    const key = (item.badge || item.name).toLowerCase();
-    return index === self.findIndex((a) => (a.badge || a.name).toLowerCase() === key);
-  });
+  const uniqueCmsAccounts = rawAccounts
+    .filter((item, index, self) => {
+      const key = (item.badge || item.name).toLowerCase();
+      return index === self.findIndex((a) => (a.badge || a.name).toLowerCase() === key);
+    })
+    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 
   const displayAccounts = uniqueCmsAccounts.map((cms) => {
     const isAr = locale === 'ar';

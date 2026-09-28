@@ -24,9 +24,19 @@ const EXPLORE_LINKS = [
     href: '/support',
     desc: 'Talk to the team directly',
     icon: (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <rect x="2" y="4" width="12" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
-        <path d="M2 5.5l6 4 6-4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
       </svg>
     ),
   },
@@ -35,20 +45,19 @@ const EXPLORE_LINKS = [
     href: '/legal',
     desc: 'Policies and disclosures',
     icon: (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path
-          d="M8 1.5l5 2v3.5c0 3-2.1 5.2-5 6-2.9-.8-5-3-5-6V3.5l5-2z"
-          stroke="currentColor"
-          strokeWidth="1.3"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M5.8 8l1.6 1.6L10.4 6.5"
-          stroke="currentColor"
-          strokeWidth="1.3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        <path d="m9 12 2 2 4-4" />
       </svg>
     ),
   },
@@ -155,12 +164,11 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
 
           <div className="flex flex-col gap-9 sm:flex-row sm:items-end sm:justify-between">
             <ScrollReveal direction="none">
-              <div>
-                <p className="text-title font-sans text-white">Alex M.</p>
-                <p className="font-body text-caption mt-1 text-white/60">{t('ceoTitle')}</p>
-                <p className="text-accent mt-4 font-mono text-[11px] font-medium uppercase tracking-[0.14em]">
-                  {t('founderLetterLabel')}
-                </p>
+              <div className="flex items-center">
+                <span className="border-accent/40 bg-accent/10 text-accent inline-flex items-center gap-2.5 rounded-full border px-4 py-2 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] shadow-[0_0_20px_rgba(0,176,80,0.18)] backdrop-blur-sm">
+                  <span className="bg-accent h-2 w-2 animate-pulse rounded-full shadow-[0_0_8px_var(--color-accent)]" />
+                  <span>{t('founderLetterLabel')}</span>
+                </span>
               </div>
             </ScrollReveal>
 
@@ -233,7 +241,7 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
                   href={`/${locale}${link.href}`}
                   className="border-border shadow-card hover:border-accent/45 hover:shadow-card-lg dark:hover:border-accent/40 dark:hover:bg-accent/[0.15] group flex h-full items-center gap-[14px] rounded-[18px] border bg-white px-[18px] py-[18px] transition-[border-color,box-shadow] duration-200 dark:border-white/[0.06] dark:bg-[#1a1c22] dark:shadow-none"
                 >
-                  <div className="group-hover:bg-accent text-foreground flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[12px] bg-[#F0F4F1] transition-colors duration-200 group-hover:text-white dark:bg-[#22252e] dark:text-white">
+                  <div className="group-hover:bg-accent text-foreground flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[14px] bg-[#F0F4F1] transition-colors duration-200 group-hover:text-white dark:bg-[#22252e] dark:text-white">
                     {link.icon}
                   </div>
                   <div className="min-w-0 flex-1">

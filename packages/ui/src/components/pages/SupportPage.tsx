@@ -66,10 +66,11 @@ const CMS_CATEGORY_LABELS: Record<string, string> = {
 };
 
 function cmsFaqsToGroups(faqs: CmsFaqItem[]): FaqGroup[] {
+  const sortedFaqs = [...faqs].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
   const seen = new Set<string>();
   const grouped = new Map<string, FaqItem[]>();
   let counter = 0;
-  for (const faq of faqs) {
+  for (const faq of sortedFaqs) {
     if (!faq.question?.trim()) continue;
     if (seen.has(faq.question)) continue;
     seen.add(faq.question);

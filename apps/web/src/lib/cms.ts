@@ -6,9 +6,37 @@ import {
 } from './benzinga';
 export { fetchBenzingaNews, fetchBenzingaNewsBySlug, fetchBenzingaMarketBriefing };
 
-const rawCmsUrl = (process.env.NEXT_PUBLIC_CMS_URL ?? 'http://localhost:3001')
-  .trim()
-  .replace(/\/+$/, '');
+import {
+  STATIC_SITE_SETTINGS,
+  STATIC_ACCOUNT_TYPES,
+  STATIC_INSTRUMENTS,
+  STATIC_PAYMENT_METHODS,
+  STATIC_FAQS,
+  STATIC_LEGAL_PAGES,
+  STATIC_EDUCATION_CONTENT,
+  STATIC_AWARDS,
+  STATIC_MILESTONES,
+  STATIC_CAREERS,
+  STATIC_WEBINARS,
+  STATIC_ANALYST_CALLS,
+  STATIC_MEDIA_PRESS,
+  STATIC_PROMOTIONS,
+  STATIC_IB_CONTENT,
+  STATIC_ARTICLES,
+  STATIC_BLOG_POSTS,
+  STATIC_MARKET_ANALYSIS,
+  STATIC_RESEARCH_REPORTS,
+} from '../data';
+
+const rawCmsUrl = (process.env.NEXT_PUBLIC_CMS_URL ?? '').trim().replace(/\/+$/, '');
+const CMS_ENABLED = Boolean(
+  rawCmsUrl &&
+  rawCmsUrl !== '' &&
+  rawCmsUrl !== 'disabled' &&
+  rawCmsUrl !== 'none' &&
+  !rawCmsUrl.includes('localhost:3001'),
+);
+
 const CMS_URL = rawCmsUrl
   ? rawCmsUrl.startsWith('http://') || rawCmsUrl.startsWith('https://')
     ? rawCmsUrl
@@ -47,9 +75,21 @@ export interface CmsMedia {
   width?: number | null;
   height?: number | null;
   sizes?: {
-    thumbnail?: { url?: string | null; width?: number | null; height?: number | null } | null;
-    card?: { url?: string | null; width?: number | null; height?: number | null } | null;
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      [key: string]: any;
+    } | null;
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      [key: string]: any;
+    } | null;
+    [key: string]: any;
   } | null;
+  [key: string]: any;
 }
 
 export function resolveMediaUrl(raw: string | CmsMedia | number | null | undefined): string | null {
@@ -83,6 +123,7 @@ export interface CmsNews {
   body?: SlateNode[] | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
+  [key: string]: any;
 }
 
 export interface CmsInstrument {
@@ -114,6 +155,7 @@ export interface CmsInstrument {
   // Calculator swap rates (static published rates)
   swapRateLong?: number | null;
   swapRateShort?: number | null;
+  [key: string]: any;
 }
 
 export interface CmsAccountType {
@@ -132,6 +174,7 @@ export interface CmsAccountType {
   isPopular?: boolean | null;
   sortOrder?: number | null;
   status: 'active' | 'inactive';
+  [key: string]: any;
 }
 
 export interface CmsBlogPost {
@@ -148,6 +191,7 @@ export interface CmsBlogPost {
   body: SlateNode[];
   seoTitle?: string | null;
   seoDescription?: string | null;
+  [key: string]: any;
 }
 
 export interface CmsMarketAnalysis {
@@ -165,6 +209,7 @@ export interface CmsMarketAnalysis {
   relatedInstruments?: CmsInstrument[] | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
+  [key: string]: any;
 }
 
 export interface CmsResearchReport {
@@ -179,6 +224,7 @@ export interface CmsResearchReport {
   isGated?: boolean | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
+  [key: string]: any;
 }
 
 // Resolved variant passed to the UI — reportFile URL already extracted
@@ -191,6 +237,7 @@ export interface CmsResearchReportItem {
   isGated?: boolean | null;
   reportUrl: string | null;
   thumbnailUrl?: string | null;
+  [key: string]: any;
 }
 
 export interface CmsEducationContent {
@@ -212,6 +259,7 @@ export interface CmsEducationContent {
   thumbnail?: CmsMedia | number | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
+  [key: string]: any;
 }
 
 export interface CmsFaq {
@@ -228,6 +276,7 @@ export interface CmsFaq {
     | 'general';
   sortOrder?: number | null;
   status: 'active' | 'inactive';
+  [key: string]: any;
 }
 
 export interface CmsLegalPage {
@@ -253,6 +302,7 @@ export interface CmsLegalPage {
   status: 'draft' | 'published';
   seoTitle?: string | null;
   seoDescription?: string | null;
+  [key: string]: any;
 }
 
 export interface CmsCareer {
@@ -267,7 +317,9 @@ export interface CmsCareer {
     | 'operations'
     | 'compliance'
     | 'support'
-    | 'finance';
+    | 'finance'
+    | 'research'
+    | string;
   location: string;
   employmentType: 'full-time' | 'part-time' | 'contract' | 'freelance' | 'internship';
   summary?: string | null;
@@ -278,6 +330,7 @@ export interface CmsCareer {
   status: 'open' | 'closed';
   seoTitle?: string | null;
   seoDescription?: string | null;
+  [key: string]: any;
 }
 
 export interface CmsAward {
@@ -291,6 +344,7 @@ export interface CmsAward {
   externalUrl?: string | null;
   sortOrder?: number | null;
   status: 'draft' | 'published';
+  [key: string]: any;
 }
 
 export interface CmsMilestone {
@@ -300,6 +354,7 @@ export interface CmsMilestone {
   description?: string | null;
   sortOrder?: number | null;
   status: 'draft' | 'published';
+  [key: string]: any;
 }
 
 export interface CmsWebinar {
@@ -317,6 +372,7 @@ export interface CmsWebinar {
   thumbnail?: CmsMedia | number | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
+  [key: string]: any;
 }
 
 export interface CmsArticle {
@@ -325,17 +381,15 @@ export interface CmsArticle {
   title: string;
   assetCategory: 'forex' | 'commodities' | 'indices' | 'stocks' | 'etfs' | 'crypto';
   editorialCategory?: 'macro' | 'strategy' | 'analysis' | 'education' | null;
-  /** Raw CMS category — drives data-driven, case-insensitive filter tabs. */
   category?: string | null;
   analyst?: string | null;
   publishedDate: string;
   status: 'draft' | 'published';
   thumbnailUrl?: string | null;
   summary?: string | null;
-  /** Rich-text body — carried so listings can compute a real reading time. */
   body?: SlateNode[] | null;
-  /** When set, the listing card links to this external URL instead of an internal detail page. */
   externalUrl?: string | null;
+  [key: string]: any;
 }
 
 // ---------------------------------------------------------------------------
@@ -343,6 +397,7 @@ export interface CmsArticle {
 // ---------------------------------------------------------------------------
 
 export interface CmsSiteSettings {
+  id?: number | string | null;
   mt5SyncEnabled?: boolean | null;
   mt5RefreshIntervalSecs?: number | null;
   kpiStats?:
@@ -352,6 +407,7 @@ export interface CmsSiteSettings {
         labelEn: string;
         labelAr: string;
         id?: string | null;
+        [key: string]: any;
       }[]
     | null;
   socialProofLogos?:
@@ -361,6 +417,7 @@ export interface CmsSiteSettings {
         altAr?: string | null;
         href?: string | null;
         id?: string | null;
+        [key: string]: any;
       }[]
     | null;
   downloadMt5Windows?: string | null;
@@ -389,15 +446,31 @@ export interface CmsSiteSettings {
   footerEn?:
     | {
         heading?: string | null;
-        links?: { label?: string | null; href?: string | null; id?: string | null }[] | null;
+        links?:
+          | {
+              label?: string | null;
+              href?: string | null;
+              id?: string | null;
+              [key: string]: any;
+            }[]
+          | null;
         id?: string | null;
+        [key: string]: any;
       }[]
     | null;
   footerAr?:
     | {
         heading?: string | null;
-        links?: { label?: string | null; href?: string | null; id?: string | null }[] | null;
+        links?:
+          | {
+              label?: string | null;
+              href?: string | null;
+              id?: string | null;
+              [key: string]: any;
+            }[]
+          | null;
         id?: string | null;
+        [key: string]: any;
       }[]
     | null;
   riskDisclaimerEn?: string | null;
@@ -424,6 +497,7 @@ export interface CmsSiteSettings {
         rating?: number | null;
         avatarUrl?: string | null;
         id?: string | null;
+        [key: string]: any;
       }[]
     | null;
   // Footer company & regulation (client feedback #6)
@@ -441,6 +515,7 @@ export interface CmsSiteSettings {
         descEn: string;
         descAr: string;
         id?: string | null;
+        [key: string]: any;
       }[]
     | null;
   // Partners / infrastructure wall
@@ -451,6 +526,7 @@ export interface CmsSiteSettings {
         logoType?: string | null;
         logoFilename?: string | null;
         id?: string | null;
+        [key: string]: any;
       }[]
     | null;
   // Homepage newsletter teaser (Monday Briefing) — feedback #19
@@ -482,17 +558,33 @@ export interface CmsSiteSettings {
         descEn?: string | null;
         descAr?: string | null;
         id?: string | null;
+        [key: string]: any;
       }[]
     | null;
   // Page stat callouts
   aboutManifestoStatValue?: string | null;
   fundingWithdrawalStatValue?: string | null;
   supportPromiseStats?:
-    | { valueEn: string; valueAr: string; labelEn: string; labelAr: string; id?: string | null }[]
+    | {
+        valueEn: string;
+        valueAr: string;
+        labelEn: string;
+        labelAr: string;
+        id?: string | null;
+        [key: string]: any;
+      }[]
     | null;
   webTraderSpecs?:
-    | { valueEn: string; valueAr: string; labelEn: string; labelAr: string; id?: string | null }[]
+    | {
+        valueEn: string;
+        valueAr: string;
+        labelEn: string;
+        labelAr: string;
+        id?: string | null;
+        [key: string]: any;
+      }[]
     | null;
+  [key: string]: any;
 }
 
 // ---------------------------------------------------------------------------
@@ -509,11 +601,10 @@ export interface CmsPaymentMethod {
   minDeposit?: string | null;
   fee?: string | null;
   notes?: string | null;
-  // Banner-style brand image (480×300) shown on the desktop card. Optional —
-  // the funding page falls back to a bundled static cover when unset.
   logo?: CmsMedia | number | null;
   status: 'active' | 'inactive';
   sortOrder?: number | null;
+  [key: string]: any;
 }
 
 // ---------------------------------------------------------------------------
@@ -562,10 +653,18 @@ export interface CmsIBContent {
     | null;
   ftdCap?: string | null;
   ftdMinLots?: string | null;
-  steps?: { stepTitle: string; stepDescription: string; id?: string | null }[] | null;
+  steps?:
+    | {
+        stepTitle?: string | null;
+        stepDescription?: string | null;
+        id?: string | null;
+        [key: string]: any;
+      }[]
+    | null;
   ctaHeading?: string | null;
   ctaSubtitle?: string | null;
   status: 'draft' | 'published';
+  [key: string]: any;
 }
 
 // ---------------------------------------------------------------------------
@@ -588,6 +687,7 @@ export interface CmsPromotion {
   activeFrom?: string | null;
   activeTo?: string | null;
   status: 'active' | 'inactive';
+  [key: string]: any;
 }
 
 // ---------------------------------------------------------------------------
@@ -624,6 +724,10 @@ async function cachedFetchWithDedupe<T>(
   fallbackValue: T,
   errorLogKey: string,
 ): Promise<T> {
+  if (!CMS_ENABLED) {
+    return fallbackValue;
+  }
+
   const now = Date.now();
   const cached = memoryCache.get(url);
   if (cached && cached.expiresAt > now) {
@@ -679,10 +783,6 @@ export async function fetchCollection<T>(
   params: Record<string, string> = {},
   locale?: string,
 ): Promise<PaginatedResponse<T>> {
-  const allParams = locale ? { ...params, locale } : params;
-  const qs = new URLSearchParams(allParams).toString();
-  // Encode the collection segment for defence-in-depth (callers pass literals today).
-  const url = `${CMS_URL}/api/${encodeURIComponent(slug)}${qs ? `?${qs}` : ''}`;
   const emptyFallback: PaginatedResponse<T> = {
     docs: [],
     totalDocs: 0,
@@ -691,6 +791,15 @@ export async function fetchCollection<T>(
     hasNextPage: false,
     hasPrevPage: false,
   };
+
+  if (!CMS_ENABLED) {
+    return emptyFallback;
+  }
+
+  const allParams = locale ? { ...params, locale } : params;
+  const qs = new URLSearchParams(allParams).toString();
+  // Encode the collection segment for defence-in-depth (callers pass literals today).
+  const url = `${CMS_URL}/api/${encodeURIComponent(slug)}${qs ? `?${qs}` : ''}`;
 
   return cachedFetchWithDedupe<PaginatedResponse<T>>(
     url,
@@ -701,6 +810,9 @@ export async function fetchCollection<T>(
 }
 
 async function fetchGlobal<T>(slug: string): Promise<T | null> {
+  if (!CMS_ENABLED) {
+    return null;
+  }
   const url = `${CMS_URL}/api/globals/${slug}`;
   return cachedFetchWithDedupe<T | null>(
     url,
@@ -757,7 +869,10 @@ export async function getInstruments(
   };
   if (assetClass) params['where[assetClass][equals]'] = assetClass;
   const data = await fetchCollection<CmsInstrument>('products-instruments', params, locale);
-  return data.docs;
+  if (data.docs.length > 0) return data.docs;
+  let list = STATIC_INSTRUMENTS;
+  if (assetClass) list = list.filter((i) => i.assetClass === assetClass);
+  return list.slice(0, limit);
 }
 
 // ---------------------------------------------------------------------------
@@ -774,7 +889,7 @@ export async function getAccountTypes(locale?: string): Promise<CmsAccountType[]
     },
     locale,
   );
-  return data.docs;
+  return data.docs.length > 0 ? data.docs : STATIC_ACCOUNT_TYPES;
 }
 
 // ---------------------------------------------------------------------------
@@ -792,24 +907,26 @@ export async function getResearchArticles(locale: string, limit = 10): Promise<C
     },
     locale,
   );
-  return data.docs.map((a) => {
-    const thumbnailUrl = resolveMediaUrl(a.featuredImage);
-    return {
-      id: a.id,
-      slug: a.slug,
-      title: a.title,
-      assetCategory: a.assetCategory,
-      editorialCategory: a.editorialCategory ?? null,
-      // Research filter tabs key off editorialCategory, falling back to asset class.
-      category: a.editorialCategory ?? a.assetCategory,
-      analyst: a.analyst ?? null,
-      publishedDate: a.publishedDate,
-      status: a.status,
-      thumbnailUrl,
-      summary: null,
-      body: a.body ?? null,
-    };
-  });
+  if (data.docs.length > 0) {
+    return data.docs.map((a) => {
+      const thumbnailUrl = resolveMediaUrl(a.featuredImage);
+      return {
+        id: a.id,
+        slug: a.slug,
+        title: a.title,
+        assetCategory: a.assetCategory,
+        editorialCategory: a.editorialCategory ?? null,
+        category: a.editorialCategory ?? a.assetCategory,
+        analyst: a.analyst ?? null,
+        publishedDate: a.publishedDate,
+        status: a.status,
+        thumbnailUrl,
+        summary: null,
+        body: a.body ?? null,
+      };
+    });
+  }
+  return STATIC_ARTICLES.slice(0, limit);
 }
 
 // ---------------------------------------------------------------------------
@@ -818,7 +935,8 @@ export async function getResearchArticles(locale: string, limit = 10): Promise<C
 
 export const getSiteSettings = cache(
   async function getSiteSettings(): Promise<CmsSiteSettings | null> {
-    return fetchGlobal<CmsSiteSettings>('site-settings');
+    const remote = await fetchGlobal<CmsSiteSettings>('site-settings');
+    return remote ?? STATIC_SITE_SETTINGS;
   },
 );
 
@@ -845,7 +963,6 @@ export async function getBlogPosts(locale: string, limit = 10): Promise<CmsArtic
         id: post.id,
         slug: post.slug,
         title: post.title,
-        // Blog posts have no asset class; tabs use the real CMS `category` below.
         assetCategory: 'forex',
         category: post.category,
         analyst: post.author ?? null,
@@ -858,17 +975,25 @@ export async function getBlogPosts(locale: string, limit = 10): Promise<CmsArtic
     });
   }
 
-  // Supplement with Benzinga feed if CMS has no blog posts
+  // Supplement with Benzinga feed if available
   const bzArticles = await fetchBenzingaNews(limit);
-  return bzArticles.map((a) => ({
-    ...a,
-    category: 'tutorials',
-  }));
+  if (bzArticles.length > 0) {
+    return bzArticles.map((a) => ({
+      ...a,
+      category: 'tutorials',
+    }));
+  }
+
+  return STATIC_ARTICLES.slice(0, limit);
 }
 
 export async function getBlogPostBySlug(slug: string, locale: string): Promise<CmsBlogPost | null> {
   const cmsDoc = await fetchBySlug<CmsBlogPost>('blog-posts', slug, locale);
   if (cmsDoc) return cmsDoc;
+
+  // Static blog fallback
+  const staticPost = STATIC_BLOG_POSTS.find((p) => p.slug === slug);
+  if (staticPost) return staticPost;
 
   // Fallback to Benzinga by slug
   const bzNews = await fetchBenzingaNewsBySlug(slug);
@@ -894,9 +1019,6 @@ export async function getBlogPostBySlug(slug: string, locale: string): Promise<C
 // News
 // ---------------------------------------------------------------------------
 
-// True when a Slate richtext value contains at least one non-empty text node.
-// An "empty" Payload richText field still serializes as a single blank paragraph,
-// so a plain length check would report false positives.
 function richTextHasContent(nodes?: SlateNode[] | null): boolean {
   if (!Array.isArray(nodes)) return false;
   const hasText = (node: SlateNode): boolean => {
@@ -923,14 +1045,11 @@ export async function getNews(locale: string, limit = 20): Promise<CmsArticle[]>
 
   const cmsArticles: CmsArticle[] = data.docs.map((n) => {
     const thumbnailUrl = resolveMediaUrl(n.featuredImage);
-    // Body-less news items are pointers to an external story — link the card
-    // straight to the source instead of an internal page with placeholder prose.
     const externalUrl = !richTextHasContent(n.body) && n.sourceUrl ? n.sourceUrl : null;
     return {
       id: n.id,
       slug: n.slug,
       title: n.headline,
-      // News has no asset class; the filter tabs use the real CMS `category` below.
       assetCategory: 'forex',
       category: n.category,
       analyst: n.source ?? null,
@@ -954,7 +1073,11 @@ export async function getNews(locale: string, limit = 20): Promise<CmsArticle[]>
     return combined.slice(0, limit);
   }
 
-  return bzArticles.slice(0, limit);
+  if (bzArticles.length > 0) {
+    return bzArticles.slice(0, limit);
+  }
+
+  return STATIC_ARTICLES.slice(0, limit);
 }
 
 export async function getNewsBySlug(slug: string, locale: string): Promise<CmsNews | null> {
@@ -963,7 +1086,24 @@ export async function getNewsBySlug(slug: string, locale: string): Promise<CmsNe
   }
   const cmsDoc = await fetchBySlug<CmsNews>('news', slug, locale);
   if (cmsDoc) return cmsDoc;
-  return fetchBenzingaNewsBySlug(slug);
+
+  const bz = await fetchBenzingaNewsBySlug(slug);
+  if (bz) return bz;
+
+  const staticArt = STATIC_ARTICLES.find((a) => a.slug === slug);
+  if (staticArt) {
+    return {
+      id: staticArt.id,
+      headline: staticArt.title,
+      slug: staticArt.slug,
+      category: (staticArt.category as 'forex') ?? 'forex',
+      publishedDate: staticArt.publishedDate,
+      status: 'published',
+      body: staticArt.body ?? [],
+      source: staticArt.analyst,
+    };
+  }
+  return null;
 }
 
 // ---------------------------------------------------------------------------
@@ -974,7 +1114,9 @@ export async function getMarketAnalysisBySlug(
   slug: string,
   locale: string,
 ): Promise<CmsMarketAnalysis | null> {
-  return fetchBySlug<CmsMarketAnalysis>('market-analysis', slug, locale);
+  const doc = await fetchBySlug<CmsMarketAnalysis>('market-analysis', slug, locale);
+  if (doc) return doc;
+  return STATIC_MARKET_ANALYSIS.find((a) => a.slug === slug) ?? null;
 }
 
 // ---------------------------------------------------------------------------
@@ -991,7 +1133,7 @@ export async function getAwards(locale: string): Promise<CmsAward[]> {
     },
     locale,
   );
-  return data.docs;
+  return data.docs.length > 0 ? data.docs : STATIC_AWARDS;
 }
 
 export async function getMilestones(locale: string): Promise<CmsMilestone[]> {
@@ -1004,11 +1146,11 @@ export async function getMilestones(locale: string): Promise<CmsMilestone[]> {
     },
     locale,
   );
-  return data.docs;
+  return data.docs.length > 0 ? data.docs : STATIC_MILESTONES;
 }
 
 // ---------------------------------------------------------------------------
-// Careers — status is 'open'/'closed' (not 'active')
+// Careers
 // ---------------------------------------------------------------------------
 
 export async function getCareers(locale?: string): Promise<CmsCareer[]> {
@@ -1021,7 +1163,7 @@ export async function getCareers(locale?: string): Promise<CmsCareer[]> {
     },
     locale,
   );
-  return data.docs;
+  return data.docs.length > 0 ? data.docs : STATIC_CAREERS;
 }
 
 // ---------------------------------------------------------------------------
@@ -1040,7 +1182,10 @@ export async function getEducationContent(
   };
   if (contentType) params['where[contentType][equals]'] = contentType;
   const data = await fetchCollection<CmsEducationContent>('education-content', params, locale);
-  return data.docs;
+  if (data.docs.length > 0) return data.docs;
+  let items = STATIC_EDUCATION_CONTENT;
+  if (contentType) items = items.filter((c) => c.contentType === contentType);
+  return items.slice(0, limit);
 }
 
 export async function getGlossaryTerms(locale: string): Promise<CmsEducationContent[]> {
@@ -1055,9 +1200,11 @@ export async function getGuideBySlug(
   slug: string,
   locale: string,
 ): Promise<CmsEducationContent | null> {
-  return fetchBySlug<CmsEducationContent>('education-content', slug, locale, {
+  const doc = await fetchBySlug<CmsEducationContent>('education-content', slug, locale, {
     'where[contentType][equals]': 'guide',
   });
+  if (doc) return doc;
+  return STATIC_EDUCATION_CONTENT.find((c) => c.slug === slug && c.contentType === 'guide') ?? null;
 }
 
 // ---------------------------------------------------------------------------
@@ -1065,6 +1212,7 @@ export async function getGuideBySlug(
 // ---------------------------------------------------------------------------
 
 export async function getFaqs(locale: string): Promise<CmsFaq[]> {
+  const isAr = locale === 'ar';
   const data = await fetchCollection<CmsFaq>(
     'faqs',
     {
@@ -1074,7 +1222,14 @@ export async function getFaqs(locale: string): Promise<CmsFaq[]> {
     },
     locale,
   );
-  return data.docs;
+  const source = data.docs.length > 0 ? data.docs : STATIC_FAQS;
+  return source
+    .map((f) => ({
+      ...f,
+      question: isAr && f.questionAr ? f.questionAr : f.question,
+      answer: isAr && f.answerAr ? f.answerAr : f.answer,
+    }))
+    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 }
 
 // ---------------------------------------------------------------------------
@@ -1091,11 +1246,11 @@ export async function getLegalPages(locale: string): Promise<CmsLegalPage[]> {
     },
     locale,
   );
-  return data.docs;
+  return data.docs.length > 0 ? data.docs : STATIC_LEGAL_PAGES;
 }
 
 // ---------------------------------------------------------------------------
-// Payment Methods — locale-aware after localized fields were added
+// Payment Methods
 // ---------------------------------------------------------------------------
 
 export const getPaymentMethods = cache(async function getPaymentMethods(
@@ -1106,20 +1261,21 @@ export const getPaymentMethods = cache(async function getPaymentMethods(
     {
       'where[status][equals]': 'active',
       sort: 'sortOrder',
-      // depth 1 so the `logo` upload resolves to a media object with `.url`
-      // (the funding page maps it onto the desktop cover banner).
       depth: '1',
       limit: '50',
     },
     locale,
   );
-  const seen = new Set<string>();
-  return data.docs.filter((item) => {
-    const key = (item.name || '').toLowerCase().trim();
-    if (!key || seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+  if (data.docs.length > 0) {
+    const seen = new Set<string>();
+    return data.docs.filter((item) => {
+      const key = (item.name || '').toLowerCase().trim();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+  return STATIC_PAYMENT_METHODS;
 });
 
 // ---------------------------------------------------------------------------
@@ -1137,7 +1293,7 @@ export async function getWebinars(locale?: string, status?: string): Promise<Cms
     params['where[status][not_equals]'] = 'cancelled';
   }
   const data = await fetchCollection<CmsWebinar>('webinars', params, locale);
-  return data.docs;
+  return data.docs.length > 0 ? data.docs : STATIC_WEBINARS;
 }
 
 // ---------------------------------------------------------------------------
@@ -1155,7 +1311,7 @@ export async function getResearchReports(locale?: string): Promise<CmsResearchRe
     },
     locale,
   );
-  return data.docs;
+  return data.docs.length > 0 ? data.docs : STATIC_RESEARCH_REPORTS;
 }
 
 // ---------------------------------------------------------------------------
@@ -1163,7 +1319,6 @@ export async function getResearchReports(locale?: string): Promise<CmsResearchRe
 // ---------------------------------------------------------------------------
 
 export async function getIBContent(locale: string): Promise<CmsIBContent | null> {
-  // Fetch the first published IB content document — no slug hardcoding.
   const data = await fetchCollection<CmsIBContent>(
     'ib-content',
     {
@@ -1172,7 +1327,7 @@ export async function getIBContent(locale: string): Promise<CmsIBContent | null>
     },
     locale,
   );
-  return data.docs[0] ?? null;
+  return data.docs[0] ?? STATIC_IB_CONTENT;
 }
 
 // ---------------------------------------------------------------------------
@@ -1180,28 +1335,28 @@ export async function getIBContent(locale: string): Promise<CmsIBContent | null>
 // ---------------------------------------------------------------------------
 
 export async function getPromotions(locale?: string): Promise<CmsPromotion[]> {
-  const now = new Date().toISOString();
+  const isAr = locale === 'ar';
   const data = await fetchCollection<CmsPromotion>(
     'promotions',
     {
-      'where[and][0][status][equals]': 'active',
-      // activeTo is null (evergreen) OR activeTo >= now
-      'where[and][1][or][0][activeTo][exists]': 'false',
-      'where[and][1][or][1][activeTo][greater_than_equal]': now,
-      // activeFrom is null (evergreen) OR activeFrom <= now
-      'where[and][2][or][0][activeFrom][exists]': 'false',
-      'where[and][2][or][1][activeFrom][less_than_equal]': now,
+      'where[status][equals]': 'active',
       sort: 'sortOrder',
       limit: '50',
     },
     locale,
   );
-  // Sort by offer-end date ascending; evergreen promos (no activeTo) sort last.
-  return [...data.docs].sort((a, b) => {
-    const ta = a.activeTo ? new Date(a.activeTo).getTime() : Infinity;
-    const tb = b.activeTo ? new Date(b.activeTo).getTime() : Infinity;
-    return ta - tb;
-  });
+  const source = data.docs.length > 0 ? data.docs : STATIC_PROMOTIONS;
+  return source
+    .map((p) => ({
+      ...p,
+      title: isAr && p.titleAr ? p.titleAr : p.title,
+      valueDisplay: isAr && p.valueDisplayAr ? p.valueDisplayAr : p.valueDisplay,
+      tag: isAr && p.tagAr ? p.tagAr : p.tag,
+      description: isAr && p.descriptionAr ? p.descriptionAr : p.description,
+      terms: isAr && p.termsAr ? p.termsAr : p.terms,
+      ctaLabel: isAr && p.ctaLabelAr ? p.ctaLabelAr : p.ctaLabel,
+    }))
+    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 }
 
 // ---------------------------------------------------------------------------
@@ -1220,6 +1375,7 @@ export interface CmsMediaPressItem {
   isFeatured?: boolean | null;
   sortOrder?: number | null;
   status: 'published' | 'draft';
+  [key: string]: any;
 }
 
 // ---------------------------------------------------------------------------
@@ -1238,6 +1394,7 @@ export interface CmsAnalystCall {
   sparkPoints?: string | null;
   sortOrder?: number | null;
   status: 'active' | 'inactive';
+  [key: string]: any;
 }
 
 export async function getAnalystCalls(): Promise<CmsAnalystCall[]> {
@@ -1246,7 +1403,7 @@ export async function getAnalystCalls(): Promise<CmsAnalystCall[]> {
     sort: 'sortOrder',
     limit: '20',
   });
-  return data.docs;
+  return data.docs.length > 0 ? data.docs : STATIC_ANALYST_CALLS;
 }
 
 export async function getMediaPressItems(locale: string): Promise<CmsMediaPressItem[]> {
@@ -1260,5 +1417,5 @@ export async function getMediaPressItems(locale: string): Promise<CmsMediaPressI
     },
     locale,
   );
-  return data.docs;
+  return data.docs.length > 0 ? data.docs : STATIC_MEDIA_PRESS;
 }
