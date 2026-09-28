@@ -638,12 +638,12 @@ export function SupportPage({ faqs, contactDetails, promiseStats }: SupportPageP
           <SectionKicker className="mb-4">{tc('channelsKicker')}</SectionKicker>
           <h2 className="text-foreground text-headline mb-8 font-sans">{tc('channelsHeading')}</h2>
         </ScrollReveal>
-        <div className={`${WRAP} grid gap-[14px] md:grid-cols-2 lg:grid-cols-3`}>
+        <div className={`${WRAP} grid items-stretch gap-[14px] md:grid-cols-2 lg:grid-cols-3`}>
           {channels.map((ch, i) => (
-            <ScrollReveal key={ch.id} index={i}>
+            <ScrollReveal key={ch.id} index={i} className="h-full">
               <a
                 href={ch.action}
-                className={`hover:border-accent/50 group flex items-center gap-[14px] rounded-[18px] border px-5 py-5 transition-colors ${CARD}`}
+                className={`hover:border-accent/50 group flex h-full items-center gap-[14px] rounded-[18px] border px-5 py-5 transition-colors ${CARD}`}
               >
                 <div className="bg-accent-subtle text-accent dark:bg-accent/15 dark:text-accent-bright flex h-[46px] w-[46px] flex-shrink-0 items-center justify-center rounded-[14px]">
                   {ch.icon}

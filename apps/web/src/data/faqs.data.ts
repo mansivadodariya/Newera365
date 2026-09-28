@@ -93,7 +93,7 @@ export const STATIC_FAQS: CmsFaq[] = [
       {
         children: [
           {
-            text: 'Yes. Client funds are held in segregated accounts with tier-1 banks, completely separate from our operating capital. Newera is regulated by the FCA, ASIC, and CySEC.',
+            text: 'Yes, We take the security of client funds seriously. Client funds are handled separately from the Company’s operating funds in accordance with our applicable policies and client agreements.\n\nPlease note that Forex and CFD trading involves market risk, and losses can occur as a result of trading activity.',
           },
         ],
       },
@@ -102,7 +102,7 @@ export const STATIC_FAQS: CmsFaq[] = [
       {
         children: [
           {
-            text: 'نعم. يتم الاحتفاظ بأموال العملاء في حسابات منفصلة لدى بنوك من الدرجة الأولى، منفصلة تماماً عن رأس مالنا التشغيلي. نيو إيرا خاضعة لرقابة FCA وASIC وCySEC.',
+            text: 'نعم، نحن نأخذ أمان أموال العملاء على محمل الجد. يتم التعامل مع أموال العملاء بشكل منفصل عن أموال التشغيل الخاصة بالشركة وفقاً لسياساتنا واتفاقيات العملاء المعمول بها.\n\nيرجى ملاحظة أن تداول الفوركس وعقود الفروقات ينطوي على مخاطر السوق، ويمكن أن تحدث خسائر نتيجة لنشاط التداول.',
           },
         ],
       },

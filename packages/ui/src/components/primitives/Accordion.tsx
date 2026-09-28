@@ -98,7 +98,9 @@ export function Accordion({
             }`}
           >
             {typeof answer === 'string' ? (
-              <p className="font-body text-muted text-body hyphens-auto text-justify">{answer}</p>
+              <p className="font-body text-muted text-body hyphens-auto whitespace-pre-line text-justify">
+                {answer}
+              </p>
             ) : (
               answer
             )}
