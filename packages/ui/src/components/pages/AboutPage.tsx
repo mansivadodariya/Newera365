@@ -162,16 +162,7 @@ export function AboutPage({ milestones: cmsMilestones, manifestoStatValue }: Abo
 
           <div className="my-10 h-px w-full bg-white/10 xl:my-12" />
 
-          <div className="flex flex-col gap-9 sm:flex-row sm:items-end sm:justify-between">
-            <ScrollReveal direction="none">
-              <div className="flex items-center">
-                <span className="border-accent/40 bg-accent/10 text-accent inline-flex items-center gap-2.5 rounded-full border px-4 py-2 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] shadow-[0_0_20px_rgba(0,176,80,0.18)] backdrop-blur-sm">
-                  <span className="bg-accent h-2 w-2 animate-pulse rounded-full shadow-[0_0_8px_var(--color-accent)]" />
-                  <span>{t('founderLetterLabel')}</span>
-                </span>
-              </div>
-            </ScrollReveal>
-
+          <div className="flex flex-col gap-9 sm:flex-row sm:items-end sm:justify-end">
             <ScrollReveal direction="none" delay={0.1}>
               <CountUpGroup>
                 <div className="flex flex-col gap-2 sm:items-end sm:text-end">

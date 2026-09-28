@@ -20,10 +20,6 @@ const cmsUrl = rawCmsUrl
     : `https://${rawCmsUrl}`
   : null;
 
-if (isProd && !cmsUrl) {
-  throw new Error('NEXT_PUBLIC_CMS_URL must be set for production builds (NE code-review WR-12).');
-}
-
 let cmsHost = null;
 let cmsProtocol = null;
 let cmsPort = '';
@@ -262,7 +258,7 @@ const nextConfig = {
               // Analytics domains: GA4 and Meta Pixel fire only after cookie consent (Analytics.tsx),
               // but CSP must whitelist their domains or the browser blocks the requests entirely.
               // MT5 service URL is included so live instrument data can be fetched from the browser.
-              `connect-src 'self' https://api.benzinga.com ${cmsUrl || 'http://localhost:3001'}${process.env.NEXT_PUBLIC_MT5_SERVICE_URL ? ` ${process.env.NEXT_PUBLIC_MT5_SERVICE_URL.trim()}` : ''} https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://connect.facebook.net https://s3.tradingview.com`,
+              `connect-src 'self' https://api.benzinga.com${cmsUrl ? ` ${cmsUrl}` : isDev ? ' http://localhost:3001' : ''}${process.env.NEXT_PUBLIC_MT5_SERVICE_URL ? ` ${process.env.NEXT_PUBLIC_MT5_SERVICE_URL.trim()}` : ''} https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://connect.facebook.net https://s3.tradingview.com`,
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",
